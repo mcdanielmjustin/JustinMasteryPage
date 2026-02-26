@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinical Vignette Settings — Mastery Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --bg2: #0c0c0e;
+      --bg3: #121214;
+      --gold: #d4a054;
+      --gold-light: #e4b76a;
+      --gold-dark: #b8863c;
+      --green: #34d399;
+      --purple: #9333ea;
+      --red: #f87171;
+      --text: #fafafa;
+      --text2: #a8a8b3;
+      --text3: #6b6b76;
+      --border: rgba(255,255,255,0.07);
+      --border-gold: rgba(212,160,84,0.25);
+    }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.09; }
+      50%       { opacity: 0.15; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes ping {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212,160,84,0.5); }
+      50%       { box-shadow: 0 0 0 8px rgba(212,160,84,0); }
+    }
+
+    .blob {
+      position: fixed; border-radius: 50%;
+      filter: blur(110px); pointer-events: none;
+      animation: pulseGlow 7s ease-in-out infinite; z-index: 0;
+    }
+    .blob-gold   { width: 540px; height: 540px; background: #d4a054; top: -200px; right: -180px; }
+    .blob-purple { width: 420px; height: 420px; background: #9333ea; bottom: -140px; left: -120px; animation-delay: 3.5s; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      height: 60px;
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 16px;
+    }
+    .back-btn {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text3); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--gold); }
+    .back-arrow { font-size: 18px; line-height: 1; }
+    .nav-sep { width: 1px; height: 20px; background: var(--border); }
+    .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .logo-icon {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: linear-gradient(135deg, #9333ea, #6d28d9);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; color: #fff;
+    }
+    .logo-title { font-weight: 700; font-size: 14px; color: var(--text); }
+
+    /* ── Page ── */
+    .page {
+      position: relative; z-index: 1;
+      max-width: 780px; margin: 0 auto;
+      padding: 52px 24px 0;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(212,160,84,0.1);
+      border: 1px solid var(--border-gold);
+      border-radius: 40px; padding: 5px 13px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--gold-light); text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .pulse-dot {
+      width: 6px; height: 6px; background: var(--gold);
+      border-radius: 50%; animation: ping 2s ease-in-out infinite;
+    }
+    .page-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.1; margin-bottom: 6px;
+    }
+    .page-title em { font-style: italic; color: var(--gold-light); }
+    .page-sub { font-size: 14px; color: var(--text3); margin-bottom: 44px; }
+
+    .settings-section { margin-bottom: 36px; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text3);
+      display: flex; align-items: center; gap: 10px; flex: 1;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .select-all-btn {
+      font-size: 12px; font-weight: 500; color: var(--text3);
+      background: none; border: none; cursor: pointer; padding: 0 0 0 14px;
+      transition: color 0.2s; white-space: nowrap; flex-shrink: 0;
+    }
+    .select-all-btn:hover { color: var(--gold); }
+
+    /* ── LEVEL CARDS ── */
+    .levels-grid { display: flex; flex-direction: column; gap: 10px; }
+    .level-card {
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 20px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      user-select: none;
+    }
+    .level-card:hover { background: rgba(255,255,255,0.04); transform: translateX(2px); }
+    .level-card.selected { border-color: var(--gold); background: rgba(212,160,84,0.07); }
+    .level-check {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 2px solid var(--border); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 11px; color: transparent;
+    }
+    .level-card.selected .level-check { border-color: var(--gold); background: var(--gold); color: #1a0f00; }
+    .level-badge {
+      width: 36px; height: 36px; flex-shrink: 0; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .badge-l1 { background: rgba(52,211,153,0.12); color: #34d399; }
+    .badge-l2 { background: rgba(212,160,84,0.12); color: var(--gold); }
+    .badge-l3 { background: rgba(251,146,60,0.12); color: #fb923c; }
+    .badge-l4 { background: rgba(248,113,113,0.12); color: #f87171; }
+    .badge-l5 { background: rgba(147,51,234,0.12); color: #c084fc; }
+    .level-info { flex: 1; }
+    .level-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .level-desc { font-size: 12px; color: var(--text3); line-height: 1.45; }
+    .level-pill {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+      padding: 3px 9px; border-radius: 20px; flex-shrink: 0;
+    }
+    .pill-l1 { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+    .pill-l2 { background: rgba(212,160,84,0.1); color: var(--gold-light); border: 1px solid var(--border-gold); }
+    .pill-l3 { background: rgba(251,146,60,0.1); color: #fb923c; border: 1px solid rgba(251,146,60,0.25); }
+    .pill-l4 { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+    .pill-l5 { background: rgba(147,51,234,0.1); color: #c084fc; border: 1px solid rgba(147,51,234,0.3); }
+
+    /* ── MIXED DOMAINS TAB ── */
+    .mixed-tab {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; margin-top: 10px;
+      background: rgba(255,255,255,0.025);
+      border: 1px dashed rgba(212,160,84,0.25);
+      border-radius: 12px;
+      padding: 11px 20px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .mixed-tab:hover { background: rgba(255,255,255,0.04); border-color: rgba(212,160,84,0.45); }
+    .mixed-tab.selected {
+      border-style: solid;
+      border-color: var(--gold);
+      background: rgba(212,160,84,0.07);
+    }
+    .mixed-tab-icon { font-size: 14px; line-height: 1; }
+    .mixed-tab-label { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .mixed-tab.selected .mixed-tab-label { color: var(--gold-light); }
+    .mixed-tab-desc { font-size: 11px; color: var(--text3); }
+    .mixed-tab.selected .mixed-tab-desc { color: var(--gold-dark); }
+    .mixed-tab-sep { width: 1px; height: 16px; background: var(--border); }
+    .mixed-tab-check {
+      width: 16px; height: 16px; flex-shrink: 0; margin-left: auto;
+      border: 2px solid var(--border); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .mixed-tab.selected .mixed-tab-check { border-color: var(--gold); background: var(--gold); color: #1a0f00; }
+
+    /* ── DOMAIN CARDS ── */
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .domain-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 14px 16px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .domain-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+    .domain-card.selected { border-color: var(--gold); background: rgba(212,160,84,0.07); }
+    .domain-card-top { display: flex; align-items: center; gap: 10px; }
+    .domain-code-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text3); flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .domain-card.selected .domain-code-badge {
+      background: rgba(212,160,84,0.18); color: var(--gold);
+    }
+    .domain-check-small {
+      width: 16px; height: 16px; margin-left: auto; flex-shrink: 0;
+      border: 2px solid var(--border); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .domain-card.selected .domain-check-small {
+      border-color: var(--gold); background: var(--gold); color: #1a0f00;
+    }
+    .domain-full-name { font-size: 12px; font-weight: 500; color: var(--text2); line-height: 1.3; }
+    .domain-card.selected .domain-full-name { color: var(--text); }
+    .domain-q-count { font-size: 11px; color: var(--text3); }
+    .domain-card.selected .domain-q-count { color: var(--gold-dark); }
+
+    /* ── QUESTION COUNT ── */
+    .count-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .count-options { display: flex; gap: 8px; flex-wrap: wrap; }
+    .count-btn {
+      width: 52px; height: 44px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600; color: var(--text2);
+      cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .count-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(212,160,84,0.3); }
+    .count-btn.selected { border-color: var(--gold); background: rgba(212,160,84,0.1); color: var(--gold-light); }
+    .count-custom { display: flex; align-items: center; gap: 8px; }
+    .count-custom input {
+      width: 64px; height: 44px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      text-align: center; outline: none; transition: border-color 0.2s;
+    }
+    .count-custom input:focus { border-color: var(--gold); }
+    .count-custom label { font-size: 12px; color: var(--text3); }
+
+    /* ── RADIO TOGGLE OPTIONS ── */
+    .toggle-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .toggle-option {
+      flex: 1; min-width: 140px;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 16px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s; user-select: none;
+    }
+    .toggle-option:hover { background: rgba(255,255,255,0.04); }
+    .toggle-option.selected { border-color: var(--gold); background: rgba(212,160,84,0.07); }
+    .toggle-radio {
+      width: 16px; height: 16px; flex-shrink: 0; border: 2px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .toggle-option.selected .toggle-radio { border-color: var(--gold); }
+    .toggle-radio-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); display: none; }
+    .toggle-option.selected .toggle-radio-dot { display: block; }
+    .toggle-label { font-size: 13px; font-weight: 500; }
+    .toggle-sublabel { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+    /* ── RAPID FIRE ── */
+    .rapid-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .rapid-card {
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .rapid-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+    .rapid-card.selected { border-color: var(--gold); background: rgba(212,160,84,0.07); }
+
+    /* "Off" card is special */
+    .rapid-card.off-card.selected { border-color: var(--text3); background: rgba(255,255,255,0.04); }
+
+    .rapid-icon {
+      font-size: 22px; line-height: 1;
+      margin-bottom: 2px;
+    }
+    .rapid-time {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.5rem; line-height: 1;
+      color: var(--gold);
+    }
+    .rapid-card.off-card .rapid-time { color: var(--text3); font-size: 1.2rem; }
+    .rapid-card.selected .rapid-time { color: var(--gold-light); }
+    .rapid-card.off-card.selected .rapid-time { color: var(--text2); }
+    .rapid-label { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.04em; }
+    .rapid-sublabel { font-size: 10px; color: var(--text3); opacity: 0.7; text-align: center; line-height: 1.3; }
+
+    /* ── SUMMARY BAR ── */
+    .summary-bar {
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border-gold);
+      border-radius: 14px; padding: 16px 22px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .summary-item { display: flex; flex-direction: column; gap: 2px; }
+    .summary-item .s-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+    .summary-item .s-val { font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--gold); }
+    .summary-sep { width: 1px; height: 32px; background: var(--border); }
+
+    /* ── START BUTTON ── */
+    .start-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, #e0b366, #d4a054);
+      color: #1a0f00; font-family: inherit;
+      font-size: 16px; font-weight: 700;
+      border: none; border-radius: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 24px rgba(212,160,84,0.3);
+      transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.01em;
+    }
+    .start-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 10px 32px rgba(212,160,84,0.4); }
+    .start-btn:active { transform: translateY(0); }
+    .start-arrow { font-size: 20px; }
+
+    /* ── ANNOTATION TOGGLE ── */
+    .annotation-row {
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 20px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .annotation-row.on {
+      border-color: rgba(212,160,84,0.35);
+      background: rgba(212,160,84,0.06);
+    }
+    .annotation-icon {
+      width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      transition: background 0.2s;
+    }
+    .annotation-row.on .annotation-icon { background: rgba(212,160,84,0.12); }
+    .annotation-text { flex: 1; }
+    .annotation-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .annotation-desc { font-size: 12px; color: var(--text3); line-height: 1.4; }
+    .annotation-row.on .annotation-desc { color: var(--gold-dark); }
+
+    /* pill switch */
+    .pill-switch-wrap {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+    }
+    .pill-switch-state {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      color: var(--text3); width: 22px; text-align: right;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .pill-switch-wrap.on .pill-switch-state { color: var(--gold); }
+    .pill-switch {
+      flex-shrink: 0;
+      width: 48px; height: 26px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .pill-switch-wrap.on .pill-switch { background: var(--gold); border-color: var(--gold); }
+    .pill-switch-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .pill-switch-wrap.on .pill-switch-thumb { transform: translateX(22px); background: #1a0f00; }
+
+    .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+
+    @media (max-width: 600px) {
+      .domains-grid { grid-template-columns: repeat(2, 1fr); }
+      .rapid-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-gold"></div>
+  <div class="blob blob-purple"></div>
+
+  <nav>
+    <a href="index.html" class="back-btn">
+      <span class="back-arrow">←</span> Modules
+    </a>
+    <div class="nav-sep"></div>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">M</div>
+      <span class="logo-title">MasteryPage</span>
+    </a>
+  </nav>
+
+  <div class="page">
+
+    <div class="page-eyebrow">
+      <span class="pulse-dot"></span>
+      Clinical Vignettes · EPPP
+    </div>
+    <h1 class="page-title">Session <em>Settings</em></h1>
+    <p class="page-sub">Configure your session before starting.</p>
+
+    <!-- ── 1. DIFFICULTY LEVEL ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Difficulty Level</div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" data-level="1" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l1">L1</div>
+          <div class="level-info">
+            <div class="level-name">Easy</div>
+            <div class="level-desc">3 hint words · clean textbook scenario · 4 answer choices</div>
+          </div>
+          <span class="level-pill pill-l1">Easy</span>
+        </div>
+
+        <div class="level-card" data-level="2" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l2">L2</div>
+          <div class="level-info">
+            <div class="level-name">Medium</div>
+            <div class="level-desc">2 hint words · mild clinical noise · 4 answer choices</div>
+          </div>
+          <span class="level-pill pill-l2">Medium</span>
+        </div>
+
+        <div class="level-card" data-level="3" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l3">L3</div>
+          <div class="level-info">
+            <div class="level-name">Hard</div>
+            <div class="level-desc">1 hint word · deliberate red herrings · requires careful reasoning</div>
+          </div>
+          <span class="level-pill pill-l3">Hard</span>
+        </div>
+
+        <div class="level-card" data-level="4" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l4">L4</div>
+          <div class="level-info">
+            <div class="level-name">Extremely Hard</div>
+            <div class="level-desc">1 indirect hint · scenario appears to favor the wrong answer</div>
+          </div>
+          <span class="level-pill pill-l4">Extremely Hard</span>
+        </div>
+
+        <div class="level-card" data-level="5" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l5">L5</div>
+          <div class="level-info">
+            <div class="level-name">Almost Impossible</div>
+            <div class="level-desc">0 hint words · pure behavioral description · all options plausible</div>
+          </div>
+          <span class="level-pill pill-l5">Almost Impossible</span>
+        </div>
+
+      </div>
+      <p class="warn" id="level-warn">Select at least one difficulty level to continue.</p>
+    </div>
+
+    <!-- ── 2. DOMAIN SELECTION ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Domain</div>
+        <button class="select-all-btn" id="domain-all-btn" onclick="toggleAllDomains()">Select all</button>
+      </div>
+
+      <div class="domains-grid" id="domains-grid">
+
+        <div class="domain-card" data-domain="PMET" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">PMET</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Psychometrics &amp; Research Methods</div>
+          <div class="domain-q-count">193 anchors · 965 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="LDEV" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">LDEV</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Lifespan &amp; Developmental Stages</div>
+          <div class="domain-q-count">174 anchors · 870 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="CPAT" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">CPAT</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Clinical Psychopathology (DSM-5)</div>
+          <div class="domain-q-count">134 anchors · 670 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="PTHE" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">PTHE</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Psychotherapy Models, Interventions &amp; Prevention</div>
+          <div class="domain-q-count">168 anchors · 840 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="SOCU" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">SOCU</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Social &amp; Cultural Psychology</div>
+          <div class="domain-q-count">153 anchors · 765 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="WDEV" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">WDEV</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Workforce Development &amp; Leadership</div>
+          <div class="domain-q-count">172 anchors · 860 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="BPSY" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">BPSY</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Biopsychology</div>
+          <div class="domain-q-count">192 anchors · 960 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="CASS" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">CASS</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Clinical Assessment &amp; Interpretation</div>
+          <div class="domain-q-count">190 anchors · 950 vignettes</div>
+        </div>
+
+        <div class="domain-card" data-domain="PETH" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">PETH</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Psychopharmacology &amp; Ethics</div>
+          <div class="domain-q-count">191 anchors · 955 vignettes</div>
+        </div>
+
+      </div>
+
+      <!-- Mixed tab sits below the grid -->
+      <div class="mixed-tab" id="mixed-card" onclick="toggleMixed()">
+        <span class="mixed-tab-icon">🔀</span>
+        <span class="mixed-tab-label">Mixed Domains</span>
+        <div class="mixed-tab-sep"></div>
+        <span class="mixed-tab-desc">Draw randomly from all 9 domains each session</span>
+        <div class="mixed-tab-check">✓</div>
+      </div>
+
+      <p class="warn" id="domain-warn">Select at least one domain to continue.</p>
+    </div>
+
+    <!-- ── 3. QUESTION COUNT ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Number of Questions</div>
+      </div>
+      <div class="count-row">
+        <div class="count-options">
+          <div class="count-btn selected" data-count="10" onclick="selectCount(this)">10</div>
+          <div class="count-btn" data-count="20" onclick="selectCount(this)">20</div>
+          <div class="count-btn" data-count="30" onclick="selectCount(this)">30</div>
+          <div class="count-btn" data-count="50" onclick="selectCount(this)">50</div>
+        </div>
+        <div class="count-custom">
+          <input type="number" id="custom-count" min="1" max="200" placeholder="—" oninput="onCustomCount(this)" />
+          <label for="custom-count">custom</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. QUESTION ORDER ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Question Order</div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-option selected" data-order="shuffled" onclick="selectToggle(this, 'order')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Shuffled</div>
+            <div class="toggle-sublabel">Random order within your selection</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-order="sequential" onclick="selectToggle(this, 'order')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Sequential by Subdomain</div>
+            <div class="toggle-sublabel">Topic by topic, at your selected levels</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-order="weakest" onclick="selectToggle(this, 'order')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Weakest First</div>
+            <div class="toggle-sublabel">Prioritize your lowest-scoring domains</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 5. RAPID FIRE ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Rapid Fire Timer</div>
+      </div>
+      <div class="rapid-grid">
+
+        <div class="rapid-card off-card selected" data-timer="off" onclick="selectRapid(this)">
+          <div class="rapid-icon">🔕</div>
+          <div class="rapid-time">Off</div>
+          <div class="rapid-label">No Timer</div>
+          <div class="rapid-sublabel">Take your time on each question</div>
+        </div>
+
+        <div class="rapid-card" data-timer="60" onclick="selectRapid(this)">
+          <div class="rapid-icon">⏱</div>
+          <div class="rapid-time">60s</div>
+          <div class="rapid-label">Measured</div>
+          <div class="rapid-sublabel">One minute per question</div>
+        </div>
+
+        <div class="rapid-card" data-timer="45" onclick="selectRapid(this)">
+          <div class="rapid-icon">⚡</div>
+          <div class="rapid-time">45s</div>
+          <div class="rapid-label">Fast</div>
+          <div class="rapid-sublabel">Push your recall speed</div>
+        </div>
+
+        <div class="rapid-card" data-timer="25" onclick="selectRapid(this)">
+          <div class="rapid-icon">🔥</div>
+          <div class="rapid-time">25s</div>
+          <div class="rapid-label">Rapid Fire</div>
+          <div class="rapid-sublabel">Gut instinct, no hesitation</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 6. ANNOTATIONS ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Annotations</div>
+      </div>
+      <div class="annotation-row" id="annotation-row" onclick="toggleAnnotations()">
+        <div class="annotation-icon">🔍</div>
+        <div class="annotation-text">
+          <div class="annotation-label">Hint Word Highlighting</div>
+          <div class="annotation-desc">Underlines the hint words embedded in each vignette — shows the clinical signal language the question is built around to reinforce keyword identification speed during the actual EPPP exam.</div>
+        </div>
+        <div class="pill-switch-wrap" id="annotation-switch">
+          <span class="pill-switch-state" id="annotation-label">OFF</span>
+          <div class="pill-switch">
+            <div class="pill-switch-thumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUMMARY + START ── -->
+    <div class="summary-bar">
+      <div class="summary-item">
+        <span class="s-label">Levels</span>
+        <span class="s-val" id="sum-levels">None</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Domains</span>
+        <span class="s-val" id="sum-domains">None</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Questions</span>
+        <span class="s-val" id="sum-questions">10</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Order</span>
+        <span class="s-val" id="sum-order">Random</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Timer</span>
+        <span class="s-val" id="sum-timer">Off</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Hints</span>
+        <span class="s-val" id="sum-hints">Off</span>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startSession()">
+      Begin Session <span class="start-arrow">→</span>
+    </button>
+
+  </div>
+
+  <script>
+    const state = {
+      levels:      new Set(),
+      domains:     new Set(),
+      mixed:       false,
+      count:       10,
+      order:       'shuffled',
+      timer:       'off',
+      annotations: false,
+    };
+
+    // ── Level ──
+    function toggleLevel(card) {
+      const lvl = card.dataset.level;
+      state.levels.has(lvl) ? state.levels.delete(lvl) : state.levels.add(lvl);
+      card.classList.toggle('selected');
+      updateSummary();
+    }
+
+    // ── Mixed Domains ──
+    function toggleMixed() {
+      state.mixed = !state.mixed;
+      document.getElementById('mixed-card').classList.toggle('selected', state.mixed);
+      if (state.mixed) {
+        // deselect all individual domain cards (but not the mixed card itself)
+        document.querySelectorAll('.domain-card:not(.mixed-card)').forEach(c => {
+          c.classList.remove('selected');
+          state.domains.delete(c.dataset.domain);
+        });
+        document.getElementById('domain-all-btn').textContent = 'Select all';
+      }
+      updateSummary();
+    }
+
+    // ── Individual Domain ──
+    function toggleDomain(card) {
+      // selecting a specific domain deactivates Mixed
+      if (state.mixed) {
+        state.mixed = false;
+        document.getElementById('mixed-card').classList.remove('selected');
+      }
+      const d = card.dataset.domain;
+      state.domains.has(d) ? state.domains.delete(d) : state.domains.add(d);
+      card.classList.toggle('selected');
+      updateDomainAllBtn();
+      updateSummary();
+    }
+
+    function toggleAllDomains() {
+      // deactivate Mixed first
+      if (state.mixed) {
+        state.mixed = false;
+        document.getElementById('mixed-card').classList.remove('selected');
+      }
+      const cards = document.querySelectorAll('.domain-card:not(.mixed-card)');
+      const allSelected = [...cards].every(c => c.classList.contains('selected'));
+      cards.forEach(card => {
+        const d = card.dataset.domain;
+        if (allSelected) { card.classList.remove('selected'); state.domains.delete(d); }
+        else             { card.classList.add('selected');    state.domains.add(d);    }
+      });
+      updateDomainAllBtn();
+      updateSummary();
+    }
+
+    function updateDomainAllBtn() {
+      const cards = document.querySelectorAll('.domain-card:not(.mixed-card)');
+      const allSelected = [...cards].every(c => c.classList.contains('selected'));
+      document.getElementById('domain-all-btn').textContent = allSelected ? 'Deselect all' : 'Select all';
+    }
+
+    // ── Count ──
+    function selectCount(btn) {
+      document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('custom-count').value = '';
+      state.count = parseInt(btn.dataset.count);
+      updateSummary();
+    }
+
+    function onCustomCount(input) {
+      document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+      state.count = parseInt(input.value) || 10;
+      updateSummary();
+    }
+
+    // ── Order / generic toggle ──
+    function selectToggle(el, group) {
+      document.querySelectorAll(`[data-${group}]`).forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state[group] = el.dataset[group];
+      updateSummary();
+    }
+
+    // ── Rapid fire ──
+    function selectRapid(card) {
+      document.querySelectorAll('.rapid-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.timer = card.dataset.timer;
+      updateSummary();
+    }
+
+    // ── Annotations ──
+    function toggleAnnotations() {
+      state.annotations = !state.annotations;
+      document.getElementById('annotation-row').classList.toggle('on', state.annotations);
+      document.getElementById('annotation-switch').classList.toggle('on', state.annotations);
+      document.getElementById('annotation-label').textContent = state.annotations ? 'ON' : 'OFF';
+      updateSummary();
+    }
+
+    // ── Summary ──
+    const orderLabels = { shuffled: 'Shuffled', sequential: 'Sequential', weakest: 'Weakest First' };
+    const timerLabels = { off: 'Off', '60': '60s', '45': '45s', '25': '25s' };
+
+    function updateSummary() {
+      document.getElementById('sum-levels').textContent =
+        state.levels.size ? [...state.levels].sort().map(l => 'L' + l).join(', ') : 'None';
+      document.getElementById('sum-domains').textContent =
+        state.mixed ? 'Mixed' :
+        state.domains.size ? state.domains.size + (state.domains.size === 1 ? ' domain' : ' domains') : 'None';
+      document.getElementById('sum-questions').textContent = state.count;
+      document.getElementById('sum-order').textContent = orderLabels[state.order];
+      document.getElementById('sum-timer').textContent  = timerLabels[state.timer] || 'Off';
+      document.getElementById('sum-hints').textContent  = state.annotations ? 'On' : 'Off';
+    }
+
+    // ── Validate + Start ──
+    function startSession() {
+      document.getElementById('level-warn').style.display  = 'none';
+      document.getElementById('domain-warn').style.display = 'none';
+      let valid = true;
+      if (state.levels.size === 0) {
+        document.getElementById('level-warn').style.display = 'block'; valid = false;
+      }
+      if (!state.mixed && state.domains.size === 0) {
+        document.getElementById('domain-warn').style.display = 'block'; valid = false;
+      }
+      if (!valid) return;
+      const params = new URLSearchParams({
+        levels:  [...state.levels].sort().join(','),
+        domains: state.mixed ? 'mixed' : [...state.domains].join(','),
+        count:   state.count,
+        order:   state.order,
+        timer:   state.timer,
+        hints:   state.annotations ? '1' : '0',
+      });
+      location.href = 'clinical-exercise.html?' + params.toString();
+    }
+
+    updateSummary();
+  </script>
+
+</body>
+</html>
