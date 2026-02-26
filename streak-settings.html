@@ -209,30 +209,6 @@
     }
     .mixed-tab.selected .mixed-tab-check { border-color: var(--orange); background: var(--orange); color: #1a0800; }
 
-    /* ── RAPID FIRE ── */
-    .rapid-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .rapid-card {
-      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
-      border-radius: 14px; padding: 16px 14px;
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      cursor: pointer; user-select: none;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    }
-    .rapid-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
-    .rapid-card.selected { border-color: var(--orange); background: rgba(249,115,22,0.07); }
-    .rapid-card.off-card.selected { border-color: var(--text3); background: rgba(255,255,255,0.04); }
-    .rapid-icon { font-size: 22px; line-height: 1; margin-bottom: 2px; }
-    .rapid-time {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 1.5rem; line-height: 1;
-      color: var(--orange);
-    }
-    .rapid-card.off-card .rapid-time { color: var(--text3); font-size: 1.2rem; }
-    .rapid-card.selected .rapid-time { color: var(--orange-light); }
-    .rapid-card.off-card.selected .rapid-time { color: var(--text2); }
-    .rapid-label { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.04em; }
-    .rapid-sublabel { font-size: 10px; color: var(--text3); opacity: 0.7; text-align: center; line-height: 1.3; }
-
     /* ── SUMMARY BAR ── */
     .summary-bar {
       background: rgba(255,255,255,0.025); border: 1px solid var(--border-orange);
@@ -260,68 +236,10 @@
     .start-btn:active { transform: translateY(0); }
     .start-arrow { font-size: 20px; }
 
-    /* ── ANNOTATION TOGGLE ── */
-    .annotation-row {
-      display: flex; align-items: center; gap: 16px;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px 20px;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .annotation-row.on {
-      border-color: rgba(249,115,22,0.35);
-      background: rgba(249,115,22,0.06);
-    }
-    .annotation-icon {
-      width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;
-      background: rgba(255,255,255,0.05);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      transition: background 0.2s;
-    }
-    .annotation-row.on .annotation-icon { background: rgba(249,115,22,0.12); }
-    .annotation-text { flex: 1; }
-    .annotation-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-    .annotation-desc { font-size: 12px; color: var(--text3); line-height: 1.4; }
-    .annotation-row.on .annotation-desc { color: var(--orange-dark); }
-
-    .pill-switch-wrap {
-      flex-shrink: 0;
-      display: flex; align-items: center; gap: 8px;
-      cursor: pointer;
-    }
-    .pill-switch-state {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
-      color: var(--text3); width: 22px; text-align: right;
-      transition: color 0.25s;
-      user-select: none;
-    }
-    .pill-switch-wrap.on .pill-switch-state { color: var(--orange); }
-    .pill-switch {
-      flex-shrink: 0;
-      width: 48px; height: 26px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 13px;
-      border: 1px solid var(--border);
-      position: relative;
-      transition: background 0.25s, border-color 0.25s;
-    }
-    .pill-switch-wrap.on .pill-switch { background: var(--orange); border-color: var(--orange); }
-    .pill-switch-thumb {
-      position: absolute;
-      top: 3px; left: 3px;
-      width: 18px; height: 18px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 50%;
-      transition: transform 0.25s, background 0.25s;
-    }
-    .pill-switch-wrap.on .pill-switch-thumb { transform: translateX(22px); background: #1a0800; }
-
     .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 
     @media (max-width: 600px) {
       .domains-grid { grid-template-columns: repeat(2, 1fr); }
-      .rapid-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -453,79 +371,11 @@
       <p class="warn" id="domain-warn">Select at least one domain to continue.</p>
     </div>
 
-    <!-- ── 2. RAPID FIRE ── -->
-    <div class="settings-section">
-      <div class="section-header">
-        <div class="section-label">Rapid Fire Timer</div>
-      </div>
-      <div class="rapid-grid">
-
-        <div class="rapid-card off-card selected" data-timer="off" onclick="selectRapid(this)">
-          <div class="rapid-icon">&#128277;</div>
-          <div class="rapid-time">Off</div>
-          <div class="rapid-label">No Timer</div>
-          <div class="rapid-sublabel">Take your time on each question</div>
-        </div>
-
-        <div class="rapid-card" data-timer="60" onclick="selectRapid(this)">
-          <div class="rapid-icon">&#9201;</div>
-          <div class="rapid-time">60s</div>
-          <div class="rapid-label">Measured</div>
-          <div class="rapid-sublabel">One minute per question</div>
-        </div>
-
-        <div class="rapid-card" data-timer="45" onclick="selectRapid(this)">
-          <div class="rapid-icon">&#9889;</div>
-          <div class="rapid-time">45s</div>
-          <div class="rapid-label">Fast</div>
-          <div class="rapid-sublabel">Push your recall speed</div>
-        </div>
-
-        <div class="rapid-card" data-timer="25" onclick="selectRapid(this)">
-          <div class="rapid-icon">&#128293;</div>
-          <div class="rapid-time">25s</div>
-          <div class="rapid-label">Rapid Fire</div>
-          <div class="rapid-sublabel">Gut instinct, no hesitation</div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ── 3. ANNOTATIONS ── -->
-    <div class="settings-section">
-      <div class="section-header">
-        <div class="section-label">Annotations</div>
-      </div>
-      <div class="annotation-row" id="annotation-row" onclick="toggleAnnotations()">
-        <div class="annotation-icon">&#128218;</div>
-        <div class="annotation-text">
-          <div class="annotation-label">Show Explanations</div>
-          <div class="annotation-desc">Display the full explanation after each answer — reinforces the concept before moving on. Turn off for pure speed drilling.</div>
-        </div>
-        <div class="pill-switch-wrap" id="annotation-switch">
-          <span class="pill-switch-state" id="annotation-label">OFF</span>
-          <div class="pill-switch">
-            <div class="pill-switch-thumb"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- ── SUMMARY + START ── -->
     <div class="summary-bar">
       <div class="summary-item">
         <span class="s-label">Domain</span>
         <span class="s-val" id="sum-domains">None</span>
-      </div>
-      <div class="summary-sep"></div>
-      <div class="summary-item">
-        <span class="s-label">Timer</span>
-        <span class="s-val" id="sum-timer">Off</span>
-      </div>
-      <div class="summary-sep"></div>
-      <div class="summary-item">
-        <span class="s-label">Explanations</span>
-        <span class="s-val" id="sum-hints">Off</span>
       </div>
     </div>
 
@@ -537,10 +387,8 @@
 
   <script>
     const state = {
-      domains:     new Set(),
-      mixed:       false,
-      timer:       'off',
-      annotations: false,
+      domains: new Set(),
+      mixed:   false,
     };
 
     // ── Domain ──
@@ -591,32 +439,11 @@
       document.getElementById('domain-all-btn').textContent = allSelected ? 'Deselect all' : 'Select all';
     }
 
-    // ── Rapid fire ──
-    function selectRapid(card) {
-      document.querySelectorAll('.rapid-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      state.timer = card.dataset.timer;
-      updateSummary();
-    }
-
-    // ── Annotations ──
-    function toggleAnnotations() {
-      state.annotations = !state.annotations;
-      document.getElementById('annotation-row').classList.toggle('on', state.annotations);
-      document.getElementById('annotation-switch').classList.toggle('on', state.annotations);
-      document.getElementById('annotation-label').textContent = state.annotations ? 'ON' : 'OFF';
-      updateSummary();
-    }
-
     // ── Summary ──
-    const timerLabels = { off: 'Off', '60': '60s', '45': '45s', '25': '25s' };
-
     function updateSummary() {
       document.getElementById('sum-domains').textContent =
         state.mixed ? 'Mixed' :
         state.domains.size ? state.domains.size + (state.domains.size === 1 ? ' domain' : ' domains') : 'None';
-      document.getElementById('sum-timer').textContent  = timerLabels[state.timer] || 'Off';
-      document.getElementById('sum-hints').textContent  = state.annotations ? 'On' : 'Off';
     }
 
     // ── Validate + Start ──
@@ -627,11 +454,7 @@
         return;
       }
       const domains = state.mixed ? 'mixed' : [...state.domains].join(',');
-      const params = new URLSearchParams({
-        domains,
-        timer: state.timer,
-        hints: state.annotations ? '1' : '0',
-      });
+      const params = new URLSearchParams({ domains });
       location.href = 'streak-exercise.html?' + params.toString();
     }
 

@@ -50,10 +50,6 @@
       60%       { transform: translateX(-5px); }
       80%       { transform: translateX(5px); }
     }
-    @keyframes countDown {
-      from { stroke-dashoffset: 0; }
-      to   { stroke-dashoffset: 226; }
-    }
     @keyframes streakBump {
       0%   { transform: scale(1); }
       40%  { transform: scale(1.25); }
@@ -162,24 +158,6 @@
     .streak-label { font-size: 12px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
     .streak-best { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
-    /* Timer ring */
-    .timer-wrap {
-      display: flex; justify-content: center; margin-bottom: 24px;
-    }
-    .timer-ring { position: relative; width: 56px; height: 56px; }
-    .timer-ring svg { transform: rotate(-90deg); }
-    .timer-ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 4; }
-    .timer-ring-fill  { fill: none; stroke: var(--orange); stroke-width: 4; stroke-linecap: round;
-                        stroke-dasharray: 226; stroke-dashoffset: 0; }
-    .timer-ring-fill.ticking { animation: countDown linear both; }
-    .timer-ring-fill.urgent  { stroke: var(--red); }
-    .timer-num {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 700; color: var(--text2);
-    }
-    .timer-num.urgent { color: var(--red); }
-
     /* Q meta */
     .q-meta {
       display: flex; align-items: center; gap: 8px;
@@ -248,24 +226,6 @@
     .option.wrong   .opt-letter  { border-color: var(--red);   background: rgba(248,113,113,0.15); color: var(--red);   }
     .opt-text { font-size: 14px; line-height: 1.55; color: var(--text2); }
     .option.correct .opt-text, .option.wrong .opt-text { color: var(--text); }
-
-    /* Explanation */
-    .explanation-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 18px;
-      font-size: 13px; line-height: 1.6; color: var(--text2);
-      margin-bottom: 16px;
-      display: none;
-      animation: slideUp 0.3s ease-out both;
-    }
-    .explanation-box.visible { display: block; }
-    .explanation-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--text3);
-      margin-bottom: 6px;
-    }
 
     /* Feedback bar */
     .feedback-bar {
@@ -415,16 +375,6 @@
       <div class="streak-best" id="streak-best-inline"></div>
     </div>
 
-    <div class="timer-wrap" id="timer-wrap" style="display:none">
-      <div class="timer-ring">
-        <svg width="56" height="56" viewBox="0 0 72 72">
-          <circle class="timer-ring-track" cx="36" cy="36" r="32"/>
-          <circle class="timer-ring-fill" id="timer-ring-fill" cx="36" cy="36" r="32"/>
-        </svg>
-        <div class="timer-num" id="timer-num">—</div>
-      </div>
-    </div>
-
     <div class="q-meta" id="q-meta"></div>
 
     <div class="q-card" id="q-card">
@@ -439,11 +389,6 @@
         <div id="feedback-msg"></div>
         <div class="feedback-sub" id="feedback-sub"></div>
       </div>
-    </div>
-
-    <div class="explanation-box" id="explanation-box">
-      <div class="explanation-label">Explanation</div>
-      <div id="explanation-text"></div>
     </div>
 
     <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question &#8594;</button>
@@ -498,8 +443,6 @@
 
     const params  = new URLSearchParams(location.search);
     const domainParam = params.get('domains') || 'mixed';
-    const TIMER   = params.get('timer')   || 'off';
-    const HINTS   = params.get('hints')   === '1';
 
     const CFG_DOMAINS = domainParam === 'mixed' ? ALL_DOMAINS : domainParam.split(',');
     const STORAGE_KEY = 'streak_best_' + CFG_DOMAINS.slice().sort().join('_');
@@ -510,8 +453,6 @@
     let bestStreak = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
     let current  = null;
     let answered = false;
-    let timerInterval = null;
-    let timerLeft = 0;
     let gameOver = false;
     let lastWrong = null;
 
@@ -578,42 +519,6 @@
       bestInline.textContent = bestStreak > 0 ? `Personal best: ${bestStreak}` : '';
     }
 
-    // ── Timer ────────────────────────────────────────────────────────────────
-    function startTimer(seconds) {
-      clearInterval(timerInterval);
-      timerLeft = seconds;
-      const wrap = document.getElementById('timer-wrap');
-      const ring = document.getElementById('timer-ring-fill');
-      const num  = document.getElementById('timer-num');
-      wrap.style.display = 'flex';
-      num.textContent = seconds;
-      num.classList.remove('urgent');
-      ring.classList.remove('urgent');
-      ring.style.animationDuration = seconds + 's';
-      ring.classList.remove('ticking');
-      void ring.offsetWidth;
-      ring.classList.add('ticking');
-
-      timerInterval = setInterval(() => {
-        timerLeft--;
-        num.textContent = timerLeft;
-        if (timerLeft <= 5) {
-          num.classList.add('urgent');
-          ring.classList.add('urgent');
-        }
-        if (timerLeft <= 0) {
-          clearInterval(timerInterval);
-          if (!answered) timeOut();
-        }
-      }, 1000);
-    }
-
-    function stopTimer() {
-      clearInterval(timerInterval);
-      const ring = document.getElementById('timer-ring-fill');
-      ring.style.animationPlayState = 'paused';
-    }
-
     // ── Next question ─────────────────────────────────────────────────────────
     function nextQuestion() {
       if (pool.length === 0) {
@@ -659,16 +564,7 @@
       // Reset feedback
       const fb = document.getElementById('feedback-bar');
       fb.className = 'feedback-bar';
-      document.getElementById('explanation-box').classList.remove('visible');
-      const nextBtn = document.getElementById('next-btn');
-      nextBtn.classList.remove('visible');
-
-      // Timer
-      if (TIMER !== 'off') {
-        startTimer(parseInt(TIMER, 10));
-      } else {
-        document.getElementById('timer-wrap').style.display = 'none';
-      }
+      document.getElementById('next-btn').classList.remove('visible');
     }
 
     function el(tag, cls, text) {
@@ -682,7 +578,6 @@
     function selectOption(letter) {
       if (answered) return;
       answered = true;
-      stopTimer();
 
       const correct = current.correct_answer;
       const isRight = letter === correct;
@@ -705,58 +600,28 @@
         bumpStreakDisplay();
         updateNavStreak();
         showFeedback(true, correct);
-        if (HINTS && current.explanation) showExplanation(current.explanation);
-        showNextBtn();
+        document.getElementById('next-btn').classList.add('visible');
       } else {
         lastWrong = current;
         showFeedback(false, correct);
-        if (current.explanation) showExplanation(current.explanation);
-        setTimeout(() => endGame(false), HINTS ? 1800 : 1200);
+        setTimeout(() => endGame(false), 1200);
       }
     }
 
-    function timeOut() {
-      if (answered) return;
-      answered = true;
-      lastWrong = current;
-      const correct = current.correct_answer;
-      document.querySelectorAll('.option').forEach(opt => {
-        opt.classList.add('locked');
-        if (opt.dataset.letter === correct) opt.classList.add('correct');
-        else opt.classList.add('dimmed');
-      });
-      showFeedback(false, correct, true);
-      if (current.explanation) showExplanation(current.explanation);
-      setTimeout(() => endGame(false), HINTS ? 1800 : 1200);
-    }
-
-    function showFeedback(isRight, correct, timedOut = false) {
+    function showFeedback(isRight, correct) {
       const fb   = document.getElementById('feedback-bar');
       const icon = document.getElementById('feedback-icon');
       const msg  = document.getElementById('feedback-msg');
       const sub  = document.getElementById('feedback-sub');
       fb.className = 'feedback-bar ' + (isRight ? 'correct' : 'wrong');
       icon.textContent = isRight ? '✓' : '✗';
-      if (timedOut) {
-        msg.textContent = "Time's up!";
-        sub.textContent = `Correct answer: ${correct}`;
-      } else if (isRight) {
+      if (isRight) {
         msg.textContent = 'Correct!';
         sub.textContent = `Streak: ${streak}`;
       } else {
         msg.textContent = 'Incorrect';
         sub.textContent = `Correct answer: ${correct}`;
       }
-    }
-
-    function showExplanation(text) {
-      const box = document.getElementById('explanation-box');
-      document.getElementById('explanation-text').textContent = text;
-      box.classList.add('visible');
-    }
-
-    function showNextBtn() {
-      document.getElementById('next-btn').classList.add('visible');
     }
 
     // ── Game over ─────────────────────────────────────────────────────────────
