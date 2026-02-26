@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spot the Error — Settings | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --bg2: #0f0f11;
+      --bg3: #18181b;
+      --card: #1c1c1f;
+      --teal: #2dd4bf;
+      --teal-light: #5eead4;
+      --teal-dark: #0d9488;
+      --text: #fafafa;
+      --text2: #a8a8b3;
+      --text3: #6b6b76;
+      --border: rgba(255,255,255,0.07);
+      --border-teal: rgba(45,212,191,0.28);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.08; }
+      50%       { opacity: 0.15; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(100px);
+      pointer-events: none; animation: pulseGlow 6s ease-in-out infinite; z-index: 0;
+    }
+    .blob-teal   { width:500px; height:500px; background:#0d9488; top:-150px; right:-140px; }
+    .blob-purple { width:450px; height:450px; background:#9333ea; bottom:-140px; left:-120px; animation-delay:3s; }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:10; height:64px;
+      background: rgba(9,9,11,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 32px; gap: 16px;
+    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-icon {
+      width:34px; height:34px; border-radius:8px;
+      background: linear-gradient(135deg,#9333ea,#6d28d9);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:16px; color:#fff;
+    }
+    .logo-title { font-weight:700; font-size:15px; }
+    .logo-sub   { font-size:10px; color:var(--text3); letter-spacing:0.06em; display:block; }
+    .breadcrumb { font-size:13px; color:var(--text3); display:flex; align-items:center; gap:6px; }
+    .breadcrumb span { color:var(--text2); }
+
+    .page {
+      position:relative; z-index:1;
+      padding: 100px 24px 60px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(45,212,191,0.1);
+      border: 1px solid var(--border-teal);
+      border-radius: 40px; padding: 6px 16px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--teal-light); text-transform: uppercase; margin-bottom: 16px;
+    }
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+    }
+    h1 em {
+      font-style: italic;
+      background: linear-gradient(90deg, var(--teal-dark), var(--teal-light), var(--teal-dark));
+      background-size: 600px 100%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; animation: shimmer 4s linear infinite;
+    }
+    .subtitle { font-size: 14px; color: var(--text2); margin-top: 12px; max-width: 460px; line-height: 1.6; }
+
+    /* Settings container */
+    .settings-wrap {
+      width: 100%; max-width: 680px;
+      display: flex; flex-direction: column; gap: 24px;
+      animation: fadeInUp 0.7s ease-out 0.1s both;
+    }
+
+    .section-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 26px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal-light);
+      margin-bottom: 14px;
+    }
+
+    /* Domain grid */
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .domain-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-align: left;
+    }
+    .domain-btn .d-code {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--text3); text-transform: uppercase; display: block; margin-bottom: 3px;
+    }
+    .domain-btn .d-name { font-size: 12px; color: var(--text2); line-height: 1.3; }
+    .domain-btn.active {
+      background: rgba(45,212,191,0.1);
+      border-color: rgba(45,212,191,0.5);
+    }
+    .domain-btn.active .d-code { color: var(--teal-light); }
+    .domain-btn.active .d-name { color: var(--text); }
+    .domain-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
+
+    /* Question count */
+    .count-row {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .count-btn {
+      flex: 1; min-width: 70px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 15px; font-weight: 600; color: var(--text2);
+    }
+    .count-btn.active {
+      background: rgba(45,212,191,0.1);
+      border-color: rgba(45,212,191,0.5);
+      color: var(--teal-light);
+    }
+    .count-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
+
+    /* Difficulty */
+    .diff-row { display: flex; gap: 10px; }
+    .diff-btn {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .diff-btn .d-title { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .diff-btn .d-desc  { font-size: 11px; color: var(--text3); margin-top: 3px; }
+    .diff-btn.active {
+      background: rgba(45,212,191,0.1);
+      border-color: rgba(45,212,191,0.5);
+    }
+    .diff-btn.active .d-title { color: var(--teal-light); }
+    .diff-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
+
+    /* Summary bar */
+    .summary-bar {
+      background: rgba(45,212,191,0.07);
+      border: 1px solid var(--border-teal);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+    }
+    .sum-item { display: flex; flex-direction: column; gap: 2px; }
+    .sum-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
+    .sum-value { font-size: 13px; font-weight: 600; color: var(--teal-light); }
+
+    .start-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--teal-dark), #0f766e);
+      border: none; border-radius: 14px;
+      padding: 16px;
+      font-size: 15px; font-weight: 700; color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .start-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .warn {
+      font-size: 12px; color: #f87171; padding: 8px 0; display: none;
+    }
+
+    @media (max-width: 600px) {
+      .domains-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-teal"></div>
+  <div class="blob blob-purple"></div>
+
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-icon">M</div>
+      <div><span class="logo-title">MasteryPage</span><span class="logo-sub">MASTERY PREP PLATFORM</span></div>
+    </a>
+    <div class="breadcrumb"><span>/</span><span>Spot the Error</span></div>
+  </nav>
+
+  <div class="page">
+
+    <div class="header">
+      <div class="eyebrow">&#128270; Reading Comprehension</div>
+      <h1>Spot the <em>Error</em></h1>
+      <p class="subtitle">Read a passage from the EPPP Study Guide. One fact has been deliberately changed — can you catch it?</p>
+    </div>
+
+    <div class="settings-wrap">
+
+      <!-- Domain Selection -->
+      <div class="section-card">
+        <div class="section-label">Domain</div>
+        <div class="domains-grid">
+          <button class="domain-btn" data-code="PMET" onclick="toggleDomain('PMET')">
+            <span class="d-code">PMET</span>
+            <span class="d-name">Psychometrics &amp; Research Methods</span>
+          </button>
+          <button class="domain-btn" data-code="LDEV" onclick="toggleDomain('LDEV')">
+            <span class="d-code">LDEV</span>
+            <span class="d-name">Lifespan &amp; Developmental Stages</span>
+          </button>
+          <button class="domain-btn" data-code="CPAT" onclick="toggleDomain('CPAT')">
+            <span class="d-code">CPAT</span>
+            <span class="d-name">Clinical Psychopathology (DSM-5)</span>
+          </button>
+          <button class="domain-btn" data-code="PTHE" onclick="toggleDomain('PTHE')">
+            <span class="d-code">PTHE</span>
+            <span class="d-name">Psychotherapy Models &amp; Interventions</span>
+          </button>
+          <button class="domain-btn" data-code="SOCU" onclick="toggleDomain('SOCU')">
+            <span class="d-code">SOCU</span>
+            <span class="d-name">Social &amp; Cultural Psychology</span>
+          </button>
+          <button class="domain-btn" data-code="WDEV" onclick="toggleDomain('WDEV')">
+            <span class="d-code">WDEV</span>
+            <span class="d-name">Workforce Development &amp; Leadership</span>
+          </button>
+          <button class="domain-btn" data-code="BPSY" onclick="toggleDomain('BPSY')">
+            <span class="d-code">BPSY</span>
+            <span class="d-name">Biopsychology</span>
+          </button>
+          <button class="domain-btn" data-code="CASS" onclick="toggleDomain('CASS')">
+            <span class="d-code">CASS</span>
+            <span class="d-name">Clinical Assessment &amp; Interpretation</span>
+          </button>
+          <button class="domain-btn" data-code="PETH" onclick="toggleDomain('PETH')">
+            <span class="d-code">PETH</span>
+            <span class="d-name">Psychopharmacology &amp; Ethics</span>
+          </button>
+        </div>
+        <div id="domain-warn" class="warn">Select at least one domain to continue.</div>
+      </div>
+
+      <!-- Question Count -->
+      <div class="section-card">
+        <div class="section-label">Number of Questions</div>
+        <div class="count-row">
+          <button class="count-btn" data-n="10" onclick="selectCount(10)">10</button>
+          <button class="count-btn active" data-n="20" onclick="selectCount(20)">20</button>
+          <button class="count-btn" data-n="30" onclick="selectCount(30)">30</button>
+          <button class="count-btn" data-n="50" onclick="selectCount(50)">50</button>
+        </div>
+      </div>
+
+      <!-- Passage Type -->
+      <div class="section-card">
+        <div class="section-label">Passage Type</div>
+        <div class="diff-row">
+          <button class="diff-btn active" data-type="all" onclick="selectType('all')">
+            <div class="d-title">All Types</div>
+            <div class="d-desc">Definitions, examples, clinical notes, paragraphs</div>
+          </button>
+          <button class="diff-btn" data-type="definition" onclick="selectType('definition')">
+            <div class="d-title">Definitions</div>
+            <div class="d-desc">Key term definition boxes</div>
+          </button>
+          <button class="diff-btn" data-type="clinical_note" onclick="selectType('clinical_note')">
+            <div class="d-title">Clinical Notes</div>
+            <div class="d-desc">Clinical implications &amp; applications</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary + Start -->
+      <div class="summary-bar">
+        <div class="sum-item">
+          <span class="sum-label">Domain</span>
+          <span class="sum-value" id="sum-domain">None selected</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Questions</span>
+          <span class="sum-value" id="sum-count">20</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Passage Type</span>
+          <span class="sum-value" id="sum-type">All Types</span>
+        </div>
+      </div>
+
+      <button class="start-btn" id="start-btn" onclick="startSession()" disabled>
+        Start Session &rarr;
+      </button>
+
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      domains: new Set(),
+      count: 20,
+      type: 'all',
+    };
+
+    const TYPE_LABELS = {
+      all: 'All Types',
+      definition: 'Definitions',
+      clinical_note: 'Clinical Notes',
+    };
+
+    function toggleDomain(code) {
+      if (state.domains.has(code)) {
+        state.domains.delete(code);
+      } else {
+        state.domains.add(code);
+      }
+      document.querySelectorAll('.domain-btn').forEach(b => {
+        b.classList.toggle('active', state.domains.has(b.dataset.code));
+      });
+      updateSummary();
+    }
+
+    function selectCount(n) {
+      state.count = n;
+      document.querySelectorAll('.count-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.n) === n);
+      });
+      updateSummary();
+    }
+
+    function selectType(t) {
+      state.type = t;
+      document.querySelectorAll('.diff-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.type === t);
+      });
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const codes = [...state.domains];
+      document.getElementById('sum-domain').textContent =
+        codes.length === 0 ? 'None selected' :
+        codes.length === 9 ? 'All Domains' :
+        codes.length <= 3 ? codes.join(', ') :
+        codes.length + ' Domains';
+      document.getElementById('sum-count').textContent = state.count;
+      document.getElementById('sum-type').textContent = TYPE_LABELS[state.type];
+
+      const warn = document.getElementById('domain-warn');
+      const btn  = document.getElementById('start-btn');
+      if (codes.length === 0) {
+        warn.style.display = 'block';
+        btn.disabled = true;
+      } else {
+        warn.style.display = 'none';
+        btn.disabled = false;
+      }
+    }
+
+    function startSession() {
+      if (state.domains.size === 0) return;
+      const p = new URLSearchParams({
+        domains: [...state.domains].join(','),
+        count:   state.count,
+        type:    state.type,
+      });
+      location.href = 'spot-exercise.html?' + p.toString();
+    }
+  </script>
+</body>
+</html>
