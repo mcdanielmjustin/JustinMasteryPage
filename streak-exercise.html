@@ -509,24 +509,28 @@
         return;
       }
 
-      // Group questions by subdomain
-      const subMap = new Map();
+      // Group questions by domain, preserving domain order
+      const domainMap = new Map();
       for (const q of pool) {
-        const key = (q.domain_code || '') + '||' + (q.subdomain || 'General');
-        if (!subMap.has(key)) subMap.set(key, []);
-        subMap.get(key).push(q);
+        const key = q.domain_code || 'General';
+        if (!domainMap.has(key)) domainMap.set(key, []);
+        domainMap.get(key).push(q);
       }
-      let groups = [...subMap.values()];
 
-      // Shuffle subdomain groups (not individual questions)
-      if (SHUFFLE) {
-        for (let i = groups.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [groups[i], groups[j]] = [groups[j], groups[i]];
+      const flatPool = [];
+      for (const domainQs of domainMap.values()) {
+        if (SHUFFLE) {
+          // Randomize all questions within this domain
+          for (let i = domainQs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [domainQs[i], domainQs[j]] = [domainQs[j], domainQs[i]];
+          }
         }
+        // else: keep original subdomain order within domain
+        flatPool.push(...domainQs);
       }
-      // Flatten and reverse so pop() yields first group first
-      pool = groups.flat().reverse();
+      // Reverse so pop() yields first question first
+      pool = flatPool.reverse();
 
       renderLives();
       showScreen('quiz');
