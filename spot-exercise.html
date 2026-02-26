@@ -23,6 +23,7 @@
       --border: rgba(255,255,255,0.07);
       --green: #34d399;
       --red: #f87171;
+      --amber: #fbbf24;
     }
 
     body {
@@ -49,9 +50,11 @@
       60%     { transform: translateX(-4px); }
       80%     { transform: translateX(4px); }
     }
-    @keyframes progressGlow {
-      0%,100% { opacity: 0.7; }
-      50%     { opacity: 1; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes highlightPop {
+      0%   { background-color: rgba(251,191,36,0.0); }
+      40%  { background-color: rgba(251,191,36,0.45); }
+      100% { background-color: rgba(251,191,36,0.22); }
     }
 
     /* NAV */
@@ -70,7 +73,7 @@
     }
     .logo-title { font-weight:700; font-size:14px; }
     .nav-spacer { flex: 1; }
-    .nav-meta { font-size: 12px; color: var(--text3); text-align: right; }
+    .nav-meta  { font-size: 12px; color: var(--text3); text-align: right; }
     .nav-score { font-weight: 600; color: var(--teal-light); font-size: 14px; }
 
     /* MAIN LAYOUT */
@@ -81,10 +84,7 @@
     }
 
     /* PROGRESS BAR */
-    .progress-wrap {
-      width: 100%; height: 3px;
-      background: rgba(255,255,255,0.06);
-    }
+    .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.06); }
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--teal-dark), var(--teal-light));
@@ -105,7 +105,6 @@
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* QUIZ SCREEN */
     #screen-quiz {
@@ -130,14 +129,8 @@
     }
     .badge-teal { color: var(--teal-light); border-color: rgba(45,212,191,0.35); background: rgba(45,212,191,0.08); }
 
-    .q-chapter {
-      font-size: 12px; color: var(--text3);
-      margin-bottom: 6px;
-    }
-    .q-section {
-      font-size: 11px; color: var(--text3);
-      margin-bottom: 20px;
-    }
+    .q-chapter { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+    .q-section  { font-size: 11px; color: var(--text3); margin-bottom: 20px; }
 
     /* Passage */
     .passage-card {
@@ -146,7 +139,6 @@
       border-radius: 16px;
       padding: 24px 26px;
       margin-bottom: 24px;
-      position: relative;
     }
     .passage-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
@@ -158,17 +150,25 @@
       line-height: 1.75;
       color: var(--text2);
     }
+    /* Error highlight — appears after answering */
+    mark.error-highlight {
+      background-color: rgba(251,191,36,0.22);
+      color: #fde68a;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-weight: 600;
+      border-bottom: 2px solid rgba(251,191,36,0.55);
+      animation: highlightPop 0.5s ease-out both;
+      /* Reset browser default mark style */
+      display: inline;
+    }
     .passage-instruction {
       font-size: 12px; color: var(--text3);
-      margin-top: 14px;
-      font-style: italic;
+      margin-top: 14px; font-style: italic;
     }
 
     /* Options */
-    .options-list {
-      display: flex; flex-direction: column; gap: 10px;
-      margin-bottom: 20px;
-    }
+    .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
     .option-btn {
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
@@ -200,20 +200,34 @@
       animation: correctPulse 0.6s ease-out;
     }
     .option-btn.correct .opt-letter { background: rgba(52,211,153,0.2); color: var(--green); }
-    .option-btn.correct .opt-text { color: var(--text); }
-
+    .option-btn.correct .opt-text   { color: var(--text); }
     .option-btn.wrong {
       border-color: var(--red);
       background: rgba(248,113,113,0.08);
       animation: wrongShake 0.4s ease-out;
     }
     .option-btn.wrong .opt-letter { background: rgba(248,113,113,0.2); color: var(--red); }
-
     .option-btn.reveal {
       border-color: rgba(52,211,153,0.4);
       background: rgba(52,211,153,0.05);
     }
     .option-btn.reveal .opt-letter { background: rgba(52,211,153,0.15); color: var(--green); }
+
+    /* Keyboard hint */
+    .kbd-hint {
+      font-size: 11px; color: var(--text3);
+      text-align: center; margin-bottom: 20px;
+    }
+    kbd {
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-family: inherit;
+      color: var(--text3);
+    }
 
     /* Feedback panel */
     .feedback-panel {
@@ -225,9 +239,7 @@
     }
     .feedback-panel.correct { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3); }
     .feedback-panel.wrong   { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
-    .feedback-header {
-      font-size: 13px; font-weight: 700; margin-bottom: 8px;
-    }
+    .feedback-header { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
     .feedback-panel.correct .feedback-header { color: var(--green); }
     .feedback-panel.wrong   .feedback-header { color: var(--red); }
     .feedback-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
@@ -260,31 +272,24 @@
     .results-icon { font-size: 56px; margin-bottom: 20px; }
     .results-title {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 2.4rem;
-      margin-bottom: 8px;
-      text-align: center;
+      font-size: 2.4rem; margin-bottom: 8px; text-align: center;
     }
     .results-sub { font-size: 15px; color: var(--text2); margin-bottom: 32px; text-align: center; }
-
     .score-ring-wrap { margin-bottom: 36px; }
     .score-ring {
-      width: 140px; height: 140px;
-      border-radius: 50%;
-      background: conic-gradient(var(--teal) var(--pct), rgba(255,255,255,0.07) 0);
+      width: 140px; height: 140px; border-radius: 50%;
+      background: conic-gradient(var(--teal) var(--pct, 0%), rgba(255,255,255,0.07) 0);
       display: flex; align-items: center; justify-content: center;
-      position: relative;
     }
     .score-ring-inner {
-      width: 108px; height: 108px;
-      border-radius: 50%;
+      width: 108px; height: 108px; border-radius: 50%;
       background: var(--bg);
       display: flex; align-items: center; justify-content: center;
       flex-direction: column; gap: 2px;
     }
-    .score-pct { font-size: 1.8rem; font-weight: 700; color: var(--teal-light); }
+    .score-pct  { font-size: 1.8rem; font-weight: 700; color: var(--teal-light); }
     .score-frac { font-size: 11px; color: var(--text3); }
-
-    .stats-row {
+    .stats-row  {
       display: flex; gap: 24px; margin-bottom: 36px;
       flex-wrap: wrap; justify-content: center;
     }
@@ -292,14 +297,12 @@
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 16px 24px;
-      text-align: center;
-      min-width: 100px;
+      padding: 16px 24px; text-align: center; min-width: 100px;
     }
-    .stat-n { font-size: 1.6rem; font-weight: 700; color: var(--teal-light); }
+    .stat-n     { font-size: 1.6rem; font-weight: 700; color: var(--teal-light); }
     .stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; }
-
     .results-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
     .btn-outline {
       background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
@@ -316,6 +319,63 @@
       cursor: pointer; transition: opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.9; }
+
+    /* REVIEW MISSED SCREEN */
+    #screen-review {
+      display: none;
+      width: 100%; max-width: 780px;
+      padding: 32px 24px 80px;
+      animation: fadeInUp 0.4s ease-out both;
+    }
+    .review-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .review-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.6rem;
+    }
+    .review-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.35s ease-out both;
+    }
+    .review-card-meta {
+      display: flex; gap: 8px; align-items: center;
+      flex-wrap: wrap; margin-bottom: 10px;
+    }
+    .review-card-chapter { font-size: 11px; color: var(--text3); }
+    .review-passage {
+      font-size: 14px; line-height: 1.75; color: var(--text2);
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px; padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+    .review-answer-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .review-choice {
+      font-size: 12px; padding: 10px 14px;
+      border-radius: 10px; line-height: 1.5;
+    }
+    .review-choice.wrong {
+      background: rgba(248,113,113,0.1); color: var(--red);
+      border: 1px solid rgba(248,113,113,0.25);
+    }
+    .review-choice.correct {
+      background: rgba(52,211,153,0.1); color: var(--green);
+      border: 1px solid rgba(52,211,153,0.25);
+    }
+    .review-explanation {
+      font-size: 12px; color: var(--text2); line-height: 1.65;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .review-error-line {
+      font-size: 11px; color: var(--text3); margin-top: 8px;
+    }
+    .review-error-line strong { color: var(--text2); }
   </style>
 </head>
 <body>
@@ -328,7 +388,7 @@
     <div class="nav-spacer"></div>
     <div>
       <div class="nav-score" id="nav-score">0 / 0</div>
-      <div class="nav-meta" id="nav-meta">Loading...</div>
+      <div class="nav-meta"  id="nav-meta">Loading...</div>
     </div>
   </nav>
 
@@ -348,29 +408,35 @@
     <div id="screen-quiz">
 
       <div class="q-meta">
-        <span class="q-num" id="q-num">Question 1 of 20</span>
+        <span class="q-num"         id="q-num">Question 1 of 20</span>
         <span class="q-badge badge-teal" id="q-domain-badge">PMET</span>
         <span class="q-badge badge-teal" id="q-type-badge">Definition</span>
       </div>
 
       <div class="q-chapter" id="q-chapter"></div>
-      <div class="q-section" id="q-section"></div>
+      <div class="q-section"  id="q-section"></div>
 
       <div class="passage-card">
-        <div class="passage-label">&#128270; Read carefully — one fact has been changed</div>
+        <div class="passage-label">&#128270; Read carefully &mdash; one fact has been changed</div>
         <div class="passage-text" id="passage-text"></div>
         <div class="passage-instruction">Select the option that correctly identifies the error.</div>
       </div>
 
       <div class="options-list" id="options-list"></div>
 
+      <div class="kbd-hint" id="kbd-hint">
+        <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue
+      </div>
+
       <div class="feedback-panel" id="feedback-panel">
-        <div class="feedback-header" id="feedback-header"></div>
-        <div class="feedback-body" id="feedback-body"></div>
+        <div class="feedback-header"    id="feedback-header"></div>
+        <div class="feedback-body"      id="feedback-body"></div>
         <div class="feedback-error-info" id="feedback-error-info"></div>
       </div>
 
-      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+        Next Question &rarr;
+      </button>
 
     </div>
 
@@ -378,43 +444,53 @@
     <div id="screen-results">
       <div class="results-icon">&#128270;</div>
       <div class="results-title" id="results-title">Session Complete</div>
-      <div class="results-sub" id="results-sub"></div>
+      <div class="results-sub"   id="results-sub"></div>
 
       <div class="score-ring-wrap">
         <div class="score-ring" id="score-ring">
           <div class="score-ring-inner">
-            <div class="score-pct" id="result-pct">—</div>
-            <div class="score-frac" id="result-frac">— / —</div>
+            <div class="score-pct"  id="result-pct">&mdash;</div>
+            <div class="score-frac" id="result-frac">&mdash; / &mdash;</div>
           </div>
         </div>
       </div>
 
       <div class="stats-row">
         <div class="stat-box">
-          <div class="stat-n" id="stat-correct">—</div>
+          <div class="stat-n"     id="stat-correct">&mdash;</div>
           <div class="stat-label">Correct</div>
         </div>
         <div class="stat-box">
-          <div class="stat-n" id="stat-wrong">—</div>
+          <div class="stat-n"     id="stat-wrong">&mdash;</div>
           <div class="stat-label">Incorrect</div>
         </div>
         <div class="stat-box">
-          <div class="stat-n" id="stat-total">—</div>
+          <div class="stat-n"     id="stat-total">&mdash;</div>
           <div class="stat-label">Total</div>
         </div>
       </div>
 
       <div class="results-btns">
         <button class="btn-primary" onclick="restartSession()">Try Again</button>
+        <button class="btn-outline"  id="btn-review" onclick="showReview()" style="display:none">Review Missed</button>
         <a class="btn-outline" href="spot-settings.html">Change Settings</a>
         <a class="btn-outline" href="index.html">Home</a>
       </div>
     </div>
 
+    <!-- Review Missed -->
+    <div id="screen-review">
+      <div class="review-header">
+        <button class="btn-outline" onclick="closeReview()">&larr; Back to Results</button>
+        <div class="review-title">Questions You Missed</div>
+      </div>
+      <div id="review-list"></div>
+    </div>
+
   </div>
 
   <script>
-    const params = new URLSearchParams(location.search);
+    const params      = new URLSearchParams(location.search);
     const DOMAIN_CODES = (params.get('domains') || '').split(',').filter(Boolean);
     const COUNT        = parseInt(params.get('count') || '20', 10);
     const TYPE_FILTER  = params.get('type') || 'all';
@@ -426,17 +502,48 @@
       example:      'Example',
     };
 
-    let pool = [];
-    let current = 0;
-    let correct = 0;
+    let pool     = [];
+    let current  = 0;
+    let correct  = 0;
     let answered = false;
+    let missed   = []; // {q, chosenIdx}
 
-    // ── Load question files ───────────────────────────────────────────────
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function buildHighlightedPassage(text, errOrig) {
+      if (!errOrig) return escHtml(text);
+      let idx = text.indexOf(errOrig);
+      let matched = errOrig;
+      if (idx === -1) {
+        // Case-insensitive fallback
+        const lower = text.toLowerCase();
+        idx = lower.indexOf(errOrig.toLowerCase());
+        if (idx !== -1) matched = text.slice(idx, idx + errOrig.length);
+      }
+      if (idx === -1) return escHtml(text); // can't find — skip highlight
+      return escHtml(text.slice(0, idx)) +
+        `<mark class="error-highlight">${escHtml(matched)}</mark>` +
+        escHtml(text.slice(idx + matched.length));
+    }
+
+    function highlightError(q) {
+      document.getElementById('passage-text').innerHTML =
+        buildHighlightedPassage(q.modified_passage || '', q.error_original || '');
+    }
+
+    // ── Load question files ───────────────────────────────────────────────────
     async function loadData() {
       const all = [];
       for (const code of DOMAIN_CODES) {
         try {
-          const res = await fetch(`data/${code}_spot.json`);
+          const res  = await fetch(`data/${code}_spot.json`);
           if (!res.ok) throw new Error(res.status);
           const data = await res.json();
           let qs = data.questions || [];
@@ -464,39 +571,40 @@
         [all[i], all[j]] = [all[j], all[i]];
       }
       pool = all.slice(0, COUNT);
-
       showQuestion();
     }
 
-    // ── Render a question ─────────────────────────────────────────────────
+    // ── Render a question ─────────────────────────────────────────────────────
     function showQuestion() {
       const q = pool[current];
       answered = false;
 
       // Progress
-      const pct = (current / pool.length) * 100;
-      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-fill').style.width =
+        (current / pool.length * 100) + '%';
 
       // Nav
       document.getElementById('nav-score').textContent = `${correct} / ${current}`;
-      document.getElementById('nav-meta').textContent =
-        `${pool.length - current} left`;
+      document.getElementById('nav-meta').textContent  = `${pool.length - current} left`;
 
       // Q meta
       document.getElementById('q-num').textContent =
         `Question ${current + 1} of ${pool.length}`;
       document.getElementById('q-domain-badge').textContent = q.domain_code;
-      document.getElementById('q-type-badge').textContent =
+      document.getElementById('q-type-badge').textContent   =
         TYPE_LABELS[q.passage_type] || q.passage_type;
-
       document.getElementById('q-chapter').textContent = q.chapter_title;
-      document.getElementById('q-section').textContent = q.section || '';
+      document.getElementById('q-section').textContent  = q.section || '';
 
-      // Passage
+      // Passage (plain text until answered)
       document.getElementById('passage-text').textContent = q.modified_passage;
 
-      // Options — shuffle display order but track correct index
+      // Options — shuffle display order via Fisher-Yates on indices
       const indices = [0, 1, 2, 3];
+      for (let i = 3; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
       const letters = ['A', 'B', 'C', 'D'];
       const ol = document.getElementById('options-list');
       ol.innerHTML = '';
@@ -506,34 +614,40 @@
         btn.dataset.origIdx = origIdx;
         btn.innerHTML = `
           <div class="opt-letter">${letters[displayIdx]}</div>
-          <div class="opt-text">${q.options[origIdx]}</div>
+          <div class="opt-text">${escHtml(q.options[origIdx])}</div>
         `;
         btn.onclick = () => selectOption(btn, origIdx, q);
         ol.appendChild(btn);
       });
 
+      // Keyboard hint
+      document.getElementById('kbd-hint').innerHTML =
+        '<kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
+
       // Reset feedback
       const fp = document.getElementById('feedback-panel');
       fp.style.display = 'none';
       fp.className = 'feedback-panel';
-
       document.getElementById('next-btn').style.display = 'none';
 
       // Show quiz screen
       document.getElementById('screen-loading').style.display = 'none';
-      document.getElementById('screen-quiz').style.display = 'block';
+      document.getElementById('screen-quiz').style.display    = 'block';
     }
 
+    // ── Handle answer selection ───────────────────────────────────────────────
     function selectOption(btn, origIdx, q) {
       if (answered) return;
       answered = true;
 
       const isCorrect = origIdx === q.correct_option_index;
-      const allBtns = document.querySelectorAll('.option-btn');
-      allBtns.forEach(b => {
+
+      // Disable all, reveal correct
+      document.querySelectorAll('.option-btn').forEach(b => {
         b.disabled = true;
-        if (parseInt(b.dataset.origIdx) === q.correct_option_index) {
-          b.classList.add(parseInt(b.dataset.origIdx) === origIdx ? 'correct' : 'reveal');
+        const bi = parseInt(b.dataset.origIdx);
+        if (bi === q.correct_option_index) {
+          b.classList.add(bi === origIdx ? 'correct' : 'reveal');
         }
       });
 
@@ -542,37 +656,51 @@
         correct++;
       } else {
         btn.classList.add('wrong');
+        missed.push({ q, chosenIdx: origIdx });
       }
+
+      // Highlight error in passage
+      highlightError(q);
 
       // Feedback panel
       const fp = document.getElementById('feedback-panel');
       fp.className = 'feedback-panel ' + (isCorrect ? 'correct' : 'wrong');
       fp.style.display = 'block';
 
-      document.getElementById('feedback-header').textContent =
+      document.getElementById('feedback-header').innerHTML =
         isCorrect ? '&#10003; Correct!' : '&#10007; Not quite';
       document.getElementById('feedback-body').textContent = q.explanation;
       document.getElementById('feedback-error-info').innerHTML =
-        `<strong>Error in passage:</strong> "${q.error_original}" &nbsp;&rarr;&nbsp; ` +
-        `<strong>Should be:</strong> "${q.error_correct}"`;
+        `<strong>Error in passage:</strong> &ldquo;${escHtml(q.error_original)}&rdquo;` +
+        ` &nbsp;&rarr;&nbsp; ` +
+        `<strong>Should be:</strong> &ldquo;${escHtml(q.error_correct)}&rdquo;`;
 
       document.getElementById('nav-score').textContent = `${correct} / ${current + 1}`;
 
-      document.getElementById('next-btn').style.display = 'block';
-      document.getElementById('next-btn').textContent =
+      // Next button
+      const nb = document.getElementById('next-btn');
+      nb.style.display = 'block';
+      nb.textContent   =
         current + 1 < pool.length ? 'Next Question \u2192' : 'See Results \u2192';
+
+      // Auto-scroll feedback into view
+      setTimeout(() => {
+        fp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 120);
     }
 
+    // ── Navigation ────────────────────────────────────────────────────────────
     function nextQuestion() {
       current++;
       if (current >= pool.length) {
         showResults();
       } else {
-        document.getElementById('screen-quiz').style.display = 'none';
-        document.getElementById('screen-quiz').style.animation = 'none';
+        const qs = document.getElementById('screen-quiz');
+        qs.style.display = 'none';
+        qs.style.animation = 'none';
         showQuestion();
-        void document.getElementById('screen-quiz').offsetWidth;
-        document.getElementById('screen-quiz').style.animation = '';
+        void qs.offsetWidth; // reflow to restart animation
+        qs.style.animation = '';
       }
     }
 
@@ -580,41 +708,116 @@
       document.getElementById('screen-quiz').style.display = 'none';
       const pct = Math.round((correct / pool.length) * 100);
 
-      document.getElementById('progress-fill').style.width = '100%';
-      document.getElementById('nav-score').textContent = `${correct} / ${pool.length}`;
-      document.getElementById('nav-meta').textContent = 'Complete';
+      document.getElementById('progress-fill').style.width   = '100%';
+      document.getElementById('nav-score').textContent       = `${correct} / ${pool.length}`;
+      document.getElementById('nav-meta').textContent        = 'Complete';
 
-      document.getElementById('result-pct').textContent = pct + '%';
+      document.getElementById('result-pct').textContent  = pct + '%';
       document.getElementById('result-frac').textContent = `${correct} / ${pool.length}`;
       document.getElementById('stat-correct').textContent = correct;
-      document.getElementById('stat-wrong').textContent = pool.length - correct;
-      document.getElementById('stat-total').textContent = pool.length;
+      document.getElementById('stat-wrong').textContent   = pool.length - correct;
+      document.getElementById('stat-total').textContent   = pool.length;
 
       const title = pct >= 90 ? 'Outstanding!' :
-                    pct >= 75 ? 'Great Work!' :
-                    pct >= 60 ? 'Good Effort' : 'Keep Practicing';
+                    pct >= 75 ? 'Great Work!'   :
+                    pct >= 60 ? 'Good Effort'   : 'Keep Practicing';
       document.getElementById('results-title').textContent = title;
-      document.getElementById('results-sub').textContent =
+      document.getElementById('results-sub').textContent   =
         `You caught ${correct} out of ${pool.length} errors.`;
 
       // Score ring
       document.getElementById('score-ring').style.setProperty('--pct', pct + '%');
 
-      const rs = document.getElementById('screen-results');
-      rs.style.display = 'flex';
+      // Review button
+      if (missed.length > 0) {
+        const rb = document.getElementById('btn-review');
+        rb.textContent   = `Review Missed (${missed.length})`;
+        rb.style.display = 'inline-block';
+      }
+
+      document.getElementById('screen-results').style.display = 'flex';
     }
 
     function restartSession() {
       current = 0; correct = 0; answered = false;
+      missed = [];
+      document.getElementById('btn-review').style.display = 'none';
       // Re-shuffle pool
       for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
       document.getElementById('screen-results').style.display = 'none';
-      document.getElementById('progress-fill').style.width = '0%';
+      document.getElementById('progress-fill').style.width    = '0%';
       showQuestion();
     }
+
+    // ── Review Missed ─────────────────────────────────────────────────────────
+    function showReview() {
+      document.getElementById('screen-results').style.display = 'none';
+      const list = document.getElementById('review-list');
+      list.innerHTML = '';
+
+      missed.forEach(({ q, chosenIdx }, i) => {
+        const card = document.createElement('div');
+        card.className = 'review-card';
+        card.style.animationDelay = (i * 0.05) + 's';
+
+        const passageHtml  = buildHighlightedPassage(q.modified_passage || '', q.error_original || '');
+        const chosenText   = escHtml(q.options[chosenIdx] || '');
+        const correctText  = escHtml(q.options[q.correct_option_index] || '');
+        const chapterLine  = escHtml(q.chapter_title) +
+          (q.section ? ' &middot; ' + escHtml(q.section) : '');
+
+        card.innerHTML = `
+          <div class="review-card-meta">
+            <span class="q-badge badge-teal">${escHtml(q.domain_code)}</span>
+            <span class="q-badge badge-teal">${escHtml(TYPE_LABELS[q.passage_type] || q.passage_type)}</span>
+            <span class="review-card-chapter">${chapterLine}</span>
+          </div>
+          <div class="review-passage">${passageHtml}</div>
+          <div class="review-answer-row">
+            <div class="review-choice wrong">&#10007; You chose: ${chosenText}</div>
+            <div class="review-choice correct">&#10003; Correct: ${correctText}</div>
+          </div>
+          <div class="review-explanation">
+            ${escHtml(q.explanation)}
+            <div class="review-error-line">
+              <strong>Error:</strong>
+              &ldquo;${escHtml(q.error_original)}&rdquo;
+              &rarr;
+              &ldquo;${escHtml(q.error_correct)}&rdquo;
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      document.getElementById('screen-review').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeReview() {
+      document.getElementById('screen-review').style.display  = 'none';
+      document.getElementById('screen-results').style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Keyboard shortcuts ────────────────────────────────────────────────────
+    document.addEventListener('keydown', e => {
+      // 1–4: select option (before answering)
+      if (['1', '2', '3', '4'].includes(e.key) && !answered) {
+        const btns = document.querySelectorAll('.option-btn:not(:disabled)');
+        const idx = parseInt(e.key) - 1;
+        if (btns[idx]) btns[idx].click();
+        return;
+      }
+      // Enter or → : next question (after answering)
+      if ((e.key === 'Enter' || e.key === 'ArrowRight') && answered) {
+        const nb = document.getElementById('next-btn');
+        if (nb && nb.style.display !== 'none') nb.click();
+      }
+    });
 
     loadData();
   </script>

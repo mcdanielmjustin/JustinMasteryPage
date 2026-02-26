@@ -44,6 +44,7 @@
       0%   { background-position: -400px 0; }
       100% { background-position: 400px 0; }
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .blob {
       position: fixed; border-radius: 50%; filter: blur(100px);
@@ -103,7 +104,6 @@
     }
     .subtitle { font-size: 14px; color: var(--text2); margin-top: 12px; max-width: 460px; line-height: 1.6; }
 
-    /* Settings container */
     .settings-wrap {
       width: 100%; max-width: 680px;
       display: flex; flex-direction: column; gap: 24px;
@@ -116,11 +116,23 @@
       border-radius: 18px;
       padding: 24px 26px;
     }
+    .section-label-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
     .section-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--teal-light);
-      margin-bottom: 14px;
     }
+    .select-all-btn {
+      background: none; border: none;
+      font-size: 11px; font-weight: 600;
+      color: var(--teal); cursor: pointer;
+      padding: 0; text-transform: uppercase;
+      letter-spacing: 0.06em; transition: color 0.2s;
+    }
+    .select-all-btn:hover { color: var(--teal-light); }
+    .select-all-btn:disabled { color: var(--text3); cursor: default; }
 
     /* Domain grid */
     .domains-grid {
@@ -134,26 +146,49 @@
       border-radius: 10px;
       padding: 11px 10px;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
       text-align: left;
+      position: relative;
     }
     .domain-btn .d-code {
       font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
       color: var(--text3); text-transform: uppercase; display: block; margin-bottom: 3px;
     }
     .domain-btn .d-name { font-size: 12px; color: var(--text2); line-height: 1.3; }
-    .domain-btn.active {
-      background: rgba(45,212,191,0.1);
-      border-color: rgba(45,212,191,0.5);
+    .domain-btn .d-count {
+      font-size: 10px; color: var(--text3);
+      margin-top: 5px; display: block;
+      min-height: 14px;
     }
-    .domain-btn.active .d-code { color: var(--teal-light); }
-    .domain-btn.active .d-name { color: var(--text); }
-    .domain-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
+    .domain-btn.active {
+      background: rgba(45,212,191,0.72);
+      border-color: var(--teal-light);
+      box-shadow: 0 0 0 1px var(--teal-light), 0 0 18px rgba(45,212,191,0.45), inset 0 0 24px rgba(45,212,191,0.2);
+    }
+    .domain-btn.active .d-code  { color: #0f2e2b; }
+    .domain-btn.active .d-name  { color: #0a1f1e; font-weight: 600; }
+    .domain-btn.active .d-count { color: #0f3330; }
+    .domain-btn:hover:not(.active):not(.locked) { border-color: rgba(45,212,191,0.35); background: rgba(45,212,191,0.05); }
+
+    /* Locked state — visual only, clicks still allowed */
+    .domain-btn.locked { opacity: 0.42; }
+    .domain-btn.locked .d-count { font-style: italic; }
+
+    /* Count skeleton while loading */
+    .d-count.loading {
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.05) 25%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.05) 75%);
+      background-size: 200px 100%;
+      animation: shimmer 1.2s infinite linear;
+      border-radius: 4px;
+      height: 12px;
+      width: 70%;
+    }
 
     /* Question count */
-    .count-row {
-      display: flex; gap: 10px; flex-wrap: wrap;
-    }
+    .count-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .count-btn {
       flex: 1; min-width: 70px;
       background: var(--bg3);
@@ -172,7 +207,7 @@
     }
     .count-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
 
-    /* Difficulty */
+    /* Passage type */
     .diff-row { display: flex; gap: 10px; }
     .diff-btn {
       flex: 1;
@@ -218,12 +253,11 @@
     .start-btn:hover { opacity: 0.9; transform: translateY(-2px); }
     .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-    .warn {
-      font-size: 12px; color: #f87171; padding: 8px 0; display: none;
-    }
+    .warn { font-size: 12px; color: #f87171; padding: 8px 0; display: none; }
 
     @media (max-width: 600px) {
       .domains-grid { grid-template-columns: repeat(2, 1fr); }
+      .diff-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -244,50 +278,62 @@
     <div class="header">
       <div class="eyebrow">&#128270; Reading Comprehension</div>
       <h1>Spot the <em>Error</em></h1>
-      <p class="subtitle">Read a passage from the EPPP Study Guide. One fact has been deliberately changed — can you catch it?</p>
+      <p class="subtitle">Read a passage from the EPPP Study Guide. One fact has been deliberately changed &mdash; can you catch it?</p>
     </div>
 
     <div class="settings-wrap">
 
       <!-- Domain Selection -->
       <div class="section-card">
-        <div class="section-label">Domain</div>
+        <div class="section-label-row">
+          <div class="section-label">Domain</div>
+          <button class="select-all-btn" id="select-all-btn" onclick="selectAllAvailable()" disabled>Select All</button>
+        </div>
         <div class="domains-grid">
           <button class="domain-btn" data-code="PMET" onclick="toggleDomain('PMET')">
             <span class="d-code">PMET</span>
             <span class="d-name">Psychometrics &amp; Research Methods</span>
+            <span class="d-count loading" id="count-PMET"></span>
           </button>
           <button class="domain-btn" data-code="LDEV" onclick="toggleDomain('LDEV')">
             <span class="d-code">LDEV</span>
             <span class="d-name">Lifespan &amp; Developmental Stages</span>
+            <span class="d-count loading" id="count-LDEV"></span>
           </button>
           <button class="domain-btn" data-code="CPAT" onclick="toggleDomain('CPAT')">
             <span class="d-code">CPAT</span>
             <span class="d-name">Clinical Psychopathology (DSM-5)</span>
+            <span class="d-count loading" id="count-CPAT"></span>
           </button>
           <button class="domain-btn" data-code="PTHE" onclick="toggleDomain('PTHE')">
             <span class="d-code">PTHE</span>
             <span class="d-name">Psychotherapy Models &amp; Interventions</span>
+            <span class="d-count loading" id="count-PTHE"></span>
           </button>
           <button class="domain-btn" data-code="SOCU" onclick="toggleDomain('SOCU')">
             <span class="d-code">SOCU</span>
             <span class="d-name">Social &amp; Cultural Psychology</span>
+            <span class="d-count loading" id="count-SOCU"></span>
           </button>
           <button class="domain-btn" data-code="WDEV" onclick="toggleDomain('WDEV')">
             <span class="d-code">WDEV</span>
             <span class="d-name">Workforce Development &amp; Leadership</span>
+            <span class="d-count loading" id="count-WDEV"></span>
           </button>
           <button class="domain-btn" data-code="BPSY" onclick="toggleDomain('BPSY')">
             <span class="d-code">BPSY</span>
             <span class="d-name">Biopsychology</span>
+            <span class="d-count loading" id="count-BPSY"></span>
           </button>
           <button class="domain-btn" data-code="CASS" onclick="toggleDomain('CASS')">
             <span class="d-code">CASS</span>
             <span class="d-name">Clinical Assessment &amp; Interpretation</span>
+            <span class="d-count loading" id="count-CASS"></span>
           </button>
           <button class="domain-btn" data-code="PETH" onclick="toggleDomain('PETH')">
             <span class="d-code">PETH</span>
             <span class="d-name">Psychopharmacology &amp; Ethics</span>
+            <span class="d-count loading" id="count-PETH"></span>
           </button>
         </div>
         <div id="domain-warn" class="warn">Select at least one domain to continue.</div>
@@ -295,7 +341,9 @@
 
       <!-- Question Count -->
       <div class="section-card">
-        <div class="section-label">Number of Questions</div>
+        <div class="section-label-row">
+          <div class="section-label">Number of Questions</div>
+        </div>
         <div class="count-row">
           <button class="count-btn" data-n="10" onclick="selectCount(10)">10</button>
           <button class="count-btn active" data-n="20" onclick="selectCount(20)">20</button>
@@ -306,7 +354,9 @@
 
       <!-- Passage Type -->
       <div class="section-card">
-        <div class="section-label">Passage Type</div>
+        <div class="section-label-row">
+          <div class="section-label">Passage Type</div>
+        </div>
         <div class="diff-row">
           <button class="diff-btn active" data-type="all" onclick="selectType('all')">
             <div class="d-title">All Types</div>
@@ -334,6 +384,10 @@
           <span class="sum-value" id="sum-count">20</span>
         </div>
         <div class="sum-item">
+          <span class="sum-label">Available</span>
+          <span class="sum-value" id="sum-available">&mdash;</span>
+        </div>
+        <div class="sum-item">
           <span class="sum-label">Passage Type</span>
           <span class="sum-value" id="sum-type">All Types</span>
         </div>
@@ -353,12 +407,51 @@
       type: 'all',
     };
 
+    const DOMAIN_COUNTS = {}; // populated by checkAvailability()
+
     const TYPE_LABELS = {
-      all: 'All Types',
-      definition: 'Definitions',
-      clinical_note: 'Clinical Notes',
+      all:          'All Types',
+      definition:   'Definitions',
+      clinical_note:'Clinical Notes',
     };
 
+    // ── Availability check ────────────────────────────────────────────────────
+    async function checkAvailability() {
+      const codes = ['PMET','LDEV','CPAT','PTHE','SOCU','WDEV','BPSY','CASS','PETH'];
+      await Promise.all(codes.map(async code => {
+        const countEl = document.getElementById(`count-${code}`);
+        const btn     = document.querySelector(`[data-code="${code}"]`);
+        try {
+          const res  = await fetch(`data/${code}_spot.json`);
+          // Don't check res.ok — file:// protocol returns status 0 with ok=false
+          // even on a successful read. Just parse the JSON and let that throw on failure.
+          const data = await res.json();
+          const n    = (data.questions || []).length;
+          if (n === 0) throw new Error('empty');
+          DOMAIN_COUNTS[code] = n;
+          countEl.classList.remove('loading');
+          countEl.textContent = `${n.toLocaleString()} question${n === 1 ? '' : 's'}`;
+        } catch {
+          countEl.classList.remove('loading');
+          countEl.textContent = 'Not yet available';
+          btn.classList.add('locked');
+          // Remove from selection if it was somehow selected
+          if (state.domains.has(code)) {
+            state.domains.delete(code);
+            btn.classList.remove('active');
+          }
+        }
+      }));
+
+      // Enable Select All once we know what's available
+      const selectAllBtn = document.getElementById('select-all-btn');
+      if (Object.keys(DOMAIN_COUNTS).length > 0) {
+        selectAllBtn.disabled = false;
+      }
+      updateSummary();
+    }
+
+    // ── Domain toggle ─────────────────────────────────────────────────────────
     function toggleDomain(code) {
       if (state.domains.has(code)) {
         state.domains.delete(code);
@@ -371,6 +464,20 @@
       updateSummary();
     }
 
+    function selectAllAvailable() {
+      const allBtns    = document.querySelectorAll('.domain-btn');
+      const allCodes   = [...allBtns].map(b => b.dataset.code);
+      const allSelected = allCodes.every(c => state.domains.has(c));
+      if (allSelected) {
+        allCodes.forEach(c => state.domains.delete(c));
+      } else {
+        allCodes.forEach(c => state.domains.add(c));
+      }
+      allBtns.forEach(b => b.classList.toggle('active', state.domains.has(b.dataset.code)));
+      updateSummary();
+    }
+
+    // ── Count / type ──────────────────────────────────────────────────────────
     function selectCount(n) {
       state.count = n;
       document.querySelectorAll('.count-btn').forEach(b => {
@@ -387,16 +494,33 @@
       updateSummary();
     }
 
+    // ── Summary bar ───────────────────────────────────────────────────────────
     function updateSummary() {
-      const codes = [...state.domains];
+      const codes     = [...state.domains];
+      const available = Object.keys(DOMAIN_COUNTS);
+
+      // Domain label
       document.getElementById('sum-domain').textContent =
-        codes.length === 0 ? 'None selected' :
-        codes.length === 9 ? 'All Domains' :
-        codes.length <= 3 ? codes.join(', ') :
+        codes.length === 0                        ? 'None selected' :
+        codes.length === available.length && available.length > 1 ? 'All Available' :
+        codes.length <= 3                         ? codes.join(', ') :
         codes.length + ' Domains';
+
+      // Total questions available across selected domains
+      const totalQ = codes.reduce((s, c) => s + (DOMAIN_COUNTS[c] || 0), 0);
       document.getElementById('sum-count').textContent = state.count;
+      document.getElementById('sum-available').textContent =
+        totalQ > 0 ? totalQ.toLocaleString() + ' available' : '\u2014';
+
       document.getElementById('sum-type').textContent = TYPE_LABELS[state.type];
 
+      // Select All label
+      const allBtnCodes = [...document.querySelectorAll('.domain-btn')].map(b => b.dataset.code);
+      const allSelected = allBtnCodes.length > 0 && allBtnCodes.every(c => state.domains.has(c));
+      document.getElementById('select-all-btn').textContent =
+        allSelected ? 'Deselect All' : 'Select All';
+
+      // Warn + start button
       const warn = document.getElementById('domain-warn');
       const btn  = document.getElementById('start-btn');
       if (codes.length === 0) {
@@ -408,6 +532,7 @@
       }
     }
 
+    // ── Start ─────────────────────────────────────────────────────────────────
     function startSession() {
       if (state.domains.size === 0) return;
       const p = new URLSearchParams({
@@ -417,6 +542,9 @@
       });
       location.href = 'spot-exercise.html?' + p.toString();
     }
+
+    // Init
+    checkAvailability();
   </script>
 </body>
 </html>
