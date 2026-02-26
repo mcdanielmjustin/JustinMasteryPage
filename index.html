@@ -18,6 +18,7 @@
       --gold-dark: #b8863c;
       --green: #34d399;
       --purple: #9333ea;
+      --orange: #f97316;
       --text: #fafafa;
       --text2: #a8a8b3;
       --text3: #6b6b76;
@@ -164,7 +165,7 @@
     /* Module grid */
     .modules-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
       width: 100%;
       max-width: 900px;
@@ -244,6 +245,7 @@
     .icon-gold    { background: rgba(212,160,84,0.12); }
     .icon-green   { background: rgba(52,211,153,0.12); }
     .icon-purple  { background: rgba(147,51,234,0.12); }
+    .icon-orange  { background: rgba(249,115,22,0.12); }
 
     .module-label {
       font-size: 10px; font-weight: 600;
@@ -252,6 +254,7 @@
     .label-gold   { color: var(--gold-light); }
     .label-green  { color: var(--green); }
     .label-purple { color: #c084fc; }
+    .label-orange { color: #fb923c; }
 
     .module-title {
       font-family: 'Instrument Serif', Georgia, serif;
@@ -276,6 +279,20 @@
     .card-clinical:hover   .module-arrow { color: var(--gold); }
     .card-ethics:hover     .module-arrow { color: var(--green); }
     .card-thisorthat:hover .module-arrow { color: #c084fc; }
+
+    /* Streak — orange */
+    .card-streak {
+      border-color: rgba(249,115,22,0.2);
+    }
+    .card-streak::before {
+      background: radial-gradient(ellipse at top left, rgba(249,115,22,0.08), transparent 70%);
+    }
+    .card-streak:hover {
+      border-color: rgba(249,115,22,0.45);
+      box-shadow: 0 20px 50px rgba(249,115,22,0.12);
+    }
+    .card-streak:hover::before { opacity: 1; }
+    .card-streak:hover .module-arrow { color: #fb923c; }
 
     @media (max-width: 700px) {
       .modules-grid { grid-template-columns: 1fr; }
@@ -327,11 +344,19 @@
       </div>
 
       <div class="module-card card-thisorthat" onclick="location.href='thisorthat-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-purple">⚡</div>
+        <div class="module-icon icon-purple">&#9889;</div>
         <div class="module-label label-purple">Module</div>
         <div class="module-title">This or That</div>
         <div class="module-desc">Sharpen your ability to distinguish between closely related concepts, theories, and approaches.</div>
-        <div class="module-arrow">→</div>
+        <div class="module-arrow">&#8594;</div>
+      </div>
+
+      <div class="module-card card-streak" onclick="location.href='streak-settings.html'" style="cursor:pointer;">
+        <div class="module-icon icon-orange">&#128293;</div>
+        <div class="module-label label-orange">Challenge</div>
+        <div class="module-title">Streak Challenge</div>
+        <div class="module-desc">How far can you go? Answer correctly to build your streak — one wrong answer ends the run.</div>
+        <div class="module-arrow">&#8594;</div>
       </div>
 
     </div>
