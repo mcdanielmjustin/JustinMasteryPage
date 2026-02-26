@@ -61,6 +61,17 @@
       60%  { transform: scale(0.7) rotate(10deg); }
       100% { transform: scale(1); opacity: 0.2; }
     }
+    @keyframes heartGained {
+      0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+      60%  { transform: scale(1.35) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @keyframes toastUp {
+      0%   { opacity: 0; transform: translateX(-50%) translateY(8px); }
+      15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+      75%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    }
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -161,6 +172,18 @@
       opacity: 0.18;
       filter: grayscale(1);
       animation: heartLost 0.45s ease-out forwards;
+    }
+    .heart.gained { animation: heartGained 0.5s ease-out both; }
+
+    .life-toast {
+      position: fixed; top: 72px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(248,113,113,0.15);
+      border: 1px solid rgba(248,113,113,0.35);
+      border-radius: 30px; padding: 7px 20px;
+      font-size: 13px; font-weight: 700; color: #fca5a5;
+      z-index: 50; pointer-events: none;
+      animation: toastUp 2s ease-out forwards;
     }
 
     /* Streak counter */
@@ -465,24 +488,27 @@
       contrast: 'Contrast', example_recognition: 'Example ID', implication: 'Implication',
     };
 
-    const params  = new URLSearchParams(location.search);
+    const params     = new URLSearchParams(location.search);
     const domainParam = params.get('domains') || 'mixed';
-    const MAX_LIVES   = parseInt(params.get('lives') || '1', 10);
+    const MAX_LIVES   = parseInt(params.get('lives')     || '1', 10);
+    const LIFE_EVERY  = parseInt(params.get('lifeevery') || '0', 10);
     const SHUFFLE     = params.get('shuffle') !== 'off';
 
     const CFG_DOMAINS = domainParam === 'mixed' ? ALL_DOMAINS : domainParam.split(',');
     const STORAGE_KEY = 'streak_best_' + CFG_DOMAINS.slice().sort().join('_');
 
     // ── State ───────────────────────────────────────────────────────────────
-    let pool       = [];
-    let streak     = 0;
-    let peakStreak = 0;   // session high
-    let bestStreak = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
-    let livesLeft  = MAX_LIVES;
-    let current    = null;
-    let answered   = false;
-    let gameOver   = false;
-    let lastWrong  = null;
+    let pool         = [];
+    let streak       = 0;
+    let peakStreak   = 0;
+    let bestStreak   = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+    let totalLives   = MAX_LIVES;
+    let livesLeft    = MAX_LIVES;
+    let totalCorrect = 0;   // cumulative correct this session
+    let current      = null;
+    let answered     = false;
+    let gameOver     = false;
+    let lastWrong    = null;
 
     // ── Load questions ───────────────────────────────────────────────────────
     async function loadQuestions() {
@@ -546,7 +572,7 @@
     function renderLives() {
       const wrap = document.getElementById('lives-display');
       wrap.innerHTML = '';
-      for (let i = 0; i < MAX_LIVES; i++) {
+      for (let i = 0; i < totalLives; i++) {
         const span = document.createElement('span');
         span.className = 'heart' + (i >= livesLeft ? ' lost' : '');
         span.id = 'heart-' + i;
@@ -557,11 +583,23 @@
 
     function loseLife() {
       livesLeft--;
-      // Animate the heart that just got lost
       const heartEl = document.getElementById('heart-' + livesLeft);
-      if (heartEl) {
-        heartEl.classList.add('lost');
-      }
+      if (heartEl) heartEl.classList.add('lost');
+    }
+
+    function gainLife() {
+      totalLives++;
+      livesLeft++;
+      renderLives();
+      // Animate the newly added heart
+      const newHeart = document.getElementById('heart-' + (livesLeft - 1));
+      if (newHeart) newHeart.classList.add('gained');
+      // Show toast
+      const toast = document.createElement('div');
+      toast.className = 'life-toast';
+      toast.textContent = '\u2764\uFE0F  +1 Life!';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
     }
 
     function bumpStreakDisplay() {
@@ -649,12 +687,15 @@
 
       if (isRight) {
         streak++;
+        totalCorrect++;
         if (streak > bestStreak) {
           bestStreak = streak;
           localStorage.setItem(STORAGE_KEY, bestStreak);
         }
         bumpStreakDisplay();
         updateNavStreak();
+        // Life extension milestone
+        if (LIFE_EVERY > 0 && totalCorrect % LIFE_EVERY === 0) gainLife();
         showFeedback(true, correct);
         document.getElementById('next-btn').classList.add('visible');
       } else {

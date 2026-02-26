@@ -440,7 +440,44 @@
       </div>
     </div>
 
-    <!-- ── 3. SHUFFLE ── -->
+    <!-- ── 3. LIFE EXTENSION ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Life Extension</div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-option selected" data-lifeevery="0" onclick="selectToggle(this,'lifeevery')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Off</div>
+            <div class="toggle-sublabel">No bonus lives earned during the run</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-lifeevery="10" onclick="selectToggle(this,'lifeevery')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Every 10 Correct</div>
+            <div class="toggle-sublabel">Earn &#10084;&#65039; +1 life for each 10-question milestone</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-lifeevery="20" onclick="selectToggle(this,'lifeevery')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Every 20 Correct</div>
+            <div class="toggle-sublabel">Earn &#10084;&#65039; +1 life for each 20-question milestone</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-lifeevery="30" onclick="selectToggle(this,'lifeevery')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Every 30 Correct</div>
+            <div class="toggle-sublabel">Earn &#10084;&#65039; +1 life for each 30-question milestone</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. SHUFFLE ── -->
     <div class="settings-section">
       <div class="section-header">
         <div class="section-label">Question Order</div>
@@ -476,6 +513,11 @@
       </div>
       <div class="summary-sep"></div>
       <div class="summary-item">
+        <span class="s-label">+Life</span>
+        <span class="s-val" id="sum-lifeevery">Off</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
         <span class="s-label">Shuffle</span>
         <span class="s-val" id="sum-shuffle">On</span>
       </div>
@@ -489,10 +531,11 @@
 
   <script>
     const state = {
-      domains: new Set(),
-      mixed:   false,
-      lives:   1,
-      shuffle: 'on',
+      domains:   new Set(),
+      mixed:     false,
+      lives:     1,
+      lifeevery: '0',
+      shuffle:   'on',
     };
 
     // ── Domain ──
@@ -567,6 +610,7 @@
         state.mixed ? 'Mixed' :
         state.domains.size ? state.domains.size + (state.domains.size === 1 ? ' domain' : ' domains') : 'None';
       document.getElementById('sum-lives').innerHTML = heartsMap[state.lives];
+      document.getElementById('sum-lifeevery').textContent = state.lifeevery === '0' ? 'Off' : 'Every ' + state.lifeevery;
       document.getElementById('sum-shuffle').textContent = state.shuffle === 'on' ? 'On' : 'Off';
     }
 
@@ -578,7 +622,7 @@
         return;
       }
       const domains = state.mixed ? 'mixed' : [...state.domains].join(',');
-      const params = new URLSearchParams({ domains, lives: state.lives, shuffle: state.shuffle });
+      const params = new URLSearchParams({ domains, lives: state.lives, lifeevery: state.lifeevery, shuffle: state.shuffle });
       location.href = 'streak-exercise.html?' + params.toString();
     }
 
