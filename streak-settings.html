@@ -236,10 +236,51 @@
     .start-btn:active { transform: translateY(0); }
     .start-arrow { font-size: 20px; }
 
+    /* ── LIVES CARDS ── */
+    .lives-grid { display: flex; gap: 10px; }
+    .lives-card {
+      flex: 1;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .lives-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+    .lives-card.selected { border-color: var(--red); background: rgba(248,113,113,0.07); }
+    .lives-hearts { font-size: 22px; letter-spacing: 3px; line-height: 1; }
+    .lives-count { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .lives-card.selected .lives-count { color: var(--text); }
+    .lives-sub { font-size: 11px; color: var(--text3); text-align: center; line-height: 1.35; }
+
+    /* ── TOGGLE ROW ── */
+    .toggle-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .toggle-option {
+      flex: 1; min-width: 140px;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 16px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s; user-select: none;
+    }
+    .toggle-option:hover { background: rgba(255,255,255,0.04); }
+    .toggle-option.selected { border-color: var(--orange); background: rgba(249,115,22,0.07); }
+    .toggle-radio {
+      width: 16px; height: 16px; flex-shrink: 0; border: 2px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .toggle-option.selected .toggle-radio { border-color: var(--orange); }
+    .toggle-radio-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); display: none; }
+    .toggle-option.selected .toggle-radio-dot { display: block; }
+    .toggle-label { font-size: 13px; font-weight: 500; }
+    .toggle-sublabel { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
     .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 
     @media (max-width: 600px) {
       .domains-grid { grid-template-columns: repeat(2, 1fr); }
+      .lives-grid { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -371,11 +412,72 @@
       <p class="warn" id="domain-warn">Select at least one domain to continue.</p>
     </div>
 
+    <!-- ── 2. LIVES ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Lives</div>
+      </div>
+      <div class="lives-grid">
+
+        <div class="lives-card selected" data-lives="1" onclick="selectLives(this)">
+          <div class="lives-hearts">&#10084;&#65039;</div>
+          <div class="lives-count">1 Life</div>
+          <div class="lives-sub">One strike and you're out</div>
+        </div>
+
+        <div class="lives-card" data-lives="2" onclick="selectLives(this)">
+          <div class="lives-hearts">&#10084;&#65039;&#10084;&#65039;</div>
+          <div class="lives-count">2 Lives</div>
+          <div class="lives-sub">One mistake forgiven</div>
+        </div>
+
+        <div class="lives-card" data-lives="3" onclick="selectLives(this)">
+          <div class="lives-hearts">&#10084;&#65039;&#10084;&#65039;&#10084;&#65039;</div>
+          <div class="lives-count">3 Lives</div>
+          <div class="lives-sub">Two mistakes forgiven</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 3. SHUFFLE ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Question Order</div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-option selected" data-shuffle="on" onclick="selectToggle(this,'shuffle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Shuffle On</div>
+            <div class="toggle-sublabel">Random order every session</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-shuffle="off" onclick="selectToggle(this,'shuffle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Shuffle Off</div>
+            <div class="toggle-sublabel">Fixed domain order</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ── SUMMARY + START ── -->
     <div class="summary-bar">
       <div class="summary-item">
         <span class="s-label">Domain</span>
         <span class="s-val" id="sum-domains">None</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Lives</span>
+        <span class="s-val" id="sum-lives">&#10084;&#65039;</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Shuffle</span>
+        <span class="s-val" id="sum-shuffle">On</span>
       </div>
     </div>
 
@@ -389,6 +491,8 @@
     const state = {
       domains: new Set(),
       mixed:   false,
+      lives:   1,
+      shuffle: 'on',
     };
 
     // ── Domain ──
@@ -439,11 +543,31 @@
       document.getElementById('domain-all-btn').textContent = allSelected ? 'Deselect all' : 'Select all';
     }
 
+    // ── Lives ──
+    function selectLives(card) {
+      document.querySelectorAll('.lives-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.lives = parseInt(card.dataset.lives);
+      updateSummary();
+    }
+
+    // ── Generic toggle (shuffle) ──
+    function selectToggle(el, group) {
+      document.querySelectorAll(`[data-${group}]`).forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state[group] = el.dataset[group];
+      updateSummary();
+    }
+
     // ── Summary ──
+    const heartsMap = { 1: '&#10084;&#65039;', 2: '&#10084;&#65039;&#10084;&#65039;', 3: '&#10084;&#65039;&#10084;&#65039;&#10084;&#65039;' };
+
     function updateSummary() {
       document.getElementById('sum-domains').textContent =
         state.mixed ? 'Mixed' :
         state.domains.size ? state.domains.size + (state.domains.size === 1 ? ' domain' : ' domains') : 'None';
+      document.getElementById('sum-lives').innerHTML = heartsMap[state.lives];
+      document.getElementById('sum-shuffle').textContent = state.shuffle === 'on' ? 'On' : 'Off';
     }
 
     // ── Validate + Start ──
@@ -454,7 +578,7 @@
         return;
       }
       const domains = state.mixed ? 'mixed' : [...state.domains].join(',');
-      const params = new URLSearchParams({ domains });
+      const params = new URLSearchParams({ domains, lives: state.lives, shuffle: state.shuffle });
       location.href = 'streak-exercise.html?' + params.toString();
     }
 

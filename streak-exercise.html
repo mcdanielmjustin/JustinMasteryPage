@@ -55,6 +55,12 @@
       40%  { transform: scale(1.25); }
       100% { transform: scale(1); }
     }
+    @keyframes heartLost {
+      0%   { transform: scale(1); }
+      25%  { transform: scale(1.4) rotate(-10deg); }
+      60%  { transform: scale(0.7) rotate(10deg); }
+      100% { transform: scale(1); opacity: 0.2; }
+    }
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -139,6 +145,22 @@
       position: relative; z-index: 1;
       padding: 32px 24px 60px;
       max-width: 780px; margin: 0 auto; width: 100%;
+    }
+
+    /* Lives display */
+    .lives-display {
+      display: flex; justify-content: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .heart {
+      font-size: 28px; line-height: 1;
+      transition: opacity 0.3s;
+      display: inline-block;
+    }
+    .heart.lost {
+      opacity: 0.18;
+      filter: grayscale(1);
+      animation: heartLost 0.45s ease-out forwards;
     }
 
     /* Streak counter */
@@ -369,6 +391,8 @@
 
   <!-- QUIZ -->
   <div id="screen-quiz" class="screen">
+    <div class="lives-display" id="lives-display"></div>
+
     <div class="streak-display">
       <div class="streak-number" id="streak-number">0</div>
       <div class="streak-label">&#128293; Current Streak</div>
@@ -443,18 +467,22 @@
 
     const params  = new URLSearchParams(location.search);
     const domainParam = params.get('domains') || 'mixed';
+    const MAX_LIVES   = parseInt(params.get('lives') || '1', 10);
+    const SHUFFLE     = params.get('shuffle') !== 'off';
 
     const CFG_DOMAINS = domainParam === 'mixed' ? ALL_DOMAINS : domainParam.split(',');
     const STORAGE_KEY = 'streak_best_' + CFG_DOMAINS.slice().sort().join('_');
 
     // ── State ───────────────────────────────────────────────────────────────
-    let pool     = [];
-    let streak   = 0;
+    let pool       = [];
+    let streak     = 0;
+    let peakStreak = 0;   // session high
     let bestStreak = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
-    let current  = null;
-    let answered = false;
-    let gameOver = false;
-    let lastWrong = null;
+    let livesLeft  = MAX_LIVES;
+    let current    = null;
+    let answered   = false;
+    let gameOver   = false;
+    let lastWrong  = null;
 
     // ── Load questions ───────────────────────────────────────────────────────
     async function loadQuestions() {
@@ -481,12 +509,17 @@
         return;
       }
 
-      // Shuffle pool
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
+      // Shuffle or keep sequential
+      if (SHUFFLE) {
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+      } else {
+        pool.reverse(); // pop() from end = first item first
       }
 
+      renderLives();
       showScreen('quiz');
       updateNavStreak();
       document.getElementById('nav-streak-wrap').style.display = 'flex';
@@ -509,14 +542,36 @@
       bestEl.textContent = bestStreak > 0 ? `Best: ${bestStreak}` : '';
     }
 
+    function renderLives() {
+      const wrap = document.getElementById('lives-display');
+      wrap.innerHTML = '';
+      for (let i = 0; i < MAX_LIVES; i++) {
+        const span = document.createElement('span');
+        span.className = 'heart' + (i >= livesLeft ? ' lost' : '');
+        span.id = 'heart-' + i;
+        span.textContent = '\u2764\uFE0F';
+        wrap.appendChild(span);
+      }
+    }
+
+    function loseLife() {
+      livesLeft--;
+      // Animate the heart that just got lost
+      const heartEl = document.getElementById('heart-' + livesLeft);
+      if (heartEl) {
+        heartEl.classList.add('lost');
+      }
+    }
+
     function bumpStreakDisplay() {
       const el = document.getElementById('streak-number');
       el.textContent = streak;
       el.classList.remove('bump');
       void el.offsetWidth;
       el.classList.add('bump');
+      if (streak > peakStreak) peakStreak = streak;
       const bestInline = document.getElementById('streak-best-inline');
-      bestInline.textContent = bestStreak > 0 ? `Personal best: ${bestStreak}` : '';
+      bestInline.textContent = peakStreak > streak ? `Session best: ${peakStreak}` : (bestStreak > streak ? `Personal best: ${bestStreak}` : '');
     }
 
     // ── Next question ─────────────────────────────────────────────────────────
@@ -603,12 +658,22 @@
         document.getElementById('next-btn').classList.add('visible');
       } else {
         lastWrong = current;
-        showFeedback(false, correct);
-        setTimeout(() => endGame(false), 1200);
+        if (streak > peakStreak) peakStreak = streak;
+        streak = 0;
+        loseLife();
+        if (livesLeft <= 0) {
+          showFeedback(false, correct);
+          setTimeout(() => endGame(false), 1200);
+        } else {
+          showFeedback(false, correct, livesLeft);
+          bumpStreakDisplay();
+          updateNavStreak();
+          document.getElementById('next-btn').classList.add('visible');
+        }
       }
     }
 
-    function showFeedback(isRight, correct) {
+    function showFeedback(isRight, correct, remainingLives = 0) {
       const fb   = document.getElementById('feedback-bar');
       const icon = document.getElementById('feedback-icon');
       const msg  = document.getElementById('feedback-msg');
@@ -618,8 +683,12 @@
       if (isRight) {
         msg.textContent = 'Correct!';
         sub.textContent = `Streak: ${streak}`;
+      } else if (remainingLives > 0) {
+        msg.textContent = 'Incorrect — streak reset';
+        const hearts = '\u2764\uFE0F'.repeat(remainingLives);
+        sub.textContent = `Correct: ${correct} · ${hearts} ${remainingLives} ${remainingLives === 1 ? 'life' : 'lives'} left`;
       } else {
-        msg.textContent = 'Incorrect';
+        msg.textContent = 'Incorrect — no lives left';
         sub.textContent = `Correct answer: ${correct}`;
       }
     }
@@ -627,10 +696,15 @@
     // ── Game over ─────────────────────────────────────────────────────────────
     function endGame(exhausted) {
       gameOver = true;
-      const isNewBest = streak > 0 && streak >= bestStreak && !exhausted;
+      const finalStreak = Math.max(streak, peakStreak);
+      const isNewBest = finalStreak > 0 && finalStreak >= bestStreak && !exhausted;
+      if (finalStreak > bestStreak) {
+        bestStreak = finalStreak;
+        localStorage.setItem(STORAGE_KEY, bestStreak);
+      }
 
-      document.getElementById('gameover-icon').textContent = exhausted ? '🏆' : (streak >= 10 ? '🔥' : '💥');
-      document.getElementById('gameover-streak').textContent = streak;
+      document.getElementById('gameover-icon').textContent = exhausted ? '🏆' : (finalStreak >= 10 ? '🔥' : '💥');
+      document.getElementById('gameover-streak').textContent = finalStreak;
       document.getElementById('stat-best').textContent = bestStreak;
       document.getElementById('stat-domain').textContent =
         domainParam === 'mixed' ? 'Mixed' : CFG_DOMAINS.join(', ');
@@ -639,7 +713,7 @@
         document.getElementById('new-best-badge').style.display = 'inline-flex';
       }
 
-      if (lastWrong) {
+      if (lastWrong && !exhausted) {
         document.getElementById('gameover-wrong-q').textContent = lastWrong.question;
         const opts = lastWrong.options;
         const ca   = lastWrong.correct_answer;
