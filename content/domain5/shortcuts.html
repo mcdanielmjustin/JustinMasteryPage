@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Shortcuts We Take | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>The Shortcuts We Take</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 5</div>
+        <div class="domain-title">Social &amp; Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cultural-roots.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From</a></li>
+        <li class="chapter-item"><a href="shortcuts.html" class="chapter-link active"><span class="chapter-number">2</span>The Shortcuts We Take</a></li>
+        <li class="chapter-item"><a href="beliefs.html" class="chapter-link"><span class="chapter-number">3</span>What We Believe</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">4</span>How We're Moved</a></li>
+        <li class="chapter-item"><a href="connection.html" class="chapter-link"><span class="chapter-number">5</span>Why We Connect</a></li>
+        <li class="chapter-item"><a href="prejudice.html" class="chapter-link"><span class="chapter-number">6</span>Where We Break</a></li>
+        <li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li>
+        <li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link"><span class="chapter-number">8</span>Across the Divide</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 8</div>
+        <h1>The Shortcuts We Take &mdash; How the Mind Judges People</h1>
+        <div class="chapter-meta">
+          <span>Attribution theory, cognitive biases, impression formation, schemas</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction: Social Cognition &amp; Attribution</h2>
+        <p>Humans are not objective processors of social information. We are <span class="key-term">cognitive misers</span> who rely on mental shortcuts, heuristics, and schemas to make rapid judgments about other people. Attribution theory &mdash; the study of how we explain the causes of behavior &mdash; is one of the most heavily tested topics in social psychology on the EPPP.</p>
+        <p>This chapter covers the foundational theories of attribution, the systematic biases that distort social judgment, and the cognitive structures (schemas, stereotypes) that shape how we perceive and remember information about others.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Attribution Theory</h2>
+        <p><span class="key-term">Attribution</span> is the process by which people explain the causes of behavior and events. The fundamental question in attribution theory is: Did this person behave this way because of who they are (internal/dispositional attribution) or because of the situation they were in (external/situational attribution)?</p>
+
+        <h3>Fritz Heider: The Father of Attribution Theory</h3>
+        <p>Fritz Heider (1958) introduced the basic distinction between <span class="key-term">internal (dispositional) attributions</span> &mdash; attributing behavior to personal characteristics such as traits, abilities, or effort &mdash; and <span class="key-term">external (situational) attributions</span> &mdash; attributing behavior to environmental factors such as task difficulty, luck, or social pressure.</p>
+
+        <div class="definition-box">
+          <strong>Internal vs. External Attribution</strong>
+          <p><strong>Internal (dispositional):</strong> "She failed the exam because she's lazy." The cause is located within the person.<br>
+          <strong>External (situational):</strong> "She failed the exam because it was unfairly difficult." The cause is located in the environment.</p>
+        </div>
+
+        <h3>Harold Kelley's Covariation Model</h3>
+        <p>Kelley (1967) proposed that when we have information about a person's behavior over time, we use three types of information to make attributions:</p>
+        <div class="definition-box">
+          <strong>Kelley's Three Dimensions</strong>
+          <p><strong>Consensus:</strong> Do other people behave the same way in this situation? (High = everyone laughs at the comedian; Low = only this person laughs)<br>
+          <strong>Distinctiveness:</strong> Does this person behave differently in other situations? (High = she only laughs at this comedian; Low = she laughs at every comedian)<br>
+          <strong>Consistency:</strong> Does this person behave the same way in this situation over time? (High = she always laughs at this comedian; Low = she only laughed this once)</p>
+        </div>
+
+        <table>
+          <tr><th>Pattern</th><th>Consensus</th><th>Distinctiveness</th><th>Consistency</th><th>Attribution</th></tr>
+          <tr><td>External (stimulus)</td><td>High</td><td>High</td><td>High</td><td>"The comedian is really funny"</td></tr>
+          <tr><td>Internal (person)</td><td>Low</td><td>Low</td><td>High</td><td>"She laughs at everything"</td></tr>
+          <tr><td>Circumstantial</td><td>Low</td><td>High</td><td>Low</td><td>"Something unusual happened"</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>EPPP-Style Application</strong>
+          <p>A supervisor reports that Employee X has been late three days this week. No other employees are late (low consensus), Employee X is late for everything (low distinctiveness), and Employee X is always late (high consistency). This pattern &mdash; low consensus, low distinctiveness, high consistency &mdash; leads to an <strong>internal attribution</strong>: "Employee X is chronically irresponsible."</p>
+        </div>
+        <p class="citation">Kelley, H. H. (1967). Attribution theory in social psychology. Nebraska Symposium on Motivation, 15, 192&ndash;238.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Attribution Biases</h2>
+
+        <h3>Fundamental Attribution Error (Correspondence Bias)</h3>
+        <div class="definition-box">
+          <strong>Fundamental Attribution Error</strong>
+          <p>The tendency to overestimate the role of dispositional factors and underestimate the role of situational factors when explaining <em>other people's</em> behavior. Also called the <span class="key-term">correspondence bias</span> because observers assume behavior corresponds to underlying dispositions.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A driver cuts you off in traffic. You immediately think, "What a jerk!" (dispositional attribution), rather than considering that the driver may be rushing to the hospital (situational). If <em>you</em> cut someone off, you think, "I had to &mdash; I'm late for an emergency."</p>
+        </div>
+        <p>The fundamental attribution error is <strong>more pronounced in individualist (Western) cultures</strong> and weaker in collectivist (East Asian) cultures, where people are more attuned to situational factors. This cross-cultural difference is a commonly tested EPPP point.</p>
+
+        <h3>Actor-Observer Bias</h3>
+        <div class="definition-box">
+          <strong>Actor-Observer Bias</strong>
+          <p>We tend to attribute <strong>our own behavior</strong> to situational factors ("I failed because the test was unfair") but attribute <strong>others' behavior</strong> to dispositional factors ("He failed because he didn't study"). The actor sees the situation; the observer sees the person.</p>
+        </div>
+        <p>This bias is explained partly by differences in <strong>perceptual salience</strong>: when we act, the situation is salient to us; when we observe others, the person is salient. It also relates to differential access to information &mdash; we know the full range of our own behavior across situations, while we observe others in a limited context.</p>
+
+        <h3>Self-Serving Bias</h3>
+        <div class="definition-box">
+          <strong>Self-Serving Bias</strong>
+          <p>The tendency to attribute our <strong>successes</strong> to internal, dispositional factors ("I aced the exam because I'm smart") and our <strong>failures</strong> to external, situational factors ("I failed because the professor is terrible"). This bias serves to protect and enhance self-esteem.</p>
+        </div>
+
+        <h3>Just-World Hypothesis</h3>
+        <p>The <span class="key-term">just-world hypothesis</span> (Lerner, 1980) is the belief that people generally get what they deserve &mdash; that the world is fundamentally fair. This leads to <strong>victim blaming</strong>: if something bad happened to someone, they must have done something to deserve it. This belief is psychologically protective because it maintains the illusion that bad things won't happen to us if we behave properly.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>The just-world hypothesis contributes to <strong>secondary victimization</strong> of trauma survivors. Clinicians must recognize when clients internalize blame for victimization ("Maybe I deserved it") and understand that this may be reinforced by cultural just-world beliefs. Cognitive processing therapy for PTSD directly addresses these distorted attributions.</p>
+        </div>
+        <p class="citation">Ross, L. (1977). The intuitive psychologist and his shortcomings: Distortions in the attribution process. Advances in Experimental Social Psychology, 10, 173&ndash;220.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Impression Formation</h2>
+
+        <h3>Primacy Effect</h3>
+        <p>In impression formation, the <span class="key-term">primacy effect</span> refers to the disproportionate influence of information presented first. Solomon Asch (1946) demonstrated that when describing a person, adjectives presented earlier carry more weight than those presented later. Describing someone as "intelligent, industrious, impulsive, critical, stubborn, envious" leads to more positive impressions than the same traits in reverse order.</p>
+
+        <h3>Halo Effect</h3>
+        <div class="definition-box">
+          <strong>Halo Effect</strong>
+          <p>The tendency for a positive impression in one area to spread to evaluations in other, unrelated areas. For example, physically attractive people are rated as more intelligent, competent, and socially skilled, even without evidence. First identified by Edward Thorndike (1920).</p>
+        </div>
+
+        <h3>Schemas &amp; Stereotypes</h3>
+        <p><span class="key-term">Schemas</span> are organized knowledge structures that help us process information quickly. A <span class="key-term">stereotype</span> is a schema applied to a social group &mdash; a generalized belief about the characteristics of group members. Stereotypes operate as cognitive shortcuts that are often activated automatically, even in people who consciously reject them.</p>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>The "elderly" schema may include traits like "slow," "forgetful," and "kind." When this schema is activated (even subliminally), it can influence behavior: in a classic study by Bargh, Chen, and Burrows (1996), participants who were primed with words related to elderly stereotypes walked more slowly down the hallway afterward.</p>
+        </div>
+
+        <h3>Confirmation Bias in Social Judgment</h3>
+        <p><span class="key-term">Confirmation bias</span> is the tendency to seek out, notice, and remember information that confirms our existing beliefs and to ignore or discount disconfirming evidence. In social perception, this means that once we form an impression or activate a schema, we selectively attend to information that supports it.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>Clinicians are not immune to attribution biases. The fundamental attribution error may lead a therapist to over-attribute a client's behavior to personality traits rather than situational stressors. Confirmation bias may lead to premature diagnostic closure. Awareness of these biases is essential for accurate clinical assessment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Judgment Heuristics (Tversky &amp; Kahneman)</h2>
+        <p>Beyond attributional biases, <span class="key-term">Amos Tversky</span> and <span class="key-term">Daniel Kahneman</span> identified a family of <span class="key-term">judgment heuristics</span> &mdash; cognitive shortcuts people use when estimating probabilities, frequencies, and values under conditions of uncertainty. These heuristics are efficient but systematically biased, leading to predictable errors in judgment. Their research program, beginning in the early 1970s, fundamentally reshaped our understanding of human decision-making and is a cornerstone of the EPPP's coverage of cognitive and social psychology.</p>
+
+        <h3>Availability Heuristic</h3>
+        <div class="definition-box">
+          <strong>Availability Heuristic</strong>
+          <p>The <span class="key-term">availability heuristic</span> is the tendency to judge the probability or frequency of an event by the ease with which examples or instances come to mind. Events that are vivid, emotionally salient, or recently encountered are more mentally "available" and are therefore judged as more frequent or probable than they actually are.</p>
+        </div>
+        <p>This heuristic leads to systematic overestimation of the likelihood of dramatic, memorable events. For example, people typically judge airplane crashes as more likely causes of death than they actually are (relative to car accidents) because plane crashes receive extensive, vivid media coverage. In contrast, mundane but statistically more common causes of death &mdash; such as diabetes or asthma &mdash; are underestimated because they generate less memorable mental imagery.</p>
+        <p><span class="key-term">Media exposure</span> is one of the most powerful drivers of availability bias. Extensive news coverage of terrorist attacks, rare diseases, or school shootings inflates the perceived risk of these events far beyond their actual base rates. This has direct implications for public health communication, risk perception, and policy-making.</p>
+
+        <div class="definition-box">
+          <strong>Schwarz's Ease-of-Retrieval Effect</strong>
+          <p>Norbert Schwarz and colleagues extended the availability heuristic by demonstrating the <span class="key-term">ease-of-retrieval effect</span>: it is not simply the <em>number</em> of examples retrieved that influences judgment, but the <em>subjective ease</em> of retrieval. When asked to recall 6 examples of their own assertive behavior (easy), participants rated themselves as more assertive than when asked to recall 12 examples (difficult) &mdash; because the difficulty of generating 12 examples signaled that assertiveness must be rare for them.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>EPPP-Style Application</strong>
+          <p>A clinician who has recently treated two cases of bipolar disorder may overestimate the base rate of bipolar disorder in the general population, leading to diagnostic bias when evaluating a new patient with mood symptoms. The recent cases are highly "available" in memory, inflating the perceived likelihood of the diagnosis.</p>
+        </div>
+        <p class="citation">Tversky, A., &amp; Kahneman, D. (1973). Availability: A heuristic for judging frequency and probability. Cognitive Psychology, 5(2), 207&ndash;232.</p>
+
+        <h3>Representativeness Heuristic</h3>
+        <div class="definition-box">
+          <strong>Representativeness Heuristic</strong>
+          <p>The <span class="key-term">representativeness heuristic</span> is the tendency to judge the probability that an object or event belongs to a particular category based on how similar it is to a prototype or stereotype of that category, rather than on actual statistical probability. The more "representative" something appears, the more likely we judge it to be &mdash; regardless of base rates or other relevant statistical information.</p>
+        </div>
+        <p>The representativeness heuristic leads to several well-documented errors in probabilistic reasoning:</p>
+
+        <h4>Base Rate Neglect</h4>
+        <p><span class="key-term">Base rate neglect</span> occurs when people ignore prior probabilities (base rates) in favor of individuating information that matches a prototype. If told that a person is quiet, orderly, and detail-oriented, people judge him more likely to be a librarian than a salesperson &mdash; even when informed that the pool contains 70 salespeople and only 30 librarians. The personality description is "representative" of the librarian category, so the base rate information is discounted or ignored entirely.</p>
+
+        <h4>Conjunction Fallacy (The Linda Problem)</h4>
+        <div class="definition-box">
+          <strong>The Conjunction Fallacy</strong>
+          <p>The <span class="key-term">conjunction fallacy</span> occurs when people judge the probability of two events occurring together (A and B) as greater than the probability of either event alone. This is a logical impossibility: P(A&cap;B) can never exceed P(A) or P(B). Tversky and Kahneman's famous <span class="key-term">Linda problem</span> demonstrated this: participants read that Linda was a philosophy major concerned with social justice, and most judged it more probable that "Linda is a bank teller and active in the feminist movement" than simply that "Linda is a bank teller." The conjunction was rated as more likely because it better "represented" the description of Linda.</p>
+        </div>
+
+        <h4>Gambler's Fallacy</h4>
+        <p>The <span class="key-term">gambler's fallacy</span> is the erroneous belief that past random events affect the probability of future random events. After a string of coin flips landing heads, people expect tails to be "due," as if the sequence needs to look "representative" of randomness. In reality, each flip is independent and the probability of heads remains 0.50 regardless of prior outcomes.</p>
+
+        <h4>Insensitivity to Sample Size</h4>
+        <p>People often fail to appreciate the <span class="key-term">law of large numbers</span> &mdash; the principle that larger samples are more representative of the population. Tversky and Kahneman showed that people judge extreme outcomes as equally likely in large and small samples. In their hospital problem, participants rated a large hospital and a small hospital as equally likely to have days where more than 60% of births are boys, when statistically the smaller hospital should have far more such days due to greater sampling variability.</p>
+
+        <div class="example-box">
+          <strong>EPPP-Style Application</strong>
+          <p>A forensic psychologist evaluating whether a defendant fits a "criminal profile" must be careful not to rely on the representativeness heuristic. Even if the defendant matches the "typical" profile of an offender, the actual base rate of the criminal behavior in the population must be considered. Profile matching without base rate consideration leads to inflated false positive rates.</p>
+        </div>
+        <p class="citation">Tversky, A., &amp; Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. Science, 185(4157), 1124&ndash;1131.</p>
+
+        <h3>Anchoring and Adjustment</h3>
+        <div class="definition-box">
+          <strong>Anchoring and Adjustment Heuristic</strong>
+          <p>The <span class="key-term">anchoring and adjustment heuristic</span> occurs when people make estimates by starting from an initial value (the <span class="key-term">anchor</span>) and then adjusting from that point to arrive at a final answer. The critical finding is that adjustment is typically <strong>insufficient</strong> &mdash; final estimates remain biased toward the anchor, even when the anchor is arbitrary or irrelevant.</p>
+        </div>
+        <p>In their seminal demonstration, Tversky and Kahneman had participants spin a <span class="key-term">wheel of fortune</span> rigged to land on either 10 or 65, then asked them to estimate the percentage of African nations in the United Nations. Participants who started from 10 gave a median estimate of 25%; those who started from 65 gave a median estimate of 45%. A completely random number powerfully influenced their estimates.</p>
+
+        <p>Anchoring effects are remarkably robust &mdash; they persist even when participants are warned about the bias, offered incentives for accuracy, or given clearly irrelevant anchors. Research has identified two mechanisms:</p>
+        <ul>
+          <li><strong>Anchoring-as-adjustment:</strong> People use the anchor as a starting point and serially adjust until they reach a plausible value, but stop adjusting too early (Epley &amp; Gilovich, 2006).</li>
+          <li><strong>Selective accessibility:</strong> The anchor activates information consistent with it, making anchor-consistent knowledge more accessible for subsequent judgment (Strack &amp; Mussweiler, 1997).</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>Anchoring powerfully affects clinical judgment. A clinician's initial diagnostic impression (the anchor) can bias the entire subsequent evaluation: presenting complaints, referral information, or even a client's appearance may anchor the clinician on a particular diagnosis, and subsequent information is assimilated toward that anchor rather than evaluated independently. This is a well-documented source of <span class="key-term">diagnostic error</span> in psychology, psychiatry, and medicine.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Other Real-World Anchoring Effects</strong>
+          <p><strong>Salary negotiations:</strong> The first number placed on the table (whether by the employer or candidate) anchors subsequent offers and counteroffers. Research shows that higher initial requests consistently produce higher final settlements.<br>
+          <strong>Legal sentencing:</strong> Prosecutors' sentencing recommendations and even random numbers have been shown to anchor judges' sentencing decisions. Englich, Mussweiler, &amp; Strack (2006) found that experienced judges were influenced by an anchor determined by rolling dice.<br>
+          <strong>Real estate appraisal:</strong> Listing prices anchor home buyers' and even expert appraisers' valuations of property (Northcraft &amp; Neale, 1987).</p>
+        </div>
+        <p class="citation">Tversky, A., &amp; Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. Science, 185(4157), 1124&ndash;1131.</p>
+
+        <h3>Additional Biases Related to Heuristics</h3>
+        <p>The heuristics-and-biases research program identified several additional systematic biases in human judgment that are frequently tested on the EPPP:</p>
+
+        <h4>Confirmation Bias</h4>
+        <div class="definition-box">
+          <strong>Confirmation Bias</strong>
+          <p><span class="key-term">Confirmation bias</span> is the tendency to search for, interpret, favor, and recall information in a way that confirms or supports one's existing beliefs or hypotheses. People engage in biased hypothesis testing: they seek <em>confirming</em> evidence rather than <em>disconfirming</em> evidence, and they interpret ambiguous information as supporting their prior beliefs. This bias operates at every stage of information processing &mdash; attention, encoding, retrieval, and evaluation.</p>
+        </div>
+        <p>Wason's (1960) <span class="key-term">2-4-6 task</span> is the classic demonstration: participants who were told that the sequence 2-4-6 fit a rule overwhelmingly tested sequences consistent with their initial hypothesis (e.g., "even numbers increasing by 2") rather than attempting to falsify it. In clinical practice, confirmation bias can lead a clinician to selectively attend to symptoms that confirm a working diagnosis while overlooking contradictory findings.</p>
+
+        <h4>Hindsight Bias</h4>
+        <div class="definition-box">
+          <strong>Hindsight Bias</strong>
+          <p><span class="key-term">Hindsight bias</span> (the "I-knew-it-all-along" effect) is the tendency, after learning an outcome, to believe that one would have predicted or expected that outcome from the beginning. Once an event has occurred, people reconstruct their prior judgments as having been more accurate than they actually were. This bias distorts our ability to learn from experience because we underestimate how surprising outcomes actually were.</p>
+        </div>
+        <p>Hindsight bias has serious implications for professional evaluations: supervisors may judge a clinician's decisions more harshly after a negative outcome ("You should have seen the warning signs"), jurors may underestimate the uncertainty facing a physician at the time of a medical decision, and forensic evaluators may overestimate the predictability of violent behavior after it has occurred.</p>
+
+        <h4>Overconfidence Effect</h4>
+        <p>The <span class="key-term">overconfidence effect</span> is the well-established finding that people's confidence in their judgments and knowledge consistently exceeds their actual accuracy. When people say they are 90% sure of an answer, they are correct only about 70&ndash;80% of the time. Overconfidence is particularly problematic in expert judgment: clinicians, financial analysts, and other professionals frequently display overconfidence in their predictions, especially for complex, uncertain tasks. Notably, <strong>expertise does not eliminate overconfidence</strong> and may sometimes increase it.</p>
+
+        <h4>Framing Effects</h4>
+        <div class="definition-box">
+          <strong>Framing Effects (Tversky &amp; Kahneman, 1981)</strong>
+          <p><span class="key-term">Framing effects</span> occur when people's decisions are influenced by how choices are presented (framed) rather than by the objective outcomes involved. Tversky and Kahneman's <span class="key-term">Asian disease problem</span> is the classic demonstration: when outcomes were framed in terms of lives <em>saved</em> (gain frame), participants were <strong>risk-averse</strong> and preferred the certain option; when the same outcomes were framed in terms of lives <em>lost</em> (loss frame), participants became <strong>risk-seeking</strong> and preferred the gamble. The objective expected values were identical in both conditions.</p>
+        </div>
+        <p>Framing effects are explained by Kahneman and Tversky's <span class="key-term">prospect theory</span>, which holds that people evaluate outcomes relative to a reference point, that losses loom larger than equivalent gains (<span class="key-term">loss aversion</span>), and that the value function is concave for gains (risk aversion) and convex for losses (risk seeking). Prospect theory won Kahneman the 2002 Nobel Prize in Economics (Tversky had died in 1996).</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>Framing effects are directly relevant to informed consent and treatment decisions. A surgeon who says "90% of patients survive this procedure" will obtain more consent than one who says "10% of patients die from this procedure" &mdash; even though the information is identical. Clinicians have an ethical responsibility to present treatment options in balanced frames that allow patients to make truly informed decisions. Similarly, how psychotherapy outcome data is framed (e.g., "60% improve" vs. "40% do not improve") can influence referral decisions and client expectations.</p>
+        </div>
+        <p class="citation">Tversky, A., &amp; Kahneman, D. (1981). The framing of decisions and the psychology of choice. Science, 211(4481), 453&ndash;458.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Kelley's covariation model</strong>: Know the three dimensions (consensus, distinctiveness, consistency) and the pattern that leads to internal vs. external attribution. High-High-High = external; Low-Low-High = internal.</li>
+          <li><strong>Fundamental attribution error</strong> is the tendency to over-attribute others' behavior to dispositional factors. It is stronger in <strong>individualist cultures</strong> and weaker in collectivist cultures.</li>
+          <li>Distinguish <strong>actor-observer bias</strong> (me = situation, others = disposition) from <strong>self-serving bias</strong> (success = me, failure = situation).</li>
+          <li>The <strong>just-world hypothesis</strong> leads to victim blaming &mdash; know its clinical implications.</li>
+          <li><strong>Primacy effect</strong> in impression formation: first information has disproportionate influence (Asch).</li>
+          <li>The <strong>halo effect</strong> is a specific type of schema-driven bias where one positive trait colors judgments of unrelated traits.</li>
+          <li><strong>Schemas and stereotypes</strong> function as cognitive shortcuts; they can be activated automatically and influence behavior unconsciously.</li>
+          <li><strong>Confirmation bias</strong> maintains existing impressions by selectively attending to confirming evidence.</li>
+          <li><strong>Availability heuristic</strong>: Probability is judged by ease of recall. Vivid/memorable events are overestimated (plane crashes vs. car accidents). Know Schwarz's ease-of-retrieval effect (subjective ease, not number of examples, drives judgment).</li>
+          <li><strong>Representativeness heuristic</strong>: Probability is judged by similarity to a prototype. Leads to <strong>base rate neglect</strong>, the <strong>conjunction fallacy</strong> (Linda problem: P(A&cap;B) cannot exceed P(A)), <strong>gambler's fallacy</strong>, and <strong>insensitivity to sample size</strong>.</li>
+          <li><strong>Anchoring and adjustment</strong>: An initial value biases subsequent estimates because adjustment is insufficient. Even arbitrary anchors (Tversky &amp; Kahneman's wheel-of-fortune study) influence estimates. Affects clinical diagnosis, salary negotiations, and legal sentencing.</li>
+          <li><strong>Framing effects</strong> (Tversky &amp; Kahneman): The <strong>Asian disease problem</strong> &mdash; people are risk-averse for gains and risk-seeking for losses. Explained by <strong>prospect theory</strong> and <strong>loss aversion</strong>.</li>
+          <li><strong>Hindsight bias</strong> ("I knew it all along") distorts post-hoc evaluation of decisions. <strong>Overconfidence effect</strong>: confidence consistently exceeds accuracy; expertise does not eliminate it.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="cultural-roots.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Where You Come From</div>
+          </div>
+        </a>
+        <a href="beliefs.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">What We Believe</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Substance Use Disorders | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Substance Use Disorders</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link active"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 10</div>
+        <h1>Substance Use Disorders</h1>
+        <div class="chapter-meta">
+          <span>Alcohol, opioids, cannabis, withdrawal syndromes</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Substance-Related and Addictive Disorders</h2>
+        <p>The DSM-5 made significant changes to the diagnosis of substance-related disorders. The most notable change was the <strong>elimination of the abuse/dependence distinction</strong> from DSM-IV, replacing it with a single <span class="key-term">substance use disorder</span> (SUD) diagnosis on a continuum of severity. The DSM-5 also added <span class="key-term">gambling disorder</span> as the first non-substance behavioral addiction and removed the legal problems criterion while adding craving.</p>
+        <div class="definition-box">
+          <h4>DSM-5 Substance Use Disorder Criteria</h4>
+          <p>A problematic pattern of substance use leading to clinically significant impairment or distress, manifested by at least <strong>2 of 11 criteria</strong> within a 12-month period. Severity: <strong>Mild</strong> (2-3 criteria), <strong>Moderate</strong> (4-5 criteria), <strong>Severe</strong> (6+ criteria). The 11 criteria cluster into four groups: impaired control, social impairment, risky use, and pharmacological criteria.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The 11 SUD Diagnostic Criteria</h2>
+        <h3>Impaired Control (Criteria 1-4)</h3>
+        <ol>
+          <li>Taking the substance in <strong>larger amounts or over a longer period</strong> than intended</li>
+          <li>Persistent desire or <strong>unsuccessful efforts to cut down</strong> or control use</li>
+          <li>Great deal of <strong>time spent</strong> obtaining, using, or recovering from the substance</li>
+          <li><strong>Craving</strong> or a strong desire to use the substance (new in DSM-5)</li>
+        </ol>
+        <h3>Social Impairment (Criteria 5-7)</h3>
+        <ol start="5">
+          <li>Recurrent use resulting in <strong>failure to fulfill major role obligations</strong></li>
+          <li><strong>Continued use despite</strong> persistent social or interpersonal <strong>problems</strong></li>
+          <li>Important activities <strong>given up or reduced</strong> because of use</li>
+        </ol>
+        <h3>Risky Use (Criteria 8-9)</h3>
+        <ol start="8">
+          <li>Recurrent use in situations in which it is <strong>physically hazardous</strong></li>
+          <li>Continued use despite knowledge of having a <strong>physical or psychological problem</strong> caused or exacerbated by the substance</li>
+        </ol>
+        <h3>Pharmacological Criteria (Criteria 10-11)</h3>
+        <ol start="10">
+          <li><strong>Tolerance:</strong> Need for markedly increased amounts to achieve desired effect, or markedly diminished effect with continued use of the same amount</li>
+          <li><strong>Withdrawal:</strong> The characteristic withdrawal syndrome for the substance, or the substance is taken to relieve or avoid withdrawal symptoms</li>
+        </ol>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Tolerance and withdrawal are <strong>neither necessary nor sufficient</strong> for an SUD diagnosis. A person taking prescribed opioids after surgery may develop tolerance and withdrawal but would not necessarily have an SUD. Conversely, a person can meet criteria for SUD (e.g., 2-3 social/behavioral criteria) without exhibiting tolerance or withdrawal. The DSM-5 notes that tolerance and withdrawal criteria should not be counted when substances are taken solely under appropriate medical supervision.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Alcohol Use Disorder</h2>
+        <p><span class="key-term">Alcohol use disorder</span> (AUD) is the most commonly diagnosed SUD. Lifetime prevalence in the United States is approximately 29% (Grant et al., 2015). Genetic factors account for approximately 50-60% of the variance in risk for AUD.</p>
+        <h3>Alcohol Withdrawal</h3>
+        <p>Alcohol withdrawal occurs after cessation or reduction of heavy, prolonged use. Symptoms begin within 6-24 hours after the last drink and can include:</p>
+        <ul>
+          <li><strong>Autonomic hyperactivity:</strong> sweating, tachycardia, elevated blood pressure</li>
+          <li>Hand tremor</li>
+          <li>Insomnia, nausea/vomiting</li>
+          <li>Psychomotor agitation, anxiety</li>
+          <li>Transient visual, tactile, or auditory hallucinations or illusions</li>
+          <li>Generalized tonic-clonic seizures (typically 12-48 hours post-cessation)</li>
+        </ul>
+        <div class="definition-box">
+          <h4>Delirium Tremens (DTs)</h4>
+          <p><span class="key-term">Delirium tremens</span> is the most severe form of alcohol withdrawal, occurring in approximately 5% of individuals undergoing withdrawal, typically 48-72 hours after the last drink. Features include profound confusion, vivid hallucinations (often visual -- classically insects or small animals), autonomic instability, agitation, and fever. DTs carry a mortality rate of up to 5% without treatment. Treatment involves benzodiazepines (especially long-acting agents like chlordiazepoxide or diazepam).</p>
+        </div>
+        <h3>Alcohol-Related Medical Conditions</h3>
+        <ul>
+          <li><strong>Wernicke's encephalopathy:</strong> Acute condition caused by <span class="key-term">thiamine (vitamin B1) deficiency</span>. Classic triad: confusion, ataxia, and ophthalmoplegia (eye movement abnormalities). A medical emergency requiring IV thiamine.</li>
+          <li><strong>Korsakoff's syndrome:</strong> Chronic condition following untreated Wernicke's. Characterized by severe <span class="key-term">anterograde amnesia</span> (inability to form new memories) and confabulation. Often irreversible.</li>
+          <li><strong>Fetal alcohol spectrum disorders:</strong> Leading preventable cause of intellectual disability. Features include facial dysmorphology, growth deficiency, and CNS dysfunction.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Opioid Use Disorder</h2>
+        <p><span class="key-term">Opioid use disorder</span> involves problematic use of opioids (heroin, prescription painkillers such as oxycodone, hydrocodone, fentanyl, or morphine). Opioids act on mu, delta, and kappa receptors, with mu receptor activation producing analgesia, euphoria, respiratory depression, and physical dependence.</p>
+        <h3>Opioid Withdrawal</h3>
+        <p>Opioid withdrawal is intensely uncomfortable but generally <strong>not life-threatening</strong> (unlike alcohol or benzodiazepine withdrawal). Symptoms emerge within hours of last use and include:</p>
+        <ul>
+          <li>Dysphoric mood, nausea/vomiting, muscle aches</li>
+          <li>Lacrimation (tearing), rhinorrhea (runny nose)</li>
+          <li>Pupillary dilation, piloerection ("goosebumps"), sweating</li>
+          <li>Diarrhea, yawning, fever, insomnia</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Pharmacological treatments for opioid use disorder: <strong>Methadone</strong> (full mu-opioid agonist; reduces cravings and withdrawal; dispensed through certified clinics). <strong>Buprenorphine</strong> (partial mu-opioid agonist; lower abuse potential than methadone; can be prescribed in office settings; often combined with naloxone as Suboxone). <strong>Naltrexone</strong> (opioid antagonist; blocks euphoric effects; available as daily oral or monthly injectable [Vivitrol]; requires full detoxification before initiation to avoid precipitated withdrawal).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Opioid Overdose Management</h2>
+        <p>Opioid overdose is a life-threatening medical emergency. Recognition and rapid intervention are critical topics for clinical practice and the EPPP.</p>
+        <h3>The Opioid Overdose Triad</h3>
+        <p>The classic presentation of opioid overdose involves a characteristic <span class="key-term">triad</span> of three signs:</p>
+        <ol>
+          <li><strong>Respiratory depression</strong> (slow, shallow, or absent breathing) -- the primary cause of death in opioid overdose</li>
+          <li><strong>Miosis</strong> (pinpoint pupils) -- highly characteristic of opioid toxicity</li>
+          <li><strong>Decreased consciousness</strong> (ranging from sedation to coma)</li>
+        </ol>
+        <h3>Naloxone (Narcan)</h3>
+        <p><span class="key-term">Naloxone</span> (brand name Narcan) is a pure <strong>opioid antagonist</strong> that rapidly reverses the effects of opioid overdose by competitively binding to mu-opioid receptors, displacing the opioid. Key clinical features include:</p>
+        <ul>
+          <li>Onset of action within <strong>2-5 minutes</strong> when administered intravenously (slightly longer intranasally or intramuscularly)</li>
+          <li>Duration of action is <strong>30-90 minutes</strong>, which is often shorter than the duration of action of the opioid itself -- therefore, <strong>repeated doses may be necessary</strong> to prevent recurrence of respiratory depression</li>
+          <li>Administration can precipitate <strong>acute opioid withdrawal</strong> in dependent individuals, but this is not life-threatening</li>
+          <li>Available in intranasal, intramuscular, intravenous, and subcutaneous formulations; widely available without a prescription in many states</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Good Samaritan laws</span> have been enacted in most U.S. states to encourage bystanders to call emergency services and administer naloxone during an overdose without fear of legal prosecution for drug-related offenses. These laws are an important public health tool in the opioid epidemic. Psychologists should be familiar with naloxone access and Good Samaritan protections in their jurisdiction.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cannabis, Stimulants, and Other Substances</h2>
+        <h3>Cannabis Use Disorder</h3>
+        <p>Cannabis use disorder is recognized in DSM-5 with the same 11-criterion framework. <span class="key-term">Cannabis withdrawal</span> is now an official diagnosis in DSM-5, occurring within approximately 1 week of cessation of heavy use. Symptoms include irritability/anger, nervousness/anxiety, sleep difficulty, decreased appetite/weight loss, restlessness, depressed mood, and at least one physical symptom (abdominal pain, shakiness, sweating, fever, chills, headache).</p>
+        <h3>Stimulant Use Disorder</h3>
+        <p>Includes cocaine, amphetamines, and other stimulant-type substances. Stimulants increase dopamine in the mesolimbic reward pathway. <span class="key-term">Stimulant withdrawal</span> ("crash") is characterized by dysphoric mood, fatigue, vivid unpleasant dreams, insomnia or hypersomnia, increased appetite, and psychomotor retardation or agitation.</p>
+
+        <h3>Withdrawal Comparison</h3>
+        <table>
+          <tr><th>Substance</th><th>Withdrawal Danger</th><th>Key Withdrawal Features</th></tr>
+          <tr><td>Alcohol</td><td>Potentially fatal (DTs, seizures)</td><td>Tremor, seizures, hallucinations, autonomic instability</td></tr>
+          <tr><td>Benzodiazepines</td><td>Potentially fatal (seizures)</td><td>Similar to alcohol; anxiety, tremor, seizures</td></tr>
+          <tr><td>Opioids</td><td>Extremely uncomfortable but rarely fatal</td><td>Flu-like symptoms, pupil dilation, piloerection</td></tr>
+          <tr><td>Stimulants (cocaine/amphetamines)</td><td>Not typically dangerous</td><td>"Crash": depression, fatigue, hypersomnia, increased appetite</td></tr>
+          <tr><td>Cannabis</td><td>Not dangerous</td><td>Irritability, sleep difficulty, decreased appetite</td></tr>
+          <tr><td>Nicotine</td><td>Not dangerous</td><td>Irritability, anxiety, difficulty concentrating, increased appetite</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Tolerance, Dependence, and Key Concepts</h2>
+        <div class="definition-box">
+          <h4>Tolerance vs. Dependence vs. Addiction</h4>
+          <p><strong>Tolerance:</strong> Needing more of a substance to achieve the same effect, or diminished effect with the same amount. <strong>Physical dependence:</strong> A physiological state in which withdrawal symptoms occur upon cessation; can occur with appropriate medical use and does not necessarily indicate a SUD. <strong>Addiction (SUD):</strong> A behavioral pattern of compulsive substance use despite adverse consequences, involving impaired control, social impairment, and risky use. The DSM-5 avoids the term "addiction" in diagnostic labels to reduce stigma.</p>
+        </div>
+        <h3>Cross-Tolerance and Cross-Dependence</h3>
+        <p><span class="key-term">Cross-tolerance</span> occurs when tolerance to one substance extends to another substance within the same pharmacological class (e.g., alcohol and benzodiazepines, both of which act on GABA-A receptors). <span class="key-term">Cross-dependence</span> is when one substance can suppress withdrawal symptoms from another substance in the same class, which is the basis for using benzodiazepines to manage alcohol withdrawal.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Neurobiology of Addiction</h2>
+        <p>Understanding the neurobiological basis of addiction is essential for the EPPP. The brain's reward system is central to addiction:</p>
+        <h3>The Mesolimbic Dopamine Pathway</h3>
+        <p>The <span class="key-term">mesolimbic dopamine pathway</span> (ventral tegmental area to nucleus accumbens) is the primary neural circuit involved in reward and reinforcement. All substances of abuse, despite their different mechanisms of action, ultimately increase dopamine transmission in the nucleus accumbens. This "final common pathway" explains why diverse substances can all produce addiction (Koob & Volkow, 2016).</p>
+        <ul>
+          <li><strong>Stimulants</strong> (cocaine, amphetamines): Directly increase dopamine by blocking reuptake or increasing release</li>
+          <li><strong>Opioids:</strong> Disinhibit dopamine neurons by inhibiting GABAergic interneurons in the VTA</li>
+          <li><strong>Alcohol:</strong> Enhances GABA and inhibits glutamate; also indirectly increases dopamine release</li>
+          <li><strong>Nicotine:</strong> Stimulates nicotinic acetylcholine receptors on dopamine neurons</li>
+          <li><strong>Cannabis:</strong> Activates CB1 receptors, which indirectly modulate dopamine release</li>
+        </ul>
+        <h3>Neuroadaptation and Allostasis</h3>
+        <p>With chronic substance use, the brain undergoes <span class="key-term">neuroadaptation</span>: the reward system becomes downregulated (fewer dopamine receptors, reduced dopamine release), leading to tolerance and a new hedonic set point. Koob's <span class="key-term">allostatic model</span> proposes that addiction involves a shift from positive reinforcement (seeking pleasure) to negative reinforcement (avoiding withdrawal and dysphoria). The extended amygdala and stress systems (CRF, norepinephrine) become hyperactivated, driving the compulsive drug-seeking characteristic of addiction.</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>The <span class="key-term">opponent-process theory</span> (Solomon & Corbit, 1974) explains drug tolerance and withdrawal through opposing emotional processes. The initial positive effect (a-process) triggers a compensatory negative effect (b-process). With repeated use, the b-process strengthens, requiring more substance to achieve the same positive effect (tolerance) and producing a powerful negative state when the substance is absent (withdrawal). This model applies beyond substance use to understanding any habituation to emotional stimuli.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Stages of Change Model</h2>
+        <p>Prochaska and DiClemente's (1983) <span class="key-term">Transtheoretical Model</span> (Stages of Change) is widely used in substance use treatment and is a commonly tested EPPP topic.</p>
+        <table>
+          <tr><th>Stage</th><th>Description</th><th>Clinical Approach</th></tr>
+          <tr><td>Precontemplation</td><td>Not considering change; unaware of or minimizes the problem</td><td>Raise awareness; express concern without confrontation</td></tr>
+          <tr><td>Contemplation</td><td>Aware of problem; ambivalent about change; weighing pros/cons</td><td>Explore ambivalence; tip the decisional balance</td></tr>
+          <tr><td>Preparation</td><td>Intending to take action; making plans; may have taken small steps</td><td>Help develop a concrete plan; identify resources</td></tr>
+          <tr><td>Action</td><td>Actively modifying behavior; engaging in treatment</td><td>Support behavior change; reinforce efforts</td></tr>
+          <tr><td>Maintenance</td><td>Sustaining change; preventing relapse</td><td>Relapse prevention; identify triggers; build coping skills</td></tr>
+        </table>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Motivational interviewing (MI)</span> (Miller & Rollnick, 2013) is the therapeutic approach most closely aligned with the stages of change model. MI uses a collaborative, empathic, non-confrontational approach to strengthen a person's own motivation for change. Core principles include expressing empathy, developing discrepancy, rolling with resistance, and supporting self-efficacy. The OARS technique (Open questions, Affirmations, Reflections, Summaries) is fundamental to MI practice.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Gambling Disorder</h2>
+        <p><span class="key-term">Gambling disorder</span> is the <strong>first and only non-substance behavioral addiction</strong> included in the DSM-5, placed in the Substance-Related and Addictive Disorders chapter. This placement reflects growing evidence that gambling disorder shares significant neurobiological, genetic, and clinical features with substance use disorders.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <p>Persistent and recurrent problematic gambling behavior leading to clinically significant impairment or distress, as indicated by <strong>4 or more of 9 criteria</strong> within a <strong>12-month period</strong>:</p>
+        <ol>
+          <li>Needs to gamble with <strong>increasing amounts of money</strong> to achieve the desired excitement (<em>tolerance</em>)</li>
+          <li>Is <strong>restless or irritable</strong> when attempting to cut down or stop gambling (<em>withdrawal</em>)</li>
+          <li>Has made repeated <strong>unsuccessful efforts to control</strong>, cut back, or stop gambling (<em>loss of control</em>)</li>
+          <li>Is often <strong>preoccupied with gambling</strong> (e.g., reliving past gambling experiences, planning the next venture, thinking of ways to obtain money)</li>
+          <li>Often gambles when feeling <strong>distressed</strong> (e.g., helpless, guilty, anxious, depressed)</li>
+          <li>After losing money gambling, often <strong>returns another day to get even</strong> ("chasing" losses)</li>
+          <li><strong>Lies</strong> to conceal the extent of involvement with gambling</li>
+          <li>Has <strong>jeopardized or lost</strong> a significant relationship, job, or educational/career opportunity because of gambling</li>
+          <li><strong>Relies on others</strong> to provide money to relieve desperate financial situations caused by gambling</li>
+        </ol>
+        <div class="definition-box">
+          <h4>Parallels with Substance Use Disorders</h4>
+          <p>The diagnostic criteria for gambling disorder closely <strong>parallel the 11 SUD criteria</strong>, including tolerance (needing more to achieve excitement), withdrawal (restlessness when stopping), loss of control, and continued engagement despite negative consequences. This parallel is deliberate and reflects the shared underlying pathology.</p>
+        </div>
+        <h3>Neurobiology</h3>
+        <p>Neuroimaging and neuropharmacological studies have demonstrated that gambling disorder shares key neurobiological features with substance addiction. The <span class="key-term">dopamine reward system</span> -- particularly the mesolimbic pathway from the ventral tegmental area to the nucleus accumbens -- is activated during gambling in ways that closely parallel activation seen with substance use. Individuals with gambling disorder show reduced striatal dopamine receptor availability, impaired prefrontal cortex function (contributing to poor decision-making), and heightened responsivity to gambling-related cues.</p>
+        <h3>Prevalence and Clinical Features</h3>
+        <p>Prevalence of gambling disorder is estimated at <strong>0.4-1% of adults</strong>. Males are affected more frequently than females, though the gender gap is narrowing. Gambling disorder has high comorbidity with substance use disorders, mood disorders, and personality disorders (particularly antisocial personality disorder). Severity specifiers follow the SUD model: <strong>mild</strong> (4-5 criteria), <strong>moderate</strong> (6-7 criteria), <strong>severe</strong> (8-9 criteria).</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Internet gaming disorder was <strong>not</strong> included as an official DSM-5 diagnosis but was placed in Section III ("Conditions for Further Study"). Gambling disorder remains the <strong>only</strong> recognized behavioral addiction in the DSM-5. The decision to include gambling disorder was based on decades of evidence showing that it parallels substance addiction in clinical presentation, comorbidity, neurobiology, physiology, and treatment response.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>DSM-5 <strong>eliminated the abuse/dependence distinction</strong>; single SUD diagnosis with mild/moderate/severe specifiers</li>
+          <li>SUD requires <strong>2 of 11 criteria</strong> in 12 months; <strong>craving</strong> is new; <strong>legal problems</strong> removed</li>
+          <li>Tolerance and withdrawal are <strong>neither necessary nor sufficient</strong> for SUD diagnosis</li>
+          <li><strong>Alcohol and benzodiazepine withdrawal</strong> can be life-threatening (seizures, DTs)</li>
+          <li><strong>Opioid withdrawal</strong> is extremely uncomfortable but rarely fatal</li>
+          <li>Wernicke's encephalopathy = <strong>thiamine deficiency</strong> (confusion, ataxia, ophthalmoplegia); Korsakoff's = <strong>anterograde amnesia + confabulation</strong></li>
+          <li>Delirium tremens: <strong>48-72 hours post-cessation</strong>; treat with <strong>benzodiazepines</strong></li>
+          <li>Opioid treatments: methadone (full agonist), buprenorphine (partial agonist), naltrexone (antagonist)</li>
+          <li>Cannabis withdrawal is now a <strong>recognized DSM-5 diagnosis</strong></li>
+          <li>Stages of Change: <strong>precontemplation, contemplation, preparation, action, maintenance</strong></li>
+          <li><strong>Motivational interviewing</strong> is non-confrontational, uses OARS technique, aligned with stages of change</li>
+          <li>Opioid overdose triad: <strong>respiratory depression + miosis (pinpoint pupils) + decreased consciousness</strong></li>
+          <li><strong>Naloxone (Narcan)</strong>: opioid antagonist; onset <strong>2-5 minutes IV</strong>; may need repeated doses; <strong>Good Samaritan laws</strong> protect bystanders</li>
+          <li><strong>Gambling disorder</strong>: first non-substance behavioral addiction in DSM-5; <strong>4+ of 9 criteria in 12 months</strong></li>
+          <li>Gambling disorder criteria parallel SUD (tolerance, withdrawal, loss of control); neurobiology involves <strong>dopamine reward system</strong>; prevalence <strong>0.4-1%</strong> adults</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Grant, B. F., Goldstein, R. B., Saha, T. D., et al. (2015). Epidemiology of DSM-5 alcohol use disorder. <em>JAMA Psychiatry, 72</em>(8), 757-766.</div>
+        <div class="citation">Koob, G. F., & Volkow, N. D. (2016). Neurobiology of addiction: A neurocircuitry analysis. <em>The Lancet Psychiatry, 3</em>(8), 760-773.</div>
+        <div class="citation">Miller, W. R., & Rollnick, S. (2013). <em>Motivational interviewing: Helping people change</em> (3rd ed.). Guilford Press.</div>
+        <div class="citation">Prochaska, J. O., & DiClemente, C. C. (1983). Stages and processes of self-change of smoking: Toward an integrative model of change. <em>Journal of Consulting and Clinical Psychology, 51</em>(3), 390-395.</div>
+        <div class="citation">Schuckit, M. A. (2014). Recognition and management of withdrawal delirium (delirium tremens). <em>New England Journal of Medicine, 371</em>(22), 2109-2113.</div>
+        <div class="citation">Volkow, N. D., & Morales, M. (2015). The brain on drugs: From reward to addiction. <em>Cell, 162</em>(2), 403-413.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="sexual-disorders.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Sexual Disorders</div>
+          </div>
+        </a>
+        <a href="trauma-dissociative.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Trauma & Dissociative</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

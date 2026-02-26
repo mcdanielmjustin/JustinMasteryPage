@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personality Measures | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Personality Measures</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link active"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 9</div>
+        <h1>Personality Measures</h1>
+        <div class="chapter-meta">
+          <span>NEO-PI, 16PF, Rorschach, TAT, projectives</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Personality Measures</h2>
+        <p>This chapter covers personality assessment instruments beyond the MMPI family. These include <span class="key-term">objective (self-report) personality inventories</span> and <span class="key-term">projective (performance-based) techniques</span>. For the EPPP, you must know the theoretical basis, structure, scoring, and appropriate uses of each major instrument, as well as the ongoing debate about the reliability and validity of projective methods.</p>
+        <div class="definition-box">
+          <strong>Objective vs. Projective:</strong> Objective personality tests use structured, standardized items (typically true/false or Likert-scale) with empirically derived scoring. Projective tests present ambiguous stimuli and assume that responses reveal underlying personality dynamics, unconscious conflicts, and thought organization. Modern terminology increasingly refers to projective tests as "performance-based" measures to reduce theoretical assumptions embedded in the name.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>NEO Personality Inventory-Revised (NEO-PI-R) and NEO-FFI-3</h2>
+        <p>The <span class="key-term">NEO-PI-R</span> (Costa & McCrae, 1992) is the standard measure of the <span class="key-term">Five-Factor Model (FFM)</span> of personality, also known as the "Big Five." The NEO-FFI-3 is the abbreviated 60-item version.</p>
+
+        <h3>The Five Factors (OCEAN/CANOE)</h3>
+        <table>
+          <tr><th>Factor</th><th>Description</th><th>Facets (6 per domain)</th></tr>
+          <tr><td><span class="key-term">Neuroticism (N)</span></td><td>Emotional instability, proneness to negative affect, vulnerability to stress</td><td>Anxiety, Angry Hostility, Depression, Self-Consciousness, Impulsiveness, Vulnerability</td></tr>
+          <tr><td><span class="key-term">Extraversion (E)</span></td><td>Sociability, assertiveness, positive emotionality, energy</td><td>Warmth, Gregariousness, Assertiveness, Activity, Excitement-Seeking, Positive Emotions</td></tr>
+          <tr><td><span class="key-term">Openness (O)</span></td><td>Intellectual curiosity, imagination, aesthetic sensitivity, openness to new experiences</td><td>Fantasy, Aesthetics, Feelings, Actions, Ideas, Values</td></tr>
+          <tr><td><span class="key-term">Agreeableness (A)</span></td><td>Cooperative, trusting, altruistic, compliant, tender-minded</td><td>Trust, Straightforwardness, Altruism, Compliance, Modesty, Tender-Mindedness</td></tr>
+          <tr><td><span class="key-term">Conscientiousness (C)</span></td><td>Organized, dependable, self-disciplined, achievement-striving, deliberate</td><td>Competence, Order, Dutifulness, Achievement Striving, Self-Discipline, Deliberation</td></tr>
+        </table>
+
+        <h3>Test Characteristics</h3>
+        <ul>
+          <li>NEO-PI-R: 240 items on a 5-point Likert scale; 5 domain scores and 30 facet scores</li>
+          <li>NEO-FFI-3: 60 items (12 per domain); domain scores only, no facets</li>
+          <li>Both self-report (Form S) and observer-report (Form R) versions available</li>
+          <li>Scores reported as T-scores (M = 50, SD = 10)</li>
+          <li>Includes three validity indices: Acquiescence, Nay-Saying, and Random Responding</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> The NEO-PI-R is used for normal-range personality assessment, not psychopathology. It measures personality traits on continua, not diagnostic categories. Very high Neuroticism and very low Agreeableness or Conscientiousness may correlate with personality pathology, but the NEO was not designed as a clinical diagnostic tool.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Sixteen Personality Factor Questionnaire (16PF)</h2>
+        <p>The <span class="key-term">16PF</span> (Cattell, Cattell, & Cattell, 1993, 5th ed.) was developed by Raymond Cattell using factor analysis to identify the fundamental dimensions (source traits) of personality.</p>
+
+        <h3>Structure</h3>
+        <ul>
+          <li>185 items measuring 16 primary factor scales and 5 global (second-order) factors</li>
+          <li>The 16 primary factors include: Warmth, Reasoning, Emotional Stability, Dominance, Liveliness, Rule-Consciousness, Social Boldness, Sensitivity, Vigilance, Abstractedness, Privateness, Apprehension, Openness to Change, Self-Reliance, Perfectionism, Tension</li>
+          <li>The 5 global factors approximate the Big Five: Extraversion, Anxiety, Tough-Mindedness, Independence, Self-Control</li>
+          <li>Scores are reported as <span class="key-term">sten scores</span> (standard ten scores, M = 5.5, SD = 2, range 1-10)</li>
+        </ul>
+
+        <h3>Uses</h3>
+        <ul>
+          <li>Personnel selection and industrial-organizational psychology</li>
+          <li>Clinical assessment of personality style (not primarily a clinical/pathology instrument)</li>
+          <li>Career counseling and vocational guidance</li>
+          <li>Research on personality structure</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Tip:</strong> The 16PF uses sten scores (1-10), not T-scores. Scores of 1-3 are low, 4-7 are average, and 8-10 are high. Cattell used factor analysis to derive the scales, making the 16PF a prime example of the factor-analytic approach to test construction.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Millon Clinical Multiaxial Inventory-IV (MCMI-IV)</h2>
+        <p>The <span class="key-term">MCMI-IV</span> (Millon, Grossman, & Millon, 2015) is a self-report inventory specifically designed to assess personality disorders and clinical syndromes. It is directly tied to Theodore Millon's theory of personality and to the DSM diagnostic system.</p>
+
+        <h3>Structure</h3>
+        <ul>
+          <li>195 true/false items</li>
+          <li>Three types of scales:
+            <ul>
+              <li><strong>Clinical Personality Pattern scales (15):</strong> Correspond to DSM personality disorders (e.g., Schizoid, Avoidant, Dependent, Histrionic, Narcissistic, Antisocial, Compulsive, Negativistic, Masochistic, Sadistic, Schizotypal, Borderline, Paranoid)</li>
+              <li><strong>Clinical Syndrome scales (7):</strong> Generalized Anxiety, Somatic Symptom, Bipolar Spectrum, Persistent Depression, Alcohol Use, Drug Use, Post-Traumatic Stress</li>
+              <li><strong>Severe Clinical Syndrome scales (3):</strong> Schizophrenic Spectrum, Major Depression, Delusional</li>
+            </ul>
+          </li>
+          <li>Validity indices: Invalidity, Inconsistency, Disclosure, Desirability, Debasement</li>
+        </ul>
+
+        <h3>Scoring</h3>
+        <ul>
+          <li>Uses <span class="key-term">Base Rate (BR) scores</span> rather than T-scores</li>
+          <li>BR scores are anchored to the prevalence (base rate) of each disorder in clinical populations</li>
+          <li>BR score of 75 = presence of the trait/syndrome; BR score of 85 = prominence (clinically significant)</li>
+          <li>This approach accounts for the fact that different disorders have different base rates in clinical settings</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>BR Scores vs. T-Scores:</strong> T-scores assume a normal distribution and compare an individual to a normative mean. BR scores are calibrated to the actual prevalence of disorders in the target population. Because personality disorders vary in prevalence, using BR scores helps avoid overdiagnosis of rare disorders and underdiagnosis of common ones.
+        </div>
+
+        <h3>Important Limitations</h3>
+        <ul>
+          <li>Normed only on clinical (psychiatric) populations -- should not be used with non-clinical samples</li>
+          <li>Tied specifically to Millon's theory; may not map perfectly onto all DSM conceptualizations</li>
+          <li>Scales overlap substantially (items shared across scales), which inflates inter-scale correlations</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Commonly Tested:</strong> The MCMI is designed for use with clinical populations only. Using it with non-clinical populations (e.g., personnel selection) is inappropriate and may lead to over-pathologizing. Also remember: BR scores, not T-scores; cutoffs of 75 (present) and 85 (prominent).
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Rorschach Inkblot Method</h2>
+        <p>The <span class="key-term">Rorschach</span> (Rorschach, 1921) consists of 10 symmetrical inkblots (5 achromatic, 2 red-and-black, 3 multicolored) presented one at a time. The examinee describes what they see in each blot. Two major scoring systems are used today.</p>
+
+        <h3>Exner's Comprehensive System (CS)</h3>
+        <p>The <span class="key-term">Comprehensive System</span> (Exner, 2003) standardized Rorschach administration, scoring, and interpretation by integrating elements from earlier systems (Beck, Klopfer, Hertz, Piotrowski, Rapaport).</p>
+        <ul>
+          <li><strong>Administration:</strong> Two phases -- Response Phase (free association to each card) and Inquiry Phase (examiner clarifies what and where the examinee saw each percept)</li>
+          <li><strong>Scoring categories:</strong> Location (W = whole, D = common detail, Dd = unusual detail), Determinants (form, color, shading, movement), Content (human, animal, anatomy, etc.), Popular responses, Organizational Activity (Z-scores)</li>
+          <li><strong>Structural Summary:</strong> A quantitative compilation of all coded scores, including ratios, percentages, and derived indices</li>
+        </ul>
+
+        <h4>Key CS Indices</h4>
+        <ul>
+          <li><span class="key-term">Erlebnistypus (EB):</span> Ratio of human movement (M) to weighted color responses (WSumC) -- reflects whether the individual is introverted (M > WSumC), extraverted (WSumC > M), or ambitent</li>
+          <li><span class="key-term">Lambda (L):</span> Ratio of pure form responses to all other responses -- high Lambda suggests avoidant, simplistic approach to complexity</li>
+          <li><span class="key-term">X-% and X+%:</span> Measures of perceptual accuracy (reality testing). X+% = conventional form quality; X-% = distorted form quality. Elevated X-% suggests impaired reality testing.</li>
+          <li><span class="key-term">SCZI / PTI (Perceptual-Thinking Index):</span> Identifies thought disorder and perceptual distortion associated with psychotic processes</li>
+          <li><span class="key-term">DEPI (Depression Index):</span> Identifies features associated with affective disturbance</li>
+          <li><span class="key-term">S-CON (Suicide Constellation):</span> Risk index for suicidal behavior (one of the best-validated indices)</li>
+        </ul>
+
+        <h3>Rorschach Performance Assessment System (R-PAS)</h3>
+        <p>The <span class="key-term">R-PAS</span> (Meyer, Viglione, Mihura, Erard, & Erdberg, 2011) was developed to address psychometric criticisms of the CS. Key improvements include:</p>
+        <ul>
+          <li>Standardized response process: Prompts examinees to give 2-3 responses per card (reduces variability in number of responses)</li>
+          <li>International normative reference data (more diverse than CS norms)</li>
+          <li>Evidence-based variable selection (retained variables with the strongest empirical support; dropped poorly validated ones)</li>
+          <li>Standard score profiles (similar to MMPI profiles) for easier interpretation</li>
+          <li>Updated scoring guidelines and reduced complexity</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>EPPP Note:</strong> The Rorschach has been highly controversial. Meta-analyses (Mihura et al., 2013) found that some Rorschach variables have validity comparable to MMPI scales (e.g., Thought Disorder Index, M- for disordered thinking) while others lack sufficient support. The R-PAS specifically retained only empirically supported variables.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Thematic Apperception Test (TAT)</h2>
+        <p>The <span class="key-term">TAT</span> (Murray, 1943) consists of 31 cards (20 administered per session) depicting ambiguous interpersonal scenes. The examinee tells a story about each card, including what is happening, what led up to it, what the characters are thinking and feeling, and what the outcome will be.</p>
+
+        <h3>Theoretical Basis</h3>
+        <p>The TAT is based on Murray's <span class="key-term">need-press theory</span>. Responses are interpreted in terms of:</p>
+        <ul>
+          <li><span class="key-term">Needs:</span> Internal drives and motives of the protagonist (who is assumed to represent the examinee)</li>
+          <li><span class="key-term">Press:</span> Environmental forces acting on the protagonist (reflecting the examinee's perceived environment)</li>
+          <li><span class="key-term">Thema:</span> The interaction between needs and press -- the story's central conflict and resolution</li>
+        </ul>
+
+        <h3>Scoring and Interpretation</h3>
+        <ul>
+          <li>The TAT lacks a universally accepted scoring system, which is a major psychometric limitation</li>
+          <li>Notable systems include: Murray's need-press analysis, Bellak's system, McClelland's need for achievement (nAch) scoring, Westen's SCORS (Social Cognition and Object Relations Scale)</li>
+          <li><span class="key-term">SCORS (Westen):</span> The best-validated TAT scoring system; assesses complexity of representations of people, affective quality of relationships, emotional investment in relationships, and understanding of social causality</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>EPPP Key Point:</strong> The TAT is primarily used to assess interpersonal themes, motivations, and object relations rather than for psychodiagnosis. McClelland's nAch scoring system is the most empirically supported specific scoring method. Westen's SCORS has the best support for clinical use.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Sentence Completion Tests</h2>
+        <p><span class="key-term">Sentence completion tests</span> present the examinee with sentence stems (e.g., "I wish...", "My mother...", "I feel guilty about...") to be completed. They are considered semi-projective because the stimuli provide more structure than inkblots or pictures.</p>
+
+        <h3>Major Instruments</h3>
+        <ul>
+          <li><span class="key-term">Rotter Incomplete Sentences Blank (RISB):</span> 40 stems scored on a 7-point scale from positive adjustment (0-1) to maladjustment (4-6). Yields a total adjustment score. Has adequate psychometric support.</li>
+          <li><span class="key-term">Washington University Sentence Completion Test (WUSCT):</span> Developed by Loevinger to measure ego development. Responses are scored for developmental stage (Impulsive, Self-Protective, Conformist, Conscientious, Autonomous, Integrated).</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Projective Drawings</h2>
+        <p>Projective drawing techniques ask the examinee to draw specific subjects. Interpretation is based on features of the drawing (size, placement, detail, pressure, omissions). These techniques are among the most controversial in clinical assessment.</p>
+
+        <h3>Draw-A-Person (DAP)</h3>
+        <ul>
+          <li>Developed by Karen Machover (1949) based on the assumption that drawings reflect self-concept and body image</li>
+          <li>Features such as size, detail, placement, and erasures are interpreted qualitatively</li>
+          <li>The <span class="key-term">DAP:SPED</span> (Draw-A-Person: Screening Procedure for Emotional Disturbance) is a standardized scoring system with better psychometric properties than clinical interpretation</li>
+        </ul>
+
+        <h3>House-Tree-Person (HTP)</h3>
+        <ul>
+          <li>Developed by John Buck (1948)</li>
+          <li>The examinee draws a house, a tree, and a person; each drawing is then discussed in a post-drawing inquiry</li>
+          <li>The house is said to represent family/home life, the tree represents growth and development, and the person represents self-concept</li>
+          <li>Interpretation is primarily qualitative and lacks standardized scoring</li>
+        </ul>
+
+        <h3>Kinetic Family Drawing (KFD)</h3>
+        <ul>
+          <li>Developed by Burns and Kaufman (1972)</li>
+          <li>The examinee draws their family doing something together</li>
+          <li>Used primarily with children to assess family dynamics, roles, and relationships</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>EPPP Critical Point:</strong> Projective drawings have generally poor reliability and validity for personality or diagnostic assessment. However, they remain widely used in clinical practice, particularly with children. On the EPPP, you should recognize that drawing techniques have limited empirical support and are best used as clinical tools to generate hypotheses rather than as diagnostic instruments.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Summary</h2>
+        <div class="definition-box">
+          <strong>NEO-PI-R:</strong> Big Five (OCEAN): Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness. 240 items, 30 facets. Normal-range personality, not pathology.
+        </div>
+        <div class="definition-box">
+          <strong>16PF:</strong> Cattell's factor-analytic test. 16 primary factors, 5 global factors. Uses sten scores (1-10). Primarily used in I/O and career settings.
+        </div>
+        <div class="definition-box">
+          <strong>MCMI-IV:</strong> Clinical populations only. Uses Base Rate scores (75 = present, 85 = prominent). Personality disorder + clinical syndrome scales. Tied to Millon's theory.
+        </div>
+        <div class="definition-box">
+          <strong>Rorschach:</strong> 10 inkblots. CS (Exner) and R-PAS scoring systems. Key variables: EB, Lambda, X-%, S-CON. R-PAS uses standardized response process and evidence-based variable selection.
+        </div>
+        <div class="definition-box">
+          <strong>TAT:</strong> Murray's need-press theory. 20 ambiguous scenes. No standard scoring system. McClelland's nAch and Westen's SCORS are best validated.
+        </div>
+        <div class="definition-box">
+          <strong>Projective drawings (DAP, HTP):</strong> Poor reliability and validity. Hypothesis-generating only. Should not be used for diagnosis in isolation.
+        </div>
+        <p class="citation">References: Costa & McCrae (1992). NEO-PI-R Manual. Millon et al. (2015). MCMI-IV Manual. Exner (2003). The Rorschach: A Comprehensive System. Meyer et al. (2011). R-PAS Manual. Murray (1943). TAT Manual. Mihura et al. (2013). Meta-analysis of Rorschach validity.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="mmpi.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">MMPI-2/MMPI-3</div>
+          </div>
+        </a>
+        <a href="clinical-tests.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Clinical & Neuropsych Tests</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

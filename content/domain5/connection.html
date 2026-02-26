@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why We Connect | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f; --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a; --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15); --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav"><div class="nav-left"><a href="../../index.html" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><span class="logo-text">MasteryPage</span></a><div class="breadcrumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="../../textbook.html">Textbook</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="index.html">Domain 5</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>Why We Connect</span></div></div></nav>
+  <div class="content-wrapper">
+    <aside class="sidebar"><div class="sidebar-header"><div class="sidebar-title">Domain 5</div><div class="domain-title">Social &amp; Cultural Psychology</div></div><ul class="chapter-list"><li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li><li class="chapter-item"><a href="cultural-roots.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From</a></li><li class="chapter-item"><a href="shortcuts.html" class="chapter-link"><span class="chapter-number">2</span>The Shortcuts We Take</a></li><li class="chapter-item"><a href="beliefs.html" class="chapter-link"><span class="chapter-number">3</span>What We Believe</a></li><li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">4</span>How We're Moved</a></li><li class="chapter-item"><a href="connection.html" class="chapter-link active"><span class="chapter-number">5</span>Why We Connect</a></li><li class="chapter-item"><a href="prejudice.html" class="chapter-link"><span class="chapter-number">6</span>Where We Break</a></li><li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li><li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link"><span class="chapter-number">8</span>Across the Divide</a></li></ul></aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 8</div>
+        <h1>Why We Connect &mdash; Attraction, Altruism &amp; Helping</h1>
+        <div class="chapter-meta"><span>Interpersonal attraction, love, prosocial behavior, bystander effect</span></div>
+      </header>
+      <div class="chapter-actions"><a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a><a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a><a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a></div>
+
+      <section class="content-section">
+        <h2>Interpersonal Attraction</h2>
+        <p>Why are we drawn to some people and not others? Research has identified several robust predictors of interpersonal attraction that apply to both friendships and romantic relationships.</p>
+        <h3>Determinants of Attraction</h3>
+        <ul>
+          <li><strong>Proximity (propinquity):</strong> Physical closeness is one of the strongest predictors of attraction. We tend to like people we encounter frequently. The mere exposure effect (Zajonc) contributes: repeated contact increases familiarity and liking.</li>
+          <li><strong>Similarity:</strong> We are attracted to people who share our attitudes, values, interests, and backgrounds. The <span class="key-term">matching hypothesis</span> states that people tend to form relationships with others of similar physical attractiveness.</li>
+          <li><strong>Reciprocity:</strong> We like people who like us. Learning that someone is attracted to us increases our attraction to them.</li>
+          <li><strong>Physical attractiveness:</strong> Attractive individuals are rated more positively on many dimensions (the halo effect). There is some cross-cultural consistency in what is considered attractive (e.g., facial symmetry, youthfulness cues).</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Matching Hypothesis</strong>
+          <p>People tend to form long-term partnerships with others who are similar in physical attractiveness. While people may initially prefer the most attractive partner, they ultimately choose partners whose attractiveness level matches their own, due to the balance of fear of rejection and desire for the best available partner.</p>
+        </div>
+        <div class="example-box">
+          <strong>Misattribution of Arousal (Dutton &amp; Aron, 1974)</strong>
+          <p>In the famous "bridge study," male participants who crossed a fear-arousing suspension bridge were more likely to call an attractive female experimenter afterward than those who crossed a low, stable bridge. Physiological arousal from fear was misattributed to attraction, demonstrating the <span class="key-term">two-factor theory of emotion</span> (Schachter &amp; Singer): we experience arousal and then label it based on context.</p>
+        </div>
+        <p class="citation">Dutton, D. G., &amp; Aron, A. P. (1974). Some evidence for heightened sexual attraction under conditions of high anxiety. Journal of Personality and Social Psychology, 30(4), 510&ndash;517.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Theories of Love</h2>
+        <h3>Sternberg's Triangular Theory of Love</h3>
+        <div class="definition-box">
+          <strong>Sternberg's Three Components</strong>
+          <p><strong>Intimacy:</strong> Feelings of closeness, connectedness, and bondedness.<br><strong>Passion:</strong> Physical attraction, sexual desire, and arousal.<br><strong>Commitment:</strong> The decision to love someone and maintain that love over time.</p>
+        </div>
+        <table>
+          <tr><th>Type of Love</th><th>Intimacy</th><th>Passion</th><th>Commitment</th></tr>
+          <tr><td>Liking</td><td>Yes</td><td>No</td><td>No</td></tr>
+          <tr><td>Infatuation</td><td>No</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Empty love</td><td>No</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Romantic love</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Companionate love</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Fatuous love</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Consummate love</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+        </table>
+        <h3>Adult Attachment Styles</h3>
+        <p>Building on Bowlby and Ainsworth's attachment theory, Hazan and Shaver (1987) proposed that adult romantic relationships follow attachment patterns similar to infant-caregiver bonds. Bartholomew and Horowitz (1991) expanded this into a four-category model:</p>
+        <table>
+          <tr><th>Style</th><th>Model of Self</th><th>Model of Others</th><th>Description</th></tr>
+          <tr><td>Secure</td><td>Positive</td><td>Positive</td><td>Comfortable with intimacy and autonomy</td></tr>
+          <tr><td>Preoccupied (Anxious)</td><td>Negative</td><td>Positive</td><td>Seeks closeness but fears rejection; clingy</td></tr>
+          <tr><td>Dismissing-Avoidant</td><td>Positive</td><td>Negative</td><td>Self-reliant; avoids closeness; denies need for others</td></tr>
+          <tr><td>Fearful-Avoidant</td><td>Negative</td><td>Negative</td><td>Desires closeness but fears it; distrustful</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Attachment style significantly impacts the therapeutic relationship. Preoccupied clients may become overly dependent on the therapist, while dismissing clients may devalue the relationship. Fearful-avoidant clients may alternate between seeking and rejecting help. Understanding attachment styles helps therapists anticipate transference patterns and tailor interventions accordingly.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Prosocial Behavior &amp; Altruism</h2>
+        <p><span class="key-term">Prosocial behavior</span> encompasses any action intended to benefit another person. <span class="key-term">Altruism</span> is prosocial behavior motivated purely by concern for the other, with no expectation of personal reward.</p>
+        <h3>The Empathy-Altruism Hypothesis</h3>
+        <div class="definition-box">
+          <strong>Empathy-Altruism Hypothesis (Batson, 1991)</strong>
+          <p>When we feel <strong>empathic concern</strong> for a person in need, we are motivated to help for purely altruistic reasons &mdash; to reduce their suffering, not our own discomfort. If we feel <strong>personal distress</strong> instead of empathy, we help only if it is the easiest way to reduce our own negative feelings (egoistic motivation).</p>
+        </div>
+        <h3>The Bystander Effect</h3>
+        <div class="definition-box">
+          <strong>Bystander Effect (Darley &amp; Latan&eacute;, 1968)</strong>
+          <p>The probability of helping decreases as the number of bystanders increases. Two key mechanisms:<br><strong>Diffusion of responsibility:</strong> Each individual feels less personally responsible when others are present.<br><strong>Pluralistic ignorance:</strong> Each bystander looks to others for cues; when everyone appears calm, each concludes the situation is not an emergency.</p>
+        </div>
+        <h3>Latan&eacute; &amp; Darley's Five Steps to Helping</h3>
+        <ol>
+          <li><strong>Notice the event</strong> (distraction can prevent this)</li>
+          <li><strong>Interpret as emergency</strong> (pluralistic ignorance can block this)</li>
+          <li><strong>Assume personal responsibility</strong> (diffusion of responsibility can block this)</li>
+          <li><strong>Know how to help</strong> (lack of competence can block this)</li>
+          <li><strong>Decide to help</strong> (audience inhibition and cost-benefit analysis can block this)</li>
+        </ol>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A person collapses in a crowded subway station. Each bystander sees others not reacting and concludes the situation is not serious (pluralistic ignorance). Each assumes someone else will call 911 (diffusion of responsibility). The same person collapsing in front of a single bystander is much more likely to receive immediate help.</p>
+        </div>
+        <h3>Social Exchange &amp; Equity Theory</h3>
+        <p><span class="key-term">Social exchange theory</span> views relationships as economic transactions: people seek to maximize rewards and minimize costs. <span class="key-term">Equity theory</span> adds that satisfaction requires perceived fairness &mdash; each partner's ratio of inputs to outcomes should be roughly equal. Both over-benefiting and under-benefiting cause distress.</p>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Couples therapy often involves restoring equity and reciprocity. Behavioral couples therapy uses behavioral exchange techniques where partners agree to increase rewarding behaviors. Understanding social exchange frameworks helps clinicians identify reward-cost imbalances driving relational distress.</p>
+        </div>
+        <p class="citation">Batson, C. D. (1991). The altruism question: Toward a social-psychological answer. Erlbaum.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Proximity</strong> is the strongest predictor of initial attraction; <strong>similarity</strong> sustains relationships over time.</li>
+          <li>The <strong>matching hypothesis</strong>: people pair with partners of similar attractiveness.</li>
+          <li><strong>Misattribution of arousal</strong> (Dutton &amp; Aron): physiological arousal from any source can be misinterpreted as attraction.</li>
+          <li><strong>Sternberg's triangular theory:</strong> Know the three components and the seven types of love, especially <strong>consummate love</strong> (all three).</li>
+          <li>Know the <strong>four adult attachment styles</strong> and their corresponding self/other models.</li>
+          <li><strong>Empathy-altruism hypothesis</strong> (Batson): Empathic concern leads to true altruism; personal distress leads to egoistic helping.</li>
+          <li><strong>Bystander effect:</strong> More bystanders = less helping. Know <strong>diffusion of responsibility</strong> and <strong>pluralistic ignorance</strong>.</li>
+          <li><strong>Latan&eacute; &amp; Darley's five steps to helping</strong> &mdash; each step represents a potential barrier.</li>
+          <li><strong>Social exchange theory</strong>: Relationships as reward/cost equations. <strong>Equity theory</strong>: Satisfaction requires perceived fairness.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="persuasion.html" class="nav-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">How We're Moved</div></div></a>
+        <a href="prejudice.html" class="nav-btn"><div style="text-align: right;"><div class="nav-btn-label">Next</div><div class="nav-btn-title">Where We Break</div></div><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')"><div class="upgrade-modal"><div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h3>Upgrade to Unlock</h3><p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p><div class="upgrade-modal-actions"><button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button><a href="../../index.html" class="btn-upgrade">View Plans</a></div></div></div>
+  <script>function chapterAction(action, domainNum) { var tier = 'free'; try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {} if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; } if (action === 'flashcards') window.location.href = '../../index.html'; else if (action === 'quiz-fundamental') window.location.href = '../../index.html'; else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; } }</script>
+</body>
+</html>

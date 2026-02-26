@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Architecture, Dreaming & the Lifespan - Domain 7: Biopsychology | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Sleep Architecture, Dreaming &amp; the Lifespan</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 7</div>
+        <div class="domain-title">Biopsychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="brain-structure-lateralization.html" class="chapter-link"><span class="chapter-number">1</span>Brain Structure &amp; Lateralization</a></li>
+        <li class="chapter-item"><a href="learning-encoding.html" class="chapter-link"><span class="chapter-number">2</span>Learning Processes &amp; Encoding Strategies</a></li>
+        <li class="chapter-item"><a href="memory-architecture.html" class="chapter-link"><span class="chapter-number">3</span>Memory Architecture &amp; Working Memory</a></li>
+        <li class="chapter-item"><a href="retrieval-forgetting.html" class="chapter-link"><span class="chapter-number">4</span>Retrieval, Forgetting &amp; Memory Distortion</a></li>
+        <li class="chapter-item"><a href="neuroscience-memory.html" class="chapter-link"><span class="chapter-number">5</span>Neuroscience of Memory &amp; Amnesia</a></li>
+        <li class="chapter-item"><a href="sleep-architecture.html" class="chapter-link active"><span class="chapter-number">6</span>Sleep Architecture, Dreaming &amp; the Lifespan</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">7</span>Neurons, Neurotransmitters &amp; Neural Signaling</a></li>
+        <li class="chapter-item"><a href="emotion-arousal.html" class="chapter-link"><span class="chapter-number">8</span>Emotion Theories, Arousal &amp; the ANS</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">9</span>Sensation, Perception &amp; Psychophysics</a></li>
+        <li class="chapter-item"><a href="neurodegenerative-movement.html" class="chapter-link"><span class="chapter-number">10</span>Neurodegenerative &amp; Movement Disorders</a></li>
+        <li class="chapter-item"><a href="cerebrovascular-injury.html" class="chapter-link"><span class="chapter-number">11</span>Cerebrovascular Disease, Brain Injury &amp; Seizures</a></li>
+        <li class="chapter-item"><a href="endocrine-neuroimaging.html" class="chapter-link"><span class="chapter-number">12</span>Endocrine Conditions, Neuroimaging &amp; Diagnostics</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">13</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 13</div>
+        <h1>Sleep Architecture, Dreaming &amp; the Lifespan</h1>
+        <div class="chapter-meta">
+          <span>Domain 7: Biopsychology</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Sleep Stages &amp; EEG Patterns</h2>
+        <p>Sleep is organized into a cyclic architecture of <span class="key-term">NREM (non-rapid eye movement)</span> and <span class="key-term">REM (rapid eye movement)</span> stages, each with characteristic electroencephalographic (EEG) signatures. A complete sleep cycle lasts approximately 90 minutes, with 4-6 cycles occurring per night.</p>
+
+        <table>
+          <tr><th>Stage</th><th>EEG Pattern</th><th>Duration per Cycle</th><th>Key Features</th></tr>
+          <tr><td>Wakefulness (relaxed)</td><td>Alpha waves (8-13 Hz)</td><td>N/A</td><td>Calm, relaxed, eyes closed</td></tr>
+          <tr><td>NREM Stage 1 (N1)</td><td>Theta waves (4-7 Hz)</td><td>~5 min</td><td>Light sleep, hypnagogic hallucinations, myoclonic jerks</td></tr>
+          <tr><td>NREM Stage 2 (N2)</td><td>Sleep spindles (12-14 Hz bursts) &amp; K-complexes</td><td>~20 min</td><td>Largest proportion of total sleep; memory consolidation</td></tr>
+          <tr><td>NREM Stage 3 (N3)</td><td>Delta waves (0.5-4 Hz, high amplitude)</td><td>~40 min (early cycles)</td><td>Slow-wave sleep (SWS); deepest sleep; growth hormone release</td></tr>
+          <tr><td>REM</td><td>Beta waves (desynchronized, similar to waking)</td><td>~10 min initially, lengthening to ~60 min</td><td>Vivid dreaming, muscle atonia, rapid eye movements</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Sleep Spindles &amp; K-Complexes:</strong>
+          <p><span class="key-term">Sleep spindles</span> are brief bursts of 12-14 Hz activity generated by the thalamus during NREM Stage 2. They are believed to play a role in memory consolidation and protecting sleep from external disturbances. <span class="key-term">K-complexes</span> are large, sharp waveforms that also appear in Stage 2; they are thought to represent cortical responses to external stimuli and may function in sleep maintenance.</p>
+        </div>
+
+        <p>As the night progresses, NREM Stage 3 (slow-wave sleep) decreases while REM periods become progressively longer. Most slow-wave sleep occurs in the first third of the night, while most REM sleep occurs in the last third. This distribution has important implications: disruptions to early-night sleep primarily affect slow-wave sleep (and declarative memory consolidation), while disruptions to late-night sleep primarily affect REM sleep (and procedural/emotional memory processing).</p>
+      </div>
+
+      <div class="content-section">
+        <h2>Circadian Rhythms &amp; the Suprachiasmatic Nucleus</h2>
+        <p><span class="key-term">Circadian rhythms</span> are endogenous biological cycles with a period of approximately 24 hours that regulate sleep-wake cycles, hormone secretion, body temperature, and other physiological processes. The master circadian clock is the <span class="key-term">suprachiasmatic nucleus (SCN)</span>, located in the anterior hypothalamus directly above the optic chiasm.</p>
+
+        <p>The SCN receives light information directly from the retina via the <span class="key-term">retinohypothalamic tract</span> (using specialized melanopsin-containing retinal ganglion cells), allowing it to synchronize the internal clock with the external light-dark cycle. The SCN projects to the <span class="key-term">pineal gland</span>, which secretes <span class="key-term">melatonin</span> during darkness. Melatonin promotes sleep onset and is suppressed by light exposure, particularly blue-wavelength light.</p>
+
+        <div class="example-box">
+          <strong>Clinical Application:</strong>
+          <p>Exogenous melatonin is used therapeutically for circadian rhythm disorders, jet lag, and as an adjunct for insomnia. The timing of administration is critical: melatonin given in the evening advances the circadian phase (useful for delayed sleep-wake phase disorder), while melatonin given in the morning delays the phase. Blue-light-blocking glasses in the evening can also advance sleep onset by preventing melatonin suppression.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Sleep Disorders</h2>
+
+        <h3>Insomnia</h3>
+        <p><span class="key-term">Insomnia disorder</span> involves difficulty initiating or maintaining sleep, or early morning awakening, at least three nights per week for at least three months, causing significant distress or functional impairment. Cognitive-behavioral therapy for insomnia (CBT-I) is the first-line treatment and includes stimulus control, sleep restriction, sleep hygiene education, cognitive restructuring, and relaxation training.</p>
+
+        <h3>Narcolepsy</h3>
+        <p><span class="key-term">Narcolepsy</span> is characterized by excessive daytime sleepiness and may include cataplexy (sudden loss of muscle tone triggered by strong emotions), hypnagogic/hypnopompic hallucinations, and sleep paralysis. Type 1 narcolepsy involves deficiency of <span class="key-term">hypocretin (orexin)</span>, a neuropeptide produced by the lateral hypothalamus that promotes wakefulness. The loss of hypocretin-producing neurons is believed to result from autoimmune destruction.</p>
+
+        <h3>Obstructive Sleep Apnea</h3>
+        <p><span class="key-term">Obstructive sleep apnea (OSA)</span> involves repeated episodes of upper airway collapse during sleep, producing apneas (cessation of breathing for 10+ seconds) or hypopneas (partial airway obstruction). OSA disrupts sleep architecture, reduces oxygen saturation, and is associated with cardiovascular disease, cognitive impairment, and excessive daytime sleepiness. Treatment includes CPAP (continuous positive airway pressure).</p>
+
+        <h3>Parasomnias</h3>
+        <div class="definition-box">
+          <strong>NREM Parasomnias (Disorders of Arousal):</strong>
+          <p><span class="key-term">Sleepwalking (somnambulism)</span> and <span class="key-term">night terrors (sleep terrors)</span> occur during NREM Stage 3 (slow-wave sleep), typically in the first third of the night. During night terrors, the individual may sit up screaming with autonomic arousal (tachycardia, sweating) but has no memory of the event. These parasomnias are most common in children and usually resolve with maturation. They should be distinguished from nightmares, which occur during REM sleep.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>REM Sleep Behavior Disorder (RBD):</strong>
+          <p><span class="key-term">REM sleep behavior disorder</span> involves loss of the normal muscle atonia during REM sleep, allowing individuals to physically act out their dreams. RBD is a strong prodromal marker for synucleinopathies — a significant percentage of patients with RBD eventually develop Parkinson's disease or Lewy body dementia. This association is high-yield for the EPPP.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Theories of Dreaming</h2>
+        <p>Three major theories of dreaming are tested on the EPPP:</p>
+        <ul>
+          <li><strong>Freud's wish-fulfillment theory:</strong> Dreams represent disguised expressions of unconscious desires. The <span class="key-term">manifest content</span> (the dream as remembered) conceals the <span class="key-term">latent content</span> (the underlying unconscious meaning) through dream work processes including condensation, displacement, and symbolization.</li>
+          <li><strong>Activation-synthesis theory (Hobson &amp; McCarley, 1977):</strong> Dreams result from the brain's attempt to make sense of random neural activation originating in the pons during REM sleep. The cortex synthesizes a narrative (the dream) from this essentially random brainstem activity. Dreams have no inherent meaning; they are the brain's "best guess" at interpreting noise.</li>
+          <li><strong>Information-processing theory:</strong> Dreams serve a functional role in consolidating memories, processing emotional experiences, and integrating new information with existing knowledge. This theory is supported by evidence that REM sleep facilitates procedural learning and emotional memory processing.</li>
+        </ul>
+
+        <div class="citation">Hobson, J. A., &amp; McCarley, R. W. (1977). The brain as a dream state generator: An activation-synthesis hypothesis of the dream process. American Journal of Psychiatry, 134(12), 1335-1348.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>Sleep Across the Lifespan &amp; Deprivation Effects</h2>
+        <p>Sleep architecture changes dramatically across development:</p>
+        <ul>
+          <li><strong>Newborns</strong>: Sleep 16-18 hours/day; approximately 50% REM sleep (called "active sleep"); polyphasic sleep pattern</li>
+          <li><strong>Children</strong>: REM proportion decreases to ~25%; high amounts of slow-wave sleep; NREM parasomnias peak</li>
+          <li><strong>Adolescents</strong>: Circadian phase delay (natural tendency toward later bedtime and waking); need ~8-10 hours</li>
+          <li><strong>Older adults</strong>: Decreased total sleep time; reduced slow-wave sleep and sleep efficiency; increased nighttime awakenings; advanced circadian phase (earlier bedtime and wake time)</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Sleep Deprivation Effects:</strong>
+          <p>Chronic sleep deprivation impairs attention, working memory, decision-making, emotional regulation, and immune function. Sleep-deprived individuals show increased activity in the amygdala and decreased prefrontal cortex regulation, leading to heightened emotional reactivity. Severe prolonged sleep deprivation can produce perceptual disturbances, paranoia, and psychotic-like symptoms. Growth hormone, which is primarily secreted during slow-wave sleep, is also affected — relevant for pediatric growth and recovery from illness.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Sleep cycles</strong> last ~90 minutes; NREM 3 (slow-wave) dominates early night; REM dominates late night</li>
+          <li><strong>EEG patterns</strong>: alpha (relaxed waking), theta (N1), sleep spindles + K-complexes (N2), delta (N3), beta-like desynchronized (REM)</li>
+          <li><strong>SCN</strong> in the hypothalamus = master circadian clock; synchronized by light via retinohypothalamic tract</li>
+          <li><strong>Melatonin</strong>: secreted by pineal gland during darkness; promotes sleep onset</li>
+          <li><strong>Narcolepsy Type 1</strong>: deficiency of hypocretin/orexin (lateral hypothalamus); features cataplexy, sleep paralysis, hypnagogic hallucinations</li>
+          <li><strong>Night terrors</strong> = NREM Stage 3 (first third of night); <strong>Nightmares</strong> = REM sleep (last third of night)</li>
+          <li><strong>REM sleep behavior disorder</strong>: loss of muscle atonia during REM; strong predictor of Parkinson's and Lewy body dementia</li>
+          <li><strong>CBT-I</strong> is the first-line treatment for insomnia disorder (not pharmacotherapy)</li>
+          <li><strong>Freud</strong>: manifest vs. latent content; <strong>Activation-synthesis</strong>: random brainstem activation interpreted by cortex; <strong>Information-processing</strong>: memory consolidation function</li>
+          <li><strong>Newborns</strong>: ~50% REM sleep; proportion decreases with age; <strong>Older adults</strong>: decreased slow-wave sleep and sleep efficiency</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="neuroscience-memory.html" class="nav-btn">
+          <span>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Neuroscience of Memory &amp; Amnesia</div>
+          </span>
+        </a>
+        <a href="neurons-neurotransmitters.html" class="nav-btn">
+          <span>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Neurons, Neurotransmitters &amp; Neural Signaling</div>
+          </span>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neurons, Neurotransmitters & Neural Signaling - Domain 7: Biopsychology | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Neurons, Neurotransmitters &amp; Neural Signaling</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 7</div>
+        <div class="domain-title">Biopsychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="brain-structure-lateralization.html" class="chapter-link"><span class="chapter-number">1</span>Brain Structure &amp; Lateralization</a></li>
+        <li class="chapter-item"><a href="learning-encoding.html" class="chapter-link"><span class="chapter-number">2</span>Learning Processes &amp; Encoding Strategies</a></li>
+        <li class="chapter-item"><a href="memory-architecture.html" class="chapter-link"><span class="chapter-number">3</span>Memory Architecture &amp; Working Memory</a></li>
+        <li class="chapter-item"><a href="retrieval-forgetting.html" class="chapter-link"><span class="chapter-number">4</span>Retrieval, Forgetting &amp; Memory Distortion</a></li>
+        <li class="chapter-item"><a href="neuroscience-memory.html" class="chapter-link"><span class="chapter-number">5</span>Neuroscience of Memory &amp; Amnesia</a></li>
+        <li class="chapter-item"><a href="sleep-architecture.html" class="chapter-link"><span class="chapter-number">6</span>Sleep Architecture, Dreaming &amp; the Lifespan</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link active"><span class="chapter-number">7</span>Neurons, Neurotransmitters &amp; Neural Signaling</a></li>
+        <li class="chapter-item"><a href="emotion-arousal.html" class="chapter-link"><span class="chapter-number">8</span>Emotion Theories, Arousal &amp; the ANS</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">9</span>Sensation, Perception &amp; Psychophysics</a></li>
+        <li class="chapter-item"><a href="neurodegenerative-movement.html" class="chapter-link"><span class="chapter-number">10</span>Neurodegenerative &amp; Movement Disorders</a></li>
+        <li class="chapter-item"><a href="cerebrovascular-injury.html" class="chapter-link"><span class="chapter-number">11</span>Cerebrovascular Disease, Brain Injury &amp; Seizures</a></li>
+        <li class="chapter-item"><a href="endocrine-neuroimaging.html" class="chapter-link"><span class="chapter-number">12</span>Endocrine Conditions, Neuroimaging &amp; Diagnostics</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">13</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 13</div>
+        <h1>Neurons, Neurotransmitters &amp; Neural Signaling</h1>
+        <div class="chapter-meta">
+          <span>Domain 7: Biopsychology</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Neuron Structure &amp; Types</h2>
+        <p>The <span class="key-term">neuron</span> is the fundamental signaling unit of the nervous system. Although neurons vary widely in shape and size, they share a common structural plan consisting of a cell body, dendrites, and an axon.</p>
+        <ul>
+          <li><span class="key-term">Soma (cell body)</span>: Contains the nucleus and organelles; integrates incoming signals from dendrites</li>
+          <li><span class="key-term">Dendrites</span>: Branching extensions that receive signals from other neurons; the primary input structures</li>
+          <li><span class="key-term">Axon</span>: A single long fiber that conducts action potentials away from the soma toward the terminal buttons</li>
+          <li><span class="key-term">Myelin sheath</span>: A fatty insulating layer produced by oligodendrocytes (CNS) or Schwann cells (PNS) that dramatically increases conduction speed</li>
+          <li><span class="key-term">Nodes of Ranvier</span>: Gaps in the myelin sheath where ion channels are concentrated, enabling saltatory conduction</li>
+          <li><span class="key-term">Terminal buttons (axon terminals)</span>: End points of the axon that release neurotransmitters into the synaptic cleft</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Glial Cells:</strong>
+          <p>Glial cells outnumber neurons and provide essential support functions. <span class="key-term">Astrocytes</span> regulate the blood-brain barrier, maintain the extracellular environment, and modulate synaptic transmission. <span class="key-term">Oligodendrocytes</span> produce myelin in the CNS; <span class="key-term">Schwann cells</span> produce myelin in the PNS (important distinction for the EPPP). <span class="key-term">Microglia</span> serve as the brain's immune cells, removing cellular debris and responding to infection or injury.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>The Action Potential</h2>
+        <p>The <span class="key-term">resting potential</span> of a neuron is approximately <span class="key-term">-70 mV</span>, maintained by the sodium-potassium pump (3 Na+ out, 2 K+ in) and selective ion channel permeability. When excitatory inputs depolarize the membrane to the <span class="key-term">threshold</span> (approximately -55 mV), an action potential is triggered.</p>
+
+        <h3>Phases of the Action Potential</h3>
+        <ol>
+          <li><strong>Depolarization</strong>: Voltage-gated sodium (Na+) channels open, allowing rapid Na+ influx. The membrane potential rises toward +30 to +40 mV.</li>
+          <li><strong>Repolarization</strong>: Na+ channels inactivate and voltage-gated potassium (K+) channels open, allowing K+ efflux. The membrane potential returns toward resting level.</li>
+          <li><strong>Hyperpolarization</strong>: K+ channels remain open briefly, causing the membrane to overshoot below resting potential (~-80 mV) before returning to -70 mV.</li>
+        </ol>
+
+        <div class="definition-box">
+          <strong>All-or-None Law:</strong>
+          <p>The <span class="key-term">all-or-none law</span> states that an action potential either fires at full amplitude or does not fire at all — there is no partial action potential. The intensity of a stimulus is coded not by the amplitude of individual action potentials but by the <em>frequency</em> of firing (rate coding) and the <em>number</em> of neurons activated.</p>
+        </div>
+
+        <h3>Refractory Periods</h3>
+        <p>The <span class="key-term">absolute refractory period</span> occurs during depolarization and early repolarization, when no stimulus (regardless of intensity) can trigger another action potential. The <span class="key-term">relative refractory period</span> follows, during which a stronger-than-normal stimulus can trigger an action potential. These periods limit the maximum firing rate and ensure unidirectional propagation of the signal along the axon.</p>
+
+        <div class="example-box">
+          <strong>Saltatory Conduction:</strong>
+          <p><span class="key-term">Saltatory conduction</span> refers to the "jumping" of action potentials from one node of Ranvier to the next along myelinated axons. This dramatically increases conduction velocity (up to 120 m/s in large myelinated fibers) compared to continuous conduction in unmyelinated fibers (~1-2 m/s). Demyelinating diseases such as multiple sclerosis disrupt saltatory conduction, slowing or blocking neural transmission.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Synaptic Transmission</h2>
+        <p>Communication between neurons occurs at the <span class="key-term">synapse</span>, the junction between a presynaptic terminal button and a postsynaptic dendrite (or cell body). The synaptic cleft — a gap of approximately 20-40 nanometers — separates the pre- and postsynaptic membranes. The sequence of synaptic transmission is as follows:</p>
+        <ol>
+          <li>The action potential arrives at the terminal button and triggers calcium (Ca2+) influx through voltage-gated calcium channels</li>
+          <li>Ca2+ causes synaptic vesicles to fuse with the presynaptic membrane and release neurotransmitter into the synaptic cleft (exocytosis)</li>
+          <li>Neurotransmitter molecules bind to postsynaptic receptors, producing excitatory or inhibitory postsynaptic potentials (EPSPs or IPSPs)</li>
+          <li>Neurotransmitter action is terminated by reuptake, enzymatic degradation, or diffusion away from the synapse</li>
+        </ol>
+
+        <div class="definition-box">
+          <strong>Agonists &amp; Antagonists:</strong>
+          <p>An <span class="key-term">agonist</span> is a substance that mimics or enhances the action of a neurotransmitter (e.g., nicotine is an acetylcholine agonist; morphine is an endorphin agonist). An <span class="key-term">antagonist</span> blocks or reduces the action of a neurotransmitter (e.g., curare blocks acetylcholine receptors; naloxone blocks opioid receptors). <span class="key-term">Reuptake inhibitors</span> (e.g., SSRIs for serotonin) block the transporter that removes the neurotransmitter from the synaptic cleft, effectively increasing its availability and prolonging its action.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Major Neurotransmitter Systems</h2>
+        <table>
+          <tr><th>Neurotransmitter</th><th>Primary Functions</th><th>Clinical Associations</th></tr>
+          <tr><td>Acetylcholine (ACh)</td><td>Muscle contraction, attention, memory, arousal</td><td>Alzheimer's (ACh deficit); myasthenia gravis (receptor antibodies); botulinum toxin (blocks release)</td></tr>
+          <tr><td>Dopamine (DA)</td><td>Reward, motivation, motor control, executive function</td><td>Parkinson's (DA deficit); schizophrenia (DA excess in mesolimbic pathway); addiction (mesolimbic pathway)</td></tr>
+          <tr><td>Serotonin (5-HT)</td><td>Mood regulation, sleep, appetite, impulse control</td><td>Depression (5-HT deficit hypothesis); OCD; anxiety disorders; SSRIs increase 5-HT availability</td></tr>
+          <tr><td>Norepinephrine (NE)</td><td>Alertness, arousal, attention, fight-or-flight</td><td>Depression; PTSD (NE hyperactivity); ADHD (NE/DA deficit); SNRIs target NE + 5-HT</td></tr>
+          <tr><td>GABA</td><td>Primary inhibitory neurotransmitter in the brain</td><td>Anxiety (GABA deficit); benzodiazepines enhance GABA; alcohol potentiates GABA; seizures (GABA deficit)</td></tr>
+          <tr><td>Glutamate</td><td>Primary excitatory neurotransmitter in the brain; learning (LTP)</td><td>Excitotoxicity (excessive glutamate causes neuronal death); involved in stroke damage; NMDA receptors in LTP</td></tr>
+          <tr><td>Endorphins</td><td>Pain modulation, stress response, reward</td><td>Runner's high; naloxone reverses opioid overdose by blocking endorphin/opioid receptors</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Dopamine Pathways (High-Yield for EPPP):</strong>
+          <p>Four major dopamine pathways are clinically important: (1) <strong>Mesolimbic pathway</strong>: ventral tegmental area (VTA) to nucleus accumbens — reward, motivation; hyperactivity linked to positive symptoms of schizophrenia. (2) <strong>Mesocortical pathway</strong>: VTA to prefrontal cortex — executive function, motivation; hypoactivity linked to negative symptoms and cognitive deficits. (3) <strong>Nigrostriatal pathway</strong>: substantia nigra to striatum — motor control; degeneration causes Parkinson's; blockade by antipsychotics causes extrapyramidal symptoms. (4) <strong>Tuberoinfundibular pathway</strong>: hypothalamus to pituitary — inhibits prolactin; blockade causes hyperprolactinemia.</p>
+        </div>
+
+        <div class="citation">Stahl, S. M. (2013). Stahl's Essential Psychopharmacology: Neuroscientific Basis and Practical Applications (4th ed.). Cambridge University Press. — The standard reference for neurotransmitter systems and psychopharmacology.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>Behavioral Genetics</h2>
+        <p>Behavioral genetics investigates the relative contributions of genetic and environmental factors to individual differences in behavior, cognition, and psychopathology. This field provides essential evidence for understanding the biological bases of psychological traits and disorders, and its concepts are heavily tested on the EPPP.</p>
+
+        <h3>Heritability</h3>
+        <div class="definition-box">
+          <strong>Heritability Coefficient (h&sup2;):</strong>
+          <p>The <span class="key-term">heritability coefficient (h&sup2;)</span> estimates the proportion of <em>variance</em> in a trait within a <strong>population</strong> that is attributable to genetic differences among individuals. Critical EPPP points: (1) heritability applies to <em>populations</em>, not individuals — you cannot say "80% of this person's IQ is genetic"; (2) heritability does not indicate the degree to which a trait is "determined" by genes — a highly heritable trait can still be strongly influenced by environment; (3) heritability estimates are specific to the population and environment studied — they can change if environmental conditions change; (4) high heritability does not mean the trait is immutable or untreatable.</p>
+        </div>
+
+        <h3>Twin Studies</h3>
+        <p><span class="key-term">Twin studies</span> are the cornerstone method of behavioral genetics. They compare concordance rates (or correlations) between monozygotic (MZ, identical) twins, who share 100% of their DNA, and dizygotic (DZ, fraternal) twins, who share approximately 50% of their segregating genes.</p>
+        <ul>
+          <li>If MZ concordance is substantially higher than DZ concordance, genetic factors are implicated</li>
+          <li>If MZ concordance is similar to DZ concordance, shared environmental factors are more important</li>
+          <li>If MZ concordance is less than 100%, environmental factors play a role (since MZ twins are genetically identical)</li>
+          <li><strong>MZ twins reared apart</strong> provide the strongest evidence for genetic influence, as any similarity cannot be attributed to shared rearing environment (e.g., the Minnesota Study of Twins Reared Apart; Bouchard et al., 1990)</li>
+        </ul>
+
+        <h3>Adoption Studies</h3>
+        <p><span class="key-term">Adoption studies</span> separate genetic from environmental contributions by comparing adopted children to both their biological parents (who share genes but not environment) and their adoptive parents (who share environment but not genes). If adopted children more closely resemble their biological parents on a trait, genetic factors are implicated. If they more closely resemble their adoptive parents, environmental factors are implicated. Adoption studies of schizophrenia (Heston, 1966; Kety et al., 1968) provided pivotal evidence for a genetic contribution to the disorder.</p>
+
+        <h3>Shared vs. Nonshared Environment</h3>
+        <div class="definition-box">
+          <strong>Environmental Influences:</strong>
+          <p><span class="key-term">Shared environment</span> (also called common environment) refers to environmental factors that make siblings growing up in the same family <em>similar</em> to one another — including family socioeconomic status, parenting style, neighborhood, and family diet. <span class="key-term">Nonshared environment</span> refers to environmental factors that make siblings growing up in the same family <em>different</em> from one another — including differential parental treatment, different peer groups, unique life events, illness or injury, and birth order effects. A landmark finding in behavioral genetics is that for most psychological traits (personality, psychopathology), <strong>nonshared environment accounts for more variance than shared environment</strong> (Plomin &amp; Daniels, 1987). This means siblings growing up in the same household often turn out quite different, and the family-wide environment is less important than sibling-specific experiences.</p>
+        </div>
+
+        <h3>Gene-Environment Interaction vs. Gene-Environment Correlation</h3>
+        <p>Two distinct processes describe how genes and environments work together:</p>
+        <ul>
+          <li><span class="key-term">Gene-environment interaction (GxE)</span>: The effect of a gene on a phenotype depends on the environment, and vice versa. The same genotype produces different outcomes in different environments. Classic example: Caspi et al. (2003) found that individuals with the short allele of the serotonin transporter gene (5-HTTLPR) were more likely to develop depression following stressful life events than those with the long allele — the genetic vulnerability was only expressed under environmental stress.</li>
+          <li><span class="key-term">Gene-environment correlation (rGE)</span>: Genetic factors influence the probability of exposure to certain environments. Three types:
+            <ul>
+              <li><strong>Passive rGE</strong>: Children passively inherit both genes and environments from their parents (e.g., musically gifted parents both pass on music-related genes and provide a musical home environment)</li>
+              <li><strong>Evocative (reactive) rGE</strong>: A person's genetically influenced characteristics evoke particular responses from others (e.g., a genetically temperamental child elicits harsh parenting)</li>
+              <li><strong>Active rGE (niche-picking)</strong>: Individuals actively select environments that match their genetic predispositions (e.g., an extraverted adolescent seeks out social activities). Active rGE becomes increasingly important with age as individuals gain more autonomy over their environment.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>Epigenetics</h3>
+        <div class="definition-box">
+          <strong>Epigenetics:</strong>
+          <p><span class="key-term">Epigenetics</span> refers to changes in gene expression that occur without alterations to the underlying DNA sequence. Environmental factors — including stress, nutrition, toxin exposure, early caregiving, and trauma — can add or remove chemical tags (e.g., <strong>DNA methylation</strong>, <strong>histone modification</strong>) that turn genes "on" or "off." Critically, some epigenetic changes can be transmitted across generations (transgenerational epigenetic inheritance). Research by Meaney and colleagues demonstrated that rat pups who received more maternal licking and grooming showed epigenetic changes in glucocorticoid receptor genes, resulting in reduced stress reactivity throughout life — providing a biological mechanism by which early experience programs later stress vulnerability.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>EPPP-Relevant Heritability Estimates:</strong>
+          <p>The following approximate heritability estimates are commonly cited on the EPPP and in board-preparation materials. Remember that these are population-level estimates that vary by study and population:</p>
+          <p><strong>IQ (general intelligence)</strong>: h&sup2; ~ .50-.80 (heritability increases across development — higher in adults than children, as active rGE becomes stronger)</p>
+          <p><strong>Schizophrenia</strong>: h&sup2; ~ .80 (MZ concordance ~48%; DZ concordance ~17%; general population risk ~1%)</p>
+          <p><strong>Bipolar disorder</strong>: h&sup2; ~ .85 (among the most heritable psychiatric disorders)</p>
+          <p><strong>Major depressive disorder</strong>: h&sup2; ~ .37 (moderate heritability; substantial environmental contribution)</p>
+          <p><strong>Personality traits (Big Five)</strong>: h&sup2; ~ .40-.60 (remarkably consistent across cultures and measurement methods)</p>
+          <p><strong>Autism spectrum disorder</strong>: h&sup2; ~ .80-.90 (very high heritability; MZ concordance far exceeds DZ concordance)</p>
+          <p><strong>Alcohol use disorder</strong>: h&sup2; ~ .50-.60 (moderate-to-high genetic contribution)</p>
+        </div>
+
+        <div class="example-box">
+          <strong>EPPP Application:</strong>
+          <p>An exam question might state: "The heritability of intelligence is .70. This means that: (A) 70% of an individual's intelligence is determined by genes, (B) 70% of the variance in intelligence in the population studied is attributable to genetic differences, (C) genes contribute 70% and environment contributes 30% to intelligence, (D) if environment improves, intelligence cannot increase." The correct answer is (B). Choice (A) is the most common error — heritability describes population variance, not individual determination. Choice (D) is incorrect because even highly heritable traits can respond to environmental intervention (e.g., IQ gains from adoption into enriched environments).</p>
+        </div>
+
+        <div class="citation">Plomin, R., DeFries, J. C., Knopik, V. S., &amp; Neiderhiser, J. M. (2016). Top 10 replicated findings from behavioral genetics. Perspectives on Psychological Science, 11(1), 3-23.</div>
+        <div class="citation">Caspi, A., Sugden, K., Moffitt, T. E., et al. (2003). Influence of life stress on depression: Moderation by a polymorphism in the 5-HTT gene. Science, 301(5631), 386-389.</div>
+        <div class="citation">Bouchard, T. J., Lykken, D. T., McGue, M., Segal, N. L., &amp; Tellegen, A. (1990). Sources of human psychological differences: The Minnesota Study of Twins Reared Apart. Science, 250(4978), 223-228.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Neuron structure</strong>: dendrites (receive signals) → soma (integrates) → axon (conducts) → terminal buttons (release neurotransmitter)</li>
+          <li><strong>Resting potential</strong> = -70 mV; <strong>threshold</strong> = ~-55 mV; action potential peaks at ~+30 to +40 mV</li>
+          <li><strong>All-or-none law</strong>: action potentials fire at full amplitude or not at all; intensity coded by firing rate</li>
+          <li><strong>Saltatory conduction</strong>: action potentials jump between nodes of Ranvier on myelinated axons; much faster than continuous conduction</li>
+          <li><strong>Oligodendrocytes</strong> = myelin in CNS; <strong>Schwann cells</strong> = myelin in PNS</li>
+          <li><strong>Reuptake</strong>: primary mechanism for terminating neurotransmitter action at many synapses; SSRIs block serotonin reuptake</li>
+          <li><strong>Agonist</strong> = mimics/enhances neurotransmitter; <strong>Antagonist</strong> = blocks/reduces neurotransmitter action</li>
+          <li><strong>GABA</strong> = main inhibitory NT; <strong>Glutamate</strong> = main excitatory NT; know their clinical associations</li>
+          <li><strong>Dopamine pathways</strong>: mesolimbic (reward/positive symptoms), mesocortical (executive function/negative symptoms), nigrostriatal (motor/Parkinson's), tuberoinfundibular (prolactin)</li>
+          <li><strong>Acetylcholine deficit</strong> in Alzheimer's; treated with cholinesterase inhibitors (donepezil, rivastigmine)</li>
+          <li><strong>Excitotoxicity</strong>: excessive glutamate kills neurons; occurs in stroke, TBI, and neurodegenerative disease</li>
+          <li><strong>Heritability (h&sup2;)</strong>: proportion of trait variance attributable to genetic differences IN A POPULATION — NOT how much of an individual's trait is "genetic"; high heritability does not mean immutable</li>
+          <li><strong>Twin studies</strong>: MZ concordance >> DZ concordance = genetic contribution; MZ concordance < 100% = environmental contribution; MZ twins reared apart = strongest design</li>
+          <li><strong>Shared vs. nonshared environment</strong>: nonshared environment explains more variance in personality and psychopathology than shared (family-wide) environment</li>
+          <li><strong>GxE interaction</strong>: gene effect depends on environment (5-HTTLPR x stress = depression); <strong>rGE correlation</strong>: passive (inherit genes + environment), evocative (genes elicit responses), active/niche-picking (select matching environments)</li>
+          <li><strong>Key heritability estimates</strong>: schizophrenia ~.80, bipolar ~.85, MDD ~.37, IQ ~.50-.80 (increases with age), personality ~.40-.60; <strong>Epigenetics</strong>: environment alters gene expression without changing DNA sequence (methylation, histone modification)</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="sleep-architecture.html" class="nav-btn">
+          <span>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Sleep Architecture, Dreaming &amp; the Lifespan</div>
+          </span>
+        </a>
+        <a href="emotion-arousal.html" class="nav-btn">
+          <span>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Emotion Theories, Arousal &amp; the ANS</div>
+          </span>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

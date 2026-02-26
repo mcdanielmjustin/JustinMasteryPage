@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizational Theories | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Organizational Theories</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link active"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 11</div>
+        <h1>Organizational Theories</h1>
+        <div class="chapter-meta">
+          <span>Classical, human relations, systems theory, contingency</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Organizational Theories</h2>
+        <p>Organizational theories provide frameworks for understanding how organizations are structured, how they function, and how they can be improved. For the EPPP, you must understand the historical evolution of these theories, from classical approaches emphasizing efficiency and structure to modern perspectives that account for complexity, human factors, and environmental contingencies.</p>
+        <p>These theories form the foundation of industrial/organizational psychology and inform current practices in organizational design, management, and consulting.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Classical Organizational Theory</h2>
+        <p>Classical theories emerged in the early 20th century during the Industrial Revolution, when organizations were growing rapidly and managers sought systematic approaches to improve efficiency and productivity. These theories share an emphasis on <span class="key-term">rational structure</span>, clear hierarchies, and standardized procedures.</p>
+
+        <h3>Scientific Management (Frederick Taylor)</h3>
+        <p><span class="key-term">Scientific management</span>, developed by Frederick Winslow Taylor (1911), applied scientific methods to analyze and optimize work processes. Taylor believed there was "one best way" to perform any job, and that scientific study could identify it.</p>
+        <div class="definition-box">
+          <h4>Core Principles of Scientific Management</h4>
+          <ul>
+            <li><strong>Scientific study of tasks:</strong> Use time-and-motion studies to determine the most efficient method for each task</li>
+            <li><strong>Scientific selection of workers:</strong> Match workers to jobs based on their abilities and training them systematically</li>
+            <li><strong>Cooperation between management and workers:</strong> Management plans and supervises; workers execute</li>
+            <li><strong>Equal division of work:</strong> Responsibility is shared between management (planning) and workers (execution)</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Example: Time-and-Motion Studies</h4>
+          <p>Taylor's famous pig-iron experiment at Bethlehem Steel demonstrated that by scientifically studying the optimal weight of shoveled loads and rest intervals, worker productivity could increase from 12.5 to 47.5 tons per day. Workers received a 60% pay increase while the company's costs per ton decreased.</p>
+        </div>
+        <p>Taylor's approach was criticized for treating workers as interchangeable parts, ignoring social and psychological needs, and reducing worker autonomy. Nevertheless, his principles laid the groundwork for modern job analysis, performance standards, and incentive systems.</p>
+
+        <h3>Bureaucratic Theory (Max Weber)</h3>
+        <p><span class="key-term">Max Weber</span> (1947) developed the theory of bureaucracy as an ideal organizational form characterized by rationality, predictability, and efficiency. Weber distinguished between three types of authority:</p>
+        <ul>
+          <li><strong>Traditional authority:</strong> Based on established customs and traditions (e.g., hereditary monarchies)</li>
+          <li><strong>Charismatic authority:</strong> Based on the exceptional personal qualities of a leader</li>
+          <li><strong>Rational-legal authority:</strong> Based on formal rules and procedures -- the foundation of bureaucracy</li>
+        </ul>
+        <div class="definition-box">
+          <h4>Key Features of Weber's Ideal Bureaucracy</h4>
+          <ul>
+            <li><strong>Division of labor:</strong> Specialized roles with clearly defined responsibilities</li>
+            <li><strong>Hierarchy of authority:</strong> Clear chain of command from top to bottom</li>
+            <li><strong>Formal rules and procedures:</strong> Written policies governing behavior and decisions</li>
+            <li><strong>Impersonality:</strong> Decisions based on rules, not personal relationships or feelings</li>
+            <li><strong>Merit-based selection:</strong> Hiring and promotion based on qualifications and performance</li>
+            <li><strong>Career orientation:</strong> Employment as a long-term career with advancement opportunities</li>
+          </ul>
+        </div>
+        <p>Weber acknowledged that bureaucracies could become rigid ("iron cage") and overly focused on rules at the expense of goals, a phenomenon later termed <span class="key-term">goal displacement</span>.</p>
+
+        <h3>Administrative Management (Henri Fayol)</h3>
+        <p><span class="key-term">Henri Fayol</span> (1916) approached organizational theory from the perspective of top management, identifying five basic functions of management and 14 principles of administration.</p>
+        <div class="definition-box">
+          <h4>Fayol's Five Functions of Management</h4>
+          <ol>
+            <li><strong>Planning:</strong> Forecasting future conditions and establishing objectives</li>
+            <li><strong>Organizing:</strong> Arranging resources and tasks to achieve objectives</li>
+            <li><strong>Commanding:</strong> Directing and motivating employees</li>
+            <li><strong>Coordinating:</strong> Harmonizing activities across departments</li>
+            <li><strong>Controlling:</strong> Monitoring performance against plans and correcting deviations</li>
+          </ol>
+        </div>
+        <p>Key Fayol principles include <span class="key-term">unity of command</span> (each employee reports to one supervisor), <span class="key-term">scalar chain</span> (clear line of authority), and <span class="key-term">span of control</span> (limit on the number of subordinates one manager can effectively supervise).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Human Relations Movement</h2>
+        <p>The <span class="key-term">human relations movement</span> emerged as a reaction to the mechanistic view of workers in classical theory, emphasizing the importance of social factors, employee attitudes, and informal group dynamics in organizational effectiveness.</p>
+
+        <h3>The Hawthorne Studies</h3>
+        <p>The <span class="key-term">Hawthorne studies</span> (1924-1932), conducted at the Western Electric Hawthorne Works near Chicago, are among the most famous research projects in organizational psychology. Initially designed to examine the effects of physical working conditions on productivity, they yielded unexpected findings about social and psychological factors.</p>
+        <div class="definition-box">
+          <h4>Major Phases of the Hawthorne Studies</h4>
+          <ul>
+            <li><strong>Illumination studies:</strong> Changes in lighting improved productivity regardless of direction -- both increases and decreases in illumination led to higher output</li>
+            <li><strong>Relay Assembly Test Room:</strong> A small group of women showed sustained productivity increases across nearly all experimental conditions, attributed to attention and social factors</li>
+            <li><strong>Interviewing program:</strong> Over 21,000 employee interviews revealed the importance of social relationships and employee attitudes</li>
+            <li><strong>Bank Wiring Observation Room:</strong> Demonstrated that informal group norms powerfully regulated individual output, often overriding formal incentive systems</li>
+          </ul>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept: The Hawthorne Effect</h4>
+          <p>The <span class="key-term">Hawthorne effect</span> refers to the tendency for people to change their behavior simply because they know they are being observed or are receiving special attention. While the original interpretation of the Hawthorne studies has been debated and critiqued (Levitt & List, 2011), the term remains widely used in research methodology. On the EPPP, know that the Hawthorne effect represents a threat to internal validity in research design.</p>
+        </div>
+        <p>Elton Mayo and Fritz Roethlisberger, the principal researchers, concluded that <span class="key-term">social factors</span> -- group norms, supervisory style, and employee attitudes -- were more powerful determinants of productivity than physical working conditions or economic incentives alone.</p>
+
+        <h3>McGregor's Theory X and Theory Y</h3>
+        <p><span class="key-term">Douglas McGregor</span> (1960) proposed that managers hold implicit assumptions about human nature that profoundly influence their management style. He described two contrasting sets of assumptions:</p>
+        <table>
+          <tr><th>Theory X (Pessimistic)</th><th>Theory Y (Optimistic)</th></tr>
+          <tr><td>People inherently dislike work and will avoid it</td><td>Work is as natural as play or rest</td></tr>
+          <tr><td>People must be coerced, controlled, or threatened to work</td><td>People will exercise self-direction toward committed objectives</td></tr>
+          <tr><td>People prefer to be directed and avoid responsibility</td><td>People seek and accept responsibility under proper conditions</td></tr>
+          <tr><td>Security is the primary motivation</td><td>Imagination and creativity are widely distributed</td></tr>
+          <tr><td>Management by close supervision and external control</td><td>Management by creating conditions for self-motivation</td></tr>
+        </table>
+        <p>McGregor argued that Theory Y assumptions were generally more accurate and that management practices based on Theory Y (participative management, delegation, enriched jobs) would lead to higher motivation and organizational effectiveness. His work significantly influenced the development of participative management and organizational development.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Systems Theory</h2>
+        <p><span class="key-term">Systems theory</span> views organizations as complex, interconnected systems that interact with their environment. Drawing on general systems theory (von Bertalanffy, 1968), this perspective emphasizes that organizations cannot be understood by examining their parts in isolation.</p>
+
+        <h3>Open Systems Model</h3>
+        <p>Organizations are conceptualized as <span class="key-term">open systems</span> that take in inputs from the environment, transform them through internal processes, and produce outputs that feed back into the environment.</p>
+        <div class="definition-box">
+          <h4>Key Systems Theory Concepts</h4>
+          <ul>
+            <li><strong>Inputs:</strong> Resources obtained from the environment (raw materials, labor, capital, information)</li>
+            <li><strong>Throughput:</strong> The transformation process (production, service delivery, decision-making)</li>
+            <li><strong>Outputs:</strong> Products, services, or outcomes returned to the environment</li>
+            <li><strong>Feedback:</strong> Information about outputs that influences future inputs and processes</li>
+            <li><strong>Entropy:</strong> The tendency of systems to run down and deteriorate without energy input</li>
+            <li><strong>Negative entropy (negentropy):</strong> Importing more energy than is expended to survive and grow</li>
+            <li><strong>Equifinality:</strong> Multiple pathways can lead to the same end result</li>
+            <li><strong>Homeostasis:</strong> Self-regulating mechanisms that maintain stability</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Example: Equifinality in Organizations</h4>
+          <p>Two technology companies can achieve similar market success through very different strategies: one through innovation and first-mover advantage, and another through cost efficiency and market follower strategies. This illustrates <span class="key-term">equifinality</span> -- there is no single "best way" to achieve organizational goals.</p>
+        </div>
+
+        <h3>Katz and Kahn's Social Systems Model</h3>
+        <p>Daniel Katz and Robert Kahn (1966, 1978) applied open systems theory specifically to organizations, identifying five key organizational subsystems:</p>
+        <ol>
+          <li><strong>Production/technical subsystems:</strong> Core transformation activities</li>
+          <li><strong>Supportive subsystems:</strong> Procurement of inputs and disposal of outputs</li>
+          <li><strong>Maintenance subsystems:</strong> Ensuring predictable role performance (HR, training)</li>
+          <li><strong>Adaptive subsystems:</strong> Sensing and responding to environmental changes (R&D, planning)</li>
+          <li><strong>Managerial subsystems:</strong> Coordinating and controlling other subsystems</li>
+        </ol>
+      </section>
+
+      <section class="content-section">
+        <h2>Contingency Theory</h2>
+        <p><span class="key-term">Contingency theory</span> rejects the idea of universal "best practices" in organizational design. Instead, it proposes that the optimal organizational structure depends on (is contingent upon) various situational factors, particularly the organization's environment, technology, and size.</p>
+
+        <h3>Burns and Stalker: Mechanistic vs. Organic Structures</h3>
+        <p>Tom Burns and G.M. Stalker (1961) identified two contrasting organizational forms suited to different environments:</p>
+        <table>
+          <tr><th>Mechanistic Structure</th><th>Organic Structure</th></tr>
+          <tr><td>Rigid hierarchy and centralized decision-making</td><td>Flat hierarchy with decentralized decisions</td></tr>
+          <tr><td>Precisely defined roles and responsibilities</td><td>Flexible, broadly defined roles</td></tr>
+          <tr><td>Formal communication through chain of command</td><td>Lateral communication and networking</td></tr>
+          <tr><td>Best suited for stable, predictable environments</td><td>Best suited for dynamic, changing environments</td></tr>
+        </table>
+
+        <h3>Lawrence and Lorsch: Differentiation and Integration</h3>
+        <p>Paul Lawrence and Jay Lorsch (1967) found that effective organizations match their internal structure to environmental demands. As environments become more complex and uncertain, organizations require greater <span class="key-term">differentiation</span> (specialized departments) and correspondingly greater <span class="key-term">integration</span> (mechanisms to coordinate those departments).</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>The key insight of contingency theory is that there is no single best way to organize. Effectiveness depends on the fit between organizational characteristics and situational factors. On the EPPP, know that mechanistic structures work best in stable environments, while organic structures are more effective in uncertain, rapidly changing environments.</p>
+        </div>
+
+        <h3>Woodward's Technology Typology</h3>
+        <p>Joan Woodward (1965) demonstrated that an organization's technology -- specifically, the complexity of its production process -- influences its optimal structure:</p>
+        <ul>
+          <li><strong>Unit/small-batch production:</strong> Custom products; organic structure with few management levels works best</li>
+          <li><strong>Mass/large-batch production:</strong> Standardized products; mechanistic structure with clear hierarchies works best</li>
+          <li><strong>Continuous process production:</strong> Automated, continuous flow; organic structure with high skill levels works best</li>
+        </ul>
+        <div class="citation">Woodward, J. (1965). <em>Industrial organization: Theory and practice</em>. Oxford University Press.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Comparing Organizational Theories</h2>
+        <table>
+          <tr><th>Theory</th><th>Key Theorist(s)</th><th>Core Focus</th><th>View of Workers</th></tr>
+          <tr><td>Scientific Management</td><td>Taylor</td><td>Task efficiency through scientific analysis</td><td>Economic beings motivated by pay</td></tr>
+          <tr><td>Bureaucracy</td><td>Weber</td><td>Rational structure and formal authority</td><td>Role occupants governed by rules</td></tr>
+          <tr><td>Administrative Theory</td><td>Fayol</td><td>Management functions and principles</td><td>Subordinates needing direction</td></tr>
+          <tr><td>Human Relations</td><td>Mayo, McGregor</td><td>Social and psychological needs</td><td>Social beings with higher needs</td></tr>
+          <tr><td>Systems Theory</td><td>Katz & Kahn</td><td>Organization-environment interaction</td><td>Part of interconnected subsystems</td></tr>
+          <tr><td>Contingency Theory</td><td>Burns & Stalker, Lawrence & Lorsch</td><td>Situational fit</td><td>Dependent on context</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Taylor's scientific management emphasizes "one best way" through time-and-motion studies</li>
+            <li>Weber's bureaucracy features hierarchy, formal rules, impersonality, and merit-based selection</li>
+            <li>Fayol's five functions of management: planning, organizing, commanding, coordinating, controlling</li>
+            <li>The Hawthorne effect: behavioral change due to being observed (threat to internal validity)</li>
+            <li>Hawthorne studies revealed the importance of informal group norms and social factors over physical conditions</li>
+            <li>McGregor's Theory X assumes workers dislike work; Theory Y assumes work is natural and people seek responsibility</li>
+            <li>Open systems: inputs, throughput, outputs, feedback, entropy, equifinality</li>
+            <li>Contingency theory: mechanistic structures suit stable environments; organic structures suit dynamic environments</li>
+            <li>Distinguish between Fayol's unity of command (one boss) and Weber's hierarchy of authority</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Burns, T., & Stalker, G. M. (1961). <em>The management of innovation</em>. Tavistock Publications.</div>
+        <div class="citation">Fayol, H. (1916/1949). <em>General and industrial management</em>. Pitman.</div>
+        <div class="citation">Katz, D., & Kahn, R. L. (1978). <em>The social psychology of organizations</em> (2nd ed.). Wiley.</div>
+        <div class="citation">Lawrence, P. R., & Lorsch, J. W. (1967). <em>Organization and environment</em>. Harvard Business School Press.</div>
+        <div class="citation">Levitt, S. D., & List, J. A. (2011). Was there really a Hawthorne effect at the Hawthorne plant? An analysis of the original illumination experiments. <em>American Economic Journal: Applied Economics, 3</em>(1), 224-238.</div>
+        <div class="citation">McGregor, D. (1960). <em>The human side of enterprise</em>. McGraw-Hill.</div>
+        <div class="citation">Roethlisberger, F. J., & Dickson, W. J. (1939). <em>Management and the worker</em>. Harvard University Press.</div>
+        <div class="citation">Taylor, F. W. (1911). <em>The principles of scientific management</em>. Harper & Brothers.</div>
+        <div class="citation">Weber, M. (1947). <em>The theory of social and economic organization</em>. Free Press.</div>
+        <div class="citation">Woodward, J. (1965). <em>Industrial organization: Theory and practice</em>. Oxford University Press.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+        </a>
+        <a href="job-analysis.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Defining the Work</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

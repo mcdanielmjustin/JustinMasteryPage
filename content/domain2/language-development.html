@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Development | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Language Development</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link active"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 9</div>
+        <h1>Language Development</h1>
+        <div class="chapter-meta">
+          <span>Phonemes, morphemes, syntax acquisition, critical periods</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Language Development</h2>
+        <p>Language acquisition is one of the most remarkable achievements of early childhood. By age 5, most children have mastered the basic grammar of their native language and possess a vocabulary of several thousand words -- all without formal instruction. Understanding the components of language, the milestones of acquisition, and the major theoretical perspectives is essential for EPPP preparation.</p>
+        <p>Language development intersects with cognitive development, social development, and clinical assessment. Delays or disorders in language are among the most common reasons for referral in pediatric and educational settings.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Components of Language</h2>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Phonology:</strong> The sound system of a language. <span class="key-term">Phonemes</span> are the smallest units of sound that distinguish meaning (e.g., /b/ and /p/ in "bat" vs. "pat"). English has approximately 44 phonemes.</p>
+          <p><strong>Morphology:</strong> The rules governing the formation of words. <span class="key-term">Morphemes</span> are the smallest units of meaning (e.g., "unhappiness" contains three morphemes: un- + happy + -ness). Free morphemes can stand alone; bound morphemes (prefixes, suffixes) cannot.</p>
+          <p><strong>Syntax:</strong> The rules governing how words are combined into sentences. Also called grammar.</p>
+          <p><strong>Semantics:</strong> The meaning of words and sentences. Includes understanding of vocabulary and how meaning changes in context.</p>
+          <p><strong>Pragmatics:</strong> The social rules governing language use in context -- knowing what to say, how to say it, and when to say it. Includes turn-taking, adjusting speech to the listener, and understanding nonliteral language (irony, metaphor).</p>
+        </div>
+
+        <p>For the EPPP, it is critical to distinguish between <span class="key-term">receptive language</span> (comprehension -- understanding what others say) and <span class="key-term">expressive language</span> (production -- generating speech). Receptive language consistently develops ahead of expressive language; children understand far more words than they can produce.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Language Development Milestones</h2>
+
+        <table>
+          <tr><th>Age</th><th>Milestone</th></tr>
+          <tr><td>Birth</td><td>Preference for human speech over other sounds; can distinguish phonemes from all languages</td></tr>
+          <tr><td>2 months</td><td><strong>Cooing:</strong> Vowel-like sounds ("ooo," "aah")</td></tr>
+          <tr><td>4-6 months</td><td><strong>Babbling:</strong> Consonant-vowel combinations ("bababa," "mamama"); initially universal, then narrows to native language sounds</td></tr>
+          <tr><td>8-10 months</td><td><strong>Perceptual narrowing:</strong> Loss of ability to discriminate non-native phonemes (Werker & Tees, 1984)</td></tr>
+          <tr><td>10-12 months</td><td><strong>First words:</strong> Typically simple nouns referring to familiar objects or people ("mama," "dada," "ball")</td></tr>
+          <tr><td>12-18 months</td><td><strong>Holophrastic speech:</strong> Single words used to convey complete ideas ("milk" = "I want milk"); vocabulary grows slowly (~50 words by 18 months)</td></tr>
+          <tr><td>18-24 months</td><td><strong>Vocabulary spurt (naming explosion):</strong> Rapid word learning; <strong>telegraphic speech:</strong> Two-word combinations ("mommy go," "more juice") that omit function words</td></tr>
+          <tr><td>2-3 years</td><td>Rapid grammatical development; sentences of 3+ words; <strong>overregularization errors</strong> ("goed," "foots") demonstrate rule learning, not imitation</td></tr>
+          <tr><td>3-5 years</td><td>Complex sentences; improving pragmatics; vocabulary of 8,000-14,000 words by age 6</td></tr>
+          <tr><td>6-10 years</td><td>Metalinguistic awareness; understanding of humor, ambiguity, and figurative language</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Clinical Example: Overregularization as Evidence for Rule Learning</h4>
+          <p>A 3-year-old says "I goed to the store" and "I saw two mouses." These <span class="key-term">overregularization errors</span> are clinically significant because they demonstrate that the child is not merely imitating adult speech but is actively extracting and applying grammatical rules. The child previously said "went" correctly (through rote imitation) but now applies the past tense rule ("-ed") systematically. This U-shaped curve (correct, then incorrect, then correct again) provides strong evidence against purely imitation-based theories of language acquisition.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Theoretical Perspectives</h2>
+
+        <h3>Nativist Theory: Chomsky's Language Acquisition Device</h3>
+        <p>Noam Chomsky (1965) argued that humans are biologically equipped with an innate <span class="key-term">Language Acquisition Device (LAD)</span> -- a neurological mechanism that contains a <span class="key-term">Universal Grammar (UG)</span>, the set of grammatical principles common to all human languages. Key arguments for the nativist position include:</p>
+        <ul>
+          <li><strong>Poverty of the stimulus:</strong> The language input children receive is insufficient to explain the complexity and creativity of the grammar they acquire. Children produce sentences they have never heard.</li>
+          <li><strong>Universal stages:</strong> Children across all cultures and languages follow a similar sequence of language milestones</li>
+          <li><strong>Critical period:</strong> There appears to be a biologically determined window for optimal language acquisition</li>
+          <li><strong>Overregularization errors:</strong> These demonstrate rule extraction, not imitation</li>
+          <li><strong>Creolization:</strong> Children exposed to pidgin languages (simplified contact languages) spontaneously develop full grammatical systems (creoles), suggesting innate grammar-building capacity</li>
+        </ul>
+
+        <h3>Behaviorist Theory: Skinner's Verbal Behavior</h3>
+        <p>B. F. Skinner (1957) proposed in <em>Verbal Behavior</em> that language is acquired through the same learning principles as any other behavior: <span class="key-term">operant conditioning</span> (reinforcement and shaping) and <span class="key-term">imitation</span>. Skinner classified verbal behavior into functional categories:</p>
+        <ul>
+          <li><strong>Mand:</strong> A verbal response controlled by a state of deprivation or aversive stimulation (essentially a request or demand, e.g., "water" when thirsty)</li>
+          <li><strong>Tact:</strong> A verbal response controlled by a nonverbal stimulus (essentially labeling, e.g., saying "dog" when seeing a dog)</li>
+          <li><strong>Echoic:</strong> Verbal behavior that repeats the verbal behavior of another person (imitation)</li>
+          <li><strong>Intraverbal:</strong> Verbal behavior controlled by other verbal behavior (e.g., answering questions, conversation)</li>
+        </ul>
+        <p>Chomsky's (1959) devastating review of <em>Verbal Behavior</em> argued that reinforcement and imitation cannot account for the creativity and rule-governed nature of language. This review is considered one of the pivotal moments in the cognitive revolution.</p>
+
+        <h3>Interactionist and Social-Pragmatic Approaches</h3>
+        <p>More contemporary theories emphasize the interaction between biological predispositions and social experience:</p>
+        <ul>
+          <li><strong>Bruner's Language Acquisition Support System (LASS):</strong> Jerome Bruner (1983) proposed that social interaction provides the crucial scaffold for language learning. The LASS complements Chomsky's LAD -- biology provides the capacity, but social interaction activates and shapes it.</li>
+          <li><strong>Child-directed speech (CDS):</strong> Also called "motherese" or "parentese" -- the simplified, high-pitched, melodic speech that adults naturally use with infants. CDS features shorter sentences, exaggerated intonation, and repetition, facilitating language learning.</li>
+          <li><strong>Tomasello's usage-based theory:</strong> Michael Tomasello (2003) argued that children learn language through general cognitive abilities (pattern recognition, intention-reading) applied to social interaction, rather than through a specialized language module.</li>
+        </ul>
+
+        <table>
+          <tr><th>Theory</th><th>Primary Mechanism</th><th>Key Figure</th><th>Strength</th></tr>
+          <tr><td>Nativist</td><td>Innate LAD / Universal Grammar</td><td>Chomsky</td><td>Explains universality, speed, and creativity of acquisition</td></tr>
+          <tr><td>Behaviorist</td><td>Reinforcement and imitation</td><td>Skinner</td><td>Explains vocabulary learning and pragmatic aspects</td></tr>
+          <tr><td>Interactionist</td><td>Biology + social interaction</td><td>Bruner, Tomasello</td><td>Integrates biological and social contributions</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Critical and Sensitive Periods for Language</h2>
+        <p>Lenneberg (1967) proposed a <span class="key-term">critical period hypothesis</span> for language acquisition, suggesting that the ability to acquire a first language natively is constrained to roughly the first 12 years of life, after which language acquisition becomes qualitatively different and more effortful.</p>
+        <p>Evidence supporting this hypothesis comes from several sources:</p>
+        <ul>
+          <li><strong>Cases of extreme isolation:</strong> Genie, discovered at age 13 after severe deprivation, acquired some vocabulary but never mastered syntax despite years of intervention (Curtiss, 1977)</li>
+          <li><strong>Deaf children and sign language:</strong> Deaf individuals exposed to sign language from birth acquire it natively; those exposed later show decreasing grammatical proficiency as age of first exposure increases (Newport, 1990)</li>
+          <li><strong>Second language acquisition:</strong> Immigrants who arrive before puberty typically achieve native-like proficiency; those arriving later rarely do, even after decades of exposure (Johnson & Newport, 1989)</li>
+        </ul>
+        <p>Most contemporary researchers prefer the term <span class="key-term">sensitive period</span> rather than "critical period," recognizing that language learning remains possible beyond this window but becomes progressively more difficult and less likely to reach native levels.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>The sensitive period concept has profound implications for clinical practice. Early identification and intervention for hearing impairment, autism spectrum disorder, and specific language impairment are critical because the window for optimal language development is limited. Children with cochlear implants show the best language outcomes when implanted before age 2 (Tomblin et al., 2005). Similarly, early intensive behavioral intervention for children with ASD shows the strongest effects on language outcomes when initiated before age 3.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Bilingualism</h2>
+        <p>Research on bilingual development has dispelled many misconceptions. Key findings include:</p>
+        <ul>
+          <li><strong>No cognitive disadvantage:</strong> Contrary to earlier beliefs, bilingualism does not cause language confusion or cognitive delay. Bilingual children may have slightly smaller vocabularies in each individual language but their total conceptual vocabulary across languages is comparable to monolinguals (Pearson et al., 1993)</li>
+          <li><strong>Cognitive advantages:</strong> Bilingual individuals often show enhanced <span class="key-term">executive function</span>, particularly in tasks requiring inhibitory control and cognitive flexibility (Bialystok, 2001). This "bilingual advantage" may extend into older adulthood as a protective factor against cognitive decline</li>
+          <li><strong>Code-switching:</strong> Alternating between languages within a conversation is a sign of linguistic competence, not confusion. It follows systematic grammatical rules</li>
+          <li><strong>Sequential vs. simultaneous bilingualism:</strong> Children exposed to two languages from birth (simultaneous) typically achieve native-like proficiency in both; sequential bilinguals (who learn the second language after age 3) may show accent or grammatical differences in the later-acquired language</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Know the five components of language: phonology, morphology, syntax, semantics, pragmatics</li>
+          <li>Distinguish phonemes (smallest unit of sound) from morphemes (smallest unit of meaning)</li>
+          <li>Know the major language milestones and their approximate ages: cooing (2 months), babbling (6 months), first words (12 months), telegraphic speech (18-24 months), vocabulary spurt (18 months)</li>
+          <li>Overregularization errors demonstrate rule learning, not imitation -- a key argument against behaviorist theory</li>
+          <li>Chomsky's LAD and Universal Grammar: know these concepts and the poverty of the stimulus argument</li>
+          <li>Skinner's verbal behavior categories: mand, tact, echoic, intraverbal</li>
+          <li>Receptive language develops before expressive language</li>
+          <li>The critical/sensitive period hypothesis: Lenneberg proposed it; Genie and deaf signers provide supporting evidence</li>
+          <li>Bilingualism provides cognitive advantages and does not cause language confusion or delays</li>
+          <li>Child-directed speech (motherese/parentese) facilitates language acquisition</li>
+          <li>Perceptual narrowing: infants lose the ability to discriminate non-native phonemes around 8-10 months</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Bialystok, E. (2001). <em>Bilingualism in development: Language, literacy, and cognition.</em> Cambridge University Press.</div>
+        <div class="citation">Bruner, J. (1983). <em>Child's talk: Learning to use language.</em> Oxford University Press.</div>
+        <div class="citation">Chomsky, N. (1959). A review of B. F. Skinner's Verbal Behavior. <em>Language, 35</em>(1), 26-58.</div>
+        <div class="citation">Chomsky, N. (1965). <em>Aspects of the theory of syntax.</em> MIT Press.</div>
+        <div class="citation">Curtiss, S. (1977). <em>Genie: A psycholinguistic study of a modern-day "wild child."</em> Academic Press.</div>
+        <div class="citation">Johnson, J. S., & Newport, E. L. (1989). Critical period effects in second language learning. <em>Cognitive Psychology, 21</em>(1), 60-99.</div>
+        <div class="citation">Lenneberg, E. H. (1967). <em>Biological foundations of language.</em> Wiley.</div>
+        <div class="citation">Newport, E. L. (1990). Maturational constraints on language learning. <em>Cognitive Science, 14</em>(1), 11-28.</div>
+        <div class="citation">Pearson, B. Z., Fernandez, S. C., & Oller, D. K. (1993). Lexical development in bilingual infants and toddlers. <em>Language Learning, 43</em>(1), 93-120.</div>
+        <div class="citation">Skinner, B. F. (1957). <em>Verbal behavior.</em> Appleton-Century-Crofts.</div>
+        <div class="citation">Tomasello, M. (2003). <em>Constructing a language: A usage-based theory of language acquisition.</em> Harvard University Press.</div>
+        <div class="citation">Tomblin, J. B., Barker, B. A., Spencer, L. J., Zhang, X., & Gantz, B. J. (2005). The effect of age at cochlear implant initial stimulation on expressive language growth in infants and toddlers. <em>Journal of Speech, Language, and Hearing Research, 48</em>(4), 853-867.</div>
+        <div class="citation">Werker, J. F., & Tees, R. C. (1984). Cross-language speech perception: Evidence for perceptual reorganization during the first year of life. <em>Infant Behavior and Development, 7</em>(1), 49-63.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="prenatal-development.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Prenatal Development</div>
+          </div>
+        </a>
+        <a href="physical-development.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Physical Development</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Awakening &mdash; Infancy &amp; Toddlerhood | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        The Awakening &mdash; Infancy &amp; Toddlerhood
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link active"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 7</div>
+        <h1>The Awakening &mdash; Infancy &amp; Toddlerhood</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Attachment Theory -->
+      <div class="content-section">
+        <h2>Attachment Theory</h2>
+        <p>Attachment&mdash;the deep emotional bond between an infant and a caregiver&mdash;is one of the most heavily tested topics on the EPPP within the developmental domain. The theoretical foundations laid by <span class="key-term">John Bowlby</span> and the empirical classification system developed by <span class="key-term">Mary Ainsworth</span> remain cornerstones of clinical and developmental psychology.</p>
+
+        <h3>Bowlby's Ethological Attachment Theory</h3>
+        <p>Bowlby (1969/1982) proposed that attachment is an evolved behavioral system designed to maintain proximity between infants and caregivers, thereby promoting survival. He described four phases of attachment development:</p>
+        <ol>
+          <li><strong>Pre-attachment (birth&ndash;6 weeks):</strong> Indiscriminate social responsiveness. Infants produce signals (crying, grasping) that attract caregivers but do not yet show specific attachment.</li>
+          <li><strong>Attachment-in-the-making (6 weeks&ndash;6&ndash;8 months):</strong> Infants begin to show differential responding to familiar caregivers, smiling and vocalizing more with known figures.</li>
+          <li><strong>Clear-cut attachment (6&ndash;8 months&ndash;18 months):</strong> The infant displays <span class="key-term">separation anxiety</span> and <span class="key-term">stranger anxiety</span>, using the caregiver as a <span class="key-term">secure base</span> for exploration.</li>
+          <li><strong>Reciprocal relationship (18 months&ndash;2+ years):</strong> With growing language and cognitive abilities, the child begins to understand the caregiver's goals and can negotiate separations.</li>
+        </ol>
+
+        <div class="definition-box">
+          <strong>Internal Working Model</strong>
+          <p>Bowlby proposed that early attachment experiences create mental representations&mdash;internal working models&mdash;of the self and others that guide expectations about relationships throughout the lifespan. A securely attached child develops a model of the self as worthy of care and of others as reliable and responsive.</p>
+        </div>
+
+        <h3>Ainsworth's Strange Situation</h3>
+        <p>Mary Ainsworth developed the <span class="key-term">Strange Situation</span> paradigm to assess the quality of infant-caregiver attachment in a laboratory setting. The procedure involves a series of separations and reunions between the infant (typically 12&ndash;18 months) and the caregiver, observed through a one-way mirror.</p>
+
+        <table>
+          <tr><th>Attachment Style</th><th>Reunion Behavior</th><th>Caregiver Pattern</th><th>Prevalence</th></tr>
+          <tr><td>Secure (Type B)</td><td>Seeks contact, quickly soothed, returns to play</td><td>Sensitive, responsive, consistent</td><td>~60&ndash;65%</td></tr>
+          <tr><td>Insecure-Avoidant (Type A)</td><td>Ignores or avoids caregiver; minimal distress</td><td>Emotionally unavailable, rejecting</td><td>~20%</td></tr>
+          <tr><td>Insecure-Resistant/Ambivalent (Type C)</td><td>Clings and resists; difficult to soothe; angry</td><td>Inconsistent responsiveness</td><td>~10&ndash;15%</td></tr>
+          <tr><td>Disorganized/Disoriented (Type D)</td><td>Contradictory behaviors; freezing, fear, confusion</td><td>Frightening or frightened; often linked to maltreatment</td><td>~5&ndash;10%</td></tr>
+        </table>
+
+        <p>The disorganized attachment classification (Type D) was added later by <span class="key-term">Mary Main</span> and Judith Solomon (1986). These infants appear to lack a coherent strategy for managing distress and show the highest risk for later psychopathology.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>In the Strange Situation, a 14-month-old becomes very upset when her mother leaves the room. When the mother returns, the child reaches out to be picked up but then immediately pushes away and cries harder, alternating between clinging and angry resistance. This pattern is most consistent with insecure-resistant (ambivalent) attachment (Type C).</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Disorganized attachment has been identified as a significant risk factor for the development of dissociative symptoms, borderline personality features, and externalizing behavior problems in later childhood and adolescence. Attachment-based interventions such as Circle of Security and Child-Parent Psychotherapy target the caregiver-child relationship to promote security.</p>
+        </div>
+
+        <p class="citation">Bowlby, J. (1982). Attachment and loss: Vol. 1. Attachment (2nd ed.). Basic Books.</p>
+        <p class="citation">Ainsworth, M. D. S., Blehar, M. C., Waters, E., &amp; Wall, S. (1978). Patterns of attachment. Erlbaum.</p>
+      </div>
+
+      <!-- Section 2: Temperament -->
+      <div class="content-section">
+        <h2>Temperament</h2>
+        <p><span class="key-term">Temperament</span> refers to individual differences in emotional reactivity and self-regulation that appear early in life, show moderate stability over time, and are influenced by both genetic and environmental factors. The most influential classification was developed by <span class="key-term">Thomas and Chess</span> (1977) based on the New York Longitudinal Study (NYLS).</p>
+
+        <div class="definition-box">
+          <strong>Thomas and Chess's Three Temperament Types</strong>
+          <p><strong>Easy child (~40%):</strong> Positive mood, regular biological rhythms, adaptable, moderate intensity of reaction.<br>
+          <strong>Difficult child (~10%):</strong> Negative mood, irregular rhythms, slow to adapt, intense reactions.<br>
+          <strong>Slow-to-warm-up child (~15%):</strong> Initially negative, low activity level, slow adaptation, mildly intense reactions. The remaining ~35% showed mixed patterns.</p>
+        </div>
+
+        <p>Thomas and Chess introduced the concept of <span class="key-term">goodness of fit</span>&mdash;the match between a child's temperament and the demands and expectations of the caregiving environment. A difficult child in a patient, flexible environment may thrive, while the same child in a rigid, punitive environment may develop behavioral problems.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A parent describes their 6-month-old as fussy, with unpredictable eating and sleeping schedules, and strong emotional reactions to new situations. Using Thomas and Chess's classification, this infant would be described as having a "difficult" temperament. A clinician would focus on goodness of fit between the child's temperament and parenting approach.</p>
+        </div>
+
+        <h3>Kagan's Behavioral Inhibition</h3>
+        <p><span class="key-term">Jerome Kagan</span> identified a temperamental dimension called <span class="key-term">behavioral inhibition</span>&mdash;the tendency to react with wariness and withdrawal to novel or unfamiliar stimuli. Approximately 15&ndash;20% of infants are classified as behaviorally inhibited. Kagan's longitudinal research showed that inhibited infants tend to remain cautious and shy into childhood, and they show a heightened risk for developing anxiety disorders, particularly social anxiety.</p>
+
+        <p class="citation">Thomas, A., &amp; Chess, S. (1977). Temperament and development. Brunner/Mazel.</p>
+      </div>
+
+      <!-- Section 3: Piaget's Sensorimotor Stage -->
+      <div class="content-section">
+        <h2>Cognitive Development: The Sensorimotor Stage</h2>
+        <p>Piaget's <span class="key-term">sensorimotor stage</span> (birth to approximately 2 years) describes the period during which infants construct knowledge about the world through physical actions and sensory experiences. Piaget divided this stage into six substages, each marked by increasingly sophisticated cognitive achievements.</p>
+
+        <h3>Key Substages</h3>
+        <ol>
+          <li><strong>Reflexive schemes (0&ndash;1 month):</strong> Behavior limited to innate reflexes.</li>
+          <li><strong>Primary circular reactions (1&ndash;4 months):</strong> Repetition of actions centered on the infant's own body (e.g., thumb sucking).</li>
+          <li><strong>Secondary circular reactions (4&ndash;8 months):</strong> Repetition of actions that produce interesting effects on the external environment.</li>
+          <li><strong>Coordination of secondary schemes (8&ndash;12 months):</strong> Intentional, goal-directed behavior; means-end coordination.</li>
+          <li><strong>Tertiary circular reactions (12&ndash;18 months):</strong> Active experimentation; "little scientist" approach to discovering new means.</li>
+          <li><strong>Mental representation (18&ndash;24 months):</strong> Internal depiction of objects and events; <span class="key-term">deferred imitation</span> and symbolic thought emerge.</li>
+        </ol>
+
+        <div class="definition-box">
+          <strong>Object Permanence</strong>
+          <p>The understanding that objects continue to exist even when they are out of sight. This is the hallmark achievement of the sensorimotor stage. It begins to emerge around 4&ndash;8 months (searching for partially hidden objects) and is fully developed by 18&ndash;24 months.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>A-not-B Error</strong>
+          <p>An error observed around 8&ndash;12 months in which an infant who has repeatedly found an object at location A continues to search there even after watching the object being hidden at location B. This error reflects immature object representation and is one of Piaget's most replicated findings.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A researcher hides a toy under blanket A several times, and the 9-month-old successfully retrieves it. Then, in full view of the infant, the researcher hides the toy under blanket B. The infant searches under blanket A. This is the classic A-not-B error, characteristic of Piaget's substage 4 (coordination of secondary schemes).</p>
+        </div>
+
+        <p class="citation">Piaget, J. (1954). The construction of reality in the child. Basic Books.</p>
+      </div>
+
+      <!-- Section 4: Language Development -->
+      <div class="content-section">
+        <h2>Language Development</h2>
+        <p>The first two years of life witness a remarkable transformation in communicative ability, from reflexive crying to the production of multi-word utterances. Language development follows a predictable sequence across cultures, though the rate varies among individuals.</p>
+
+        <table>
+          <tr><th>Age</th><th>Milestone</th><th>Description</th></tr>
+          <tr><td>0&ndash;2 months</td><td>Cooing</td><td>Production of vowel-like sounds ("ooo," "aah"); social in nature</td></tr>
+          <tr><td>4&ndash;6 months</td><td>Babbling</td><td>Consonant-vowel combinations ("bababa," "mamama"); increasingly resembles native language</td></tr>
+          <tr><td>8&ndash;10 months</td><td>Echolalia / variegated babbling</td><td>Imitation of speech sounds; varied syllable combinations</td></tr>
+          <tr><td>~12 months</td><td>First words</td><td>Typically referential (naming objects/people); vocabulary of ~1&ndash;3 words</td></tr>
+          <tr><td>12&ndash;18 months</td><td>Holophrastic stage</td><td>Single words used to convey entire sentences ("milk" = "I want milk")</td></tr>
+          <tr><td>18&ndash;24 months</td><td>Vocabulary spurt / telegraphic speech</td><td>Rapid word acquisition (~50+ words); two-word combinations ("mommy go," "more juice")</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Holophrastic Speech</strong>
+          <p>The use of a single word to express a complete thought or sentence. The meaning is derived from context, intonation, and gesture. For example, "up" accompanied by raised arms means "pick me up."</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Telegraphic Speech</strong>
+          <p>Two- or three-word utterances that contain only the most essential content words (nouns, verbs) and omit grammatical function words (articles, prepositions). Example: "daddy go work." This stage typically emerges around 18&ndash;24 months.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>Language delay is one of the most common reasons for referral in early childhood. While late talkers (children with expressive vocabularies below 50 words at 24 months) often catch up, persistent language delays by age 3 may signal specific language impairment, autism spectrum disorder, or hearing loss and warrant formal evaluation.</p>
+        </div>
+
+        <h3>Overextension and Underextension</h3>
+        <p>As toddlers begin mapping words to meanings, they make characteristic semantic errors:</p>
+        <div class="definition-box">
+          <strong>Overextension</strong>
+          <p>Using a word too broadly by applying it to objects that share perceptual features with the original referent. For example, calling all four-legged animals "doggie" or all round objects "ball." Overextension is more common in production than comprehension and typically resolves as vocabulary expands.</p>
+        </div>
+        <div class="definition-box">
+          <strong>Underextension</strong>
+          <p>Using a word too narrowly by restricting it to only a specific instance of a category. For example, a child may use "car" only for the family car and not recognize that other vehicles are also cars. Underextension is less commonly tested but reflects the child's initial context-bound word learning.</p>
+        </div>
+
+        <p class="citation">Bates, E., &amp; Goodman, J. C. (1999). On the emergence of grammar from the lexicon. In B. MacWhinney (Ed.), The emergence of language (pp. 29&ndash;79). Erlbaum.</p>
+      </div>
+
+      <!-- Section 4b: Language Acquisition Theories -->
+      <div class="content-section">
+        <h2>Language Acquisition Theories</h2>
+        <p>How do children acquire language? This question has generated one of the most influential debates in psychology, pitting behaviorist, nativist, and interactionist perspectives against one another. The <span class="key-term">Skinner&ndash;Chomsky debate</span> remains a foundational topic for the EPPP.</p>
+
+        <h3>Skinner's Behaviorist Approach</h3>
+        <p>In <em>Verbal Behavior</em> (1957), <span class="key-term">B. F. Skinner</span> argued that language is acquired through the same principles of <span class="key-term">operant conditioning</span> that govern all learned behavior. According to Skinner, children learn to speak through reinforcement (a parent smiles and responds when a child says "mama"), shaping (successive approximations of correct speech are differentially reinforced), and imitation (children repeat the speech they hear modeled by adults).</p>
+
+        <div class="definition-box">
+          <strong>Skinner's Verbal Operants</strong>
+          <p><strong>Mand:</strong> A verbal response driven by a state of deprivation or need (essentially a request; e.g., saying "water" when thirsty).<br>
+          <strong>Tact:</strong> A verbal response evoked by a nonverbal stimulus (essentially labeling; e.g., saying "dog" upon seeing a dog).<br>
+          <strong>Echoic:</strong> Repeating the verbal behavior of another (imitation).<br>
+          <strong>Intraverbal:</strong> Verbal behavior controlled by other verbal behavior (e.g., answering a question, holding a conversation).</p>
+        </div>
+
+        <h3>Chomsky's Nativist Approach</h3>
+        <p><span class="key-term">Noam Chomsky</span> fundamentally challenged Skinner's account in his landmark 1959 review of <em>Verbal Behavior</em>, arguing that reinforcement and imitation cannot explain the speed, creativity, and rule-governed nature of language acquisition. Chomsky proposed that humans are born with an innate <span class="key-term">Language Acquisition Device (LAD)</span>&mdash;a neurological mechanism containing <span class="key-term">Universal Grammar (UG)</span>, the set of grammatical principles shared by all human languages.</p>
+
+        <div class="definition-box">
+          <strong>Key Nativist Arguments</strong>
+          <p><strong>Poverty of the stimulus:</strong> The language input children receive is too incomplete, error-ridden, and unstructured to account for the complex and creative grammar they produce. Children routinely generate sentences they have never heard.<br>
+          <strong>Universal Grammar:</strong> All human languages share deep structural features (e.g., noun phrases, verb phrases, recursion), suggesting an innate grammatical blueprint.<br>
+          <strong>Critical/sensitive period:</strong> There is a biologically determined window (roughly the first 12 years) during which language acquisition occurs most naturally and completely. Evidence includes cases of extreme deprivation (Genie) and research on deaf signers and second-language learners.<br>
+          <strong>Overregularization:</strong> Errors like "goed" and "mouses" demonstrate that children extract rules rather than simply imitating what they hear.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Historical Significance</strong>
+          <p>Chomsky's 1959 review of Skinner's <em>Verbal Behavior</em> is widely regarded as one of the pivotal events in the <span class="key-term">cognitive revolution</span>, helping shift psychology away from strict behaviorism and toward the study of internal mental structures and processes. This is a high-frequency EPPP topic.</p>
+        </div>
+
+        <h3>Interactionist Approaches</h3>
+        <p>Contemporary theories recognize that both biological endowment and social experience are necessary for language development. Interactionist perspectives emphasize the scaffolding role of the social environment in activating and shaping innate capacities.</p>
+        <ul>
+          <li><strong>Bruner's Language Acquisition Support System (LASS):</strong> <span class="key-term">Jerome Bruner</span> (1983) proposed that social interaction&mdash;particularly structured routines like peekaboo, book reading, and naming games&mdash;provides the essential scaffold for language learning. The LASS complements Chomsky's LAD: biology provides the capacity, but social interaction activates and shapes it.</li>
+          <li><strong>Vygotsky's Zone of Proximal Development:</strong> <span class="key-term">Lev Vygotsky</span> emphasized that language is fundamentally social in origin. Caregivers scaffold language learning by operating within the child's <span class="key-term">zone of proximal development</span>&mdash;the gap between what the child can do alone and what the child can do with assistance.</li>
+          <li><strong>Social pragmatic theory:</strong> <span class="key-term">Michael Tomasello</span> (2003) argued that children learn language through general cognitive abilities (pattern recognition, intention-reading, joint attention) applied within social interactions, rather than through a specialized language module.</li>
+          <li><strong>Child-directed speech (CDS):</strong> Also called "motherese" or "parentese"&mdash;the simplified, high-pitched, melodic speech that adults naturally use with infants. CDS features shorter sentences, exaggerated intonation, repetition, and a focus on the here-and-now, all of which facilitate language learning.</li>
+        </ul>
+
+        <table>
+          <tr><th>Theory</th><th>Key Figure(s)</th><th>Primary Mechanism</th><th>Core Strength</th></tr>
+          <tr><td>Behaviorist</td><td>Skinner</td><td>Reinforcement, shaping, imitation</td><td>Explains vocabulary learning and pragmatic aspects</td></tr>
+          <tr><td>Nativist</td><td>Chomsky</td><td>Innate LAD / Universal Grammar</td><td>Explains universality, speed, creativity, and rule-governed nature</td></tr>
+          <tr><td>Interactionist</td><td>Bruner, Vygotsky, Tomasello</td><td>Biology + social scaffolding</td><td>Integrates biological and environmental contributions</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 2-year-old says "I goed to the park" even though no adult has ever modeled this sentence. This <span class="key-term">overregularization</span> error provides evidence for Chomsky's nativist theory over Skinner's behaviorist account, because the child is applying an internalized grammatical rule (past tense = verb + "-ed") rather than imitating adult speech.</p>
+        </div>
+
+        <p class="citation">Skinner, B. F. (1957). Verbal behavior. Appleton-Century-Crofts.</p>
+        <p class="citation">Chomsky, N. (1959). A review of B. F. Skinner's Verbal Behavior. Language, 35(1), 26&ndash;58.</p>
+        <p class="citation">Bruner, J. (1983). Child's talk: Learning to use language. Oxford University Press.</p>
+      </div>
+
+      <!-- Section 5: Brain Development and Motor Milestones -->
+      <div class="content-section">
+        <h2>Brain Development and Motor Milestones</h2>
+        <p>The infant brain undergoes explosive growth during the first two years of life, doubling in weight by the first birthday and reaching roughly 75% of adult size by age 2. This growth is driven by <span class="key-term">synaptogenesis</span> (the formation of new synaptic connections) and <span class="key-term">myelination</span> (the coating of neural axons with myelin to increase signal speed).</p>
+
+        <h3>Synaptic Pruning</h3>
+        <p>The infant brain produces far more synapses than it will ultimately retain&mdash;a process of neural overproduction. <span class="key-term">Synaptic pruning</span> is the experience-dependent elimination of underused or redundant connections, sculpting the brain's architecture based on environmental input. This process follows the principle of "use it or lose it" and is critical for efficient neural functioning.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>The concept of experience-expectant development refers to neural processes that require typical environmental input (visual stimulation, language exposure, social interaction) to develop normally. Experience-dependent development involves the formation of synapses in response to unique individual experiences. Both processes underscore the importance of enriched early environments for optimal brain development.</p>
+        </div>
+
+        <h3>Motor Development</h3>
+        <p>Motor milestones follow a predictable cephalocaudal (head-to-toe) and proximodistal (center-to-periphery) sequence:</p>
+        <ul>
+          <li><strong>2&ndash;3 months:</strong> Lifts head while on stomach</li>
+          <li><strong>4&ndash;5 months:</strong> Rolls over</li>
+          <li><strong>6&ndash;7 months:</strong> Sits without support</li>
+          <li><strong>8&ndash;9 months:</strong> Crawls; pulls to standing</li>
+          <li><strong>10&ndash;12 months:</strong> Stands alone; takes first steps</li>
+          <li><strong>13&ndash;18 months:</strong> Walks independently; begins to run</li>
+        </ul>
+        <p>While the sequence of motor milestones is largely invariant, the timing can vary considerably across individuals and cultures. Motor development reflects the maturation of the nervous system, muscular strength, body proportions, and opportunities for practice.</p>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Ainsworth's four attachment types:</strong> Know the reunion behaviors, caregiver patterns, and relative prevalence of secure (B), avoidant (A), resistant/ambivalent (C), and disorganized (D) attachment. Disorganized carries the highest psychopathology risk.</li>
+          <li><strong>Bowlby's phases:</strong> Pre-attachment, attachment-in-the-making, clear-cut attachment, and reciprocal relationship. Internal working models shape later relationship expectations.</li>
+          <li><strong>Thomas and Chess:</strong> Easy, difficult, and slow-to-warm-up temperaments. The key clinical concept is goodness of fit between temperament and environment.</li>
+          <li><strong>Kagan's behavioral inhibition:</strong> A biologically based tendency toward wariness of novelty; associated with later social anxiety.</li>
+          <li><strong>Sensorimotor substages:</strong> Know the six substages, especially object permanence development and the A-not-B error.</li>
+          <li><strong>Language milestones:</strong> Cooing (2 months), babbling (6 months), first words (12 months), holophrastic speech (12&ndash;18 months), telegraphic speech (18&ndash;24 months). Know overextension (word used too broadly) and underextension (word used too narrowly).</li>
+          <li><strong>Skinner vs. Chomsky:</strong> Skinner's <em>Verbal Behavior</em> (1957) proposed language is learned through operant conditioning. Chomsky's 1959 review argued reinforcement cannot explain language creativity. Know Skinner's verbal operants (mand, tact, echoic, intraverbal) and Chomsky's LAD, Universal Grammar, and poverty of the stimulus argument.</li>
+          <li><strong>Interactionist theories:</strong> Bruner's LASS (social scaffolding complements LAD), Vygotsky's ZPD, Tomasello's social-pragmatic theory. Child-directed speech facilitates acquisition.</li>
+          <li><strong>Brain development:</strong> Synaptogenesis followed by pruning; experience-expectant vs. experience-dependent processes. Myelination proceeds in a cephalocaudal direction.</li>
+          <li><strong>Motor milestones:</strong> Follow cephalocaudal and proximodistal patterns. Sequence is invariant; timing varies.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="conception-prenatal.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">From Conception to First Breath</div>
+          </div>
+        </a>
+        <a href="discovering-early-childhood.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Discovering the World &mdash; Early Childhood</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

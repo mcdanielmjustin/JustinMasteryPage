@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EBT: Substance Use & Developmental Disorders – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><span class="logo-text">MasteryPage</span></a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>EBT: Substance &amp; Developmental</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header"><div class="sidebar-title">Domain 8</div><div class="domain-title">Clinical Assessment &amp; Interpretation</div></div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link active"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 12 of 12</div>
+        <h1>EBT: Substance Use &amp; Developmental Disorders</h1>
+        <div class="chapter-meta"><span>Domain 8: Clinical Assessment &amp; Interpretation</span><span>~28 min read</span></div>
+      </div>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a>
+      </div>
+
+      <div class="content-section">
+        <h2>Motivational Interviewing (MI)</h2>
+        <p><span class="key-term">Motivational Interviewing</span> (Miller & Rollnick, 1991, 2013) is a client-centered, directive therapeutic style designed to enhance intrinsic motivation for change by exploring and resolving ambivalence. MI is particularly effective for substance use disorders but is applied broadly across health behavior change.</p>
+
+        <h3>The Spirit of MI</h3>
+        <p>MI is defined by its underlying <span class="key-term">spirit</span> — the stance and mindset of the clinician:</p>
+        <ul>
+          <li><strong>Collaboration (Partnership):</strong> MI is done "with" the client, not "to" or "for" them. The clinician is an equal partner in exploring change.</li>
+          <li><strong>Evocation:</strong> The motivation for change already exists within the client. The clinician's role is to evoke and amplify it, not impose it.</li>
+          <li><strong>Autonomy (Acceptance):</strong> The client's right to make their own choices is respected. The clinician does not coerce or prescribe.</li>
+          <li><strong>Compassion:</strong> The clinician prioritizes the client's welfare and well-being.</li>
+        </ul>
+
+        <h3>OARS: Core MI Skills</h3>
+        <div class="definition-box">
+          <strong>OARS:</strong>
+          <p><span class="key-term">O</span>pen questions — encourage elaboration and exploration. <span class="key-term">A</span>ffirmations — recognize the client's strengths, efforts, and values. <span class="key-term">R</span>eflections — demonstrate understanding and amplify change talk (simple vs. complex reflections). <span class="key-term">S</span>ummaries — collect and link what the client has shared, often ending with a "bouquet" of change talk.</p>
+        </div>
+
+        <h3>Stages of Change (Transtheoretical Model)</h3>
+        <p>MI is closely associated with Prochaska and DiClemente's <span class="key-term">Transtheoretical Model (TTM)</span> of change, which identifies five stages:</p>
+        <table>
+          <tr><th>Stage</th><th>Description</th><th>MI Strategy</th></tr>
+          <tr><td><strong>Precontemplation</strong></td><td>Not considering change; unaware or in denial</td><td>Raise awareness; explore pros of status quo and cons of change</td></tr>
+          <tr><td><strong>Contemplation</strong></td><td>Ambivalent; weighing pros and cons</td><td>Explore ambivalence; develop discrepancy; elicit change talk</td></tr>
+          <tr><td><strong>Preparation</strong></td><td>Planning to change; committed but not yet acting</td><td>Support planning; explore options; strengthen commitment</td></tr>
+          <tr><td><strong>Action</strong></td><td>Actively making changes</td><td>Support self-efficacy; problem-solve barriers; reinforce efforts</td></tr>
+          <tr><td><strong>Maintenance</strong></td><td>Sustaining change over time</td><td>Prevent relapse; reinforce gains; address ongoing challenges</td></tr>
+        </table>
+
+        <h3>Change Talk and Sustain Talk</h3>
+        <p>In MI, the clinician listens for and strategically reinforces <span class="key-term">change talk</span> — client statements favoring change — while softening <span class="key-term">sustain talk</span> — statements favoring the status quo. Change talk can be categorized using the DARN-CAT framework:</p>
+        <ul>
+          <li><strong>Preparatory change talk (DARN):</strong> Desire ("I want to..."), Ability ("I could..."), Reasons ("Because..."), Need ("I have to...")</li>
+          <li><strong>Mobilizing change talk (CAT):</strong> Commitment ("I will..."), Activation ("I'm ready to..."), Taking steps ("I already started...")</li>
+        </ul>
+        <p>Research shows that higher frequency of change talk relative to sustain talk predicts actual behavior change. The clinician uses strategic reflections and questions to differentially evoke and reinforce change talk.</p>
+
+        <div class="clinical-note">
+          <strong>The MI-Consistent Response:</strong>
+          <p>When a client expresses ambivalence (e.g., "I know drinking is hurting my liver, but it's the only way I relax"), the MI-consistent response is a double-sided reflection that acknowledges both sides of the ambivalence while subtly emphasizing the change side: "On one hand, alcohol has been your go-to way to unwind, and on the other hand, you're concerned about the real damage it's doing to your health." This respects autonomy while developing discrepancy.</p>
+        </div>
+
+        <h3>Decisional Balance</h3>
+        <p>The <span class="key-term">decisional balance</span> exercise explores the pros and cons of both changing and not changing. While commonly used in the contemplation stage, MI theory suggests that dwelling on the pros of the status quo can inadvertently strengthen sustain talk. The most effective MI approach strategically focuses the conversation on evoking the client's own arguments for change.</p>
+
+        <div class="citation">Miller, W. R., & Rollnick, S. (2013). <em>Motivational interviewing: Helping people change</em> (3rd ed.). Guilford Press.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>Relapse Prevention and Behavioral Treatments for SUDs</h2>
+
+        <h3>Marlatt's Relapse Prevention Model</h3>
+        <p><span class="key-term">Relapse prevention (RP)</span> (Marlatt & Gordon, 1985) is a cognitive-behavioral approach that conceptualizes relapse as a predictable process with identifiable precursors. Key concepts include:</p>
+        <ul>
+          <li><strong>High-risk situations:</strong> Circumstances that increase vulnerability to substance use (e.g., negative emotions, interpersonal conflict, social pressure, cue exposure)</li>
+          <li><strong>Seemingly irrelevant decisions (SIDs):</strong> Apparently minor choices that progressively move the person closer to a high-risk situation (e.g., an individual in recovery who decides to take "the scenic route home" that passes their former dealer's neighborhood)</li>
+          <li><strong>Abstinence violation effect (AVE):</strong> The cognitive-emotional reaction to a lapse, characterized by internal attribution ("I'm weak") and a sense of loss of control, which increases the probability that the lapse will escalate to a full relapse. Challenging the AVE is a core RP strategy.</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>RP in Practice:</strong>
+          <p>A client in recovery identifies that negative affect after arguments with their spouse is their primary high-risk situation. In RP, they develop coping strategies for managing anger (e.g., calling a sponsor, using relaxation techniques), identify early warning signs of the relapse chain, recognize SIDs (e.g., agreeing to attend a party where alcohol will be present after a fight), and plan responses to any lapses to prevent the AVE from triggering full relapse.</p>
+        </div>
+
+        <h3>Contingency Management (CM)</h3>
+        <p><span class="key-term">Contingency management</span> applies operant conditioning principles by providing tangible reinforcers (typically vouchers redeemable for goods and services) for objectively verified drug-free urine samples or treatment attendance. The voucher value typically increases with consecutive drug-free samples and resets to the initial value after a positive sample. CM has among the highest effect sizes of any substance use treatment, particularly for stimulant use disorders.</p>
+
+        <div class="definition-box">
+          <strong>CM Principles and Variations:</strong>
+          <p>CM is grounded in the operant principle that behaviors followed by reinforcement are more likely to recur. Two major CM approaches include: (1) <span class="key-term">Voucher-Based Reinforcement Therapy (VBRT)</span> — vouchers increase in value with consecutive negative samples (escalating reinforcement schedule) and reset after a positive sample, and (2) <span class="key-term">Prize-Based CM (fishbowl method)</span> — clients earn draws from a fishbowl containing slips for prizes of varying value. The prize-based approach is more cost-effective as most draws yield low-value prizes or encouraging messages, yet the intermittent reinforcement schedule maintains motivation. CM is particularly effective for stimulant use disorders where no pharmacotherapy exists.</p>
+        </div>
+
+        <h3>Cognitive-Behavioral Coping Skills Training</h3>
+        <p><span class="key-term">CBT for substance use disorders</span> teaches clients to identify and modify maladaptive thoughts and behaviors associated with substance use. Key components include:</p>
+        <ul>
+          <li><strong>Functional analysis:</strong> Identifying the antecedents (triggers), behaviors (substance use), and consequences that maintain the addiction cycle</li>
+          <li><strong>Coping skills training:</strong> Developing alternative responses to high-risk situations, including drink/drug refusal skills, managing cravings (urge surfing), anger management, and assertiveness training</li>
+          <li><strong>Cognitive restructuring:</strong> Challenging permission-giving thoughts (e.g., "I deserve a drink after this week") and seemingly irrelevant decisions</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Urge Surfing (Marlatt):</strong>
+          <p>Urge surfing is a mindfulness-based technique from relapse prevention in which clients learn to observe cravings without acting on them. Rather than fighting or suppressing the urge, the client is taught to "ride the wave" — noticing the craving rise, peak, and naturally subside. This technique is based on the principle that cravings are time-limited and will pass if not reinforced by substance use.</p>
+        </div>
+
+        <h3>Community Reinforcement Approach (CRA)</h3>
+        <p><span class="key-term">CRA</span> rearranges the client's social, occupational, and recreational environment so that a sober lifestyle becomes more rewarding than a substance-using lifestyle. Components include functional analysis, sobriety sampling, job skills training, social/recreational counseling, relationship counseling, and communication skills training. CRA plus vouchers is one of the most effective treatments for cocaine dependence.</p>
+
+        <h3>Twelve-Step Facilitation (TSF)</h3>
+        <p><span class="key-term">TSF</span> is a manualized, therapist-delivered intervention designed to facilitate engagement with Alcoholics Anonymous (AA) and other 12-step programs. Based on findings from Project MATCH — the largest psychotherapy trial for alcohol use disorders — TSF was as effective as CBT and MET (Motivational Enhancement Therapy). TSF works primarily by increasing AA attendance and involvement, which mediates outcomes. Key mechanisms include acceptance of the disease model, surrender to a higher power, and active participation in the fellowship community.</p>
+
+        <div class="definition-box">
+          <strong>Project MATCH Key Findings:</strong>
+          <p>The landmark <span class="key-term">Project MATCH</span> (1997) study compared TSF, CBT, and MET for alcohol use disorder and found that all three treatments produced significant and roughly equivalent reductions in drinking. The primary patient-treatment matching hypothesis was largely unsupported — few significant matching effects were found. The main finding that matching did not substantially improve outcomes challenged assumptions about treatment-patient matching and supported the value of multiple evidence-based approaches.</p>
+        </div>
+
+        <h3>Brief Interventions and SBIRT</h3>
+        <p><span class="key-term">SBIRT</span> (Screening, Brief Intervention, and Referral to Treatment) is an evidence-based framework for delivering early intervention for individuals with risky substance use in non-specialty settings such as primary care, emergency departments, and college health centers. The brief intervention component typically lasts 5-15 minutes and uses MI principles to provide personalized feedback about substance use risks, increase motivation for change, and develop a plan. SBIRT is most effective for reducing hazardous alcohol use in adults who have not yet developed dependence.</p>
+
+        <div class="clinical-note">
+          <strong>Screening Instruments for Substance Use:</strong>
+          <p>Common screening tools include: <span class="key-term">CAGE</span> (4 yes/no questions: Cut down, Annoyed, Guilty, Eye-opener — 2+ positive answers suggest problem drinking), <span class="key-term">AUDIT</span> (Alcohol Use Disorders Identification Test — 10 items, WHO-developed, distinguishes hazardous from harmful drinking), and <span class="key-term">DAST</span> (Drug Abuse Screening Test — 28 items assessing consequences of drug use). These are screening tools, not diagnostic instruments.</p>
+        </div>
+
+        <h3>Medication-Assisted Treatment (MAT)</h3>
+        <table>
+          <tr><th>Medication</th><th>Mechanism</th><th>Indication</th></tr>
+          <tr><td>Naltrexone</td><td>Opioid antagonist; blocks euphoric effects</td><td>Alcohol and opioid use disorders</td></tr>
+          <tr><td>Buprenorphine</td><td>Partial opioid agonist; reduces cravings/withdrawal</td><td>Opioid use disorder</td></tr>
+          <tr><td>Methadone</td><td>Full opioid agonist; prevents withdrawal, reduces craving</td><td>Opioid use disorder (dispensed in clinics)</td></tr>
+          <tr><td>Disulfiram (Antabuse)</td><td>Aldehyde dehydrogenase inhibitor; causes nausea if alcohol consumed</td><td>Alcohol use disorder (aversive conditioning)</td></tr>
+          <tr><td>Acamprosate</td><td>NMDA/GABA modulation; reduces craving in abstinent patients</td><td>Alcohol use disorder (maintaining abstinence)</td></tr>
+        </table>
+      </div>
+
+      <div class="content-section">
+        <h2>Evidence-Based Treatments for Developmental Disorders</h2>
+
+        <h3>Applied Behavior Analysis (ABA) for Autism Spectrum Disorder</h3>
+        <p><span class="key-term">ABA</span> is the most well-established intervention for autism spectrum disorder (ASD), particularly when delivered as <span class="key-term">Early Intensive Behavioral Intervention (EIBI)</span> (25-40 hours per week, starting before age 4). ABA is grounded in learning theory and uses systematic application of reinforcement, prompting, shaping, chaining, and generalization to build adaptive skills and reduce problem behaviors.</p>
+        <ul>
+          <li><strong>Discrete Trial Training (DTT):</strong> Structured, therapist-led teaching using a three-term contingency (discriminative stimulus, response, consequence). Tasks are broken into small, measurable components taught in a controlled setting.</li>
+          <li><strong>Natural Environment Teaching (NET):</strong> Uses the child's interests and natural interactions as learning opportunities, promoting generalization. Follows the child's lead and uses naturally occurring reinforcers.</li>
+          <li><strong>Functional Behavior Assessment (FBA):</strong> Identifies the function (antecedents and consequences) maintaining problem behaviors to develop function-based interventions. The four functions of behavior are: attention, escape/avoidance, access to tangibles, and automatic/sensory reinforcement.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Functional Behavior Assessment (FBA):</strong>
+          <p>FBA systematically identifies the <span class="key-term">antecedent-behavior-consequence</span> (A-B-C) chain to determine WHY a behavior occurs. Methods include direct observation, structured interviews, and functional analysis (systematic manipulation of environmental variables). Interventions are then designed to address the function: if a child hits to escape demands, the intervention teaches an appropriate escape request (functional communication training).</p>
+        </div>
+
+        <h3>Parent-Child Interaction Therapy (PCIT)</h3>
+        <p><span class="key-term">PCIT</span> (Eyberg) is an evidence-based treatment for disruptive behavior in young children (ages 2-7). It has two phases: <strong>Child-Directed Interaction (CDI)</strong>, in which the parent follows the child's lead using PRIDE skills (Praise, Reflect, Imitate, Describe, Enthusiasm), and <strong>Parent-Directed Interaction (PDI)</strong>, in which the parent gives clear commands and follows through with consistent consequences. The therapist coaches the parent in real-time from behind a one-way mirror using a bug-in-the-ear device.</p>
+
+        <h3>Parent Management Training (PMT)</h3>
+        <p><span class="key-term">PMT</span> (Patterson, 1982) is based on social learning theory and targets the coercive family interactions that maintain child conduct problems. Patterson's <span class="key-term">coercion theory</span> proposes that antisocial behavior develops through a cycle in which the child's aversive behavior is negatively reinforced by the parent's giving in, and the parent's giving in is negatively reinforced by the cessation of the child's aversive behavior. PMT teaches parents to use positive reinforcement for prosocial behavior, consistent consequences for problem behavior, effective commands, and monitoring.</p>
+
+        <h3>Multisystemic Therapy (MST)</h3>
+        <p><span class="key-term">MST</span> (Henggeler et al.) is an intensive, community-based treatment for serious juvenile offenders that addresses the multiple systems influencing the adolescent's behavior: family, peers, school, and community. MST therapists have small caseloads (4-6 families), provide services in natural settings (home, school, community), are available 24/7, and treatment is typically 3-5 months. MST has strong evidence for reducing recidivism, out-of-home placements, and substance use in adolescents with severe antisocial behavior.</p>
+
+        <h3>Pivotal Response Treatment (PRT) for ASD</h3>
+        <p><span class="key-term">PRT</span> (Koegel & Koegel) is a naturalistic behavioral intervention derived from ABA principles that targets "pivotal" areas of development — motivation, self-management, responsivity to multiple cues, and self-initiated social interactions. By targeting these pivotal areas, PRT aims to produce widespread improvements across untargeted behaviors. PRT is child-directed, uses natural reinforcers (directly related to the child's response), and takes place in natural environments, making it more ecologically valid than DTT alone.</p>
+
+        <h3>Evidence Summary: SUD Treatment Effectiveness</h3>
+        <table>
+          <tr><th>Treatment</th><th>Strongest Evidence For</th><th>Key Mechanism</th></tr>
+          <tr><td>MI/MET</td><td>Alcohol, mixed substance use</td><td>Resolving ambivalence, developing discrepancy</td></tr>
+          <tr><td>CBT/RP</td><td>Alcohol, cocaine, cannabis</td><td>Coping skills, cognitive restructuring, AVE prevention</td></tr>
+          <tr><td>CM</td><td>Cocaine, methamphetamine, opioids</td><td>Positive reinforcement for verified abstinence</td></tr>
+          <tr><td>TSF</td><td>Alcohol</td><td>12-step engagement and fellowship</td></tr>
+          <tr><td>CRA + Vouchers</td><td>Cocaine</td><td>Environmental restructuring + reinforcement</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>PCIT vs. PMT:</strong>
+          <p>Both are parent-focused behavioral interventions for child conduct problems, but PCIT involves live coaching of parent-child interactions (in-session observation and feedback), while PMT typically involves teaching parenting skills through discussion, modeling, and role-play without live observation of parent-child interaction. PCIT has the unique feature of the therapist coaching the parent in real-time via an earpiece.</p>
+        </div>
+
+        <h3>Functional Family Therapy (FFT)</h3>
+        <p><span class="key-term">FFT</span> (Alexander & Parsons) is a family-based intervention for at-risk adolescents with conduct problems, substance use, and delinquency. FFT proceeds through three phases: (1) <strong>Engagement and motivation</strong> — reframing negative attributions and reducing blame, (2) <strong>Behavior change</strong> — developing communication, parenting, and problem-solving skills, and (3) <strong>Generalization</strong> — extending gains to broader community contexts. FFT typically lasts 8-12 sessions and has strong evidence for reducing recidivism in adolescents.</p>
+
+        <h3>Social Skills Training for ASD</h3>
+        <p>Beyond ABA, evidence-based approaches for social skills in autism spectrum disorder include:</p>
+        <ul>
+          <li><strong>Social Stories (Carol Gray):</strong> Short, individualized stories describing social situations, expected behaviors, and perspectives of others to teach social understanding</li>
+          <li><strong>Video Modeling:</strong> Uses video demonstrations of target behaviors for the child to observe and imitate, capitalizing on visual learning strengths common in ASD</li>
+          <li><strong>PEERS (Program for the Education and Enrichment of Relational Skills):</strong> Manualized social skills intervention for adolescents and young adults with ASD targeting conversational skills, electronic communication, choosing friends, and handling conflict</li>
+        </ul>
+
+        <h3>Pharmacological Treatments for ADHD</h3>
+        <table>
+          <tr><th>Medication Class</th><th>Examples</th><th>Mechanism</th><th>Key Points</th></tr>
+          <tr><td>Stimulants (first-line)</td><td>Methylphenidate (Ritalin), Amphetamine (Adderall)</td><td>Increase dopamine and norepinephrine</td><td>70-80% response rate; MTA study showed medication superior to behavioral for core ADHD symptoms</td></tr>
+          <tr><td>Non-stimulants</td><td>Atomoxetine (Strattera)</td><td>Selective NE reuptake inhibitor</td><td>Alternative when stimulants contraindicated; lower abuse potential; slower onset (2-4 weeks)</td></tr>
+          <tr><td>Alpha-2 agonists</td><td>Guanfacine (Intuniv), Clonidine (Kapvay)</td><td>Noradrenergic modulation</td><td>Often used adjunctively; help with hyperactivity and impulsivity; useful for comorbid tics</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>MTA Study (Multimodal Treatment Study of ADHD):</strong>
+          <p>The landmark <span class="key-term">MTA study</span> (1999) compared four conditions for childhood ADHD: medication management alone, intensive behavioral treatment alone, combined medication + behavioral treatment, and community care (control). Results showed that medication management was superior to behavioral treatment alone for core ADHD symptoms (inattention, hyperactivity-impulsivity). The combined condition showed advantages over medication alone for comorbid symptoms (anxiety, oppositional behavior, social skills) and parent-child relations.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>MI Spirit:</strong> Collaboration, evocation, autonomy, compassion. MI is client-centered and directive. Uses OARS skills.</li>
+          <li><strong>TTM Stages:</strong> Precontemplation, contemplation, preparation, action, maintenance. Know which MI strategies match each stage.</li>
+          <li><strong>Abstinence Violation Effect (AVE):</strong> Marlatt. Internal attribution + loss of control feeling after a lapse. Challenging AVE prevents lapse from becoming relapse.</li>
+          <li><strong>Seemingly Irrelevant Decisions (SIDs):</strong> Minor choices that increase relapse risk. Part of the relapse prevention model.</li>
+          <li><strong>Contingency Management:</strong> Voucher-based reinforcement for verified abstinence. Highest effect sizes for stimulant use disorders.</li>
+          <li><strong>CRA:</strong> Restructures the environment so sobriety is more rewarding than substance use.</li>
+          <li><strong>MAT medications:</strong> Naltrexone = antagonist (blocks effects); disulfiram = aversive (causes nausea); methadone = full agonist; buprenorphine = partial agonist; acamprosate = reduces craving in abstinence.</li>
+          <li><strong>ABA:</strong> Gold standard for ASD. DTT = structured trials. NET = naturalistic. EIBI = 25-40 hours/week, before age 4.</li>
+          <li><strong>FBA:</strong> Identifies A-B-C contingencies. Four functions: attention, escape, tangibles, sensory/automatic.</li>
+          <li><strong>PCIT:</strong> Eyberg. CDI then PDI phases. Bug-in-ear coaching. Ages 2-7.</li>
+          <li><strong>PMT:</strong> Patterson. Coercion theory. Negative reinforcement trap in parent-child interactions.</li>
+          <li><strong>MST:</strong> Henggeler. For serious juvenile offenders. Multi-system (family, peers, school, community). 24/7 availability. 3-5 months.</li>
+          <li><strong>Change talk (DARN-CAT):</strong> Preparatory = Desire, Ability, Reasons, Need. Mobilizing = Commitment, Activation, Taking steps. Higher ratio of change talk to sustain talk predicts behavior change.</li>
+          <li><strong>Project MATCH:</strong> TSF, CBT, and MET were all effective for alcohol use disorder. Patient-treatment matching hypothesis was largely unsupported. All three approaches produced comparable outcomes.</li>
+          <li><strong>TSF:</strong> Manualized therapist-delivered approach to facilitate AA/12-step involvement. Works through increasing attendance and active participation.</li>
+          <li><strong>Urge surfing:</strong> Marlatt's mindfulness technique. Observe cravings as waves that rise, peak, and naturally subside without acting on them.</li>
+          <li><strong>FFT:</strong> Alexander & Parsons. Three phases: engagement/motivation, behavior change, generalization. For at-risk adolescents. 8-12 sessions.</li>
+          <li><strong>MTA study:</strong> Medication management superior to behavioral treatment alone for core ADHD symptoms. Combined treatment best for comorbid conditions.</li>
+          <li><strong>ADHD medications:</strong> Stimulants (methylphenidate, amphetamine) are first-line with 70-80% response rate. Atomoxetine is a non-stimulant alternative (NE reuptake inhibitor).</li>
+          <li><strong>Social Stories (Gray):</strong> Individualized narratives for teaching social understanding to children with ASD. Visual learning approach.</li>
+          <li><strong>PEERS program:</strong> Manualized social skills intervention for adolescents/young adults with ASD. Targets conversational skills and friendship development.</li>
+          <li><strong>SBIRT:</strong> Screening, Brief Intervention, Referral to Treatment. For risky substance use in non-specialty settings (primary care, ED). Uses MI principles.</li>
+          <li><strong>CAGE:</strong> 4-item alcohol screening (Cut down, Annoyed, Guilty, Eye-opener). 2+ positive = problem drinking suspected.</li>
+          <li><strong>AUDIT:</strong> WHO-developed 10-item alcohol screening. Distinguishes hazardous from harmful drinking. More comprehensive than CAGE.</li>
+          <li><strong>CM escalating schedule:</strong> Voucher value increases with consecutive negative samples and resets after positive. Prize-based (fishbowl) method is more cost-effective.</li>
+          <li><strong>PRT:</strong> Pivotal Response Treatment (Koegel). Naturalistic ABA approach targeting pivotal areas (motivation, self-management, multiple cues). Child-directed, natural reinforcers.</li>
+          <li><strong>Coercion theory (Patterson):</strong> Negative reinforcement trap. Child's aversive behavior is reinforced by parent's giving in; parent's giving in is reinforced by cessation of child's behavior. Forms the basis for PMT.</li>
+          <li><strong>Four functions of behavior:</strong> Attention, escape/avoidance, access to tangibles, automatic/sensory reinforcement. Identified through FBA. Interventions must match function.</li>
+          <li><strong>Functional Communication Training (FCT):</strong> Teaches an appropriate communicative response that serves the same function as the problem behavior. E.g., teaching a child to request "break please" instead of hitting to escape demands.</li>
+          <li><strong>Disulfiram mechanism:</strong> Inhibits aldehyde dehydrogenase, causing accumulation of acetaldehyde when alcohol is consumed, resulting in nausea, flushing, headache. This is aversive conditioning — not pharmacological craving reduction.</li>
+          <li><strong>Buprenorphine advantages:</strong> Partial agonist — has a ceiling effect on respiratory depression (safer in overdose than full agonists like methadone). Can be prescribed in office-based settings.</li>
+          <li><strong>Motivational Enhancement Therapy (MET):</strong> Brief (typically 4 sessions) structured MI-based intervention. Developed for Project MATCH. Uses personalized feedback from assessment results to motivate change.</li>
+          <li><strong>CRA (Community Reinforcement Approach):</strong> Comprehensive behavioral approach that rearranges vocational, social, family, and recreational contingencies so that a sober lifestyle is more rewarding than substance use.</li>
+          <li><strong>Matrix Model:</strong> Intensive outpatient program for stimulant use disorders combining CBT, family education, 12-step facilitation, drug testing, and relapse prevention into a structured 16-week program.</li>
+          <li><strong>High-probability behavior vs. low-probability behavior:</strong> Premack principle applied in CM — access to high-probability behaviors (valued activities/vouchers) is contingent on low-probability behaviors (abstinence/treatment attendance).</li>
+          <li><strong>ABA generalization:</strong> Ensuring skills learned in therapy transfer to natural environments. A major goal of NET and PRT approaches. Without planned generalization, treatment gains may not persist outside structured settings.</li>
+          <li><strong>Incidental teaching:</strong> Naturalistic ABA strategy where the therapist uses naturally occurring opportunities to teach skills. Child initiates interaction, therapist elaborates and reinforces. Related to NET.</li>
+          <li><strong>Wraparound services:</strong> Comprehensive, individualized, community-based support for youth with serious emotional/behavioral needs. Involves a team (family, providers, community) developing a coordinated care plan.</li>
+          <li><strong>Pharmacotherapy for ASD:</strong> No medication treats core ASD symptoms. Risperidone and aripiprazole (atypical antipsychotics) are FDA-approved for irritability/aggression in ASD. SSRIs sometimes used for repetitive behaviors.</li>
+          <li><strong>Harm reduction:</strong> A public health approach that aims to reduce negative consequences of substance use without requiring abstinence. Strategies include needle exchange, naloxone distribution, supervised consumption sites, and controlled drinking programs. Controversial but evidence-based.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch11-ebt-mood-personality.html" class="nav-btn"><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">EBT: Mood, Personality &amp; Eating</div></div></a>
+        <a href="index.html" class="nav-btn"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Overview</div></div></a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

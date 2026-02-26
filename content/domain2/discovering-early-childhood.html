@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovering the World &mdash; Early Childhood | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        Discovering the World &mdash; Early Childhood
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link active"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 7</div>
+        <h1>Discovering the World &mdash; Early Childhood</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Preoperational Thought -->
+      <div class="content-section">
+        <h2>Piaget's Preoperational Stage</h2>
+        <p>The <span class="key-term">preoperational stage</span> (approximately ages 2&ndash;7) is marked by tremendous cognitive growth alongside characteristic limitations. The child gains the ability to represent objects and events mentally through symbols, language, and pretend play, but is not yet capable of logical operations.</p>
+
+        <h3>Symbolic Function Substage (Ages 2&ndash;4)</h3>
+        <p>The <span class="key-term">symbolic function substage</span> is characterized by the child's emerging ability to use mental symbols, words, and images to represent objects and events that are not physically present. This capacity enables <span class="key-term">pretend play</span> (using a block as a telephone), drawing, and language use. However, thinking at this stage is limited by egocentrism and animism.</p>
+
+        <div class="definition-box">
+          <strong>Egocentrism</strong>
+          <p>The inability to take another person's perspective or to understand that others may see, think, or feel differently than oneself. Piaget demonstrated this with the <span class="key-term">three-mountain task</span>, in which preoperational children selected their own view of a three-dimensional display rather than the view that would be seen by a doll placed on the other side.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Animism</strong>
+          <p>The belief that inanimate objects are alive and have feelings and intentions. A preoperational child might say that the sun is "happy" or that a rock "wants" to stay in one place. This reflects the child's difficulty in distinguishing between animate and inanimate entities.</p>
+        </div>
+
+        <h3>Intuitive Thought Substage (Ages 4&ndash;7)</h3>
+        <p>During the <span class="key-term">intuitive thought substage</span>, children begin to use primitive reasoning and want to know the answers to all sorts of questions. However, their thinking remains constrained by several key limitations:</p>
+        <ul>
+          <li><strong>Centration:</strong> Focusing on one salient aspect of a situation while ignoring other relevant features.</li>
+          <li><strong>Irreversibility:</strong> Inability to mentally reverse a sequence of events or operations.</li>
+          <li><strong>Conservation failure:</strong> Inability to understand that certain properties of objects (number, volume, mass) remain the same despite changes in appearance.</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 4-year-old is shown two identical rows of coins. When one row is spread apart to appear longer, the child says it now has "more" coins. This conservation failure results from centration (focusing on the length of the row) and irreversibility (inability to mentally "push" the coins back together).</p>
+        </div>
+
+        <p class="citation">Piaget, J. (1962). Play, dreams, and imitation in childhood. W. W. Norton.</p>
+      </div>
+
+      <!-- Section 2: Theory of Mind -->
+      <div class="content-section">
+        <h2>Theory of Mind</h2>
+        <p><span class="key-term">Theory of Mind (ToM)</span> refers to the understanding that other people have mental states&mdash;beliefs, desires, intentions, knowledge&mdash;that may differ from one's own and that may differ from reality. The development of ToM represents one of the most important cognitive achievements of early childhood.</p>
+
+        <h3>False Belief Understanding</h3>
+        <p>The classic test for ToM is the <span class="key-term">false belief task</span>. In the most widely used version (the Sally-Anne task, Baron-Cohen, Leslie, &amp; Frith, 1985), a child watches as Sally places a marble in a basket and leaves. While Sally is away, Anne moves the marble to a box. The child is asked where Sally will look for the marble when she returns. Children who understand false belief correctly indicate that Sally will look in the basket (where she left it), while those lacking ToM say she will look in the box (where it actually is).</p>
+
+        <p>Most typically developing children pass false belief tasks between ages 4 and 5. Prior to this age, children struggle to distinguish between what they know and what another person knows&mdash;a cognitive limitation closely related to Piaget's concept of egocentrism.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>Deficits in Theory of Mind are a hallmark feature of <span class="key-term">Autism Spectrum Disorder (ASD)</span>. Baron-Cohen and colleagues proposed that the social communication difficulties seen in autism reflect an impaired "mindblindness"&mdash;a fundamental difficulty in understanding that others have mental states. However, ToM deficits are not unique to ASD and can also be observed in other conditions affecting social cognition.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 3-year-old watches as a candy box is filled with crayons. When asked what another child (who hasn't seen inside) would think is in the box, the 3-year-old says "crayons." This failure to attribute a false belief to the other child indicates that Theory of Mind has not yet fully developed.</p>
+        </div>
+
+        <p class="citation">Baron-Cohen, S., Leslie, A. M., &amp; Frith, U. (1985). Does the autistic child have a "theory of mind"? Cognition, 21(1), 37&ndash;46.</p>
+      </div>
+
+      <!-- Section 2b: Parten's Stages of Play -->
+      <div class="content-section">
+        <h2>Parten's Stages of Play</h2>
+        <p><span class="key-term">Mildred Parten</span> (1932) conducted pioneering observational research on children's social play, identifying six categories that reflect increasing levels of social involvement. Parten's classification describes a developmental progression from nonsocial to highly social forms of play, typically observed during the preschool years (ages 2&ndash;5).</p>
+
+        <table>
+          <tr><th>Stage</th><th>Approximate Age</th><th>Description</th></tr>
+          <tr><td>Unoccupied play</td><td>Birth&ndash;2 years</td><td>The child is not engaged in any particular play activity; may watch others, wander, or engage in random movements without clear purpose.</td></tr>
+          <tr><td>Solitary play</td><td>2&ndash;2.5 years</td><td>The child plays alone with different toys and makes no effort to interact with or get close to other children. The child is focused on their own activity.</td></tr>
+          <tr><td>Onlooker play</td><td>2.5&ndash;3 years</td><td>The child watches other children play, may ask questions or make comments, but does not actively participate. The child is interested in others' activities but remains an observer.</td></tr>
+          <tr><td>Parallel play</td><td>2.5&ndash;3.5 years</td><td>The child plays alongside&mdash;but not <em>with</em>&mdash;other children. Children may use similar materials and be in close proximity but do not coordinate their activities or directly interact.</td></tr>
+          <tr><td>Associative play</td><td>3&ndash;4 years</td><td>Children engage in similar activities and there is social interaction (sharing materials, talking, following each other), but there is no organized effort toward a common goal. Each child acts on their own interests.</td></tr>
+          <tr><td>Cooperative play</td><td>4&ndash;5+ years</td><td>Children organize play around a common goal, assign roles, negotiate rules, and work together. Examples include building a fort together, playing house with assigned roles, or organized games. This is the most socially sophisticated form of play.</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Parallel Play vs. Associative Play</strong>
+          <p>The distinction between parallel and associative play is frequently tested. In <span class="key-term">parallel play</span>, children play side by side with similar materials but do not interact directly (e.g., two children both building with blocks at the same table but constructing independent structures). In <span class="key-term">associative play</span>, children interact, share materials, and talk about their activity, but there is no organized division of labor or shared goal (e.g., children playing in a sandbox together, sharing shovels and commenting on each other's digging, but not building the same thing).</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>While Parten's stages suggest a developmental progression, contemporary research recognizes that all forms of play persist across the preschool years and beyond. Solitary play in older preschoolers is not inherently concerning&mdash;it depends on context and the nature of the play. <em>Constructive</em> solitary play (building, drawing) is associated with positive outcomes, while <em>reticent</em> behavior (hovering near peers without joining) may signal social anxiety. Clinicians assessing social development in young children should observe the quality and nature of play, not just its social level.</p>
+        </div>
+
+        <h3>Play and Social Development</h3>
+        <p>The progression through Parten's stages reflects the child's growing capacity for <span class="key-term">social cognition</span>, perspective-taking, and behavioral regulation. Cooperative play requires Theory of Mind (understanding others' intentions and desires), executive function (inhibiting impulses, following rules), and language skills (negotiating roles, resolving conflicts). Play is therefore not "just play"&mdash;it is a critical context for developing social competence.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A preschool teacher observes two 3-year-olds sitting at the same table, both drawing with crayons. They occasionally glance at each other's pictures and chat about their drawings, but each child is creating their own picture with no shared plan. This behavior is most consistent with Parten's associative play&mdash;there is social interaction and shared materials, but no organized common goal.</p>
+        </div>
+
+        <p class="citation">Parten, M. B. (1932). Social participation among preschool children. Journal of Abnormal and Social Psychology, 27(3), 243&ndash;269.</p>
+      </div>
+
+      <!-- Section 3: Parenting Styles -->
+      <div class="content-section">
+        <h2>Baumrind's Parenting Styles</h2>
+        <p><span class="key-term">Diana Baumrind</span> (1966, 1971) identified three parenting styles based on two dimensions: <span class="key-term">demandingness</span> (the degree of behavioral control and expectations for maturity) and <span class="key-term">responsiveness</span> (the degree of warmth, acceptance, and sensitivity to the child's needs). A fourth style was later added by Maccoby and Martin (1983).</p>
+
+        <table>
+          <tr><th>Style</th><th>Demandingness</th><th>Responsiveness</th><th>Child Outcomes</th></tr>
+          <tr><td>Authoritative</td><td>High</td><td>High</td><td>High self-esteem, social competence, academic achievement, self-regulation</td></tr>
+          <tr><td>Authoritarian</td><td>High</td><td>Low</td><td>Obedient but less happy, more anxious, lower self-esteem, potential aggression</td></tr>
+          <tr><td>Permissive (Indulgent)</td><td>Low</td><td>High</td><td>Poor self-regulation, impulsivity, entitled behavior, academic difficulties</td></tr>
+          <tr><td>Uninvolved (Neglectful)</td><td>Low</td><td>Low</td><td>Worst outcomes across domains; attachment difficulties, behavioral problems</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Authoritative Parenting</strong>
+          <p>Characterized by high expectations paired with high warmth, open communication, and reasoned discipline. Authoritative parents set clear standards while encouraging autonomy. This style is consistently associated with the most positive developmental outcomes across Western cultures.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Consideration</strong>
+          <p>Research on parenting styles was initially conducted with predominantly White, middle-class American families. Cross-cultural studies have revealed that authoritarian parenting may not carry the same negative associations in all cultural contexts. For example, in some collectivist cultures and in high-risk neighborhoods, authoritarian parenting may serve a protective function. Clinicians should consider cultural context when evaluating parenting practices.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A parent sets clear rules about homework and bedtime but explains the reasons behind the rules, listens to the child's perspective, and allows age-appropriate choices. This parent is best described as authoritative&mdash;high in both demandingness and responsiveness.</p>
+        </div>
+
+        <p class="citation">Baumrind, D. (1971). Current patterns of parental authority. Developmental Psychology Monographs, 4(1, Pt. 2).</p>
+      </div>
+
+      <!-- Section 4: Language and Private Speech -->
+      <div class="content-section">
+        <h2>Language Explosion and Private Speech</h2>
+        <p>Early childhood witnesses a <span class="key-term">language explosion</span>. Vocabulary grows from approximately 200 words at age 2 to roughly 10,000 words by age 6. Children master complex grammatical structures, begin to use past tense and plurals (sometimes overgeneralizing rules, as in "goed" or "mouses"), and engage in increasingly sophisticated conversations.</p>
+
+        <h3>Overregularization</h3>
+        <p><span class="key-term">Overregularization</span> occurs when children apply grammatical rules to irregular forms (e.g., "runned" instead of "ran," "foots" instead of "feet"). Paradoxically, this type of error reflects cognitive progress&mdash;the child has internalized a grammatical rule and is applying it systematically, even where exceptions apply.</p>
+
+        <h3>Vygotsky's Private Speech</h3>
+        <div class="definition-box">
+          <strong>Private Speech</strong>
+          <p>The self-directed speech that children use to plan, guide, and regulate their behavior. Vygotsky viewed private speech as a bridge between social speech and inner (silent) thought. Rather than being egocentric (as Piaget characterized it), private speech serves a critical self-regulatory function. It increases during challenging tasks and gradually becomes internalized as inner speech by around age 7.</p>
+        </div>
+
+        <p>Research supports Vygotsky's view: children use more private speech when tasks are moderately difficult, and private speech use is positively correlated with task performance. Children with ADHD and learning difficulties often show delayed internalization of private speech.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Self-instructional training (Meichenbaum, 1977), a cognitive-behavioral intervention for impulsive children, is directly based on Vygotsky's theory of private speech. Children are taught to talk themselves through problems, first aloud, then in a whisper, and finally silently. This technique has been used in the treatment of ADHD and conduct problems.</p>
+        </div>
+
+        <p class="citation">Vygotsky, L. S. (1986). Thought and language (A. Kozulin, Trans.). MIT Press. (Original work published 1934)</p>
+      </div>
+
+      <!-- Section 5: Gender Development -->
+      <div class="content-section">
+        <h2>Gender Development</h2>
+        <p>Early childhood is a period of rapid gender development. By age 2&ndash;3, most children can label themselves and others as male or female. By age 5&ndash;6, they demonstrate strong gender-typed preferences in play, clothing, and peer interactions. Several theoretical perspectives explain these developments.</p>
+
+        <h3>Kohlberg's Cognitive-Developmental Theory of Gender</h3>
+        <p>Kohlberg (1966) proposed that children's understanding of gender progresses through three stages:</p>
+        <ol>
+          <li><strong>Gender identity (~2&ndash;3 years):</strong> Children can correctly label their own gender and that of others.</li>
+          <li><strong>Gender stability (~4 years):</strong> Children understand that gender remains the same over time (a girl will grow up to be a woman).</li>
+          <li><strong>Gender constancy (~6&ndash;7 years):</strong> Children understand that gender is unchanged by superficial transformations (wearing different clothes, changing hairstyle). Only after achieving constancy do children begin to actively seek gender-appropriate models.</li>
+        </ol>
+
+        <h3>Gender Schema Theory</h3>
+        <p><span class="key-term">Gender schema theory</span> (Bem, 1981; Martin &amp; Halverson, 1981) proposes that children develop <span class="key-term">gender schemas</span>&mdash;organized networks of knowledge and expectations about what it means to be male or female in their culture. Once a basic gender identity is established, children actively filter new information through these schemas, attending to and remembering gender-consistent information more than gender-inconsistent information.</p>
+
+        <h3>Social Learning Theory</h3>
+        <p>From the perspective of <span class="key-term">social learning theory</span> (Bandura, 1977), gender development results from observation, imitation, and reinforcement. Children observe gender-typed behavior in models (parents, peers, media), imitate same-sex models, and receive differential reinforcement for gender-appropriate and gender-inappropriate behavior.</p>
+
+        <p class="citation">Bem, S. L. (1981). Gender schema theory: A cognitive account of sex typing. Psychological Review, 88(4), 354&ndash;364.</p>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Preoperational limitations:</strong> Know egocentrism (three-mountain task), animism, centration, irreversibility, and conservation failure. Be able to identify these in clinical vignettes.</li>
+          <li><strong>Theory of Mind:</strong> Develops around age 4&ndash;5; tested via false belief tasks. Deficits in ToM are associated with Autism Spectrum Disorder ("mindblindness").</li>
+          <li><strong>Parten's play stages:</strong> Unoccupied, solitary, onlooker, parallel, associative, cooperative. Progression reflects growing social cognitive abilities. Distinguish parallel play (side by side, no interaction) from associative play (interacting but no shared goal). Cooperative play requires ToM and executive function.</li>
+          <li><strong>Baumrind's parenting styles:</strong> Know the 2x2 grid (demandingness x responsiveness). Authoritative = best outcomes in Western research. Be aware of cultural variations.</li>
+          <li><strong>Authoritative vs. authoritarian:</strong> Both are high in demandingness, but authoritative adds warmth and reasoning; authoritarian relies on obedience and punishment.</li>
+          <li><strong>Private speech (Vygotsky):</strong> Self-regulatory, not egocentric. Increases with task difficulty. Internalizes to inner speech around age 7. Basis for self-instructional training.</li>
+          <li><strong>Overregularization:</strong> Application of grammatical rules to irregular forms (e.g., "goed"). Indicates rule learning, not regression.</li>
+          <li><strong>Gender development sequence:</strong> Gender identity (2&ndash;3), gender stability (4), gender constancy (6&ndash;7). Gender schema theory proposes that schemas form once basic identity is established.</li>
+          <li><strong>Erikson's stage:</strong> Initiative vs. Guilt (ages 3&ndash;5). Children assert power through directing play and social interaction. Excessive guilt leads to inhibition and lack of initiative.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="awakening-infancy.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">The Awakening &mdash; Infancy &amp; Toddlerhood</div>
+          </div>
+        </a>
+        <a href="building-competence.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Building Competence &mdash; Middle Childhood</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

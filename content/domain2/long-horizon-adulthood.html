@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Long Horizon &mdash; Adulthood &amp; Aging | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        The Long Horizon &mdash; Adulthood &amp; Aging
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link active"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 7</div>
+        <h1>The Long Horizon &mdash; Adulthood &amp; Aging</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~30 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Emerging Adulthood and Erikson's Adult Stages -->
+      <div class="content-section">
+        <h2>Emerging Adulthood and Psychosocial Development</h2>
+        <p>The study of adult development has expanded dramatically since the mid-20th century, reflecting both increased life expectancy and the recognition that psychological growth does not end at adolescence. This chapter covers the vast terrain from the late teens through the end of life.</p>
+
+        <h3>Arnett's Emerging Adulthood</h3>
+        <div class="definition-box">
+          <strong>Emerging Adulthood</strong>
+          <p><span class="key-term">Jeffrey Jensen Arnett</span> (2000) proposed that the period from approximately ages 18&ndash;25 constitutes a distinct developmental stage in industrialized societies called <span class="key-term">emerging adulthood</span>. This phase is characterized by five features: (1) identity exploration (especially in love, work, and worldviews), (2) instability (frequent changes in residence, relationships, and employment), (3) self-focus, (4) feeling "in between" adolescence and adulthood, and (5) a sense of possibilities and optimism about the future.</p>
+        </div>
+
+        <p>Arnett's concept has been debated&mdash;critics note that it may apply primarily to privileged populations in Western, industrialized nations and may not describe the experiences of those who take on adult responsibilities (parenthood, full-time work) early due to economic necessity. Nevertheless, the concept has been influential in framing the transitional nature of the late teens to mid-20s.</p>
+
+        <h3>Erikson's Adult Psychosocial Stages</h3>
+        <p>Erikson's final three stages span the decades of adulthood:</p>
+
+        <table>
+          <tr><th>Stage</th><th>Age Range</th><th>Crisis</th><th>Virtue</th><th>Key Theme</th></tr>
+          <tr><td>6</td><td>Young Adulthood (18&ndash;40)</td><td>Intimacy vs. Isolation</td><td>Love</td><td>Forming close, committed relationships; capacity for intimacy requires a firm sense of identity</td></tr>
+          <tr><td>7</td><td>Middle Adulthood (40&ndash;65)</td><td>Generativity vs. Stagnation</td><td>Care</td><td>Contributing to the next generation through parenting, mentoring, creative work, or community involvement</td></tr>
+          <tr><td>8</td><td>Late Adulthood (65+)</td><td>Ego Integrity vs. Despair</td><td>Wisdom</td><td>Reflecting on one's life with acceptance; viewing it as meaningful and well-lived vs. filled with regret</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 70-year-old retired professor reflects on his career and family life with a sense of satisfaction and acceptance, acknowledging both accomplishments and mistakes. He tells his grandchildren, "I wouldn't change the big choices I made." This reflects successful resolution of Erikson's ego integrity crisis.</p>
+        </div>
+
+        <p class="citation">Arnett, J. J. (2000). Emerging adulthood: A theory of development from the late teens through the twenties. American Psychologist, 55(5), 469&ndash;480.</p>
+      </div>
+
+      <!-- Section 2: Levinson and Midlife -->
+      <div class="content-section">
+        <h2>Levinson's Seasons of Life and the Midlife Transition</h2>
+        <p><span class="key-term">Daniel Levinson</span> (1978) proposed that adult development follows a sequence of eras, each lasting approximately 20&ndash;25 years, with transitional periods between them. His model, based on intensive biographical interviews (initially with men, later extended to women), describes the construction, modification, and rebuilding of <span class="key-term">life structures</span>&mdash;the underlying patterns of a person's life at any given time, encompassing relationships, work, and other central commitments.</p>
+
+        <h3>Key Eras and Transitions</h3>
+        <ul>
+          <li><strong>Early Adult Transition (17&ndash;22):</strong> Moving from the preadult world into early adulthood; forming initial adult life structure.</li>
+          <li><strong>Entering the Adult World (22&ndash;28):</strong> Building a first adult life structure; exploring possibilities while seeking stability.</li>
+          <li><strong>Age-30 Transition (28&ndash;33):</strong> Reassessing and potentially modifying the first life structure.</li>
+          <li><strong>Midlife Transition (40&ndash;45):</strong> A critical turning point; questioning earlier choices and confronting mortality, aging, and unfulfilled dreams.</li>
+          <li><strong>Late Adult Transition (60&ndash;65):</strong> Preparing for late adulthood; adjusting to retirement, physical decline, and legacy concerns.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Midlife Crisis</strong>
+          <p>Levinson proposed that the midlife transition (ages 40&ndash;45) often involves a period of questioning and potential turmoil as individuals confront the gap between youthful dreams and reality. However, subsequent research suggests that a full-blown "midlife crisis" is not universal&mdash;only about 10&ndash;25% of adults report a crisis in middle adulthood. Most experience a more gradual midlife transition rather than a dramatic upheaval.</p>
+        </div>
+
+        <h3>Menopause</h3>
+        <p><span class="key-term">Menopause</span> refers to the cessation of menstruation and reproductive capacity, typically occurring between ages 45 and 55 (average age ~51). The <span class="key-term">perimenopause</span> transition involves fluctuating hormone levels (estrogen and progesterone decline) and can span several years. Physical symptoms may include hot flashes, sleep disturbances, and vaginal dryness. Psychological responses to menopause vary widely and are influenced by cultural attitudes, personal expectations, and individual health. Cross-cultural research has shown that women in cultures that value postmenopausal women (e.g., certain South Asian cultures) report fewer negative symptoms.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>While menopause is a normal biological transition, the hormonal changes associated with perimenopause can exacerbate or precipitate depressive episodes in vulnerable women. Clinicians should assess for mood changes during this period and be aware that the relationship between menopause and depression is not deterministic but reflects a complex interaction of biological, psychological, and social factors.</p>
+        </div>
+
+        <p class="citation">Levinson, D. J. (1978). The seasons of a man's life. Knopf.</p>
+      </div>
+
+      <!-- Section 3: Cognitive Aging -->
+      <div class="content-section">
+        <h2>Cognitive Aging: Fluid and Crystallized Intelligence</h2>
+        <p>One of the most important distinctions in the psychology of cognitive aging is between <span class="key-term">fluid intelligence (Gf)</span> and <span class="key-term">crystallized intelligence (Gc)</span>, originally proposed by <span class="key-term">Raymond Cattell</span> (1963) and elaborated by <span class="key-term">John Horn</span>.</p>
+
+        <div class="definition-box">
+          <strong>Fluid Intelligence (Gf)</strong>
+          <p>The capacity for novel reasoning, pattern recognition, and problem-solving independent of previously acquired knowledge. Fluid intelligence relies heavily on processing speed, working memory, and the ability to adapt to new situations. It peaks in the mid-20s and shows a gradual, steady decline beginning in the 30s that accelerates in later adulthood.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Crystallized Intelligence (Gc)</strong>
+          <p>Accumulated knowledge, vocabulary, and expertise gained through education and life experience. Crystallized intelligence remains stable or even increases through middle adulthood and often into the 60s and 70s, declining significantly only in very late life or in the presence of neurodegenerative disease.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 75-year-old retired attorney takes longer to learn a new smartphone app (reflecting decline in fluid intelligence) but remains highly articulate, well-read, and effective in advising younger colleagues on complex legal matters (reflecting preserved crystallized intelligence). This pattern exemplifies the differential aging trajectories of Gf and Gc.</p>
+        </div>
+
+        <h3>Schaie's Seattle Longitudinal Study</h3>
+        <p><span class="key-term">K. Warner Schaie's</span> Seattle Longitudinal Study, begun in 1956, has been the most comprehensive investigation of intellectual development in adulthood. Key findings include: (1) most cognitive abilities remain stable through the mid-50s to early 60s; (2) perceptual speed shows the earliest and steepest decline; (3) verbal abilities and inductive reasoning are relatively well-preserved; (4) individual differences in cognitive aging are enormous; and (5) factors associated with reduced cognitive decline include higher education, an active lifestyle, flexible personality, a stimulating environment, and absence of cardiovascular disease.</p>
+
+        <h3>Memory Changes in Aging</h3>
+        <p>Normal aging affects different memory systems differentially:</p>
+        <table>
+          <tr><th>Memory Type</th><th>Age-Related Change</th></tr>
+          <tr><td>Working memory</td><td>Declines; reduced capacity and processing speed</td></tr>
+          <tr><td>Episodic memory (recall of specific events)</td><td>Declines, especially free recall; recognition memory better preserved</td></tr>
+          <tr><td>Semantic memory (general knowledge)</td><td>Relatively stable; may even increase</td></tr>
+          <tr><td>Procedural memory (how to do things)</td><td>Well-preserved</td></tr>
+          <tr><td>Prospective memory (remembering to do things)</td><td>Mixed; time-based declines, event-based relatively stable</td></tr>
+        </table>
+
+        <p class="citation">Schaie, K. W. (2005). Developmental influences on adult intelligence: The Seattle Longitudinal Study. Oxford University Press.</p>
+      </div>
+
+      <!-- Section 4: Death, Dying, and Grief -->
+      <div class="content-section">
+        <h2>Death, Dying, and Grief</h2>
+        <p>Understanding the psychology of death and dying is essential for clinicians who work with patients facing terminal illness, their families, and bereaved individuals of all ages.</p>
+
+        <h3>K&uuml;bler-Ross's Five Stages</h3>
+        <p><span class="key-term">Elisabeth K&uuml;bler-Ross</span> (1969) proposed five stages that individuals may experience when facing their own death:</p>
+        <ol>
+          <li><strong>Denial:</strong> "This can't be happening to me."</li>
+          <li><strong>Anger:</strong> "Why me? This isn't fair!"</li>
+          <li><strong>Bargaining:</strong> "If I could just have more time, I'll..."</li>
+          <li><strong>Depression:</strong> Mourning impending losses; withdrawing from the world.</li>
+          <li><strong>Acceptance:</strong> Coming to terms with the reality of death; not necessarily happy, but at peace.</li>
+        </ol>
+
+        <div class="clinical-note">
+          <strong>Important Clinical Caveat</strong>
+          <p>K&uuml;bler-Ross's model, while widely known, has been criticized for implying a fixed sequence. Contemporary research shows that not all individuals experience all stages, the stages do not necessarily occur in the described order, and people may move back and forth between stages. The model is best understood as a description of common emotional reactions to dying rather than a prescriptive or universal progression. Clinicians should avoid rigidly applying this framework and instead attend to the individual's unique experience.</p>
+        </div>
+
+        <h3>Dual Process Model of Bereavement</h3>
+        <p>The <span class="key-term">Dual Process Model</span> (Stroebe &amp; Schut, 1999) offers a more nuanced framework for understanding grief. It proposes that bereaved individuals oscillate between two types of coping: <span class="key-term">loss-oriented coping</span> (confronting and processing the emotional pain of the loss) and <span class="key-term">restoration-oriented coping</span> (attending to life changes, new roles, and rebuilding). Healthy grieving involves dynamic oscillation between these two orientations rather than exclusively dwelling on loss or avoiding it.</p>
+
+        <div class="definition-box">
+          <strong>Complicated Grief / Prolonged Grief Disorder</strong>
+          <p>While grief is a normal process, a subset of bereaved individuals (approximately 7&ndash;10%) develop <span class="key-term">prolonged grief disorder</span>, characterized by persistent, pervasive longing for the deceased, difficulty accepting the death, emotional numbness, difficulty moving forward in life, and significant functional impairment lasting beyond 12 months (6 months in the ICD-11). This condition is distinct from major depressive disorder and requires specific clinical attention.</p>
+        </div>
+
+        <p class="citation">K&uuml;bler-Ross, E. (1969). On death and dying. Macmillan.</p>
+        <p class="citation">Stroebe, M., &amp; Schut, H. (1999). The dual process model of coping with bereavement. Death Studies, 23(3), 197&ndash;224.</p>
+      </div>
+
+      <!-- Section 5: Theories of Successful Aging -->
+      <div class="content-section">
+        <h2>Theories of Successful Aging</h2>
+        <p>Several theoretical perspectives address how individuals adapt to the challenges of aging, with each emphasizing different mechanisms for maintaining well-being in later life.</p>
+
+        <h3>Disengagement Theory</h3>
+        <p><span class="key-term">Disengagement theory</span> (Cumming &amp; Henry, 1961) was one of the first formal theories of aging. It proposed that it is natural and adaptive for older adults to gradually withdraw from social roles and relationships, and for society to reciprocally disengage from the aging individual. This mutual withdrawal was seen as functional for both the individual (allowing preparation for death) and society (facilitating orderly transfer of roles to younger people).</p>
+        <p>Disengagement theory has been widely criticized for normalizing social isolation and for lacking empirical support. Most research shows that continued social engagement is associated with better physical and mental health outcomes in older adults.</p>
+
+        <h3>Activity Theory</h3>
+        <p><span class="key-term">Activity theory</span> (Havighurst, 1961) proposes that successful aging involves maintaining the activities, roles, and social connections of middle adulthood for as long as possible. When roles are lost (e.g., through retirement or widowhood), the individual should find substitute activities. Happiness in late life is linked to staying active and engaged.</p>
+
+        <h3>Socioemotional Selectivity Theory</h3>
+        <div class="definition-box">
+          <strong>Socioemotional Selectivity Theory (SST)</strong>
+          <p>Proposed by <span class="key-term">Laura Carstensen</span> (1991), SST posits that as people age and perceive their remaining time as limited, they shift their goals from knowledge acquisition and future-oriented pursuits to emotional regulation and the pursuit of emotionally meaningful experiences. This leads older adults to prune their social networks, retaining only the most emotionally rewarding relationships. This selective narrowing is not a sign of decline but an adaptive motivational shift driven by time perspective.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 78-year-old woman has a smaller social network than she did at 40 but reports higher levels of satisfaction with her relationships. She prioritizes spending time with close family and lifelong friends over meeting new people. According to Carstensen's socioemotional selectivity theory, this pattern reflects a motivational shift toward emotionally meaningful goals as perceived time remaining decreases.</p>
+        </div>
+
+        <p class="citation">Carstensen, L. L. (1991). Socioemotional selectivity theory: Social activity in life-span context. Annual Review of Gerontology and Geriatrics, 11, 195&ndash;217.</p>
+      </div>
+
+      <!-- Section 5b: Baltes' Lifespan Development Theory -->
+      <div class="content-section">
+        <h2>Baltes' Lifespan Development Theory</h2>
+        <p><span class="key-term">Paul Baltes</span> (1987, 1997) was the foremost architect of the <span class="key-term">lifespan developmental psychology</span> perspective, which holds that development is a lifelong process&mdash;not something that ends with adolescence or early adulthood. His theoretical contributions are among the most important frameworks for understanding adult development and aging on the EPPP.</p>
+
+        <h3>Principles of Lifespan Development</h3>
+        <p>Baltes articulated several foundational propositions about the nature of development across the entire life course:</p>
+        <ul>
+          <li><strong>Lifelong:</strong> Development is not limited to childhood; it continues from conception to death. No single age period holds supremacy over another.</li>
+          <li><strong>Multidirectional:</strong> Development involves both growth (gains) and decline (losses). At any given point in life, some capacities are increasing while others are decreasing. This stands in contrast to models that view development as only growth or only decline.</li>
+          <li><strong>Development as gain AND loss:</strong> At every point in the lifespan, development is a joint expression of gains and losses. Even in childhood, the acquisition of new skills involves the loss of prior flexibility (e.g., perceptual narrowing in infancy). In aging, decline in one area may be accompanied by growth in another.</li>
+          <li><strong>Plasticity:</strong> Cognitive and behavioral capacities can be modified through training and experience at any age, though the degree of plasticity has limits and generally decreases with age.</li>
+          <li><strong>Historical embeddedness:</strong> Development is influenced by the historical and cultural conditions in which a person lives. Different cohorts develop differently because of differing historical circumstances.</li>
+          <li><strong>Contextualism:</strong> Development is the product of multiple interacting forces: age-graded influences (biological maturation, social expectations), history-graded influences (events affecting an entire cohort), and non-normative influences (unique individual experiences).</li>
+          <li><strong>Multidisciplinary:</strong> Understanding development requires contributions from psychology, biology, sociology, anthropology, and other fields.</li>
+        </ul>
+
+        <h3>The Selection, Optimization, and Compensation (SOC) Model</h3>
+        <div class="definition-box">
+          <strong>SOC Model</strong>
+          <p>Baltes and Baltes (1990) proposed that successful adaptation across the lifespan&mdash;and particularly in older adulthood&mdash;relies on three interrelated processes:<br><br>
+          <strong>Selection:</strong> Choosing which goals and domains to invest in, given that resources (time, energy, cognitive capacity) are finite. Selection can be <em>elective</em> (choosing goals proactively) or <em>loss-based</em> (narrowing goals in response to loss of resources).<br><br>
+          <strong>Optimization:</strong> Acquiring, refining, and investing resources to achieve selected goals at a high level. This includes practice, effort, and the acquisition of new skills or knowledge related to chosen domains.<br><br>
+          <strong>Compensation:</strong> Using alternative means to maintain functioning when previously used resources are no longer available. This involves substituting strategies or deploying new resources to offset losses.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Classic Illustration: The Pianist Rubinstein</strong>
+          <p>Baltes frequently used the concert pianist Arthur Rubinstein to illustrate SOC. In his 80s, Rubinstein continued to perform brilliantly by: (1) <strong>selecting</strong> a smaller number of pieces to perform (reducing his repertoire), (2) <strong>optimizing</strong> by practicing those selected pieces more frequently and intensively, and (3) <strong>compensating</strong> for reduced motor speed by slowing down before fast passages, creating a contrast that made the fast sections appear faster than they actually were.</p>
+        </div>
+
+        <h3>Baltes' Dual-Process Model of Cognitive Aging</h3>
+        <p>Baltes (1997) proposed a dual-process framework that distinguishes between two broad categories of cognitive functioning:</p>
+
+        <div class="definition-box">
+          <strong>Mechanics vs. Pragmatics of Cognition</strong>
+          <p><strong>Cognitive mechanics (biology-based):</strong> The hardware of the mind&mdash;basic information-processing capacities including processing speed, working memory, inhibitory efficiency, and the ability to detect patterns and relationships in novel information. Mechanics are closely tied to neurobiological integrity and show normative decline beginning in early adulthood, accelerating in later life. This construct parallels <span class="key-term">fluid intelligence (Gf)</span> in the Cattell-Horn model.<br><br>
+          <strong>Cognitive pragmatics (culture-based):</strong> The software of the mind&mdash;accumulated knowledge, expertise, cultural wisdom, and practical know-how acquired through education and experience. Pragmatics can be maintained or even increase well into old age, as long as the underlying mechanics remain sufficient to support their expression. This construct parallels <span class="key-term">crystallized intelligence (Gc)</span> in the Cattell-Horn model.</p>
+        </div>
+
+        <p>A key insight of Baltes' dual-process model is that pragmatics can partially <em>compensate</em> for declines in mechanics&mdash;but only up to a point. In very old age (the "fourth age," roughly 80+), the biological declines become so pronounced that even well-developed pragmatic systems can no longer fully compensate, leading to more pervasive functional decline.</p>
+
+        <h3>The Berlin Wisdom Paradigm</h3>
+        <p><span class="key-term">Paul Baltes</span> and colleagues at the Max Planck Institute in Berlin developed the most systematic empirical research program on <span class="key-term">wisdom</span>. The Berlin Wisdom Paradigm defines wisdom as <em>expert knowledge about the fundamental pragmatics of life</em>, encompassing five criteria:</p>
+        <ol>
+          <li><strong>Rich factual knowledge:</strong> Extensive knowledge about the human condition and life matters.</li>
+          <li><strong>Rich procedural knowledge:</strong> Strategies for dealing with life's problems and for offering advice, judgment, and planning.</li>
+          <li><strong>Lifespan contextualism:</strong> Awareness of the multiple contexts of life (education, family, work) and how they change over time.</li>
+          <li><strong>Value relativism:</strong> Acknowledgment and tolerance of differences in values and life priorities across individuals and cultures.</li>
+          <li><strong>Recognition and management of uncertainty:</strong> Understanding that life involves uncertainty and having strategies for dealing with it.</li>
+        </ol>
+
+        <p>Research using the Berlin paradigm found that wisdom does <em>not</em> automatically increase with age&mdash;older adults do not consistently score higher than younger adults. However, older adults with rich life experiences, high intelligence, and openness to experience have the greatest potential for wisdom. Clinical psychologists and those in mentoring professions showed relatively high wisdom scores.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>The SOC model has direct clinical relevance for working with older adults. Clinicians can help aging clients identify their most valued goals (selection), develop strategies to pursue those goals effectively (optimization), and find alternative approaches when abilities change (compensation). This framework is particularly useful in rehabilitation settings, chronic illness management, and psychotherapy with older adults experiencing age-related losses.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 72-year-old retired surgeon volunteers as a medical advisor rather than continuing to perform operations. She reads the latest journals daily to maintain her knowledge base and uses voice-recording software when her handwriting becomes unreliable. According to Baltes' SOC model, she is demonstrating selection (choosing advisory over surgical roles), optimization (continuing to update medical knowledge), and compensation (using technology to substitute for declining fine motor skills).</p>
+        </div>
+
+        <p class="citation">Baltes, P. B. (1987). Theoretical propositions of life-span developmental psychology: On the dynamics between growth and decline. Developmental Psychology, 23(5), 611&ndash;626.</p>
+        <p class="citation">Baltes, P. B. (1997). On the incomplete architecture of human ontogeny: Selection, optimization, and compensation as foundation of developmental theory. American Psychologist, 52(4), 366&ndash;380.</p>
+        <p class="citation">Baltes, P. B., &amp; Baltes, M. M. (1990). Psychological perspectives on successful aging: The model of selective optimization with compensation. In P. B. Baltes &amp; M. M. Baltes (Eds.), Successful aging (pp. 1&ndash;34). Cambridge University Press.</p>
+      </div>
+
+      <!-- Section 6: Dementia vs Normal Aging -->
+      <div class="content-section">
+        <h2>Dementia vs. Normal Cognitive Aging</h2>
+        <p>Distinguishing between normal age-related cognitive changes and pathological conditions is a critical clinical skill.</p>
+
+        <h3>Normal Aging</h3>
+        <p>Normal aging involves slowed processing speed, decreased working memory capacity, occasional word-finding difficulties ("tip of the tongue"), and reduced efficiency in encoding new episodic memories. Importantly, these changes typically do not significantly impair daily functioning or independent living.</p>
+
+        <h3>Mild Cognitive Impairment (MCI)</h3>
+        <p><span class="key-term">Mild Cognitive Impairment</span> represents a transitional state between normal aging and dementia. Individuals with MCI show cognitive decline greater than expected for their age and education level, but not severe enough to meet criteria for dementia. They maintain functional independence. Approximately 10&ndash;15% of individuals with MCI progress to dementia annually, though some remain stable or even revert to normal cognition.</p>
+
+        <h3>Major Neurocognitive Disorders (Dementias)</h3>
+        <table>
+          <tr><th>Type</th><th>Key Features</th><th>Distinguishing Characteristics</th></tr>
+          <tr><td>Alzheimer's Disease</td><td>Most common (~60&ndash;70% of dementias); gradual onset; progressive decline</td><td>Early memory loss (especially recent events); neurofibrillary tangles and amyloid plaques; genetic risk includes APOE-e4 allele</td></tr>
+          <tr><td>Vascular Dementia</td><td>Second most common; results from cerebrovascular damage</td><td>Stepwise decline (following strokes); may co-occur with Alzheimer's; associated with cardiovascular risk factors</td></tr>
+          <tr><td>Lewy Body Dementia</td><td>Third most common; Lewy bodies in cortex</td><td>Visual hallucinations; fluctuating cognition; parkinsonism; sensitivity to antipsychotics</td></tr>
+          <tr><td>Frontotemporal Dementia</td><td>Younger onset (often 45&ndash;65); frontal and temporal lobe degeneration</td><td>Personality and behavioral changes (disinhibition, apathy) precede memory loss; includes Pick's disease</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Neuropsychological assessment is essential in differentiating normal aging from MCI and various dementia subtypes. Key assessment tools include the Mini-Mental State Examination (MMSE), Montreal Cognitive Assessment (MoCA), and comprehensive neuropsychological batteries that evaluate memory, executive function, language, visuospatial skills, and processing speed. Clinicians should also screen for treatable conditions that can mimic dementia, including depression ("pseudodementia"), medication side effects, thyroid dysfunction, and vitamin B12 deficiency.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>An 80-year-old man presents with a gradual, progressive decline in memory over the past 3 years. He forgets recent conversations, has difficulty finding his way in familiar places, and his wife reports personality changes and word-finding problems. His MoCA score is 18/30. Brain imaging shows hippocampal atrophy. This presentation is most consistent with Alzheimer's disease, the most common neurodegenerative cause of dementia.</p>
+        </div>
+
+        <p class="citation">American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.).</p>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Emerging adulthood (Arnett):</strong> Ages 18&ndash;25; characterized by identity exploration, instability, self-focus, feeling in-between, and possibilities. Primarily applies to industrialized societies.</li>
+          <li><strong>Erikson's adult stages:</strong> Intimacy vs. Isolation (young adulthood, virtue = love), Generativity vs. Stagnation (middle adulthood, virtue = care), Ego Integrity vs. Despair (late adulthood, virtue = wisdom).</li>
+          <li><strong>Levinson's seasons:</strong> Adult development follows a sequence of eras with transitions. The midlife transition (40&ndash;45) may involve a "crisis" but a full-blown crisis occurs in only a minority of adults.</li>
+          <li><strong>Fluid vs. crystallized intelligence (Cattell &amp; Horn):</strong> Gf (novel reasoning) declines from mid-20s; Gc (accumulated knowledge) remains stable or increases through the 60s&ndash;70s. This is a very high-frequency EPPP topic.</li>
+          <li><strong>Memory and aging:</strong> Working memory and episodic memory (especially free recall) decline; semantic memory and procedural memory are preserved. Recognition memory declines less than free recall.</li>
+          <li><strong>K&uuml;bler-Ross stages:</strong> Denial, Anger, Bargaining, Depression, Acceptance. Know the stages but also know the criticism: not a fixed sequence; not universal.</li>
+          <li><strong>Successful aging theories:</strong> Disengagement theory (mutual withdrawal, largely discredited), Activity theory (stay active), Socioemotional Selectivity Theory (Carstensen: time perspective shifts goals from knowledge to emotional meaning). Know how each contrasts with the others.</li>
+          <li><strong>Baltes' lifespan principles:</strong> Development is lifelong, multidirectional, involves both gain and loss, shows plasticity, is historically embedded, and is contextual. These principles challenge models that view development only as growth or only as decline.</li>
+          <li><strong>SOC model (Baltes):</strong> Selection (choosing goals), Optimization (investing resources in chosen goals), Compensation (using alternative means when resources decline). Classic illustration: pianist Rubinstein in old age.</li>
+          <li><strong>Mechanics vs. pragmatics (Baltes):</strong> Mechanics (biology-based, parallels Gf) decline with age; pragmatics (culture-based, parallels Gc) can be maintained or increase. Pragmatics can compensate for mechanics decline, but only up to a point in very old age.</li>
+          <li><strong>Berlin Wisdom Paradigm:</strong> Wisdom = expert knowledge about fundamentals of life. Five criteria: factual knowledge, procedural knowledge, lifespan contextualism, value relativism, management of uncertainty. Wisdom does NOT automatically increase with age.</li>
+          <li><strong>Dementia types:</strong> Alzheimer's (most common, gradual, plaques and tangles), Vascular (stepwise, stroke-related), Lewy Body (visual hallucinations, fluctuating cognition, antipsychotic sensitivity), Frontotemporal (younger onset, personality changes first).</li>
+          <li><strong>MCI:</strong> Greater decline than normal aging but not meeting dementia criteria; 10&ndash;15% annual conversion to dementia. Some individuals remain stable or improve.</li>
+          <li><strong>Pseudodementia:</strong> Cognitive impairment caused by depression that mimics dementia; treatable and reversible. Key differential diagnosis in older adults.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="transformation-adolescence.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Transformation &mdash; Adolescence</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

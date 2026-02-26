@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocational Assessment & Interest Inventories – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Vocational Assessment &amp; Interest Inventories</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link active"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 12</div>
+        <h1>Vocational Assessment &amp; Interest Inventories</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~22 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Holland's RIASEC -->
+      <div class="content-section">
+        <h2>Holland's RIASEC Model</h2>
+        <p>John Holland's theory of vocational personalities and work environments is the most influential framework in career psychology. Holland proposed that both people and occupational environments can be categorized into six types, and career satisfaction and stability are maximized when there is <span class="key-term">congruence</span> between personality type and work environment.</p>
+
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Sample Occupations</th></tr>
+          <tr><td><strong>Realistic (R)</strong></td><td>Practical, hands-on, mechanical; prefers working with things and tools</td><td>Engineer, mechanic, farmer, electrician</td></tr>
+          <tr><td><strong>Investigative (I)</strong></td><td>Analytical, intellectual, scientific; prefers observation and problem-solving</td><td>Scientist, researcher, physician, psychologist</td></tr>
+          <tr><td><strong>Artistic (A)</strong></td><td>Creative, expressive, nonconforming; prefers unstructured activities</td><td>Artist, musician, writer, designer</td></tr>
+          <tr><td><strong>Social (S)</strong></td><td>Helping, cooperative, interpersonal; prefers teaching and caregiving</td><td>Teacher, counselor, social worker, nurse</td></tr>
+          <tr><td><strong>Enterprising (E)</strong></td><td>Persuasive, competitive, leadership-oriented; prefers business activities</td><td>Manager, salesperson, lawyer, politician</td></tr>
+          <tr><td><strong>Conventional (C)</strong></td><td>Organized, detail-oriented, systematic; prefers structured tasks</td><td>Accountant, banker, clerk, data analyst</td></tr>
+        </table>
+
+        <h3>The Hexagonal Model</h3>
+        <p>The six types are arranged in a <span class="key-term">hexagonal model</span> in the order R-I-A-S-E-C. Adjacent types on the hexagon are most similar (e.g., Realistic and Investigative), while opposite types are most dissimilar (e.g., Realistic and Social). This spatial arrangement generates three key constructs:</p>
+        <ul>
+          <li><strong>Congruence:</strong> The degree of match between an individual's personality type and their work environment. Higher congruence predicts greater job satisfaction, stability, and performance.</li>
+          <li><strong>Consistency:</strong> The degree to which an individual's top two types are adjacent on the hexagon. A person with an RI code (adjacent types) has higher consistency than a person with an RA code (alternating types).</li>
+          <li><strong>Differentiation:</strong> The degree to which an individual's profile shows clear peaks and valleys rather than a flat profile. Higher differentiation indicates clearer vocational identity.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Holland Code (Three-Letter Code):</strong>
+          <p>An individual's profile is typically summarized as a three-letter code representing their highest scores across the six types (e.g., <span class="key-term">SIA</span> = Social, Investigative, Artistic). This code is used to match individuals with congruent occupational environments. The <em>Dictionary of Holland Occupational Codes</em> and <em>O*NET</em> classify occupations by their Holland codes.</p>
+        </div>
+
+        <h3>Calculus and the Hexagonal Model</h3>
+        <p>Holland's <span class="key-term">calculus assumption</span> predicts that the relationships among types follow the hexagonal arrangement: adjacent types are most strongly correlated, alternate types are moderately correlated, and opposite types have the weakest correlations. Research provides moderate support for the calculus assumption, though the hexagonal model does not fit perfectly in all populations. For example:</p>
+        <table>
+          <tr><th>Relationship</th><th>Example Pair</th><th>Expected Correlation</th></tr>
+          <tr><td>Adjacent</td><td>Realistic-Investigative</td><td>Moderate to strong positive</td></tr>
+          <tr><td>Alternate</td><td>Realistic-Artistic</td><td>Low to moderate</td></tr>
+          <tr><td>Opposite</td><td>Realistic-Social</td><td>Near zero or negative</td></tr>
+        </table>
+      </div>
+
+      <!-- Section 2: Interest Inventories -->
+      <div class="content-section">
+        <h2>Major Interest Inventories</h2>
+
+        <h3>Strong Interest Inventory (SII)</h3>
+        <p>The <span class="key-term">Strong Interest Inventory</span> is the most widely used vocational interest measure. Based on the empirical work of E. K. Strong Jr. and organized around Holland's RIASEC framework, the SII provides four types of scales:</p>
+        <ul>
+          <li><strong>General Occupational Themes (GOTs):</strong> Map directly to Holland's six RIASEC types, providing a broad picture of interests</li>
+          <li><strong>Basic Interest Scales (BIS):</strong> More specific interest clusters within each GOT (e.g., under Investigative: Science, Research, Medical Science, Mathematics)</li>
+          <li><strong>Occupational Scales (OS):</strong> Compare the examinee's response pattern to those of satisfied workers in specific occupations. Scores are reported as Similar, Dissimilar, or Mid-range</li>
+          <li><strong>Personal Style Scales (PSS):</strong> Assess preferences for work style, learning environment, leadership style, risk taking, and team orientation</li>
+        </ul>
+        <p>The SII uses a <span class="key-term">criterion-keying approach</span> for its Occupational Scales, meaning items were selected based on empirical differences between the responses of people in a given occupation and a general reference sample.</p>
+
+        <div class="clinical-note">
+          <strong>Interest Inventories and Special Populations:</strong>
+          <p>Interest inventories should be interpreted cautiously with populations who have had limited exposure to diverse activities and occupations. Adolescents, individuals from lower socioeconomic backgrounds, and culturally diverse clients may have restricted interest profiles not because of limited potential, but because of limited exposure to varied occupational options. Career counselors should use interest inventories as starting points for exploration rather than definitive predictors, and should actively broaden clients' awareness of options they may not have considered.</p>
+        </div>
+
+        <h3>Self-Directed Search (SDS)</h3>
+        <p>Also developed by Holland, the <span class="key-term">Self-Directed Search</span> is a self-administered, self-scored, and self-interpreted career exploration tool. The examinee rates their activities, competencies, occupations, and self-estimates across the six RIASEC types. The result is a three-letter summary code used to search for matching occupations in the <em>Occupations Finder</em>. The SDS is unique in that it requires no professional administration or interpretation.</p>
+
+        <h3>Campbell Interest and Skill Survey (CISS)</h3>
+        <p>The <span class="key-term">CISS</span> (Campbell, 1992) is unique among interest inventories because it measures both interests AND self-reported skills on parallel scales. This dual assessment allows identification of four patterns: (1) high interest/high skill = <strong>pursue</strong>, (2) high interest/low skill = <strong>develop</strong>, (3) low interest/high skill = <strong>explore</strong>, and (4) low interest/low skill = <strong>avoid</strong>. The CISS is organized around seven orientation scales (Influencing, Organizing, Helping, Creating, Analyzing, Producing, Adventuring).</p>
+
+        <h3>Kuder Career Search</h3>
+        <p>The <span class="key-term">Kuder Career Search</span> uses forced-choice triads (the examinee picks the most and least preferred activity from each set of three). It provides scores on six Activity Preference Scales and compares the individual's profile to those of satisfied workers in various occupations (Person Match). The Kuder system emphasizes ipsative scores (comparing the individual's own interests to each other rather than to normative data).</p>
+
+        <div class="example-box">
+          <strong>Clinical Application:</strong>
+          <p>A 22-year-old college student uncertain about career direction completes the Strong Interest Inventory and obtains a three-letter code of AIE (Artistic, Investigative, Enterprising). The Occupational Scales show "Similar" ratings for advertising manager, public relations director, and interior designer. The Basic Interest Scales show peak elevations on Visual Arts, Writing, and Public Speaking. This profile suggests careers combining creative expression with intellectual challenge and leadership opportunity.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Career Development Theories -->
+      <div class="content-section">
+        <h2>Career Development Theories</h2>
+
+        <h3>Super's Life-Span, Life-Space Theory</h3>
+        <p>Donald Super's theory conceptualizes career development as a lifelong process occurring across multiple life roles. Key concepts include:</p>
+        <ul>
+          <li><strong>Career Rainbow:</strong> A visual model showing multiple life roles (child, student, leisurite, citizen, worker, spouse, homemaker, parent) enacted across the <span class="key-term">life-space</span> (theaters: home, community, school, workplace) and <span class="key-term">life-span</span> (developmental stages)</li>
+          <li><strong>Developmental Stages:</strong> Growth (birth-14), Exploration (15-24), Establishment (25-44), Maintenance (45-64), and Disengagement (65+). Each stage has specific developmental tasks</li>
+          <li><strong>Career Maturity:</strong> The readiness to make age-appropriate career decisions, measured by planfulness, exploration, information, decision-making, and reality orientation</li>
+          <li><strong>Self-Concept:</strong> Career choice is an implementation of one's self-concept. As self-concept evolves, so do career choices</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Super's Archway Model:</strong>
+          <p>The Archway Model illustrates that career development is shaped by two pillars: biographical-geographical factors (base) and psychological characteristics (columns). The left column represents personality, needs, and values; the right column represents aptitudes, interests, and achievements. The keystone of the arch is the self-concept, which integrates all factors into career decision-making.</p>
+        </div>
+
+        <h3>Krumboltz's Social Learning Theory of Career Decision Making</h3>
+        <p>John Krumboltz applied Bandura's social learning principles to career development, proposing that career decisions are influenced by four factors: (1) <span class="key-term">genetic endowment</span> and special abilities, (2) <span class="key-term">environmental conditions and events</span>, (3) <span class="key-term">learning experiences</span> (instrumental and associative), and (4) <span class="key-term">task approach skills</span> (problem-solving, work habits, cognitive responses). Krumboltz later developed the concept of <span class="key-term">planned happenstance</span>, which encourages clients to remain open to unplanned events that can become career opportunities through curiosity, persistence, flexibility, optimism, and risk taking.</p>
+
+        <div class="definition-box">
+          <strong>Instrumental vs. Associative Learning in Career Development:</strong>
+          <p><span class="key-term">Instrumental learning</span> occurs when the individual directly engages in an activity and experiences its consequences (e.g., a student excels in a biology class and receives praise, strengthening interest in science). <span class="key-term">Associative learning</span> occurs through classical conditioning or observation — pairing a previously neutral stimulus with a positive or negative experience (e.g., a child observes a parent's satisfaction in their medical career, developing a positive association with healthcare). Both types shape career-relevant self-observation generalizations (beliefs about abilities) and worldview generalizations (beliefs about the world of work).</p>
+        </div>
+
+        <h3>Theory of Work Adjustment (TWA)</h3>
+        <p>Dawis and Lofquist's <span class="key-term">Theory of Work Adjustment</span> proposes that job satisfaction and tenure result from the correspondence between an individual's abilities and the job's requirements (<span class="key-term">satisfactoriness</span>) and between the individual's needs/values and the job's reinforcers (<span class="key-term">satisfaction</span>). When correspondence is low, adjustment occurs through four modes: activeness (changing the environment), reactiveness (changing oneself), flexibility (tolerance for discorrespondence), and perseverance (length of time one tolerates discorrespondence before leaving).</p>
+
+        <div class="definition-box">
+          <strong>Satisfaction vs. Satisfactoriness (TWA):</strong>
+          <p><span class="key-term">Satisfaction</span> reflects the worker's subjective contentment — the degree to which the job provides reinforcers that meet the worker's needs and values. <span class="key-term">Satisfactoriness</span> reflects the employer's assessment — the degree to which the worker's abilities meet the performance requirements of the job. Together, these two forms of correspondence predict <span class="key-term">tenure</span> (job stability). Both must be assessed for a complete work adjustment analysis.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Assessment Implication:</strong>
+          <p>The Minnesota Importance Questionnaire (MIQ) is the primary assessment instrument associated with TWA. It measures 20 psychological needs organized into six values: Achievement, Comfort, Status, Altruism, Safety, and Autonomy. These scores are compared to Occupational Reinforcer Patterns (ORPs) to predict satisfaction in specific jobs.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Comprehensive Career Assessment Battery:</strong>
+          <p>A thorough career assessment typically integrates multiple data sources: (1) an interest inventory (e.g., SII) to identify what activities the client finds appealing, (2) an abilities/aptitude measure (e.g., ASVAB, DAT) to identify what the client can do well, (3) a values assessment (e.g., MIQ, Work Values Inventory) to identify what the client finds meaningful and rewarding, and (4) a clinical interview exploring career history, work experiences, life circumstances, and barriers. This multimethod approach provides a more complete picture than any single measure.</p>
+        </div>
+
+        <div class="citation">Holland, J. L. (1997). <em>Making vocational choices: A theory of vocational personalities and work environments</em> (3rd ed.). Psychological Assessment Resources.</div>
+      </div>
+
+      <!-- Section 4: Additional Career Models -->
+      <div class="content-section">
+        <h2>Additional Career Decision-Making Approaches</h2>
+
+        <h3>Gottfredson's Theory of Circumscription and Compromise</h3>
+        <p>Linda Gottfredson proposed that career aspirations develop through a process of <span class="key-term">circumscription</span> (narrowing acceptable alternatives based on gender type, social prestige, and personal interests) and <span class="key-term">compromise</span> (adjusting aspirations to accommodate external constraints). Children progressively eliminate options based on: sex type (ages 6-8), social valuation/prestige (ages 9-13), and then unique personal interests (age 14+). When forced to compromise, individuals sacrifice interests first, then prestige level, and protect gender type last.</p>
+
+        <div class="example-box">
+          <strong>Gottfredson's Circumscription Process:</strong>
+          <p>Stage 1 (ages 3-5): Orientation to size and power — children recognize that adults hold occupational roles. Stage 2 (ages 6-8): Orientation to sex roles — children eliminate occupations perceived as gender-inappropriate. Stage 3 (ages 9-13): Orientation to social valuation — children eliminate occupations perceived as too low or too high in prestige for their self-concept. Stage 4 (age 14+): Orientation to internal, unique self — individuals refine choices based on personal interests, values, and abilities. Each stage progressively narrows the "zone of acceptable alternatives."</p>
+        </div>
+
+        <h3>Savickas Career Construction Theory</h3>
+        <p>Mark Savickas extended Super's theory by emphasizing that careers are constructed through narrative meaning-making. The concept of <span class="key-term">career adaptability</span> — comprising concern (planning), control (decision-making), curiosity (exploration), and confidence (self-efficacy) — replaces the older concept of career maturity. The Career Construction Interview asks clients to describe role models, favorite stories, and early memories to reveal life themes that guide career construction.</p>
+
+        <h3>Roe's Needs Theory</h3>
+        <p>Anne Roe proposed that early childhood experiences, particularly the parent-child relationship, influence the development of need structures that ultimately shape career choice. Roe categorized parenting styles (overprotective, avoidant, accepting) and hypothesized that individuals who experienced emotional warmth gravitate toward person-oriented occupations (social service, teaching), while those with cold or rejecting parenting lean toward non-person-oriented careers (technology, science). Although the empirical evidence for Roe's specific parent-child predictions is weak, her classification of occupations by field and level remains influential.</p>
+
+        <h3>Social Cognitive Career Theory (SCCT)</h3>
+        <p><span class="key-term">SCCT</span> (Lent, Brown, & Hackett, 1994) applies Bandura's social cognitive theory to career development, emphasizing three key cognitive-person variables:</p>
+        <ul>
+          <li><strong>Self-efficacy beliefs:</strong> An individual's confidence in their ability to perform specific tasks or behaviors. Self-efficacy is the most powerful predictor of career interests and choices in SCCT.</li>
+          <li><strong>Outcome expectations:</strong> Beliefs about the consequences of performing specific behaviors (e.g., "If I become a doctor, I will have financial security and social prestige")</li>
+          <li><strong>Personal goals:</strong> The intentions to engage in particular activities or produce particular outcomes</li>
+        </ul>
+        <p>SCCT proposes that self-efficacy and outcome expectations jointly influence interest development, which in turn shapes career goals and actions. Contextual factors (barriers and supports) moderate the translation of interests into goals and goals into actions.</p>
+
+        <div class="definition-box">
+          <strong>Self-Efficacy Sources in Career Development:</strong>
+          <p>Following Bandura, SCCT identifies four sources of self-efficacy that shape career-related confidence: (1) <span class="key-term">performance accomplishments</span> (mastery experiences — the most powerful source), (2) <span class="key-term">vicarious learning</span> (observing similar others succeed), (3) <span class="key-term">verbal persuasion</span> (encouragement from others), and (4) <span class="key-term">physiological/affective states</span> (emotional reactions to career-related activities). Career counselors can strengthen self-efficacy through structured success experiences and exposure to diverse role models.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>RIASEC order:</strong> Realistic-Investigative-Artistic-Social-Enterprising-Conventional. Adjacent types are most similar; opposite types are most dissimilar.</li>
+          <li><strong>Holland constructs:</strong> Congruence (person-environment fit), consistency (adjacent types in code), differentiation (clear peaks in profile). Congruence is the strongest predictor of satisfaction.</li>
+          <li><strong>Strong Interest Inventory:</strong> Uses criterion keying for Occupational Scales. Four scale types: GOTs, BIS, OS, PSS. Based on RIASEC framework.</li>
+          <li><strong>SDS:</strong> Self-administered, self-scored, self-interpreted. Developed by Holland.</li>
+          <li><strong>Kuder:</strong> Forced-choice triads; ipsative scoring.</li>
+          <li><strong>Super's stages:</strong> Growth, Exploration, Establishment, Maintenance, Disengagement. Career choice implements self-concept.</li>
+          <li><strong>Krumboltz:</strong> Social learning theory applied to careers. Four factors influencing career decisions. Planned happenstance emphasizes openness to unplanned opportunities.</li>
+          <li><strong>TWA (Dawis &amp; Lofquist):</strong> Satisfaction (needs met by reinforcers) + Satisfactoriness (abilities meet requirements) = tenure. MIQ is the associated instrument.</li>
+          <li><strong>Gottfredson:</strong> Circumscription and compromise. Gender type is last to be sacrificed in compromise.</li>
+          <li><strong>Interests vs. abilities:</strong> Interest inventories predict what activities a person will enjoy, NOT what they will be good at. Interests are independent of aptitude.</li>
+          <li><strong>SCCT (Lent, Brown, Hackett):</strong> Self-efficacy + outcome expectations influence interests, which influence goals and actions. Self-efficacy is the most powerful predictor of career choice.</li>
+          <li><strong>Self-efficacy sources:</strong> Performance accomplishments (strongest), vicarious learning, verbal persuasion, physiological states. Follows Bandura.</li>
+          <li><strong>Roe's theory:</strong> Early parent-child relationships influence career choice. Person-oriented vs. non-person-oriented occupations. Empirical support for specific predictions is weak.</li>
+          <li><strong>Savickas's four Cs:</strong> Concern, Control, Curiosity, Confidence. Career adaptability replaces career maturity.</li>
+          <li><strong>Criterion keying:</strong> SII Occupational Scales were developed by comparing item responses of people in specific occupations to a general reference sample. This is the same approach used for MMPI clinical scales.</li>
+          <li><strong>Calculus assumption:</strong> Holland predicted that relationships among types follow the hexagonal arrangement (adjacent = most similar, opposite = most dissimilar). Moderate empirical support.</li>
+          <li><strong>Career rainbow (Super):</strong> Visual model showing multiple life roles (worker, spouse, citizen, etc.) across the life-span and life-space. Illustrates that career is only one of many roles.</li>
+          <li><strong>Planned happenstance (Krumboltz):</strong> Openness to unplanned events that become opportunities through curiosity, persistence, flexibility, optimism, and risk-taking.</li>
+          <li><strong>Instrumental vs. associative learning:</strong> Instrumental = direct experience + consequences. Associative = classical conditioning or observation. Both shape career-related beliefs.</li>
+          <li><strong>CISS:</strong> Measures both interests AND self-reported skills. Four patterns: pursue (high/high), develop (high interest/low skill), explore (low interest/high skill), avoid (low/low).</li>
+          <li><strong>Career Maturity Inventory (CMI):</strong> Crites' measure of career maturity based on Super's theory. Assesses readiness to make age-appropriate career decisions.</li>
+          <li><strong>O*NET:</strong> The Occupational Information Network. U.S. Department of Labor database classifying occupations by Holland codes, required skills, knowledge, abilities, and work activities. Replaced the DOT.</li>
+          <li><strong>Person-environment fit:</strong> Central concept across Holland, TWA, and other career theories. Better fit between person and environment predicts satisfaction, performance, and tenure.</li>
+          <li><strong>DAT (Differential Aptitude Tests):</strong> Multi-aptitude battery measuring verbal reasoning, numerical ability, abstract reasoning, mechanical reasoning, space relations, spelling, language usage, and perceptual speed.</li>
+          <li><strong>ASVAB:</strong> Armed Services Vocational Aptitude Battery. Yields an AFQT composite score for military qualification and ten subtest scores used for military occupational specialty placement.</li>
+          <li><strong>Values Scale (Super &amp; Nevill):</strong> 21 values scales including economic rewards, prestige, altruism, creativity, physical activity. Values are distinct from interests — what is important vs. what is enjoyed.</li>
+          <li><strong>Congruence is key:</strong> Holland's congruence (match between individual type and work environment type) is the single most important predictor of vocational satisfaction and stability.</li>
+          <li><strong>Super's career maturity:</strong> Readiness to make age-appropriate career decisions. Measured by Career Maturity Inventory (CMI). Precursor to Savickas's career adaptability construct.</li>
+          <li><strong>Circumscription order of sacrifice:</strong> When compromising, individuals sacrifice interests first, then prestige, and protect sex type (gender type) last. This is a frequently tested Gottfredson distinction.</li>
+          <li><strong>Roe's field-level classification:</strong> Classifies occupations by field (8 categories, e.g., service, science, organization) and level (6 levels based on degree of responsibility/skill). Creating a two-dimensional matrix of the occupational world.</li>
+          <li><strong>TWA four adjustment modes:</strong> Activeness (change environment), reactiveness (change self), flexibility (tolerate discrepancy), perseverance (time before leaving). Know all four.</li>
+          <li><strong>Holland consistency:</strong> Adjacent types in a person's code are more consistent (e.g., RI is more consistent than RA). Consistent codes predict more stable career paths.</li>
+          <li><strong>Differentiation (Holland):</strong> The degree of clarity in a person's profile. A differentiated profile has clear peaks and valleys; an undifferentiated (flat) profile suggests unclear vocational identity.</li>
+          <li><strong>Identity (Holland):</strong> The clarity and stability of a person's vocational self-concept. Measured by the My Vocational Situation (MVS) scale.</li>
+          <li><strong>Bandura's four self-efficacy sources:</strong> Performance accomplishments (strongest), vicarious learning, verbal persuasion, physiological/affective states. SCCT directly incorporates these into career development.</li>
+          <li><strong>Super's mini-cycle:</strong> Within each major life stage, individuals may recycle through growth, exploration, establishment, maintenance, and disengagement as they transition between roles or face career changes. Recycling is normative, not pathological.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch3-neuropsych-clinical.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Neuropsych Screening &amp; Clinical Measurement</div>
+          </div>
+        </a>
+        <a href="ch5-score-interpretation.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Test Score Interpretation &amp; Psychometrics</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

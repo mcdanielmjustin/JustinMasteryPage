@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competence (Std 2) | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Competence</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology &amp; Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="sidebar-section-label">Part A: APA Ethics Code</li>
+        <li class="chapter-item"><a href="ethics-overview.html" class="chapter-link"><span class="chapter-number">A0</span>Overview & Principles</a></li>
+        <li class="chapter-item"><a href="resolving-ethical-issues.html" class="chapter-link"><span class="chapter-number">A1</span>Resolving Ethical Issues</a></li>
+        <li class="chapter-item"><a href="competence.html" class="chapter-link active"><span class="chapter-number">A2</span>Competence</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link"><span class="chapter-number">A3</span>Human Relations</a></li>
+        <li class="chapter-item"><a href="privacy-confidentiality.html" class="chapter-link"><span class="chapter-number">A4</span>Privacy & Confidentiality</a></li>
+        <li class="chapter-item"><a href="advertising.html" class="chapter-link"><span class="chapter-number">A5</span>Advertising</a></li>
+        <li class="chapter-item"><a href="record-keeping-fees.html" class="chapter-link"><span class="chapter-number">A6</span>Record Keeping & Fees</a></li>
+        <li class="chapter-item"><a href="education-training.html" class="chapter-link"><span class="chapter-number">A7</span>Education & Training</a></li>
+        <li class="chapter-item"><a href="research-publication.html" class="chapter-link"><span class="chapter-number">A8</span>Research & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">A9</span>Assessment</a></li>
+        <li class="chapter-item"><a href="therapy-ethics.html" class="chapter-link"><span class="chapter-number">A10</span>Therapy</a></li>
+        <li class="sidebar-section-label">Part B: Psychopharmacology</li>
+        <li class="chapter-item"><a href="pharma-foundations.html" class="chapter-link"><span class="chapter-number">B0</span>Pharmacological Foundations</a></li>
+        <li class="chapter-item"><a href="antidepressants.html" class="chapter-link"><span class="chapter-number">B1</span>Antidepressants</a></li>
+        <li class="chapter-item"><a href="antipsychotics.html" class="chapter-link"><span class="chapter-number">B2</span>Antipsychotics</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">B3</span>Anxiolytics & Sedatives</a></li>
+        <li class="chapter-item"><a href="mood-stabilizers.html" class="chapter-link"><span class="chapter-number">B4</span>Mood Stabilizers</a></li>
+        <li class="chapter-item"><a href="stimulants-adhd.html" class="chapter-link"><span class="chapter-number">B5</span>Stimulants & ADHD Meds</a></li>
+        <li class="sidebar-section-label">Appendix</li>
+        <li class="chapter-item"><a href="professional-issues.html" class="chapter-link"><span class="chapter-number">+</span>Professional Issues</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter A2 of 17</div>
+        <h1>Competence (Std 2)</h1>
+        <div class="chapter-meta">
+          <span>Boundaries of competence, maintaining expertise</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+<section class="content-section">
+        <h2>Overview of Standard 2: Competence</h2>
+        <p>Standard 2 of the APA Ethics Code addresses the foundational requirement that psychologists practice only within the <span class="key-term">boundaries of their competence</span>, based on their education, training, supervised experience, consultation, study, or professional experience. Competence is not a fixed trait but a dynamic, evolving professional obligation.</p>
+        <p>This standard is one of the most frequently tested areas on the EPPP because it intersects with virtually every professional activity a psychologist undertakes -- from therapy and assessment to research, teaching, and consultation.</p>
+        <div class="definition-box">
+          <strong>Competence Defined</strong>
+          <p>Professional competence refers to the ability to effectively and appropriately apply the knowledge, skills, and attitudes necessary to fulfill one's professional roles. It encompasses both intellectual understanding and practical skill, shaped by ongoing education and experience.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 2.01: Boundaries of Competence</h2>
+        <p>This subsection establishes the fundamental rule: psychologists provide services, teach, and conduct research only within the boundaries of their competence.</p>
+
+        <h3>2.01(a) -- Education, Training, and Experience</h3>
+        <p>Psychologists provide services in areas in which they have established competence through education, training, supervised experience, consultation, study, or professional experience. Competence is typically demonstrated through:</p>
+        <ul>
+          <li>Graduate coursework in the specific area</li>
+          <li>Supervised clinical or research experience</li>
+          <li>Postdoctoral training or specialty fellowships</li>
+          <li>Continuing education in the specific domain</li>
+          <li>Peer consultation and supervision</li>
+        </ul>
+
+        <h3>2.01(b) -- New Areas of Practice</h3>
+        <p>When psychologists wish to provide services in areas where recognized professional standards do not yet exist, they take reasonable steps to ensure the competence of their work and to protect clients, students, and others from harm. This provision acknowledges that psychology is an evolving field.</p>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist trained in cognitive-behavioral therapy wants to begin providing telepsychology services. Under 2.01(b), the psychologist should obtain training in telehealth best practices, learn the relevant technology, understand the legal requirements of interstate practice, and seek consultation from colleagues experienced in telepsychology before beginning.</p>
+        </div>
+
+        <h3>2.01(c) -- Unfamiliar Populations</h3>
+        <p>In areas where recognized training standards for serving specific populations do not yet exist, psychologists with closely related prior training or experience may provide such services, with appropriate study, training, supervision, and/or consultation. This is particularly relevant to working with diverse cultural, ethnic, or linguistic groups.</p>
+
+        <h3>2.01(d) -- Forensic Activities</h3>
+        <p>When psychologists are asked to provide services to individuals for whom appropriate mental health services are not available and for which psychologists have not obtained the requisite competence, they may provide services with the closest related competence -- but only until a qualified provider becomes available.</p>
+
+        <h3>2.01(e) -- New Techniques</h3>
+        <p>In emerging areas where generally recognized standards for preparatory training do not yet exist, psychologists take reasonable steps to ensure competence and protect clients from harm.</p>
+
+        <h3>2.01(f) -- Familiarity with Relevant Factors</h3>
+        <p>When assuming forensic roles, psychologists must be knowledgeable about the judicial or administrative rules governing their participation.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 2.02: Providing Services in Emergencies</h2>
+        <p>In emergencies, when psychologists are asked to provide services to individuals for whom other mental health services are not available, psychologists may provide such services to ensure that services are not denied. The services are discontinued as soon as the emergency has ended or appropriate services are available.</p>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>Standard 2.02 is the emergency exception to competence boundaries. On the EPPP, if a question describes a crisis situation (e.g., a natural disaster) where no other provider is available, the psychologist may provide services outside their typical area of competence. However, this is temporary -- they must stop once the emergency ends or a qualified provider is found.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 2.03: Maintaining Competence</h2>
+        <p>Psychologists undertake ongoing efforts to develop and maintain their competence. This includes:</p>
+        <ul>
+          <li>Staying current with scientific and professional developments in their areas of practice</li>
+          <li>Pursuing continuing education (CE) activities</li>
+          <li>Engaging in peer consultation and supervision</li>
+          <li>Reviewing current literature and research findings</li>
+          <li>Attending professional conferences and workshops</li>
+        </ul>
+
+        <h3>Continuing Education Requirements</h3>
+        <p>Most state licensing boards require psychologists to complete a specified number of <span class="key-term">continuing education (CE) credits</span> during each renewal period (typically 20-40 hours per biennium). Many states require specific CE topics such as ethics, cultural diversity, or evidence-based practice.</p>
+
+        <h3>The Competence Constellation Model</h3>
+        <p>Rodolfa et al. (2005) proposed a <span class="key-term">competence constellation model</span> that distinguishes between foundational competencies and functional competencies:</p>
+        <table>
+          <tr><th>Foundational Competencies</th><th>Functional Competencies</th></tr>
+          <tr><td>Reflective practice and self-assessment</td><td>Assessment, diagnosis, and case conceptualization</td></tr>
+          <tr><td>Scientific knowledge and methods</td><td>Intervention</td></tr>
+          <tr><td>Relationships (therapeutic alliance)</td><td>Consultation</td></tr>
+          <tr><td>Ethical and legal standards</td><td>Research and evaluation</td></tr>
+          <tr><td>Individual and cultural diversity</td><td>Supervision and teaching</td></tr>
+          <tr><td>Interdisciplinary systems</td><td>Management and administration</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 2.04: Bases for Scientific and Professional Judgments</h2>
+        <p>Psychologists' work must be based on established scientific and professional knowledge of the discipline. This means psychologists should rely on:</p>
+        <ul>
+          <li>Peer-reviewed research and empirical evidence</li>
+          <li>Established theories grounded in scientific investigation</li>
+          <li>Professional guidelines and practice parameters</li>
+          <li>Clinical judgment informed by training and experience, not personal bias or speculation</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Evidence-Based Practice</strong>
+          <p>The APA Presidential Task Force (2006) defined <span class="key-term">evidence-based practice in psychology (EBPP)</span> as the integration of the best available research with clinical expertise in the context of patient characteristics, culture, and preferences. EBPP is the operational expression of Standard 2.04.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 2.05: Delegation of Work to Others</h2>
+        <p>Psychologists who delegate work to employees, supervisees, research or teaching assistants, or others:</p>
+        <ul>
+          <li>Take reasonable steps to avoid delegating work to persons with a <span class="key-term">multiple relationship</span> with those being served</li>
+          <li>Authorize only those responsibilities the person can be expected to perform competently based on their education, training, or experience</li>
+          <li>Ensure that such persons perform the services competently</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist delegates psychological testing administration to a psychometrist. Under 2.05, the psychologist must ensure the psychometrist is properly trained in administering the specific test, must supervise the work appropriately, and retains ultimate responsibility for the interpretation and clinical use of test results.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 2.06: Personal Problems and Conflicts</h2>
+        <p>This subsection addresses situations where a psychologist's personal problems may interfere with professional functioning.</p>
+
+        <h3>2.06(a) -- Awareness of Personal Problems</h3>
+        <p>Psychologists refrain from initiating an activity when they know or should know that there is a substantial likelihood that their personal problems will prevent them from performing their work-related activities in a competent manner.</p>
+
+        <h3>2.06(b) -- Taking Appropriate Action</h3>
+        <p>When psychologists become aware of personal problems that may interfere with their performing work-related duties adequately, they take appropriate measures such as:</p>
+        <ul>
+          <li>Obtaining professional consultation or assistance</li>
+          <li>Determining whether they should limit, suspend, or terminate work-related duties</li>
+          <li>Seeking personal therapy</li>
+          <li>Taking a leave of absence if necessary</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>EPPP questions about impaired psychologists test whether you know that the ethical response involves the psychologist taking responsibility for their own impairment. The first step is self-awareness; the second is taking appropriate corrective action (consultation, therapy, limiting practice). Colleagues who become aware of an impaired psychologist should attempt informal resolution (Standard 1.04) by speaking to the psychologist directly.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Scope of Practice</h2>
+        <p><span class="key-term">Scope of practice</span> refers to the legally defined range of activities that a licensed professional is authorized to perform. Scope of practice is established by state licensing laws and varies across jurisdictions.</p>
+
+        <h3>Competence vs. Scope of Practice</h3>
+        <p>These are related but distinct concepts:</p>
+        <table>
+          <tr><th>Competence (Ethical)</th><th>Scope of Practice (Legal)</th></tr>
+          <tr><td>Defined by the Ethics Code and professional standards</td><td>Defined by state statutes and licensing regulations</td></tr>
+          <tr><td>Based on individual training, education, and experience</td><td>Based on the profession's legally permitted activities</td></tr>
+          <tr><td>Self-assessed and regulated by professional norms</td><td>Externally imposed by law and regulation</td></tr>
+          <tr><td>Can be narrower than scope of practice</td><td>Sets the outer boundary of permitted practice</td></tr>
+        </table>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A state's scope of practice for psychologists may include neuropsychological assessment. However, a psychologist trained only in clinical therapy has not established individual competence in neuropsychological assessment, even though it falls within the profession's legal scope of practice. The psychologist should not perform neuropsychological assessments without obtaining appropriate training.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li>Psychologists practice only within the boundaries of their competence based on education, training, supervised experience, consultation, study, or professional experience.</li>
+          <li>The <strong>emergency exception</strong> (2.02) allows temporary practice outside competence boundaries when no other provider is available during a crisis.</li>
+          <li>Maintaining competence (2.03) is an ongoing obligation requiring continuing education and professional development.</li>
+          <li>Professional judgments must be based on <strong>established scientific and professional knowledge</strong> (2.04), not personal opinion or speculation.</li>
+          <li>When delegating work (2.05), the psychologist retains responsibility for ensuring the quality and competence of the delegated services.</li>
+          <li>Personal problems that may impair functioning must be addressed proactively (2.06) through consultation, therapy, or limiting practice.</li>
+          <li><strong>Scope of practice</strong> (legal) differs from <strong>competence</strong> (ethical); a psychologist may have legal authority to perform an activity without having individual competence to do so.</li>
+        </ul>
+      </section>
+      <div class="nav-buttons">
+        <a href="resolving-ethical-issues.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Resolving Ethical Issues</div>
+          </div>
+        </a>
+        <a href="human-relations.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Human Relations</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

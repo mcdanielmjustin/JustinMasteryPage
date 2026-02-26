@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neurological Disorders | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 8px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-secondary); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 16px 0; }
+    .example-box strong { color: var(--accent); }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .clinical-note strong { color: #60a5fa; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 12px 16px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 16px; border: 1px solid var(--border); color: var(--text-secondary); }
+    tr:hover td { background: var(--bg-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Neurological Disorders</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 7</div>
+        <div class="domain-title">Biological Bases of Behavior</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="memory-forgetting.html" class="chapter-link"><span class="chapter-number">1</span>Memory & Forgetting</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">2</span>Cerebral Cortex</a></li>
+        <li class="chapter-item"><a href="subcortical.html" class="chapter-link"><span class="chapter-number">3</span>Subcortical Structures</a></li>
+        <li class="chapter-item"><a href="emotion-stress.html" class="chapter-link"><span class="chapter-number">4</span>Emotion & Stress</a></li>
+        <li class="chapter-item"><a href="memory-sleep.html" class="chapter-link"><span class="chapter-number">5</span>Memory & Sleep</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">6</span>Neurons & Neurotransmitters</a></li>
+        <li class="chapter-item"><a href="neurological-disorders.html" class="chapter-link active"><span class="chapter-number">7</span>Neurological Disorders</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">8</span>Sensation & Perception</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">9</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 9</div>
+        <h1>Neurological Disorders</h1>
+        <div class="chapter-meta">
+          <span>Epilepsy, Parkinson's, multiple sclerosis, stroke</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Neurological Disorders</h2>
+        <p>Neurological disorders involve structural or functional pathology of the nervous system. For the EPPP, clinicians must understand the neuroanatomical bases, key symptoms, and differential diagnosis of major neurological conditions, as they frequently co-occur with or mimic psychiatric disorders. This chapter covers epilepsy, Parkinson's disease, Huntington's disease, multiple sclerosis, stroke, traumatic brain injury, and aphasia syndromes.</p>
+        <div class="definition-box">
+          <p><strong>Neurological Disorder:</strong> A disease or condition caused by dysfunction of the brain, spinal cord, or peripheral nerves. Unlike primary psychiatric disorders, neurological disorders have identifiable neuropathology. However, nearly all neurological disorders produce psychiatric and cognitive symptoms that psychologists must recognize and address.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Epilepsy</h2>
+        <p><span class="key-term">Epilepsy</span> is a chronic neurological disorder characterized by recurrent, unprovoked seizures resulting from abnormal, excessive, or hypersynchronous neuronal activity. It affects approximately 1% of the population.</p>
+
+        <h3>Types of Seizures</h3>
+        <h4>Focal (Partial) Seizures</h4>
+        <p>Originate in a localized area of one hemisphere:</p>
+        <ul>
+          <li><strong>Focal aware seizures (formerly "simple partial"):</strong> Consciousness is preserved. Symptoms depend on the brain region involved -- motor (jerking), sensory (tingling, visual disturbances), autonomic (nausea, sweating), or psychic (deja vu, fear, hallucinations). An aura is a focal aware seizure that precedes a larger seizure.</li>
+          <li><strong>Focal impaired awareness seizures (formerly "complex partial"):</strong> Consciousness is altered. Most commonly originate in the temporal lobe. Typically feature automatisms (repetitive purposeless movements such as lip smacking, picking at clothes, or wandering). Patients are amnestic for the event.</li>
+          <li><strong>Focal to bilateral tonic-clonic:</strong> Begins focally and then spreads to both hemispheres (secondarily generalized).</li>
+        </ul>
+
+        <h4>Generalized Seizures</h4>
+        <p>Involve both hemispheres from the onset:</p>
+        <ul>
+          <li><strong>Tonic-clonic (formerly "grand mal"):</strong> A tonic phase (muscle rigidity, loss of consciousness, possible cry) followed by a clonic phase (rhythmic jerking of all extremities). Postictal confusion and sleepiness follow.</li>
+          <li><strong>Absence (formerly "petit mal"):</strong> Brief (5-30 second) episodes of staring and unresponsiveness, often with subtle motor signs (eye blinking, lip movements). EEG shows characteristic 3 Hz spike-and-wave pattern. Most common in children and may be mistaken for daydreaming or ADHD.</li>
+          <li><strong>Myoclonic:</strong> Brief, shock-like muscle jerks</li>
+          <li><strong>Atonic ("drop attacks"):</strong> Sudden loss of muscle tone causing falls</li>
+          <li><strong>Tonic:</strong> Sustained muscle stiffening</li>
+        </ul>
+
+        <h3>Temporal Lobe Epilepsy (TLE)</h3>
+        <p>The most common form of focal epilepsy in adults. Frequently involves the hippocampus and amygdala (mesial temporal sclerosis). Associated with:</p>
+        <ul>
+          <li>Memory impairment (especially if dominant hemisphere is affected)</li>
+          <li>Interictal personality changes (Geschwind syndrome: hypergraphia, hyperreligiosity, altered sexuality, viscosity)</li>
+          <li>Psychiatric comorbidities: depression (30-50%), anxiety, and psychosis-like symptoms</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> The Wada test (intracarotid amobarbital procedure) is used before epilepsy surgery to determine hemispheric language dominance and memory lateralization. One hemisphere is anesthetized at a time while language and memory are tested. This information guides surgical decisions to avoid causing language or memory deficits.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Parkinson's Disease</h2>
+        <p><span class="key-term">Parkinson's disease (PD)</span> is a progressive neurodegenerative disorder caused by the loss of dopaminergic neurons in the <span class="key-term">substantia nigra pars compacta</span>, leading to dopamine depletion in the striatum (nigrostriatal pathway).</p>
+
+        <h3>Cardinal Motor Symptoms (TRAP)</h3>
+        <ul>
+          <li><strong>Tremor:</strong> Resting tremor (4-6 Hz), often described as "pill-rolling." Decreases during intentional movement (in contrast to cerebellar intention tremor).</li>
+          <li><strong>Rigidity:</strong> Increased muscle tone throughout range of motion. "Cogwheel rigidity" (ratchet-like resistance) is characteristic.</li>
+          <li><strong>Akinesia/Bradykinesia:</strong> Slowness of movement (bradykinesia) or difficulty initiating movement (akinesia). Includes reduced facial expressiveness (masked facies), small handwriting (micrographia), and shuffling gait.</li>
+          <li><strong>Postural instability:</strong> Impaired balance and righting reflexes, leading to falls. Typically a later symptom.</li>
+        </ul>
+
+        <h3>Non-Motor Symptoms</h3>
+        <ul>
+          <li><strong>Depression:</strong> Affects 40-50% of PD patients; may precede motor symptoms</li>
+          <li><strong>Cognitive impairment:</strong> Executive dysfunction (frontal-subcortical deficits); approximately 75-80% develop dementia over the disease course</li>
+          <li><strong>REM sleep behavior disorder (RBD):</strong> Often precedes motor diagnosis by years</li>
+          <li><strong>Autonomic dysfunction:</strong> Constipation, orthostatic hypotension, urinary dysfunction</li>
+          <li><strong>Anosmia:</strong> Loss of smell; an early premotor symptom</li>
+          <li><strong>Psychosis:</strong> Visual hallucinations, particularly with advancing disease and dopaminergic medications</li>
+        </ul>
+
+        <h3>Treatment</h3>
+        <ul>
+          <li><strong>L-dopa (levodopa):</strong> The dopamine precursor that crosses the blood-brain barrier and is converted to dopamine in the brain. Combined with carbidopa (which prevents peripheral conversion). Most effective treatment but associated with motor fluctuations ("wearing off," "on-off" phenomenon) and dyskinesias with long-term use.</li>
+          <li><strong>Dopamine agonists:</strong> Pramipexole, ropinirole (directly stimulate dopamine receptors). Side effects may include impulse control disorders (gambling, hypersexuality, compulsive shopping).</li>
+          <li><strong>MAO-B inhibitors:</strong> Selegiline, rasagiline (prevent dopamine breakdown)</li>
+          <li><strong>Deep brain stimulation (DBS):</strong> Electrodes implanted in the subthalamic nucleus or globus pallidus for medication-refractory symptoms</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Huntington's Disease</h2>
+        <p><span class="key-term">Huntington's disease (HD)</span> is an autosomal dominant neurodegenerative disorder caused by a CAG trinucleotide repeat expansion on chromosome 4 (huntingtin gene). Onset is typically in the 30s-40s. Characterized by the triad of:</p>
+        <ul>
+          <li><strong>Chorea:</strong> Involuntary, irregular, writhing, dance-like movements (the opposite of Parkinson's hypokinesia)</li>
+          <li><strong>Cognitive decline:</strong> Subcortical dementia pattern with executive dysfunction, slowed processing speed, and memory retrieval deficits (as opposed to the encoding deficits in Alzheimer's)</li>
+          <li><strong>Psychiatric symptoms:</strong> Depression, irritability, apathy, and psychosis; personality and mood changes often precede motor symptoms by years</li>
+        </ul>
+        <div class="definition-box">
+          <p><strong>Neuropathology:</strong> Huntington's disease involves progressive atrophy of the caudate nucleus and putamen (striatum), with loss of GABAergic inhibitory neurons. The loss of inhibitory output from the striatum produces excess, uncontrolled movement (chorea). There is no cure; treatment is symptomatic. Genetic testing is available and raises significant ethical considerations for at-risk family members.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Multiple Sclerosis (MS)</h2>
+        <p><span class="key-term">Multiple sclerosis</span> is an autoimmune demyelinating disease of the central nervous system in which the immune system attacks myelin sheaths and the oligodendrocytes that produce them. This results in demyelinating plaques (lesions) scattered throughout the CNS white matter.</p>
+        <ul>
+          <li><strong>Demographics:</strong> Typically diagnosed between ages 20-40; more common in women (2-3:1 ratio) and in populations farther from the equator</li>
+          <li><strong>Symptoms are variable</strong> and depend on the location of plaques: visual disturbances (optic neuritis), motor weakness, sensory changes (numbness, tingling), fatigue, bladder dysfunction, and cognitive impairment (slowed processing, attention and memory deficits)</li>
+          <li><strong>Relapsing-remitting MS (RRMS):</strong> The most common form (85%); discrete attacks followed by partial or full recovery</li>
+          <li><strong>Primary progressive MS:</strong> Steady worsening from onset without distinct relapses (10-15%)</li>
+          <li><strong>Secondary progressive MS:</strong> Initially relapsing-remitting, then transitions to progressive worsening</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> MS lesions are disseminated in space (multiple CNS locations) and time (occurring on different occasions). Charcot's triad (nystagmus, intention tremor, scanning speech) is a classic but not always present presentation. Cognitive impairment affects 40-65% of MS patients and can occur early in the disease course.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Stroke (Cerebrovascular Accident)</h2>
+        <p><span class="key-term">Stroke</span> is an acute neurological event caused by disruption of blood supply to the brain, resulting in rapid death of neural tissue. It is a leading cause of disability and the presentation depends on which artery and brain region are affected.</p>
+
+        <h3>Types of Stroke</h3>
+        <table>
+          <tr><th>Feature</th><th>Ischemic Stroke (87%)</th><th>Hemorrhagic Stroke (13%)</th></tr>
+          <tr><td>Mechanism</td><td>Blockage of a cerebral artery (thrombus or embolus)</td><td>Rupture of a cerebral blood vessel</td></tr>
+          <tr><td>Subtypes</td><td>Thrombotic (clot forms in situ), embolic (clot travels from elsewhere)</td><td>Intracerebral hemorrhage, subarachnoid hemorrhage</td></tr>
+          <tr><td>Acute treatment</td><td>tPA (thrombolytic) within 4.5 hours; thrombectomy</td><td>Blood pressure control; surgical evacuation if needed</td></tr>
+          <tr><td>Risk factors</td><td>Atrial fibrillation, atherosclerosis, hypertension</td><td>Hypertension, aneurysm, AVM, anticoagulant use</td></tr>
+        </table>
+
+        <h3>Common Stroke Syndromes</h3>
+        <ul>
+          <li><strong>Middle cerebral artery (MCA) stroke:</strong> Most common. Contralateral hemiparesis and hemisensory loss (face and arm greater than leg); aphasia if left hemisphere (Broca's, Wernicke's, or global); hemispatial neglect if right hemisphere.</li>
+          <li><strong>Anterior cerebral artery (ACA) stroke:</strong> Contralateral leg weakness greater than arm; personality changes; abulia (loss of will/motivation); urinary incontinence.</li>
+          <li><strong>Posterior cerebral artery (PCA) stroke:</strong> Contralateral homonymous hemianopsia (visual field loss); memory impairment if medial temporal structures are affected.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Traumatic Brain Injury (TBI)</h2>
+        <p><span class="key-term">Traumatic brain injury</span> results from an external mechanical force causing brain dysfunction. Severity is classified by Glasgow Coma Scale (GCS) scores, duration of loss of consciousness, and duration of post-traumatic amnesia (PTA).</p>
+
+        <h3>Severity Classification</h3>
+        <table>
+          <tr><th>Feature</th><th>Mild (Concussion)</th><th>Moderate</th><th>Severe</th></tr>
+          <tr><td>GCS</td><td>13-15</td><td>9-12</td><td>3-8</td></tr>
+          <tr><td>Loss of consciousness</td><td>&lt; 30 minutes</td><td>30 min - 24 hours</td><td>&gt; 24 hours</td></tr>
+          <tr><td>Post-traumatic amnesia</td><td>&lt; 24 hours</td><td>1-7 days</td><td>&gt; 7 days</td></tr>
+        </table>
+
+        <h3>Types of TBI Damage</h3>
+        <ul>
+          <li><strong>Coup injury:</strong> Damage at the point of impact</li>
+          <li><strong>Contrecoup injury:</strong> Damage at the opposite side of the brain from the impact, caused by the brain bouncing against the skull</li>
+          <li><strong>Diffuse axonal injury (DAI):</strong> Widespread shearing of axons due to rotational forces; the most common cause of severe TBI disability</li>
+          <li><strong>Epidural hematoma:</strong> Bleeding between skull and dura mater, typically from middle meningeal artery rupture. "Lucid interval" followed by rapid deterioration.</li>
+          <li><strong>Subdural hematoma:</strong> Bleeding between dura and arachnoid, from bridging vein rupture. Can be acute or chronic (common in elderly, alcoholics).</li>
+        </ul>
+
+        <h3>Neuropsychological Sequelae</h3>
+        <p>The frontal and temporal lobes are most vulnerable to TBI due to their position against bony skull protrusions:</p>
+        <ul>
+          <li>Executive dysfunction (planning, inhibition, cognitive flexibility)</li>
+          <li>Memory impairment (anterograde greater than retrograde)</li>
+          <li>Attention and processing speed deficits</li>
+          <li>Personality and behavioral changes (disinhibition, irritability, apathy)</li>
+          <li>Emotional dysregulation (increased risk of depression, anxiety, PTSD)</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Aphasia Syndromes</h2>
+        <p>Aphasia is an acquired language disorder resulting from brain damage. The major aphasia types are among the most frequently tested neurological topics on the EPPP.</p>
+
+        <table>
+          <tr><th>Aphasia Type</th><th>Fluency</th><th>Comprehension</th><th>Repetition</th><th>Lesion Site</th></tr>
+          <tr><td>Broca's (expressive)</td><td>Nonfluent</td><td>Relatively preserved</td><td>Impaired</td><td>Left inferior frontal gyrus</td></tr>
+          <tr><td>Wernicke's (receptive)</td><td>Fluent</td><td>Impaired</td><td>Impaired</td><td>Left posterior superior temporal</td></tr>
+          <tr><td>Conduction</td><td>Fluent</td><td>Preserved</td><td>Severely impaired</td><td>Arcuate fasciculus</td></tr>
+          <tr><td>Global</td><td>Nonfluent</td><td>Impaired</td><td>Impaired</td><td>Large left perisylvian lesion</td></tr>
+          <tr><td>Transcortical motor</td><td>Nonfluent</td><td>Preserved</td><td>Preserved</td><td>Anterior/superior to Broca's</td></tr>
+          <tr><td>Transcortical sensory</td><td>Fluent</td><td>Impaired</td><td>Preserved</td><td>Posterior to Wernicke's</td></tr>
+          <tr><td>Anomic</td><td>Fluent</td><td>Preserved</td><td>Preserved</td><td>Variable (often angular gyrus)</td></tr>
+        </table>
+
+        <div class="example-box">
+          <p><strong>EPPP Key Distinction:</strong> Conduction aphasia is distinguished from other aphasias by the selective impairment of repetition with relatively preserved comprehension and fluent speech. Patients make frequent phonemic paraphasias (sound-based errors, e.g., saying "trable" for "table") and are aware of their errors, making repeated self-correction attempts.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Terms Summary</h2>
+        <table>
+          <tr><th>Term</th><th>Definition</th></tr>
+          <tr><td>Tonic-clonic seizure</td><td>Generalized seizure with rigidity (tonic) then rhythmic jerking (clonic)</td></tr>
+          <tr><td>Absence seizure</td><td>Brief staring episodes with 3 Hz spike-and-wave EEG; common in children</td></tr>
+          <tr><td>Bradykinesia</td><td>Slowness of movement; cardinal feature of Parkinson's disease</td></tr>
+          <tr><td>L-dopa</td><td>Dopamine precursor used to treat Parkinson's disease</td></tr>
+          <tr><td>Chorea</td><td>Involuntary writhing movements; hallmark of Huntington's disease</td></tr>
+          <tr><td>Demyelination</td><td>Loss of myelin sheath; central pathology of multiple sclerosis</td></tr>
+          <tr><td>Ischemic stroke</td><td>Stroke caused by arterial blockage (87% of strokes)</td></tr>
+          <tr><td>Hemorrhagic stroke</td><td>Stroke caused by blood vessel rupture</td></tr>
+          <tr><td>Coup/contrecoup</td><td>Brain injury at impact site and opposite side, respectively</td></tr>
+          <tr><td>Conduction aphasia</td><td>Fluent speech, intact comprehension, severely impaired repetition</td></tr>
+        </table>
+        <p class="citation">Key references: Adams &amp; Victor (2014); Geschwind (1971); Lezak, Howieson, Bigler, &amp; Tranel (2012).</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="neurons-neurotransmitters.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Neurons & Neurotransmitters</div>
+          </div>
+        </a>
+        <a href="sensation-perception.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Sensation & Perception</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

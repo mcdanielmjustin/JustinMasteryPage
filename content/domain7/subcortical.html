@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subcortical Structures | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 8px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-secondary); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 16px 0; }
+    .example-box strong { color: var(--accent); }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .clinical-note strong { color: #60a5fa; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 12px 16px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 16px; border: 1px solid var(--border); color: var(--text-secondary); }
+    tr:hover td { background: var(--bg-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Subcortical Structures</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 7</div>
+        <div class="domain-title">Biological Bases of Behavior</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="memory-forgetting.html" class="chapter-link"><span class="chapter-number">1</span>Memory & Forgetting</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">2</span>Cerebral Cortex</a></li>
+        <li class="chapter-item"><a href="subcortical.html" class="chapter-link active"><span class="chapter-number">3</span>Subcortical Structures</a></li>
+        <li class="chapter-item"><a href="emotion-stress.html" class="chapter-link"><span class="chapter-number">4</span>Emotion & Stress</a></li>
+        <li class="chapter-item"><a href="memory-sleep.html" class="chapter-link"><span class="chapter-number">5</span>Memory & Sleep</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">6</span>Neurons & Neurotransmitters</a></li>
+        <li class="chapter-item"><a href="neurological-disorders.html" class="chapter-link"><span class="chapter-number">7</span>Neurological Disorders</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">8</span>Sensation & Perception</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">9</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 9</div>
+        <h1>Subcortical Structures</h1>
+        <div class="chapter-meta">
+          <span>Limbic system, basal ganglia, thalamus, hypothalamus</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Subcortical Structures</h2>
+        <p>Subcortical structures are brain regions located beneath the cerebral cortex that perform vital functions including relaying sensory information, regulating homeostasis, coordinating movement, and mediating emotion and memory. For the EPPP, it is essential to know the key subcortical structures, their locations, their functions, and the clinical consequences of their damage.</p>
+        <div class="definition-box">
+          <p><strong>Subcortical:</strong> Refers to structures situated below the cerebral cortex, including the thalamus, hypothalamus, basal ganglia, limbic system structures, brainstem, and cerebellum. These regions are phylogenetically older and more critical for survival-related functions than cortical structures.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Thalamus</h2>
+        <p>The <span class="key-term">thalamus</span> is a large, egg-shaped structure sitting atop the brainstem at the center of the brain. It serves as the brain's primary sensory relay station, routing incoming sensory information to the appropriate cortical areas.</p>
+        <ul>
+          <li><strong>Lateral geniculate nucleus (LGN):</strong> Relays visual information from the optic tract to the primary visual cortex (V1)</li>
+          <li><strong>Medial geniculate nucleus (MGN):</strong> Relays auditory information from the inferior colliculus to the primary auditory cortex</li>
+          <li><strong>Ventral posterolateral (VPL) nucleus:</strong> Relays somatosensory information from the body to the primary somatosensory cortex</li>
+          <li><strong>Ventral posteromedial (VPM) nucleus:</strong> Relays somatosensory information from the face</li>
+          <li><strong>Dorsomedial nucleus:</strong> Connects to the prefrontal cortex; involved in memory and emotion. Damage is implicated in Korsakoff's syndrome.</li>
+          <li><strong>Pulvinar:</strong> Involved in visual attention and filtering of visual information</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Olfaction (smell) is the only sensory modality that does not relay through the thalamus. Olfactory information travels directly from the olfactory bulb to the piriform cortex and amygdala. This is a frequently tested fact on the EPPP.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Hypothalamus</h2>
+        <p>The <span class="key-term">hypothalamus</span> is a small structure (approximately the size of an almond) located below the thalamus. Despite its small size, it is critical for maintaining homeostasis and regulating the endocrine system through its connection with the pituitary gland.</p>
+
+        <h3>The "Four F's" of the Hypothalamus</h3>
+        <p>A classic mnemonic for the hypothalamus's primary regulatory functions:</p>
+        <ul>
+          <li><strong>Fighting (aggression):</strong> The ventromedial hypothalamus is involved in aggressive behavior</li>
+          <li><strong>Fleeing (fear responses):</strong> Coordinates autonomic fear responses through connections with the amygdala and brainstem</li>
+          <li><strong>Feeding:</strong> The lateral hypothalamus (LH) is the "hunger center" -- stimulation induces eating, and lesions cause aphagia (refusal to eat). The ventromedial hypothalamus (VMH) is the "satiety center" -- stimulation inhibits eating, and lesions cause hyperphagia (overeating) and obesity.</li>
+          <li><strong>Mating (sexual behavior):</strong> Regulates sexual behavior and reproductive functions; the sexually dimorphic nucleus differs in size between males and females</li>
+        </ul>
+
+        <h3>Other Hypothalamic Functions</h3>
+        <ul>
+          <li><strong>Thermoregulation:</strong> Maintains body temperature through sweating, shivering, and vasoconstriction/vasodilation</li>
+          <li><strong>Circadian rhythms:</strong> The suprachiasmatic nucleus (SCN) serves as the master biological clock, entrained by light input from the retina</li>
+          <li><strong>Endocrine control:</strong> Regulates the pituitary gland ("master gland") through releasing and inhibiting hormones. Controls the HPA axis (hypothalamic-pituitary-adrenal axis) for stress responses.</li>
+          <li><strong>Thirst and water balance:</strong> Osmoreceptors detect blood osmolarity changes and trigger thirst and ADH release</li>
+        </ul>
+        <div class="example-box">
+          <p><strong>EPPP Application:</strong> Lesion studies are frequently tested. Remember: lateral hypothalamus lesions produce "lateral leanness" (aphagia/weight loss), while ventromedial hypothalamus lesions produce "ventromedial voluminosity" (hyperphagia/obesity). These mnemonics appear on many EPPP study resources.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Limbic System</h2>
+        <p>The <span class="key-term">limbic system</span> is a collection of interconnected structures surrounding the thalamus that mediate emotion, motivation, learning, and memory. While the exact boundaries of the limbic system are debated, the following structures are consistently included:</p>
+
+        <h3>Hippocampus</h3>
+        <p>A seahorse-shaped structure in the medial temporal lobe that is essential for the <span class="key-term">consolidation</span> of new declarative (explicit) memories -- the transfer of information from short-term to long-term storage.</p>
+        <ul>
+          <li>Bilateral hippocampal damage produces severe anterograde amnesia for declarative information (the case of H.M.)</li>
+          <li>Contains <span class="key-term">place cells</span> (O'Keefe, Nobel Prize 2014) that fire when an animal occupies a specific location, forming cognitive maps for spatial navigation</li>
+          <li>One of only two brain regions where adult neurogenesis has been confirmed (the other is the olfactory bulb/subventricular zone)</li>
+          <li>Particularly vulnerable to damage from chronic stress (cortisol is neurotoxic to hippocampal neurons), hypoxia, and Alzheimer's disease</li>
+        </ul>
+
+        <h3>Amygdala</h3>
+        <p>An almond-shaped structure anterior to the hippocampus, the <span class="key-term">amygdala</span> is the brain's "fear center" and is critical for emotional processing, particularly fear conditioning and threat detection.</p>
+        <ul>
+          <li>Receives rapid, coarse sensory input via a direct pathway from the thalamus (LeDoux's "low road"), enabling fast fear responses before cortical processing is complete</li>
+          <li>Also receives slower, detailed input from the cortex ("high road") for more nuanced evaluation</li>
+          <li>Modulates memory consolidation: emotionally arousing events are remembered better because amygdala activation enhances hippocampal encoding</li>
+          <li>Bilateral damage (Kluver-Bucy syndrome) produces "psychic blindness" -- inability to recognize emotional significance of stimuli, hypersexuality, hyperorality, and flattened affect</li>
+        </ul>
+
+        <h3>Cingulate Cortex</h3>
+        <p>The <span class="key-term">cingulate gyrus</span> wraps around the corpus callosum and is divided into functionally distinct regions:</p>
+        <ul>
+          <li><strong>Anterior cingulate cortex (ACC):</strong> Involved in error detection, conflict monitoring, pain perception, and emotional regulation. Active when there is a mismatch between expected and actual outcomes. Plays a role in the emotional experience of pain.</li>
+          <li><strong>Posterior cingulate cortex (PCC):</strong> Part of the default mode network; involved in self-referential processing, autobiographical memory retrieval, and internal mentation. One of the first regions affected in Alzheimer's disease.</li>
+        </ul>
+
+        <h3>Other Limbic Structures</h3>
+        <ul>
+          <li><strong>Mammillary bodies:</strong> Part of the Papez circuit; relay information from the hippocampus to the thalamus. Degeneration occurs in Korsakoff's syndrome (thiamine deficiency) and contributes to anterograde amnesia and confabulation.</li>
+          <li><strong>Fornix:</strong> Major white matter tract connecting the hippocampus to the mammillary bodies and septal nuclei</li>
+          <li><strong>Septal nuclei:</strong> Involved in pleasure, reward, and the inhibition of aggression</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Basal Ganglia</h2>
+        <p>The <span class="key-term">basal ganglia</span> are a group of subcortical nuclei involved in the initiation, execution, and modulation of voluntary movement, as well as procedural learning and habit formation.</p>
+
+        <h3>Components</h3>
+        <ul>
+          <li><strong>Caudate nucleus:</strong> Involved in cognitive control of movement, goal-directed behavior, and procedural memory</li>
+          <li><strong>Putamen:</strong> Primary motor component; involved in the initiation and execution of movement. Together with the caudate, forms the <span class="key-term">striatum</span> (so named for its striped appearance).</li>
+          <li><strong>Globus pallidus:</strong> Output nucleus of the basal ganglia; sends inhibitory signals to the thalamus to regulate motor activity</li>
+          <li><strong>Subthalamic nucleus:</strong> Regulates the globus pallidus; lesions or deep brain stimulation here can reduce Parkinsonian symptoms</li>
+          <li><strong>Substantia nigra:</strong> Located in the midbrain; its pars compacta produces dopamine that is sent to the striatum via the nigrostriatal pathway. Degeneration of dopaminergic neurons here is the primary pathology of Parkinson's disease.</li>
+        </ul>
+
+        <h3>Clinical Significance of Basal Ganglia Dysfunction</h3>
+        <table>
+          <tr><th>Disorder</th><th>Pathology</th><th>Motor Symptoms</th></tr>
+          <tr><td>Parkinson's disease</td><td>Loss of dopaminergic neurons in substantia nigra</td><td>Bradykinesia, resting tremor, rigidity, postural instability (hypokinetic)</td></tr>
+          <tr><td>Huntington's disease</td><td>Degeneration of caudate nucleus and putamen (GABAergic neurons)</td><td>Chorea (involuntary writhing movements), cognitive decline, psychiatric symptoms (hyperkinetic)</td></tr>
+          <tr><td>Hemiballismus</td><td>Lesion of subthalamic nucleus</td><td>Violent flinging movements of contralateral limbs</td></tr>
+        </table>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> The direct pathway through the basal ganglia facilitates movement (excitatory net effect), while the indirect pathway inhibits movement (inhibitory net effect). Parkinson's disease (too little dopamine) results in difficulty initiating movement. Huntington's disease (loss of inhibitory neurons) results in excessive, uncontrolled movement.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Brainstem</h2>
+        <p>The <span class="key-term">brainstem</span> connects the cerebral hemispheres to the spinal cord and controls vital autonomic functions. It consists of three major divisions:</p>
+
+        <h3>Midbrain (Mesencephalon)</h3>
+        <ul>
+          <li><strong>Superior colliculi:</strong> Visual reflexes and orienting responses (e.g., turning the head toward a visual stimulus)</li>
+          <li><strong>Inferior colliculi:</strong> Auditory reflexes and relay of auditory information to the thalamus</li>
+          <li><strong>Substantia nigra:</strong> Dopamine production for motor control (part of basal ganglia circuitry)</li>
+          <li><strong>Ventral tegmental area (VTA):</strong> Dopamine production for the mesolimbic reward pathway (projects to nucleus accumbens and prefrontal cortex)</li>
+          <li><strong>Periaqueductal gray (PAG):</strong> Involved in pain modulation and defensive behaviors</li>
+        </ul>
+
+        <h3>Pons</h3>
+        <ul>
+          <li>Relays information between the cerebellum and cerebral cortex</li>
+          <li>Contains nuclei for cranial nerves V (trigeminal), VI (abducens), VII (facial), and VIII (vestibulocochlear)</li>
+          <li>Contains the <span class="key-term">locus coeruleus</span>, the brain's primary source of norepinephrine, involved in arousal, attention, and the stress response</li>
+          <li>Involved in regulating sleep, particularly REM sleep transitions</li>
+        </ul>
+
+        <h3>Medulla Oblongata</h3>
+        <ul>
+          <li>Controls vital autonomic functions: breathing, heart rate, blood pressure, and digestive reflexes</li>
+          <li>Contains the <span class="key-term">raphe nuclei</span>, the brain's primary source of serotonin</li>
+          <li>Site of the pyramidal decussation, where motor fibers cross from one side to the other (explaining contralateral motor control)</li>
+          <li>Damage is often life-threatening due to disruption of vital functions</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>The Cerebellum</h2>
+        <p>The <span class="key-term">cerebellum</span> ("little brain") is located posterior to the brainstem and contains more neurons than the rest of the brain combined. Although comprising only 10% of brain volume, it contains approximately 50% of the brain's neurons.</p>
+        <ul>
+          <li><strong>Motor coordination:</strong> Fine-tunes motor output for smooth, coordinated, accurate movements</li>
+          <li><strong>Balance and posture:</strong> Integrates vestibular input to maintain equilibrium</li>
+          <li><strong>Motor learning:</strong> Essential for acquiring skilled movements and classical conditioning of motor responses (e.g., eyeblink conditioning)</li>
+          <li><strong>Timing:</strong> Internal clock for the precise timing of movements and cognitive operations</li>
+          <li><strong>Cognitive functions:</strong> Increasingly recognized role in language, attention, and executive function</li>
+        </ul>
+        <div class="definition-box">
+          <p><strong>Cerebellar Damage:</strong> Produces <span class="key-term">ataxia</span> (loss of coordination), dysarthria (slurred speech), intention tremor (tremor that worsens as the hand approaches a target, in contrast to Parkinson's resting tremor), nystagmus (involuntary eye movements), and gait instability. Cerebellar damage does NOT cause paralysis.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Reticular Activating System (RAS)</h2>
+        <p>The <span class="key-term">reticular activating system</span> is a network of neurons extending through the brainstem core from the medulla to the midbrain. It plays a critical role in regulating consciousness, arousal, and the sleep-wake cycle.</p>
+        <ul>
+          <li>Filters incoming sensory information, determining what reaches conscious awareness</li>
+          <li>Maintains cortical alertness through diffuse projections to the thalamus and cortex</li>
+          <li>Damage to the RAS can produce coma or persistent vegetative state</li>
+          <li>Anesthetic agents exert their effects partly by suppressing RAS activity</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> The RAS is clinically important for understanding disorders of consciousness. Coma results from bilateral cortical damage or damage to the RAS. Damage to specific brainstem regions can produce "locked-in syndrome," where patients are conscious but unable to move or communicate except through eye movements.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Terms Summary</h2>
+        <table>
+          <tr><th>Structure</th><th>Primary Function(s)</th></tr>
+          <tr><td>Thalamus</td><td>Sensory relay station (all senses except olfaction)</td></tr>
+          <tr><td>Hypothalamus</td><td>Homeostasis, endocrine regulation, the "Four F's"</td></tr>
+          <tr><td>Hippocampus</td><td>Declarative memory consolidation, spatial navigation</td></tr>
+          <tr><td>Amygdala</td><td>Fear conditioning, emotional processing, memory modulation</td></tr>
+          <tr><td>Basal ganglia</td><td>Voluntary movement initiation, procedural learning</td></tr>
+          <tr><td>Substantia nigra</td><td>Dopamine production for motor control; degenerates in Parkinson's</td></tr>
+          <tr><td>Cerebellum</td><td>Motor coordination, balance, motor learning, timing</td></tr>
+          <tr><td>Reticular activating system</td><td>Arousal, consciousness, sleep-wake regulation</td></tr>
+          <tr><td>Locus coeruleus</td><td>Primary norepinephrine source; arousal and attention</td></tr>
+          <tr><td>Raphe nuclei</td><td>Primary serotonin source; mood and sleep regulation</td></tr>
+        </table>
+        <p class="citation">Key references: LeDoux (1996); Milner, Squire, &amp; Kandel (1998); O'Keefe &amp; Nadel (1978); Papez (1937); Scoville &amp; Milner (1957).</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="cerebral-cortex.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Cerebral Cortex</div>
+          </div>
+        </a>
+        <a href="emotion-stress.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Emotion & Stress</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

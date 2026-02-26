@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment Ethics: Test Fairness & Security – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Assessment Ethics: Fairness &amp; Security</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link active"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 12</div>
+        <h1>Assessment Ethics: Test Fairness &amp; Security</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: APA Ethics Code Standard 9 -->
+      <div class="content-section">
+        <h2>APA Ethics Code: Standard 9 (Assessment)</h2>
+        <p><span class="key-term">Standard 9</span> of the APA Ethics Code governs psychological assessment and includes critical provisions that are frequently tested on the EPPP.</p>
+
+        <h3>Standard 9.01: Bases for Assessments</h3>
+        <p>Psychologists base their assessment recommendations, reports, and diagnostic statements on information and techniques sufficient to substantiate their findings. When a personal examination is not practical, psychologists document their efforts and the impact of the limited information on the reliability and validity of their opinions, and they clarify the limitations of their conclusions.</p>
+
+        <h3>Standard 9.02: Use of Assessments</h3>
+        <p>Psychologists use assessment instruments whose validity and reliability have been established for the purpose and population being assessed. When such evidence is not available, psychologists describe the strengths and limitations of test results and interpretation. Tests must be administered, adapted, scored, interpreted, and used in a manner consistent with the research on the instrument.</p>
+
+        <div class="example-box">
+          <strong>Standard 9.02 Application:</strong>
+          <p>A psychologist is asked to evaluate a 78-year-old Chinese-speaking immigrant's cognitive functioning using the MMSE. Ethical concerns include: (1) the MMSE was not validated for individuals tested in a non-native language, (2) some items are culturally loaded (e.g., "What county are we in?" assumes familiarity with U.S. geography), (3) education level affects scores. The psychologist should select a culturally appropriate screening tool, use a qualified interpreter if needed, and clearly document the limitations of the assessment in the report.</p>
+        </div>
+
+        <h3>Standard 9.03: Informed Consent in Assessments</h3>
+        <p>Psychologists obtain <span class="key-term">informed consent</span> for assessments, explaining the nature and purpose of the assessment, fees, involvement of third parties, and limits of confidentiality. Exceptions exist for mandated testing (e.g., court-ordered evaluations), routine educational/institutional testing, and cognitive testing to evaluate decisional capacity.</p>
+
+        <h3>Standard 9.05: Test Construction</h3>
+        <p>Psychologists who develop tests use appropriate psychometric procedures, current scientific knowledge for test design, standardization, validation, reduction of bias, and recommendations for use. This standard applies to all psychologists who create formal or informal assessment instruments, including those developed for research or institutional purposes.</p>
+
+        <div class="definition-box">
+          <strong>Test Data vs. Test Materials (Standards 9.04 and 9.11):</strong>
+          <p><span class="key-term">Test data</span> includes raw and scaled scores, client responses, and the psychologist's notes related to the client's statements and behavior during examination. Test data is released to the client or their representative upon request, unless substantial harm or misuse is anticipated. <span class="key-term">Test materials</span> include manuals, instruments, protocols, and test questions. Psychologists have an obligation to maintain test security and are NOT required to release test materials to the client, as this could compromise the test's integrity.</p>
+        </div>
+
+        <h3>Standard 9.06: Interpreting Assessment Results</h3>
+        <p>When interpreting results, psychologists consider the purpose of the assessment, test factors, examinee characteristics (including situational, personal, linguistic, and cultural differences) that might affect interpretation. This standard underscores the requirement for culturally competent assessment practice.</p>
+
+        <h3>Standard 9.08: Obsolete Tests and Outdated Results</h3>
+        <p>Psychologists do not base their assessment decisions or recommendations on data from tests that are <span class="key-term">obsolete</span> or <span class="key-term">outdated</span> for the current purpose. Test norms become outdated due to the <span class="key-term">Flynn effect</span> — the well-documented increase in IQ scores over time (approximately 3 points per decade). Using old norms can overestimate abilities and result in missed diagnoses, particularly for intellectual disability. When newer editions of a test are available, clinicians should use the most current version unless a specific reason justifies the older edition.</p>
+
+        <h3>Standard 9.09: Test Scoring and Interpretation Services</h3>
+        <p>Psychologists who use automated scoring and interpretation services (e.g., computer-generated MMPI reports) retain responsibility for the appropriate application, interpretation, and use of results. They must be familiar with the evidence supporting the interpretive algorithms and must integrate automated output with other clinical data. Computer-generated interpretive reports should never be provided directly to clients without professional review and contextualization.</p>
+
+        <div class="clinical-note">
+          <strong>Key Distinction for the EPPP:</strong>
+          <p>Test DATA is generally released to clients upon request (with limited exceptions). Test MATERIALS are protected and NOT released to clients to maintain test security. When a court orders release of test materials, the psychologist should make reasonable efforts to maintain test security while complying with the order, such as requesting that the court limit access to qualified professionals.</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Test Bias and Fairness -->
+      <div class="content-section">
+        <h2>Test Bias and Fairness</h2>
+        <p>Test bias is a technical psychometric concept that is distinct from the broader social concept of test fairness. Understanding these distinctions is essential for ethical assessment practice.</p>
+
+        <h3>Types of Test Bias</h3>
+        <ul>
+          <li><strong>Item Bias (Differential Item Functioning — DIF):</strong> An item is biased if examinees from different groups who have the same level of the underlying trait have different probabilities of endorsing or correctly answering the item. <span class="key-term">DIF analysis</span> statistically identifies such items for review and possible removal.</li>
+          <li><strong>Predictive Bias (Differential Prediction):</strong> A test shows predictive bias if the regression equation relating the test score to the criterion differs across groups. If a test overpredicts or underpredicts criterion performance for a particular group, the test is said to show <span class="key-term">predictive bias</span> for that group. Research has generally shown that standardized cognitive tests slightly overpredict the academic performance of minority groups rather than underpredict it.</li>
+          <li><strong>Construct Bias:</strong> A test measures different constructs in different groups. For example, a verbal reasoning test may primarily measure verbal ability for native English speakers but may additionally measure English language proficiency for non-native speakers.</li>
+        </ul>
+
+        <table>
+          <tr><th>Type of Bias</th><th>Definition</th><th>Detection Method</th></tr>
+          <tr><td>Item Bias (DIF)</td><td>Group differences in item performance at equal trait levels</td><td>DIF analysis (Mantel-Haenszel, IRT methods)</td></tr>
+          <tr><td>Predictive Bias</td><td>Different regression lines for different groups</td><td>Moderated regression analysis</td></tr>
+          <tr><td>Construct Bias</td><td>Test measures different constructs across groups</td><td>Measurement invariance, factor analysis</td></tr>
+        </table>
+
+        <h3>Measurement Invariance</h3>
+        <p><span class="key-term">Measurement invariance</span> (measurement equivalence) is the psychometric property that a test measures the same construct in the same way across different groups. Without measurement invariance, group comparisons on test scores are not meaningful. Testing for measurement invariance typically proceeds through increasingly restrictive levels:</p>
+        <ul>
+          <li><strong>Configural invariance:</strong> The same factor structure holds across groups</li>
+          <li><strong>Metric invariance:</strong> Factor loadings are equal across groups</li>
+          <li><strong>Scalar invariance:</strong> Item intercepts are equal across groups (required for meaningful mean comparisons)</li>
+          <li><strong>Strict invariance:</strong> Residual variances are equal across groups</li>
+        </ul>
+
+        <h3>Models of Test Fairness</h3>
+        <p>Several models of test fairness have been proposed, and these are not always compatible with each other:</p>
+        <ul>
+          <li><strong>Unqualified individualism:</strong> The same test and cutoff should be used for all examinees regardless of group membership</li>
+          <li><strong>Quotas:</strong> Selection proportions should match the proportions of applicants from each group</li>
+          <li><strong>Qualified individualism (regression model):</strong> A test is fair if it has equal regression slopes and intercepts across groups (Cleary's definition — the most widely accepted psychometric definition of fairness)</li>
+          <li><strong>Equal probability model:</strong> A test is fair if examinees with equal probability of success on the criterion have equal probability of being selected regardless of group membership</li>
+        </ul>
+
+        <div class="citation">Cleary, T. A. (1968). Test bias: Prediction of grades of Negro and white students in integrated colleges. <em>Journal of Educational Measurement, 5</em>(2), 115-124.</div>
+      </div>
+
+      <!-- Section 3: Standards for Testing -->
+      <div class="content-section">
+        <h2>Standards for Educational and Psychological Testing</h2>
+        <p>The <span class="key-term">Standards</span> (AERA/APA/NCME, 2014) is the authoritative reference for test development, evaluation, and use. It addresses validity, reliability, fairness, test design, documentation, and the responsibilities of test users. Key principles include:</p>
+        <ul>
+          <li>Validity is the most important consideration in test evaluation and refers to the degree to which evidence and theory support the interpretations of test scores for proposed uses</li>
+          <li>Test developers must provide evidence of validity for each intended use and population</li>
+          <li>Test users must select instruments appropriate for the population and purpose</li>
+          <li>Fairness is an integral aspect of validity — a test that produces biased results for a group is not valid for that group</li>
+        </ul>
+
+        <h3>ADA and Testing Accommodations</h3>
+        <p>The <span class="key-term">Americans with Disabilities Act (ADA)</span> requires that testing accommodations be provided to individuals with documented disabilities so that the test measures the intended construct rather than the disability itself. Common accommodations include extended time, large print, separate testing rooms, use of a reader, and Braille formats. Clinicians must document the need for accommodations and consider that accommodated scores may have altered psychometric properties.</p>
+
+        <h3>Telepractice Assessment Considerations</h3>
+        <p>The growth of telepsychology has raised important questions about remote assessment. Key considerations include: ensuring equivalent test conditions across in-person and remote administrations, verifying client identity, maintaining test security, using only tests that have been validated for remote administration, and accounting for technological factors that may influence performance (e.g., screen size, internet connectivity, environmental distractions).</p>
+
+        <h3>Test Security and Ethical Obligations</h3>
+        <p>Psychologists have an ethical obligation to maintain <span class="key-term">test security</span> (Standard 9.11) by protecting test items, protocols, and scoring algorithms from unauthorized disclosure. Threats to test security include:</p>
+        <ul>
+          <li><strong>Internet disclosure:</strong> Posting test items online compromises validity for all future examinees</li>
+          <li><strong>Unauthorized coaching:</strong> Providing examinees with specific test content prior to evaluation invalidates results</li>
+          <li><strong>Inappropriate release:</strong> Releasing test materials (as opposed to test data) to unqualified individuals</li>
+          <li><strong>Inadequate storage:</strong> Failing to secure physical and electronic test materials</li>
+        </ul>
+        <p>When faced with conflicting demands (e.g., a court order to release test materials), psychologists should attempt to resolve the conflict by educating the court about test security concerns, requesting in camera (private) review, or requesting that access be limited to qualified professionals.</p>
+
+        <h3>Cross-Cultural Assessment Issues</h3>
+        <p>Culturally competent assessment requires attention to multiple factors that may affect test validity across cultural groups:</p>
+        <ul>
+          <li><strong>Language considerations:</strong> Testing should generally be conducted in the examinee's dominant language. Use of interpreters introduces additional error variance and should be documented.</li>
+          <li><strong>Acculturation level:</strong> The degree to which an individual has adopted the values, behaviors, and norms of the dominant culture affects the applicability of normative data.</li>
+          <li><strong>Culturally appropriate instruments:</strong> Some tests have been developed or adapted for specific cultural groups (e.g., TEMAS for Hispanic and Black youth — a multicultural apperception test).</li>
+          <li><strong>Norm applicability:</strong> Clinicians must consider whether the normative sample adequately represents the examinee's demographic group.</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Cultural Assessment Scenario:</strong>
+          <p>A psychologist evaluates a recently immigrated 8-year-old child whose family speaks primarily Spanish at home. The child is referred for possible intellectual disability. Using the WISC-V English version alone would be inappropriate, as the VCI would likely underestimate the child's verbal abilities due to language barriers. The psychologist should consider: (1) administering a nonverbal measure such as the Universal Nonverbal Intelligence Test (UNIT-2) or Leiter-3, (2) using the Spanish-language WISC-V if appropriate, (3) supplementing with adaptive behavior assessment, and (4) carefully documenting the linguistic context and its potential impact on results.</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Forensic Assessment Ethics -->
+      <div class="content-section">
+        <h2>Forensic and Third-Party Assessment Issues</h2>
+        <p>Forensic assessment presents unique ethical challenges because the evaluator's primary obligation is to the referral source (typically a court or attorney), not to the individual being evaluated. This fundamentally alters the nature of the professional relationship.</p>
+
+        <div class="definition-box">
+          <strong>Standard 9.03(b) — Mandated Assessments:</strong>
+          <p>When assessment is mandated by law or regulation, informed consent includes informing the individual about the nature and purpose of the assessment, the referral source, and the limits of confidentiality — specifically, that results will be shared with the referring party. The individual's agreement to participate is not required, but they must be informed of the process and their rights.</p>
+        </div>
+
+        <h3>Specialty Guidelines for Forensic Psychology (SGFP)</h3>
+        <p>The APA's <span class="key-term">Specialty Guidelines for Forensic Psychology</span> (2013) supplement the Ethics Code for psychologists working in forensic contexts. Key principles include:</p>
+        <ul>
+          <li>Forensic practitioners should have competence in both psychology and the legal system</li>
+          <li>The forensic role should be clearly distinguished from the therapeutic role</li>
+          <li>Multiple relationships between forensic and therapeutic roles with the same individual should be avoided when possible</li>
+          <li>Forensic opinions should be based on sufficient examination or clearly state the basis for and limitations of opinions offered without personal examination</li>
+          <li>Reports should present findings in a balanced manner, including data that do not support the referral source's preferred conclusion</li>
+        </ul>
+
+        <h3>Third-Party Requests for Evaluation (Standard 9.03(c))</h3>
+        <p>When a third party (employer, attorney, insurer) requests the evaluation, the psychologist must clarify the nature of the relationship with all parties at the outset, including who the client is, what services will be provided, who will have access to results, and the limits of confidentiality.</p>
+
+        <div class="example-box">
+          <strong>Ethical Scenario:</strong>
+          <p>A defense attorney requests a psychological evaluation of their client for a competency hearing. The psychologist must inform the client (the defendant) that: (a) the psychologist was retained by the attorney, (b) the evaluation results will be shared with the attorney, (c) the results may or may not be presented in court depending on the attorney's strategy, (d) the evaluation is not a therapeutic relationship, and (e) the usual limits of confidentiality may not apply in a forensic context.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Test data vs. test materials:</strong> Data (scores, responses, clinician notes) is released to clients upon request. Materials (manuals, protocols, test items) are protected for test security.</li>
+          <li><strong>Standard 9.02:</strong> Use tests with established validity/reliability for the specific purpose and population.</li>
+          <li><strong>Informed consent exceptions:</strong> Mandated testing, routine institutional testing, and capacity evaluations.</li>
+          <li><strong>DIF:</strong> Statistical method for detecting item bias — items functioning differently across groups at equal trait levels.</li>
+          <li><strong>Predictive bias:</strong> Cleary model — different regression equations across groups. Research shows IQ tests slightly overpredict minority academic performance.</li>
+          <li><strong>Test fairness models:</strong> Know the difference between unqualified individualism, qualified individualism (Cleary), quotas, and equal probability approaches.</li>
+          <li><strong>ADA accommodations:</strong> Required for documented disabilities. Accommodation must not change the construct being measured.</li>
+          <li><strong>Forensic assessment:</strong> Primary obligation is to referral source, not examinee. Informed consent must be obtained even when assessment is mandated.</li>
+          <li><strong>Court-ordered release of test materials:</strong> Make reasonable efforts to protect test security; request judicial limitations on access.</li>
+          <li><strong>Standard 9.06:</strong> Consider cultural, linguistic, and situational factors when interpreting results.</li>
+          <li><strong>Flynn effect:</strong> IQ scores increase approximately 3 points per decade. Old norms overestimate abilities. Use current test editions (Standard 9.08).</li>
+          <li><strong>Standard 9.09:</strong> Computer-generated interpretive reports require professional review. Psychologist retains responsibility for appropriate use.</li>
+          <li><strong>Test security (Standard 9.11):</strong> Protect test items and materials from unauthorized disclosure. Internet posting and coaching compromise validity.</li>
+          <li><strong>Cross-cultural assessment:</strong> Test in dominant language; consider acculturation level; use nonverbal measures when language is a barrier; document limitations.</li>
+          <li><strong>TEMAS:</strong> Multicultural apperception test for Hispanic and Black youth. An alternative to the TAT with culturally relevant stimulus cards.</li>
+          <li><strong>Construct vs. item vs. predictive bias:</strong> These are independent — a test can show one type of bias without the others. Each requires different detection methods.</li>
+          <li><strong>Measurement invariance:</strong> A test must measure the same construct in the same way across groups for group comparisons to be meaningful. Tested via confirmatory factor analysis.</li>
+          <li><strong>SGFP:</strong> Forensic psychology specialty guidelines. Distinguish forensic from therapeutic role. Present balanced findings. Multiple forensic-therapeutic relationships should be avoided.</li>
+          <li><strong>Standard 9.05:</strong> Psychologists who develop tests must use appropriate psychometric procedures. Applies to all tests, including those developed for research or institutional use.</li>
+          <li><strong>Cleary's model (qualified individualism):</strong> The most widely accepted psychometric definition of fairness. A test is fair if regression lines are equivalent across groups.</li>
+          <li><strong>Standard 9.02 application:</strong> Use instruments validated for the specific purpose and population. When evidence is lacking, document limitations and describe strengths/weaknesses of interpretations.</li>
+          <li><strong>Telepractice assessment:</strong> Use only tests validated for remote administration. Verify identity. Maintain test security. Account for technological factors (screen size, connectivity).</li>
+          <li><strong>Standard 9.09:</strong> Computer-generated reports require professional review. Never provide automated interpretations directly to clients without clinician contextualization.</li>
+          <li><strong>Test translation vs. adaptation:</strong> Simple translation of test items is insufficient. Cultural adaptation requires demonstrating measurement equivalence in the target population through empirical validation.</li>
+          <li><strong>Overprediction vs. underprediction:</strong> Research generally shows that standardized tests slightly overpredict minority academic performance (higher predicted than actual). This means test bias does NOT explain lower performance — the tests are actually generous.</li>
+          <li><strong>Griggs v. Duke Power (1971):</strong> Supreme Court case establishing that employment tests must be job-related and consistent with business necessity. Prohibited using tests that have disparate impact without demonstrating validity.</li>
+          <li><strong>Adverse/disparate impact:</strong> Occurs when a selection procedure results in substantially different selection rates across groups. The four-fifths rule: if the selection rate for a minority group is less than 80% of the majority group's rate, adverse impact may be present.</li>
+          <li><strong>Standard 9.01 (Bases for Assessments):</strong> Psychologists base their opinions on information sufficient to substantiate findings. When examination is not practical, opinions must be clearly identified as preliminary and limitations acknowledged.</li>
+          <li><strong>Record retention:</strong> Test data and records should be maintained for the period required by law and institutional policy. Records must be stored securely and destroyed in a manner that ensures confidentiality.</li>
+          <li><strong>Test user qualifications:</strong> Tests are classified by user qualification levels (A, B, C or equivalent). Level C tests (e.g., IQ tests, personality inventories) require doctoral-level training. Improper use by unqualified individuals is an ethical concern.</li>
+          <li><strong>Differential prediction:</strong> When regression equations differ across groups (different slopes or intercepts), a single prediction equation may over- or underpredict for specific subgroups. Requires separate regression analyses.</li>
+          <li><strong>Four-fifths rule:</strong> Screening guideline for adverse impact. If minority selection rate divided by majority selection rate is less than 0.80 (4/5), adverse impact is indicated. Used by EEOC as a practical threshold.</li>
+          <li><strong>Standard 9.10 (Explaining Results):</strong> Psychologists take reasonable steps to ensure that assessment results are explained to the individual or designated representative, using language that is understandable.</li>
+          <li><strong>Raw scores:</strong> Never interpret or report raw scores alone. Raw scores are meaningless without a normative reference or criterion. Always convert to derived scores for interpretation.</li>
+          <li><strong>Larry P. v. Riles (1979):</strong> Banned use of IQ tests for placing Black children in special education classes in California. Found that IQ tests were culturally biased and contributed to overrepresentation of Black students in EMR classes.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch5-score-interpretation.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Test Score Interpretation &amp; Psychometrics</div>
+          </div>
+        </a>
+        <a href="ch7-therapeutic-relationships.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Therapeutic Relationships &amp; Boundaries</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

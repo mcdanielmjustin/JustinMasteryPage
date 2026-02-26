@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sexual Disorders | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Sexual Disorders</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link active"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 8 of 10</div>
+        <h1>Sexual Disorders & Gender Dysphoria</h1>
+        <div class="chapter-meta">
+          <span>Dysfunctions, paraphilias, gender dysphoria</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Sexual Dysfunctions, Paraphilias, and Gender Dysphoria</h2>
+        <p>The DSM-5 addresses sexual concerns across three separate chapters: <span class="key-term">Sexual Dysfunctions</span>, <span class="key-term">Paraphilic Disorders</span>, and <span class="key-term">Gender Dysphoria</span>. This separation reflects the view that these are fundamentally different types of conditions. Sexual dysfunctions involve disturbances in sexual desire, arousal, or response. Paraphilic disorders involve atypical sexual interests that cause distress or impairment or involve nonconsenting others. Gender dysphoria involves incongruence between experienced/expressed gender and assigned gender.</p>
+        <div class="definition-box">
+          <h4>Key DSM-5 Changes</h4>
+          <p>DSM-5 made significant changes: sexual dysfunctions were reorganized with gender-specific diagnoses; the distinction between <span class="key-term">paraphilia</span> (atypical sexual interest, not necessarily a disorder) and <span class="key-term">paraphilic disorder</span> (a paraphilia causing distress/impairment or harm to others) was clarified; and gender identity disorder was renamed to <span class="key-term">gender dysphoria</span> to reduce stigmatization and emphasize distress rather than identity as pathological.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Sexual Dysfunctions</h2>
+        <p>DSM-5 sexual dysfunctions are gender-specific and generally require a minimum duration of approximately <strong>6 months</strong>, occurring on at least 75-100% of sexual occasions, and causing clinically significant distress. Specifiers include lifelong vs. acquired, generalized vs. situational, and current severity.</p>
+        <h3>Desire and Arousal Disorders</h3>
+        <h4>Female Sexual Interest/Arousal Disorder</h4>
+        <p>This new DSM-5 diagnosis <strong>combined</strong> what DSM-IV separated as hypoactive sexual desire disorder (HSDD) and female sexual arousal disorder. It requires at least 3 of 6 symptoms: absent/reduced interest in sexual activity, absent/reduced sexual fantasies, reduced/absent initiation and unreceptiveness to partner's attempts, absent/reduced sexual excitement during activity, absent/reduced sexual interest in response to internal or external cues, and absent/reduced genital or nongenital sensations during activity.</p>
+        <h4>Male Hypoactive Sexual Desire Disorder</h4>
+        <p>Persistently or recurrently deficient or absent sexual/erotic thoughts or fantasies and desire for sexual activity. DSM-5 retained this as a separate diagnosis for males, unlike the combined female diagnosis.</p>
+        <h4>Erectile Disorder</h4>
+        <p>Marked difficulty obtaining an erection, maintaining an erection, or marked decrease in erectile rigidity on at least 75-100% of occasions. This is one of the most common sexual dysfunctions in males, particularly with increasing age.</p>
+
+        <h3>Orgasmic Disorders</h3>
+        <h4>Female Orgasmic Disorder</h4>
+        <p>Marked delay in, marked infrequency of, or absence of orgasm, or markedly reduced intensity of orgasmic sensations on at least 75-100% of occasions.</p>
+        <h4>Delayed Ejaculation</h4>
+        <p>Marked delay in ejaculation, or marked infrequency or absence of ejaculation during partnered sexual activity on at least 75-100% of occasions.</p>
+        <h4>Premature (Early) Ejaculation</h4>
+        <p>A persistent or recurrent pattern of ejaculation occurring within approximately 1 minute of vaginal penetration and before the individual wishes it. This can also be applied to nonvaginal sexual activities.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Masters and Johnson's (1966) <span class="key-term">Human Sexual Response Cycle</span> (excitement, plateau, orgasm, resolution) and Kaplan's (1979) <span class="key-term">Triphasic Model</span> (desire, excitement, orgasm) provide the conceptual framework for understanding sexual dysfunctions. DSM-5 moved away from rigid mapping onto these models but they remain foundational for the EPPP. Sensate focus exercises, developed by Masters and Johnson, remain a key behavioral intervention for sexual dysfunctions.</p>
+        </div>
+
+        <h3>Sexual Pain Disorders</h3>
+        <h4>Genito-Pelvic Pain/Penetration Disorder</h4>
+        <p>This new DSM-5 diagnosis <strong>combined</strong> DSM-IV's vaginismus and dyspareunia into a single diagnosis. It involves persistent or recurrent difficulties with one or more of: vaginal penetration during intercourse, marked vulvovaginal or pelvic pain during intercourse or penetration attempts, marked fear or anxiety about vulvovaginal or pelvic pain in anticipation of or during penetration, and marked tensing or tightening of pelvic floor muscles during attempted penetration. This diagnosis applies only to females.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Paraphilic Disorders</h2>
+        <p>The DSM-5 makes a crucial distinction: a <span class="key-term">paraphilia</span> is any intense and persistent sexual interest other than sexual interest in genital stimulation or preparatory fondling with phenotypically normal, physically mature, consenting human partners. A <span class="key-term">paraphilic disorder</span> is a paraphilia that causes marked distress or impairment, or whose satisfaction requires actions that involve personal harm or risk of harm to others.</p>
+        <h3>DSM-5 Paraphilic Disorders</h3>
+        <table>
+          <tr><th>Disorder</th><th>Focus of Sexual Interest</th><th>Key Features</th></tr>
+          <tr><td>Voyeuristic Disorder</td><td>Observing unsuspecting persons undressing/in sexual activity</td><td>Must be 18+ years old; prevalence up to 12% in males</td></tr>
+          <tr><td>Exhibitionistic Disorder</td><td>Exposing genitals to unsuspecting persons</td><td>May involve desire to surprise, shock, or impress</td></tr>
+          <tr><td>Frotteuristic Disorder</td><td>Touching or rubbing against a nonconsenting person</td><td>Typically occurs in crowded public settings</td></tr>
+          <tr><td>Sexual Masochism Disorder</td><td>Being humiliated, beaten, or otherwise made to suffer</td><td>Specify if with asphyxiophilia (arousal by oxygen deprivation)</td></tr>
+          <tr><td>Sexual Sadism Disorder</td><td>Physical or psychological suffering of another person</td><td>Must involve nonconsenting partner or cause distress</td></tr>
+          <tr><td>Pedophilic Disorder</td><td>Sexual activity with prepubescent children (generally 13 or younger)</td><td>Individual must be at least 16 and at least 5 years older than the child; specify exclusive/nonexclusive type</td></tr>
+          <tr><td>Fetishistic Disorder</td><td>Nonliving objects or highly specific nongenital body parts</td><td>Does not include garments used for cross-dressing</td></tr>
+          <tr><td>Transvestic Disorder</td><td>Cross-dressing</td><td>Applies to heterosexual males; specify with fetishism or autogynephilia</td></tr>
+        </table>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>A person with a paraphilia (e.g., fetishism) who does not experience distress, impairment, or harm to others would <strong>not</strong> meet criteria for a paraphilic disorder. The diagnosis requires either personal distress/impairment (Criterion B for some disorders) or acting on urges with nonconsenting persons (Criterion B for voyeuristic, exhibitionistic, frotteuristic, and pedophilic disorders). This distinction reduces pathologizing of atypical but harmless sexual interests.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Etiology and Treatment of Sexual Dysfunctions</h2>
+        <h3>Biopsychosocial Etiology</h3>
+        <p>Sexual dysfunctions arise from the interaction of biological, psychological, and sociocultural factors:</p>
+        <ul>
+          <li><strong>Biological factors:</strong> Vascular disease, diabetes, hormonal imbalances (low testosterone, hyperprolactinemia), neurological conditions, medications (SSRIs are the most common medication-related cause, particularly for delayed orgasm and decreased desire), substance use (alcohol, opioids)</li>
+          <li><strong>Psychological factors:</strong> Performance anxiety (spectating, as described by Masters & Johnson), relationship distress, depression, anxiety, history of sexual trauma, negative body image, restrictive sexual attitudes</li>
+          <li><strong>Sociocultural factors:</strong> Cultural and religious prohibitions, inadequate sexual education, gender role expectations</li>
+        </ul>
+        <h3>Evidence-Based Treatments</h3>
+        <table>
+          <tr><th>Dysfunction</th><th>Primary Treatments</th></tr>
+          <tr><td>Erectile disorder</td><td>PDE-5 inhibitors (sildenafil/Viagra); CBT; couples therapy; sensate focus</td></tr>
+          <tr><td>Female sexual interest/arousal</td><td>CBT; mindfulness-based therapies; hormonal therapy (in some cases); addressing relationship factors</td></tr>
+          <tr><td>Premature ejaculation</td><td>Squeeze technique and stop-start technique (Masters & Johnson/Semans); SSRIs (off-label); topical anesthetics</td></tr>
+          <tr><td>Female orgasmic disorder</td><td>Directed masturbation training; sensate focus; CBT; bibliotherapy</td></tr>
+          <tr><td>Genito-pelvic pain/penetration</td><td>Pelvic floor physical therapy; graduated vaginal dilators; CBT; pain management</td></tr>
+        </table>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Spectating</span> (Masters & Johnson, 1970) refers to the process whereby an individual monitors and evaluates their own sexual performance during sexual activity, becoming an anxious observer rather than an engaged participant. This self-focused attention creates a negative feedback loop: anxiety impairs sexual response, which increases performance monitoring, which further heightens anxiety. Sensate focus exercises address spectating by redirecting attention to sensory experience and removing performance demands.</p>
+        </div>
+        <h3>Paraphilic Disorder Treatment</h3>
+        <p>Treatment approaches for paraphilic disorders include:</p>
+        <ul>
+          <li><strong>Cognitive-behavioral therapy:</strong> Cognitive restructuring of distorted thinking, relapse prevention planning, social skills training</li>
+          <li><strong>Aversion therapy:</strong> Pairing paraphilic stimuli with aversive consequences (covert sensitization uses imagined aversive scenes)</li>
+          <li><strong>Orgasmic reconditioning:</strong> Redirecting arousal patterns toward appropriate stimuli</li>
+          <li><strong>Pharmacotherapy:</strong> Antiandrogens (medroxyprogesterone acetate/Depo-Provera, cyproterone acetate) reduce testosterone and sexual drive; SSRIs may reduce paraphilic urges; GnRH agonists (leuprolide) for severe cases ("chemical castration")</li>
+        </ul>
+        <div class="citation">Risk assessment for sexual offending is a critical competency. Actuarial instruments such as the Static-99 and the SVR-20 assess risk factors including prior sexual offenses, victim characteristics, age at first offense, and relationship history (Hanson & Thornton, 2000).</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Gender Dysphoria</h2>
+        <p><span class="key-term">Gender dysphoria</span> refers to the distress that may accompany the incongruence between one's experienced or expressed gender and one's assigned gender. DSM-5 renamed this from "gender identity disorder" to emphasize that gender nonconformity is not itself a disorder -- the clinical problem is the distress (dysphoria) that may accompany it.</p>
+        <h3>Criteria in Children</h3>
+        <p>Requires at least 6 of 8 criteria over at least 6 months, including a strong desire to be of the other gender or insistence that one is the other gender (or some alternative gender). Other criteria include strong preference for cross-gender roles in play, toys, and activities; strong preference for playmates of the other gender; strong rejection of typically gendered toys/activities; strong dislike of one's sexual anatomy; and strong desire for primary/secondary sex characteristics matching experienced gender.</p>
+        <h3>Criteria in Adolescents and Adults</h3>
+        <p>Requires at least 2 of 6 criteria over at least 6 months: marked incongruence between experienced/expressed gender and primary/secondary sex characteristics, strong desire to be rid of one's sex characteristics, strong desire for sex characteristics of the other gender, strong desire to be the other gender, strong desire to be treated as the other gender, and strong conviction that one has the typical feelings and reactions of the other gender.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>The DSM-5 removal of "disorder" from the diagnostic name reflects the movement to depathologize gender diversity. The diagnosis exists primarily to enable access to medical treatment (hormone therapy, surgical interventions) and is distinct from sexual orientation. Research shows that gender dysphoria in childhood persists into adulthood in approximately 12-27% of cases, but persistence rates are much higher when dysphoria intensifies during adolescence (Steensma et al., 2013).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Differential Diagnosis and Assessment</h2>
+        <h3>Differentiating Sexual Dysfunctions</h3>
+        <p>Accurate assessment of sexual dysfunctions requires consideration of several factors:</p>
+        <ul>
+          <li><strong>Medical conditions:</strong> Diabetes, cardiovascular disease, neurological conditions (multiple sclerosis, spinal cord injury), endocrine disorders (hypogonadism, thyroid dysfunction), and pelvic conditions must be ruled out</li>
+          <li><strong>Medication effects:</strong> SSRIs (most common medication cause), antihypertensives, antipsychotics, anticonvulsants, and opioids can all impair sexual function. SSRI-induced sexual dysfunction affects 30-70% of patients and involves decreased desire, delayed orgasm, and erectile difficulties</li>
+          <li><strong>Substance effects:</strong> Alcohol acutely impairs arousal and orgasm; chronic use causes hormonal changes. Opioids significantly reduce testosterone and sexual desire</li>
+          <li><strong>Relationship factors:</strong> Partner sexual dysfunction, relationship conflict, and differing desire levels must be assessed. DSM-5 requires that the dysfunction is not better explained by relationship distress or other significant stressors</li>
+          <li><strong>Cultural factors:</strong> Cultural expectations about sexual performance, sexual knowledge, and attitudes toward sexual behavior vary widely and must be considered in assessment</li>
+        </ul>
+        <h3>Nocturnal Penile Tumescence (NPT) Testing</h3>
+        <p><span class="key-term">NPT testing</span> measures erections during sleep. Normal NPT in a man with erectile complaints suggests a psychogenic etiology (performance anxiety, depression, relationship issues), while absent NPT suggests an organic cause (vascular, neurological, hormonal). This distinction guides treatment planning -- psychogenic erectile dysfunction responds well to psychotherapy, while organic erectile dysfunction requires medical intervention.</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>A 45-year-old man reports erectile difficulties with his partner but has morning erections and can achieve erections with masturbation. This pattern is most consistent with <strong>situational, psychogenic erectile dysfunction</strong>, likely related to performance anxiety or relationship factors. In contrast, a man with no erections in any context (including during sleep) likely has an <strong>organic etiology</strong>. The lifelong vs. acquired and generalized vs. situational specifiers help guide this differentiation.</p>
+        </div>
+        <h3>Assessment of Paraphilic Disorders</h3>
+        <p>Assessment of paraphilic disorders, particularly in forensic contexts, typically includes:</p>
+        <ul>
+          <li><strong>Clinical interview:</strong> Detailed sexual history, pattern of urges/fantasies/behaviors, history of offenses</li>
+          <li><strong>Penile plethysmography (PPG):</strong> Measures penile blood flow in response to visual and auditory stimuli; used primarily in forensic assessment of sexual interest patterns (e.g., pedophilic interest). Has reliability and ethical concerns</li>
+          <li><strong>Viewing time measures:</strong> Assess attention allocation to sexual stimuli as an indirect measure of sexual interest</li>
+          <li><strong>Actuarial risk assessment tools:</strong> Static-99R, STABLE-2007, and ACUTE-2007 assess static and dynamic risk factors for sexual recidivism</li>
+          <li><strong>Psychometric instruments:</strong> Multiphasic Sex Inventory, Clarke Sexual History Questionnaire</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>DSM-5 <strong>combined</strong> HSDD and female sexual arousal disorder into <strong>Female Sexual Interest/Arousal Disorder</strong></li>
+          <li>DSM-5 <strong>combined</strong> vaginismus and dyspareunia into <strong>Genito-Pelvic Pain/Penetration Disorder</strong></li>
+          <li>Sexual dysfunctions require symptoms for at least <strong>6 months</strong> on <strong>75-100%</strong> of occasions</li>
+          <li><strong>Paraphilia</strong> (atypical interest) vs. <strong>paraphilic disorder</strong> (causes distress/impairment or involves nonconsent)</li>
+          <li>Pedophilic disorder: individual must be <strong>at least 16</strong> and <strong>at least 5 years older</strong> than the child</li>
+          <li>Gender identity disorder renamed to <strong>gender dysphoria</strong> to emphasize distress, not identity</li>
+          <li>Masters & Johnson's sexual response cycle: <strong>excitement, plateau, orgasm, resolution</strong></li>
+          <li>Kaplan's triphasic model: <strong>desire, excitement, orgasm</strong></li>
+          <li><strong>Sensate focus</strong> is the key behavioral intervention for sexual dysfunctions (Masters & Johnson)</li>
+          <li>Gender dysphoria in childhood persists into adulthood in approximately <strong>12-27%</strong> of cases</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Kaplan, H. S. (1979). <em>Disorders of sexual desire</em>. Brunner/Mazel.</div>
+        <div class="citation">Masters, W. H., & Johnson, V. E. (1966). <em>Human sexual response</em>. Little, Brown.</div>
+        <div class="citation">Seto, M. C. (2008). <em>Pedophilia and sexual offending against children: Theory, assessment, and intervention</em>. American Psychological Association.</div>
+        <div class="citation">Steensma, T. D., McGuire, J. K., Kreukels, B. P., Beekman, A. J., & Cohen-Kettenis, P. T. (2013). Factors associated with desistence and persistence of childhood gender dysphoria. <em>Journal of the American Academy of Child & Adolescent Psychiatry, 52</em>(6), 582-590.</div>
+        <div class="citation">Hanson, R. K., & Thornton, D. (2000). Improving risk assessments for sex offenders: A comparison of three actuarial scales. <em>Law and Human Behavior, 24</em>(1), 119-136.</div>
+        <div class="citation">Masters, W. H., & Johnson, V. E. (1970). <em>Human sexual inadequacy</em>. Little, Brown.</div>
+        <div class="citation">Zucker, K. J., & Lawrence, A. A. (2009). Epidemiology of gender identity disorder. <em>International Journal of Transgenderism, 11</em>(1), 8-18.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="schizophrenia.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Schizophrenia Spectrum</div>
+          </div>
+        </a>
+        <a href="substance-disorders.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Substance Use Disorders</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

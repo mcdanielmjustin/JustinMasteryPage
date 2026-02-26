@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prenatal Development | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Prenatal Development</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link active"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 9</div>
+        <h1>Prenatal Development</h1>
+        <div class="chapter-meta">
+          <span>Stages, teratogens, fetal alcohol syndrome, genetic disorders</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Prenatal Development</h2>
+        <p>Prenatal development spans approximately 38 weeks from conception to birth and is divided into three major periods: germinal, embryonic, and fetal. During this time, a single fertilized cell develops into a complex organism with functioning organ systems. Understanding prenatal development is essential for the EPPP because many developmental abnormalities, genetic disorders, and environmental hazards have their origins during this period.</p>
+        <p>Clinicians must understand the timing and mechanisms of prenatal risk factors to provide accurate psychoeducation, conduct informed assessments, and develop appropriate treatment plans for individuals affected by prenatal insults.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Stages of Prenatal Development</h2>
+
+        <h3>Germinal Period (Conception to ~2 Weeks)</h3>
+        <p>The germinal period begins with <span class="key-term">fertilization</span> (the union of sperm and ovum forming a zygote) and ends with <span class="key-term">implantation</span> of the developing organism in the uterine wall. During this period:</p>
+        <ul>
+          <li>The zygote undergoes rapid cell division (<span class="key-term">mitosis</span>), forming a hollow ball of cells called a <span class="key-term">blastocyst</span></li>
+          <li>The blastocyst differentiates into the <strong>embryonic disk</strong> (which becomes the embryo) and the <strong>trophoblast</strong> (which becomes the support structures: placenta, umbilical cord, amniotic sac)</li>
+          <li>Implantation occurs approximately 10-14 days after conception</li>
+          <li>An estimated 58% of fertilized ova fail to implant successfully and are lost, often without the woman's awareness</li>
+        </ul>
+
+        <h3>Embryonic Period (~2 to 8 Weeks)</h3>
+        <p>This is the most critical period for structural development. All major organ systems begin to form through a process called <span class="key-term">organogenesis</span>. Three embryonic cell layers differentiate:</p>
+
+        <div class="definition-box">
+          <h4>Embryonic Cell Layers</h4>
+          <p><strong>Ectoderm (outer layer):</strong> Develops into the nervous system, sensory organs, and skin.</p>
+          <p><strong>Mesoderm (middle layer):</strong> Develops into muscles, bones, circulatory system, and other internal organs.</p>
+          <p><strong>Endoderm (inner layer):</strong> Develops into the digestive system, lungs, urinary tract, and glands.</p>
+        </div>
+
+        <p>By the end of the embryonic period (8 weeks), the embryo is approximately 1 inch long and has recognizable features including rudimentary eyes, ears, limbs, and a beating heart. The <span class="key-term">neural tube</span> (precursor to the brain and spinal cord) forms during weeks 3-4, making this period particularly critical for nervous system development. Failure of neural tube closure results in conditions such as <strong>spina bifida</strong> (incomplete closure of the spinal column) or <strong>anencephaly</strong> (absence of major portions of the brain).</p>
+
+        <h3>Fetal Period (~9 Weeks to Birth)</h3>
+        <p>The fetal period is characterized by rapid growth, refinement of organ systems, and increasing behavioral complexity. Key milestones include:</p>
+        <ul>
+          <li><strong>Weeks 9-12:</strong> Sex differentiation occurs; the fetus begins to move (though not yet felt by the mother)</li>
+          <li><strong>Weeks 13-24:</strong> Rapid growth; "quickening" (mother feels fetal movement) typically around 18-20 weeks; the fetus can hear external sounds</li>
+          <li><strong>Week 24-28:</strong> The <span class="key-term">age of viability</span> -- the point at which the fetus has a reasonable chance of survival outside the womb with medical intervention (due primarily to sufficient lung maturation)</li>
+          <li><strong>Weeks 29-40:</strong> Rapid brain development, weight gain, and maturation of all organ systems in preparation for birth</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>The concept of <span class="key-term">critical periods</span> (also called sensitive periods) is essential: specific organ systems are most vulnerable to disruption during the time they are actively forming. The embryonic period is the time of greatest vulnerability to structural birth defects because organogenesis is occurring. However, the brain continues to develop throughout the fetal period and into postnatal life, making it vulnerable to insult across a longer window than other organs.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Teratogens</h2>
+        <p>A <span class="key-term">teratogen</span> is any environmental agent that can cause damage to the developing organism during prenatal development. The effects of teratogens depend on several principles:</p>
+        <ul>
+          <li><strong>Timing of exposure:</strong> The same teratogen can produce different defects depending on when exposure occurs (critical period principle)</li>
+          <li><strong>Dose-response relationship:</strong> Greater exposure generally leads to more severe effects</li>
+          <li><strong>Genetic susceptibility:</strong> Individual genetic makeup influences vulnerability to teratogens</li>
+          <li><strong>Number of teratogens:</strong> Multiple risk factors interact and may produce cumulative or synergistic effects</li>
+        </ul>
+
+        <h3>Alcohol: Fetal Alcohol Spectrum Disorders (FASD)</h3>
+        <p>Alcohol is the most well-studied and one of the most damaging teratogens. Prenatal alcohol exposure can produce a range of effects collectively called <span class="key-term">Fetal Alcohol Spectrum Disorders (FASD)</span>, with <span class="key-term">Fetal Alcohol Syndrome (FAS)</span> representing the most severe end of the spectrum.</p>
+
+        <div class="definition-box">
+          <h4>Fetal Alcohol Syndrome (FAS) -- Diagnostic Features</h4>
+          <p><strong>Facial dysmorphology:</strong> Short palpebral fissures, smooth philtrum (groove between nose and upper lip), thin upper lip.</p>
+          <p><strong>Growth deficiency:</strong> Prenatal and/or postnatal growth restriction (height and/or weight at or below the 10th percentile).</p>
+          <p><strong>CNS abnormalities:</strong> Structural brain abnormalities, microcephaly, and/or neurological problems. Intellectual disability is common (mean IQ ~70), along with deficits in executive function, attention, learning, and social judgment.</p>
+          <p><strong>Confirmed prenatal alcohol exposure.</strong></p>
+        </div>
+
+        <p>FAS is the <strong>leading preventable cause of intellectual disability</strong> in the Western world. No safe threshold of alcohol consumption during pregnancy has been established, which is why major health organizations recommend complete abstinence during pregnancy (AAP, 2000).</p>
+
+        <h3>Other Substance Teratogens</h3>
+        <table>
+          <tr><th>Substance</th><th>Effects</th></tr>
+          <tr><td>Tobacco/Nicotine</td><td>Low birth weight, preterm birth, SIDS risk, possible behavioral and attentional problems</td></tr>
+          <tr><td>Cocaine</td><td>Prematurity, low birth weight, irritability; earlier claims of severe "crack baby" effects were overstated (Lester et al., 2004)</td></tr>
+          <tr><td>Opioids (heroin, methadone)</td><td>Neonatal Abstinence Syndrome (NAS): tremors, irritability, sleep disturbance, feeding difficulties; requires medical management after birth</td></tr>
+          <tr><td>Marijuana/THC</td><td>Possible effects on attention and executive function; research is ongoing and complicated by polydrug use</td></tr>
+          <tr><td>SSRIs</td><td>Generally considered low risk; some studies suggest slightly elevated risk of persistent pulmonary hypertension; benefits often outweigh risks for maternal depression</td></tr>
+        </table>
+
+        <h3>Infectious Teratogens</h3>
+        <p>Several maternal infections can cross the placenta and damage the developing fetus. The acronym <span class="key-term">TORCH</span> represents the major infectious teratogens:</p>
+        <ul>
+          <li><strong>T</strong> -- Toxoplasmosis (from undercooked meat or cat feces): can cause brain damage, visual impairment</li>
+          <li><strong>O</strong> -- Other infections (syphilis, varicella, HIV, Zika virus)</li>
+          <li><strong>R</strong> -- Rubella (German measles): most dangerous during first trimester; can cause deafness, heart defects, intellectual disability, cataracts</li>
+          <li><strong>C</strong> -- Cytomegalovirus (CMV): the most common congenital infection; can cause hearing loss, intellectual disability</li>
+          <li><strong>H</strong> -- Herpes simplex virus: risk of transmission primarily during vaginal delivery if active lesions present</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Clinical Example: Rubella Effects by Trimester</h4>
+          <p>A psychologist evaluates a 7-year-old child with congenital hearing loss, heart defects, and intellectual disability. Medical records indicate the mother contracted rubella during the first 8 weeks of pregnancy, before the availability of vaccination. This constellation of deficits is characteristic of <strong>congenital rubella syndrome</strong>. The risk of major defects from first-trimester rubella infection is approximately 80%, dropping dramatically after the first trimester because the critical periods for most organ systems have passed. This case illustrates both the critical period principle and the importance of public health measures (vaccination) in preventing teratogenic effects.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Genetic Disorders</h2>
+
+        <h3>Chromosomal Abnormalities</h3>
+        <p><span class="key-term">Down syndrome (Trisomy 21)</span> is the most common chromosomal disorder, occurring in approximately 1 in 700 live births. It results from an extra copy of chromosome 21, typically due to nondisjunction during meiosis. Characteristics include:</p>
+        <ul>
+          <li>Distinctive facial features (flat facial profile, upward-slanting eyes, small ears)</li>
+          <li>Intellectual disability (typically mild to moderate; IQ range 35-70)</li>
+          <li>Increased risk of congenital heart defects, early-onset Alzheimer's disease, and immune system dysfunction</li>
+          <li>Risk increases significantly with maternal age (especially after age 35)</li>
+        </ul>
+        <p>Other chromosomal abnormalities tested on the EPPP include <strong>Turner syndrome</strong> (45,X -- females with only one X chromosome; short stature, infertility, possible spatial processing deficits) and <strong>Klinefelter syndrome</strong> (47,XXY -- males with an extra X; tall stature, possible language delays, infertility).</p>
+
+        <h3>Single-Gene Disorders</h3>
+        <div class="definition-box">
+          <h4>Phenylketonuria (PKU)</h4>
+          <p><strong>Inheritance:</strong> Autosomal recessive -- both parents must carry the recessive allele.</p>
+          <p><strong>Mechanism:</strong> Deficiency of the enzyme phenylalanine hydroxylase, which metabolizes the amino acid phenylalanine. Accumulation of phenylalanine damages the developing brain.</p>
+          <p><strong>Without treatment:</strong> Severe intellectual disability, seizures, behavioral problems.</p>
+          <p><strong>With treatment:</strong> A phenylalanine-restricted diet begun in early infancy prevents intellectual disability. PKU is a prime example of how a 100% genetic disorder can be effectively managed through environmental modification.</p>
+          <p><strong>Screening:</strong> Newborn screening (the Guthrie test) is mandated in all U.S. states.</p>
+        </div>
+
+        <p>Other important single-gene disorders include <strong>Tay-Sachs disease</strong> (autosomal recessive; progressive neurological deterioration, typically fatal by age 5; most common in Ashkenazi Jewish populations), <strong>Huntington's disease</strong> (autosomal dominant; progressive motor and cognitive deterioration with onset typically in the 30s-40s), and <strong>sickle cell disease</strong> (autosomal recessive; carriers have resistance to malaria, illustrating heterozygote advantage).</p>
+
+        <h3>Prenatal Testing and Screening</h3>
+        <ul>
+          <li><strong>Amniocentesis:</strong> Sampling of amniotic fluid (typically at 15-18 weeks) to analyze fetal chromosomes and detect genetic abnormalities; carries a small risk (~0.5%) of miscarriage</li>
+          <li><strong>Chorionic villus sampling (CVS):</strong> Sampling of placental tissue (typically at 10-13 weeks); provides results earlier than amniocentesis but carries a slightly higher miscarriage risk</li>
+          <li><strong>Ultrasound:</strong> Non-invasive imaging used to assess fetal growth, detect structural abnormalities, and determine gestational age</li>
+          <li><strong>Non-invasive prenatal testing (NIPT):</strong> Analysis of cell-free fetal DNA in maternal blood; high sensitivity for detecting trisomies, with no miscarriage risk</li>
+          <li><strong>Maternal serum screening (triple/quad screen):</strong> Blood tests measuring levels of AFP, hCG, estriol, and inhibin A to assess risk of chromosomal abnormalities and neural tube defects</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Other Prenatal Risk Factors</h2>
+        <h3>Maternal Factors</h3>
+        <ul>
+          <li><strong>Maternal age:</strong> Advanced maternal age (35+) increases risk for chromosomal abnormalities; very young maternal age (under 15) associated with low birth weight and prematurity</li>
+          <li><strong>Maternal nutrition:</strong> Folic acid supplementation reduces risk of neural tube defects by 50-70%; severe malnutrition is associated with low birth weight and cognitive deficits</li>
+          <li><strong>Maternal stress:</strong> Chronic stress increases cortisol exposure to the fetus, potentially affecting brain development and stress reactivity (Talge et al., 2007)</li>
+          <li><strong>Rh factor incompatibility:</strong> When an Rh-negative mother carries an Rh-positive fetus, maternal antibodies can attack fetal red blood cells in subsequent pregnancies (erythroblastosis fetalis); preventable with RhoGAM injection</li>
+        </ul>
+
+        <h3>Environmental Toxins</h3>
+        <ul>
+          <li><strong>Lead:</strong> Associated with intellectual disability, behavioral problems, and attention deficits even at low levels of exposure</li>
+          <li><strong>Mercury (methylmercury):</strong> Damages the developing nervous system; found in certain fish species</li>
+          <li><strong>Radiation:</strong> High-dose radiation (e.g., from atomic bomb exposure, radiation therapy) can cause microcephaly and intellectual disability</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Know the three stages of prenatal development and their approximate timeframes: germinal (0-2 weeks), embryonic (2-8 weeks), fetal (9 weeks to birth)</li>
+          <li>The embryonic period is the most critical for major structural defects because organogenesis occurs during this time</li>
+          <li>FAS is the leading preventable cause of intellectual disability; know the diagnostic features (facial dysmorphology, growth deficiency, CNS abnormalities)</li>
+          <li>Understand the principles governing teratogenic effects: timing, dose, genetic susceptibility, and multiple risk factors</li>
+          <li>Know the TORCH infections and their specific effects</li>
+          <li>Down syndrome (Trisomy 21): most common chromosomal abnormality, risk increases with maternal age</li>
+          <li>PKU illustrates that a 100% genetic disorder can be prevented through environmental modification (diet), demonstrating that high heritability does not mean immutability</li>
+          <li>Know the difference between amniocentesis (15-18 weeks) and CVS (10-13 weeks) in timing and relative risk</li>
+          <li>The age of viability is approximately 24-28 weeks</li>
+          <li>Neural tube formation occurs weeks 3-4; folic acid supplementation is protective</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Academy of Pediatrics. (2000). Fetal alcohol syndrome and alcohol-related neurodevelopmental disorders. <em>Pediatrics, 106</em>(2), 358-361.</div>
+        <div class="citation">Hoyme, H. E., Kalberg, W. O., Elliott, A. J., et al. (2016). Updated clinical guidelines for diagnosing fetal alcohol spectrum disorders. <em>Pediatrics, 138</em>(2), e20154256.</div>
+        <div class="citation">Lester, B. M., Tronick, E. Z., LaGasse, L., et al. (2004). Summary statistics of neonatal intensive care unit network neurobehavioral scale scores. <em>Pediatrics, 113</em>(3), 679-689.</div>
+        <div class="citation">Moore, K. L., Persaud, T. V. N., & Torchia, M. G. (2016). <em>The developing human: Clinically oriented embryology</em> (10th ed.). Elsevier.</div>
+        <div class="citation">Sadler, T. W. (2015). <em>Langman's medical embryology</em> (13th ed.). Lippincott Williams & Wilkins.</div>
+        <div class="citation">Talge, N. M., Neal, C., & Glover, V. (2007). Antenatal maternal stress and long-term effects on child neurodevelopment: How and why? <em>Journal of Child Psychology and Psychiatry, 48</em>(3-4), 245-261.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="nature-nurture.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Nature vs. Nurture</div>
+          </div>
+        </a>
+        <a href="language-development.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Language Development</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

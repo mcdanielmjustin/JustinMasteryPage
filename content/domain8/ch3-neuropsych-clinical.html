@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuropsychological Screening & Clinical Measurement – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Neuropsych Screening &amp; Clinical Measurement</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link active"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 12</div>
+        <h1>Neuropsychological Screening &amp; Clinical Measurement</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~28 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Fixed Battery Approach -->
+      <div class="content-section">
+        <h2>Fixed Battery Approaches</h2>
+        <p>The <span class="key-term">fixed battery approach</span> administers a standard set of tests to every patient regardless of the referral question, providing a comprehensive profile of cognitive functioning. This approach prioritizes standardization and allows for normative comparison across a wide range of functions.</p>
+
+        <h3>Halstead-Reitan Neuropsychological Battery (HRNB)</h3>
+        <p>The <span class="key-term">Halstead-Reitan Battery</span> is the prototypical fixed battery, originally developed by Ward Halstead and subsequently refined by Ralph Reitan. It consists of multiple tests that assess a broad range of cognitive and sensory-motor functions. Key components include:</p>
+        <ul>
+          <li><strong>Category Test:</strong> Measures abstract concept formation and the ability to learn from feedback. The examinee identifies an underlying principle across sets of visual stimuli. Errors indicate difficulty with abstract reasoning, often associated with frontal lobe dysfunction.</li>
+          <li><strong>Tactual Performance Test (TPT):</strong> The blindfolded examinee places geometric blocks into a form board using each hand separately and then both hands together. Assesses tactile form recognition, spatial memory, and lateralization. A memory and localization component tests incidental spatial learning.</li>
+          <li><strong>Finger Oscillation (Finger Tapping) Test:</strong> Measures motor speed by counting the number of taps in 10 seconds for each hand. The dominant hand typically taps about 10% faster; significant deviations suggest contralateral hemispheric dysfunction.</li>
+          <li><strong>Trail Making Test:</strong> <span class="key-term">Part A</span> (connect numbered circles in sequence) measures visual scanning and psychomotor speed. <span class="key-term">Part B</span> (alternate between numbers and letters: 1-A-2-B-3-C...) additionally measures cognitive flexibility and set-shifting, often associated with frontal/executive function.</li>
+          <li><strong>Impairment Index:</strong> A summary score ranging from 0.0 to 1.0 based on the proportion of tests falling in the impaired range. Scores above 0.4 suggest brain dysfunction.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Halstead-Reitan Impairment Index:</strong>
+          <p>Calculated by dividing the number of tests falling in the impaired range by the total number of tests in the battery. Ranges from 0.0 (no impairment) to 1.0 (all tests impaired). A cutoff of 0.4 or above is commonly used to suggest the presence of brain dysfunction, though this index alone is insufficient for localization or diagnosis.</p>
+        </div>
+
+        <h3>Luria-Nebraska Neuropsychological Battery (LNNB)</h3>
+        <p>The <span class="key-term">Luria-Nebraska Battery</span> (Golden et al., 1980) was developed to standardize A. R. Luria's qualitative neuropsychological assessment procedures into a quantitative format. It includes 269 items organized into 11 scales: Motor, Rhythm, Tactile, Visual, Receptive Speech, Expressive Speech, Writing, Reading, Arithmetic, Memory, and Intellectual Processes. Three additional scales were added: Pathognomonic (items most sensitive to brain damage), Left Hemisphere, and Right Hemisphere. The LNNB takes less time to administer than the HRNB (approximately 2-3 hours vs. 6-8 hours).</p>
+
+        <h3>Lateralization Indicators in Neuropsychological Assessment</h3>
+        <p>Several neuropsychological tests provide information about the lateralization of brain dysfunction:</p>
+        <ul>
+          <li><strong>Finger Tapping asymmetry:</strong> A significant discrepancy between dominant and non-dominant hand speed suggests contralateral hemisphere dysfunction</li>
+          <li><strong>Grip Strength (Dynamometer):</strong> The dominant hand is typically 10% stronger; asymmetry beyond this suggests contralateral pathology</li>
+          <li><strong>Sensory-Perceptual Examination:</strong> Assesses tactile, auditory, and visual extinction during bilateral simultaneous stimulation — failure to detect the stimulus on one side suggests contralateral parietal dysfunction</li>
+          <li><strong>Aphasia Screening Test:</strong> Part of the HRNB; screens for language disturbances associated with dominant (typically left) hemisphere dysfunction</li>
+        </ul>
+
+        <div class="citation">Reitan, R. M., & Wolfson, D. (1993). <em>The Halstead-Reitan Neuropsychological Test Battery: Theory and clinical interpretation.</em> Neuropsychology Press.</div>
+      </div>
+
+      <!-- Section 2: Executive Function Measures -->
+      <div class="content-section">
+        <h2>Executive Function Measures</h2>
+        <p>Executive functions encompass higher-order cognitive processes including planning, cognitive flexibility, inhibition, working memory, and problem-solving. These are primarily associated with prefrontal cortex functioning.</p>
+
+        <h3>Wisconsin Card Sorting Test (WCST)</h3>
+        <p>The <span class="key-term">WCST</span> is one of the most widely used measures of executive function. The examinee matches cards to one of four stimulus cards based on color, form, or number. The sorting principle changes without warning after 10 consecutive correct sorts, requiring the examinee to shift set. Key metrics include:</p>
+        <ul>
+          <li><strong>Categories completed:</strong> Number of sorting principles correctly identified (maximum 6)</li>
+          <li><strong>Perseverative errors:</strong> Continued sorting by a previously correct but currently incorrect principle — the hallmark indicator of <span class="key-term">frontal lobe dysfunction</span></li>
+          <li><strong>Total errors:</strong> Overall error count</li>
+          <li><strong>Failure to maintain set:</strong> Errors after five consecutive correct responses within a category</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Clinical Example:</strong>
+          <p>A 52-year-old patient with a history of traumatic brain injury completes only 2 categories on the WCST with 45 perseverative errors (well above the clinical cutoff). Despite being told "that's wrong," the patient continues sorting by the same principle. This perseverative pattern is characteristic of dorsolateral prefrontal cortex damage and impaired cognitive flexibility.</p>
+        </div>
+
+        <h3>Tower of London / Tower of Hanoi</h3>
+        <p>These tests measure <span class="key-term">planning and problem-solving ability</span>. The examinee must move colored beads/discs from an initial configuration to a goal configuration in a minimum number of moves. Performance is scored based on the number of moves required and the time to first move (an index of planning). Impairment suggests executive dysfunction, particularly in planning and sequencing.</p>
+
+        <h3>Delis-Kaplan Executive Function System (D-KEFS)</h3>
+        <p>The <span class="key-term">D-KEFS</span> (Delis, Kaplan, & Kramer, 2001) is a comprehensive battery of nine tests specifically designed to assess executive functions across the lifespan (ages 8-89). It emphasizes the process approach by measuring not just overall scores but qualitative aspects of performance. Key subtests include:</p>
+        <ul>
+          <li><strong>Trail Making Test:</strong> Five conditions (visual scanning, number sequencing, letter sequencing, number-letter switching, motor speed) that isolate the specific component responsible for impaired performance</li>
+          <li><strong>Color-Word Interference Test:</strong> Four conditions (color naming, word reading, inhibition, inhibition/switching) separating basic skills from executive demands</li>
+          <li><strong>Sorting Test:</strong> Free sorting and sort recognition tasks measuring concept formation, problem-solving, and flexibility</li>
+        </ul>
+
+        <h3>Stroop Color-Word Test</h3>
+        <p>The <span class="key-term">Stroop test</span> assesses inhibitory control and selective attention. In the interference condition, the examinee must name the ink color of color-words printed in incongruent colors (e.g., the word "RED" printed in blue ink — the correct response is "blue"). The <span class="key-term">Stroop effect</span> — the delay caused by the automatic reading response competing with color naming — provides a measure of an individual's ability to inhibit a prepotent response. Impaired Stroop performance is associated with frontal lobe dysfunction.</p>
+
+        <div class="definition-box">
+          <strong>Executive Functions — Core Components:</strong>
+          <p>Executive functions are not a unitary construct but rather a set of related but dissociable processes. Miyake et al. (2000) identified three core executive functions: (1) <span class="key-term">Shifting</span> (cognitive flexibility, set-shifting — measured by WCST, Trail Making B), (2) <span class="key-term">Updating</span> (monitoring and manipulating working memory contents — measured by N-back tasks, digit span backward), and (3) <span class="key-term">Inhibition</span> (suppressing prepotent responses — measured by Stroop, Go/No-Go tasks). These three components are moderately correlated but contribute independently to complex executive tasks such as planning, reasoning, and problem-solving.</p>
+        </div>
+
+        <h3>Continuous Performance Tests (CPT)</h3>
+        <p>CPTs measure <span class="key-term">sustained attention and vigilance</span>. The examinee monitors a series of rapidly presented stimuli and responds to designated targets while withholding responses to non-targets. Key metrics include omission errors (failures to detect targets, reflecting inattention), commission errors (responses to non-targets, reflecting impulsivity), and reaction time variability. The Conners Continuous Performance Test (CPT-3) is the most widely used version, frequently employed in ADHD evaluation.</p>
+
+        <h3>Verbal Fluency Tests</h3>
+        <p><span class="key-term">Verbal fluency</span> tasks assess word generation ability and are sensitive to frontal lobe and temporal lobe dysfunction:</p>
+        <ul>
+          <li><strong>Phonemic (letter) fluency (FAS/CFL):</strong> Generate as many words as possible beginning with a specific letter (e.g., F, A, S) in 60 seconds. Primarily associated with left frontal lobe functioning. Impairment is common in frontal lobe lesions and subcortical dementias.</li>
+          <li><strong>Semantic (category) fluency:</strong> Generate as many words as possible within a category (e.g., animals, fruits) in 60 seconds. More strongly associated with temporal lobe functioning and semantic memory stores. Category fluency is more impaired than letter fluency in Alzheimer's disease, reflecting the temporal lobe pathology characteristic of this condition.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Fluency Pattern Interpretation:</strong>
+          <p>The pattern of letter versus category fluency impairment provides diagnostic information: <strong>Category worse than letter</strong> suggests temporal lobe or semantic memory dysfunction (classic Alzheimer's pattern). <strong>Letter worse than category</strong> suggests frontal lobe or subcortical dysfunction (as in Parkinson's disease, Huntington's disease, or frontal lobe damage). Both impaired equally may suggest diffuse cortical dysfunction.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Screening and Memory Measures -->
+      <div class="content-section">
+        <h2>Cognitive Screening &amp; Memory Assessment</h2>
+
+        <h3>Mini-Mental State Examination (MMSE)</h3>
+        <p>The <span class="key-term">MMSE</span> (Folstein et al., 1975) is a brief 30-point cognitive screening tool that assesses orientation (10 points), registration (3 points), attention/calculation (5 points), recall (3 points), and language/construction (9 points). A score below 24 typically suggests cognitive impairment, though cutoffs should be adjusted for age and education. The MMSE is widely used in dementia screening but has limited sensitivity for mild cognitive impairment and executive dysfunction.</p>
+
+        <h3>Montreal Cognitive Assessment (MoCA)</h3>
+        <p>The <span class="key-term">MoCA</span> (Nasreddine et al., 2005) was designed to be more sensitive than the MMSE for detecting mild cognitive impairment (MCI). It assesses visuospatial/executive functions, naming, memory, attention, language, abstraction, delayed recall, and orientation. The total score is 30, with a cutoff of 26 or above considered normal. A 1-point correction is added for individuals with 12 or fewer years of education.</p>
+
+        <h3>Wechsler Memory Scale (WMS-IV)</h3>
+        <p>The <span class="key-term">WMS-IV</span> is the most widely used comprehensive memory assessment, providing index scores for Auditory Memory, Visual Memory, Visual Working Memory, Immediate Memory, and Delayed Memory. It is co-normed with the WAIS-IV, allowing direct comparison of memory and intellectual functioning. Key subtests include Logical Memory (prose recall), Visual Reproduction (geometric designs), and Verbal Paired Associates. A significant discrepancy between memory and intellectual functioning may suggest a memory disorder beyond what would be expected from general cognitive decline.</p>
+
+        <table>
+          <tr><th>Feature</th><th>MMSE</th><th>MoCA</th></tr>
+          <tr><td>Max Score</td><td>30</td><td>30</td></tr>
+          <tr><td>Cutoff for Impairment</td><td>&lt; 24</td><td>&lt; 26</td></tr>
+          <tr><td>Executive Function</td><td>Minimal</td><td>Trail Making, clock, abstraction</td></tr>
+          <tr><td>MCI Sensitivity</td><td>Low (~18%)</td><td>High (~90%)</td></tr>
+          <tr><td>Dementia Screening</td><td>Adequate</td><td>Excellent</td></tr>
+          <tr><td>Admin Time</td><td>~10 min</td><td>~10 min</td></tr>
+        </table>
+
+        <h3>Bender Visual Motor Gestalt Test (Bender-Gestalt II)</h3>
+        <p>The <span class="key-term">Bender-Gestalt</span> requires the examinee to copy nine geometric designs, then reproduce them from memory. It assesses visual-motor integration and can screen for neurological impairment. Errors such as rotation, perseveration, fragmentation, and simplification may suggest organic brain dysfunction, though developmental factors must be considered in children. The Bender-Gestalt II added a recall phase and expanded normative data.</p>
+
+        <h3>Rey-Osterrieth Complex Figure Test (ROCF)</h3>
+        <p>The <span class="key-term">ROCF</span> involves copying a complex geometric figure, followed by immediate and delayed recall drawings. It assesses visuospatial construction, planning/organization, and visual memory. The copy condition reveals organizational strategy (do they start with the overall structure or focus on details?), while delayed recall assesses visual-spatial memory. Poor organizational strategy during copy is associated with executive dysfunction.</p>
+
+        <h3>Boston Naming Test (BNT)</h3>
+        <p>The <span class="key-term">BNT</span> (Kaplan et al., 1983) assesses confrontation naming ability by presenting 60 line drawings of increasing difficulty. The examinee names each picture, with semantic and phonemic cues provided for items not spontaneously named. Impaired naming (anomia) is a hallmark of aphasia and is commonly seen in Alzheimer's disease and other neurodegenerative conditions.</p>
+      </div>
+
+      <!-- Section 4: Assessment Approaches -->
+      <div class="content-section">
+        <h2>Fixed vs. Flexible Battery and Process Approaches</h2>
+
+        <div class="definition-box">
+          <strong>Fixed Battery Approach:</strong>
+          <p>Administers the same comprehensive set of tests to all patients (e.g., Halstead-Reitan). Advantages: standardization, normative comparison, comprehensive coverage. Disadvantages: time-intensive, may include tests irrelevant to the referral question.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Flexible (Hypothesis-Testing) Battery Approach:</strong>
+          <p>Selects tests based on the specific referral question, patient history, and emerging findings during evaluation. Advantages: efficient, tailored to individual needs. Disadvantages: relies heavily on clinician expertise, less standardized.</p>
+        </div>
+
+        <h3>The Boston Process Approach (Kaplan)</h3>
+        <p>Edith Kaplan's <span class="key-term">process approach</span> emphasizes qualitative analysis of how a patient arrives at a response, not just whether the response is correct. For example, on Block Design, the process approach examines the patient's strategy (e.g., broken configurations suggesting parietal dysfunction), time to completion, and error types. This approach can reveal lateralized deficits and specific cognitive processes that quantitative scores alone may miss.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Integration:</strong>
+          <p>Contemporary neuropsychological practice typically blends approaches: a core set of standardized measures supplemented by hypothesis-driven additional tests, with qualitative process observations integrated throughout. The referral question, patient demographics, and available time guide the specific battery composition.</p>
+        </div>
+
+        <h3>Effort and Symptom Validity Testing</h3>
+        <p>Assessing the validity of test performance is essential in neuropsychological evaluation, particularly in forensic and disability contexts. <span class="key-term">Performance validity tests (PVTs)</span> detect suboptimal effort or exaggeration of cognitive impairment:</p>
+        <ul>
+          <li><strong>Test of Memory Malingering (TOMM):</strong> 50-item visual recognition memory test. Even individuals with severe cognitive impairment typically perform above chance. Scores below 45/50 on Trial 2 suggest insufficient effort.</li>
+          <li><strong>Word Memory Test (WMT):</strong> Assesses effort using a paired-associate learning paradigm. Includes immediate recognition, delayed recognition, and consistency measures.</li>
+          <li><strong>Embedded validity indicators:</strong> Many standard neuropsychological tests include built-in effort measures. For example, the Reliable Digit Span (RDS) from WAIS-IV Digit Span — scores below 7 suggest possible insufficient effort.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Base Rate of Invalid Performance:</strong>
+          <p>Research suggests that approximately 25-30% of evaluees in forensic and disability settings produce invalid performance on effort measures. In clinical (non-litigation) contexts, the base rate is lower (approximately 5-10%). Current best practice guidelines recommend that at least one standalone PVT and multiple embedded validity indicators be administered in every neuropsychological evaluation.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Trail Making Test:</strong> Part A = visual scanning/psychomotor speed; Part B = cognitive flexibility/set-shifting (executive function). Part B difficulty relative to Part A suggests executive dysfunction.</li>
+          <li><strong>WCST perseverative errors:</strong> The hallmark sign of frontal lobe dysfunction on this test. Know the distinction between perseverative and non-perseverative errors.</li>
+          <li><strong>Category Test:</strong> Measures abstract concept formation; most sensitive single test in the Halstead-Reitan Battery for brain dysfunction.</li>
+          <li><strong>Finger Tapping:</strong> Dominant hand normally 10% faster. Reversal or significant asymmetry suggests contralateral hemisphere pathology.</li>
+          <li><strong>MMSE vs. MoCA:</strong> MoCA is more sensitive for mild cognitive impairment; MMSE has limited executive function assessment. Both score out of 30.</li>
+          <li><strong>Stroop test:</strong> Measures inhibitory control. The interference condition is the key executive function measure.</li>
+          <li><strong>BNT:</strong> Confrontation naming; anomia is associated with aphasia and neurodegenerative disease.</li>
+          <li><strong>ROCF:</strong> Copy = visuospatial construction and organizational strategy; recall = visual memory.</li>
+          <li><strong>Fixed vs. flexible battery:</strong> HRNB is the prototype fixed battery; flexible approach is hypothesis-driven and clinician-dependent.</li>
+          <li><strong>Process approach (Kaplan):</strong> Focuses on qualitative HOW of performance, not just quantitative WHAT.</li>
+          <li><strong>LNNB vs. HRNB:</strong> LNNB is shorter (2-3 hours vs. 6-8 hours) and based on Luria's theory; HRNB has more extensive normative data.</li>
+          <li><strong>Verbal fluency patterns:</strong> Category fluency worse than letter fluency = temporal lobe (Alzheimer's). Letter fluency worse than category = frontal/subcortical (Parkinson's, Huntington's).</li>
+          <li><strong>TOMM:</strong> Performance validity test. Score below 45/50 on Trial 2 suggests insufficient effort. Even severely impaired patients typically perform above chance.</li>
+          <li><strong>Effort testing:</strong> Recommended in every neuropsychological evaluation. ~25-30% of forensic/disability evaluees produce invalid performance.</li>
+          <li><strong>Reliable Digit Span (RDS):</strong> Embedded validity indicator from WAIS-IV. Scores below 7 suggest possible insufficient effort.</li>
+          <li><strong>Lateralization:</strong> Finger tapping/grip strength asymmetry suggests contralateral hemisphere pathology. Dominant hand is normally 10% faster/stronger.</li>
+          <li><strong>Sensory extinction:</strong> Failure to detect bilateral simultaneous stimulation on one side suggests contralateral parietal lobe dysfunction.</li>
+          <li><strong>Impairment Index:</strong> Halstead-Reitan summary score (0.0-1.0); proportion of tests in impaired range. Cutoff of 0.4 suggests brain dysfunction.</li>
+          <li><strong>D-KEFS:</strong> Comprehensive executive function battery (9 tests). Emphasizes process approach. Isolates component processes underlying test performance.</li>
+          <li><strong>WMS-IV:</strong> Most widely used comprehensive memory battery. Co-normed with WAIS-IV. Index scores for auditory, visual, immediate, and delayed memory.</li>
+          <li><strong>Double dissociation:</strong> Two patients show opposite patterns of impairment (Patient A: impaired on Task 1, normal on Task 2; Patient B: normal on Task 1, impaired on Task 2). Strongest evidence that two functions are independent and served by different brain regions.</li>
+          <li><strong>Left hemisphere specialization:</strong> Language (Broca's = expressive, Wernicke's = receptive), verbal memory, logical/analytical processing. Damage often produces aphasia in right-handers.</li>
+          <li><strong>Right hemisphere specialization:</strong> Visuospatial processing, facial recognition (prosopagnosia), emotional prosody, spatial attention (hemispatial neglect). Damage often produces visuospatial deficits and anosognosia.</li>
+          <li><strong>Aphasia types:</strong> Broca's = nonfluent, intact comprehension, anterior lesion. Wernicke's = fluent, impaired comprehension, posterior lesion. Global = both nonfluent and impaired comprehension, large lesion. Conduction = intact fluency and comprehension, impaired repetition, arcuate fasciculus.</li>
+          <li><strong>Premorbid functioning estimates:</strong> Demographic formulas (Barona), word reading tests (WTAR, TOPF), or hold/don't hold methods used to estimate pre-injury cognitive ability for comparison with current performance.</li>
+          <li><strong>Hold vs. don't hold tests:</strong> "Hold" tests (Vocabulary, Information) are relatively resistant to brain damage. "Don't hold" tests (Block Design, Digit Symbol) are more sensitive to neurological impairment. Discrepancy suggests acquired dysfunction.</li>
+          <li><strong>Bender-Gestalt II:</strong> Copy and recall of geometric designs. Assesses visual-motor integration and screens for brain dysfunction. Errors include rotation, perseveration, fragmentation, and simplification.</li>
+          <li><strong>ROCF organizational strategy:</strong> How the patient approaches copying (part-oriented vs. configurational) reveals executive functioning. Poor organization during copy predicts poor recall.</li>
+          <li><strong>Ecological validity:</strong> The degree to which neuropsychological test results predict real-world functioning. A critical concern because strong test performance does not always translate to daily competence.</li>
+          <li><strong>Contralateral control:</strong> Each hemisphere primarily controls the opposite side of the body. Motor and sensory functions are crossed: left hemisphere controls right side, right hemisphere controls left side. Exception: ipsilateral control of same-side limb proximal muscles.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch2-personality-assessment.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Personality Assessment</div>
+          </div>
+        </a>
+        <a href="ch4-vocational-assessment.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Vocational Assessment &amp; Interest Inventories</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

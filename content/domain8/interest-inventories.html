@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interest Inventories | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Interest Inventories</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link active"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 9</div>
+        <h1>Interest Inventories</h1>
+        <div class="chapter-meta">
+          <span>Strong, Kuder, Holland themes, career assessment</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Interest Inventories</h2>
+        <p>Interest inventories are assessment instruments designed to measure an individual's preferences for various activities, occupations, and work environments. They are primarily used in <span class="key-term">career counseling</span> and vocational guidance. Unlike aptitude or ability tests, interest inventories do not measure what a person can do, but rather what they prefer to do. For the EPPP, you should know the major instruments, their theoretical foundations, and the specific scales and scores they produce.</p>
+        <div class="definition-box">
+          <strong>Interests vs. Aptitudes:</strong> Interests refer to what activities a person finds enjoyable or appealing. Aptitudes refer to the capacity to learn or perform a skill. A person may have strong interest in an area without corresponding aptitude (and vice versa). Comprehensive career assessment typically evaluates both.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Holland's RIASEC Model</h2>
+        <p><span class="key-term">John Holland's theory of vocational personalities and work environments</span> is the most widely used framework for understanding vocational interests. Holland proposed that both people and work environments can be classified into six types, forming the <span class="key-term">RIASEC hexagon</span>:</p>
+
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Example Occupations</th></tr>
+          <tr><td><span class="key-term">Realistic (R)</span></td><td>Prefers hands-on, physical, mechanical, or outdoor activities; values practical solutions</td><td>Engineer, mechanic, carpenter, farmer</td></tr>
+          <tr><td><span class="key-term">Investigative (I)</span></td><td>Prefers analytical, intellectual, scientific activities; values research and inquiry</td><td>Scientist, physician, mathematician, researcher</td></tr>
+          <tr><td><span class="key-term">Artistic (A)</span></td><td>Prefers creative, unstructured, expressive activities; values aesthetics and imagination</td><td>Artist, musician, writer, actor, graphic designer</td></tr>
+          <tr><td><span class="key-term">Social (S)</span></td><td>Prefers helping, teaching, counseling, and cooperative activities; values interpersonal relationships</td><td>Teacher, counselor, social worker, nurse</td></tr>
+          <tr><td><span class="key-term">Enterprising (E)</span></td><td>Prefers leading, persuading, managing, and selling activities; values influence and status</td><td>Manager, salesperson, lawyer, politician</td></tr>
+          <tr><td><span class="key-term">Conventional (C)</span></td><td>Prefers structured, organized, data-management activities; values accuracy and order</td><td>Accountant, banker, clerk, office manager</td></tr>
+        </table>
+
+        <h3>Key Principles of Holland's Theory</h3>
+        <ul>
+          <li><span class="key-term">Congruence:</span> People are most satisfied and productive when their personality type matches their work environment (e.g., an Artistic person in an Artistic job)</li>
+          <li><span class="key-term">Consistency:</span> Some type combinations are more related to each other (adjacent on the hexagon, e.g., RI or SE) than others (opposite, e.g., RA or SC). Consistent profiles are more stable and predictable.</li>
+          <li><span class="key-term">Differentiation:</span> A person who strongly resembles one type and little resembles others is well-differentiated. A flat profile (similar scores across all types) is undifferentiated and harder to interpret.</li>
+          <li><span class="key-term">Identity:</span> The clarity and stability of a person's goals, interests, and talents</li>
+          <li><span class="key-term">Calculus:</span> The hexagonal arrangement reflects the relationships among the types -- adjacent types are most similar; opposite types are most different</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>EPPP Key Point:</strong> The hexagonal model arranges types so that adjacent types (e.g., R-I, I-A, A-S, S-E, E-C, C-R) are most similar, and opposite types (R-S, I-E, A-C) are most dissimilar. Congruence predicts job satisfaction, stability, and achievement.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Strong Interest Inventory (SII)</h2>
+        <p>The <span class="key-term">Strong Interest Inventory</span> is the most widely used and researched interest inventory. Originally developed by E. K. Strong Jr. in 1927, the current version was revised in 2012 and is published by CPP (now The Myers-Briggs Company). It uses Holland's RIASEC framework as its organizing structure.</p>
+
+        <h3>Three Levels of Scales</h3>
+        <h4>1. General Occupational Themes (GOTs)</h4>
+        <p>The six GOTs correspond directly to Holland's RIASEC types. They provide the broadest level of information about an individual's interests.</p>
+        <ul>
+          <li>Scores are reported as standard scores with a mean of 50 and SD of 10</li>
+          <li>Scores are compared to a combined-gender or same-gender reference group</li>
+          <li>The GOT profile provides the Holland code (e.g., ISA, SEC) used to identify congruent occupations</li>
+        </ul>
+
+        <h4>2. Basic Interest Scales (BIS)</h4>
+        <p>The 30 Basic Interest Scales provide more specific information within each GOT. For example, within the Investigative theme, separate BIS scores are provided for Science, Mathematics, and Medical Science.</p>
+        <ul>
+          <li>BIS scores help differentiate within a broad interest area</li>
+          <li>Also reported as standard scores (M = 50, SD = 10)</li>
+          <li>Useful for identifying specific activity clusters within a general theme</li>
+        </ul>
+
+        <h4>3. Occupational Scales (OS)</h4>
+        <p>The 260 Occupational Scales are the most specific level. Each scale was developed using the <span class="key-term">criterion keying (empirical method)</span> approach -- comparing the item responses of individuals employed in a specific occupation with those of a general reference sample.</p>
+        <ul>
+          <li>A high score on an occupational scale indicates that the examinee's pattern of interests is similar to that of satisfied workers in that occupation</li>
+          <li>Scores are reported as standard scores (M = 50, SD = 10) for each occupation</li>
+          <li>Separate male and female norms are available for each occupational scale</li>
+        </ul>
+
+        <h3>Personal Style Scales</h3>
+        <p>The SII also includes five <span class="key-term">Personal Style Scales</span> that assess preferences in work style:</p>
+        <ul>
+          <li>Work Style (prefers working with people vs. ideas/data/things)</li>
+          <li>Learning Environment (prefers academic/practical learning)</li>
+          <li>Leadership Style (prefers leading by example vs. directing others)</li>
+          <li>Risk Taking (prefers adventure and risk vs. caution and safety)</li>
+          <li>Team Orientation (prefers working as part of a team vs. independently)</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> The Strong is constructed primarily through empirical criterion keying -- the Occupational Scales were developed by comparing responses of satisfied workers to a general reference group. This is the same construction method used for the MMPI. The GOTs and BIS use homogeneous item clustering (items that intercorrelate).
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Self-Directed Search (SDS)</h2>
+        <p>The <span class="key-term">Self-Directed Search</span> was developed by John Holland himself as a self-administered, self-scored, and self-interpreted career exploration tool. It is the most direct operationalization of Holland's RIASEC theory.</p>
+
+        <h3>Structure</h3>
+        <ul>
+          <li>The SDS consists of four sections: Activities (liked/disliked), Competencies (can/cannot do), Occupations (appealing/not), and Self-Estimates (self-rated abilities)</li>
+          <li>Each section yields scores for all six RIASEC types</li>
+          <li>The three highest scores form the individual's <span class="key-term">three-letter Holland code</span> (called the Summary Code)</li>
+          <li>The code is then used with the Occupations Finder or Dictionary of Holland Occupational Codes to identify matching occupations</li>
+        </ul>
+
+        <h3>Strengths and Limitations</h3>
+        <ul>
+          <li><strong>Strengths:</strong> Self-administered and quick (20-30 minutes); cost-effective for group use; strong theoretical foundation; well-validated</li>
+          <li><strong>Limitations:</strong> Less detailed than the Strong; self-scoring can lead to errors; relies heavily on self-estimates that may be biased; less useful for individuals with undifferentiated profiles</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Kuder Career Search (KCS)</h2>
+        <p>The <span class="key-term">Kuder Career Search</span> (Zytowski, 2007) is the latest version of the Kuder interest inventories, which date back to Frederic Kuder's work in the 1930s. The Kuder approach differs from the Strong in its use of <span class="key-term">forced-choice triads</span>.</p>
+
+        <h3>Item Format</h3>
+        <ul>
+          <li>Each item presents three activities, and the examinee selects the most preferred and least preferred</li>
+          <li>This forced-choice format reduces the tendency toward acquiescence (saying "like" to everything) or social desirability</li>
+          <li>Scores are <span class="key-term">ipsative</span> (within-person comparisons) rather than normative (compared to a reference group)</li>
+        </ul>
+
+        <h3>Activity Preference Scales</h3>
+        <p>The KCS produces scores on six Activity Preference Scales that align with Holland's RIASEC themes, though Kuder uses different labels:</p>
+        <ul>
+          <li>Nature (aligns with Realistic)</li>
+          <li>Science/Technical (aligns with Investigative)</li>
+          <li>Art/Communication (aligns with Artistic)</li>
+          <li>Social/Personal Services (aligns with Social)</li>
+          <li>Influence/Sales (aligns with Enterprising)</li>
+          <li>Organization/Management (aligns with Conventional)</li>
+        </ul>
+
+        <h3>Person Match</h3>
+        <p>A unique feature of the KCS is the <span class="key-term">Person Match</span> system, which compares the examinee's interest profile to those of satisfied individuals in various occupations. This is similar in concept to the Strong's Occupational Scales but uses a different matching algorithm.</p>
+
+        <div class="definition-box">
+          <strong>Ipsative vs. Normative Scoring:</strong> Ipsative scores compare an individual's interests to their own other interests (within-person). Normative scores compare to a reference group (between-person). Ipsative scores from forced-choice instruments cannot be directly compared across individuals. This is a key limitation of the Kuder's forced-choice format.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Other Notable Interest Instruments</h2>
+
+        <h3>Career Assessment Inventory (CAI)</h3>
+        <p>Developed by Charles Johansson, the CAI is structured similarly to the Strong but focuses on <span class="key-term">non-professional and skilled/technical occupations</span> that typically require two years or less of postsecondary training. It fills a gap because the Strong focuses primarily on professional occupations requiring college education.</p>
+
+        <h3>Jackson Vocational Interest Survey (JVIS)</h3>
+        <p>Developed by Douglas Jackson using a <span class="key-term">construct validation</span> approach (rather than empirical keying). It measures 34 basic interest scales organized into themes. It is notable for its strong psychometric properties and theoretical grounding.</p>
+
+        <h3>Campbell Interest and Skill Survey (CISS)</h3>
+        <p>Developed by David Campbell (who was also a key developer of the Strong), the CISS uniquely measures both <span class="key-term">interests and self-reported skills</span> across the same domains. This allows for four quadrants of interpretation: Pursue (high interest, high skill), Develop (high interest, low skill), Explore (low interest, high skill), Avoid (low interest, low skill).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Psychometric Considerations</h2>
+
+        <h3>Validity of Interest Inventories</h3>
+        <ul>
+          <li><span class="key-term">Concurrent validity:</span> Individuals in a given occupation tend to score highest on the corresponding scale</li>
+          <li><span class="key-term">Predictive validity:</span> Interest scores measured in adolescence or young adulthood predict occupational choice years later at moderate levels (r ~ .30-.40)</li>
+          <li><span class="key-term">Hit rates:</span> The Strong correctly predicts occupational group membership in approximately 50% of cases over long follow-up periods</li>
+        </ul>
+
+        <h3>Stability of Interests</h3>
+        <p>Interests are relatively stable over time, particularly after age 25. Test-retest reliabilities for the Strong GOTs range from .80-.92 over periods of 1-5 years. Interests are less stable in adolescence and early adulthood.</p>
+
+        <h3>Gender Differences</h3>
+        <p>Gender differences in vocational interests are among the largest in psychology. Meta-analyses show substantial differences on Realistic (males higher) and Social (females higher) dimensions, with smaller differences on other RIASEC types. The Strong addresses this by providing both same-sex and combined-sex norms.</p>
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> The use of same-sex vs. combined-sex norms on interest inventories is an important consideration. Same-sex norms compare the individual to their own gender group; combined norms compare to both genders. Using same-sex norms can expand the range of suggested occupations for an individual, particularly when gender-atypical interests are present.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Using Interest Inventories in Practice</h2>
+
+        <h3>Integrating Results in Career Counseling</h3>
+        <p>Interest inventories are most useful when combined with other sources of information in a comprehensive career counseling process:</p>
+        <ul>
+          <li><span class="key-term">Interests + abilities:</span> High interest without corresponding aptitude may lead to frustration; high aptitude without interest may lead to dissatisfaction. Comprehensive career assessment evaluates both.</li>
+          <li><span class="key-term">Interests + values:</span> Work values (e.g., autonomy, financial security, altruism) add a dimension beyond what interest inventories measure. Instruments like the Work Values Inventory can supplement interest results.</li>
+          <li><span class="key-term">Interests + personality:</span> Personality measures (e.g., NEO-PI-R, MBTI) can help explain why certain interests exist and how they might manifest in different work environments.</li>
+          <li><span class="key-term">Interests + developmental context:</span> Consider the client's age, life stage, career development stage (Super's Life-Span model), and prior work experiences when interpreting interest profiles.</li>
+        </ul>
+
+        <h3>Interests Across the Lifespan</h3>
+        <p>Super's <span class="key-term">Life-Span, Life-Space theory</span> recognizes that career development occurs across the lifespan and is influenced by changing roles and life circumstances. Interest inventories are most commonly used during the Exploration stage (ages 15-24) and at career transition points. However, interests themselves demonstrate remarkable stability -- among the most stable of all individual difference constructs after age 25.</p>
+
+        <h3>Computer-Based and Online Inventories</h3>
+        <p>Most major interest inventories are now available in computer-administered formats. The <span class="key-term">O*NET Interest Profiler</span> is a free, government-developed interest inventory based on Holland's RIASEC model and linked to the extensive O*NET occupational database. It provides a convenient, no-cost alternative to commercial instruments, though it lacks the depth of the Strong or CISS.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Summary</h2>
+        <div class="definition-box">
+          <strong>Holland's RIASEC:</strong> Realistic-Investigative-Artistic-Social-Enterprising-Conventional. Adjacent types most similar, opposite types most different. Congruence = person-environment match.
+        </div>
+        <div class="definition-box">
+          <strong>Strong Interest Inventory:</strong> Three scale levels -- GOTs (6 RIASEC themes), BIS (30 specific interest areas), and Occupational Scales (260 scales, criterion-keyed). Also includes Personal Style Scales.
+        </div>
+        <div class="definition-box">
+          <strong>SDS:</strong> Holland's self-administered instrument. Produces a three-letter Holland code. Self-scored. Most direct application of RIASEC theory.
+        </div>
+        <div class="definition-box">
+          <strong>Kuder:</strong> Forced-choice triads produce ipsative scores. Person Match feature. Ipsative scores cannot be compared across individuals.
+        </div>
+        <div class="definition-box">
+          <strong>Key distinction:</strong> The Strong uses empirical criterion keying (Occupational Scales) and homogeneous keying (GOTs, BIS). The SDS is based purely on Holland's theory. The Kuder uses forced-choice format producing ipsative scores.
+        </div>
+        <p class="citation">References: Holland, J. L. (1997). Making Vocational Choices. Strong, E. K. Jr. (1927). Vocational Interest Blank. Zytowski, D. G. (2007). Kuder Career Search. Campbell, D. P. (1992). CISS Manual.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="clinical-tests.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Clinical & Neuropsych Tests</div>
+          </div>
+        </a>
+        <a href="score-interpretation.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Score Interpretation</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

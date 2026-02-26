@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transformation &mdash; Adolescence | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        Transformation &mdash; Adolescence
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link active"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 7</div>
+        <h1>Transformation &mdash; Adolescence</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Puberty -->
+      <div class="content-section">
+        <h2>Puberty and Physical Development</h2>
+        <p><span class="key-term">Puberty</span> is the biological process of sexual maturation that transforms a child's body into an adult body capable of reproduction. It is initiated by the activation of the <span class="key-term">hypothalamic-pituitary-gonadal (HPG) axis</span>, which triggers increased production of sex hormones&mdash;primarily estrogen in females and testosterone in males.</p>
+
+        <h3>Sequence and Timing</h3>
+        <p>Puberty follows a predictable sequence of physical changes, though the timing of onset varies widely. For girls, the first visible sign is typically breast development (thelarche), followed by pubic hair growth, a growth spurt, and menarche (first menstruation, typically around age 12&ndash;13). For boys, the sequence begins with testicular enlargement, followed by penile growth, pubic hair, the growth spurt (which peaks about 2 years later than in girls), and deepening of the voice.</p>
+
+        <h3>Effects of Pubertal Timing</h3>
+        <div class="definition-box">
+          <strong>Early and Late Maturation Effects</strong>
+          <p><strong>Early-maturing girls</strong> are at elevated risk for depression, anxiety, eating disorders, substance use, early sexual activity, and association with older peers. They face a mismatch between physical maturity and psychosocial readiness.<br><br>
+          <strong>Early-maturing boys</strong> tend to experience initial social advantages (popularity, athletic prowess) but may also show increased risk for externalizing problems, substance use, and early sexual behavior.<br><br>
+          <strong>Late-maturing boys</strong> may experience social disadvantage and lower self-esteem during adolescence, though these effects typically diminish by adulthood.<br><br>
+          <strong>Late-maturing girls</strong> generally fare well and may even experience some advantages in terms of body image and adjustment.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>The secular trend toward earlier pubertal onset (the average age of menarche has decreased by approximately 3&ndash;4 years over the past 150 years in Western nations) has implications for clinical practice. Earlier physical maturation without corresponding cognitive and emotional development may increase vulnerability to psychosocial stressors and risky behaviors.</p>
+        </div>
+
+        <p class="citation">Mendle, J., Turkheimer, E., &amp; Emery, R. E. (2007). Detrimental psychological outcomes associated with early pubertal timing in adolescent girls. Developmental Review, 27(2), 151&ndash;171.</p>
+      </div>
+
+      <!-- Section 2: Cognitive Development -->
+      <div class="content-section">
+        <h2>Formal Operational Thought</h2>
+        <p>Piaget's <span class="key-term">formal operational stage</span> (approximately age 11 and beyond) represents the pinnacle of cognitive development in his theory. Adolescents become capable of abstract, systematic, and scientific thinking that goes beyond the here-and-now world of concrete operations.</p>
+
+        <h3>Key Cognitive Achievements</h3>
+        <ul>
+          <li><strong>Hypothetical-deductive reasoning:</strong> The ability to generate hypotheses, systematically test them, and draw logical conclusions. Piaget demonstrated this with the pendulum problem, where formal operational thinkers systematically vary one variable at a time.</li>
+          <li><strong>Abstract thought:</strong> The capacity to reason about ideas, concepts, and possibilities that are not tied to concrete reality (e.g., thinking about justice, freedom, or hypothetical future scenarios).</li>
+          <li><strong>Propositional thought:</strong> The ability to evaluate the logic of propositions (verbal statements) without requiring reference to real-world circumstances.</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>When asked "If dogs are bigger than elephants, and elephants are bigger than mice, are dogs bigger than mice?" a concrete operational child may protest that dogs are not bigger than elephants. A formal operational adolescent can set aside real-world knowledge and evaluate the logical structure of the argument, correctly answering "yes."</p>
+        </div>
+
+        <p>Piaget acknowledged that not all adolescents (or adults) achieve full formal operational thought, and that its application may be domain-specific. Subsequent research has confirmed that formal operations are reached by only about 40&ndash;60% of college students in Western samples when tested across multiple task domains.</p>
+
+        <h3>Elkind's Adolescent Egocentrism</h3>
+        <p><span class="key-term">David Elkind</span> (1967) proposed that the emergence of abstract thinking in adolescence gives rise to a new form of egocentrism manifested in two cognitive distortions:</p>
+
+        <div class="definition-box">
+          <strong>Imaginary Audience</strong>
+          <p>The adolescent's belief that others are as preoccupied with their appearance and behavior as they are themselves. This belief leads to heightened self-consciousness, feeling constantly "on stage," and behaviors like spending excessive time in front of the mirror or feeling mortified by minor embarrassments.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Personal Fable</strong>
+          <p>The belief that one's experiences and feelings are unique and that one is somehow special or invulnerable. This cognitive distortion contributes to risk-taking behavior ("It won't happen to me") and can manifest as a sense that no one else could possibly understand what the adolescent is going through.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 15-year-old refuses to wear a coat on a cold day because "everyone will stare at me." This reflects the imaginary audience. The same teen engages in reckless driving, believing "I'm a great driver; accidents happen to other people." This reflects the personal fable.</p>
+        </div>
+
+        <p class="citation">Elkind, D. (1967). Egocentrism in adolescence. Child Development, 38(4), 1025&ndash;1034.</p>
+      </div>
+
+      <!-- Section 3: Identity Development -->
+      <div class="content-section">
+        <h2>Identity Development</h2>
+        <p>The central psychosocial task of adolescence, according to Erikson, is resolving the crisis of <span class="key-term">Identity vs. Role Confusion</span>. Adolescents must integrate their various roles, values, and self-perceptions into a coherent sense of who they are and who they want to become. <span class="key-term">James Marcia</span> (1966) operationalized Erikson's identity theory by proposing four identity statuses based on two dimensions: <span class="key-term">exploration</span> (crisis) and <span class="key-term">commitment</span>.</p>
+
+        <table>
+          <tr><th>Identity Status</th><th>Exploration</th><th>Commitment</th><th>Description</th></tr>
+          <tr><td>Identity Diffusion</td><td>Low</td><td>Low</td><td>No exploration, no commitments. May appear apathetic or directionless.</td></tr>
+          <tr><td>Identity Foreclosure</td><td>Low</td><td>High</td><td>Commitment without exploration. Adopts identity from authority figures (parents, religion) without questioning.</td></tr>
+          <tr><td>Identity Moratorium</td><td>High</td><td>Low</td><td>Actively exploring options but has not yet committed. May appear anxious or in crisis.</td></tr>
+          <tr><td>Identity Achievement</td><td>High (past)</td><td>High</td><td>Has explored alternatives and made firm commitments. Most psychologically healthy status.</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Marcia's Identity Statuses</strong>
+          <p>Identity statuses are not fixed stages&mdash;individuals can move between statuses over time. However, the general developmental trajectory moves from diffusion and foreclosure toward moratorium and eventually achievement. Identity achievement is associated with higher self-esteem, better stress management, and more mature interpersonal relationships.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A college freshman who declares pre-med because "my parents are both doctors and expect me to be one too," without having explored other career options, is in identity foreclosure. A classmate who is taking courses in multiple departments, debating between psychology and philosophy, and feeling anxious about the decision is in moratorium.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Consideration</strong>
+          <p>Identity diffusion is the status most associated with psychological distress, including depression, substance use, and interpersonal difficulties. In clinical settings, adolescents in diffusion may present as disengaged, unmotivated, or oppositional. Therapeutic work may involve supporting the exploration process&mdash;helping the adolescent engage with moratorium rather than remaining diffused.</p>
+        </div>
+
+        <p class="citation">Marcia, J. E. (1966). Development and validation of ego-identity status. Journal of Personality and Social Psychology, 3(5), 551&ndash;558.</p>
+      </div>
+
+      <!-- Section 4: Adolescent Brain Development -->
+      <div class="content-section">
+        <h2>The Adolescent Brain</h2>
+        <p>Neuroscience has fundamentally reshaped our understanding of adolescence by revealing that the brain continues to develop well into the mid-20s. Two key findings dominate this literature and have direct clinical and legal implications.</p>
+
+        <h3>Prefrontal Cortex Maturation</h3>
+        <p>The <span class="key-term">prefrontal cortex (PFC)</span>&mdash;the brain region responsible for executive functions including planning, impulse control, decision-making, and considering consequences&mdash;is among the last regions to fully mature. Myelination and synaptic pruning in the PFC continue through the early to mid-20s. This protracted development explains why adolescents may show adult-like cognitive abilities in calm, low-arousal situations but revert to impulsive decision-making under emotional arousal or peer pressure.</p>
+
+        <h3>The Dual Systems Model</h3>
+        <p>The <span class="key-term">dual systems model</span> (Steinberg, 2008) posits that the mismatch between the early maturation of the <span class="key-term">socioemotional system</span> (centered on the limbic system, particularly the nucleus accumbens and amygdala) and the later maturation of the <span class="key-term">cognitive control system</span> (centered on the prefrontal cortex) creates a developmental window of heightened vulnerability to risk-taking. The limbic system, which processes reward and emotional arousal, matures rapidly during puberty, while the PFC lags behind.</p>
+
+        <div class="definition-box">
+          <strong>Dual Systems Model</strong>
+          <p>Adolescent risk-taking is not due to a failure to perceive risk (adolescents generally know that dangerous activities are dangerous) but to an imbalance between a hyper-responsive reward system and an immature regulatory system. This imbalance is greatest in the presence of peers, who amplify reward sensitivity.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Legal and Clinical Implications</strong>
+          <p>Neuroscience evidence on adolescent brain development has been cited in landmark U.S. Supreme Court decisions, including Roper v. Simmons (2005, abolishing the juvenile death penalty), Graham v. Florida (2010, banning life without parole for non-homicide juvenile offenses), and Miller v. Alabama (2012, prohibiting mandatory life without parole for juveniles). Clinicians working with adolescents should understand that impulsive or risky behavior may reflect neurodevelopmental immaturity rather than fixed character traits.</p>
+        </div>
+
+        <p class="citation">Steinberg, L. (2008). A social neuroscience perspective on adolescent risk-taking. Developmental Review, 28(1), 78&ndash;106.</p>
+      </div>
+
+      <!-- Section 5: Peer Influence and Risk -->
+      <div class="content-section">
+        <h2>Peer Influence and Risk-Taking</h2>
+        <p>Peer relationships reach peak importance during adolescence. The influence of peers on behavior&mdash;both positive and negative&mdash;intensifies, driven in part by the neurobiological changes described above.</p>
+
+        <h3>Peer Conformity</h3>
+        <p>Susceptibility to <span class="key-term">peer pressure</span> peaks around ages 14&ndash;15 and then gradually declines as cognitive maturity increases. Research by Steinberg and Monahan (2007) demonstrates that resistance to peer influence increases linearly from ages 14 to 18 and then stabilizes in early adulthood. Importantly, peers can also exert positive influence, supporting academic achievement, prosocial behavior, and healthy identity exploration.</p>
+
+        <h3>Risk-Taking Behavior</h3>
+        <p>Adolescence is characterized by increased rates of reckless driving, substance experimentation, unprotected sex, and delinquent behavior. Experimental research using driving simulation tasks shows that the presence of peers increases risk-taking in adolescents but not in adults, consistent with the dual systems model's prediction that peers amplify reward sensitivity in the context of an immature regulatory system.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A driving simulation study finds that adolescents run significantly more yellow lights and have more crashes when a peer is present in the room, compared to when they are alone. Adults show no difference. This finding is best explained by the dual systems model, which posits that peers activate the socioemotional reward system, overwhelming the not-yet-mature cognitive control system.</p>
+        </div>
+
+        <p class="citation">Steinberg, L., &amp; Monahan, K. C. (2007). Age differences in resistance to peer influence. Developmental Psychology, 43(6), 1531&ndash;1543.</p>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Pubertal timing effects:</strong> Early maturation is most problematic for girls (depression, eating disorders, substance use, older peer association). Late maturation is most challenging for boys (lower self-esteem, social difficulties).</li>
+          <li><strong>Formal operations:</strong> Hypothetical-deductive reasoning, abstract thought, propositional logic. Not all adults achieve this stage. Piaget used the pendulum problem as a demonstration.</li>
+          <li><strong>Elkind's adolescent egocentrism:</strong> Imaginary audience (everyone is watching me) and personal fable (I'm unique/invulnerable). These contribute to self-consciousness and risk-taking.</li>
+          <li><strong>Marcia's four identity statuses:</strong> Based on exploration and commitment. Diffusion (low/low), Foreclosure (low exploration/high commitment), Moratorium (high exploration/low commitment), Achievement (high/high). These are not fixed stages.</li>
+          <li><strong>Erikson's Identity vs. Role Confusion:</strong> The central task of adolescence; virtue = fidelity (loyalty to values, people, ideologies).</li>
+          <li><strong>Dual systems model:</strong> Mismatch between early-maturing limbic system (reward) and late-maturing PFC (control) explains adolescent risk-taking. Effect is amplified by peer presence.</li>
+          <li><strong>PFC maturation:</strong> Continues into mid-20s. Explains why adolescents can reason well in calm settings but make poor decisions under emotional arousal. Has been cited in Supreme Court decisions regarding juvenile sentencing.</li>
+          <li><strong>Peer conformity:</strong> Peaks around ages 14&ndash;15. Resistance to peer influence increases through late adolescence and stabilizes in early adulthood.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="building-competence.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Building Competence &mdash; Middle Childhood</div>
+          </div>
+        </a>
+        <a href="long-horizon-adulthood.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">The Long Horizon &mdash; Adulthood &amp; Aging</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

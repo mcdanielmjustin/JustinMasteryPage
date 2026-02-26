@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trauma & Dissociative Disorders | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Trauma & Dissociative</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link active"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 10 of 10</div>
+        <h1>Trauma & Dissociative Disorders</h1>
+        <div class="chapter-meta">
+          <span>PTSD, acute stress, DID, somatic symptoms</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Trauma- and Stressor-Related Disorders</h2>
+        <p>The DSM-5 created a new chapter for <span class="key-term">trauma- and stressor-related disorders</span>, removing PTSD and acute stress disorder from the anxiety disorders chapter. This change reflects the recognition that the response to traumatic events is not limited to anxiety-based symptoms but also includes anhedonic/dysphoric, externalizing (anger, aggression), and dissociative presentations. The common element is exposure to a traumatic or stressful event as a diagnostic criterion.</p>
+        <div class="definition-box">
+          <h4>Key DSM-5 Change</h4>
+          <p>PTSD is no longer classified as an anxiety disorder. The DSM-5 reorganization places it alongside acute stress disorder, adjustment disorders, reactive attachment disorder, and disinhibited social engagement disorder in a chapter unified by the requirement of an identifiable stressor as an etiological criterion.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Posttraumatic Stress Disorder (PTSD)</h2>
+        <p><span class="key-term">PTSD</span> is the most commonly tested trauma-related disorder on the EPPP. DSM-5 made several important changes to the diagnostic criteria, expanding from three to four symptom clusters.</p>
+        <h3>Criterion A: Exposure to Traumatic Event</h3>
+        <p>Exposure to actual or threatened death, serious injury, or sexual violence through one or more of:</p>
+        <ul>
+          <li>Directly experiencing the traumatic event</li>
+          <li>Witnessing the event in person as it occurred to others</li>
+          <li>Learning that the event occurred to a close family member or friend (must be violent or accidental for death)</li>
+          <li>Experiencing repeated or extreme exposure to aversive details of traumatic events (e.g., first responders; does <strong>not</strong> include exposure through media unless work-related)</li>
+        </ul>
+        <h3>The Four Symptom Clusters</h3>
+        <h4>Cluster B: Intrusion Symptoms (1 or more)</h4>
+        <ul>
+          <li>Recurrent, involuntary, and intrusive distressing memories</li>
+          <li>Recurrent distressing dreams related to the event</li>
+          <li>Dissociative reactions (flashbacks) where the individual feels or acts as if the event is recurring</li>
+          <li>Intense or prolonged psychological distress at exposure to cues</li>
+          <li>Marked physiological reactions to reminders</li>
+        </ul>
+        <h4>Cluster C: Avoidance (1 or more)</h4>
+        <ul>
+          <li>Avoidance of or efforts to avoid distressing memories, thoughts, or feelings</li>
+          <li>Avoidance of or efforts to avoid external reminders (people, places, activities, situations)</li>
+        </ul>
+        <h4>Cluster D: Negative Alterations in Cognitions and Mood (2 or more)</h4>
+        <ul>
+          <li>Inability to remember important aspects of the event (dissociative amnesia)</li>
+          <li>Persistent and exaggerated negative beliefs about oneself, others, or the world</li>
+          <li>Persistent distorted cognitions about the cause or consequences of the event (self-blame)</li>
+          <li>Persistent negative emotional state (fear, horror, anger, guilt, shame)</li>
+          <li>Markedly diminished interest in significant activities</li>
+          <li>Feelings of detachment or estrangement from others</li>
+          <li>Persistent inability to experience positive emotions (emotional numbing)</li>
+        </ul>
+        <h4>Cluster E: Alterations in Arousal and Reactivity (2 or more)</h4>
+        <ul>
+          <li>Irritable behavior and angry outbursts</li>
+          <li>Reckless or self-destructive behavior (new in DSM-5)</li>
+          <li>Hypervigilance</li>
+          <li>Exaggerated startle response</li>
+          <li>Problems with concentration</li>
+          <li>Sleep disturbance</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Major DSM-5 changes to PTSD: (1) Moved from anxiety disorders to its own chapter. (2) Criterion A was tightened -- subjective response of fear/helplessness/horror was removed. (3) Expanded from 3 to <strong>4 symptom clusters</strong> (avoidance and numbing were separated). (4) Added <strong>"with dissociative symptoms"</strong> specifier (depersonalization or derealization). (5) Added <strong>"with delayed expression"</strong> specifier (full criteria not met until at least 6 months after the event, though some symptoms may begin immediately). (6) Added reckless/self-destructive behavior and negative cognitions as symptoms.</p>
+        </div>
+        <p>Duration must be more than <strong>1 month</strong>. Prevalence is approximately 6.8% lifetime in the United States, with women approximately twice as likely as men to develop PTSD. The strongest predictor of PTSD development is <span class="key-term">peritraumatic dissociation</span> -- dissociative experiences during or immediately after the traumatic event (Ozer et al., 2003).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Acute Stress Disorder</h2>
+        <p><span class="key-term">Acute stress disorder</span> (ASD) shares similar symptomatology with PTSD but differs in its time course. ASD occurs within <strong>3 days to 1 month</strong> after trauma exposure and requires 9 or more symptoms from any of five categories: intrusion, negative mood, dissociation, avoidance, and arousal.</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Key distinction: ASD = <strong>3 days to 1 month</strong> post-trauma. PTSD = symptoms persisting for <strong>more than 1 month</strong>. If PTSD criteria are not met until at least 6 months after the event, specify <strong>"with delayed expression."</strong> Approximately 50% of individuals who develop PTSD initially present with ASD, but not all individuals with ASD go on to develop PTSD.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Adjustment Disorders</h2>
+        <p><span class="key-term">Adjustment disorders</span> involve the development of emotional or behavioral symptoms in response to an identifiable stressor occurring within <strong>3 months</strong> of the onset of the stressor. Symptoms must be clinically significant (out of proportion to the stressor or causing significant impairment) and must resolve within <strong>6 months</strong> of the termination of the stressor.</p>
+        <h3>Subtypes</h3>
+        <ul>
+          <li>With depressed mood</li>
+          <li>With anxiety</li>
+          <li>With mixed anxiety and depressed mood</li>
+          <li>With disturbance of conduct</li>
+          <li>With mixed disturbance of emotions and conduct</li>
+          <li>Unspecified</li>
+        </ul>
+        <div class="citation">Adjustment disorders serve as a diagnostic "residual" category -- they are diagnosed when symptoms do not meet criteria for another specific disorder (e.g., MDD, PTSD) but are clinically significant. They are among the most commonly used diagnoses in clinical practice.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Prolonged Grief Disorder</h2>
+        <p><span class="key-term">Prolonged Grief Disorder</span> (PGD) was added to the DSM-5-TR (2022) as a new diagnosis within the trauma- and stressor-related disorders chapter. It is characterized by a persistent and pervasive grief response following the death of someone close that exceeds expected social, cultural, or religious norms in both duration and intensity.</p>
+        <h3>DSM-5-TR Diagnostic Criteria</h3>
+        <p>The death of someone close to the individual must have occurred at least <strong>12 months ago</strong> for adults, or at least <strong>6 months ago</strong> for children and adolescents. Since the death, the individual has experienced, on more days than not, one or both of:</p>
+        <ul>
+          <li><strong>Intense yearning or longing</strong> for the deceased</li>
+          <li><strong>Preoccupation</strong> with thoughts or memories of the deceased (in children/adolescents, preoccupation may focus on the circumstances of the death)</li>
+        </ul>
+        <p>In addition, at least <strong>3 of the following 8 symptoms</strong> must be present most days, to a clinically significant degree, since the death:</p>
+        <ol>
+          <li><strong>Identity disruption</strong> (e.g., feeling as though part of oneself has died)</li>
+          <li><strong>Marked sense of disbelief</strong> about the death</li>
+          <li><strong>Avoidance of reminders</strong> that the person is dead</li>
+          <li><strong>Intense emotional pain</strong> (e.g., anger, bitterness, sorrow) related to the death</li>
+          <li><strong>Difficulty reintegrating</strong> into one's relationships and activities after the death</li>
+          <li><strong>Emotional numbness</strong> (absence or marked reduction of emotional experience)</li>
+          <li><strong>Feeling that life is meaningless</strong> as a result of the death</li>
+          <li><strong>Intense loneliness</strong> as a result of the death</li>
+        </ol>
+        <div class="definition-box">
+          <h4>Distinction from Normal Grief</h4>
+          <p>Normal grief is a natural response to loss that, while painful, typically <strong>decreases in intensity over time</strong> as the bereaved individual adapts. In prolonged grief disorder, the grief response <strong>does not diminish</strong> over time and remains at an intensity that causes significant distress and functional impairment well beyond expected norms. The duration and severity must cause clinically significant impairment in social, occupational, or other important areas of functioning.</p>
+        </div>
+        <h3>Prevalence and Treatment</h3>
+        <p>Approximately <strong>10% of bereaved individuals</strong> develop prolonged grief disorder. Risk factors include close kinship to the deceased (e.g., loss of a spouse or child), sudden or violent death, prior psychiatric history, and insecure attachment style.</p>
+        <p>The most well-supported treatment is <span class="key-term">Complicated Grief Treatment (CGT)</span>, developed by M. Katherine Shear. CGT is a 16-session protocol that combines elements of <strong>interpersonal therapy (IPT)</strong> and <strong>exposure-based techniques</strong>. It includes revisiting the story of the death (imaginal exposure), situational exposure to avoided reminders, and work on restoring functioning and pursuing personal goals. CGT has been shown to be more effective than standard interpersonal psychotherapy for this condition (Shear et al., 2005, 2014).</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>PGD is distinct from MDD and PTSD. While grief may include depressive symptoms, PGD is specifically focused on the <strong>loss of the deceased</strong> and the yearning/preoccupation that follows. The 12-month (adults) and 6-month (children) duration thresholds help ensure the diagnosis is not applied to normal grief. The grief response must also exceed expected <strong>social, cultural, and religious norms</strong> for the individual's context.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Dissociative Disorders</h2>
+        <p>Dissociative disorders involve disruptions in the normally integrated functions of consciousness, memory, identity, emotion, perception, behavior, and sense of self. They are placed after the trauma chapter in DSM-5 to reflect their close relationship with traumatic experiences.</p>
+        <h3>Dissociative Identity Disorder (DID)</h3>
+        <p><span class="key-term">Dissociative Identity Disorder</span> (formerly multiple personality disorder) involves a disruption of identity characterized by <strong>two or more distinct personality states</strong> or an experience of possession, with marked discontinuity in sense of self and sense of agency. Associated features include:</p>
+        <ul>
+          <li>Recurrent gaps in recall of everyday events, important personal information, and/or traumatic events (beyond ordinary forgetting)</li>
+          <li>Significant distress or impairment in functioning</li>
+          <li>Not attributable to broadly accepted cultural or religious practice</li>
+          <li>Not attributable to substances or another medical condition</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>DID is controversial. The <span class="key-term">posttraumatic model</span> views DID as arising from severe childhood trauma (typically severe physical/sexual abuse before age 9), with dissociation serving as a defense mechanism. The <span class="key-term">sociocognitive model</span> (Lilienfeld et al., 1999) argues that DID is created through therapist suggestion, media influences, and sociocultural expectations, noting that it was rarely diagnosed before the 1980s and that its prevalence increased dramatically after media portrayals. Most research supports an association with childhood trauma, but the debate continues.</p>
+        </div>
+
+        <h3>Depersonalization/Derealization Disorder</h3>
+        <p><span class="key-term">Depersonalization</span> involves persistent or recurrent experiences of unreality, detachment, or being an outside observer with respect to one's thoughts, feelings, body, or actions (e.g., feeling like a robot, dreamlike state, sense of unreality of self). <span class="key-term">Derealization</span> involves experiences of unreality or detachment with respect to surroundings (e.g., the world seems unreal, dreamlike, distant, or distorted). Crucially, reality testing remains <strong>intact</strong> -- the individual knows the experiences are not real.</p>
+
+        <h3>Dissociative Amnesia</h3>
+        <p><span class="key-term">Dissociative amnesia</span> involves an inability to recall important autobiographical information, usually of a traumatic or stressful nature, that is inconsistent with ordinary forgetting. It may be localized (specific event/time period), selective (some aspects of an event), or generalized (identity and life history). The specifier <span class="key-term">"with dissociative fugue"</span> applies when the individual engages in purposeful travel or bewildered wandering associated with amnesia for identity or other important autobiographical information.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Somatic Symptom and Related Disorders</h2>
+        <p>Though in a separate DSM-5 chapter, somatic symptom disorders are frequently tested alongside trauma and dissociative conditions.</p>
+        <h3>Somatic Symptom Disorder</h3>
+        <p><span class="key-term">Somatic symptom disorder</span> replaced DSM-IV's somatization disorder and is defined by one or more somatic symptoms that are distressing or result in significant disruption of daily life, accompanied by excessive thoughts, feelings, or behaviors related to the somatic symptoms. Importantly, the DSM-5 no longer requires that symptoms be "medically unexplained" -- the focus is on the disproportionate response to symptoms.</p>
+        <h3>Illness Anxiety Disorder</h3>
+        <p><span class="key-term">Illness anxiety disorder</span> (replacing DSM-IV's hypochondriasis, in part) involves preoccupation with having or acquiring a serious illness, with minimal or no somatic symptoms present. If somatic symptoms are present, the anxiety about illness is clearly disproportionate. The individual has high health anxiety and performs excessive health-related behaviors or shows maladaptive avoidance.</p>
+        <h3>Conversion Disorder (Functional Neurological Symptom Disorder)</h3>
+        <p><span class="key-term">Conversion disorder</span> involves one or more symptoms of altered voluntary motor or sensory function, with clinical findings providing evidence of incompatibility between the symptom and recognized neurological or medical conditions. DSM-5 removed the requirement to demonstrate a psychological stressor and renamed it to include "functional neurological symptom disorder."</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p><span class="key-term">La belle indifference</span> (a relative lack of concern about the nature or implications of the symptom) was historically associated with conversion disorder, but research has shown it is neither sensitive nor specific for the diagnosis. It should not be used as a reliable diagnostic indicator. Hoover's sign and other clinical tests of internal inconsistency are more useful for establishing the "incompatibility" criterion in DSM-5.</p>
+        </div>
+        <h3>Factitious Disorder</h3>
+        <p><span class="key-term">Factitious disorder</span> involves falsification of medical or psychological symptoms or induction of injury/disease, in the absence of obvious external rewards. The deception is present even when external incentives are absent. <strong>Factitious disorder imposed on self</strong> (formerly Munchausen syndrome) and <strong>factitious disorder imposed on another</strong> (formerly Munchausen by proxy) are both recognized. Unlike malingering (which involves external incentives), factitious disorder is driven by the motivation to assume the sick role.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Treatment of PTSD</h2>
+        <h3>First-Line Psychotherapies</h3>
+        <ul>
+          <li><strong>Prolonged Exposure (PE):</strong> Developed by Foa et al., involves repeated, systematic exposure to trauma-related memories (imaginal exposure) and avoided situations (in vivo exposure). Based on emotional processing theory -- the idea that fear memories must be activated and modified with corrective information. PE has the largest evidence base for PTSD treatment.</li>
+          <li><strong>Cognitive Processing Therapy (CPT):</strong> Developed by Resick et al., focuses on identifying and challenging maladaptive beliefs ("stuck points") about the trauma, oneself, and the world. Involves written trauma accounts and cognitive restructuring worksheets.</li>
+          <li><strong>EMDR (Eye Movement Desensitization and Reprocessing):</strong> Developed by Shapiro, involves processing traumatic memories while simultaneously engaging in bilateral stimulation (typically lateral eye movements). Effective but the mechanism of action remains debated -- the specific role of eye movements is controversial, and some argue the exposure component drives efficacy.</li>
+        </ul>
+        <h3>Pharmacotherapy</h3>
+        <ul>
+          <li><strong>SSRIs</strong> (sertraline and paroxetine are FDA-approved for PTSD) are the first-line pharmacological treatment</li>
+          <li><strong>Prazosin</strong> (alpha-1 antagonist) has evidence for reducing PTSD-related nightmares</li>
+          <li><strong>Benzodiazepines are NOT recommended</strong> for PTSD -- they can interfere with fear extinction learning and may worsen outcomes</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Psychological debriefing</span> (including Critical Incident Stress Debriefing/CISD) -- single-session interventions provided immediately after trauma -- has been shown in multiple studies and meta-analyses to be <strong>ineffective and potentially harmful</strong>, as it may impede natural recovery processes (Rose et al., 2002). Current guidelines recommend against mandatory debriefing. Instead, evidence supports <strong>psychological first aid</strong> -- a non-intrusive, practical approach focused on safety, calming, self-efficacy, social connectedness, and hope.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>PTSD is no longer an <strong>anxiety disorder</strong> in DSM-5; it is in Trauma- and Stressor-Related Disorders</li>
+          <li>PTSD now has <strong>4 symptom clusters</strong> (intrusion, avoidance, negative cognitions/mood, arousal/reactivity)</li>
+          <li>PTSD requires symptoms for <strong>more than 1 month</strong>; ASD is <strong>3 days to 1 month</strong></li>
+          <li><strong>Peritraumatic dissociation</strong> is the strongest predictor of PTSD development</li>
+          <li>DSM-5 added the <strong>"with dissociative symptoms"</strong> specifier for PTSD</li>
+          <li>Adjustment disorder: within <strong>3 months</strong> of stressor, resolves within <strong>6 months</strong> of stressor termination</li>
+          <li>DID debate: <strong>posttraumatic model</strong> (childhood trauma) vs. <strong>sociocognitive model</strong> (iatrogenic/cultural)</li>
+          <li>Depersonalization/derealization: reality testing remains <strong>intact</strong></li>
+          <li>Somatic symptom disorder: DSM-5 focuses on <strong>disproportionate response to symptoms</strong>, not whether they are medically explained</li>
+          <li>Conversion disorder no longer requires evidence of a <strong>psychological stressor</strong></li>
+          <li><strong>Factitious disorder</strong> = motivation to assume sick role; <strong>malingering</strong> = external incentives</li>
+          <li><strong>La belle indifference</strong> is not a reliable diagnostic indicator for conversion disorder</li>
+          <li><strong>Prolonged Grief Disorder</strong> (DSM-5-TR): death at least <strong>12 months ago</strong> (adults) or <strong>6 months</strong> (children); yearning/preoccupation + <strong>3 of 8 symptoms</strong></li>
+          <li>PGD prevalence: approximately <strong>10% of bereaved</strong> individuals; normal grief decreases over time, PGD does not</li>
+          <li><strong>Complicated Grief Treatment (CGT)</strong> by Shear combines elements of IPT and exposure therapy</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Brewin, C. R., Andrews, B., & Valentine, J. D. (2000). Meta-analysis of risk factors for posttraumatic stress disorder in trauma-exposed adults. <em>Journal of Consulting and Clinical Psychology, 68</em>(5), 748-766.</div>
+        <div class="citation">Friedman, M. J. (2013). Finalizing PTSD in DSM-5: Getting here from there and where to go next. <em>Journal of Traumatic Stress, 26</em>(5), 548-556.</div>
+        <div class="citation">Lilienfeld, S. O., Lynn, S. J., Kirsch, I., et al. (1999). Dissociative identity disorder and the sociocognitive model: Recalling the lessons of the past. <em>Psychological Bulletin, 125</em>(5), 507-523.</div>
+        <div class="citation">Ozer, E. J., Best, S. R., Lipsey, T. L., & Weiss, D. S. (2003). Predictors of posttraumatic stress disorder and symptoms in adults: A meta-analysis. <em>Psychological Bulletin, 129</em>(1), 52-73.</div>
+        <div class="citation">Stone, J., Smyth, R., Carson, A., et al. (2006). La belle indifference in conversion symptoms and hysteria: Systematic review. <em>British Journal of Psychiatry, 188</em>, 204-209.</div>
+        <div class="citation">Shear, M. K., Frank, E., Houck, P. R., & Reynolds, C. F. (2005). Treatment of complicated grief: A randomized controlled trial. <em>JAMA, 293</em>(21), 2601-2608.</div>
+        <div class="citation">Shear, M. K., Wang, Y., Skritskaya, N., et al. (2014). Treatment of complicated grief in elderly persons: A randomized clinical trial. <em>JAMA Psychiatry, 71</em>(11), 1287-1295.</div>
+        <div class="citation">van der Kolk, B. A. (2014). <em>The body keeps the score: Brain, mind, and body in the healing of trauma</em>. Viking.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="substance-disorders.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Substance Use Disorders</div>
+          </div>
+        </a>
+        <a href="index.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Back to</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

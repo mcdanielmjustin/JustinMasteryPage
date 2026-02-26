@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relationships in Data: Correlation & Regression | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e;
+      --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: var(--success); display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Relationships in Data: Correlation & Regression</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link active"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 10</div>
+        <h1>Relationships in Data: Correlation & Regression</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Correlation</h2>
+
+        <p>Correlation is a statistical technique used to describe and measure the relationship between two variables. Understanding correlation is essential for psychological research and practice, as it underlies many assessment concepts including test reliability and validity. The <span class="key-term">correlation coefficient</span> quantifies both the strength and direction of the linear relationship between two variables (Cohen et al., 2003).</p>
+
+        <p>It is critical to understand that correlation does not imply causation. Even a strong correlation between two variables does not establish that one variable causes changes in the other. The relationship could be due to a third variable influencing both, reverse causation, or coincidence.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Correlation Coefficient:</strong> A numerical index ranging from -1.00 to +1.00 that indicates the strength and direction of the linear relationship between two variables.</p>
+          <p><strong>Positive Correlation:</strong> As one variable increases, the other tends to increase (e.g., height and weight).</p>
+          <p><strong>Negative Correlation:</strong> As one variable increases, the other tends to decrease (e.g., stress and immune function).</p>
+          <p><strong>Zero Correlation:</strong> No systematic linear relationship exists between the variables.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Types of Correlation Coefficients</h2>
+
+        <h3>Pearson Product-Moment Correlation (r)</h3>
+
+        <p>The <span class="key-term">Pearson r</span> is the most commonly used correlation coefficient and is appropriate when both variables are measured on interval or ratio scales and the relationship is linear. The Pearson r measures the degree to which data points fall on a straight line.</p>
+
+        <p>Assumptions for Pearson r include:</p>
+        <ul>
+          <li>Both variables are continuous (interval or ratio scale)</li>
+          <li>The relationship between variables is linear</li>
+          <li>Both variables are normally distributed (for significance testing)</li>
+          <li>Homoscedasticity: variance is similar across the range of scores</li>
+        </ul>
+
+        <h3>Spearman Rank-Order Correlation (rho)</h3>
+
+        <p><span class="key-term">Spearman's rho (ρ)</span> is used when one or both variables are measured on an ordinal scale, or when the relationship is monotonic but not linear. This coefficient correlates the ranks of the data rather than the raw scores. Spearman's rho is also more robust to outliers than Pearson's r (Field, 2018).</p>
+
+        <h3>Point-Biserial Correlation</h3>
+
+        <p>The <span class="key-term">point-biserial correlation</span> is used when one variable is continuous and the other is a true dichotomy (e.g., male/female, pass/fail). It is mathematically equivalent to the Pearson r but is appropriate for this specific combination of variable types.</p>
+
+        <h3>Phi Coefficient</h3>
+
+        <p>The <span class="key-term">phi coefficient (φ)</span> is used when both variables are true dichotomies. It is commonly used in 2×2 contingency tables and is related to chi-square statistics.</p>
+
+        <div class="definition-box">
+          <h4>Choosing the Right Correlation Coefficient</h4>
+          <p><strong>Both continuous:</strong> Pearson r (if linear) or Spearman rho (if non-linear or ordinal)</p>
+          <p><strong>One continuous, one dichotomous:</strong> Point-biserial correlation</p>
+          <p><strong>Both dichotomous:</strong> Phi coefficient</p>
+          <p><strong>Both ordinal:</strong> Spearman rho</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Interpreting Correlation Coefficients</h2>
+
+        <h3>Strength of Correlation</h3>
+
+        <p>The absolute value of the correlation coefficient indicates the strength of the relationship. Cohen (1988) provided widely used guidelines for interpreting effect sizes in behavioral sciences:</p>
+
+        <table>
+          <tr>
+            <th>Absolute Value of r</th>
+            <th>Interpretation</th>
+          </tr>
+          <tr>
+            <td>.10 to .29</td>
+            <td>Small (weak)</td>
+          </tr>
+          <tr>
+            <td>.30 to .49</td>
+            <td>Medium (moderate)</td>
+          </tr>
+          <tr>
+            <td>.50 and above</td>
+            <td>Large (strong)</td>
+          </tr>
+        </table>
+
+        <p>However, these guidelines should be interpreted in context. In some research areas (e.g., personality psychology), correlations of .30 are considered substantial, while in others (e.g., test-retest reliability), correlations below .80 might be considered inadequate.</p>
+
+        <h3>Coefficient of Determination (r²)</h3>
+
+        <p>The <span class="key-term">coefficient of determination (r²)</span> is obtained by squaring the correlation coefficient. It represents the proportion of variance in one variable that is explained by (or shared with) the other variable. This is also referred to as shared variance or common variance.</p>
+
+        <div class="example-box">
+          <h4>Example: Interpreting r²</h4>
+          <p>If the correlation between SAT scores and college GPA is r = .50, then r² = .25. This means that 25% of the variance in college GPA can be explained by SAT scores. Conversely, 75% of the variance in GPA is due to other factors not captured by SAT scores. This interpretation helps put correlation coefficients in practical perspective.</p>
+        </div>
+
+        <h3>Coefficient of Alienation</h3>
+
+        <p>The <span class="key-term">coefficient of alienation</span> represents the proportion of variance that is NOT shared between two variables. It is calculated as 1 - r², or equivalently, it indicates the proportion of unexplained variance.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Factors Affecting Correlation</h2>
+
+        <h3>Restriction of Range</h3>
+
+        <p><span class="key-term">Restriction of range</span> occurs when the variability in one or both variables is limited compared to the full population. This artificial restriction attenuates (reduces) the observed correlation coefficient. When range is restricted, correlations appear weaker than they would be in the unrestricted population (Sackett & Yang, 2000).</p>
+
+        <div class="example-box">
+          <h4>Example: Range Restriction in Selection</h4>
+          <p>A company uses a cognitive ability test to select employees, hiring only those who score above the 75th percentile. When later examining the correlation between test scores and job performance among hired employees, they find a modest correlation of r = .20. However, if they could have studied all applicants (unrestricted range), the correlation might be r = .50. The selection process restricted the range of test scores, attenuating the observed validity coefficient.</p>
+        </div>
+
+        <h3>Outliers</h3>
+
+        <p>Extreme scores (outliers) can dramatically affect correlation coefficients, either inflating or deflating them depending on their position. A single outlier can change a strong correlation to a weak one or vice versa. Researchers should always examine scatterplots and consider the influence of outliers on their findings.</p>
+
+        <h3>Non-linearity</h3>
+
+        <p>Pearson's r only captures linear relationships. If the relationship between variables is curvilinear (e.g., the Yerkes-Dodson law relating arousal and performance), Pearson's r will underestimate the strength of the actual relationship. Examining scatterplots is essential for detecting non-linear patterns.</p>
+
+        <h3>Heteroscedasticity</h3>
+
+        <p><span class="key-term">Heteroscedasticity</span> occurs when the variability of one variable differs across levels of the other variable. For example, the variance in job performance might be larger for people with low test scores than for people with high scores. This violates an assumption of Pearson's r and can affect the accuracy of the correlation coefficient.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Understanding factors that affect correlation is critical for interpreting validity studies. When a test shows lower validity in clinical samples than in research samples, restriction of range may be responsible. Clinicians should consider whether the validation sample is representative of the population they serve.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Simple Linear Regression</h2>
+
+        <p><span class="key-term">Regression</span> extends correlation by allowing prediction of one variable from another. While correlation describes the relationship between variables, regression provides a mathematical equation for predicting scores on a criterion variable (Y) from scores on a predictor variable (X).</p>
+
+        <h3>The Regression Equation</h3>
+
+        <p>The simple linear regression equation is: Y' = a + bX</p>
+
+        <ul>
+          <li><strong>Y'</strong> (Y-prime): The predicted score on the criterion variable</li>
+          <li><strong>a</strong>: The Y-intercept (the value of Y when X = 0)</li>
+          <li><strong>b</strong>: The slope (regression coefficient) indicating the change in Y for each one-unit change in X</li>
+          <li><strong>X</strong>: The score on the predictor variable</li>
+        </ul>
+
+        <p>The regression line is the "line of best fit" that minimizes the sum of squared errors (differences between actual and predicted Y values). This is called the <span class="key-term">least squares criterion</span>.</p>
+
+        <h3>Standard Error of Estimate</h3>
+
+        <p>The <span class="key-term">standard error of estimate (SEE)</span> quantifies the average amount of error in predictions made from the regression equation. It represents the standard deviation of the residuals (prediction errors). A smaller SEE indicates more accurate predictions.</p>
+
+        <p>The relationship between SEE and correlation is: as r increases, SEE decreases. When r = 1.00 (perfect correlation), SEE = 0 (no prediction error). When r = 0, the SEE equals the standard deviation of the Y variable (knowing X provides no improvement over just guessing the mean of Y).</p>
+
+        <div class="definition-box">
+          <h4>Key Regression Concepts</h4>
+          <p><strong>Predictor Variable (X):</strong> The variable used to make predictions; also called the independent variable in regression.</p>
+          <p><strong>Criterion Variable (Y):</strong> The variable being predicted; also called the dependent variable in regression.</p>
+          <p><strong>Residual:</strong> The difference between the actual Y score and the predicted Y score (Y - Y').</p>
+          <p><strong>SEE:</strong> The standard deviation of the residuals; indicates prediction accuracy.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Multiple Regression</h2>
+
+        <p><span class="key-term">Multiple regression</span> extends simple regression by using two or more predictor variables to predict a single criterion variable. The multiple regression equation is: Y' = a + b₁X₁ + b₂X₂ + ... + bₖXₖ</p>
+
+        <p>Each predictor variable has its own regression coefficient (b) indicating its unique contribution to predicting Y while controlling for other predictors.</p>
+
+        <h3>Multiple Correlation Coefficient (R)</h3>
+
+        <p>The <span class="key-term">multiple correlation coefficient (R)</span> indicates the correlation between the actual criterion scores and the predicted scores from the multiple regression equation. R ranges from 0 to 1.00 (it is always positive because it represents the correlation between actual and predicted values).</p>
+
+        <p>R² indicates the proportion of variance in the criterion variable explained by the combination of all predictor variables. R² always increases (or stays the same) when additional predictors are added, even if those predictors have no true relationship with the criterion. For this reason, <span class="key-term">adjusted R²</span> is often reported, which accounts for the number of predictors and sample size.</p>
+
+        <h3>Incremental Validity</h3>
+
+        <p><span class="key-term">Incremental validity</span> refers to the additional predictive power provided by adding a new predictor to an existing set of predictors. A predictor has incremental validity if it significantly increases R² beyond what existing predictors already explain. This concept is important in personnel selection and clinical assessment when evaluating whether adding a new test improves prediction.</p>
+
+        <div class="example-box">
+          <h4>Example: Incremental Validity in Clinical Assessment</h4>
+          <p>A researcher examines whether a new anxiety questionnaire adds predictive value for treatment outcomes beyond existing measures. A regression using only the BDI-II yields R² = .30. Adding the new anxiety measure increases R² to .38. The increment of .08 (8% additional variance explained) represents the incremental validity of the new measure. Statistical tests can determine whether this increment is significant.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Regression to the Mean</h2>
+
+        <p><span class="key-term">Regression to the mean</span> is a statistical phenomenon wherein extreme scores on one measurement tend to be followed by less extreme scores on subsequent measurements. This occurs whenever the correlation between two variables is less than perfect (r &lt; 1.00). The term "regression" was coined by Francis Galton based on this observation (Galton, 1886).</p>
+
+        <div class="example-box">
+          <h4>Example: Regression to the Mean</h4>
+          <p>Students who score extremely high on a midterm exam will, on average, score somewhat lower on the final exam. Similarly, students who score extremely low on the midterm will, on average, score somewhat higher on the final. This is not because high scorers "got worse" or low scorers "improved" - it's a statistical artifact of imperfect correlation between the two measurements.</p>
+        </div>
+
+        <p>Regression to the mean has important implications for interpreting treatment effects. If participants are selected for treatment based on extreme scores (e.g., high depression scores), some improvement would be expected on subsequent measurement due to regression alone, even without any treatment effect.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications: Threats to Internal Validity</h4>
+          <p>Regression to the mean is a threat to internal validity in clinical research. When clients seek treatment because they're at their worst, some apparent improvement may simply reflect regression rather than treatment effects. Proper research designs (e.g., control groups, randomization) are necessary to separate regression effects from true treatment effects.</p>
+        </div>
+
+        <div class="citation">
+          Galton, F. (1886). Regression towards mediocrity in hereditary stature. <em>Journal of the Anthropological Institute of Great Britain and Ireland, 15</em>, 246-263. - Galton's observations on the heights of parents and children led to the development of regression analysis.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Applications in Psychological Assessment</h2>
+
+        <h3>Test Reliability</h3>
+
+        <p>Correlation coefficients are fundamental to assessing test reliability. Test-retest reliability, alternate forms reliability, and internal consistency (via coefficient alpha) all rely on correlational methods. Higher correlations indicate greater reliability.</p>
+
+        <h3>Test Validity</h3>
+
+        <p>Correlation is central to evaluating criterion-related validity (both predictive and concurrent). The correlation between test scores and criterion measures indicates how well the test predicts the criterion. Validity coefficients are interpreted considering factors like range restriction and criterion reliability.</p>
+
+        <h3>Meta-Analysis</h3>
+
+        <p><span class="key-term">Meta-analysis</span> is a quantitative method for systematically combining results from multiple studies to arrive at an overall estimate of an effect. Unlike a narrative literature review, meta-analysis uses statistical techniques to integrate findings, weight studies by quality or sample size, and assess variability across studies (Borenstein et al., 2009). Correlation coefficients can be converted to other effect size metrics and combined to estimate population-level relationships while accounting for sampling error and study artifacts (Hunter & Schmidt, 2004).</p>
+
+        <h4>Effect Size Calculation</h4>
+        <p>The foundation of meta-analysis is the <span class="key-term">effect size</span>—a standardized measure of the magnitude of an effect that can be compared across studies with different scales and designs. Common effect size metrics include Cohen's d (standardized mean difference), Pearson's r (correlation), and odds ratios (for binary outcomes). Each study's effect size is calculated and then combined into a weighted average, with larger studies typically receiving more weight.</p>
+
+        <h4>Fixed vs. Random Effects Models</h4>
+        <div class="definition-box">
+          <h4>Two Approaches to Combining Studies</h4>
+          <ul>
+            <li><strong>Fixed effects model:</strong> Assumes all studies estimate the same underlying true effect size. Differences between studies are attributed solely to sampling error. Appropriate when studies are very similar in design, population, and intervention. Inferences are limited to the specific studies included.</li>
+            <li><strong>Random effects model:</strong> Assumes that true effect sizes vary across studies due to differences in populations, methods, and contexts. Accounts for both within-study sampling error and between-study variability. Generally preferred in psychological research because studies are rarely identical in all respects. Produces wider confidence intervals than fixed effects models.</li>
+          </ul>
+        </div>
+
+        <h4>Forest Plots</h4>
+        <p>A <span class="key-term">forest plot</span> is the standard graphical display of meta-analytic results. Each study is represented by a horizontal line (confidence interval) with a square at the point estimate (the square's size reflects the study's weight). The overall combined estimate is displayed as a diamond at the bottom. Forest plots allow readers to visually assess the consistency and direction of effects across studies.</p>
+
+        <h4>Heterogeneity</h4>
+        <p><span class="key-term">Heterogeneity</span> refers to variability in effect sizes across studies beyond what would be expected from sampling error alone. Key measures include:</p>
+        <ul>
+          <li><strong>Q statistic:</strong> Tests whether observed variability exceeds chance; a significant Q indicates heterogeneity is present</li>
+          <li><strong>I² statistic:</strong> Quantifies the percentage of variability due to true differences between studies rather than sampling error. Values of 25%, 50%, and 75% are considered low, moderate, and high heterogeneity, respectively (Higgins et al., 2003)</li>
+        </ul>
+        <p>When substantial heterogeneity exists, researchers conduct <span class="key-term">moderator analysis</span> (also called subgroup analysis or meta-regression) to identify variables that explain why effect sizes differ across studies (e.g., type of intervention, participant age, study quality).</p>
+
+        <h4>Publication Bias</h4>
+        <p><span class="key-term">Publication bias</span> (also called the "file drawer problem") occurs when studies with statistically significant results are more likely to be published than studies with null findings. This can inflate meta-analytic effect size estimates because non-significant studies are missing from the analysis.</p>
+        <ul>
+          <li><strong>Funnel plot:</strong> A scatter plot of effect sizes (x-axis) against study precision or sample size (y-axis). In the absence of bias, the plot should be symmetrical around the mean effect. Asymmetry (missing studies in the lower-left corner) suggests publication bias.</li>
+          <li><strong>File drawer problem (Rosenthal):</strong> Refers to the unknown number of unpublished studies with null findings "sitting in file drawers." Rosenthal's fail-safe N estimates how many null studies would need to exist to reduce the combined effect to non-significance.</li>
+          <li><strong>Trim and fill method:</strong> Statistically estimates and corrects for missing studies in an asymmetric funnel plot</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Meta-Analysis in Evidence-Based Practice</h4>
+          <p>Meta-analyses are considered among the highest levels of evidence in evidence-based practice hierarchies. They inform clinical practice guidelines (e.g., APA treatment guidelines), resolve conflicting findings across individual studies, and provide more precise effect size estimates than any single study. However, the quality of a meta-analysis depends on the quality and representativeness of the included studies—"garbage in, garbage out."</p>
+        </div>
+
+        <div class="citation">
+          Borenstein, M., Hedges, L. V., Higgins, J. P. T., & Rothstein, H. R. (2009). <em>Introduction to meta-analysis</em>. Wiley.
+        </div>
+        <div class="citation">
+          Hunter, J. E., & Schmidt, F. L. (2004). <em>Methods of meta-analysis: Correcting error and bias in research findings</em> (2nd ed.). Sage Publications.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+
+        <div class="key-concepts" style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h4 style="color: var(--accent); margin-top: 0;">Commonly Tested Topics for the EPPP</h4>
+          <ul style="color: var(--text-secondary);">
+            <li><strong>Correlation ≠ Causation:</strong> Correlation describes relationships but cannot establish cause and effect</li>
+            <li><strong>Range of r:</strong> Correlation coefficients range from -1.00 to +1.00</li>
+            <li><strong>r²:</strong> The coefficient of determination indicates shared/explained variance</li>
+            <li><strong>Restriction of Range:</strong> Attenuates (reduces) correlation coefficients</li>
+            <li><strong>Pearson r:</strong> Requires continuous, normally distributed variables with linear relationship</li>
+            <li><strong>Spearman rho:</strong> Used for ordinal data or non-linear monotonic relationships</li>
+            <li><strong>Regression Equation:</strong> Y' = a + bX for simple regression</li>
+            <li><strong>Standard Error of Estimate:</strong> Measures prediction accuracy; decreases as r increases</li>
+            <li><strong>Multiple R:</strong> Always positive; R² indicates total explained variance</li>
+            <li><strong>Incremental Validity:</strong> Additional predictive power from adding a predictor</li>
+            <li><strong>Regression to the Mean:</strong> Extreme scores tend toward the mean on retest; threat to internal validity</li>
+            <li><strong>Cohen's Guidelines:</strong> Small (r = .10), Medium (r = .30), Large (r = .50)</li>
+            <li><strong>Meta-analysis:</strong> Quantitative synthesis of effect sizes across studies; forest plots display results</li>
+            <li><strong>Fixed vs. random effects:</strong> Fixed assumes one true effect; random accounts for variability across studies (preferred in psychology)</li>
+            <li><strong>Heterogeneity:</strong> I² quantifies between-study variability (25% = low, 50% = moderate, 75% = high)</li>
+            <li><strong>Publication bias:</strong> Assessed via funnel plots; the file drawer problem refers to unpublished null results</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <p style="font-size: 0.9rem; line-height: 1.9;">
+          Borenstein, M., Hedges, L. V., Higgins, J. P. T., & Rothstein, H. R. (2009). <em>Introduction to meta-analysis</em>. Wiley.<br><br>
+          Cohen, J. (1988). <em>Statistical power analysis for the behavioral sciences</em> (2nd ed.). Lawrence Erlbaum Associates.<br><br>
+          Cohen, J., Cohen, P., West, S. G., & Aiken, L. S. (2003). <em>Applied multiple regression/correlation analysis for the behavioral sciences</em> (3rd ed.). Lawrence Erlbaum Associates.<br><br>
+          Field, A. (2018). <em>Discovering statistics using IBM SPSS statistics</em> (5th ed.). Sage Publications.<br><br>
+          Galton, F. (1886). Regression towards mediocrity in hereditary stature. <em>Journal of the Anthropological Institute of Great Britain and Ireland, 15</em>, 246-263.<br><br>
+          Higgins, J. P. T., Thompson, S. G., Deeks, J. J., & Altman, D. G. (2003). Measuring inconsistency in meta-analyses. <em>BMJ, 327</em>(7414), 557-560.<br><br>
+          Hunter, J. E., & Schmidt, F. L. (2004). <em>Methods of meta-analysis: Correcting error and bias in research findings</em> (2nd ed.). Sage Publications.<br><br>
+          Sackett, P. R., & Yang, H. (2000). Correction for range restriction: An expanded typology. <em>Journal of Applied Psychology, 85</em>(1), 112-118.
+        </p>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="operant-conditioning.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Shaping Behavior: Operant Conditioning</div>
+          </div>
+        </a>
+        <a href="inferential-statistics.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">From Samples to Populations: Inferential Statistics</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

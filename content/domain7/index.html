@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain 7: Biopsychology | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .domain-header { margin-bottom: 48px; }
+    .domain-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 20px; font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.75rem; margin-bottom: 16px; line-height: 1.2; }
+    .domain-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .domain-description { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+
+    .chapter-cards { display: grid; gap: 16px; margin-top: 32px; }
+    .chapter-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: center; gap: 20px; text-decoration: none; transition: all 0.2s ease; }
+    .chapter-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    .chapter-card-number { width: 48px; height: 48px; background: var(--accent-dim); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .chapter-card-content { flex: 1; }
+    .chapter-card-title { font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .chapter-card-desc { font-size: 0.85rem; color: var(--text-muted); }
+    .chapter-card-arrow { color: var(--text-muted); }
+    .chapter-card:hover .chapter-card-arrow { color: var(--accent); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Domain 7</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 7</div>
+        <div class="domain-title">Biopsychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link active"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="brain-structure-lateralization.html" class="chapter-link"><span class="chapter-number">1</span>Brain Structure & Lateralization</a></li>
+        <li class="chapter-item"><a href="learning-encoding.html" class="chapter-link"><span class="chapter-number">2</span>Learning Processes & Encoding Strategies</a></li>
+        <li class="chapter-item"><a href="memory-architecture.html" class="chapter-link"><span class="chapter-number">3</span>Memory Architecture & Working Memory</a></li>
+        <li class="chapter-item"><a href="retrieval-forgetting.html" class="chapter-link"><span class="chapter-number">4</span>Retrieval, Forgetting & Memory Distortion</a></li>
+        <li class="chapter-item"><a href="neuroscience-memory.html" class="chapter-link"><span class="chapter-number">5</span>Neuroscience of Memory & Amnesia</a></li>
+        <li class="chapter-item"><a href="sleep-architecture.html" class="chapter-link"><span class="chapter-number">6</span>Sleep Architecture, Dreaming & the Lifespan</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">7</span>Neurons, Neurotransmitters & Neural Signaling</a></li>
+        <li class="chapter-item"><a href="emotion-arousal.html" class="chapter-link"><span class="chapter-number">8</span>Emotion Theories, Arousal & the ANS</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">9</span>Sensation, Perception & Psychophysics</a></li>
+        <li class="chapter-item"><a href="neurodegenerative-movement.html" class="chapter-link"><span class="chapter-number">10</span>Neurodegenerative & Movement Disorders</a></li>
+        <li class="chapter-item"><a href="cerebrovascular-injury.html" class="chapter-link"><span class="chapter-number">11</span>Cerebrovascular Disease, Brain Injury & Seizures</a></li>
+        <li class="chapter-item"><a href="endocrine-neuroimaging.html" class="chapter-link"><span class="chapter-number">12</span>Endocrine Conditions, Neuroimaging & Diagnostics</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">13</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="domain-header">
+        <div class="domain-badge">BIG 4 DOMAIN</div>
+        <h1>Biopsychology</h1>
+        <div class="domain-meta">
+          <span>13 Chapters</span>
+        </div>
+        <p class="domain-description">
+          Select a chapter below to begin studying this domain.
+        </p>
+      </header>
+
+      <section class="content-section">
+        <h2>Chapters</h2>
+        <p>Click on any chapter to view its content:</p>
+
+        <div class="chapter-cards">
+          <a href="brain-structure-lateralization.html" class="chapter-card">
+            <div class="chapter-card-number">1</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Brain Structure & Lateralization</div>
+              <div class="chapter-card-desc">Cortical lobes, subcortical structures, limbic system, basal ganglia, brainstem, and hemispheric lateralization.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="learning-encoding.html" class="chapter-card">
+            <div class="chapter-card-number">2</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Learning Processes & Encoding Strategies</div>
+              <div class="chapter-card-desc">Classical and operant conditioning, observational learning, and encoding techniques.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="memory-architecture.html" class="chapter-card">
+            <div class="chapter-card-number">3</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Memory Architecture & Working Memory</div>
+              <div class="chapter-card-desc">Sensory, short-term, and long-term memory systems and working memory models.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="retrieval-forgetting.html" class="chapter-card">
+            <div class="chapter-card-number">4</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Retrieval, Forgetting & Memory Distortion</div>
+              <div class="chapter-card-desc">Recall vs. recognition, interference theory, false memories, and forgetting curves.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="neuroscience-memory.html" class="chapter-card">
+            <div class="chapter-card-number">5</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Neuroscience of Memory & Amnesia</div>
+              <div class="chapter-card-desc">Hippocampal circuits, long-term potentiation, and anterograde vs. retrograde amnesia.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="sleep-architecture.html" class="chapter-card">
+            <div class="chapter-card-number">6</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Sleep Architecture, Dreaming & the Lifespan</div>
+              <div class="chapter-card-desc">Sleep stages, circadian rhythms, dream theories, and age-related sleep changes.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="neurons-neurotransmitters.html" class="chapter-card">
+            <div class="chapter-card-number">7</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Neurons, Neurotransmitters & Neural Signaling</div>
+              <div class="chapter-card-desc">Action potentials, synaptic transmission, and major neurotransmitter systems.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="emotion-arousal.html" class="chapter-card">
+            <div class="chapter-card-number">8</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Emotion Theories, Arousal & the Autonomic Nervous System</div>
+              <div class="chapter-card-desc">James-Lange, Cannon-Bard, Schachter-Singer theories, and sympathetic/parasympathetic responses.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="sensation-perception.html" class="chapter-card">
+            <div class="chapter-card-number">9</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Sensation, Perception & Psychophysics</div>
+              <div class="chapter-card-desc">Sensory systems, signal detection theory, Weber's law, and perceptual organization.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="neurodegenerative-movement.html" class="chapter-card">
+            <div class="chapter-card-number">10</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Neurodegenerative & Movement Disorders</div>
+              <div class="chapter-card-desc">Parkinson's, Huntington's, ALS, multiple sclerosis, and basal ganglia pathology.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="cerebrovascular-injury.html" class="chapter-card">
+            <div class="chapter-card-number">11</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Cerebrovascular Disease, Brain Injury & Seizure Disorders</div>
+              <div class="chapter-card-desc">Stroke types, traumatic brain injury, epilepsy, and seizure classification.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="endocrine-neuroimaging.html" class="chapter-card">
+            <div class="chapter-card-number">12</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Endocrine Conditions, Neuroimaging & Diagnostics</div>
+              <div class="chapter-card-desc">Thyroid and adrenal disorders, MRI, CT, PET, EEG, and diagnostic methods.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+
+          <a href="neurocognitive.html" class="chapter-card">
+            <div class="chapter-card-number">13</div>
+            <div class="chapter-card-content">
+              <div class="chapter-card-title">Neurocognitive Disorders</div>
+              <div class="chapter-card-desc">Alzheimer's, vascular dementia, Lewy body disease, delirium, and diagnostic criteria.</div>
+            </div>
+            <svg class="chapter-card-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

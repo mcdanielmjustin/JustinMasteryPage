@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Organisms Learn: Classical Conditioning | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e;
+      --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: var(--success); display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>How Organisms Learn: Classical Conditioning</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales &amp; the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link active"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">4</span>Relationships in Data: Correlation &amp; Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats &amp; Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content &amp; Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 10</div>
+        <h1>How Organisms Learn: Classical Conditioning</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Classical Conditioning</h2>
+
+        <p>Classical conditioning, also known as Pavlovian or respondent conditioning, represents one of the most fundamental mechanisms of learning discovered in the history of psychology. First systematically described by Russian physiologist Ivan Pavlov in the 1890s during his research on digestive processes in dogs, classical conditioning explains how organisms learn to associate neutral stimuli with biologically significant events (Pavlov, 1927).</p>
+
+        <p>This form of learning is characterized by the pairing of a <span class="key-term">neutral stimulus</span> with an <span class="key-term">unconditioned stimulus</span> that naturally and automatically triggers a reflexive response. Through repeated pairings, the previously neutral stimulus acquires the ability to elicit a similar response, now termed the <span class="key-term">conditioned response</span>.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Unconditioned Stimulus (US):</strong> A stimulus that naturally and automatically triggers a response without prior learning (e.g., food causing salivation).</p>
+          <p><strong>Unconditioned Response (UR):</strong> The unlearned, naturally occurring response to the unconditioned stimulus (e.g., salivation to food).</p>
+          <p><strong>Conditioned Stimulus (CS):</strong> A previously neutral stimulus that, after association with the US, comes to trigger a conditioned response (e.g., bell after pairing with food).</p>
+          <p><strong>Conditioned Response (CR):</strong> The learned response to the conditioned stimulus (e.g., salivation to the bell).</p>
+        </div>
+
+        <p>Classical conditioning underlies many emotional responses, phobias, and physiological reactions. Understanding these mechanisms is essential for psychologists because they form the theoretical foundation for exposure-based treatments, systematic desensitization, and other evidence-based interventions for anxiety disorders (Craske et al., 2014).</p>
+
+        <div class="citation">
+          Pavlov, I. P. (1927). <em>Conditioned reflexes: An investigation of the physiological activity of the cerebral cortex</em>. Oxford University Press. - Pavlov's foundational work established the basic paradigm and terminology of classical conditioning that continues to guide research and clinical practice.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Basic Principles of Classical Conditioning</h2>
+
+        <h3>Acquisition</h3>
+
+        <p><span class="key-term">Acquisition</span> refers to the initial learning phase during which the conditioned response is established. Several factors influence the strength and speed of acquisition:</p>
+
+        <ul>
+          <li><strong>Temporal Contiguity:</strong> The CS and US must occur close together in time. The optimal interval varies by response system but is typically 0.5 seconds for many conditioned responses (Rescorla, 1988).</li>
+          <li><strong>Contingency:</strong> The CS must reliably predict the US. If the US occurs equally often with and without the CS, conditioning will not occur despite temporal pairing.</li>
+          <li><strong>CS-US Intensity:</strong> Stronger unconditioned stimuli generally produce faster and stronger conditioning.</li>
+        </ul>
+
+        <h4>Delay Conditioning</h4>
+
+        <p><span class="key-term">Delay conditioning</span> is the most effective temporal arrangement for establishing conditioned responses. In this procedure, the CS begins before the US and continues until the US is presented. The CS "overlaps" with the US onset, creating optimal conditions for association formation.</p>
+
+        <p>Research consistently demonstrates that delay conditioning produces more robust learning than trace conditioning (where a gap exists between CS offset and US onset) or simultaneous conditioning (where CS and US begin at the same time) (Pavlov, 1927; Rescorla, 1988).</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Fear Acquisition</h4>
+          <p>A child is bitten by a dog (US) while at a park. The pain from the bite naturally produces fear (UR). The visual appearance of dogs (CS) was present just before and during the bite. After this single pairing (one-trial learning), the child now experiences fear (CR) when seeing any dog. The temporal relationship - seeing the dog immediately before and during the painful bite - exemplifies delay conditioning producing rapid fear acquisition.</p>
+        </div>
+
+        <h3>Extinction and Spontaneous Recovery</h3>
+
+        <p><span class="key-term">Extinction</span> occurs when the conditioned stimulus is repeatedly presented without the unconditioned stimulus. Over time, the conditioned response weakens and eventually ceases. However, extinction does not erase the original learning; rather, it represents new inhibitory learning that suppresses the conditioned response (Bouton, 2004).</p>
+
+        <p>Evidence for this interpretation comes from <span class="key-term">spontaneous recovery</span> - the reappearance of the extinguished conditioned response after a rest period. When time passes following extinction training, the CR often returns at partial strength when the CS is presented again. This phenomenon demonstrates that extinction does not eliminate the original CS-US association but instead creates a competing inhibitory association.</p>
+
+        <div class="citation">
+          Bouton, M. E. (2004). Context and behavioral processes in extinction. <em>Learning & Memory, 11</em>(5), 485-494. https://doi.org/10.1101/lm.78804 - Bouton's research demonstrates that extinction is context-dependent and represents new learning rather than unlearning.
+        </div>
+
+        <p>Additional phenomena supporting the "new learning" view of extinction include:</p>
+
+        <ul>
+          <li><strong>Renewal:</strong> The CR returns when testing occurs in a context different from the extinction context</li>
+          <li><strong>Reinstatement:</strong> The CR returns after unpaired US presentations following extinction</li>
+          <li><strong>Rapid reacquisition:</strong> Reconditioning after extinction occurs faster than original acquisition</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>The context-dependence of extinction has important implications for exposure therapy. Fear extinguished in a therapist's office may return when the client encounters the feared stimulus in different contexts. Effective treatment should include exposure in multiple contexts to promote generalization of extinction learning (Craske et al., 2014).</p>
+        </div>
+
+        <h3>Stimulus Generalization and Discrimination</h3>
+
+        <p><span class="key-term">Stimulus generalization</span> occurs when stimuli similar to the original CS also elicit the conditioned response. The degree of generalization typically follows a gradient - stimuli more similar to the original CS elicit stronger responses than dissimilar stimuli (Pavlov, 1927).</p>
+
+        <p><span class="key-term">Stimulus discrimination</span> is the opposite process - learning to respond differently to stimuli that differ from the original CS. Discrimination training involves reinforcing (pairing with the US) responses to one stimulus (CS+) while not reinforcing responses to similar stimuli (CS-).</p>
+
+        <div class="example-box">
+          <h4>The Little Albert Study</h4>
+          <p>Watson and Rayner's (1920) famous demonstration with "Little Albert" illustrated both fear conditioning and stimulus generalization. After conditioning fear to a white rat (CS) by pairing it with a loud noise (US), Albert showed fear responses not only to the rat but also to a rabbit, a dog, a fur coat, and even a Santa Claus mask - stimuli that shared the white, furry characteristics of the original CS. This generalization occurred despite these stimuli never being directly paired with the aversive noise.</p>
+        </div>
+
+        <div class="citation">
+          Watson, J. B., & Rayner, R. (1920). Conditioned emotional reactions. <em>Journal of Experimental Psychology, 3</em>(1), 1-14. - The "Little Albert" study demonstrated that emotional responses could be classically conditioned and would generalize to similar stimuli.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Advanced Conditioning Phenomena</h2>
+
+        <h3>Higher-Order Conditioning</h3>
+
+        <p><span class="key-term">Higher-order conditioning</span> (also called second-order conditioning) occurs when a well-established CS is used to condition a response to a new neutral stimulus, without further US presentations. In this procedure:</p>
+
+        <ol>
+          <li>First, CS1 is paired with the US until a strong CR is established</li>
+          <li>Then, a new neutral stimulus (CS2) is paired with CS1</li>
+          <li>CS2 eventually elicits a CR, despite never being directly paired with the US</li>
+        </ol>
+
+        <p>Higher-order conditioning is generally weaker than first-order conditioning and is susceptible to extinction. However, it provides a mechanism for explaining how complex associative networks develop and how fears can spread to stimuli never directly associated with trauma (Gewirtz & Davis, 2000).</p>
+
+        <h3>Blocking</h3>
+
+        <p>The <span class="key-term">blocking phenomenon</span>, discovered by Leon Kamin (1969), demonstrated that mere temporal contiguity between CS and US is insufficient for conditioning. In blocking experiments:</p>
+
+        <ol>
+          <li>CS1 (e.g., a light) is first conditioned to the US</li>
+          <li>Then, CS1 and a new stimulus CS2 (e.g., a tone) are presented together and paired with the US</li>
+          <li>When CS2 is tested alone, little or no conditioning is observed</li>
+        </ol>
+
+        <p>The prior conditioning to CS1 "blocks" new learning to CS2, even though CS2 was paired with the US. This finding led to the influential Rescorla-Wagner model, which proposes that conditioning occurs only when the US is unexpected or surprising (Rescorla & Wagner, 1972).</p>
+
+        <div class="citation">
+          Rescorla, R. A., & Wagner, A. R. (1972). A theory of Pavlovian conditioning: Variations in the effectiveness of reinforcement and nonreinforcement. In A. H. Black & W. F. Prokasy (Eds.), <em>Classical conditioning II: Current research and theory</em> (pp. 64-99). Appleton-Century-Crofts.
+        </div>
+
+        <h3>Overshadowing</h3>
+
+        <p><span class="key-term">Overshadowing</span> occurs when two stimuli are presented together as a compound CS, and conditioning to the more salient stimulus interferes with conditioning to the less salient stimulus. Unlike blocking, overshadowing occurs with simultaneous conditioning and does not require prior training with one element.</p>
+
+        <p>For example, if a bright light and soft tone are presented together before a shock, the more salient bright light may overshadow the tone, resulting in strong conditioning to the light but weak conditioning to the tone. This phenomenon has implications for understanding why some trauma cues become strongly associated with fear while others do not (Mackintosh, 1976).</p>
+
+        <h3>Experimental Neurosis</h3>
+
+        <p>Pavlov observed that when discrimination training becomes too difficult - when the CS+ and CS- become increasingly similar - animals may develop behavioral disturbances including agitation, aggression, and stereotyped behaviors. He termed this <span class="key-term">experimental neurosis</span> (Pavlov, 1927).</p>
+
+        <p>This phenomenon has been considered a model for understanding how chronic stress and unpredictable environments may contribute to anxiety and other psychological disorders. When organisms cannot reliably predict safety versus threat, chronic arousal and maladaptive behaviors may emerge.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Biological Preparedness and Constraints on Learning</h2>
+
+        <p>Early learning theorists assumed that any stimulus could be equally well conditioned to any response. However, research on taste aversion learning and phobias demonstrated significant biological constraints on classical conditioning (Seligman, 1971).</p>
+
+        <h3>Taste Aversion Learning</h3>
+
+        <p>Garcia and Koelling (1966) demonstrated that rats easily learn to avoid flavors (but not audiovisual cues) paired with illness, while they easily learn to avoid audiovisual cues (but not flavors) paired with shock. This <span class="key-term">selective association</span> suggests that organisms are biologically prepared to form certain associations more readily than others.</p>
+
+        <p>Taste aversion learning also violates typical temporal contiguity requirements - illness occurring hours after food consumption can still produce strong conditioned aversions. This makes adaptive sense, as food poisoning typically has delayed effects.</p>
+
+        <div class="citation">
+          Garcia, J., & Koelling, R. A. (1966). Relation of cue to consequence in avoidance learning. <em>Psychonomic Science, 4</em>(1), 123-124. - This landmark study demonstrated that certain CS-US associations are more readily learned due to biological preparedness.
+        </div>
+
+        <h3>Prepared Fears</h3>
+
+        <p>Seligman's (1971) <span class="key-term">preparedness theory</span> proposes that humans are biologically prepared to rapidly acquire fears of stimuli that posed threats throughout evolutionary history - snakes, spiders, heights, darkness, enclosed spaces, and social scrutiny. These "prepared" fears are:</p>
+
+        <ul>
+          <li>Acquired more rapidly (sometimes in single trials)</li>
+          <li>More resistant to extinction</li>
+          <li>Less affected by cognitive information</li>
+          <li>More likely to become clinical phobias</li>
+        </ul>
+
+        <p>In contrast, fears of evolutionarily recent threats (cars, electrical outlets, guns) are relatively rare despite causing more deaths in modern society. This preparedness may explain the non-random distribution of phobias in clinical populations (Ohman & Mineka, 2001).</p>
+
+        <div class="citation">
+          Ohman, A., & Mineka, S. (2001). Fears, phobias, and preparedness: Toward an evolved module of fear and fear learning. <em>Psychological Review, 108</em>(3), 483-522. https://doi.org/10.1037/0033-295X.108.3.483
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Conditioned Response Characteristics</h2>
+
+        <h3>CR versus UR</h3>
+
+        <p>While the conditioned response often resembles the unconditioned response, they are not identical. The CR is typically:</p>
+
+        <ul>
+          <li>Weaker in magnitude than the UR</li>
+          <li>Longer in latency (slower to begin)</li>
+          <li>Sometimes different in form (compensatory CRs)</li>
+        </ul>
+
+        <h3>Conditioned Compensatory Responses</h3>
+
+        <p>In some cases, particularly with drug conditioning, the CR may be opposite in direction to the UR. For example, when morphine (US) is repeatedly administered in a particular environment (CS), the body develops tolerance by producing physiological responses that counteract the drug's effects. These <span class="key-term">conditioned compensatory responses</span> are triggered by environmental cues associated with drug administration (Siegel, 1984).</p>
+
+        <p>This phenomenon has important implications for drug tolerance and overdose. When drugs are administered in novel environments lacking the conditioned compensatory responses, the full drug effect is experienced, potentially leading to overdose at doses that would be tolerated in familiar settings.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Application: Understanding Drug Overdose</h4>
+          <p>Siegel's research explains why many drug overdoses occur when users take their typical dose in unfamiliar environments. The novel context lacks the conditioned cues that normally trigger compensatory responses, resulting in an unexpectedly powerful drug effect. This underscores the importance of contextual factors in substance use treatment.</p>
+        </div>
+
+        <div class="citation">
+          Siegel, S. (1984). Pavlovian conditioning and heroin overdose: Reports by overdose victims. <em>Bulletin of the Psychonomic Society, 22</em>(5), 428-430.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Clinical Applications</h2>
+
+        <p>Classical conditioning principles underlie several evidence-based treatments, particularly for anxiety disorders:</p>
+
+        <h3>Systematic Desensitization</h3>
+
+        <p>Developed by Joseph Wolpe (1958), <span class="key-term">systematic desensitization</span> uses counterconditioning to treat phobias. The procedure involves:</p>
+
+        <ol>
+          <li>Training the client in relaxation techniques</li>
+          <li>Constructing a fear hierarchy from least to most anxiety-provoking</li>
+          <li>Pairing each hierarchy item with relaxation (reciprocal inhibition)</li>
+          <li>Progressing through the hierarchy until the most feared item can be imagined while relaxed</li>
+        </ol>
+
+        <h3>Exposure Therapy</h3>
+
+        <p>Modern exposure-based treatments emphasize extinction learning rather than counterconditioning. Prolonged exposure to feared stimuli without the feared outcome allows extinction of the fear response (Craske et al., 2014). Key principles include:</p>
+
+        <ul>
+          <li>Exposure must be prolonged enough for fear reduction to occur</li>
+          <li>Multiple contexts enhance generalization of extinction</li>
+          <li>Variability in exposure parameters may enhance long-term outcomes</li>
+          <li>Cognitive changes (expectancy violation) may be more important than within-session fear reduction</li>
+        </ul>
+
+        <div class="citation">
+          Craske, M. G., Treanor, M., Conway, C. C., Zbozinek, T., & Vervliet, B. (2014). Maximizing exposure therapy: An inhibitory learning approach. <em>Behaviour Research and Therapy, 58</em>, 10-23. https://doi.org/10.1016/j.brat.2014.04.006
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+
+        <div class="key-concepts" style="background: var(--bg-card);">
+          <h4 style="color: var(--accent);">Commonly Tested Topics for the EPPP</h4>
+          <ul style="color: var(--text-secondary);">
+            <li><strong>Terminology:</strong> Know the precise definitions of US, UR, CS, CR</li>
+            <li><strong>Extinction vs. Unlearning:</strong> Extinction is NEW learning, not erasure - supported by spontaneous recovery, renewal, and reinstatement</li>
+            <li><strong>Delay Conditioning:</strong> Most effective temporal arrangement (CS begins before and overlaps with US)</li>
+            <li><strong>Blocking:</strong> Prior conditioning to CS1 prevents conditioning to CS2 - supports prediction error models</li>
+            <li><strong>Preparedness:</strong> Biological constraints on learning; evolutionary-relevant fears acquired faster and extinguish slower</li>
+            <li><strong>Little Albert:</strong> Watson & Rayner (1920) - fear conditioning and stimulus generalization in humans</li>
+            <li><strong>Taste Aversion:</strong> Garcia & Koelling - selective association, long delays possible</li>
+            <li><strong>Clinical Applications:</strong> Systematic desensitization (Wolpe) and exposure therapy based on extinction</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <p style="font-size: 0.9rem; line-height: 1.9;">
+          Bouton, M. E. (2004). Context and behavioral processes in extinction. <em>Learning & Memory, 11</em>(5), 485-494.<br><br>
+          Craske, M. G., Treanor, M., Conway, C. C., Zbozinek, T., & Vervliet, B. (2014). Maximizing exposure therapy: An inhibitory learning approach. <em>Behaviour Research and Therapy, 58</em>, 10-23.<br><br>
+          Garcia, J., & Koelling, R. A. (1966). Relation of cue to consequence in avoidance learning. <em>Psychonomic Science, 4</em>(1), 123-124.<br><br>
+          Gewirtz, J. C., & Davis, M. (2000). Using Pavlovian higher-order conditioning paradigms to investigate the neural substrates of emotional learning and memory. <em>Learning & Memory, 7</em>(5), 257-266.<br><br>
+          Kamin, L. J. (1969). Predictability, surprise, attention, and conditioning. In B. A. Campbell & R. M. Church (Eds.), <em>Punishment and aversive behavior</em> (pp. 279-296). Appleton-Century-Crofts.<br><br>
+          Mackintosh, N. J. (1976). Overshadowing and stimulus intensity. <em>Animal Learning & Behavior, 4</em>(2), 186-192.<br><br>
+          Ohman, A., & Mineka, S. (2001). Fears, phobias, and preparedness: Toward an evolved module of fear and fear learning. <em>Psychological Review, 108</em>(3), 483-522.<br><br>
+          Pavlov, I. P. (1927). <em>Conditioned reflexes: An investigation of the physiological activity of the cerebral cortex</em>. Oxford University Press.<br><br>
+          Rescorla, R. A. (1988). Pavlovian conditioning: It's not what you think it is. <em>American Psychologist, 43</em>(3), 151-160.<br><br>
+          Rescorla, R. A., & Wagner, A. R. (1972). A theory of Pavlovian conditioning: Variations in the effectiveness of reinforcement and nonreinforcement. In A. H. Black & W. F. Prokasy (Eds.), <em>Classical conditioning II</em> (pp. 64-99). Appleton-Century-Crofts.<br><br>
+          Seligman, M. E. P. (1971). Phobias and preparedness. <em>Behavior Therapy, 2</em>(3), 307-320.<br><br>
+          Siegel, S. (1984). Pavlovian conditioning and heroin overdose: Reports by overdose victims. <em>Bulletin of the Psychonomic Society, 22</em>(5), 428-430.<br><br>
+          Watson, J. B., & Rayner, R. (1920). Conditioned emotional reactions. <em>Journal of Experimental Psychology, 3</em>(1), 1-14.<br><br>
+          Wolpe, J. (1958). <em>Psychotherapy by reciprocal inhibition</em>. Stanford University Press.
+        </p>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="variables-data.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Variables, Scales &amp; the Language of Data</div>
+          </div>
+        </a>
+        <a href="operant-conditioning.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Shaping Behavior: Operant Conditioning</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

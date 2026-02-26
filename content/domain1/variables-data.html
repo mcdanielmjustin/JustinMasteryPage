@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variables, Scales & the Language of Data | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; color: var(--text-primary); }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .definition-box h4 { margin: 0 0 12px; color: var(--accent); font-size: 1rem; }
+    .definition-box p { margin: 0; color: var(--text-secondary); }
+    .definition-box ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .definition-box li { margin-bottom: 8px; }
+
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .example-box h4 { margin: 0 0 12px; color: #60a5fa; font-size: 1rem; }
+    .example-box p { margin: 0; color: var(--text-secondary); }
+
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .clinical-note h4 { margin: 0 0 12px; color: #4ade80; font-size: 1rem; }
+    .clinical-note p { margin: 0; color: var(--text-secondary); }
+    .clinical-note ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .clinical-note li { margin-bottom: 8px; }
+
+    .citation { border-left: 3px solid var(--accent); padding-left: 16px; margin: 24px 0; font-style: italic; color: var(--text-muted); }
+
+    .exam-focus { background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 28px; margin: 40px 0; }
+    .exam-focus h3 { color: var(--accent); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    .exam-focus ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .exam-focus li { margin-bottom: 10px; }
+
+    .references { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .references h3 { margin-bottom: 20px; }
+    .reference-list { list-style: none; }
+    .reference-list li { margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; padding-left: 32px; text-indent: -32px; }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Variables, Scales & the Language of Data</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link active"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 10</div>
+        <h1>Variables, Scales & the Language of Data</h1>
+        <div class="chapter-meta">
+          <span>Measurement scales, distributions, and descriptive statistics</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Variables</h2>
+        <p>Variables are characteristics or attributes that can take on different values across individuals, time, or conditions. Understanding the types of variables and how they are measured is fundamental to psychological research and assessment. The nature of a variable determines which statistical analyses are appropriate and what conclusions can be drawn from data (Gravetter & Wallnau, 2017).</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <ul>
+            <li><strong>Variable:</strong> Any characteristic that can vary or take on different values</li>
+            <li><strong>Constant:</strong> A characteristic that does not change across observations</li>
+            <li><strong>Operationalization:</strong> The process of defining a variable in terms of specific, measurable procedures</li>
+            <li><strong>Measurement:</strong> The assignment of numbers to objects or events according to rules</li>
+          </ul>
+        </div>
+
+        <h3>Types of Variables in Research</h3>
+
+        <h4>Independent and Dependent Variables</h4>
+        <p>The <span class="key-term">independent variable (IV)</span> is the variable that is manipulated or selected by the researcher to determine its effect on behavior. The <span class="key-term">dependent variable (DV)</span> is the measured outcome that is expected to change as a function of the independent variable (Kerlinger & Lee, 2000).</p>
+
+        <div class="example-box">
+          <h4>Research Example</h4>
+          <p>In a study examining the effects of sleep deprivation on memory, the researcher manipulates hours of sleep (IV: 8 hours vs. 4 hours) and measures performance on a memory test (DV). The dependent variable "depends on" the level of the independent variable.</p>
+        </div>
+
+        <h4>Extraneous and Confounding Variables</h4>
+        <p><span class="key-term">Extraneous variables</span> are variables other than the IV that could potentially influence the DV. When an extraneous variable systematically varies with the IV, it becomes a <span class="key-term">confounding variable</span>, making it impossible to determine whether the IV or the confound caused changes in the DV.</p>
+
+        <div class="clinical-note">
+          <h4>Control Techniques</h4>
+          <ul>
+            <li><strong>Random assignment:</strong> Distributes individual differences across conditions</li>
+            <li><strong>Matching:</strong> Ensures groups are equivalent on specific variables</li>
+            <li><strong>Holding constant:</strong> Keeps a variable at one level across all conditions</li>
+            <li><strong>Counterbalancing:</strong> Varies order of conditions to control sequence effects</li>
+            <li><strong>Statistical control:</strong> Uses ANCOVA or partial correlation to remove effects</li>
+          </ul>
+        </div>
+
+        <h4>Mediating and Moderating Variables</h4>
+        <p>A <span class="key-term">mediating variable</span> explains the mechanism through which an IV affects a DV. It represents the pathway or process by which the effect occurs. A <span class="key-term">moderating variable</span> affects the strength or direction of the relationship between an IV and DV—it identifies when or for whom an effect occurs (Baron & Kenny, 1986).</p>
+
+        <div class="example-box">
+          <h4>Mediator vs. Moderator</h4>
+          <p><strong>Mediator example:</strong> Therapy → Increased self-efficacy → Decreased depression. Self-efficacy mediates the relationship between therapy and depression by explaining how therapy works.</p>
+          <p><strong>Moderator example:</strong> The effect of therapy on depression is stronger for patients with high motivation (motivation moderates the therapy-depression relationship by explaining when therapy works best).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Scales of Measurement</h2>
+        <p>Stevens (1946) identified four scales of measurement, often remembered by the mnemonic <span class="key-term">NOIR</span>: Nominal, Ordinal, Interval, and Ratio. The scale of measurement determines which mathematical operations and statistical procedures are appropriate for the data.</p>
+
+        <h3>Nominal Scale</h3>
+        <p>The <span class="key-term">nominal scale</span> uses numbers only as labels or names for categories. Numbers cannot be meaningfully added, subtracted, or compared in terms of magnitude. Examples include gender (1 = male, 2 = female), diagnostic categories, or political party affiliation.</p>
+
+        <p>Appropriate statistics for nominal data include frequency counts, percentages, mode, and chi-square tests.</p>
+
+        <h3>Ordinal Scale</h3>
+        <p>The <span class="key-term">ordinal scale</span> ranks observations from lowest to highest but does not specify the distance between ranks. The difference between ranks 1 and 2 may not equal the difference between ranks 2 and 3. Examples include class rank, Likert-type scales, and socioeconomic status categories.</p>
+
+        <p>Appropriate statistics include median, percentile ranks, and nonparametric tests (Spearman correlation, Mann-Whitney U).</p>
+
+        <h3>Interval Scale</h3>
+        <p>The <span class="key-term">interval scale</span> has equal intervals between values but no true zero point. The zero is arbitrary, and ratios are not meaningful. The classic example is temperature in Fahrenheit or Celsius—the difference between 20° and 30° equals the difference between 70° and 80°, but 40° is not "twice as hot" as 20°.</p>
+
+        <p>Most psychological tests are treated as interval scales. Appropriate statistics include mean, standard deviation, Pearson correlation, t-tests, and ANOVA.</p>
+
+        <h3>Ratio Scale</h3>
+        <p>The <span class="key-term">ratio scale</span> has all the properties of the interval scale plus a true zero point representing the absence of the measured attribute. Ratios are meaningful—10 seconds is twice as long as 5 seconds. Examples include reaction time, number of errors, height, and weight.</p>
+
+        <p>All statistical procedures are appropriate for ratio data.</p>
+
+        <div class="definition-box">
+          <h4>Summary: Scales of Measurement (NOIR)</h4>
+          <table>
+            <tr>
+              <th>Scale</th>
+              <th>Properties</th>
+              <th>Example</th>
+              <th>Central Tendency</th>
+            </tr>
+            <tr>
+              <td><strong>Nominal</strong></td>
+              <td>Categories only</td>
+              <td>Diagnosis, gender</td>
+              <td>Mode</td>
+            </tr>
+            <tr>
+              <td><strong>Ordinal</strong></td>
+              <td>Rank order</td>
+              <td>Class rank, severity ratings</td>
+              <td>Median</td>
+            </tr>
+            <tr>
+              <td><strong>Interval</strong></td>
+              <td>Equal intervals, no true zero</td>
+              <td>Temperature, IQ scores</td>
+              <td>Mean</td>
+            </tr>
+            <tr>
+              <td><strong>Ratio</strong></td>
+              <td>Equal intervals, true zero</td>
+              <td>Reaction time, height</td>
+              <td>Mean</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Descriptive Statistics</h2>
+        <p>Descriptive statistics summarize and organize data to make patterns more interpretable. They fall into three main categories: measures of central tendency, measures of variability, and measures of relative position (Howell, 2013).</p>
+
+        <h3>Measures of Central Tendency</h3>
+        <p>Central tendency statistics identify the typical or representative score in a distribution.</p>
+
+        <h4>Mean</h4>
+        <p>The <span class="key-term">mean</span> (M or X̄) is the arithmetic average, calculated by summing all scores and dividing by the number of scores. It uses information from every score but is sensitive to extreme values (outliers). The mean is appropriate for interval and ratio data.</p>
+
+        <h4>Median</h4>
+        <p>The <span class="key-term">median</span> (Mdn) is the middle score when data are arranged in order. It is less affected by outliers than the mean and is appropriate for ordinal, interval, and ratio data. In a skewed distribution, the median better represents the typical score.</p>
+
+        <h4>Mode</h4>
+        <p>The <span class="key-term">mode</span> is the most frequently occurring score. It is the only measure of central tendency appropriate for nominal data. A distribution can be bimodal (two modes) or multimodal (multiple modes).</p>
+
+        <div class="clinical-note">
+          <h4>Choosing the Right Measure</h4>
+          <p>Use the mean when the distribution is relatively normal and outliers are absent. Use the median when the distribution is skewed or contains outliers (e.g., income data). Use the mode for nominal data or to identify the most common category.</p>
+        </div>
+
+        <h3>Measures of Variability</h3>
+        <p>Variability statistics describe how spread out scores are in a distribution.</p>
+
+        <h4>Range</h4>
+        <p>The <span class="key-term">range</span> is the difference between the highest and lowest scores. It is simple but unstable because it is based on only two scores and is highly sensitive to outliers.</p>
+
+        <h4>Variance</h4>
+        <p>The <span class="key-term">variance</span> (s² or σ²) is the average of the squared deviations from the mean. Squaring the deviations ensures that positive and negative deviations do not cancel out. Sample variance uses n-1 in the denominator to provide an unbiased estimate of population variance.</p>
+
+        <h4>Standard Deviation</h4>
+        <p>The <span class="key-term">standard deviation</span> (SD or s) is the square root of the variance, returning the measure to the original unit of measurement. It represents the average distance of scores from the mean and is the most commonly used measure of variability.</p>
+
+        <div class="definition-box">
+          <h4>Computational Formulas</h4>
+          <p><strong>Variance (sample):</strong> s² = Σ(X - M)² / (n - 1)</p>
+          <p><strong>Standard Deviation:</strong> s = √s²</p>
+          <p>The divisor (n - 1) is called <span class="key-term">degrees of freedom</span> and provides an unbiased estimate of the population parameter.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Normal Distribution</h2>
+        <p>The <span class="key-term">normal distribution</span> (also called the Gaussian distribution or bell curve) is a theoretical probability distribution that is symmetric, unimodal, and asymptotic. Many psychological variables approximate normal distributions in large samples, and the normal distribution underlies many statistical procedures (Cohen et al., 2003).</p>
+
+        <h3>Properties of the Normal Distribution</h3>
+        <ul>
+          <li>Symmetric around the mean (mean = median = mode)</li>
+          <li>Defined by two parameters: mean (μ) and standard deviation (σ)</li>
+          <li>Approximately 68% of scores fall within ±1 SD of the mean</li>
+          <li>Approximately 95% of scores fall within ±2 SD of the mean</li>
+          <li>Approximately 99.7% of scores fall within ±3 SD of the mean</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>The Empirical Rule (68-95-99.7)</h4>
+          <p>In a normal distribution:</p>
+          <ul>
+            <li><strong>68%</strong> of observations fall between M - 1SD and M + 1SD</li>
+            <li><strong>95%</strong> of observations fall between M - 2SD and M + 2SD</li>
+            <li><strong>99.7%</strong> of observations fall between M - 3SD and M + 3SD</li>
+          </ul>
+        </div>
+
+        <h3>Z-Scores and Standard Scores</h3>
+        <p>A <span class="key-term">z-score</span> (standard score) expresses a raw score in terms of how many standard deviations it falls above or below the mean. Z-scores allow comparison of scores from different distributions by converting them to a common scale.</p>
+
+        <div class="definition-box">
+          <h4>Z-Score Formula</h4>
+          <p>z = (X - M) / SD</p>
+          <p>Where X is the raw score, M is the mean, and SD is the standard deviation.</p>
+          <p>The z-score distribution always has a mean of 0 and a standard deviation of 1.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>Z-Score Calculation Example</h4>
+          <p>On a test with M = 100 and SD = 15, a score of 130 has a z-score of:</p>
+          <p>z = (130 - 100) / 15 = 30 / 15 = 2.0</p>
+          <p>This score is 2 standard deviations above the mean, falling at approximately the 98th percentile in a normal distribution.</p>
+        </div>
+
+        <h3>Other Standard Score Transformations</h3>
+        <p>Z-scores can be linearly transformed to other standard score scales that eliminate negative values and decimals:</p>
+
+        <table>
+          <tr>
+            <th>Scale</th>
+            <th>Mean</th>
+            <th>SD</th>
+            <th>Formula</th>
+          </tr>
+          <tr>
+            <td><strong>T-score</strong></td>
+            <td>50</td>
+            <td>10</td>
+            <td>T = 10z + 50</td>
+          </tr>
+          <tr>
+            <td><strong>IQ (deviation)</strong></td>
+            <td>100</td>
+            <td>15</td>
+            <td>IQ = 15z + 100</td>
+          </tr>
+          <tr>
+            <td><strong>SAT/GRE subtest</strong></td>
+            <td>500</td>
+            <td>100</td>
+            <td>Score = 100z + 500</td>
+          </tr>
+          <tr>
+            <td><strong>Stanine</strong></td>
+            <td>5</td>
+            <td>2</td>
+            <td>Stanine = 2z + 5</td>
+          </tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Skewness and Kurtosis</h2>
+        <p>Real data often deviate from the normal distribution. Two important characteristics describe the shape of distributions: skewness and kurtosis.</p>
+
+        <h3>Skewness</h3>
+        <p><span class="key-term">Skewness</span> refers to the asymmetry of a distribution. In a <span class="key-term">positively skewed</span> distribution, the tail extends toward higher values (right), and the mean is greater than the median. In a <span class="key-term">negatively skewed</span> distribution, the tail extends toward lower values (left), and the mean is less than the median.</p>
+
+        <div class="example-box">
+          <h4>Skewness Examples</h4>
+          <p><strong>Positive skew:</strong> Income distribution (many low-to-moderate incomes, few very high incomes pulling the mean up)</p>
+          <p><strong>Negative skew:</strong> Age at death in developed countries (most people live to old age, with some early deaths pulling the mean down)</p>
+        </div>
+
+        <h3>Kurtosis</h3>
+        <p><span class="key-term">Kurtosis</span> describes the "peakedness" of a distribution and the heaviness of its tails. <span class="key-term">Leptokurtic</span> distributions are more peaked with heavier tails than normal (positive kurtosis). <span class="key-term">Platykurtic</span> distributions are flatter with lighter tails (negative kurtosis). <span class="key-term">Mesokurtic</span> distributions have the same kurtosis as the normal distribution.</p>
+
+        <div class="clinical-note">
+          <h4>Practical Implications</h4>
+          <p>Severe skewness or kurtosis can violate assumptions of parametric statistical tests. Options include:</p>
+          <ul>
+            <li>Using nonparametric alternatives</li>
+            <li>Transforming data (log, square root)</li>
+            <li>Using robust statistical methods</li>
+            <li>Reporting median instead of mean for skewed data</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Percentiles and Percentile Ranks</h2>
+        <p>Percentiles describe scores in terms of their relative position in a distribution.</p>
+
+        <p>A <span class="key-term">percentile rank</span> indicates the percentage of scores in a distribution that fall at or below a given score. A score at the 75th percentile (P75) exceeds 75% of scores in the distribution.</p>
+
+        <p>A <span class="key-term">percentile point</span> (or percentile) is the score at or below which a specified percentage of scores falls. The 75th percentile point is the score that 75% of examinees scored at or below.</p>
+
+        <div class="definition-box">
+          <h4>Special Percentiles: Quartiles</h4>
+          <ul>
+            <li><strong>Q1 (25th percentile):</strong> First quartile—25% of scores fall below</li>
+            <li><strong>Q2 (50th percentile):</strong> Second quartile—the median</li>
+            <li><strong>Q3 (75th percentile):</strong> Third quartile—75% of scores fall below</li>
+            <li><strong>Interquartile Range (IQR):</strong> Q3 - Q1, contains middle 50% of scores</li>
+          </ul>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Interpreting Test Scores</h4>
+          <p>When interpreting psychological test scores, percentile ranks are often more intuitive for clients than standard scores. However, percentile ranks have important limitations:</p>
+          <ul>
+            <li>They are not equal-interval—a difference of 10 percentile points near the mean represents fewer raw score points than the same difference at the extremes</li>
+            <li>They cannot be meaningfully averaged or subjected to arithmetic operations</li>
+            <li>They should not be compared across different normative samples</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="exam-focus">
+        <h3>EPPP Exam Focus Points</h3>
+        <ul>
+          <li>Know <strong>NOIR</strong>: Nominal (categories), Ordinal (rank), Interval (equal intervals, no true zero), Ratio (equal intervals, true zero)</li>
+          <li><strong>Mediators explain how</strong> an effect occurs; <strong>moderators explain when/for whom</strong> the effect occurs</li>
+          <li>In a <strong>positively skewed</strong> distribution, mean > median > mode (tail points right)</li>
+          <li>In a <strong>negatively skewed</strong> distribution, mode > median > mean (tail points left)</li>
+          <li><strong>Z-score formula:</strong> z = (X - M) / SD; z-scores have M = 0 and SD = 1</li>
+          <li>The <strong>68-95-99.7 rule</strong> describes the percentage of scores within 1, 2, and 3 SDs of the mean in a normal distribution</li>
+          <li><strong>Standard deviation</strong> is the most commonly reported measure of variability; it represents the average distance from the mean</li>
+          <li><strong>Confounding variables</strong> vary systematically with the IV, making causal inference impossible</li>
+          <li>The <strong>median</strong> is the preferred measure of central tendency for skewed distributions</li>
+          <li><strong>T-scores</strong> have M = 50 and SD = 10; <strong>deviation IQ scores</strong> have M = 100 and SD = 15</li>
+        </ul>
+      </div>
+
+      <section class="references">
+        <h3>References</h3>
+        <ul class="reference-list">
+          <li>Baron, R. M., & Kenny, D. A. (1986). The moderator-mediator variable distinction in social psychological research: Conceptual, strategic, and statistical considerations. <em>Journal of Personality and Social Psychology, 51</em>(6), 1173-1182.</li>
+          <li>Cohen, B. H., Welkowitz, J., & Lea, R. B. (2003). <em>Introductory statistics for the behavioral sciences</em> (5th ed.). Wiley.</li>
+          <li>Gravetter, F. J., & Wallnau, L. B. (2017). <em>Statistics for the behavioral sciences</em> (10th ed.). Cengage Learning.</li>
+          <li>Howell, D. C. (2013). <em>Statistical methods for psychology</em> (8th ed.). Cengage Learning.</li>
+          <li>Kerlinger, F. N., & Lee, H. B. (2000). <em>Foundations of behavioral research</em> (4th ed.). Harcourt College Publishers.</li>
+          <li>Stevens, S. S. (1946). On the theory of scales of measurement. <em>Science, 103</em>(2684), 677-680.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+        </a>
+        <a href="classical-conditioning.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">How Organisms Learn: Classical Conditioning</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

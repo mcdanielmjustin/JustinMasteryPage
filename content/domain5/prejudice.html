@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where We Break | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f; --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a; --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15); --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav"><div class="nav-left"><a href="../../index.html" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><span class="logo-text">MasteryPage</span></a><div class="breadcrumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="../../textbook.html">Textbook</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="index.html">Domain 5</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>Where We Break</span></div></div></nav>
+  <div class="content-wrapper">
+    <aside class="sidebar"><div class="sidebar-header"><div class="sidebar-title">Domain 5</div><div class="domain-title">Social &amp; Cultural Psychology</div></div><ul class="chapter-list"><li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li><li class="chapter-item"><a href="cultural-roots.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From</a></li><li class="chapter-item"><a href="shortcuts.html" class="chapter-link"><span class="chapter-number">2</span>The Shortcuts We Take</a></li><li class="chapter-item"><a href="beliefs.html" class="chapter-link"><span class="chapter-number">3</span>What We Believe</a></li><li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">4</span>How We're Moved</a></li><li class="chapter-item"><a href="connection.html" class="chapter-link"><span class="chapter-number">5</span>Why We Connect</a></li><li class="chapter-item"><a href="prejudice.html" class="chapter-link active"><span class="chapter-number">6</span>Where We Break</a></li><li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li><li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link"><span class="chapter-number">8</span>Across the Divide</a></li></ul></aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 8</div>
+        <h1>Where We Break &mdash; Prejudice, Discrimination &amp; Conflict</h1>
+        <div class="chapter-meta"><span>Stereotypes, social identity theory, stereotype threat, reducing prejudice</span></div>
+      </header>
+      <div class="chapter-actions"><a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a><a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a><a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a></div>
+
+      <section class="content-section">
+        <h2>The Anatomy of Prejudice</h2>
+        <p>Prejudice, stereotyping, and discrimination form a triad of interrelated but distinct phenomena. Understanding the distinctions is critical for the EPPP.</p>
+        <div class="definition-box">
+          <strong>The Three Components</strong>
+          <p><strong>Stereotypes (cognitive):</strong> Generalized beliefs about the characteristics of a group and its members.<br><strong>Prejudice (affective):</strong> A negative (or positive) emotional attitude toward a group and its members.<br><strong>Discrimination (behavioral):</strong> Unjustified negative behavior directed toward members of a group based on their group membership.</p>
+        </div>
+        <p>A person can hold stereotypes without being prejudiced and can be prejudiced without discriminating. However, all three frequently co-occur and reinforce one another.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Theories of Prejudice</h2>
+        <h3>Social Identity Theory (Tajfel &amp; Turner, 1979)</h3>
+        <div class="definition-box">
+          <strong>Social Identity Theory</strong>
+          <p>Henri Tajfel proposed that people derive part of their self-concept from the groups to which they belong (in-groups). To maintain positive self-esteem, people are motivated to view their in-groups favorably, leading to <span class="key-term">in-group favoritism</span> and <span class="key-term">out-group derogation</span>. Social categorization alone is sufficient to trigger bias.</p>
+        </div>
+        <h3>Minimal Group Paradigm</h3>
+        <p>Tajfel demonstrated that even when people are assigned to groups based on trivial criteria (e.g., preference for Klee vs. Kandinsky paintings), they show <span class="key-term">in-group bias</span> &mdash; allocating more resources to in-group members. Mere categorization, not conflict, is sufficient for bias.</p>
+        <h3>Realistic Conflict Theory</h3>
+        <div class="definition-box">
+          <strong>Realistic Conflict Theory &amp; Robbers Cave (Sherif, 1961)</strong>
+          <p>Muzafer Sherif's <span class="key-term">Robbers Cave experiment</span> demonstrated that intergroup hostility arises from competition over limited resources. Two groups of boys ("Eagles" and "Rattlers") developed intense animosity when placed in competition. Hostility was reduced only when the groups had to cooperate on <span class="key-term">superordinate goals</span> &mdash; tasks neither group could accomplish alone.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example: Superordinate Goals</strong>
+          <p>Simply bringing the groups together for pleasant activities (movies, meals) did not reduce hostility. Only when they had to work together &mdash; fixing the camp water supply, pulling a stalled truck &mdash; did prejudice decrease. This finding has been applied in schools, workplaces, and international diplomacy.</p>
+        </div>
+        <h3>Allport's Contact Hypothesis</h3>
+        <p>Gordon Allport (1954) proposed that intergroup contact can reduce prejudice only under specific conditions:</p>
+        <ul>
+          <li><strong>Equal status:</strong> Groups must interact as equals</li>
+          <li><strong>Common goals:</strong> Groups must work toward shared objectives</li>
+          <li><strong>Intergroup cooperation:</strong> Achievement of goals must require cooperation</li>
+          <li><strong>Support of authorities:</strong> Contact must be sanctioned by institutional authority</li>
+        </ul>
+        <p class="citation">Allport, G. W. (1954). The nature of prejudice. Addison-Wesley.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Modern Forms of Prejudice</h2>
+        <h3>Aversive Racism</h3>
+        <p><span class="key-term">Aversive racism</span> (Gaertner &amp; Dovidio) describes people who sincerely endorse egalitarian values but harbor unconscious negative feelings toward out-groups. Bias emerges in ambiguous situations where discrimination can be rationalized on non-racial grounds.</p>
+        <h3>Modern (Symbolic) Racism</h3>
+        <p><span class="key-term">Modern racism</span> expresses prejudice indirectly through opposition to policies perceived as benefiting minority groups while denying that discrimination still exists.</p>
+        <h3>Microaggressions</h3>
+        <div class="definition-box">
+          <strong>Microaggressions (Sue et al., 2007)</strong>
+          <p>Brief, commonplace exchanges that communicate hostile, derogatory, or negative slights toward marginalized groups. Three types: <strong>microassaults</strong> (deliberate), <strong>microinsults</strong> (unintentionally demeaning), and <strong>microinvalidations</strong> (dismissing experiential reality). Examples: "Where are you really from?" or "You're so articulate" (expressed with surprise to a person of color).</p>
+        </div>
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>Cumulative exposure to microaggressions is associated with depression, anxiety, decreased self-esteem, and racial battle fatigue. Clinicians must recognize microaggressions both as experiences reported by clients and as behaviors they themselves might inadvertently commit in the therapeutic relationship.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Stereotype Threat</h2>
+        <div class="definition-box">
+          <strong>Stereotype Threat (Steele &amp; Aronson, 1995)</strong>
+          <p><span class="key-term">Stereotype threat</span> is the apprehension experienced when a person is at risk of confirming a negative stereotype about their group. This anxiety consumes working memory and impairs performance. The person does <strong>not</strong> need to believe the stereotype &mdash; mere awareness that others might apply it is sufficient.</p>
+        </div>
+        <div class="example-box">
+          <strong>Classic Findings</strong>
+          <p>When Black students were told a test measured intellectual ability, they performed worse than White students. When the same test was described as non-diagnostic, the gap disappeared. Similarly, women performed worse on math tests when gender stereotypes were salient, and White men performed worse on athletic tasks when racial athletic stereotypes were activated.</p>
+        </div>
+        <p>Factors that reduce stereotype threat: reframing the task as non-diagnostic, emphasizing growth mindset, providing in-group role models, and self-affirmation exercises.</p>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Stereotype threat is directly relevant to psychological testing. When administering cognitive or achievement tests to members of stereotyped groups, clinicians should create non-threatening testing environments and frame tests carefully to obtain more valid results.</p>
+        </div>
+        <p class="citation">Steele, C. M., &amp; Aronson, J. (1995). Stereotype threat and the intellectual test performance of African Americans. Journal of Personality and Social Psychology, 69(5), 797&ndash;811.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Reducing Prejudice</h2>
+        <h3>The Jigsaw Classroom</h3>
+        <p>Developed by Elliot Aronson, the <span class="key-term">jigsaw classroom</span> gives each student a unique piece of information necessary for the group to complete a task. This creates interdependence, equal status, and shared goals &mdash; Allport's conditions for prejudice reduction.</p>
+        <h3>Common In-Group Identity Model</h3>
+        <p>Gaertner and Dovidio proposed that prejudice can be reduced by encouraging members of different groups to recategorize themselves as members of a single, inclusive group &mdash; transforming "us vs. them" into "we."</p>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A company reorganizes competitive departments into cross-functional teams. Employees who identified as "Marketing" or "Engineering" begin identifying as "Team Alpha," reducing interdepartmental bias and increasing cooperation.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Aggression</h2>
+        <div class="definition-box">
+          <strong>Aggression Defined</strong>
+          <p><span class="key-term">Aggression</span> is behavior intended to harm another person who is motivated to avoid that harm. The key element is <strong>intent</strong> &mdash; accidental harm is not aggression, and the target must be unwilling. Aggression can be physical, verbal, or relational.</p>
+        </div>
+
+        <h3>Types of Aggression</h3>
+        <p>Researchers distinguish two fundamental types of aggression:</p>
+        <ul>
+          <li><strong><span class="key-term">Hostile (affective/reactive) aggression</span>:</strong> Driven by anger and the desire to harm the target. The harm itself is the goal. It is impulsive, emotional, and typically a response to perceived provocation or frustration.</li>
+          <li><strong><span class="key-term">Instrumental (proactive) aggression</span>:</strong> Aggression used as a means to an end &mdash; the goal is not to harm per se, but to obtain something (resources, power, status). It is calculated and goal-directed rather than emotional.</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A person who punches someone in a rage after being insulted is displaying <strong>hostile aggression</strong>. A hired enforcer who threatens a shop owner to collect a debt is displaying <strong>instrumental aggression</strong> &mdash; the harm serves a strategic purpose.</p>
+        </div>
+
+        <h3>Frustration-Aggression Hypothesis</h3>
+        <div class="definition-box">
+          <strong>Frustration-Aggression Hypothesis (Dollard et al., 1939)</strong>
+          <p>The original hypothesis proposed that <strong>frustration always leads to some form of aggression</strong>, and <strong>aggression is always the result of frustration</strong>. Frustration was defined as the blocking of a goal-directed behavior.</p>
+        </div>
+        <p>This strong formulation was later <strong>revised by Leonard Berkowitz</strong>, who argued that frustration produces a readiness for aggression (negative affect and arousal), but whether aggression actually occurs depends on the presence of <span class="key-term">aggressive cues</span> in the environment. Frustration creates the emotional groundwork; situational cues trigger the aggressive response.</p>
+        <p class="citation">Dollard, J., Doob, L. W., Miller, N. E., Mowrer, O. H., &amp; Sears, R. R. (1939). Frustration and aggression. Yale University Press.</p>
+
+        <h3>Social Learning Theory of Aggression (Bandura)</h3>
+        <div class="definition-box">
+          <strong>Bandura's Social Learning Theory &amp; the Bobo Doll Experiment</strong>
+          <p>Albert Bandura demonstrated that aggression can be learned through <span class="key-term">observational learning</span> (modeling). In his famous <span class="key-term">Bobo doll experiments</span> (1961, 1963), children who observed an adult model behaving aggressively toward an inflatable Bobo doll were significantly more aggressive when later placed in a room with the doll, compared to children who observed a non-aggressive model or no model. Critically, children <strong>imitated specific novel aggressive acts</strong> they had observed (e.g., hitting the doll with a mallet, sitting on it, punching its nose).</p>
+        </div>
+        <p>Key principles from Bandura's social learning theory of aggression:</p>
+        <ul>
+          <li><strong>Observational learning:</strong> Aggression is acquired by watching others behave aggressively &mdash; children do not need to be directly reinforced to learn aggressive behavior</li>
+          <li><strong><span class="key-term">Vicarious reinforcement</span>:</strong> When observers see a model rewarded for aggression, they are more likely to imitate it; when the model is punished, imitation decreases (though the behavior is still learned)</li>
+          <li><strong>Modeling:</strong> The model's status, similarity to the observer, and the perceived consequences of aggression all influence whether the observed behavior is performed</li>
+          <li><strong>Distinction between acquisition and performance:</strong> People may learn aggressive behaviors through observation but only perform them when conditions are favorable</li>
+        </ul>
+        <p class="citation">Bandura, A., Ross, D., &amp; Ross, S. A. (1961). Transmission of aggression through imitation of aggressive models. Journal of Abnormal and Social Psychology, 63, 575&ndash;582.</p>
+
+        <h3>Excitation Transfer Theory</h3>
+        <div class="definition-box">
+          <strong>Excitation Transfer Theory (Zillmann)</strong>
+          <p>Dolf Zillmann proposed that <span class="key-term">residual physiological arousal</span> from one situation can transfer to a subsequent situation and intensify an emotional response, including aggression. If a person is still physiologically aroused from exercise, an exciting movie, or a prior confrontation, that residual arousal can be <strong>misattributed</strong> to a new provocation, making an aggressive response more intense than it otherwise would be.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A person finishes an intense workout and is still physiologically aroused (elevated heart rate, adrenaline). Shortly after, another driver honks at them. The residual arousal from the workout transfers to the new situation, amplifying their anger response beyond what the provocation alone would produce.</p>
+        </div>
+
+        <h3>The Weapons Effect</h3>
+        <div class="definition-box">
+          <strong>Weapons Effect (Berkowitz &amp; LePage, 1967)</strong>
+          <p>The mere <strong>presence of weapons</strong> in the environment increases aggressive behavior. In the original study, participants who had been angered delivered more electric shocks when a gun was visible in the room than when a neutral object (such as a badminton racquet) was present. Berkowitz summarized this as: <em>"The finger pulls the trigger, but the trigger may also be pulling the finger."</em> Weapons serve as aggressive cues that prime aggressive cognitions and behaviors.</p>
+        </div>
+
+        <h3>The Catharsis Hypothesis</h3>
+        <p>The <span class="key-term">catharsis hypothesis</span> suggests that expressing aggression &mdash; or engaging in aggressive activities like watching violent media, punching a pillow, or venting anger &mdash; reduces the urge to aggress by releasing pent-up aggressive energy. This idea has roots in Freudian hydraulic models of emotion.</p>
+        <div class="clinical-note">
+          <strong>Research Verdict: Largely Debunked</strong>
+          <p>Extensive research has shown that catharsis <strong>does not reduce aggression</strong> and often <strong>increases it</strong>. Venting anger, hitting objects, or engaging in aggressive fantasies tends to maintain or escalate arousal and aggressive feelings rather than dissipate them. Bushman (2002) found that participants who hit a punching bag while thinking about someone who angered them were <em>more</em> aggressive afterward, not less. This is an important counterintuitive finding for the EPPP.</p>
+        </div>
+
+        <h3>Biological Factors in Aggression</h3>
+        <p>Multiple biological systems contribute to aggressive behavior:</p>
+        <ul>
+          <li><strong><span class="key-term">Testosterone</span>:</strong> Higher levels are correlated with increased aggression, dominance-seeking, and status competition, though the relationship is bidirectional (winning also raises testosterone)</li>
+          <li><strong><span class="key-term">Serotonin</span>:</strong> Low serotonin levels are associated with <strong>impulsive aggression</strong> (hostile/reactive type). The serotonin deficiency hypothesis suggests that low serotonergic activity reduces inhibition of aggressive impulses</li>
+          <li><strong><span class="key-term">Amygdala</span>:</strong> Central to threat detection and emotional arousal; stimulation of the amygdala can trigger aggressive responses. Lesions may reduce aggressive behavior</li>
+          <li><strong><span class="key-term">Prefrontal cortex</span>:</strong> Responsible for impulse control and behavioral regulation. Damage or reduced activity in the prefrontal cortex (particularly the orbitofrontal region) is associated with disinhibited aggression</li>
+        </ul>
+
+        <h3>Cultural Factors in Aggression</h3>
+        <div class="definition-box">
+          <strong>Culture of Honor (Nisbett &amp; Cohen, 1996)</strong>
+          <p>Research by Nisbett and Cohen documented a <span class="key-term">culture of honor</span> in the U.S. South, where insults &mdash; particularly those threatening a man's reputation &mdash; provoke stronger physiological and behavioral aggressive responses than in Northern U.S. samples. Southern participants who were insulted showed greater increases in cortisol and testosterone and were more likely to respond aggressively. This cultural pattern is linked historically to herding economies where protecting one's reputation and property was essential for survival.</p>
+        </div>
+        <p><strong>Media violence effects:</strong> Meta-analyses consistently show that exposure to media violence is associated with increased aggressive cognitions, affect, and behavior, and with decreased empathy and prosocial behavior. Effects are present in both short-term (priming) and long-term (desensitization, script development) contexts, though the magnitude of the effect is debated.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Know the <strong>cognitive-affective-behavioral triad</strong>: stereotypes, prejudice, discrimination.</li>
+          <li><strong>Social identity theory</strong> (Tajfel): In-group favoritism from need for positive self-esteem. <strong>Minimal group paradigm</strong> shows mere categorization suffices for bias.</li>
+          <li><strong>Realistic conflict theory</strong> (Sherif): Competition generates hostility; <strong>superordinate goals</strong> reduce it.</li>
+          <li><strong>Allport's contact hypothesis</strong>: Equal status, common goals, cooperation, institutional support.</li>
+          <li><strong>Stereotype threat</strong> (Steele &amp; Aronson): Awareness of stereotypes impairs performance via working memory drain. Relevant to testing validity.</li>
+          <li><strong>Aversive racism:</strong> Unconscious bias in egalitarian people; emerges in ambiguous situations.</li>
+          <li><strong>Microaggressions:</strong> Three types (microassaults, microinsults, microinvalidations) with cumulative psychological impact.</li>
+          <li><strong>Jigsaw classroom</strong> (Aronson): Cooperative learning that creates interdependence.</li>
+          <li><strong>Common In-Group Identity Model:</strong> Recategorization into shared group reduces bias.</li>
+          <li><strong>Hostile vs. instrumental aggression:</strong> Hostile is emotional/reactive (harm is the goal); instrumental is calculated/proactive (harm is a means).</li>
+          <li><strong>Frustration-aggression hypothesis</strong> (Dollard et al.): Frustration leads to aggression; <strong>Berkowitz's revision</strong> adds that frustration creates readiness but aggressive cues trigger the behavior.</li>
+          <li><strong>Bandura's Bobo doll experiment:</strong> Aggression is learned through observation and modeling. Children imitated specific novel aggressive acts. Vicarious reinforcement modulates performance, not acquisition.</li>
+          <li><strong>Excitation transfer</strong> (Zillmann): Residual arousal from one source intensifies aggression in a new situation.</li>
+          <li><strong>Weapons effect</strong> (Berkowitz &amp; LePage): Presence of weapons increases aggressive behavior &mdash; weapons serve as aggressive cues.</li>
+          <li><strong>Catharsis hypothesis is debunked:</strong> Venting anger increases rather than decreases aggression.</li>
+          <li><strong>Biological factors:</strong> Low serotonin = impulsive aggression; high testosterone = dominance; amygdala = threat response; prefrontal cortex = inhibition.</li>
+          <li><strong>Culture of honor</strong> (Nisbett &amp; Cohen): Insults provoke stronger aggressive responses in honor cultures.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="connection.html" class="nav-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Why We Connect</div></div></a>
+        <a href="group-dynamics.html" class="nav-btn"><div style="text-align: right;"><div class="nav-btn-label">Next</div><div class="nav-btn-title">When We're Together</div></div><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')"><div class="upgrade-modal"><div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h3>Upgrade to Unlock</h3><p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p><div class="upgrade-modal-actions"><button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button><a href="../../index.html" class="btn-upgrade">View Plans</a></div></div></div>
+  <script>function chapterAction(action, domainNum) { var tier = 'free'; try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {} if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; } if (action === 'flashcards') window.location.href = '../../index.html'; else if (action === 'quiz-fundamental') window.location.href = '../../index.html'; else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; } }</script>
+</body>
+</html>

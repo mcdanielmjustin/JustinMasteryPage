@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building Competence &mdash; Middle Childhood | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        Building Competence &mdash; Middle Childhood
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link active"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 7</div>
+        <h1>Building Competence &mdash; Middle Childhood</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Concrete Operational Thought -->
+      <div class="content-section">
+        <h2>Piaget's Concrete Operational Stage</h2>
+        <p>The <span class="key-term">concrete operational stage</span> (approximately ages 7&ndash;11) represents a major cognitive watershed. Children now think logically about concrete, tangible events. The hallmark limitations of preoperational thought&mdash;egocentrism, centration, irreversibility&mdash;give way to more flexible, organized reasoning. However, children at this stage still struggle with abstract or hypothetical problems.</p>
+
+        <h3>Conservation</h3>
+        <div class="definition-box">
+          <strong>Conservation</strong>
+          <p>The understanding that certain physical properties of objects (number, length, liquid quantity, mass, area, weight, volume) remain unchanged despite changes in their outward appearance. Conservation develops gradually, with number and length typically mastered first (around age 6&ndash;7) and volume last (around age 11&ndash;12). This staggered acquisition is called <span class="key-term">horizontal d&eacute;calage</span>.</p>
+        </div>
+
+        <h3>Classification and Seriation</h3>
+        <p><span class="key-term">Classification</span> is the ability to group objects according to shared characteristics and to understand class inclusion relationships (e.g., understanding that "dogs" is a subset of "animals"). <span class="key-term">Seriation</span> is the ability to arrange objects in a logical order along a quantitative dimension (e.g., shortest to tallest). <span class="key-term">Transitivity</span>&mdash;the ability to infer the relationship between two items based on their relationships with a third item (if A > B and B > C, then A > C)&mdash;also emerges during this period.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A child is shown a set of sticks of varying lengths and asked to arrange them from shortest to longest. A preoperational child may use trial-and-error, while a concrete operational child systematically selects the shortest stick first, then the next shortest, demonstrating seriation ability.</p>
+        </div>
+
+        <h3>Reversibility and Decentration</h3>
+        <p><span class="key-term">Reversibility</span>&mdash;the ability to mentally reverse an action or operation&mdash;is a key achievement that enables conservation. The concrete operational child understands that pouring water back into the original container would restore the original appearance. <span class="key-term">Decentration</span>&mdash;the ability to consider multiple aspects of a situation simultaneously&mdash;allows the child to attend to both height and width when judging volume.</p>
+
+        <p class="citation">Piaget, J., &amp; Inhelder, B. (1969). The psychology of the child. Basic Books.</p>
+      </div>
+
+      <!-- Section 2: Moral Development -->
+      <div class="content-section">
+        <h2>Kohlberg's Theory of Moral Development</h2>
+        <p><span class="key-term">Lawrence Kohlberg</span> (1927&ndash;1987) expanded upon Piaget's earlier work on moral judgment to propose a comprehensive stage theory of moral reasoning. Using moral dilemmas (most famously the Heinz dilemma), Kohlberg identified three levels of moral development, each containing two stages.</p>
+
+        <table>
+          <tr><th>Level</th><th>Stage</th><th>Basis for Moral Judgment</th></tr>
+          <tr><td rowspan="2">Preconventional (ages ~4&ndash;10)</td><td>Stage 1: Punishment &amp; Obedience</td><td>Avoiding punishment; "might makes right"</td></tr>
+          <tr><td>Stage 2: Instrumental Purpose</td><td>Self-interest; "what's in it for me?"; reciprocal exchange</td></tr>
+          <tr><td rowspan="2">Conventional (ages ~10&ndash;adult)</td><td>Stage 3: Interpersonal Conformity</td><td>"Good boy/good girl" orientation; meeting others' expectations; maintaining relationships</td></tr>
+          <tr><td>Stage 4: Law &amp; Order</td><td>Maintaining social order; following rules and laws; duty to society</td></tr>
+          <tr><td rowspan="2">Postconventional (not reached by all adults)</td><td>Stage 5: Social Contract</td><td>Rights, democratic principles; laws serve the greater good but can be changed</td></tr>
+          <tr><td>Stage 6: Universal Ethical Principles</td><td>Abstract principles of justice, dignity, equality; conscience-directed</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>The Heinz Dilemma</strong>
+          <p>A man's wife is dying of cancer. A druggist has discovered a cure but is charging $2,000&mdash;ten times what the drug costs to make. Heinz can only raise $1,000. Should he steal the drug? Kohlberg's scoring focuses not on whether the person says Heinz should or should not steal, but on the reasoning behind the judgment.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A child says Heinz should not steal the drug because "he'll get in trouble and go to jail." This reasoning reflects Stage 1 (preconventional), where morality is based on avoidance of punishment. In contrast, an adult who says Heinz should steal because "the right to life supersedes the right to property" is reasoning at Stage 6 (postconventional).</p>
+        </div>
+
+        <h3>Gilligan's Ethic of Care</h3>
+        <p><span class="key-term">Carol Gilligan</span> (1982) critiqued Kohlberg's theory as reflecting a male-centered justice orientation and proposed an alternative <span class="key-term">ethic of care</span>. Gilligan argued that women's moral reasoning tends to emphasize relationships, compassion, and responsibility to others, which Kohlberg's framework undervalued. She proposed three levels of moral development in women: (1) self-interest, (2) self-sacrifice and caring for others, and (3) a balanced ethic of care that includes both self and others.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Consideration</strong>
+          <p>Empirical research has produced mixed support for Gilligan's claim of systematic gender differences in moral reasoning. Meta-analyses have found that when differences appear, they tend to be small. However, Gilligan's work importantly highlighted the role of cultural context and relational orientation in moral development, broadening the field beyond a purely justice-based framework.</p>
+        </div>
+
+        <p class="citation">Kohlberg, L. (1984). Essays on moral development: Vol. 2. The psychology of moral development. Harper &amp; Row.</p>
+        <p class="citation">Gilligan, C. (1982). In a different voice. Harvard University Press.</p>
+      </div>
+
+      <!-- Section 3: Self-Concept and Self-Esteem -->
+      <div class="content-section">
+        <h2>Self-Concept and Self-Esteem</h2>
+        <p>During middle childhood, children develop increasingly complex and realistic self-representations. Unlike the overly positive and concrete self-descriptions of early childhood ("I'm fast," "I have a dog"), school-age children begin to describe themselves in terms of psychological traits, social comparisons, and competencies across multiple domains.</p>
+
+        <h3>Erikson's Industry vs. Inferiority</h3>
+        <div class="definition-box">
+          <strong>Industry vs. Inferiority</strong>
+          <p>Erikson's fourth psychosocial stage (approximately ages 6&ndash;11). Children develop a sense of <span class="key-term">industry</span>&mdash;competence and mastery&mdash;through productive work in school, sports, hobbies, and social activities. Failure to develop competence leads to feelings of <span class="key-term">inferiority</span> and inadequacy. The virtue that emerges from successful resolution is <strong>competence</strong>.</p>
+        </div>
+
+        <h3>Susan Harter's Self-Perception Model</h3>
+        <p><span class="key-term">Susan Harter</span> demonstrated that by middle childhood, self-esteem becomes differentiated into distinct domains: academic competence, social acceptance, athletic competence, physical appearance, and behavioral conduct. Global self-worth depends on both the child's self-perceived competence in each domain and the importance they attach to that domain. A child who values academics and performs well will have higher self-esteem than one who values academics but struggles.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 9-year-old who excels at reading but is poor at sports has high self-esteem if she values academic achievement and places less importance on athletics. According to Harter, the discrepancy between perceived competence and the importance of a domain predicts self-esteem.</p>
+        </div>
+
+        <p class="citation">Harter, S. (2012). The construction of the self: Developmental and sociocultural foundations (2nd ed.). Guilford Press.</p>
+      </div>
+
+      <!-- Section 4: Peer Relationships -->
+      <div class="content-section">
+        <h2>Peer Relationships and Friendship</h2>
+        <p>Peer relationships become increasingly important during middle childhood, as children spend more time with age-mates and less time under direct adult supervision. The nature of friendships shifts from proximity-based and activity-based connections to relationships grounded in mutual trust, loyalty, and reciprocity.</p>
+
+        <h3>Selman's Stages of Perspective-Taking</h3>
+        <p><span class="key-term">Robert Selman</span> proposed a stage model of social perspective-taking that parallels cognitive development:</p>
+        <ol>
+          <li><strong>Stage 0 (3&ndash;6 years):</strong> Egocentric; undifferentiated perspective-taking.</li>
+          <li><strong>Stage 1 (5&ndash;9 years):</strong> Social-informational; recognizes that others may have different information.</li>
+          <li><strong>Stage 2 (7&ndash;12 years):</strong> Self-reflective; can step into another's shoes and reflect on own behavior from their perspective.</li>
+          <li><strong>Stage 3 (10&ndash;15 years):</strong> Mutual; can simultaneously consider own and other's perspective.</li>
+          <li><strong>Stage 4 (14&ndash;adult):</strong> Societal; understands that third-party or societal perspectives exist.</li>
+        </ol>
+
+        <h3>Peer Status Categories</h3>
+        <p>Sociometric research has identified five <span class="key-term">peer status categories</span> based on peer nominations: <strong>popular</strong> (many liked, few disliked), <strong>rejected</strong> (few liked, many disliked), <strong>neglected</strong> (few liked, few disliked), <strong>controversial</strong> (many liked, many disliked), and <strong>average</strong>. Rejected children are at highest risk for later adjustment difficulties, particularly <span class="key-term">rejected-aggressive</span> children, who show elevated rates of externalizing problems and delinquency.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Chronic peer rejection in middle childhood is one of the strongest predictors of later maladjustment, including school dropout, delinquency, and substance use. Social skills training interventions targeting rejected children aim to improve social cognition, emotion regulation, and behavioral repertoire to break the cycle of rejection.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Note: Bullying</strong>
+          <p>Bullying peaks during the transition to middle school. <span class="key-term">Olweus</span> (1993) identified characteristics of both bullies (dominant, low empathy, positive attitudes toward aggression) and victims (anxious, insecure, physically weaker). Bully-victims&mdash;children who are both perpetrators and targets&mdash;show the worst psychological outcomes. Evidence-based prevention programs (e.g., Olweus Bullying Prevention Program) address the school climate systemically.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Learning and Academic Challenges -->
+      <div class="content-section">
+        <h2>Learning Disabilities and ADHD</h2>
+        <p>Middle childhood is the period when learning disabilities and attention difficulties are most commonly identified, as the academic demands of formal schooling expose underlying cognitive processing weaknesses.</p>
+
+        <h3>Specific Learning Disorders</h3>
+        <p>The DSM-5 uses the umbrella term <span class="key-term">Specific Learning Disorder</span> with specifiers for the affected academic domain: reading (dyslexia), written expression (dysgraphia), and mathematics (dyscalculia). Key diagnostic features include academic skills substantially below age expectations despite adequate instruction, not better explained by intellectual disability, sensory deficits, or psychosocial adversity.</p>
+
+        <div class="definition-box">
+          <strong>Dyslexia</strong>
+          <p>The most common specific learning disorder, characterized by difficulties with accurate and/or fluent word recognition, poor spelling, and poor decoding. Research implicates deficits in <span class="key-term">phonological processing</span>&mdash;the ability to identify and manipulate the sound structures of language. The prevalence is approximately 5&ndash;15% of school-age children, with higher rates in boys.</p>
+        </div>
+
+        <h3>Attention-Deficit/Hyperactivity Disorder (ADHD)</h3>
+        <p><span class="key-term">ADHD</span> is characterized by a persistent pattern of inattention and/or hyperactivity-impulsivity that interferes with functioning. The DSM-5 identifies three presentations: predominantly inattentive, predominantly hyperactive-impulsive, and combined. The prevalence is approximately 5&ndash;7% of children, with boys diagnosed more frequently than girls (though girls are more likely to have the inattentive presentation, which may be underidentified).</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A teacher reports that an 8-year-old girl daydreams frequently, loses her homework, and has difficulty following multi-step instructions, but is not disruptive in class. Her grades have been declining despite average intelligence. This presentation is most consistent with ADHD, predominantly inattentive presentation&mdash;a subtype that is more common in girls and often missed due to the absence of hyperactive-impulsive behaviors.</p>
+        </div>
+
+        <p class="citation">American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.).</p>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Concrete operations:</strong> Conservation (horizontal d&eacute;calage), classification, seriation, transitivity, reversibility, and decentration. Children reason logically about concrete but not abstract problems.</li>
+          <li><strong>Kohlberg's three levels and six stages:</strong> Know the reasoning (not just the answer) that defines each stage. Preconventional = self-interest; Conventional = social expectations; Postconventional = abstract principles.</li>
+          <li><strong>Gilligan's critique:</strong> Kohlberg's theory may undervalue care-based reasoning. Gilligan proposed an ethic of care orientation, though empirical evidence for systematic gender differences in moral stage is mixed.</li>
+          <li><strong>Industry vs. Inferiority (Erikson):</strong> Stage 4; virtue = competence. Children develop self-efficacy through mastering school, sports, and social tasks.</li>
+          <li><strong>Peer status:</strong> Popular, rejected, neglected, controversial, average. Rejected-aggressive children are at highest risk for later maladjustment.</li>
+          <li><strong>Harter's self-esteem model:</strong> Self-esteem = discrepancy between perceived competence and domain importance. Multiple domains differentiate in middle childhood.</li>
+          <li><strong>Specific Learning Disorders:</strong> Dyslexia (phonological processing deficit), dyscalculia, dysgraphia. Discrepancy between ability and achievement.</li>
+          <li><strong>ADHD presentations:</strong> Inattentive, hyperactive-impulsive, combined. Know that the inattentive presentation is more common in girls and often underdiagnosed.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="discovering-early-childhood.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Discovering the World &mdash; Early Childhood</div>
+          </div>
+        </a>
+        <a href="transformation-adolescence.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Transformation &mdash; Adolescence</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Conception to First Breath | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        From Conception to First Breath
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link active"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 7</div>
+        <h1>From Conception to First Breath</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Foundations of Genetics -->
+      <div class="content-section">
+        <h2>Foundations of Genetics</h2>
+        <p>Human development begins at conception, when a sperm cell fertilizes an ovum to form a single-celled <span class="key-term">zygote</span> containing 46 chromosomes&mdash;23 from each parent. Understanding the basic principles of genetics is essential for the EPPP, particularly as they relate to the inheritance of traits, genetic disorders, and the interplay between genotype and phenotype.</p>
+
+        <h3>Genotype and Phenotype</h3>
+        <div class="definition-box">
+          <strong>Genotype vs. Phenotype</strong>
+          <p><strong>Genotype</strong> refers to the specific genetic makeup of an organism&mdash;the particular alleles inherited for a given trait. <strong>Phenotype</strong> refers to the observable characteristics that result from the interaction of the genotype with the environment. The same genotype can produce different phenotypes depending on environmental conditions.</p>
+        </div>
+
+        <h3>Patterns of Inheritance</h3>
+        <p>In <span class="key-term">dominant-recessive inheritance</span>, a single dominant allele is sufficient to produce the trait in the phenotype, whereas the recessive trait appears only when the individual is homozygous recessive (carries two copies of the recessive allele). Examples include Huntington's disease (dominant) and cystic fibrosis (recessive).</p>
+        <p>Many traits follow more complex patterns, including <span class="key-term">codominance</span> (both alleles fully expressed, as in AB blood type), <span class="key-term">incomplete dominance</span> (blended expression), and <span class="key-term">polygenic inheritance</span> (traits influenced by many genes, such as intelligence and temperament).</p>
+
+        <h3>Chromosomal Abnormalities</h3>
+        <table>
+          <tr><th>Condition</th><th>Chromosomal Basis</th><th>Key Features</th></tr>
+          <tr><td>Down Syndrome (Trisomy 21)</td><td>Extra chromosome 21</td><td>Intellectual disability, characteristic facial features, increased risk of heart defects; incidence increases with maternal age</td></tr>
+          <tr><td>Turner Syndrome (45,X)</td><td>Missing X chromosome (females)</td><td>Short stature, infertility, possible learning difficulties in visuospatial processing</td></tr>
+          <tr><td>Klinefelter Syndrome (47,XXY)</td><td>Extra X chromosome (males)</td><td>Tall stature, reduced fertility, possible language and learning difficulties</td></tr>
+          <tr><td>Fragile X Syndrome</td><td>FMR1 gene mutation on X chromosome</td><td>Most common inherited cause of intellectual disability; more severe in males</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Phenylketonuria (PKU)</strong>
+          <p>An autosomal recessive metabolic disorder in which the enzyme needed to break down phenylalanine is absent. If untreated, the accumulation of phenylalanine leads to severe intellectual disability. PKU is a classic example of how environment (diet) can modify genetic expression&mdash;a restricted diet begun in infancy prevents cognitive impairment.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>PKU screening is performed via the newborn heel-prick test (Guthrie test) in all U.S. states. It illustrates a core principle: a genetic condition does not inevitably produce disability if the environmental trigger is removed early. This concept is central to understanding the gene-environment interaction framework.</p>
+        </div>
+
+        <p class="citation">Plomin, R., DeFries, J. C., Knopik, V. S., &amp; Neiderhiser, J. M. (2016). Top 10 replicated findings from behavioral genetics. Perspectives on Psychological Science, 11(1), 3&ndash;23.</p>
+      </div>
+
+      <!-- Section 2: Prenatal Development -->
+      <div class="content-section">
+        <h2>Stages of Prenatal Development</h2>
+        <p>Prenatal development unfolds across three distinct periods, each characterized by unique milestones and vulnerabilities. The timing of harmful exposures determines which structures are most affected, a principle known as <span class="key-term">organogenesis timing</span>.</p>
+
+        <h3>Germinal Period (Weeks 0&ndash;2)</h3>
+        <p>The <span class="key-term">germinal period</span> begins at fertilization and extends through implantation in the uterine wall (approximately days 10&ndash;14). During this phase, the zygote undergoes rapid cell division (cleavage), forming a <span class="key-term">blastocyst</span>. The inner cell mass will become the embryo, while the outer layer (trophoblast) develops into support structures including the placenta. Approximately 50&ndash;60% of fertilized ova fail to implant successfully.</p>
+
+        <h3>Embryonic Period (Weeks 3&ndash;8)</h3>
+        <p>The <span class="key-term">embryonic period</span> is the most critical phase of prenatal development. During these six weeks, all major organ systems begin to form through a process called <span class="key-term">organogenesis</span>. The three germ layers&mdash;ectoderm (nervous system, skin), mesoderm (muscles, bones, circulatory system), and endoderm (digestive and respiratory systems)&mdash;differentiate into specialized tissues. The neural tube, which will become the brain and spinal cord, closes by approximately day 28.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>Neural tube defects (e.g., spina bifida, anencephaly) result from failure of the neural tube to close properly during weeks 3&ndash;4. Adequate maternal folic acid intake before and during early pregnancy significantly reduces this risk, which is why supplementation is recommended before conception.</p>
+        </div>
+
+        <h3>Fetal Period (Weeks 9&ndash;Birth)</h3>
+        <p>The <span class="key-term">fetal period</span> is characterized by rapid growth, refinement of organ systems, and increasing behavioral complexity. By week 12, the fetus can move its limbs. By weeks 22&ndash;26, the age of viability is approached&mdash;the point at which survival outside the womb becomes possible with intensive medical support. During the third trimester, the brain undergoes rapid development, with extensive synapse formation and the beginnings of myelination.</p>
+      </div>
+
+      <!-- Section 3: Teratogens -->
+      <div class="content-section">
+        <h2>Teratogens and Prenatal Risk Factors</h2>
+        <p>A <span class="key-term">teratogen</span> is any environmental agent that can cause damage to the developing embryo or fetus. The impact of a teratogen depends on several factors: the dose and duration of exposure, the genetic susceptibility of the organism, the timing of exposure (organ systems are most vulnerable during their period of most rapid formation), and the presence of other risk or protective factors.</p>
+
+        <div class="definition-box">
+          <strong>Principles of Teratogenic Effects</strong>
+          <p>1. Susceptibility depends on the developmental stage at the time of exposure.<br>
+          2. Each teratogen has a characteristic pattern of abnormalities (specificity).<br>
+          3. The effect is dose-dependent: greater exposure typically produces more severe effects.<br>
+          4. Teratogens differ in their mechanisms of action at the cellular level.<br>
+          5. The genotype of the mother and the embryo/fetus influences susceptibility.</p>
+        </div>
+
+        <h3>Alcohol: Fetal Alcohol Spectrum Disorders</h3>
+        <p><span class="key-term">Fetal Alcohol Spectrum Disorders (FASD)</span> represent a continuum of effects resulting from prenatal alcohol exposure. The most severe form, <span class="key-term">Fetal Alcohol Syndrome (FAS)</span>, is characterized by facial dysmorphology (smooth philtrum, thin upper lip, short palpebral fissures), growth retardation, and central nervous system dysfunction. Alcohol is the leading known preventable cause of intellectual disability in the Western world.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A child presents with a smooth philtrum, thin upper lip, small head circumference, and significant learning difficulties. The mother reports heavy alcohol use during pregnancy. This presentation is most consistent with Fetal Alcohol Syndrome, the most severe manifestation of prenatal alcohol exposure.</p>
+        </div>
+
+        <h3>TORCH Infections</h3>
+        <p>The <span class="key-term">TORCH</span> acronym refers to a group of infections that are particularly dangerous during pregnancy:</p>
+        <table>
+          <tr><th>Letter</th><th>Infection</th><th>Key Prenatal Effects</th></tr>
+          <tr><td>T</td><td>Toxoplasmosis</td><td>Brain damage, visual impairment, intellectual disability</td></tr>
+          <tr><td>O</td><td>Other (syphilis, varicella, HIV)</td><td>Variable; syphilis can cause bone/tooth abnormalities, hearing loss</td></tr>
+          <tr><td>R</td><td>Rubella</td><td>Deafness, heart defects, cataracts, intellectual disability (especially dangerous in first trimester)</td></tr>
+          <tr><td>C</td><td>Cytomegalovirus (CMV)</td><td>Most common congenital viral infection; hearing loss, intellectual disability</td></tr>
+          <tr><td>H</td><td>Herpes simplex</td><td>Neonatal herpes can cause encephalitis; risk is highest during vaginal delivery with active lesions</td></tr>
+        </table>
+
+        <h3>Other Teratogens</h3>
+        <p>Additional teratogens of note include: <strong>tobacco</strong> (associated with low birth weight, preterm delivery, and SIDS risk); <strong>cocaine</strong> (vasoconstriction leading to placental abruption, preterm birth); <strong>prescription medications</strong> such as thalidomide (limb malformations), isotretinoin/Accutane (craniofacial, cardiac, and CNS defects), and certain antiepileptic drugs (e.g., valproic acid, associated with neural tube defects); and <strong>environmental toxins</strong> such as lead and mercury.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Clinicians should be aware that the effects of prenatal substance exposure may not be fully apparent at birth but can emerge as developmental delays in cognition, language, and behavior during childhood. A thorough developmental history should always include questions about prenatal exposures.</p>
+        </div>
+
+        <p class="citation">Moore, K. L., Persaud, T. V. N., &amp; Torchia, M. G. (2019). The developing human: Clinically oriented embryology (11th ed.). Elsevier.</p>
+      </div>
+
+      <!-- Section 4: Birth and Neonatal Assessment -->
+      <div class="content-section">
+        <h2>Birth and Neonatal Assessment</h2>
+        <p>The transition from intrauterine to extrauterine life is a critical period. Complications during labor and delivery can have lasting developmental consequences, making rapid assessment of the newborn essential.</p>
+
+        <h3>Birth Complications</h3>
+        <p>Key complications include <span class="key-term">anoxia</span> (oxygen deprivation), which can lead to brain damage if prolonged; <span class="key-term">preterm birth</span> (before 37 weeks gestation), associated with increased risk for respiratory distress, intraventricular hemorrhage, and later developmental delays; and <span class="key-term">low birth weight</span> (below 2,500 grams), which can result from either prematurity or intrauterine growth restriction (IUGR).</p>
+
+        <div class="definition-box">
+          <strong>Apgar Score</strong>
+          <p>Developed by Virginia Apgar in 1952, this rapid assessment is performed at 1 and 5 minutes after birth. Five criteria are each scored 0&ndash;2: <strong>A</strong>ppearance (skin color), <strong>P</strong>ulse (heart rate), <strong>G</strong>rimace (reflex irritability), <strong>A</strong>ctivity (muscle tone), and <strong>R</strong>espiration. Total scores range from 0&ndash;10, with 7&ndash;10 indicating good condition, 4&ndash;6 requiring some intervention, and 0&ndash;3 indicating a critical need for resuscitation.</p>
+        </div>
+
+        <h3>Neonatal Reflexes</h3>
+        <p>Newborns arrive equipped with a set of <span class="key-term">primitive reflexes</span> that serve survival functions and provide diagnostic information about neurological integrity. The presence, strength, and eventual disappearance of these reflexes follow predictable timetables.</p>
+
+        <table>
+          <tr><th>Reflex</th><th>Stimulus</th><th>Response</th><th>Disappears By</th></tr>
+          <tr><td>Rooting</td><td>Stroke cheek or corner of mouth</td><td>Head turns toward stimulus, mouth opens</td><td>3&ndash;4 months</td></tr>
+          <tr><td>Sucking</td><td>Object placed in mouth</td><td>Rhythmic sucking</td><td>4 months (becomes voluntary)</td></tr>
+          <tr><td>Moro (startle)</td><td>Sudden loud noise or loss of support</td><td>Arms extend, then draw inward; crying</td><td>5&ndash;6 months</td></tr>
+          <tr><td>Babinski</td><td>Stroke sole of foot</td><td>Toes fan out, big toe extends</td><td>8&ndash;12 months</td></tr>
+          <tr><td>Palmar grasp</td><td>Object placed in palm</td><td>Fingers close around object</td><td>3&ndash;4 months</td></tr>
+          <tr><td>Stepping</td><td>Held upright with feet touching surface</td><td>Stepping movements</td><td>2&ndash;3 months</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A pediatric neurologist evaluates a 10-month-old and notes that the Babinski reflex is still present. While the Babinski reflex is normal in infants, its persistence beyond approximately 12 months (or its reappearance in adults) may indicate upper motor neuron damage and warrants further neurological investigation.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A neonate scored 3 at 1 minute and 6 at 5 minutes on the Apgar. The low initial score indicated the need for immediate medical intervention, while the improvement to 6 suggests partial response to resuscitation. The 5-minute score is the stronger predictor of long-term outcomes.</p>
+        </div>
+
+        <p class="citation">Apgar, V. (1953). A proposal for a new method of evaluation of the newborn infant. Current Researches in Anesthesia &amp; Analgesia, 32(4), 260&ndash;267.</p>
+      </div>
+
+      <!-- Section 5: Maternal Factors -->
+      <div class="content-section">
+        <h2>Maternal Factors Affecting Prenatal Development</h2>
+        <p>Beyond specific teratogens, a range of maternal characteristics and conditions influence prenatal development. These factors interact with one another and with genetic susceptibility to produce cumulative effects on the developing organism.</p>
+
+        <h3>Maternal Age</h3>
+        <p>Advanced maternal age (typically defined as 35 or older at delivery) is associated with increased risk of chromosomal abnormalities, particularly <span class="key-term">Down syndrome</span>, due to age-related changes in oocyte quality. The risk of trisomy 21 rises from approximately 1 in 1,250 at age 25 to 1 in 100 at age 40. Adolescent mothers face increased risks related to inadequate prenatal care, nutritional deficiencies, and social stressors.</p>
+
+        <h3>Maternal Stress</h3>
+        <p>Chronic maternal stress during pregnancy elevates cortisol levels, which can cross the placental barrier and affect fetal development. Research has linked prenatal stress to preterm birth, low birth weight, and later behavioral and emotional difficulties in offspring, including increased reactivity of the <span class="key-term">hypothalamic-pituitary-adrenal (HPA) axis</span>.</p>
+
+        <h3>Nutrition</h3>
+        <p>Adequate maternal nutrition is essential for optimal prenatal development. Key nutrients include <span class="key-term">folic acid</span> (prevents neural tube defects), iron (supports oxygen transport and brain development), iodine (critical for thyroid function and cognitive development), and omega-3 fatty acids (support neural development). Severe maternal malnutrition is associated with low birth weight, cognitive impairment, and increased vulnerability to later disease.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>When conducting a comprehensive developmental history, clinicians should inquire about maternal nutrition, stress, substance use, infections, and complications during pregnancy and delivery. These factors form an essential part of the biopsychosocial formulation for any developmental concern.</p>
+        </div>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Genotype vs. phenotype:</strong> Genotype is the genetic code; phenotype is what is expressed. PKU demonstrates that phenotype can be altered by environmental intervention even when genotype is fixed.</li>
+          <li><strong>Three prenatal stages:</strong> Germinal (0&ndash;2 weeks, implantation), embryonic (3&ndash;8 weeks, organogenesis, most vulnerable to teratogens), fetal (9 weeks&ndash;birth, growth and refinement).</li>
+          <li><strong>Teratogen principles:</strong> Timing is critical. The embryonic period is the most vulnerable. Effects are dose-dependent and influenced by genetic susceptibility.</li>
+          <li><strong>FAS features:</strong> Smooth philtrum, thin upper lip, short palpebral fissures, microcephaly, intellectual disability. It is the leading preventable cause of intellectual disability.</li>
+          <li><strong>TORCH infections:</strong> Know the acronym and the key prenatal effects of each, especially rubella (first trimester exposure is most dangerous).</li>
+          <li><strong>Apgar scoring:</strong> Five criteria (Appearance, Pulse, Grimace, Activity, Respiration), scored 0&ndash;2 each at 1 and 5 minutes. The 5-minute score is more predictive of outcomes.</li>
+          <li><strong>Neonatal reflexes:</strong> Know the major reflexes (rooting, sucking, Moro, Babinski, palmar grasp), their stimuli, responses, and when they should disappear. Persistence beyond expected age suggests neurological concern.</li>
+          <li><strong>Chromosomal abnormalities:</strong> Down syndrome (trisomy 21), Turner (45,X), Klinefelter (47,XXY), Fragile X (FMR1 mutation). Know key features and inheritance patterns.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="architecture-development.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">The Architecture of Development</div>
+          </div>
+        </a>
+        <a href="awakening-infancy.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">The Awakening &mdash; Infancy &amp; Toddlerhood</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

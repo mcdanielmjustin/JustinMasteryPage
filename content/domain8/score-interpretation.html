@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Score Interpretation | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Score Interpretation</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link active"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 9</div>
+        <h1>Score Interpretation</h1>
+        <div class="chapter-meta">
+          <span>z-scores, T-scores, percentiles, standard scores</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Score Interpretation</h2>
+        <p>Understanding how to convert, compare, and interpret test scores is fundamental to psychological assessment. This chapter covers the major types of derived scores used in psychological testing, the normal distribution that underlies them, and key statistical concepts that affect score interpretation. For the EPPP, you must be able to convert between score types, understand confidence intervals, and apply concepts like regression to the mean and the reliable change index.</p>
+        <div class="definition-box">
+          <strong>Raw Score vs. Derived Score:</strong> A raw score is the initial, untransformed score on a test (e.g., number correct). A derived score is obtained by transforming the raw score using a normative reference group, making it interpretable by comparison to a defined population. Almost all clinically meaningful interpretation uses derived scores.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Normal Distribution</h2>
+        <p>Most psychological test scores are assumed to follow a <span class="key-term">normal (Gaussian) distribution</span>, which is symmetrical and bell-shaped. Understanding the normal curve is essential because nearly all derived scores are referenced to it.</p>
+
+        <h3>Key Properties</h3>
+        <ul>
+          <li>The mean, median, and mode are equal and located at the center</li>
+          <li>The distribution is symmetrical around the mean</li>
+          <li>Approximately 68% of scores fall within +/- 1 standard deviation (SD) of the mean</li>
+          <li>Approximately 95% fall within +/- 2 SDs</li>
+          <li>Approximately 99.7% fall within +/- 3 SDs</li>
+          <li>The tails extend infinitely in both directions but approach (never reach) zero</li>
+        </ul>
+
+        <h3>Standard Deviation Percentages</h3>
+        <table>
+          <tr><th>SD Range</th><th>Percentage of Scores</th><th>Cumulative from Below</th></tr>
+          <tr><td>Below -3 SD</td><td>0.13%</td><td>0.13%</td></tr>
+          <tr><td>-3 SD to -2 SD</td><td>2.14%</td><td>2.27%</td></tr>
+          <tr><td>-2 SD to -1 SD</td><td>13.59%</td><td>15.87%</td></tr>
+          <tr><td>-1 SD to Mean</td><td>34.13%</td><td>50%</td></tr>
+          <tr><td>Mean to +1 SD</td><td>34.13%</td><td>84.13%</td></tr>
+          <tr><td>+1 SD to +2 SD</td><td>13.59%</td><td>97.72%</td></tr>
+          <tr><td>+2 SD to +3 SD</td><td>2.14%</td><td>99.87%</td></tr>
+          <tr><td>Above +3 SD</td><td>0.13%</td><td>100%</td></tr>
+        </table>
+        <div class="example-box">
+          <strong>EPPP Must-Know:</strong> The percentages 34-14-2 (rounded from 34.13%, 13.59%, 2.14%) for each SD band are tested frequently. Also know: 1 SD below the mean = approximately the 16th percentile. 2 SDs below = approximately the 2nd percentile.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Z-Scores</h2>
+        <p>The <span class="key-term">z-score</span> is the most fundamental derived score. It expresses how many standard deviations a raw score falls above or below the mean of its distribution.</p>
+
+        <div class="definition-box">
+          <strong>Formula:</strong> z = (X - M) / SD, where X = individual's raw score, M = mean of the distribution, and SD = standard deviation. A z-score of 0 = the mean. A z-score of +1.0 = 1 SD above the mean. A z-score of -2.0 = 2 SDs below the mean.
+        </div>
+
+        <h3>Properties of Z-Scores</h3>
+        <ul>
+          <li>Mean = 0, SD = 1</li>
+          <li>Can be positive (above the mean) or negative (below the mean)</li>
+          <li>Unitless -- allows comparison across different tests and metrics</li>
+          <li>The z-score distribution has the same shape as the original raw score distribution (it is a linear transformation that does not normalize the distribution)</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Example:</strong> An examinee scores 130 on a test with M = 100 and SD = 15. The z-score = (130 - 100) / 15 = +2.0. This means the score is 2 SDs above the mean, corresponding to approximately the 98th percentile.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>T-Scores</h2>
+        <p>A <span class="key-term">T-score</span> is a standardized score with M = 50 and SD = 10. T-scores eliminate the negative numbers and decimals of z-scores, making them easier to communicate.</p>
+
+        <div class="definition-box">
+          <strong>Formula:</strong> T = 10(z) + 50, or equivalently, T = 10[(X - M) / SD] + 50. A T-score of 50 = the mean. A T-score of 60 = 1 SD above the mean. A T-score of 30 = 2 SDs below the mean.
+        </div>
+
+        <h3>Common Uses</h3>
+        <ul>
+          <li><span class="key-term">MMPI-2, MMPI-2-RF, MMPI-3:</span> All scales reported as T-scores (clinical significance at T >= 65)</li>
+          <li><span class="key-term">NEO-PI-R:</span> Domain and facet scores reported as T-scores</li>
+          <li><span class="key-term">Behavior Rating Inventory of Executive Function (BRIEF):</span> T-scores with clinical cutoff at 65</li>
+          <li>Many behavioral checklists and symptom measures use T-scores</li>
+        </ul>
+
+        <h3>Linear vs. Normalized T-Scores</h3>
+        <ul>
+          <li><span class="key-term">Linear T-scores:</span> Direct transformation of raw scores (preserves original distribution shape). Used on MMPI-2 Scales 5 and 0.</li>
+          <li><span class="key-term">Normalized T-scores:</span> Raw scores are first transformed to percentile ranks, then converted to T-scores based on the normal distribution. This forces the distribution into a normal shape.</li>
+          <li><span class="key-term">Uniform T-scores:</span> Used on most MMPI-2 clinical scales. A method developed by Tellegen that ensures the percentile value of a given T-score is the same across all scales, even though the raw score distributions differ.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard Scores (IQ-type Scores)</h2>
+        <p><span class="key-term">Standard scores</span> with M = 100 and SD = 15 are used by the Wechsler scales, Stanford-Binet 5, and most other intelligence and cognitive ability tests for composite/index scores.</p>
+
+        <h3>Conversion Between Score Types</h3>
+        <table>
+          <tr><th>z-Score</th><th>T-Score</th><th>IQ Score (M=100, SD=15)</th><th>Scaled Score (M=10, SD=3)</th><th>Percentile</th></tr>
+          <tr><td>+3.0</td><td>80</td><td>145</td><td>19</td><td>99.87</td></tr>
+          <tr><td>+2.0</td><td>70</td><td>130</td><td>16</td><td>97.7</td></tr>
+          <tr><td>+1.0</td><td>60</td><td>115</td><td>13</td><td>84.1</td></tr>
+          <tr><td>0</td><td>50</td><td>100</td><td>10</td><td>50</td></tr>
+          <tr><td>-1.0</td><td>40</td><td>85</td><td>7</td><td>15.9</td></tr>
+          <tr><td>-2.0</td><td>30</td><td>70</td><td>4</td><td>2.3</td></tr>
+          <tr><td>-3.0</td><td>20</td><td>55</td><td>1</td><td>0.13</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Must-Know:</strong> You should be able to convert freely between z-scores, T-scores, IQ scores, scaled scores, and percentiles. The general formula is: New Score = (New SD)(z) + New Mean. Memorize the table above -- it appears in various forms on many EPPP questions.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Percentile Ranks</h2>
+        <p>A <span class="key-term">percentile rank</span> indicates the percentage of scores in the normative distribution that fall at or below a given score. It is one of the most intuitive and commonly communicated score types.</p>
+
+        <h3>Key Properties</h3>
+        <ul>
+          <li>Range: 1 to 99 (the 0th and 100th percentiles are theoretical limits)</li>
+          <li>The 50th percentile = the median = the mean (in a normal distribution)</li>
+          <li>Percentile ranks are <span class="key-term">ordinal</span>, not interval -- equal differences in percentiles do NOT represent equal differences in ability</li>
+          <li>Percentile ranks are compressed near the mean (where most scores cluster) and stretched at the extremes</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Important Caution:</strong> The difference between the 50th and 60th percentiles in raw score points is much smaller than the difference between the 90th and 99th percentiles. This is because percentile ranks are not on an equal-interval scale. A child moving from the 50th to 55th percentile may have gained 2 raw score points, while a child moving from the 95th to 99th percentile may have gained 10 raw score points. Never average percentile ranks.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Stanines</h2>
+        <p><span class="key-term">Stanines</span> (standard nines) divide the normal distribution into 9 units with M = 5 and SD = approximately 2. Each stanine (except 1 and 9) spans a half standard deviation.</p>
+
+        <table>
+          <tr><th>Stanine</th><th>Percentile Range</th><th>Percentage of Cases</th><th>Description</th></tr>
+          <tr><td>9</td><td>96-99</td><td>4%</td><td>Very High</td></tr>
+          <tr><td>8</td><td>89-95</td><td>7%</td><td>High</td></tr>
+          <tr><td>7</td><td>77-88</td><td>12%</td><td>Above Average</td></tr>
+          <tr><td>6</td><td>60-76</td><td>17%</td><td>High Average</td></tr>
+          <tr><td>5</td><td>40-59</td><td>20%</td><td>Average</td></tr>
+          <tr><td>4</td><td>23-39</td><td>17%</td><td>Low Average</td></tr>
+          <tr><td>3</td><td>11-22</td><td>12%</td><td>Below Average</td></tr>
+          <tr><td>2</td><td>4-10</td><td>7%</td><td>Low</td></tr>
+          <tr><td>1</td><td>1-3</td><td>4%</td><td>Very Low</td></tr>
+        </table>
+        <p>Stanines are commonly used in educational testing and provide a coarse but useful classification. The percentages 4-7-12-17-20-17-12-7-4 should be memorized.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Normal Curve Equivalents (NCEs)</h2>
+        <p><span class="key-term">Normal Curve Equivalents</span> are standard scores with M = 50 and SD = 21.06. They were developed for use in federally funded educational programs (e.g., Title I evaluations) to allow averaging and statistical comparison of scores across different tests.</p>
+        <ul>
+          <li>Range: 1 to 99</li>
+          <li>NCEs of 1, 50, and 99 correspond to percentile ranks of 1, 50, and 99</li>
+          <li>Unlike percentile ranks, NCEs are on an equal-interval scale and can be meaningfully averaged</li>
+          <li>NCEs are rarely used in clinical practice but may appear on the EPPP</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard Error of Measurement (SEM)</h2>
+        <p>The <span class="key-term">Standard Error of Measurement (SEM)</span> quantifies the amount of error in an individual's observed test score. It reflects the fact that no test is perfectly reliable -- an individual's observed score may differ from their "true score" due to measurement error.</p>
+
+        <div class="definition-box">
+          <strong>Formula:</strong> SEM = SD * sqrt(1 - r<sub>xx</sub>), where SD = standard deviation of the test scores and r<sub>xx</sub> = reliability coefficient of the test. Higher reliability yields a smaller SEM (less measurement error). A perfectly reliable test (r = 1.0) would have SEM = 0.
+        </div>
+
+        <h3>SEM Properties</h3>
+        <ul>
+          <li>The SEM is in the same units as the test score</li>
+          <li>The SEM decreases as reliability increases</li>
+          <li>The SEM is assumed to be constant across all score levels (though in practice, it may vary)</li>
+          <li>The SEM is used to construct confidence intervals around an observed score</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Example:</strong> A test has SD = 15 and reliability = .91. SEM = 15 * sqrt(1 - .91) = 15 * sqrt(.09) = 15 * 0.30 = 4.5. For the WAIS-IV FSIQ (reliability ~.98), SEM ~ 15 * sqrt(.02) ~ 2.1 points. This means the FSIQ is measured with very high precision.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Confidence Intervals</h2>
+        <p>A <span class="key-term">confidence interval (CI)</span> provides a range around the observed score within which the true score is likely to fall, given a specified level of confidence.</p>
+
+        <h3>Construction</h3>
+        <ul>
+          <li><strong>68% CI:</strong> Observed score +/- 1 SEM</li>
+          <li><strong>90% CI:</strong> Observed score +/- 1.645 SEM</li>
+          <li><strong>95% CI:</strong> Observed score +/- 1.96 SEM (often rounded to 2 SEM)</li>
+          <li><strong>99% CI:</strong> Observed score +/- 2.576 SEM</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Example:</strong> An examinee obtains an IQ of 112 on a test with SEM = 4.5. The 95% CI = 112 +/- (1.96 x 4.5) = 112 +/- 8.82, or approximately 103 to 121. We can state with 95% confidence that the individual's true IQ falls between 103 and 121.
+        </div>
+
+        <div class="clinical-note">
+          <strong>EPPP Practice Point:</strong> Reporting confidence intervals rather than single scores is considered best practice because it communicates the inherent imprecision in any test score. APA guidelines recommend that psychologists report confidence intervals when communicating test results.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Reliable Change Index (RCI)</h2>
+        <p>The <span class="key-term">Reliable Change Index (RCI)</span> (Jacobson & Truax, 1991) determines whether the difference between two test scores (e.g., pre- and post-treatment) reflects true change rather than measurement error.</p>
+
+        <div class="definition-box">
+          <strong>Formula:</strong> RCI = (X<sub>2</sub> - X<sub>1</sub>) / S<sub>diff</sub>, where S<sub>diff</sub> = sqrt(2 * SEM<sup>2</sup>) = SEM * sqrt(2). If |RCI| > 1.96, the change is statistically significant at the .05 level (i.e., unlikely to be due to measurement error alone).
+        </div>
+
+        <h3>Clinical Application</h3>
+        <ul>
+          <li>Used to evaluate whether therapeutic interventions produced meaningful change</li>
+          <li>Used in neuropsychological re-evaluation to determine whether cognitive decline is beyond what measurement error would predict</li>
+          <li>Provides an objective criterion for "reliable" change rather than relying on arbitrary cutoffs</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Example:</strong> A client scores 85 on a depression measure before treatment and 70 after treatment. The SEM = 5. S<sub>diff</sub> = 5 * sqrt(2) = 7.07. RCI = (70 - 85) / 7.07 = -2.12. Since |2.12| > 1.96, the change is statistically reliable -- the improvement is unlikely due to measurement error alone.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Regression to the Mean</h2>
+        <p><span class="key-term">Regression to the mean</span> is the statistical phenomenon whereby extreme scores on a first measurement tend to be less extreme on subsequent measurements. This occurs because any observed score contains both true score variance and error variance, and the error component is random.</p>
+
+        <h3>Key Implications</h3>
+        <ul>
+          <li>A student who scores very high on a test is likely to score somewhat lower on retest (and vice versa) -- not because their ability changed, but because the extreme score was partly due to random error in the favorable direction</li>
+          <li>Regression to the mean is more pronounced when reliability is lower (more error variance) and when the initial score is more extreme</li>
+          <li>This effect must be considered when evaluating treatment outcomes: improvement from an extremely low baseline may partly reflect regression to the mean rather than true treatment effects</li>
+          <li>The <span class="key-term">estimated true score</span> = M + r<sub>xx</sub>(X - M), where M = population mean, r<sub>xx</sub> = reliability, and X = observed score. This formula shows that the estimated true score is always closer to the mean than the observed score (regressed toward the mean by a factor of the reliability coefficient)</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Estimated True Score Formula:</strong> Estimated True Score = M + r(X - M). If a test has M = 100, r = .90, and an individual scores 130, the estimated true score = 100 + .90(130 - 100) = 100 + 27 = 127. The estimated true score (127) is regressed 3 points toward the mean from the observed score (130).
+        </div>
+
+        <div class="clinical-note">
+          <strong>EPPP Application:</strong> When predicting retest scores, always expect regression to the mean. An individual who scored 75 (low) is predicted to score somewhat higher on retest; an individual who scored 130 (high) is predicted to score somewhat lower. The amount of regression depends on the test's reliability -- lower reliability produces more regression.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Additional Score Types</h2>
+
+        <h3>Age Equivalents and Grade Equivalents</h3>
+        <ul>
+          <li><span class="key-term">Age equivalent:</span> The age at which the individual's raw score is the average performance. A 7-year-old with an age equivalent of 9:6 performs like the average 9-year-6-month-old.</li>
+          <li><span class="key-term">Grade equivalent:</span> The grade level at which the individual's raw score is the average. A 4th grader with a grade equivalent of 6.2 performs like the average student in the 2nd month of 6th grade.</li>
+          <li>Both are <span class="key-term">ordinal</span> scales and are widely criticized because they are often misinterpreted (e.g., a 2nd grader with a grade equivalent of 5.0 in math does not necessarily know 5th-grade math content)</li>
+          <li>Age and grade equivalents should not be used for comparison across different tests or subtests</li>
+        </ul>
+
+        <h3>Scaled Scores</h3>
+        <p>Wechsler subtest scores use a scaled score metric with M = 10 and SD = 3. The range is 1-19. Scaled scores allow comparison of performance across subtests.</p>
+
+        <h3>Sten Scores</h3>
+        <p><span class="key-term">Sten scores</span> (standard ten) have M = 5.5 and SD = 2, with a range of 1-10. Used by the 16PF and some other personality measures. Scores of 4-7 are average; 1-3 are low; 8-10 are high.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Summary</h2>
+        <div class="definition-box">
+          <strong>Score conversions:</strong> z = (X-M)/SD. T = 10z + 50. IQ = 15z + 100. Scaled = 3z + 10. Know how to convert between all types.
+        </div>
+        <div class="definition-box">
+          <strong>Normal curve:</strong> 34-14-2 rule for percentage of scores in each SD band. 1 SD below mean ~ 16th percentile. 2 SDs below ~ 2nd percentile.
+        </div>
+        <div class="definition-box">
+          <strong>SEM:</strong> SEM = SD * sqrt(1 - reliability). Used to build confidence intervals. 95% CI = Score +/- 1.96 SEM.
+        </div>
+        <div class="definition-box">
+          <strong>RCI:</strong> (Score2 - Score1) / (SEM * sqrt(2)). If |RCI| > 1.96, change is reliable at p < .05.
+        </div>
+        <div class="definition-box">
+          <strong>Regression to the mean:</strong> Extreme scores become less extreme on retest. Estimated true score = M + r(X - M). More regression when reliability is lower.
+        </div>
+        <div class="definition-box">
+          <strong>Percentile ranks:</strong> Ordinal, not interval. Cannot be averaged. Compressed near the mean, spread at extremes.
+        </div>
+        <p class="citation">References: Anastasi & Urbina (1997). Psychological Testing. Jacobson & Truax (1991). Reliable Change Index. Nunnally & Bernstein (1994). Psychometric Theory. Cohen & Swerdlik (2018). Psychological Testing and Assessment.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="interest-inventories.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Interest Inventories</div>
+          </div>
+        </a>
+        <a href="assessment-ethics.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Assessment Ethics</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

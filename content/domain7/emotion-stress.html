@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emotion & Stress | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 8px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-secondary); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 16px 0; }
+    .example-box strong { color: var(--accent); }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .clinical-note strong { color: #60a5fa; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 12px 16px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 16px; border: 1px solid var(--border); color: var(--text-secondary); }
+    tr:hover td { background: var(--bg-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Emotion & Stress</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 7</div>
+        <div class="domain-title">Biological Bases of Behavior</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="memory-forgetting.html" class="chapter-link"><span class="chapter-number">1</span>Memory & Forgetting</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">2</span>Cerebral Cortex</a></li>
+        <li class="chapter-item"><a href="subcortical.html" class="chapter-link"><span class="chapter-number">3</span>Subcortical Structures</a></li>
+        <li class="chapter-item"><a href="emotion-stress.html" class="chapter-link active"><span class="chapter-number">4</span>Emotion & Stress</a></li>
+        <li class="chapter-item"><a href="memory-sleep.html" class="chapter-link"><span class="chapter-number">5</span>Memory & Sleep</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">6</span>Neurons & Neurotransmitters</a></li>
+        <li class="chapter-item"><a href="neurological-disorders.html" class="chapter-link"><span class="chapter-number">7</span>Neurological Disorders</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">8</span>Sensation & Perception</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">9</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 9</div>
+        <h1>Emotion & Stress</h1>
+        <div class="chapter-meta">
+          <span>HPA axis, autonomic nervous system, stress response</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Emotion and Stress</h2>
+        <p>Emotion and stress are among the most clinically relevant topics in biological psychology. Understanding the biological mechanisms underlying emotional experience and the stress response is essential for EPPP preparation, as these processes are implicated in numerous psychological disorders, health conditions, and therapeutic interventions.</p>
+        <div class="definition-box">
+          <p><strong>Emotion:</strong> A complex psychological state involving three distinct components: a subjective experience (feeling), a physiological response (autonomic arousal), and a behavioral or expressive response (facial expression, action tendency). Theories differ on the causal ordering of these components.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Theories of Emotion</h2>
+        <p>Several major theories attempt to explain the relationship between physiological arousal, cognitive appraisal, and subjective emotional experience. These theories are frequently tested on the EPPP.</p>
+
+        <h3>James-Lange Theory (1884/1885)</h3>
+        <p>William James and Carl Lange independently proposed that <span class="key-term">emotions result from the perception of bodily changes</span>. According to this theory, a stimulus triggers a physiological response, and the conscious experience of emotion follows from the perception of that response.</p>
+        <div class="definition-box">
+          <p><strong>Sequence:</strong> Stimulus --> Physiological arousal/bodily response --> Perception of arousal --> Emotional experience. "We feel sorry because we cry, angry because we strike, afraid because we tremble" (James, 1884).</p>
+        </div>
+        <ul>
+          <li><strong>Implication:</strong> Different emotions should produce distinct patterns of physiological arousal</li>
+          <li><strong>Supporting evidence:</strong> Some research shows that different emotions do involve partially distinct autonomic patterns (Levenson, Ekman, &amp; Friesen, 1990)</li>
+          <li><strong>Criticism:</strong> Cannon argued that visceral changes are too slow and too undifferentiated to account for the rapid and varied nature of emotional experience</li>
+        </ul>
+
+        <h3>Cannon-Bard Theory (1927)</h3>
+        <p>Walter Cannon and Philip Bard proposed that <span class="key-term">emotional experience and physiological arousal occur simultaneously and independently</span>, both triggered by the thalamus in response to an emotion-provoking stimulus.</p>
+        <div class="definition-box">
+          <p><strong>Sequence:</strong> Stimulus --> Thalamus sends signals simultaneously to the cortex (emotional experience) and the body (physiological arousal). The two processes are parallel and independent.</p>
+        </div>
+        <ul>
+          <li><strong>Key claim:</strong> Physiological arousal does not cause emotion; both are products of the same neural event</li>
+          <li><strong>Supporting evidence:</strong> Animals with severed connections between the brain and viscera still show emotional behavior; people with spinal cord injuries still experience emotions</li>
+        </ul>
+
+        <h3>Schachter-Singer Two-Factor Theory (1962)</h3>
+        <p>Stanley Schachter and Jerome Singer proposed that <span class="key-term">emotion requires both physiological arousal AND cognitive interpretation (labeling) of that arousal</span>. Arousal provides the intensity of the emotion, while cognition determines which emotion is experienced.</p>
+        <div class="definition-box">
+          <p><strong>Sequence:</strong> Stimulus --> Physiological arousal --> Cognitive interpretation of the arousal based on context --> Emotional experience.</p>
+        </div>
+        <ul>
+          <li><strong>Classic experiment:</strong> Participants injected with epinephrine (causing arousal) who were not informed of the drug's effects labeled their arousal based on social context -- reporting happiness when with a euphoric confederate and anger when with an angry confederate</li>
+          <li><strong>Misattribution of arousal:</strong> People may misattribute physiological arousal from one source to another (e.g., Dutton &amp; Aron's [1974] bridge study, where men crossing a fear-inducing suspension bridge were more attracted to a female interviewer)</li>
+        </ul>
+
+        <h3>Other Important Emotion Theories</h3>
+        <h4>Lazarus's Cognitive Appraisal Theory (1991)</h4>
+        <p>Richard Lazarus argued that <span class="key-term">cognitive appraisal is a necessary precondition for emotion</span>. We first evaluate whether a stimulus is relevant and whether we have the resources to cope, and this appraisal determines both the emotion and the physiological response.</p>
+
+        <h4>Zajonc's Affective Primacy Hypothesis (1984)</h4>
+        <p>Robert Zajonc countered Lazarus by arguing that <span class="key-term">emotional reactions can occur before and independent of cognition</span>. Simple emotional preferences (e.g., the mere exposure effect) can occur without conscious cognitive processing.</p>
+
+        <h4>LeDoux's Dual-Pathway Model (1996)</h4>
+        <p>Joseph LeDoux demonstrated that fear processing involves two neural pathways from the thalamus to the amygdala:</p>
+        <ul>
+          <li><strong>"Low road" (thalamo-amygdala pathway):</strong> Fast, direct, and crude processing. Enables rapid fear responses before conscious awareness.</li>
+          <li><strong>"High road" (thalamo-cortical-amygdala pathway):</strong> Slower but more detailed cortical processing. Allows for more nuanced evaluation of threats.</li>
+        </ul>
+
+        <table>
+          <tr><th>Theory</th><th>Key Claim</th><th>Theorist(s)</th></tr>
+          <tr><td>James-Lange</td><td>Arousal precedes and causes emotion</td><td>James, Lange</td></tr>
+          <tr><td>Cannon-Bard</td><td>Arousal and emotion occur simultaneously</td><td>Cannon, Bard</td></tr>
+          <tr><td>Two-Factor</td><td>Arousal + cognitive label = emotion</td><td>Schachter, Singer</td></tr>
+          <tr><td>Cognitive Appraisal</td><td>Appraisal must precede emotion</td><td>Lazarus</td></tr>
+          <tr><td>Affective Primacy</td><td>Emotion can precede cognition</td><td>Zajonc</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>The Autonomic Nervous System and Emotion</h2>
+        <p>The <span class="key-term">autonomic nervous system (ANS)</span> is the division of the peripheral nervous system that controls involuntary bodily functions and mediates the physiological component of emotional responses.</p>
+
+        <h3>Sympathetic Nervous System (SNS)</h3>
+        <p>The "fight-or-flight" system, activated during stress, danger, or emotional arousal:</p>
+        <ul>
+          <li>Increases heart rate, blood pressure, and respiration</li>
+          <li>Dilates pupils and bronchioles</li>
+          <li>Redirects blood from digestive organs to skeletal muscles</li>
+          <li>Stimulates the adrenal medulla to release epinephrine and norepinephrine</li>
+          <li>Inhibits digestion and salivation</li>
+          <li>Uses norepinephrine as the primary postganglionic neurotransmitter</li>
+        </ul>
+
+        <h3>Parasympathetic Nervous System (PNS)</h3>
+        <p>The "rest-and-digest" system, promoting calm, recovery, and energy conservation:</p>
+        <ul>
+          <li>Decreases heart rate, blood pressure, and respiration</li>
+          <li>Constricts pupils and bronchioles</li>
+          <li>Stimulates digestion, salivation, and sexual arousal</li>
+          <li>Promotes energy storage and tissue repair</li>
+          <li>Uses acetylcholine as the primary postganglionic neurotransmitter</li>
+          <li>The vagus nerve (cranial nerve X) is the primary parasympathetic pathway</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Polyvagal theory (Porges, 2011) proposes that the vagus nerve has two branches: the ventral vagal complex (promotes social engagement and calm states) and the dorsal vagal complex (triggers immobilization/shutdown during overwhelming threat). This framework is increasingly used in trauma therapy.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Stress Response: HPA Axis</h2>
+        <p>The <span class="key-term">hypothalamic-pituitary-adrenal (HPA) axis</span> is the primary neuroendocrine system that mediates the body's response to stress.</p>
+
+        <h3>HPA Axis Activation Sequence</h3>
+        <ol>
+          <li>The hypothalamus releases <span class="key-term">corticotropin-releasing hormone (CRH)</span> in response to perceived stress</li>
+          <li>CRH stimulates the anterior pituitary to release <span class="key-term">adrenocorticotropic hormone (ACTH)</span></li>
+          <li>ACTH travels through the bloodstream to the adrenal cortex</li>
+          <li>The adrenal cortex releases <span class="key-term">cortisol</span> (the primary stress hormone, a glucocorticoid)</li>
+          <li>Cortisol acts on multiple organ systems and provides negative feedback to the hypothalamus and pituitary to terminate the stress response</li>
+        </ol>
+
+        <h3>Effects of Cortisol</h3>
+        <ul>
+          <li><strong>Metabolic:</strong> Increases blood glucose (gluconeogenesis), mobilizes energy stores</li>
+          <li><strong>Immune:</strong> Anti-inflammatory and immunosuppressive effects at sustained high levels</li>
+          <li><strong>Cognitive:</strong> Moderate levels enhance memory consolidation; chronic high levels impair hippocampal function and memory</li>
+          <li><strong>Neural:</strong> Chronic elevation causes hippocampal atrophy and dendritic remodeling in the prefrontal cortex</li>
+        </ul>
+        <div class="definition-box">
+          <p><strong>Cortisol:</strong> The primary glucocorticoid hormone released by the adrenal cortex in response to ACTH. It follows a diurnal rhythm (highest in the morning, lowest at night) and is a key biomarker of HPA axis function. Chronically elevated cortisol is associated with depression, PTSD, metabolic syndrome, and hippocampal damage.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Selye's General Adaptation Syndrome (GAS)</h2>
+        <p>Hans Selye (1936, 1956) described the <span class="key-term">General Adaptation Syndrome</span>, a three-stage model of the body's response to prolonged stress:</p>
+
+        <h3>Stage 1: Alarm Reaction</h3>
+        <p>The body's initial fight-or-flight response to a stressor. The sympathetic nervous system is activated, releasing catecholamines (epinephrine, norepinephrine). Cortisol levels begin to rise. Resistance to stress temporarily drops below normal.</p>
+
+        <h3>Stage 2: Resistance (Adaptation)</h3>
+        <p>The body attempts to adapt to the continued presence of the stressor. Cortisol levels remain elevated but the body achieves a new homeostatic balance. Parasympathetic activity partially counterbalances sympathetic arousal. The individual appears to be coping but physiological resources are being depleted.</p>
+
+        <h3>Stage 3: Exhaustion</h3>
+        <p>Prolonged stress depletes the body's adaptive resources. The immune system becomes compromised, vulnerability to illness increases dramatically, and organ systems may begin to fail. This stage can lead to "diseases of adaptation" including cardiovascular disease, gastrointestinal disorders, and immune dysfunction.</p>
+        <div class="example-box">
+          <p><strong>EPPP Application:</strong> Selye distinguished between <span class="key-term">eustress</span> (positive, motivating stress) and <span class="key-term">distress</span> (negative, harmful stress). He also noted that the GAS response is nonspecific -- the body responds similarly regardless of the type of stressor.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Allostatic Load</h2>
+        <p><span class="key-term">Allostatic load</span> (McEwen, 1998) refers to the cumulative physiological wear and tear on the body resulting from chronic exposure to stress hormones and repeated activation of the stress response. Unlike acute stress (which is adaptive), chronic stress overloads the system.</p>
+        <ul>
+          <li><strong>Allostasis:</strong> The process by which the body achieves stability through physiological change (as opposed to homeostasis, which maintains a fixed set point)</li>
+          <li><strong>Allostatic overload:</strong> When cumulative stress exceeds the body's ability to adapt, leading to pathology</li>
+          <li>Contributors include chronic psychological stress, sleep deprivation, poor diet, lack of exercise, and social isolation</li>
+          <li>Measurable biomarkers include cortisol levels, blood pressure, waist-to-hip ratio, glycated hemoglobin, and inflammatory markers (C-reactive protein, IL-6)</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Allostatic load provides a framework for understanding health disparities. Chronic exposure to discrimination, poverty, and adversity produces elevated allostatic load, contributing to poorer health outcomes among marginalized populations. This concept bridges biological psychology and health psychology on the EPPP.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Psychoneuroimmunology (PNI)</h2>
+        <p><span class="key-term">Psychoneuroimmunology</span> is the interdisciplinary field studying the interactions among psychological processes, the nervous system, and the immune system.</p>
+
+        <h3>Key Findings</h3>
+        <ul>
+          <li><strong>Stress and immunity:</strong> Acute stress can temporarily enhance immune function (mobilizing natural killer cells), while chronic stress suppresses immune function through sustained cortisol elevation</li>
+          <li><strong>Kiecolt-Glaser studies:</strong> Medical student exams, caregiver stress, and marital conflict all demonstrated measurable immune suppression (reduced natural killer cell activity, slower wound healing, reduced antibody response to vaccines)</li>
+          <li><strong>Conditioning of immune responses:</strong> Ader and Cohen (1975) demonstrated that immune responses can be classically conditioned, providing direct evidence that the nervous system can regulate immune function</li>
+          <li><strong>Cytokines and behavior:</strong> Pro-inflammatory cytokines (e.g., interleukin-1, interleukin-6, TNF-alpha) produced by the immune system can induce "sickness behavior" (fatigue, social withdrawal, anhedonia) that overlaps with depressive symptoms</li>
+        </ul>
+
+        <h3>Pathways of Communication</h3>
+        <ul>
+          <li><strong>Neural pathway:</strong> The autonomic nervous system innervates lymphoid organs (spleen, thymus, lymph nodes) and can directly modulate immune cell activity</li>
+          <li><strong>Endocrine pathway:</strong> Cortisol and other stress hormones regulate immune cell function through glucocorticoid receptors on immune cells</li>
+          <li><strong>Immune-to-brain signaling:</strong> Cytokines produced by immune cells signal the brain via the vagus nerve and circumventricular organs, influencing mood and behavior</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Biological Bases of Specific Emotions</h2>
+
+        <h3>Fear</h3>
+        <p>The amygdala is the central structure for fear processing. Fear conditioning involves pairing a neutral stimulus (CS) with an aversive stimulus (US), resulting in the CS eliciting a fear response. The amygdala mediates both the acquisition and expression of conditioned fear, while the prefrontal cortex (particularly the ventromedial PFC) is involved in fear extinction.</p>
+
+        <h3>Anger and Aggression</h3>
+        <p>The neural circuitry of aggression involves the amygdala, hypothalamus (particularly the ventromedial hypothalamus), and the orbitofrontal cortex (which provides top-down inhibitory control). Low serotonin levels are consistently associated with increased impulsive aggression.</p>
+
+        <h3>Reward and Pleasure</h3>
+        <p>The <span class="key-term">mesolimbic dopamine pathway</span> (VTA to nucleus accumbens) is the brain's primary reward circuit. Dopamine release in the nucleus accumbens is associated with reward anticipation and motivation rather than pleasure itself. The opioid system is more directly linked to hedonic "liking."</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Terms Summary</h2>
+        <table>
+          <tr><th>Term</th><th>Definition</th></tr>
+          <tr><td>James-Lange theory</td><td>Physiological arousal precedes and produces emotional experience</td></tr>
+          <tr><td>Cannon-Bard theory</td><td>Arousal and emotional experience occur simultaneously via thalamic relay</td></tr>
+          <tr><td>Two-factor theory</td><td>Emotion requires arousal plus cognitive labeling (Schachter-Singer)</td></tr>
+          <tr><td>HPA axis</td><td>Hypothalamic-pituitary-adrenal neuroendocrine stress response system</td></tr>
+          <tr><td>Cortisol</td><td>Primary glucocorticoid stress hormone from adrenal cortex</td></tr>
+          <tr><td>General Adaptation Syndrome</td><td>Alarm, resistance, exhaustion stages of prolonged stress (Selye)</td></tr>
+          <tr><td>Allostatic load</td><td>Cumulative physiological wear from chronic stress (McEwen)</td></tr>
+          <tr><td>Psychoneuroimmunology</td><td>Study of interactions among psychological, neural, and immune systems</td></tr>
+          <tr><td>Sympathetic NS</td><td>Fight-or-flight division of the autonomic nervous system</td></tr>
+          <tr><td>Parasympathetic NS</td><td>Rest-and-digest division of the autonomic nervous system</td></tr>
+        </table>
+        <p class="citation">Key references: Ader &amp; Cohen (1975); Cannon (1927); James (1884); Lazarus (1991); LeDoux (1996); McEwen (1998); Schachter &amp; Singer (1962); Selye (1956).</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="subcortical.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Subcortical Structures</div>
+          </div>
+        </a>
+        <a href="memory-sleep.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Memory & Sleep</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

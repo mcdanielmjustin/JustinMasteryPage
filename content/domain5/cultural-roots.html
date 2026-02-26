@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where You Come From | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Where You Come From</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 5</div>
+        <div class="domain-title">Social &amp; Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cultural-roots.html" class="chapter-link active"><span class="chapter-number">1</span>Where You Come From</a></li>
+        <li class="chapter-item"><a href="shortcuts.html" class="chapter-link"><span class="chapter-number">2</span>The Shortcuts We Take</a></li>
+        <li class="chapter-item"><a href="beliefs.html" class="chapter-link"><span class="chapter-number">3</span>What We Believe</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">4</span>How We're Moved</a></li>
+        <li class="chapter-item"><a href="connection.html" class="chapter-link"><span class="chapter-number">5</span>Why We Connect</a></li>
+        <li class="chapter-item"><a href="prejudice.html" class="chapter-link"><span class="chapter-number">6</span>Where We Break</a></li>
+        <li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li>
+        <li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link"><span class="chapter-number">8</span>Across the Divide</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 8</div>
+        <h1>Where You Come From &mdash; Cultural Roots, Identity &amp; Self</h1>
+        <div class="chapter-meta">
+          <span>Hofstede dimensions, acculturation, ethnic identity, independent vs. interdependent self</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction: Culture &amp; Psychology</h2>
+        <p>Culture is the invisible architecture of human experience. It shapes how we perceive ourselves, relate to others, interpret emotions, and define what counts as normal or pathological. For the EPPP, understanding cultural dimensions is essential not only for the Social &amp; Cultural Psychology domain but also for ethical practice, assessment, and treatment planning across all domains.</p>
+        <div class="definition-box">
+          <strong>Culture</strong>
+          <p>A shared system of meanings, values, beliefs, norms, and practices that is transmitted across generations and shapes the behavior, cognition, and emotional experience of its members. Culture includes but extends beyond race and ethnicity to encompass religion, socioeconomic status, gender, sexual orientation, disability, and other dimensions of identity.</p>
+        </div>
+        <p>Cross-cultural psychology examines how culture influences psychological processes, while cultural psychology argues that mind and culture are inseparable &mdash; each constitutes the other. Both perspectives are relevant to the EPPP.</p>
+        <p class="citation">Triandis, H. C. (1996). The psychological measurement of cultural syndromes. American Psychologist, 51(4), 407&ndash;415.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Hofstede's Cultural Dimensions</h2>
+        <p><span class="key-term">Geert Hofstede</span> conducted one of the largest cross-cultural studies in history, surveying over 100,000 IBM employees in more than 70 countries. His framework identifies key dimensions along which national cultures differ. These dimensions are continua, not categories.</p>
+
+        <h3>Individualism vs. Collectivism</h3>
+        <p>This is the most frequently tested cultural dimension on the EPPP. <span class="key-term">Individualist cultures</span> (e.g., United States, United Kingdom, Australia) emphasize personal autonomy, individual achievement, and self-reliance. <span class="key-term">Collectivist cultures</span> (e.g., China, Japan, many Latin American and African nations) prioritize group harmony, family obligation, and interdependence.</p>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A student from an individualist culture might describe success as "getting into my top-choice graduate program," while a student from a collectivist culture might say "bringing honor to my family by earning a degree." Neither is more adaptive &mdash; each reflects a coherent cultural value system.</p>
+        </div>
+
+        <h3>Power Distance</h3>
+        <p><span class="key-term">Power distance</span> refers to the degree to which less powerful members of a society accept and expect that power is distributed unequally. High power-distance cultures (e.g., Malaysia, Philippines, Mexico) show greater deference to authority figures and accept hierarchical structures. Low power-distance cultures (e.g., Denmark, Austria, Israel) expect more egalitarian relationships.</p>
+
+        <h3>Uncertainty Avoidance</h3>
+        <p><span class="key-term">Uncertainty avoidance</span> describes a society's tolerance for ambiguity and the unknown. Cultures high in uncertainty avoidance (e.g., Greece, Japan, France) tend to create elaborate rules, rituals, and institutions to minimize unpredictability. Low uncertainty-avoidance cultures (e.g., Singapore, Jamaica, Denmark) are more comfortable with ambiguity and change.</p>
+
+        <h3>Masculinity vs. Femininity</h3>
+        <p><span class="key-term">Masculine cultures</span> (e.g., Japan, Hungary, Austria) emphasize competition, achievement, and assertiveness. <span class="key-term">Feminine cultures</span> (e.g., Sweden, Norway, Netherlands) prioritize quality of life, cooperation, nurturing, and caring for the vulnerable.</p>
+
+        <h3>Additional Dimensions</h3>
+        <p>Hofstede later added <span class="key-term">long-term vs. short-term orientation</span> (thrift and perseverance vs. tradition and meeting social obligations) and <span class="key-term">indulgence vs. restraint</span> (allowing gratification of basic human desires vs. suppressing it through strict social norms).</p>
+
+        <table>
+          <tr><th>Dimension</th><th>High Pole</th><th>Low Pole</th><th>Example Countries (High)</th></tr>
+          <tr><td>Individualism&ndash;Collectivism</td><td>Individualism</td><td>Collectivism</td><td>US, UK, Australia</td></tr>
+          <tr><td>Power Distance</td><td>High hierarchy acceptance</td><td>Egalitarian</td><td>Malaysia, Philippines</td></tr>
+          <tr><td>Uncertainty Avoidance</td><td>Rule-oriented</td><td>Ambiguity-tolerant</td><td>Greece, Japan</td></tr>
+          <tr><td>Masculinity&ndash;Femininity</td><td>Competitive</td><td>Cooperative</td><td>Japan, Hungary</td></tr>
+          <tr><td>Long-term Orientation</td><td>Future-focused</td><td>Tradition-focused</td><td>China, South Korea</td></tr>
+        </table>
+        <p class="citation">Hofstede, G. (2001). Culture's consequences: Comparing values, behaviors, institutions, and organizations across nations (2nd ed.). Sage.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Acculturation Models</h2>
+        <p><span class="key-term">Acculturation</span> is the process of cultural and psychological change that results from continuous contact between two distinct cultural groups. It is bidirectional &mdash; both the immigrant group and the host culture may change &mdash; though typically the minority group changes more.</p>
+
+        <div class="definition-box">
+          <strong>Berry's Acculturation Model</strong>
+          <p>John Berry proposed the most widely cited acculturation framework, based on two independent questions: (1) Is it valuable to maintain one's heritage culture? (2) Is it valuable to develop relationships with the larger society? The answers to these two questions produce four acculturation strategies.</p>
+        </div>
+
+        <table>
+          <tr><th>Strategy</th><th>Heritage Culture?</th><th>Host Culture?</th><th>Description</th></tr>
+          <tr><td><strong>Integration</strong></td><td>Yes</td><td>Yes</td><td>Maintain heritage culture while also engaging with host culture; generally associated with best psychological outcomes</td></tr>
+          <tr><td><strong>Assimilation</strong></td><td>No</td><td>Yes</td><td>Adopt host culture at the expense of heritage culture</td></tr>
+          <tr><td><strong>Separation</strong></td><td>Yes</td><td>No</td><td>Maintain heritage culture while avoiding engagement with host culture</td></tr>
+          <tr><td><strong>Marginalization</strong></td><td>No</td><td>No</td><td>Reject both heritage and host cultures; associated with poorest psychological outcomes</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Research consistently shows that <strong>integration</strong> (biculturalism) is associated with the best mental health outcomes, including lower depression, higher self-esteem, and better social functioning. <strong>Marginalization</strong> is associated with the worst outcomes. When assessing clients from immigrant backgrounds, understanding their acculturation strategy provides critical clinical information.</p>
+        </div>
+
+        <p><span class="key-term">Acculturative stress</span> refers to the psychological strain arising from the acculturation process. It can manifest as anxiety, depression, identity confusion, somatic complaints, and substance use. Risk factors include language barriers, discrimination, loss of social support, and involuntary migration.</p>
+        <p class="citation">Berry, J. W. (2005). Acculturation: Living successfully in two cultures. International Journal of Intercultural Relations, 29(6), 697&ndash;712.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Ethnic Identity Development</h2>
+        <p><span class="key-term">Ethnic identity</span> refers to a person's subjective sense of belonging to an ethnic group, including the feelings, attitudes, and knowledge associated with that membership. It is a developmental process, not a fixed trait.</p>
+
+        <h3>Phinney's Model of Ethnic Identity Development</h3>
+        <p>Jean Phinney proposed a three-stage model of ethnic identity development that applies across ethnic groups. It draws on Erikson's identity theory and Marcia's identity statuses.</p>
+
+        <div class="definition-box">
+          <strong>Phinney's Stages</strong>
+          <p><strong>1. Unexamined Ethnic Identity (Diffusion/Foreclosure):</strong> The individual has not explored their ethnic identity. They may hold internalized stereotypes or show little interest in ethnicity.<br>
+          <strong>2. Ethnic Identity Search (Moratorium):</strong> Triggered by a significant experience (e.g., encountering discrimination), the individual actively explores the meaning and implications of their ethnic group membership.<br>
+          <strong>3. Achieved Ethnic Identity:</strong> The individual has a secure, committed sense of their ethnicity. This does not require in-group bias &mdash; it reflects a confident, internalized understanding of what ethnic membership means to them.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A biracial adolescent in high school (Stage 1) may have never questioned their identity. After experiencing a microaggression in which a peer asks "But what are you really?" they enter Stage 2, reading about their cultural history and connecting with cultural organizations. Over time, they arrive at Stage 3 with a secure, self-defined sense of identity.</p>
+        </div>
+
+        <p>Research indicates that a strong, achieved ethnic identity is associated with higher self-esteem, better academic outcomes, and psychological well-being, particularly for members of minority groups.</p>
+        <p class="citation">Phinney, J. S. (1992). The Multigroup Ethnic Identity Measure: A new scale for use with diverse groups. Journal of Adolescent Research, 7(2), 156&ndash;176.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>The Self Across Cultures</h2>
+        <p>One of the most influential frameworks in cultural psychology distinguishes between <span class="key-term">independent</span> and <span class="key-term">interdependent</span> self-construals, proposed by Hazel Markus and Shinobu Kitayama.</p>
+
+        <div class="definition-box">
+          <strong>Independent vs. Interdependent Self-Construal</strong>
+          <p>The <strong>independent self</strong> views the person as a bounded, autonomous entity defined by internal attributes (traits, abilities, preferences). Prevalent in Western, individualist cultures. The <strong>interdependent self</strong> views the person as fundamentally connected to others, defined by social roles and relationships. Prevalent in East Asian, Latin American, and African collectivist cultures.</p>
+        </div>
+
+        <table>
+          <tr><th>Feature</th><th>Independent Self</th><th>Interdependent Self</th></tr>
+          <tr><td>Core unit</td><td>Individual</td><td>Relationship / Group</td></tr>
+          <tr><td>Self-definition</td><td>Internal attributes</td><td>Social roles, duties</td></tr>
+          <tr><td>Goal</td><td>Self-expression, uniqueness</td><td>Harmony, fitting in</td></tr>
+          <tr><td>Emotional priority</td><td>Ego-focused (pride, anger)</td><td>Other-focused (shame, empathy)</td></tr>
+          <tr><td>Attribution style</td><td>Dispositional</td><td>Situational</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>The Twenty Statements Test ("I am ___") reveals cross-cultural differences: American respondents tend to list personal attributes ("I am creative," "I am ambitious"), while Japanese respondents tend to list social roles and relationships ("I am a daughter," "I am a member of the swim team").</p>
+        </div>
+
+        <p class="citation">Markus, H. R., &amp; Kitayama, S. (1991). Culture and the self: Implications for cognition, emotion, and motivation. Psychological Review, 98(2), 224&ndash;253.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Cultural Values &amp; Worldviews</h2>
+        <p>Beyond Hofstede's dimensions, several other frameworks describe how cultural values shape psychological experience.</p>
+
+        <h3>Schwartz's Value Theory</h3>
+        <p>Shalom Schwartz identified 10 basic human values organized along two bipolar dimensions: <strong>self-enhancement vs. self-transcendence</strong> and <strong>openness to change vs. conservation</strong>. These values are universal in their existence but vary in their relative importance across cultures.</p>
+
+        <h3>Emic vs. Etic Approaches</h3>
+        <div class="definition-box">
+          <strong>Emic &amp; Etic</strong>
+          <p><strong>Etic</strong> approaches study culture from the outside, seeking universal laws that apply across cultures (e.g., Hofstede's dimensions). <strong>Emic</strong> approaches study culture from the inside, seeking to understand phenomena as they are experienced within a particular cultural context. Effective cross-cultural research typically combines both.</p>
+        </div>
+
+        <h3>Intersectionality</h3>
+        <p><span class="key-term">Intersectionality</span>, a term coined by Kimberl&eacute; Crenshaw, recognizes that individuals hold multiple, overlapping social identities (e.g., race, gender, class, sexual orientation, disability) that interact to produce unique experiences of privilege and oppression. A Black woman's experience of discrimination, for example, cannot be understood as the simple sum of racism plus sexism &mdash; the intersection creates qualitatively distinct experiences.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Culturally competent assessment requires understanding clients at the intersection of their identities, not reducing them to a single cultural variable. A clinician should explore how multiple identity dimensions interact to shape the client's presenting problems, coping strategies, and treatment expectations.</p>
+        </div>
+        <p class="citation">Crenshaw, K. (1991). Mapping the margins: Intersectionality, identity politics, and violence against women of color. Stanford Law Review, 43(6), 1241&ndash;1299.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Individualism vs. collectivism</strong> is the most heavily tested cultural dimension &mdash; know examples and psychological implications of each.</li>
+          <li><strong>Berry's acculturation model</strong>: Know all four strategies and that integration is associated with the best outcomes.</li>
+          <li><strong>Phinney's ethnic identity model</strong> parallels Marcia's identity statuses &mdash; the EPPP may present scenarios requiring you to identify the stage.</li>
+          <li><strong>Independent vs. interdependent self-construal</strong> (Markus &amp; Kitayama) affects attribution, emotion, motivation, and self-concept.</li>
+          <li>Know the distinction between <strong>emic</strong> (culture-specific, inside perspective) and <strong>etic</strong> (universal, outside perspective) approaches.</li>
+          <li><strong>Acculturative stress</strong> is a common clinical presentation &mdash; be prepared to identify risk factors and protective factors.</li>
+          <li><strong>Intersectionality</strong> is increasingly tested: understand that cultural identity is multidimensional and interacting.</li>
+          <li>Do not confuse <strong>acculturation</strong> (cultural change from contact) with <strong>enculturation</strong> (socialization into one's own heritage culture).</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Overview</div>
+          </div>
+        </a>
+        <a href="shortcuts.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">The Shortcuts We Take</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

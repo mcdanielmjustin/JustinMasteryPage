@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wechsler & Stanford-Binet | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Wechsler & Stanford-Binet</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link active"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 9</div>
+        <h1>Wechsler & Stanford-Binet</h1>
+        <div class="chapter-meta">
+          <span>WAIS-IV, WISC-V, WPPSI-IV, SB5, index interpretation</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of the Wechsler Scales</h2>
+        <p>The Wechsler intelligence scales are the most widely used individually administered intelligence tests in the world. Developed by David Wechsler beginning in 1939, the scales are based on Wechsler's definition of intelligence as "the aggregate or global capacity of the individual to act purposefully, think rationally, and deal effectively with his environment." The current editions include measures for adults, children, and preschoolers.</p>
+        <div class="definition-box">
+          <strong>Wechsler's Definition:</strong> Intelligence is not a single ability but an aggregate of abilities. Wechsler also emphasized that non-intellective factors (motivation, persistence, emotional regulation) influence intelligent behavior. This holistic view influenced his decision to include both verbal and performance measures.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Wechsler Adult Intelligence Scale - Fourth Edition (WAIS-IV)</h2>
+        <p>The <span class="key-term">WAIS-IV</span> (Wechsler, 2008) is the premier adult intelligence measure for ages 16-90. It yields a Full Scale IQ (FSIQ) and four index scores based on the <span class="key-term">Cattell-Horn-Carroll (CHC)</span> theoretical framework.</p>
+
+        <h3>Four Index Scores</h3>
+        <table>
+          <tr><th>Index</th><th>Abbreviation</th><th>Core Subtests</th><th>Supplemental Subtests</th><th>What It Measures</th></tr>
+          <tr><td>Verbal Comprehension</td><td>VCI</td><td>Similarities, Vocabulary, Information</td><td>Comprehension</td><td>Crystallized intelligence (Gc): verbal reasoning, word knowledge, acquired information</td></tr>
+          <tr><td>Perceptual Reasoning</td><td>PRI</td><td>Block Design, Matrix Reasoning, Visual Puzzles</td><td>Figure Weights, Picture Completion</td><td>Fluid reasoning (Gf) and visual-spatial processing (Gv): nonverbal reasoning, spatial analysis</td></tr>
+          <tr><td>Working Memory</td><td>WMI</td><td>Digit Span, Arithmetic</td><td>Letter-Number Sequencing</td><td>Short-term memory (Gsm): mental manipulation, attention, concentration</td></tr>
+          <tr><td>Processing Speed</td><td>PSI</td><td>Symbol Search, Coding</td><td>Cancellation</td><td>Processing speed (Gs): speed of visual scanning, motor output, and mental processing</td></tr>
+        </table>
+
+        <h3>Subtest Descriptions</h3>
+        <h4>Verbal Comprehension Subtests</h4>
+        <ul>
+          <li><span class="key-term">Similarities:</span> How are two words alike? Measures verbal abstract reasoning and concept formation</li>
+          <li><span class="key-term">Vocabulary:</span> Define words. Measures word knowledge, verbal expression, and crystallized ability</li>
+          <li><span class="key-term">Information:</span> General knowledge questions. Measures breadth of acquired knowledge and long-term memory</li>
+          <li><span class="key-term">Comprehension (supplemental):</span> Social judgment questions. Measures practical reasoning and social knowledge</li>
+        </ul>
+
+        <h4>Perceptual Reasoning Subtests</h4>
+        <ul>
+          <li><span class="key-term">Block Design:</span> Replicate patterns using red-and-white blocks within time limits. Measures visual-spatial analysis, construction, and nonverbal problem-solving. Often considered the best single nonverbal measure of g.</li>
+          <li><span class="key-term">Matrix Reasoning:</span> Select the missing element from a visual pattern. Measures fluid reasoning with minimal motor demands</li>
+          <li><span class="key-term">Visual Puzzles:</span> Identify pieces that combine to form a target design. Measures visual-spatial reasoning</li>
+          <li><span class="key-term">Figure Weights (supplemental):</span> Quantitative fluid reasoning using visual balance scale</li>
+        </ul>
+
+        <h4>Working Memory Subtests</h4>
+        <ul>
+          <li><span class="key-term">Digit Span:</span> Three conditions -- Forward (attention, short-term memory), Backward (working memory, mental manipulation), and Sequencing (working memory, cognitive flexibility)</li>
+          <li><span class="key-term">Arithmetic:</span> Mental math problems. Measures working memory, attention, and numerical reasoning</li>
+        </ul>
+
+        <h4>Processing Speed Subtests</h4>
+        <ul>
+          <li><span class="key-term">Symbol Search:</span> Visual scanning task -- does the target symbol match any in the row? Measures processing speed and visual discrimination</li>
+          <li><span class="key-term">Coding:</span> Transcribe symbol-number pairs using a key. Measures processing speed, visual-motor coordination, and incidental learning</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>EPPP Commonly Tested Subtests:</strong> Block Design is considered the best single nonverbal measure of g. Vocabulary is considered the best single verbal measure of g (and the single best overall predictor of FSIQ). Digit Span is the most commonly used subtest for assessing attention and working memory across clinical settings.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>WAIS-IV Scoring</h2>
+        <ul>
+          <li>Subtest scaled scores: M = 10, SD = 3 (range 1-19)</li>
+          <li>Index scores and FSIQ: M = 100, SD = 15</li>
+          <li>FSIQ is based on the 10 core subtests</li>
+          <li>Significant discrepancies between indices (e.g., VCI-PRI or WMI-PSI) may have clinical significance but must be interpreted in context</li>
+        </ul>
+
+        <h3>General Ability Index (GAI)</h3>
+        <p>The <span class="key-term">GAI</span> is composed of VCI + PRI subtests only, excluding WMI and PSI. It provides an estimate of general intellectual ability that is less influenced by processing speed and working memory. The GAI is useful when:</p>
+        <ul>
+          <li>WMI or PSI scores are significantly lower than VCI/PRI (e.g., in ADHD, TBI, or processing disorders)</li>
+          <li>The clinician wants to estimate cognitive ability without the confound of processing speed deficits</li>
+        </ul>
+
+        <h3>Cognitive Proficiency Index (CPI)</h3>
+        <p>The <span class="key-term">CPI</span> combines WMI + PSI. A significant GAI-CPI discrepancy may indicate that processing efficiency is significantly lower than reasoning ability, which is clinically meaningful in conditions like ADHD, learning disabilities, and neurological impairment.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Wechsler Intelligence Scale for Children - Fifth Edition (WISC-V)</h2>
+        <p>The <span class="key-term">WISC-V</span> (Wechsler, 2014) is the children's version for ages 6-16:11. It expanded from four to <span class="key-term">five index scores</span>:</p>
+
+        <table>
+          <tr><th>Index</th><th>Core Subtests</th><th>CHC Ability</th></tr>
+          <tr><td>Verbal Comprehension (VCI)</td><td>Similarities, Vocabulary</td><td>Gc (Crystallized)</td></tr>
+          <tr><td>Visual Spatial (VSI)</td><td>Block Design, Visual Puzzles</td><td>Gv (Visual Processing)</td></tr>
+          <tr><td>Fluid Reasoning (FRI)</td><td>Matrix Reasoning, Figure Weights</td><td>Gf (Fluid Reasoning)</td></tr>
+          <tr><td>Working Memory (WMI)</td><td>Digit Span, Picture Span</td><td>Gsm (Short-Term Memory)</td></tr>
+          <tr><td>Processing Speed (PSI)</td><td>Coding, Symbol Search</td><td>Gs (Processing Speed)</td></tr>
+        </table>
+
+        <h3>Key Change from WISC-IV to WISC-V</h3>
+        <p>The major structural change was splitting the WISC-IV's Perceptual Reasoning Index into two separate indices: <span class="key-term">Visual Spatial (VSI)</span> and <span class="key-term">Fluid Reasoning (FRI)</span>. This provides better alignment with the CHC model by distinguishing visual-spatial processing (Gv) from fluid reasoning (Gf).</p>
+
+        <div class="example-box">
+          <strong>EPPP Comparison:</strong> WISC-V has 5 primary indices vs. WAIS-IV's 4. The WISC-V separates visual-spatial and fluid reasoning, while the WAIS-IV combines them in the PRI. Also note: the WISC-V includes Picture Span (a visual working memory task) as a core WMI subtest, expanding working memory assessment beyond the auditory-verbal modality.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Wechsler Preschool and Primary Scale of Intelligence - Fourth Edition (WPPSI-IV)</h2>
+        <p>The <span class="key-term">WPPSI-IV</span> (Wechsler, 2012) is designed for children ages 2:6 to 7:7. It has two age bands:</p>
+
+        <h3>Ages 2:6-3:11</h3>
+        <ul>
+          <li>Three index scores: VCI, VSI, and Working Memory</li>
+          <li>Core subtests: Receptive Vocabulary, Information, Block Design, Object Assembly, Picture Memory</li>
+          <li>Shorter and more engaging for very young children</li>
+        </ul>
+
+        <h3>Ages 4:0-7:7</h3>
+        <ul>
+          <li>Five index scores: VCI, VSI, FRI, WMI, PSI</li>
+          <li>Includes Fluid Reasoning subtests (Matrix Reasoning, Picture Concepts)</li>
+          <li>Processing Speed subtests added (Bug Search, Cancellation)</li>
+        </ul>
+
+        <h3>Special Considerations</h3>
+        <ul>
+          <li>Subtests use manipulatives, colorful stimuli, and game-like formats to maintain the attention of young children</li>
+          <li>Administration time is shorter than the WISC-V or WAIS-IV</li>
+          <li>Test-retest reliability is somewhat lower than for older-child and adult versions (due to developmental variability at young ages)</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Stanford-Binet Intelligence Scales, Fifth Edition (SB5)</h2>
+        <p>The <span class="key-term">SB5</span> (Roid, 2003) is the latest revision of the oldest intelligence test in continuous use. Originally developed by Binet and Simon in 1905 (adapted by Terman at Stanford in 1916), the SB5 measures five factors across both verbal and nonverbal domains.</p>
+
+        <h3>Five Factor Structure</h3>
+        <table>
+          <tr><th>Factor</th><th>Nonverbal Subtest</th><th>Verbal Subtest</th><th>CHC Ability</th></tr>
+          <tr><td>Fluid Reasoning</td><td>Nonverbal Fluid Reasoning</td><td>Verbal Fluid Reasoning</td><td>Gf</td></tr>
+          <tr><td>Knowledge</td><td>Nonverbal Knowledge</td><td>Verbal Knowledge</td><td>Gc</td></tr>
+          <tr><td>Quantitative Reasoning</td><td>Nonverbal Quantitative Reasoning</td><td>Verbal Quantitative Reasoning</td><td>Gq</td></tr>
+          <tr><td>Visual-Spatial Processing</td><td>Nonverbal Visual-Spatial</td><td>Verbal Visual-Spatial</td><td>Gv</td></tr>
+          <tr><td>Working Memory</td><td>Nonverbal Working Memory</td><td>Verbal Working Memory</td><td>Gsm</td></tr>
+        </table>
+
+        <h3>Composite Scores</h3>
+        <ul>
+          <li><span class="key-term">Full Scale IQ (FSIQ):</span> Based on all 10 subtests (M = 100, SD = 15)</li>
+          <li><span class="key-term">Nonverbal IQ (NVIQ):</span> Based on the 5 nonverbal subtests</li>
+          <li><span class="key-term">Verbal IQ (VIQ):</span> Based on the 5 verbal subtests</li>
+          <li>Five Factor Index scores (one for each factor)</li>
+        </ul>
+
+        <h3>Routing Procedure</h3>
+        <p>The SB5 uses a unique <span class="key-term">routing procedure</span> to establish the appropriate starting point for each subtest. Two routing subtests are administered first:</p>
+        <ul>
+          <li><span class="key-term">Nonverbal Fluid Reasoning</span> (first nonverbal routing subtest)</li>
+          <li><span class="key-term">Vocabulary</span> (first verbal routing subtest)</li>
+        </ul>
+        <p>These routing subtests determine the functional level (starting item set) for the remaining subtests, ensuring that the examinee is tested at an appropriate difficulty level and reducing floor/ceiling effects.</p>
+
+        <h3>SB5 vs. Wechsler Scales</h3>
+        <ul>
+          <li>The SB5 has a broader age range (2-85+) than any single Wechsler scale</li>
+          <li>The SB5 measures each factor in both verbal and nonverbal domains (the Wechsler scales do not systematically do this)</li>
+          <li>The SB5 uses a routing procedure; the Wechsler scales use age-based starting points</li>
+          <li>The SB5 has a wider score range (extended IQ from 40 to 160), which is useful at the extremes</li>
+          <li>The Wechsler scales generally have more subtests and offer more detailed clinical information within each domain</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Historical Note:</strong> The original Stanford-Binet introduced the concept of the <span class="key-term">Intelligence Quotient (IQ)</span>, originally computed as Mental Age / Chronological Age x 100 (the ratio IQ). Modern intelligence tests, including the SB5 and Wechsler scales, use deviation IQ scores (M = 100, SD = 15) rather than ratio IQs. The deviation IQ was introduced by Wechsler and later adopted by the Stanford-Binet.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>IQ Classification System</h2>
+        <p>The WAIS-IV, WISC-V, and SB5 all use M = 100, SD = 15. The following classification system is commonly used:</p>
+        <table>
+          <tr><th>IQ Range</th><th>Classification</th><th>Percentile Range</th><th>Prevalence</th></tr>
+          <tr><td>130+</td><td>Very Superior / Extremely High</td><td>98th+</td><td>~2.2%</td></tr>
+          <tr><td>120-129</td><td>Superior / Very High</td><td>91st-97th</td><td>~6.7%</td></tr>
+          <tr><td>110-119</td><td>High Average</td><td>75th-90th</td><td>~16.1%</td></tr>
+          <tr><td>90-109</td><td>Average</td><td>25th-74th</td><td>~50%</td></tr>
+          <tr><td>80-89</td><td>Low Average</td><td>9th-24th</td><td>~16.1%</td></tr>
+          <tr><td>70-79</td><td>Borderline</td><td>2nd-8th</td><td>~6.7%</td></tr>
+          <tr><td>69 and below</td><td>Extremely Low / Intellectual Disability range</td><td>Below 2nd</td><td>~2.2%</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> A diagnosis of intellectual disability requires: (1) significantly subaverage intellectual functioning (typically IQ ~70 or below), (2) concurrent deficits in adaptive functioning, and (3) onset during the developmental period (before age 18). An IQ score alone is never sufficient for the diagnosis.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Flynn Effect</h2>
+        <p>The <span class="key-term">Flynn Effect</span> (Flynn, 1984, 1987) refers to the well-documented finding that IQ scores have been rising approximately 3 points per decade across populations over the past century. Key implications:</p>
+        <ul>
+          <li>When a new edition of a test is normed, the normative sample performs better than the previous edition's sample, resulting in slightly lower scores on the new edition</li>
+          <li>Using an outdated test version can inflate IQ scores by approximately 3 points per decade since the norms were established</li>
+          <li>The Flynn Effect is larger for fluid intelligence measures (~5 points/decade) than for crystallized measures (~2 points/decade)</li>
+          <li>This has significant forensic implications, particularly in Atkins v. Virginia (2002) intellectual disability death penalty cases, where the version of the test used can affect whether an individual falls above or below the IQ 70 cutoff</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Application:</strong> If a person was tested with the WAIS-III (normed in 1997) and obtained an FSIQ of 73, retesting with the WAIS-IV (normed in 2008) might yield an FSIQ of approximately 70 due to the Flynn Effect. This difference can have legal consequences in intellectual disability determinations.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Factor Structure and CHC Theory</h2>
+        <p>Modern intelligence tests are organized around the <span class="key-term">Cattell-Horn-Carroll (CHC) theory</span>, which integrates Cattell and Horn's Gf-Gc theory with Carroll's three-stratum model:</p>
+        <ul>
+          <li><strong>Stratum III:</strong> General intelligence (g)</li>
+          <li><strong>Stratum II:</strong> Broad abilities -- Gf (Fluid Reasoning), Gc (Crystallized Ability), Gv (Visual Processing), Gsm (Short-Term Memory), Gs (Processing Speed), Glr (Long-Term Retrieval), Ga (Auditory Processing), Gq (Quantitative Knowledge), and others</li>
+          <li><strong>Stratum I:</strong> Narrow abilities (specific skills measured by individual subtests)</li>
+        </ul>
+
+        <h3>Gf vs. Gc</h3>
+        <ul>
+          <li><span class="key-term">Fluid Intelligence (Gf):</span> The ability to reason, solve novel problems, and identify patterns without relying on previously acquired knowledge. Largely biologically determined. Peaks in young adulthood and declines with age.</li>
+          <li><span class="key-term">Crystallized Intelligence (Gc):</span> Accumulated knowledge, vocabulary, and skills acquired through education and experience. Largely culturally and educationally influenced. Continues to grow throughout the lifespan (or at least remains stable into late life).</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Aging Pattern:</strong> Gf declines with age (particularly after age 60-70), while Gc remains stable or increases through middle and later adulthood. This produces the "classic aging pattern" on the Wechsler scales: relatively preserved VCI with declining PSI and WMI scores. Processing speed (Gs) shows the earliest and most pronounced age-related decline.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Summary</h2>
+        <div class="definition-box">
+          <strong>WAIS-IV:</strong> Ages 16-90. Four indices (VCI, PRI, WMI, PSI) + FSIQ. Subtest M = 10, SD = 3. Index/FSIQ M = 100, SD = 15. GAI = VCI + PRI (excludes working memory and speed).
+        </div>
+        <div class="definition-box">
+          <strong>WISC-V:</strong> Ages 6-16. Five indices (VCI, VSI, FRI, WMI, PSI). Separates Visual Spatial from Fluid Reasoning. Includes Picture Span for visual working memory.
+        </div>
+        <div class="definition-box">
+          <strong>SB5:</strong> Ages 2-85+. Five factors, each measured verbally and nonverbally. Uses routing procedure. Wider score range (40-160). Introduced the original IQ concept (ratio IQ, now replaced by deviation IQ).
+        </div>
+        <div class="definition-box">
+          <strong>Flynn Effect:</strong> ~3 IQ points per decade increase. Using outdated norms inflates scores. Forensically significant (Atkins v. Virginia). Larger for Gf than Gc.
+        </div>
+        <div class="definition-box">
+          <strong>Classic aging pattern:</strong> Gf and Gs decline with age; Gc remains stable or increases. On WAIS-IV: VCI preserved, PSI declines most.
+        </div>
+        <p class="citation">References: Wechsler (2008). WAIS-IV Manual. Wechsler (2014). WISC-V Manual. Roid (2003). SB5 Manual. Flynn (1987). Massive IQ gains. McGrew (2009). CHC theory and the human cognitive abilities project.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+        </a>
+        <a href="cognitive-measures.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Other Cognitive Measures</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

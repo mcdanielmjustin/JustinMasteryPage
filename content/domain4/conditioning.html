@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through Conditioning | Domain 4 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #22c55e; --accent-dim: rgba(34, 197, 94, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 4</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Through Conditioning</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 4</div>
+        <div class="domain-title">How Therapy Works</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="insight.html" class="chapter-link"><span class="chapter-number">1</span>Through the Unconscious</a></li>
+        <li class="chapter-item"><a href="cognition.html" class="chapter-link"><span class="chapter-number">2</span>Through Thoughts</a></li>
+        <li class="chapter-item"><a href="conditioning.html" class="chapter-link active"><span class="chapter-number">3</span>Through Conditioning</a></li>
+        <li class="chapter-item"><a href="acceptance.html" class="chapter-link"><span class="chapter-number">4</span>Through Acceptance</a></li>
+        <li class="chapter-item"><a href="relationship.html" class="chapter-link"><span class="chapter-number">5</span>Through the Relationship</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">6</span>Through Motivation</a></li>
+        <li class="chapter-item"><a href="systems.html" class="chapter-link"><span class="chapter-number">7</span>Through the System</a></li>
+        <li class="chapter-item"><a href="evidence.html" class="chapter-link"><span class="chapter-number">8</span>Through Evidence</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 8</div>
+        <h1>Through Conditioning</h1>
+        <div class="chapter-meta">
+          <span>Learning-based behavioral interventions</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 4)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 4)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- ===== CLASSICAL CONDITIONING CONTENT ===== -->
+
+      <section class="content-section">
+        <h2>Systematic Desensitization</h2>
+        <p><span class="key-term">Systematic desensitization</span> was developed by <span class="key-term">Joseph Wolpe</span> in the 1950s and is based on the principle of <span class="key-term">reciprocal inhibition</span> -- the idea that an anxiety response can be inhibited by a simultaneously occurring response that is incompatible with anxiety (typically deep muscle relaxation). It is one of the earliest and most well-researched behavioral interventions for phobias and anxiety disorders.</p>
+
+        <div class="definition-box">
+          <h4>Reciprocal Inhibition</h4>
+          <p>Wolpe's principle of reciprocal inhibition states: "If a response inhibitory of anxiety can be made to occur in the presence of anxiety-evoking stimuli, it will weaken the bond between these stimuli and the anxiety response." Relaxation and anxiety are mutually exclusive autonomic nervous system states -- one cannot be deeply relaxed and intensely anxious at the same time.</p>
+        </div>
+
+        <h3>Three Steps of Systematic Desensitization</h3>
+        <ol>
+          <li><strong>Relaxation training</strong> -- The client is taught <span class="key-term">progressive muscle relaxation (PMR)</span>, originally developed by Edmund Jacobson. The client learns to systematically tense and release muscle groups, achieving a state of deep physical relaxation.</li>
+          <li><strong>Construction of an anxiety hierarchy</strong> -- The client and therapist collaboratively create a graded list of anxiety-provoking situations related to the feared stimulus, ranked from least to most anxiety-provoking using <span class="key-term">Subjective Units of Distress (SUDs)</span> on a 0-100 scale.</li>
+          <li><strong>Pairing relaxation with hierarchy items</strong> -- Beginning with the lowest item, the client imagines the scene while maintaining relaxation. Only when anxiety is no longer evoked at one level does the client progress to the next. If anxiety emerges, the client returns to relaxation before attempting the item again.</li>
+        </ol>
+
+        <div class="example-box">
+          <h4>Anxiety Hierarchy Example: Fear of Dogs</h4>
+          <p>SUD 10: Looking at a photo of a small puppy. SUD 25: Seeing a dog on a leash across the street. SUD 40: Being in the same room as a small, calm dog on a leash. SUD 55: Standing 5 feet from a medium-sized dog. SUD 70: A dog walking past within arm's reach. SUD 85: Touching a calm dog briefly. SUD 100: A large unfamiliar dog approaching off-leash.</p>
+        </div>
+
+        <h3>In Vivo vs. Imaginal Desensitization</h3>
+        <p><span class="key-term">In vivo desensitization</span> involves real-life exposure to the feared stimuli (e.g., actually approaching a dog). <span class="key-term">Imaginal desensitization</span> uses mental imagery. Research generally shows that in vivo desensitization is more effective, but imaginal methods are useful when in vivo exposure is impractical (e.g., fear of flying, fear of storms). Virtual reality exposure therapy combines elements of both approaches.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Flooding and Implosive Therapy</h2>
+        <p>In contrast to the gradual approach of systematic desensitization, <span class="key-term">flooding</span> involves prolonged, intense exposure to the most anxiety-provoking stimulus without relaxation. The theoretical basis is <span class="key-term">extinction</span>: sustained exposure in the absence of the feared consequence leads to a reduction in the conditioned anxiety response.</p>
+
+        <div class="definition-box">
+          <h4>Flooding vs. Implosive Therapy</h4>
+          <p><strong>Flooding</strong> involves exposure to the actual feared stimulus (in vivo) or vivid imaginal presentation at full intensity. <strong>Implosive therapy</strong>, developed by <span class="key-term">Thomas Stampfl</span>, is an imaginal technique that incorporates psychodynamic themes (e.g., guilt, aggression, sexual content) into the anxiety scenes, often exaggerating the stimulus beyond realistic proportions to maximize anxiety arousal and subsequent extinction.</p>
+        </div>
+
+        <h3>Mechanism of Action</h3>
+        <p>During flooding, the client's anxiety rises dramatically. However, because the feared catastrophic outcome does not occur and because the autonomic nervous system cannot sustain peak arousal indefinitely, anxiety eventually habituates. This process, called <span class="key-term">within-session habituation</span>, is followed by <span class="key-term">between-session habituation</span> across multiple sessions. The key requirement is that the client remain in the anxiety-provoking situation long enough for the anxiety to diminish -- premature escape can actually reinforce the fear through negative reinforcement.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Caution</h4>
+          <p>Flooding carries a risk of <span class="key-term">sensitization</span> -- if the exposure session is terminated before habituation occurs, the anxiety may actually increase. This makes flooding potentially iatrogenic if not conducted properly. Clients must be fully informed and consent to the procedure, and therapists must ensure sessions are long enough (typically 60-90 minutes) for habituation to occur. Flooding is contraindicated for some clients, including those with serious cardiac conditions or fragile psychological states.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Exposure and Response Prevention (ERP)</h2>
+        <p><span class="key-term">Exposure and Response Prevention</span> is the gold standard behavioral treatment for <span class="key-term">obsessive-compulsive disorder (OCD)</span>. Developed by <span class="key-term">Victor Meyer</span> and later systematized by <span class="key-term">Edna Foa</span>, ERP combines exposure to obsession-triggering stimuli with prevention of the compulsive rituals that normally follow.</p>
+
+        <h3>Two Components</h3>
+        <ul>
+          <li><strong>Exposure</strong> -- Systematic, prolonged contact with situations, objects, or thoughts that trigger obsessional distress (e.g., touching a "contaminated" doorknob for a person with contamination obsessions)</li>
+          <li><strong>Response prevention</strong> -- Refraining from performing the compulsive behavior that typically follows the obsession (e.g., not washing hands after touching the doorknob)</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Why Both Components Are Necessary</h4>
+          <p>Exposure alone activates the obsessional anxiety, but without response prevention, the compulsion reduces anxiety through negative reinforcement, maintaining the OCD cycle. Response prevention alone does not provide sufficient exposure to trigger and extinguish the conditioned anxiety. Together, they allow the anxiety to habituate without the maladaptive compulsive relief, breaking the obsession-compulsion cycle.</p>
+        </div>
+
+        <div class="citation">Foa, E. B., &amp; Kozak, M. J. (1986). Emotional processing of fear: Exposure to corrective information. <em>Psychological Bulletin, 99</em>(1), 20-35.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Aversion Therapy</h2>
+        <p><span class="key-term">Aversion therapy</span> uses classical conditioning principles to reduce the attractiveness of a stimulus by pairing it with an aversive experience. The goal is to create a conditioned aversion to a previously desired stimulus, such as alcohol, cigarettes, or deviant sexual arousal.</p>
+
+        <h3>Types of Aversive Stimuli</h3>
+        <table>
+          <tr><th>Type</th><th>Method</th><th>Application</th></tr>
+          <tr><td><strong>Chemical aversion</strong></td><td>Pairing the target stimulus with a nausea-inducing agent (e.g., emetine, Antabuse/disulfiram)</td><td>Alcohol use disorder -- drinking paired with vomiting</td></tr>
+          <tr><td><strong>Electrical aversion</strong></td><td>Pairing the target stimulus with mild electric shock</td><td>Historically used for various unwanted behaviors</td></tr>
+          <tr><td><strong>Covert sensitization</strong></td><td>Imagining the target behavior paired with imagined aversive consequences</td><td>Clients imagine engaging in the behavior followed by nausea, embarrassment, or other aversive outcomes</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Covert Sensitization</h4>
+          <p>Developed by <span class="key-term">Joseph Cautela</span>, <span class="key-term">covert sensitization</span> is a purely imaginal form of aversion therapy. The client imagines approaching the target behavior (e.g., reaching for a drink) and then vividly imagines an aversive consequence (e.g., becoming violently ill). Relief is imagined when the client turns away from the behavior. This is considered more ethically acceptable than physical aversion methods and is entirely "covert" (occurring in the imagination).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Counterconditioning</h2>
+        <p><span class="key-term">Counterconditioning</span> is the general principle underlying many classical conditioning treatments. It involves replacing a conditioned response (e.g., fear) with a new, incompatible response (e.g., relaxation) to the same stimulus. Systematic desensitization is the most well-known application of counterconditioning.</p>
+
+        <h3>Related Techniques</h3>
+        <ul>
+          <li><span class="key-term">Stimulus control</span> -- Modifying the environment to alter the cues that trigger maladaptive behavior (e.g., only eating at the dining table to reduce snacking)</li>
+          <li><span class="key-term">Conditioned inhibition</span> -- Presenting the CS without the UCS repeatedly to weaken the conditioned association (basic extinction)</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Inhibitory Learning Model of Exposure</h2>
+        <p>Recent theoretical developments have proposed the <span class="key-term">inhibitory learning model</span> (Craske et al., 2014) as an alternative to the traditional habituation model for understanding how exposure therapy works. Rather than viewing anxiety reduction within a session as the key mechanism, the inhibitory learning model proposes that exposure creates a new, competing association (CS-no US) that inhibits, but does not erase, the original fear association (CS-US).</p>
+
+        <h3>Implications for Exposure Practice</h3>
+        <ul>
+          <li><strong>Expectancy violation</strong> -- The goal of each exposure trial is to maximally violate the client's specific threat expectancy, not simply to reduce SUDs</li>
+          <li><strong>Variability</strong> -- Conducting exposure across varied stimuli, contexts, durations, and intensities strengthens the inhibitory association and promotes generalization</li>
+          <li><strong>Deepened extinction</strong> -- Combining multiple feared cues during exposure (e.g., exposure to heights AND enclosed spaces together) produces stronger learning</li>
+          <li><strong>Occasional reinforced extinction</strong> -- Intermittently including the feared outcome during exposure may paradoxically strengthen long-term extinction</li>
+          <li><strong>Removal of safety signals</strong> -- Safety behaviors (e.g., carrying a water bottle "in case of panic") should be gradually removed, as they prevent full inhibitory learning</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Habituation vs. Inhibitory Learning</h4>
+          <p>Under the traditional <strong>habituation model</strong>, successful exposure is marked by within-session and between-session fear reduction. Under the <strong>inhibitory learning model</strong>, fear reduction during a session is neither necessary nor sufficient for learning. What matters is whether the client's feared prediction was violated. This has shifted clinical practice: therapists now focus on designing exposures that maximally disconfirm threat beliefs, rather than simply waiting for SUDs to decline.</p>
+        </div>
+
+        <div class="citation">Craske, M. G., Treanor, M., Conway, C. C., Zbozinek, T., &amp; Vervliet, B. (2014). Maximizing exposure therapy: An inhibitory learning approach. <em>Behaviour Research and Therapy, 58</em>, 10-23.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Applied Relaxation and Biofeedback</h2>
+        <h3>Applied Relaxation</h3>
+        <p><span class="key-term">Applied relaxation</span>, developed by <span class="key-term">Lars-Goran Ost</span>, teaches clients to rapidly apply relaxation skills in anxiety-provoking situations. The training progresses through stages: (1) progressive muscle relaxation, (2) release-only relaxation (without initial tension), (3) cue-controlled relaxation (pairing relaxation with a cue word), (4) differential relaxation (relaxing in various postures), and (5) rapid relaxation (achieving relaxation in 20-30 seconds). The final stage involves application in real-world anxiety situations.</p>
+
+        <h3>Biofeedback</h3>
+        <p><span class="key-term">Biofeedback</span> uses electronic instruments to provide real-time information about physiological processes (e.g., muscle tension via EMG, skin temperature, heart rate, EEG brain waves). By observing these signals, clients learn to gain voluntary control over typically automatic physiological functions. Common applications include tension headaches (EMG biofeedback of frontalis muscle), Raynaud's disease (thermal biofeedback), and anxiety disorders. <span class="key-term">Neurofeedback</span> (EEG biofeedback) has been applied to ADHD, though its evidence base remains debated.</p>
+
+        <div class="example-box">
+          <h4>Biofeedback for Tension Headache</h4>
+          <p>A client with chronic tension headaches is connected to an EMG sensor on the frontalis (forehead) muscle. The machine emits a tone that gets louder as muscle tension increases and quieter as it decreases. Through repeated sessions, the client learns to recognize and reduce excessive muscle tension, eventually gaining the ability to relax the frontalis muscle without the feedback device. This operant learning process (using biofeedback signals as reinforcement) is layered onto classical conditioning-based relaxation.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Comparing Classical Conditioning Treatments</h2>
+        <table>
+          <tr><th>Technique</th><th>Mechanism</th><th>Approach</th><th>Primary Use</th></tr>
+          <tr><td>Systematic desensitization</td><td>Reciprocal inhibition / counterconditioning</td><td>Gradual, paired with relaxation</td><td>Phobias, anxiety</td></tr>
+          <tr><td>Flooding</td><td>Extinction via habituation</td><td>Intense, prolonged in vivo exposure</td><td>Phobias, PTSD</td></tr>
+          <tr><td>Implosive therapy</td><td>Extinction (with psychodynamic elements)</td><td>Intense imaginal exposure</td><td>Phobias, anxiety</td></tr>
+          <tr><td>ERP</td><td>Extinction of obsessional anxiety</td><td>Exposure + ritual prevention</td><td>OCD (gold standard)</td></tr>
+          <tr><td>Aversion therapy</td><td>Classical aversive conditioning</td><td>Pairing desired stimulus with aversive UCS</td><td>Substance use, paraphilias</td></tr>
+          <tr><td>Covert sensitization</td><td>Imaginal aversive conditioning</td><td>Imagined behavior + imagined aversion</td><td>Substance use, unwanted urges</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Eye Movement Desensitization and Reprocessing (EMDR)</h2>
+        <p><span class="key-term">EMDR</span> was developed by <span class="key-term">Francine Shapiro</span> in 1987 as a treatment for trauma and PTSD. While its theoretical basis is debated and it does not fit neatly into classical conditioning, it shares exposure-based elements and is frequently tested on the EPPP alongside classical conditioning treatments.</p>
+
+        <h3>Eight Phases of EMDR</h3>
+        <ol>
+          <li><strong>History taking and treatment planning</strong></li>
+          <li><strong>Preparation</strong> -- Teaching coping skills, establishing safety</li>
+          <li><strong>Assessment</strong> -- Identifying the target memory, negative cognition, desired positive cognition, and baseline SUDs</li>
+          <li><strong>Desensitization</strong> -- Client focuses on the traumatic memory while engaging in bilateral stimulation (typically eye movements, but may include tapping or auditory tones)</li>
+          <li><strong>Installation</strong> -- Strengthening the desired positive cognition</li>
+          <li><strong>Body scan</strong> -- Checking for residual physical tension</li>
+          <li><strong>Closure</strong> -- Returning to equilibrium</li>
+          <li><strong>Reevaluation</strong> -- Assessing treatment effects at the next session</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>The EMDR Controversy</h4>
+          <p>EMDR has generated significant debate. Proponents point to RCT evidence showing it is effective for PTSD (it is listed as an evidence-based treatment by the VA/DoD and WHO). Critics argue that the eye movement component is not the active ingredient -- component analyses suggest that EMDR without the eye movements works equally well, and that the effective component is likely the prolonged exposure to the traumatic memory (i.e., standard extinction/habituation). For the EPPP, know that EMDR is evidence-based for PTSD, but the mechanism of the bilateral stimulation remains debated.</p>
+        </div>
+      </section>
+
+      <!-- ===== OPERANT CONDITIONING CONTENT ===== -->
+
+      <section class="content-section">
+        <h2>Operant Conditioning Review</h2>
+        <p>Operant conditioning treatments are based on <span class="key-term">B.F. Skinner's</span> principles of learning, in which behavior is shaped by its consequences. Unlike classical conditioning (which pairs stimuli), operant procedures modify behavior by manipulating the <span class="key-term">antecedents</span> (what comes before the behavior) and <span class="key-term">consequences</span> (what follows the behavior).</p>
+
+        <div class="definition-box">
+          <h4>Four Consequences of Behavior</h4>
+          <p><strong>Positive reinforcement</strong> -- Adding a desirable stimulus to increase behavior. <strong>Negative reinforcement</strong> -- Removing an aversive stimulus to increase behavior. <strong>Positive punishment</strong> -- Adding an aversive stimulus to decrease behavior. <strong>Negative punishment</strong> -- Removing a desirable stimulus to decrease behavior. Remember: "positive" and "negative" refer to adding or removing, not to whether the experience is good or bad.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Token Economies</h2>
+        <p>A <span class="key-term">token economy</span> is a systematic reinforcement program in which individuals earn tokens (conditioned/secondary reinforcers) for performing specified target behaviors. Tokens can later be exchanged for backup reinforcers (items, privileges, activities). Token economies are used extensively in institutional settings such as psychiatric hospitals, schools, and residential treatment facilities.</p>
+
+        <h3>Key Components</h3>
+        <ul>
+          <li><strong>Target behaviors</strong> -- Clearly defined, observable behaviors to be increased (e.g., attending group therapy, completing hygiene routines, completing homework)</li>
+          <li><strong>Tokens</strong> -- Generalized conditioned reinforcers (e.g., points, chips, stickers, play money) that bridge the gap between the behavior and the ultimate reward</li>
+          <li><strong>Backup reinforcers</strong> -- The actual desired items or privileges purchased with tokens (e.g., extra free time, snacks, outings)</li>
+          <li><strong>Exchange rate</strong> -- A clear system specifying how many tokens each behavior earns and how many tokens each backup reinforcer costs</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Clinical Example</h4>
+          <p>On an inpatient psychiatric unit, patients earn tokens for attending group therapy (5 tokens), making their bed (2 tokens), and completing medication rounds on time (3 tokens). Tokens can be exchanged for TV time (10 tokens), a phone call (15 tokens), or an off-unit outing (50 tokens). A posted menu makes the system transparent and predictable.</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Advantages and Limitations</h4>
+          <p>Token economies are effective because they provide <strong>immediate reinforcement</strong> for desired behavior and bridge the delay to larger rewards. However, concerns include: (1) difficulty with <span class="key-term">generalization</span> -- behaviors may not transfer outside the token economy setting; (2) ethical issues regarding the use of reinforcement programs with captive populations; and (3) the need for consistent staff training and implementation fidelity.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Contingency Management</h2>
+        <p><span class="key-term">Contingency management (CM)</span> refers to the systematic application of reinforcement contingencies to increase desired behavior or decrease undesired behavior. In clinical settings, CM has been particularly effective for <span class="key-term">substance use disorders</span>.</p>
+
+        <h3>Voucher-Based Reinforcement</h3>
+        <p>In the <span class="key-term">voucher-based reinforcement</span> approach (developed by Stephen Higgins for cocaine dependence), patients earn vouchers with monetary value for each drug-negative urine sample. Voucher values escalate with consecutive negative samples, providing an increasing incentive for sustained abstinence. A positive sample resets the voucher value to baseline.</p>
+
+        <h3>Contingency Contracts</h3>
+        <p>A <span class="key-term">contingency contract</span> (or behavioral contract) is a written agreement between two or more parties specifying: (1) the target behavior, (2) the reinforcement contingencies (rewards for compliance, consequences for non-compliance), and (3) the monitoring method. Contracts are used in family therapy, couples therapy, schools, and substance abuse treatment.</p>
+
+        <div class="definition-box">
+          <h4>Quid Pro Quo vs. Good Faith Contracts</h4>
+          <p>In couples therapy, a <strong>quid pro quo contract</strong> links one partner's behavior change to the other's ("If you do X, I'll do Y"). A <strong>good faith contract</strong> provides reinforcement for each partner's behavior change independent of the other's ("If you do X, you earn Y, regardless of what your partner does"). Good faith contracts are generally preferred because they avoid creating a "hostage" dynamic.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Behavioral Activation</h2>
+        <p><span class="key-term">Behavioral activation (BA)</span> is an operant treatment for depression based on the behavioral model that depression is maintained by a cycle of avoidance and withdrawal that reduces access to positive reinforcement. As the depressed person withdraws from activities, they experience fewer rewarding interactions, which worsens depression, leading to further withdrawal.</p>
+
+        <h3>Core Procedures</h3>
+        <ul>
+          <li><strong>Activity monitoring</strong> -- Tracking daily activities and associated mood to identify patterns of avoidance and engagement</li>
+          <li><strong>Activity scheduling</strong> -- Systematically planning and engaging in activities that are likely to produce positive reinforcement, even when the person does not feel motivated</li>
+          <li><strong>Graded task assignment</strong> -- Breaking overwhelming tasks into small, manageable steps to build mastery and reduce avoidance</li>
+          <li><strong>Values-based activation</strong> -- Linking activities to the client's personal values to enhance intrinsic motivation</li>
+        </ul>
+
+        <div class="citation">Jacobson, N. S., Martell, C. R., &amp; Dimidjian, S. (2001). Behavioral activation treatment for depression: Returning to contextual roots. <em>Clinical Psychology: Science and Practice, 8</em>(3), 255-270.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Shaping and Chaining</h2>
+        <h3>Shaping (Successive Approximations)</h3>
+        <p><span class="key-term">Shaping</span> involves reinforcing successive approximations of a target behavior that is not currently in the individual's repertoire. Rather than waiting for the final behavior to occur, the therapist reinforces behaviors that increasingly resemble the goal.</p>
+
+        <div class="example-box">
+          <h4>Shaping Example</h4>
+          <p>Teaching a nonverbal child with autism to request items verbally: First, reinforce any vocalization. Then reinforce only sounds approximating the target word. Then reinforce only recognizable words. Then reinforce only complete requests ("I want juice, please"). Each step requires a closer approximation before reinforcement is delivered.</p>
+        </div>
+
+        <h3>Chaining</h3>
+        <p><span class="key-term">Chaining</span> is used to teach complex behaviors that consist of a sequence of discrete steps. Each step serves as a <span class="key-term">discriminative stimulus (SD)</span> for the next step and a conditioned reinforcer for the previous step.</p>
+        <table>
+          <tr><th>Type</th><th>Description</th><th>When Used</th></tr>
+          <tr><td><strong>Forward chaining</strong></td><td>Teaching the first step first; the learner completes step 1, then the therapist assists with the rest</td><td>When the first step is easiest or most motivating</td></tr>
+          <tr><td><strong>Backward chaining</strong></td><td>Teaching the last step first; the therapist completes all steps except the last, which the learner does</td><td>When the last step is most reinforcing (e.g., eating the food after cooking)</td></tr>
+          <tr><td><strong>Total task presentation</strong></td><td>Teaching all steps simultaneously with prompts at each step</td><td>When the learner can approximate the entire sequence</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Differential Reinforcement</h2>
+        <p><span class="key-term">Differential reinforcement</span> procedures are used to decrease undesirable behaviors without using punishment, by selectively reinforcing alternative or incompatible behaviors:</p>
+        <table>
+          <tr><th>Procedure</th><th>Abbreviation</th><th>Method</th><th>Example</th></tr>
+          <tr><td><strong>Differential Reinforcement of Other behavior</strong></td><td>DRO</td><td>Reinforce the absence of the target behavior for a specified time interval</td><td>A child earns a sticker for every 15 minutes without hitting</td></tr>
+          <tr><td><strong>Differential Reinforcement of Alternative behavior</strong></td><td>DRA</td><td>Reinforce a specific desirable behavior that replaces the problem behavior</td><td>Reinforcing hand-raising instead of calling out</td></tr>
+          <tr><td><strong>Differential Reinforcement of Incompatible behavior</strong></td><td>DRI</td><td>Reinforce a behavior that is physically incompatible with the problem behavior</td><td>Reinforcing sitting in one's seat (incompatible with wandering)</td></tr>
+          <tr><td><strong>Differential Reinforcement of Low rates</strong></td><td>DRL</td><td>Reinforce the target behavior only when it occurs at or below a specified rate</td><td>Reinforce a talkative student for asking only 3 or fewer questions per class</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>The Premack Principle</h2>
+        <p>The <span class="key-term">Premack Principle</span> (also known as "Grandma's Rule") states that a high-probability behavior can be used to reinforce a low-probability behavior. Formally: access to a more preferred activity is contingent upon completing a less preferred activity.</p>
+
+        <div class="example-box">
+          <h4>Premack Principle Examples</h4>
+          <p>"You can play video games (high-probability behavior) after you finish your homework (low-probability behavior)." / "You can go to recess after completing the math worksheet." The more preferred activity serves as the reinforcer for the less preferred activity. This is one of the most intuitive and widely used behavioral principles in everyday life.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Extinction and Extinction Burst</h2>
+        <p><span class="key-term">Extinction</span> in operant conditioning involves withholding reinforcement for a previously reinforced behavior. When reinforcement is discontinued, the behavior will eventually decrease. However, the initial effect is often an <span class="key-term">extinction burst</span> -- a temporary increase in the frequency, intensity, or variability of the behavior before it declines.</p>
+
+        <div class="definition-box">
+          <h4>Extinction Burst</h4>
+          <p>When a behavior that previously "worked" (was reinforced) no longer produces the expected consequence, the organism initially tries harder. A child who previously received attention for tantrums may throw a more intense tantrum when the parents first begin ignoring the behavior. Understanding the extinction burst is critical -- if the caregiver gives in during the burst, they inadvertently reinforce a more intense version of the behavior through <span class="key-term">intermittent reinforcement</span>, making it even more resistant to extinction.</p>
+        </div>
+
+        <h3>Spontaneous Recovery</h3>
+        <p>After extinction, the behavior may temporarily reappear after a period of time -- a phenomenon called <span class="key-term">spontaneous recovery</span>. This does not mean extinction has failed; continued non-reinforcement will lead to re-extinction. Clinicians must educate caregivers and staff about both extinction bursts and spontaneous recovery to prevent premature abandonment of the intervention.</p>
+
+        <h3>Schedule Effects on Extinction</h3>
+        <p>Behaviors maintained on <span class="key-term">continuous reinforcement (CRF)</span> schedules extinguish more quickly than those on <span class="key-term">intermittent (partial) reinforcement</span> schedules. This is known as the <span class="key-term">partial reinforcement extinction effect (PREE)</span>. Clinically, this means that behaviors which have been intermittently reinforced (e.g., a child who sometimes gets what they want by whining) will be harder to extinguish and will show more pronounced extinction bursts.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Functional Behavior Assessment (FBA)</h2>
+        <p>Before implementing any operant intervention, best practice requires conducting a <span class="key-term">functional behavior assessment (FBA)</span> to identify the function (purpose) of the problem behavior. The four primary functions of behavior are:</p>
+        <ul>
+          <li><strong>Attention</strong> -- The behavior is maintained by social attention (positive reinforcement)</li>
+          <li><strong>Escape/avoidance</strong> -- The behavior is maintained by removal of aversive demands (negative reinforcement)</li>
+          <li><strong>Access to tangibles</strong> -- The behavior produces access to preferred items or activities (positive reinforcement)</li>
+          <li><strong>Automatic/sensory</strong> -- The behavior itself produces sensory reinforcement independent of social consequences</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Function-Based Intervention</h4>
+          <p>The function of the behavior determines the appropriate intervention. For example, if a child's tantrums are maintained by attention (positive reinforcement), the intervention would involve extinction (planned ignoring) combined with DRA (reinforcing appropriate communication). If the same topography of tantrum behavior is maintained by escape from demands (negative reinforcement), planned ignoring alone would be ineffective -- instead, escape extinction (not allowing the child to avoid the task) combined with teaching appropriate break-requesting would be indicated. The same behavior can serve different functions for different individuals.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Additional Operant Procedures</h2>
+        <h3>Time-Out from Positive Reinforcement</h3>
+        <p><span class="key-term">Time-out</span> is a form of <span class="key-term">negative punishment</span> -- it decreases behavior by temporarily removing access to reinforcement. There are two types: <strong>exclusionary time-out</strong> (removing the child from the reinforcing environment) and <strong>non-exclusionary time-out</strong> (removing reinforcement while the child remains in the environment, e.g., putting a toy in a "rest" box).</p>
+
+        <h3>Response Cost</h3>
+        <p><span class="key-term">Response cost</span> is another form of negative punishment in which a specific amount of reinforcement is removed contingent on an undesired behavior. It is often used in conjunction with token economies (e.g., losing tokens for rule violations).</p>
+
+        <h3>Overcorrection</h3>
+        <p><span class="key-term">Overcorrection</span> requires the individual to correct the effects of the misbehavior and then practice an appropriate alternative. It has two components: <strong>restitutional overcorrection</strong> (restoring the environment to a better-than-original state, e.g., cleaning up the mess and the rest of the room) and <strong>positive practice overcorrection</strong> (repeatedly practicing the correct behavior).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Stimulus Generalization and Discrimination Training</h2>
+        <p><span class="key-term">Stimulus generalization</span> occurs when a behavior reinforced in one context spreads to similar contexts. While sometimes desirable (e.g., a child using polite language at school and at home), it can also be problematic (e.g., a child who learns to tantrum at home also tantrums at school). <span class="key-term">Discrimination training</span> teaches the individual to respond differently in different contexts by reinforcing behavior in the presence of one stimulus (SD) and not reinforcing it in the presence of another (S-delta).</p>
+
+        <h3>Programming for Generalization</h3>
+        <p>One of the primary challenges with operant interventions is ensuring that behavior changes <span class="key-term">generalize</span> beyond the training environment. Stokes and Baer (1977) identified strategies for promoting generalization:</p>
+        <ul>
+          <li><strong>Train and hope</strong> -- Simply implementing the intervention and hoping generalization occurs (least effective)</li>
+          <li><strong>Train sufficient exemplars</strong> -- Practice the skill across multiple settings, people, and stimuli</li>
+          <li><strong>Use natural reinforcers</strong> -- Ensure the behavior contacts natural reinforcement in the environment</li>
+          <li><strong>Program common stimuli</strong> -- Make the training environment resemble the natural environment</li>
+          <li><strong>Train loosely</strong> -- Vary the conditions of training to promote flexible responding</li>
+          <li><strong>Use indiscriminable contingencies</strong> -- Shift from continuous to intermittent reinforcement so the person cannot predict when reinforcement will occur</li>
+        </ul>
+
+        <div class="citation">Stokes, T. F., &amp; Baer, D. M. (1977). An implicit technology of generalization. <em>Journal of Applied Behavior Analysis, 10</em>(2), 349-367.</div>
+      </section>
+
+      <!-- ===== MERGED EPPP FOCUS ===== -->
+
+      <section class="content-section">
+        <h2>EPPP Focus: Commonly Tested Concepts</h2>
+        <ul>
+          <li><span class="key-term">Systematic desensitization</span> = Wolpe = reciprocal inhibition = gradual exposure + relaxation</li>
+          <li>Know the three steps: relaxation training, anxiety hierarchy, pairing relaxation with hierarchy items</li>
+          <li><span class="key-term">Flooding</span> = intense, prolonged exposure; <span class="key-term">implosive therapy</span> = Stampfl = imaginal flooding with psychodynamic themes</li>
+          <li><span class="key-term">ERP</span> is the gold standard for OCD -- both exposure AND response prevention are necessary</li>
+          <li>Premature termination of flooding can lead to <span class="key-term">sensitization</span> (worsening of fear)</li>
+          <li><span class="key-term">Covert sensitization</span> = Cautela = imaginal aversion therapy</li>
+          <li>In vivo exposure is generally more effective than imaginal exposure</li>
+          <li><span class="key-term">SUDs</span> (Subjective Units of Distress) scale is used to construct the anxiety hierarchy (0-100)</li>
+          <li>Distinguish <span class="key-term">counterconditioning</span> (replacing one response with an incompatible one) from <span class="key-term">extinction</span> (removing the reinforcement/UCS)</li>
+          <li><span class="key-term">EMDR</span> = Shapiro = bilateral stimulation + trauma memory; evidence-based for PTSD but mechanism debated</li>
+          <li>The <span class="key-term">inhibitory learning model</span> (Craske) proposes that exposure creates a competing association rather than erasing the original fear</li>
+          <li>Under the inhibitory learning model, the key mechanism is <span class="key-term">expectancy violation</span>, not within-session habituation</li>
+          <li><span class="key-term">Applied relaxation</span> (Ost) involves progressive stages from PMR to rapid relaxation in real-world situations</li>
+          <li><span class="key-term">Biofeedback</span> = electronic monitoring of physiological processes to gain voluntary control; EMG for tension headaches</li>
+          <li>Distinguish <span class="key-term">positive reinforcement</span> (adding something desirable) from <span class="key-term">negative reinforcement</span> (removing something aversive) -- both INCREASE behavior</li>
+          <li><span class="key-term">Token economies</span> use generalized conditioned reinforcers; key concern is generalization to natural settings</li>
+          <li><span class="key-term">Shaping</span> = reinforcing successive approximations; <span class="key-term">chaining</span> = teaching linked sequences of behavior</li>
+          <li>Know the difference between <span class="key-term">forward chaining</span> (teach first step first) and <span class="key-term">backward chaining</span> (teach last step first)</li>
+          <li><span class="key-term">DRO, DRA, DRI, DRL</span> -- differential reinforcement procedures reduce problem behavior without punishment</li>
+          <li><span class="key-term">Premack Principle</span> = high-probability behavior reinforces low-probability behavior ("Grandma's Rule")</li>
+          <li><span class="key-term">Time-out</span> = negative punishment (removal of reinforcement); <span class="key-term">response cost</span> = negative punishment (removal of earned reinforcers)</li>
+          <li><span class="key-term">Behavioral activation</span> treats depression by increasing engagement with positive reinforcement; based on the avoidance model of depression</li>
+          <li><span class="key-term">Contingency management</span> has strong evidence for substance use disorders (voucher-based reinforcement)</li>
+          <li><span class="key-term">Overcorrection</span> = restitutional (fix the mess) + positive practice (practice correct behavior)</li>
+        </ul>
+      </section>
+
+      <!-- ===== MERGED REFERENCES ===== -->
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Wolpe, J. (1958). <em>Psychotherapy by reciprocal inhibition.</em> Stanford University Press.</div>
+        <div class="citation">Foa, E. B., Yadin, E., &amp; Lichner, T. K. (2012). <em>Exposure and response (ritual) prevention for obsessive-compulsive disorder: Therapist guide</em> (2nd ed.). Oxford University Press.</div>
+        <div class="citation">Stampfl, T. G., &amp; Levis, D. J. (1967). Essentials of implosive therapy: A learning-theory-based psychodynamic behavioral therapy. <em>Journal of Abnormal Psychology, 72</em>(6), 496-503.</div>
+        <div class="citation">Cautela, J. R. (1967). Covert sensitization. <em>Psychological Reports, 20</em>(2), 459-468.</div>
+        <div class="citation">Abramowitz, J. S. (1996). Variants of exposure and response prevention in the treatment of obsessive-compulsive disorder. <em>Behavior Therapy, 27</em>(4), 583-600.</div>
+        <div class="citation">Skinner, B. F. (1953). <em>Science and human behavior.</em> Macmillan.</div>
+        <div class="citation">Ayllon, T., &amp; Azrin, N. H. (1968). <em>The token economy: A motivational system for therapy and rehabilitation.</em> Appleton-Century-Crofts.</div>
+        <div class="citation">Higgins, S. T., Heil, S. H., &amp; Lussier, J. P. (2004). Clinical implications of reinforcement as a determinant of substance use disorders. <em>Annual Review of Psychology, 55</em>, 431-461.</div>
+        <div class="citation">Martell, C. R., Dimidjian, S., &amp; Herman-Dunn, R. (2010). <em>Behavioral activation for depression: A clinician's guide.</em> Guilford Press.</div>
+        <div class="citation">Premack, D. (1959). Toward empirical behavior laws: I. Positive reinforcement. <em>Psychological Review, 66</em>(4), 219-233.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="cognition.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Through Thoughts</div>
+          </div>
+        </a>
+        <a href="acceptance.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Through Acceptance</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

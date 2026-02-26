@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What We Believe | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>What We Believe</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 5</div>
+        <div class="domain-title">Social &amp; Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cultural-roots.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From</a></li>
+        <li class="chapter-item"><a href="shortcuts.html" class="chapter-link"><span class="chapter-number">2</span>The Shortcuts We Take</a></li>
+        <li class="chapter-item"><a href="beliefs.html" class="chapter-link active"><span class="chapter-number">3</span>What We Believe</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">4</span>How We're Moved</a></li>
+        <li class="chapter-item"><a href="connection.html" class="chapter-link"><span class="chapter-number">5</span>Why We Connect</a></li>
+        <li class="chapter-item"><a href="prejudice.html" class="chapter-link"><span class="chapter-number">6</span>Where We Break</a></li>
+        <li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li>
+        <li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link"><span class="chapter-number">8</span>Across the Divide</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 8</div>
+        <h1>What We Believe &mdash; Attitudes, Dissonance &amp; Behavior</h1>
+        <div class="chapter-meta">
+          <span>Attitude formation, cognitive dissonance, self-perception, implicit attitudes</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction: The Psychology of Attitudes</h2>
+        <p>Attitudes are evaluative judgments &mdash; our likes and dislikes, our approvals and disapprovals &mdash; applied to people, objects, ideas, and events. They are among the oldest constructs in social psychology, and understanding how attitudes form, change, and relate to behavior is essential for the EPPP.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Attitude Structure: The ABC Model</h2>
+        <div class="definition-box">
+          <strong>The ABC Model of Attitudes</strong>
+          <p>Attitudes have three components:<br>
+          <strong>Affective:</strong> The emotional reaction to the attitude object ("I feel anxious around dogs").<br>
+          <strong>Behavioral:</strong> The tendency to act in certain ways toward the attitude object ("I avoid dogs").<br>
+          <strong>Cognitive:</strong> The beliefs and thoughts about the attitude object ("Dogs are dangerous").</p>
+        </div>
+        <p>The three components do not always align. A person may believe intellectually that flying is safe (cognitive) but feel terrified on planes (affective) and avoid air travel (behavioral). This internal inconsistency can create psychological tension and is a key precursor to dissonance.</p>
+
+        <h3>Attitude Formation</h3>
+        <p>Attitudes are acquired through multiple pathways:</p>
+        <ul>
+          <li><strong>Classical conditioning:</strong> A neutral object is paired with a positive or negative stimulus (e.g., a product paired with an attractive model in advertising)</li>
+          <li><strong>Operant conditioning:</strong> Attitudes are reinforced or punished (e.g., a child praised for expressing a particular political opinion)</li>
+          <li><strong>Observational learning:</strong> Attitudes are acquired by watching significant others (e.g., adopting parents' racial attitudes)</li>
+          <li><strong>Direct experience:</strong> Personal encounters with the attitude object (generally produces stronger, more accessible attitudes)</li>
+          <li><strong>Mere exposure effect:</strong> Repeated exposure to a stimulus increases liking for it, even without conscious awareness (Zajonc, 1968)</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example: Mere Exposure Effect</strong>
+          <p>In Zajonc's classic studies, participants were shown Chinese ideographs at varying frequencies. They later rated ideographs they had seen more often as more pleasant, even though they could not recognize which ones they had seen. This effect operates below conscious awareness and contributes to preferences for familiar faces, music, and brands.</p>
+        </div>
+        <p class="citation">Zajonc, R. B. (1968). Attitudinal effects of mere exposure. Journal of Personality and Social Psychology, 9(2), 1&ndash;27.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Cognitive Dissonance Theory</h2>
+        <p><span class="key-term">Cognitive dissonance theory</span>, proposed by Leon Festinger (1957), is one of the most important theories in social psychology. It holds that when a person holds two or more cognitions that are psychologically inconsistent, they experience an unpleasant state of arousal (dissonance) and are motivated to reduce it.</p>
+
+        <div class="definition-box">
+          <strong>Cognitive Dissonance</strong>
+          <p>The uncomfortable psychological tension that arises when a person simultaneously holds two contradictory cognitions, or when their behavior contradicts their attitudes. People are motivated to reduce dissonance by changing their attitude, changing their behavior, or adding new cognitions to justify the inconsistency.</p>
+        </div>
+
+        <h3>Dissonance Reduction Strategies</h3>
+        <ul>
+          <li><strong>Change the attitude:</strong> "Smoking isn't really that bad for you" (adjusting the belief to match behavior)</li>
+          <li><strong>Change the behavior:</strong> Actually quit smoking (adjusting behavior to match the belief)</li>
+          <li><strong>Add consonant cognitions:</strong> "I exercise regularly, so smoking is offset" (reducing the perceived inconsistency)</li>
+          <li><strong>Trivialize the inconsistency:</strong> "Life is short anyway &mdash; enjoy it" (minimizing the importance of the discrepancy)</li>
+        </ul>
+
+        <h3>The Insufficient Justification Effect</h3>
+        <div class="definition-box">
+          <strong>Insufficient Justification Effect</strong>
+          <p>When people are induced to behave in a way that contradicts their attitudes with <strong>minimal external justification</strong>, they experience more dissonance and are more likely to change their attitude to match their behavior. Paradoxically, the less external reward or pressure, the greater the attitude change.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Festinger &amp; Carlsmith (1959): The $1/$20 Study</strong>
+          <p>Participants performed a boring task and were then asked to tell the next participant that the task was enjoyable. Those paid $1 to lie later rated the task as more enjoyable than those paid $20. Why? The $20 group had sufficient external justification for lying ("I said it was fun because I was paid well"). The $1 group had insufficient justification, so they reduced dissonance by actually changing their attitude: "Maybe it really was kind of interesting."</p>
+        </div>
+        <p class="citation">Festinger, L., &amp; Carlsmith, J. M. (1959). Cognitive consequences of forced compliance. Journal of Abnormal and Social Psychology, 58(2), 203&ndash;210.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Self-Perception Theory</h2>
+        <div class="definition-box">
+          <strong>Self-Perception Theory (Bem, 1972)</strong>
+          <p>Daryl Bem proposed an alternative to cognitive dissonance theory: when our attitudes are weak or ambiguous, we infer them by observing our own behavior and the circumstances under which it occurs &mdash; just as we infer other people's attitudes from their behavior. "I must enjoy jogging because I do it every morning."</p>
+        </div>
+        <p>Self-perception theory and dissonance theory make similar predictions but differ in their proposed mechanism. Dissonance theory assumes an aversive motivational state (tension) that drives attitude change. Self-perception theory assumes a cool, inferential process with no arousal. Research suggests that <strong>dissonance theory better explains attitude change when initial attitudes are strong</strong>, while <strong>self-perception theory better explains attitude formation when initial attitudes are weak or nonexistent</strong>.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Self-perception theory has important implications for therapy. Behavioral activation for depression works partly through self-perception: when clients engage in pleasurable activities (even without feeling pleasure initially), they may begin to infer more positive self-attitudes ("I went to the gym &mdash; maybe I'm not as helpless as I thought"). This is also the mechanism behind the "act as if" technique.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Attitude-Behavior Relationship</h2>
+        <p>Early research found surprisingly weak correlations between attitudes and behavior (LaPiere, 1934). This led to decades of research asking: When do attitudes actually predict behavior?</p>
+
+        <h3>Factors That Strengthen the Attitude-Behavior Link</h3>
+        <ul>
+          <li><strong>Attitude strength:</strong> Strong, accessible attitudes (formed through direct experience) are better predictors of behavior</li>
+          <li><strong>Attitude specificity:</strong> Specific attitudes predict specific behaviors better than general attitudes (the principle of <span class="key-term">attitude-behavior correspondence</span>)</li>
+          <li><strong>Self-awareness:</strong> People who are made self-aware are more likely to act consistently with their attitudes</li>
+          <li><strong>Social pressure:</strong> Low social pressure allows attitudes to be expressed in behavior more freely</li>
+          <li><strong>Attitude accessibility:</strong> Attitudes that come to mind quickly are stronger predictors of behavior</li>
+        </ul>
+
+        <h3>Theory of Planned Behavior</h3>
+        <div class="definition-box">
+          <strong>Theory of Planned Behavior (Ajzen, 1991)</strong>
+          <p>Behavior is best predicted by <strong>behavioral intention</strong>, which is determined by three factors:<br>
+          <strong>1. Attitude toward the behavior:</strong> Is the behavior evaluated positively or negatively?<br>
+          <strong>2. Subjective norms:</strong> What do important others think I should do?<br>
+          <strong>3. Perceived behavioral control:</strong> Do I believe I can actually perform the behavior? (Similar to Bandura's self-efficacy)</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>Predicting whether a student will exercise regularly: (1) Does the student believe exercise is beneficial? (attitude), (2) Do their friends and family value exercise? (subjective norm), (3) Does the student believe they have the time, access, and ability to exercise? (perceived behavioral control). All three factors combine to predict the intention to exercise, which in turn predicts actual exercise behavior.</p>
+        </div>
+        <p class="citation">Ajzen, I. (1991). The theory of planned behavior. Organizational Behavior and Human Decision Processes, 50(2), 179&ndash;211.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Implicit Attitudes</h2>
+        <p>Not all attitudes are consciously accessible. <span class="key-term">Implicit attitudes</span> are automatic, unconscious evaluations that can differ from explicit (self-reported) attitudes. They are particularly important in domains where social desirability pressures may distort self-reports &mdash; such as attitudes toward race, gender, and sexual orientation.</p>
+
+        <h3>The Implicit Association Test (IAT)</h3>
+        <div class="definition-box">
+          <strong>Implicit Association Test (IAT)</strong>
+          <p>Developed by Greenwald, McGhee, and Schwartz (1998), the IAT measures the strength of automatic associations between concepts (e.g., "Black" vs. "White") and evaluations (e.g., "good" vs. "bad") by measuring response latencies. Faster responses when two concepts share the same key indicate a stronger implicit association.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>Research shows that many people &mdash; including those who explicitly endorse egalitarian values &mdash; show implicit biases on the IAT. These implicit biases can affect clinical decision-making, including diagnostic judgments and treatment recommendations. Awareness of implicit bias is a core component of multicultural competence.</p>
+        </div>
+        <p class="citation">Greenwald, A. G., McGhee, D. E., &amp; Schwartz, J. L. K. (1998). Measuring individual differences in implicit cognition: The Implicit Association Test. Journal of Personality and Social Psychology, 74(6), 1464&ndash;1480.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Personality Theories</h2>
+        <p>Personality theories address one of the most fundamental questions in psychology: What makes people who they are, and why do they behave consistently (or inconsistently) across situations? These theories are cross-domain content on the EPPP, bridging social psychology, clinical assessment, and individual differences.</p>
+
+        <h3>Trait Theories of Personality</h3>
+        <p>Trait theories assume that personality consists of stable, enduring dispositions that influence behavior across situations.</p>
+
+        <h4>Gordon Allport (1897&ndash;1967)</h4>
+        <div class="definition-box">
+          <strong>Allport's Trait Theory</strong>
+          <p>Allport distinguished three levels of traits:<br>
+          <strong><span class="key-term">Cardinal traits</span>:</strong> Rare, all-encompassing traits that dominate a person's entire life (e.g., Mother Teresa's altruism, Machiavelli's deviousness). Most people do not have a cardinal trait.<br>
+          <strong><span class="key-term">Central traits</span>:</strong> The 5&ndash;10 core traits that form the building blocks of personality (e.g., honest, anxious, sociable). These are what we typically describe when characterizing someone.<br>
+          <strong><span class="key-term">Secondary traits</span>:</strong> Situationally specific preferences and attitudes (e.g., dislikes crowds, prefers chocolate ice cream). Less consistent and less influential than central traits.</p>
+        </div>
+        <p>Allport also distinguished between <span class="key-term">idiographic</span> approaches (studying the unique individual in depth) and <span class="key-term">nomothetic</span> approaches (identifying general laws of personality that apply across people). He favored an idiographic focus while acknowledging the value of both.</p>
+
+        <h4>Raymond Cattell (1905&ndash;1998)</h4>
+        <div class="definition-box">
+          <strong>Cattell's Factor-Analytic Approach</strong>
+          <p>Cattell used factor analysis to reduce Allport's extensive trait list to <strong>16 primary personality factors</strong>, measured by the <span class="key-term">16 Personality Factor Questionnaire (16PF)</span>. He distinguished between <span class="key-term">surface traits</span> (observable clusters of behavior) and <span class="key-term">source traits</span> (the underlying dimensions identified through factor analysis that cause the surface behaviors).</p>
+        </div>
+
+        <h4>Hans Eysenck (1916&ndash;1997)</h4>
+        <div class="definition-box">
+          <strong>Eysenck's PEN Model</strong>
+          <p>Eysenck proposed three broad, biologically based dimensions of personality:<br>
+          <strong><span class="key-term">Psychoticism (P)</span>:</strong> Tough-mindedness, aggressiveness, antisocial tendencies, creativity<br>
+          <strong><span class="key-term">Extraversion (E)</span>:</strong> Sociability, assertiveness, positive affect, sensation-seeking<br>
+          <strong><span class="key-term">Neuroticism (N)</span>:</strong> Emotional instability, anxiety, moodiness, irritability</p>
+          <p>Eysenck emphasized the <strong>biological basis</strong> of personality: he proposed that extraverts have chronically lower cortical arousal (and thus seek stimulation), while introverts have higher baseline arousal (and thus avoid overstimulation). Neuroticism reflects the reactivity of the limbic system.</p>
+        </div>
+
+        <h3>The Big Five / Five Factor Model (OCEAN)</h3>
+        <div class="definition-box">
+          <strong>Five Factor Model (McCrae &amp; Costa)</strong>
+          <p>The most widely accepted trait model of personality identifies five broad dimensions, remembered by the acronym <span class="key-term">OCEAN</span>:<br>
+          <strong><span class="key-term">Openness to Experience</span>:</strong> Imagination, intellectual curiosity, preference for novelty and variety<br>
+          <strong><span class="key-term">Conscientiousness</span>:</strong> Organization, dependability, self-discipline, achievement striving<br>
+          <strong><span class="key-term">Extraversion</span>:</strong> Sociability, assertiveness, positive emotionality, energy<br>
+          <strong><span class="key-term">Agreeableness</span>:</strong> Trust, altruism, compliance, tender-mindedness, cooperativeness<br>
+          <strong><span class="key-term">Neuroticism</span>:</strong> Anxiety, hostility, depression, self-consciousness, vulnerability to stress</p>
+        </div>
+        <p>Key facts about the Big Five for the EPPP:</p>
+        <ul>
+          <li>Developed primarily by <strong>Paul Costa and Robert McCrae</strong>, measured by the <span class="key-term">NEO Personality Inventory &mdash; Revised (NEO-PI-R)</span></li>
+          <li><strong>Cross-cultural replication:</strong> The five-factor structure has been replicated in dozens of cultures and languages, suggesting these dimensions may reflect universal aspects of human personality</li>
+          <li><strong>Heritability:</strong> Twin studies indicate approximately <strong>50% heritability</strong> for each of the Big Five traits, with the remaining variance attributable to non-shared environmental influences</li>
+          <li><strong>Stability increases with age:</strong> Traits become more stable from adolescence through adulthood, with rank-order stability peaking around age 50. However, mean-level changes occur: people tend to become more agreeable and conscientious and less neurotic with age</li>
+          <li><strong>Conscientiousness</strong> is the strongest Big Five predictor of job performance across occupations</li>
+          <li><strong>Neuroticism</strong> is the strongest Big Five predictor of psychological distress and psychopathology</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>The NEO-PI-R is used in clinical assessment to understand personality structure, treatment planning, and predicting therapeutic outcomes. For example, high neuroticism predicts greater vulnerability to depression and anxiety disorders, while low agreeableness and low conscientiousness are associated with personality disorders in the externalizing spectrum.</p>
+        </div>
+
+        <h3>Bandura's Social-Cognitive Theory</h3>
+        <div class="definition-box">
+          <strong>Reciprocal Determinism (Bandura)</strong>
+          <p>Albert Bandura proposed that personality emerges from the continuous, dynamic interaction of three factors: <strong>the person</strong> (cognitive factors, beliefs, expectations), <strong>behavior</strong>, and <strong>the environment</strong>. This principle of <span class="key-term">reciprocal determinism</span> rejects both pure trait explanations (personality causes behavior) and pure situationist explanations (environment causes behavior), arguing instead that all three factors simultaneously influence one another.</p>
+        </div>
+
+        <h4>Self-Efficacy</h4>
+        <p><span class="key-term">Self-efficacy</span> &mdash; the belief in one's capability to execute the behaviors necessary to produce specific outcomes &mdash; is the central construct in Bandura's theory. It varies along three dimensions:</p>
+        <ul>
+          <li><strong>Magnitude:</strong> The level of task difficulty a person believes they can handle</li>
+          <li><strong>Strength:</strong> The certainty with which the person holds their efficacy belief (easily extinguished vs. resilient)</li>
+          <li><strong>Generality:</strong> The extent to which efficacy beliefs in one domain extend to other domains</li>
+        </ul>
+        <p>Bandura distinguished between <span class="key-term">efficacy expectations</span> ("Can I do it?") and <span class="key-term">outcome expectations</span> ("If I do it, will it lead to the desired result?"). A person may believe that exercise leads to weight loss (high outcome expectation) but doubt their ability to maintain an exercise regimen (low efficacy expectation).</p>
+
+        <h4>Observational Learning (Modeling)</h4>
+        <p>Bandura's four processes of observational learning are essential EPPP content:</p>
+        <ol>
+          <li><strong>Attention:</strong> The observer must attend to the model's behavior</li>
+          <li><strong>Retention:</strong> The observed behavior must be encoded and stored in memory</li>
+          <li><strong>Reproduction:</strong> The observer must have the physical and cognitive ability to reproduce the behavior</li>
+          <li><strong>Motivation:</strong> The observer must have a reason to perform the behavior (e.g., anticipated reinforcement, vicarious reinforcement, or self-reinforcement)</li>
+        </ol>
+        <div class="example-box">
+          <strong>Example: Self-Efficacy in Clinical Practice</strong>
+          <p>A client with social anxiety may believe that social skills lead to positive interactions (high outcome expectation) but doubt their own ability to perform those skills in a real conversation (low self-efficacy). Treatment focuses on building self-efficacy through graduated exposure, modeling, and mastery experiences &mdash; the most powerful source of self-efficacy information.</p>
+        </div>
+
+        <h3>The Person-Situation Debate</h3>
+        <div class="definition-box">
+          <strong>Mischel's Critique of Trait Consistency</strong>
+          <p>Walter Mischel (1968) ignited the <span class="key-term">person-situation debate</span> by demonstrating that the correlation between personality traits and behavior in any given situation rarely exceeds .30 (the <span class="key-term">"personality coefficient"</span>). He argued for <span class="key-term">situational specificity</span> &mdash; that behavior is largely determined by situational factors rather than stable internal dispositions. A person who is honest at work may cheat on their taxes; a child who is aggressive on the playground may be docile in the classroom.</p>
+        </div>
+        <p>The debate was eventually resolved through an <strong>interactionist position</strong>: behavior is a function of the interaction between person and situation variables. Neither traits alone nor situations alone adequately predict behavior; the combination of both is necessary.</p>
+
+        <h4>Mischel's Cognitive-Affective Personality System (CAPS)</h4>
+        <div class="definition-box">
+          <strong>CAPS Model (Mischel &amp; Shoda, 1995)</strong>
+          <p>Mischel's later work proposed the <span class="key-term">Cognitive-Affective Personality System (CAPS)</span>, which reconceptualized personality not as a set of global traits but as a stable system of <strong>if...then... situation-behavior patterns</strong>. Personality consistency is found not in behaving the same way across all situations, but in having a <strong>distinctive, stable profile of situation-behavior relationships</strong>. This is called <span class="key-term">personality coherence</span> &mdash; the person reliably shows a particular pattern of variation across situations.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example: Personality Coherence</strong>
+          <p>A person may be consistently warm with close friends (situation A) but consistently cold with authority figures (situation B). Traditional trait theory would see inconsistency (sometimes warm, sometimes cold). CAPS sees coherence: the person has a stable if-then profile ("If close friend, then warm; if authority figure, then cold") that is reliably their own.</p>
+        </div>
+        <p class="citation">Mischel, W., &amp; Shoda, Y. (1995). A cognitive-affective system theory of personality. Psychological Review, 102(2), 246&ndash;268.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>ABC model:</strong> Attitudes have affective, behavioral, and cognitive components that may not always be consistent.</li>
+          <li><strong>Cognitive dissonance</strong> (Festinger): Inconsistency between cognitions produces tension that motivates attitude or behavior change.</li>
+          <li><strong>Insufficient justification effect:</strong> Less external reward for counter-attitudinal behavior produces <em>more</em> attitude change &mdash; this is counterintuitive and frequently tested.</li>
+          <li><strong>Self-perception theory</strong> (Bem): We infer our own attitudes from our behavior when attitudes are weak or ambiguous. Contrasts with dissonance theory.</li>
+          <li><strong>Theory of Planned Behavior</strong> (Ajzen): Behavioral intention is predicted by attitude + subjective norms + perceived behavioral control.</li>
+          <li>Attitudes predict behavior better when they are <strong>strong, specific, accessible</strong>, and when <strong>social pressure is low</strong>.</li>
+          <li><strong>Implicit attitudes</strong> (measured by the IAT) can diverge from explicit attitudes and influence behavior outside of awareness.</li>
+          <li>The <strong>mere exposure effect</strong> (Zajonc): Familiarity increases liking, even without conscious recognition.</li>
+          <li><strong>Allport's trait levels:</strong> Cardinal (rare, all-encompassing), central (5&ndash;10 core traits), secondary (situational preferences). Know idiographic vs. nomothetic.</li>
+          <li><strong>Cattell:</strong> 16PF, source traits (deep, factor-analyzed) vs. surface traits (observable clusters).</li>
+          <li><strong>Eysenck's PEN model:</strong> Psychoticism, Extraversion, Neuroticism &mdash; biologically based. Extraverts have lower cortical arousal.</li>
+          <li><strong>Big Five (OCEAN):</strong> Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism. ~50% heritable; cross-culturally replicated; stability increases with age. Measured by NEO-PI-R.</li>
+          <li><strong>Bandura's reciprocal determinism:</strong> Person &times; Behavior &times; Environment interact continuously. <strong>Self-efficacy</strong> varies in magnitude, strength, and generality. Distinguish efficacy expectations from outcome expectations.</li>
+          <li><strong>Observational learning</strong> (Bandura): Four steps &mdash; attention, retention, reproduction, motivation.</li>
+          <li><strong>Mischel's person-situation debate:</strong> Trait-behavior correlations rarely exceed .30; behavior is situationally specific. Resolved by interactionism.</li>
+          <li><strong>CAPS model</strong> (Mischel &amp; Shoda): Personality = stable if...then... situation-behavior patterns. <strong>Personality coherence</strong> = consistency in the pattern of variation, not in absolute behavior.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="shortcuts.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">The Shortcuts We Take</div>
+          </div>
+        </a>
+        <a href="persuasion.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">How We're Moved</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

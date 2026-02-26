@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attribution Theory | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Attribution Theory</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link active"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 9</div>
+        <h1>Attribution Theory</h1>
+        <div class="chapter-meta">
+          <span>Fundamental attribution error, self-serving bias, actor-observer</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Attribution Theory</h2>
+        <p><span class="key-term">Attribution</span> refers to the process by which people explain the causes of behavior and events. Attribution theory examines how ordinary people construct causal explanations -- how they answer the "why" question about behavior. This is one of the most heavily tested areas on the EPPP within social psychology.</p>
+        <p>The fundamental distinction in attribution theory is between <span class="key-term">internal (dispositional) attributions</span> -- explaining behavior in terms of the person's traits, abilities, or motives -- and <span class="key-term">external (situational) attributions</span> -- explaining behavior in terms of environmental factors, social pressure, or circumstances.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Fundamental Attribution Error</h2>
+        <p>The <span class="key-term">fundamental attribution error</span> (FAE), also called the <span class="key-term">correspondence bias</span>, is the tendency to overestimate the role of dispositional factors and underestimate the role of situational factors when explaining other people's behavior (Ross, 1977).</p>
+
+        <div class="example-box">
+          <h4>Classic Demonstration: Jones and Harris (1967)</h4>
+          <p>Participants read essays either supporting or opposing Fidel Castro's Cuba. Even when told the essay writer had been <strong>assigned</strong> their position (no choice), participants still attributed the essay's viewpoint to the writer's true attitude. They made dispositional attributions even when a clear situational explanation (being assigned a position) was available.</p>
+        </div>
+
+        <h3>Why Does the FAE Occur?</h3>
+        <ul>
+          <li><strong>Perceptual salience:</strong> The actor is the "figure" against the "ground" of the situation. We attend to people more than contexts (Heider, 1958).</li>
+          <li><strong>Two-stage process (Gilbert, 1989):</strong> We first make an automatic dispositional attribution, then (if we have the cognitive resources) adjust for situational factors. When cognitively busy or distracted, the adjustment stage is often skipped.</li>
+          <li><strong>Cultural factors:</strong> The FAE is more pronounced in individualistic (Western) cultures. Members of collectivistic cultures attend more to situational factors and show a weaker correspondence bias (Miller, 1984).</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Relevance</h4>
+          <p>The FAE has implications for clinical judgment. Clinicians may attribute a client's behavior (e.g., missing appointments) to dispositional factors (lack of motivation, resistance) while underestimating situational factors (transportation difficulties, childcare, financial constraints). This bias can lead to inaccurate case conceptualization and damaged therapeutic alliance.</p>
+        </div>
+        <div class="citation">Ross, L. (1977). The intuitive psychologist and his shortcomings: Distortions in the attribution process. Advances in Experimental Social Psychology, 10, 173-220.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Self-Serving Bias</h2>
+        <p>The <span class="key-term">self-serving bias</span> is the tendency to attribute one's successes to internal, dispositional factors ("I got an A because I'm smart") and one's failures to external, situational factors ("I failed because the test was unfair"). This bias serves to protect and enhance self-esteem.</p>
+
+        <h3>Components</h3>
+        <ul>
+          <li><strong>Self-enhancing bias:</strong> Taking credit for successes (internal attribution for positive outcomes).</li>
+          <li><strong>Self-protecting bias:</strong> Denying responsibility for failures (external attribution for negative outcomes).</li>
+        </ul>
+
+        <h3>Exceptions and Variations</h3>
+        <p>The self-serving bias is <strong>reduced or reversed</strong> in individuals with depression, who tend to show a <span class="key-term">depressive attributional style</span> -- attributing negative events to internal, stable, and global causes. This pattern was described by Abramson, Seligman, and Teasdale (1978) in their reformulated learned helplessness theory and is central to Beck's cognitive model of depression.</p>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>The self-serving bias and the fundamental attribution error operate differently. FAE is about how we explain <strong>other people's</strong> behavior (overemphasizing their dispositions). Self-serving bias is about how we explain <strong>our own</strong> outcomes (taking credit for success, denying blame for failure). The EPPP may test this distinction directly.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Actor-Observer Effect</h2>
+        <p>The <span class="key-term">actor-observer effect</span> (Jones &amp; Nisbett, 1972) describes the tendency for actors (those performing a behavior) to attribute their own behavior to situational factors, while observers attribute the same behavior to the actor's dispositions.</p>
+
+        <h3>Explanations</h3>
+        <ul>
+          <li><strong>Perceptual focus:</strong> Actors look outward at the situation; observers look at the actor. This difference in visual perspective produces different causal attributions.</li>
+          <li><strong>Information asymmetry:</strong> Actors have more information about the variability of their own behavior across situations, making them more likely to see situational influences. Observers see only the current behavior and infer stable traits.</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Storms (1973) Demonstration</h4>
+          <p>Storms tested the perceptual explanation by videotaping a conversation and then showing participants the interaction from the other person's perspective. When actors saw themselves from the observer's point of view, they made more dispositional attributions about their own behavior. When observers saw the situation from the actor's viewpoint, they made more situational attributions. This supports the perceptual salience explanation.</p>
+        </div>
+
+        <p><strong>Note:</strong> More recent meta-analyses (Malle, 2006) have questioned the robustness of the actor-observer effect, finding it to be smaller and more context-dependent than originally claimed. Nevertheless, it remains a frequently tested concept on the EPPP.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Kelley's Covariation Model</h2>
+        <p>Harold Kelley's (1967, 1973) <span class="key-term">covariation model</span> describes how people make causal attributions when they have information from multiple observations. The model proposes that people act like naive scientists, examining the covariation between potential causes and effects across three dimensions.</p>
+
+        <h3>Three Types of Information</h3>
+        <table>
+          <tr><th>Dimension</th><th>Question Asked</th><th>High</th><th>Low</th></tr>
+          <tr><td><strong>Consensus</strong></td><td>Do other people behave this way toward the same stimulus?</td><td>Everyone laughs at the comedian</td><td>Only this person laughs at the comedian</td></tr>
+          <tr><td><strong>Distinctiveness</strong></td><td>Does this person behave this way toward other stimuli?</td><td>This person laughs only at this comedian</td><td>This person laughs at all comedians</td></tr>
+          <tr><td><strong>Consistency</strong></td><td>Does this person behave this way at other times/situations?</td><td>This person always laughs at this comedian</td><td>This person laughed only this one time</td></tr>
+        </table>
+
+        <h3>Attribution Patterns</h3>
+        <div class="definition-box">
+          <h4>External (Stimulus) Attribution</h4>
+          <p>Made when consensus is <strong>high</strong>, distinctiveness is <strong>high</strong>, and consistency is <strong>high</strong>. Example: Everyone laughs at this comedian (high consensus), this person laughs only at this comedian (high distinctiveness), and this person always laughs at this comedian (high consistency). Conclusion: The comedian is genuinely funny (external attribution to the stimulus).</p>
+        </div>
+        <div class="definition-box">
+          <h4>Internal (Person) Attribution</h4>
+          <p>Made when consensus is <strong>low</strong>, distinctiveness is <strong>low</strong>, and consistency is <strong>high</strong>. Example: No one else laughs at this comedian (low consensus), this person laughs at everything (low distinctiveness), and this person always laughs at this comedian (high consistency). Conclusion: This person just laughs easily (internal attribution).</p>
+        </div>
+        <div class="definition-box">
+          <h4>Circumstance Attribution</h4>
+          <p>Made when consistency is <strong>low</strong>. If the behavior occurs only this one time, it is likely attributed to the particular circumstances rather than the person or the stimulus.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Kelley's model is one of the most commonly tested attribution topics. Memorize the pattern: High-High-High = external/stimulus attribution. Low-Low-High = internal/person attribution. Low consistency = circumstance attribution. Practice applying these patterns to scenario questions.</p>
+        </div>
+        <div class="citation">Kelley, H. H. (1973). The processes of causal attribution. American Psychologist, 28(2), 107-128.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Weiner's Attribution Theory of Motivation</h2>
+        <p>Bernard Weiner (1979, 1985) applied attribution theory to achievement motivation, proposing that the causal explanations people make for success and failure influence their emotional reactions and future motivation.</p>
+
+        <h3>Three Dimensions of Causal Attributions</h3>
+        <table>
+          <tr><th>Dimension</th><th>Description</th><th>Psychological Consequence</th></tr>
+          <tr><td><strong>Locus</strong></td><td>Internal vs. external cause</td><td>Affects self-esteem and pride/shame. Internal attributions for success lead to pride; internal attributions for failure lead to shame.</td></tr>
+          <tr><td><strong>Stability</strong></td><td>Stable (enduring) vs. unstable (temporary) cause</td><td>Affects expectations for future performance. Stable attributions for failure (e.g., lack of ability) lead to hopelessness; unstable attributions (e.g., bad luck) preserve hope.</td></tr>
+          <tr><td><strong>Controllability</strong></td><td>Controllable vs. uncontrollable cause</td><td>Affects emotions such as guilt (controllable failure) vs. helplessness (uncontrollable failure), and others' sympathy vs. anger.</td></tr>
+        </table>
+
+        <h3>Four Common Attributions for Achievement Outcomes</h3>
+        <table>
+          <tr><th>Attribution</th><th>Locus</th><th>Stability</th><th>Controllability</th></tr>
+          <tr><td><strong>Ability</strong></td><td>Internal</td><td>Stable</td><td>Uncontrollable</td></tr>
+          <tr><td><strong>Effort</strong></td><td>Internal</td><td>Unstable</td><td>Controllable</td></tr>
+          <tr><td><strong>Task difficulty</strong></td><td>External</td><td>Stable</td><td>Uncontrollable</td></tr>
+          <tr><td><strong>Luck</strong></td><td>External</td><td>Unstable</td><td>Uncontrollable</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Clinical Application</h4>
+          <p>Weiner's model is directly relevant to cognitive therapy. Depressed clients often attribute failure to internal, stable, global causes ("I failed because I'm stupid and I'll always be stupid"). Cognitive restructuring targets these attributions, encouraging clients to consider unstable (effort, strategy) and specific (this particular exam) rather than stable and global explanations. Attribution retraining has been used effectively in educational and clinical settings.</p>
+        </div>
+        <div class="citation">Weiner, B. (1985). An attributional theory of achievement motivation and emotion. Psychological Review, 92(4), 548-573.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Additional Attribution Concepts</h2>
+
+        <h3>Just-World Hypothesis (Lerner, 1980)</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p>The <span class="key-term">just-world hypothesis</span> is the belief that the world is fundamentally fair -- that people get what they deserve and deserve what they get. This belief leads to <strong>victim blaming</strong>: attributing negative outcomes to victims' character or behavior rather than to situational or systemic factors. For example, believing that a person who was robbed must have been careless, or that poverty is caused by laziness.</p>
+        </div>
+        <p>The just-world belief serves a defensive function: it allows people to feel that they are personally safe from random misfortune. If bad things only happen to people who deserve them, then as long as one is a good person, one is protected. Clinicians should be aware that just-world beliefs can affect how clients process trauma -- trauma survivors may blame themselves as a way to maintain a sense of control and predictability.</p>
+
+        <h3>False Consensus Effect</h3>
+        <p>The <span class="key-term">false consensus effect</span> (Ross, Greene, &amp; House, 1977) is the tendency to overestimate the extent to which others share our attitudes, beliefs, and behaviors. People who smoke, for example, overestimate the percentage of the population that smokes. This bias serves self-validation: believing others agree with us supports our confidence in our own positions.</p>
+
+        <h3>Self-Handicapping</h3>
+        <p><span class="key-term">Self-handicapping</span> (Jones &amp; Berglas, 1978) is a preemptive attributional strategy in which individuals create obstacles to their own performance so that if they fail, the failure can be attributed to the obstacle rather than to lack of ability. Examples include not studying before an exam, staying out late before an important presentation, or claiming illness. Self-handicapping protects self-esteem by providing an external attribution for potential failure.</p>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Attribution questions on the EPPP often require distinguishing between similar concepts. Remember: FAE = explaining <strong>others'</strong> behavior dispositionally; self-serving bias = taking credit for <strong>own</strong> success, externalizing failure; actor-observer = different attributions depending on perspective; just-world = blaming victims to maintain fairness beliefs; false consensus = overestimating agreement with ourselves.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cultural Variations in Attribution</h2>
+        <p>Attribution patterns vary significantly across cultures, reflecting broader differences in individualism-collectivism and self-construal.</p>
+        <ul>
+          <li><strong>Western (individualistic) cultures</strong> show a stronger fundamental attribution error, reflecting the emphasis on individual agency and autonomy.</li>
+          <li><strong>East Asian (collectivistic) cultures</strong> attend more to contextual and situational factors. Miller (1984) found that Hindu Indians increasingly used situational attributions with age, while Americans increasingly used dispositional attributions.</li>
+          <li><strong>Modesty bias:</strong> In collectivistic cultures, the self-serving bias is often reversed -- people may attribute success to external factors (luck, help from others) and failure to internal factors (lack of effort). This reflects cultural values of modesty and group harmony.</li>
+          <li><strong>Self-effacing bias:</strong> Japanese participants are more likely to attribute failures internally and successes externally, the opposite of the Western self-serving pattern. This supports social harmony by maintaining humility.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Integration</h4>
+          <p>Awareness of cultural variation in attribution is essential for culturally competent practice. A clinician working with a client from a collectivistic culture should not assume that the client's tendency to attribute problems to situational factors represents "externalization" or "lack of insight." Similarly, a client's reluctance to take credit for achievements should not be interpreted as low self-esteem if it reflects culturally normative modesty. Understanding a client's attributional patterns within their cultural context leads to more accurate assessment and more effective intervention.</p>
+        </div>
+        <div class="citation">Miller, J. G. (1984). Culture and the development of everyday social explanation. Journal of Personality and Social Psychology, 46(5), 961-978.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Attributional Theories of Depression</h2>
+        <p>Attribution theory has had a major influence on clinical models of depression, making this a commonly tested cross-topic area for the EPPP.</p>
+
+        <h3>Reformulated Learned Helplessness Theory</h3>
+        <p>Abramson, Seligman, and Teasdale (1978) proposed that the original learned helplessness model (Seligman, 1975) needed to be reformulated to account for individual differences. Their <span class="key-term">attributional reformulation</span> proposed that when people experience uncontrollable negative events, the type of causal attribution they make determines whether they develop helplessness and depression:</p>
+        <ul>
+          <li><strong>Internal vs. External:</strong> Internal attributions for failure ("It's my fault") lead to lowered self-esteem.</li>
+          <li><strong>Stable vs. Unstable:</strong> Stable attributions ("This will never change") lead to chronic helplessness.</li>
+          <li><strong>Global vs. Specific:</strong> Global attributions ("This affects everything") lead to pervasive helplessness across situations.</li>
+        </ul>
+        <p>The <span class="key-term">depressive attributional style</span> (internal-stable-global for negative events) is a vulnerability factor for depression. The Attributional Style Questionnaire (ASQ) was developed to measure this cognitive style.</p>
+
+        <h3>Hopelessness Theory (Abramson, Metalsky, &amp; Alloy, 1989)</h3>
+        <p>An extension of the reformulated model, hopelessness theory proposes a specific subtype of depression -- <span class="key-term">hopelessness depression</span> -- characterized by the expectation that desired outcomes will not occur (or that aversive outcomes will occur) and that one cannot change this situation. The proximal cause of hopelessness depression is hopelessness itself, which is generated by stable and global attributions for negative events combined with high importance of the negative event.</p>
+
+        <div class="clinical-note">
+          <h4>Therapeutic Integration</h4>
+          <p>Attribution theory informs several evidence-based interventions. Cognitive therapy (Beck) directly targets distorted causal attributions. Attribution retraining programs teach individuals to make adaptive attributions (unstable, specific, controllable) for negative events. In academic settings, students who are taught to attribute failure to insufficient effort (unstable, controllable) rather than low ability (stable, uncontrollable) show improved persistence and performance. Understanding the attributional components of depression is essential for both the clinical content areas and the social psychology content area of the EPPP.</p>
+        </div>
+        <div class="citation">Abramson, L. Y., Seligman, M. E. P., &amp; Teasdale, J. D. (1978). Learned helplessness in humans: Critique and reformulation. Journal of Abnormal Psychology, 87(1), 49-74.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Correspondent Inference Theory (Jones &amp; Davis, 1965)</h2>
+        <p><span class="key-term">Correspondent inference theory</span> describes how observers infer that a person's behavior corresponds to (is caused by) an underlying disposition. The theory focuses specifically on intentional behavior and identifies conditions under which dispositional attributions are most likely.</p>
+
+        <h3>Key Factors</h3>
+        <ul>
+          <li><strong>Non-common effects:</strong> When a person chooses one action over alternatives, the observer examines the unique consequences (non-common effects) of the chosen action. Fewer non-common effects make it easier to identify the specific disposition driving the choice.</li>
+          <li><strong>Social desirability:</strong> Behaviors that are low in social desirability (counternormative) are more informative about the person's true disposition than socially desirable (expected) behaviors.</li>
+          <li><strong>Free choice:</strong> Behaviors performed freely are more diagnostic of dispositions than behaviors performed under external constraint.</li>
+          <li><strong>Hedonic relevance:</strong> Behaviors that directly affect the observer are given more dispositional weight.</li>
+          <li><strong>Personalism:</strong> Behaviors perceived as intentionally directed at the observer are especially likely to produce correspondent inferences.</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Correspondent inference theory and the fundamental attribution error are related but distinct concepts. Correspondent inference theory describes <strong>when</strong> we make dispositional inferences (conditions such as free choice, low social desirability). The FAE describes a <strong>bias</strong> toward dispositional attribution even when situational explanations are available. Both are part of the broader attribution process that the EPPP tests extensively.</p>
+        </div>
+      </section>
+      <div class="nav-buttons">
+        <a href="cultural-concepts.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Cultural Concepts</div>
+          </div>
+        </a>
+        <a href="biases-heuristics.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Biases & Heuristics</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evidence-Based Treatments | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Evidence-Based Treatments</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link active"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 9</div>
+        <h1>Evidence-Based Treatments</h1>
+        <div class="chapter-meta">
+          <span>ESTs by disorder, treatment selection, outcome monitoring</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>The Evidence-Based Practice Model</h2>
+        <p><span class="key-term">Evidence-based practice in psychology (EBPP)</span> is defined by the APA (2006) as the integration of the best available research with clinical expertise in the context of patient characteristics, culture, and preferences. This three-legged stool model forms the conceptual foundation for treatment selection on the EPPP.</p>
+        <div class="definition-box">
+          <strong>APA Definition (2006):</strong> "Evidence-based practice in psychology (EBPP) is the integration of the best available research with clinical expertise in the context of patient characteristics, culture, and preferences." This definition deliberately broadens the concept beyond simply applying manuals to include clinical judgment and individual factors.
+        </div>
+
+        <h3>The Three Components</h3>
+        <ul>
+          <li><span class="key-term">Best available research evidence</span> -- includes meta-analyses, RCTs, effectiveness studies, single-case designs, qualitative research, and clinical observation. The hierarchy typically places systematic reviews and RCTs at the top, but all levels of evidence contribute.</li>
+          <li><span class="key-term">Clinical expertise</span> -- refers to the competencies acquired through education, training, and experience, including assessment skill, diagnostic acumen, case formulation, treatment planning, therapeutic relationship management, and self-reflection.</li>
+          <li><span class="key-term">Patient characteristics, culture, and preferences</span> -- encompasses the client's values, goals, religious beliefs, worldview, cultural identity, socioeconomic context, readiness for change, social support, and treatment preferences.</li>
+        </ul>
+
+        <h3>EBPP vs. ESTs</h3>
+        <p><span class="key-term">Empirically Supported Treatments (ESTs)</span> are specific psychological interventions that have demonstrated efficacy for specific disorders through controlled research. ESTs are one component of EBPP -- they represent the "best available research" leg of the stool. EBPP is the broader framework for clinical decision-making.</p>
+        <div class="clinical-note">
+          <strong>EPPP Distinction:</strong> ESTs = specific treatments validated by research. EBPP = the process of integrating research, clinical expertise, and patient factors. The EPPP expects you to know both concepts and recognize that EBPP is broader than simply applying ESTs.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Empirically Supported Treatments by Disorder</h2>
+        <p>The APA Division 12 (Society of Clinical Psychology) maintains a list of treatments with strong or modest research support. The following table summarizes key ESTs most commonly tested on the EPPP:</p>
+
+        <table>
+          <tr><th>Disorder</th><th>Well-Established ESTs</th></tr>
+          <tr><td>Major Depressive Disorder</td><td>Cognitive Therapy (Beck), Behavioral Activation, Interpersonal Therapy (IPT)</td></tr>
+          <tr><td>Generalized Anxiety Disorder</td><td>CBT (including applied relaxation), Acceptance-based behavioral therapy</td></tr>
+          <tr><td>Panic Disorder</td><td>CBT (Barlow's Panic Control Treatment), exposure-based therapies</td></tr>
+          <tr><td>Social Anxiety Disorder</td><td>CBT (cognitive restructuring + exposure), Social Effectiveness Therapy</td></tr>
+          <tr><td>Specific Phobias</td><td>Exposure therapy (in vivo, systematic desensitization), applied tension (blood-injection-injury)</td></tr>
+          <tr><td>OCD</td><td>Exposure and Response Prevention (ERP), CBT with ERP</td></tr>
+          <tr><td>PTSD</td><td>Prolonged Exposure (Foa), Cognitive Processing Therapy (Resick), EMDR</td></tr>
+          <tr><td>Bulimia Nervosa</td><td>CBT (Fairburn), Interpersonal Therapy</td></tr>
+          <tr><td>Anorexia Nervosa</td><td>Family-Based Treatment (Maudsley), no individual therapy has strong support as standalone</td></tr>
+          <tr><td>Borderline Personality Disorder</td><td>Dialectical Behavior Therapy (Linehan), Mentalization-Based Therapy, Transference-Focused Psychotherapy</td></tr>
+          <tr><td>Substance Use Disorders</td><td>Motivational Interviewing / MET, CBT (Relapse Prevention), Contingency Management, 12-Step Facilitation</td></tr>
+          <tr><td>Insomnia</td><td>CBT for Insomnia (CBT-I), stimulus control, sleep restriction</td></tr>
+          <tr><td>Schizophrenia (adjunctive)</td><td>Social Skills Training, CBT for psychosis, Family Psychoeducation, supported employment</td></tr>
+          <tr><td>Childhood Disruptive Behavior</td><td>Parent-Child Interaction Therapy (PCIT), Parent Management Training (PMT, Kazdin)</td></tr>
+          <tr><td>Childhood Anxiety</td><td>CBT (Coping Cat Program), exposure-based protocols</td></tr>
+          <tr><td>Childhood Depression</td><td>CBT, Interpersonal Therapy for Adolescents (IPT-A)</td></tr>
+          <tr><td>Autism Spectrum Disorder</td><td>Applied Behavior Analysis (ABA), Early Intensive Behavioral Intervention</td></tr>
+          <tr><td>Enuresis</td><td>Bell-and-pad (urine alarm), dry bed training</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>EPPP Commonly Tested:</strong> Exposure and Response Prevention (ERP) for OCD and Prolonged Exposure for PTSD are among the most commonly tested ESTs. Know the developers (Foa for both). Also remember that CBT has the broadest evidence base across disorders.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Treatment Planning</h2>
+        <p>Effective treatment planning integrates diagnostic assessment, case formulation, treatment selection, and ongoing monitoring. Key principles include:</p>
+
+        <h3>Case Formulation</h3>
+        <p>A <span class="key-term">case formulation</span> is a hypothesis about the causes, precipitants, and maintaining factors of an individual's psychological problems. It goes beyond diagnosis to provide a conceptual framework for treatment. Components typically include:</p>
+        <ul>
+          <li>Presenting problems and their functional impact</li>
+          <li>Predisposing factors (e.g., developmental history, genetics, early learning)</li>
+          <li>Precipitating factors (e.g., recent stressors, life transitions)</li>
+          <li>Perpetuating factors (e.g., avoidance patterns, cognitive distortions, environmental reinforcement)</li>
+          <li>Protective factors and strengths</li>
+        </ul>
+
+        <h3>Matching Treatment to Client</h3>
+        <p>Beutler and colleagues developed the <span class="key-term">Systematic Treatment Selection (STS)</span> model, which identifies patient dimensions that predict differential response to specific treatment characteristics:</p>
+        <ul>
+          <li><span class="key-term">Problem complexity / chronicity:</span> More complex or chronic problems may require longer-term, insight-oriented approaches</li>
+          <li><span class="key-term">Coping style:</span> Internalizers (high self-blame) respond better to insight-oriented treatments; externalizers respond better to symptom-focused, skill-building approaches</li>
+          <li><span class="key-term">Resistance level / reactance:</span> Highly resistant clients respond better to nondirective approaches; low-resistance clients respond well to directive approaches</li>
+          <li><span class="key-term">Subjective distress:</span> Moderate distress levels optimize treatment engagement; very low or very high distress may impede progress</li>
+        </ul>
+
+        <h3>Stages of Change (Prochaska & DiClemente)</h3>
+        <p>The <span class="key-term">Transtheoretical Model</span> suggests that interventions should match the client's readiness for change:</p>
+        <ul>
+          <li><span class="key-term">Precontemplation:</span> Consciousness-raising, motivational interviewing</li>
+          <li><span class="key-term">Contemplation:</span> Decisional balance, exploring ambivalence</li>
+          <li><span class="key-term">Preparation:</span> Goal setting, commitment enhancement</li>
+          <li><span class="key-term">Action:</span> Behavioral strategies, skill building, contingency management</li>
+          <li><span class="key-term">Maintenance:</span> Relapse prevention, stimulus control, social support</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Common Factors and the Therapeutic Alliance</h2>
+        <p>Research consistently shows that <span class="key-term">common factors</span> account for a substantial proportion of therapy outcome variance -- often cited as more predictive than specific technique factors. Key common factors include:</p>
+
+        <h3>The Therapeutic Alliance</h3>
+        <p><span class="key-term">Bordin's (1979) pantheoretical model</span> defines the alliance as consisting of three components:</p>
+        <ol>
+          <li><strong>Agreement on goals:</strong> Therapist and client share an understanding of the targets of treatment</li>
+          <li><strong>Agreement on tasks:</strong> Both parties agree on the activities and methods used in therapy</li>
+          <li><strong>The relational bond:</strong> Mutual trust, respect, liking, and attachment between therapist and client</li>
+        </ol>
+        <div class="definition-box">
+          <strong>Meta-analytic findings:</strong> The alliance-outcome correlation is approximately r = .28 (Horvath et al., 2011), accounting for roughly 7-8% of outcome variance. While this is a modest effect size, the alliance is one of the strongest and most consistent predictors of treatment outcome across orientations.
+        </div>
+
+        <h3>Other Common Factors</h3>
+        <ul>
+          <li><span class="key-term">Empathy:</span> The therapist's ability to understand the client's experience (r = .28 with outcome)</li>
+          <li><span class="key-term">Positive regard / warmth:</span> Unconditional acceptance of the client</li>
+          <li><span class="key-term">Congruence / genuineness:</span> The therapist's authenticity in the relationship</li>
+          <li><span class="key-term">Client expectations (placebo/hope):</span> The client's belief that therapy will help</li>
+          <li><span class="key-term">Extratherapeutic factors:</span> Client variables and life events outside of therapy -- Lambert (1992) estimated these account for approximately 40% of outcome variance</li>
+        </ul>
+
+        <h3>Lambert's Outcome Factors</h3>
+        <p>Lambert (1992) proposed the following estimated contributions to therapeutic outcome:</p>
+        <table>
+          <tr><th>Factor</th><th>Estimated Variance</th></tr>
+          <tr><td>Extratherapeutic change (client/life factors)</td><td>40%</td></tr>
+          <tr><td>Common factors (relationship)</td><td>30%</td></tr>
+          <tr><td>Expectancy / placebo effects</td><td>15%</td></tr>
+          <tr><td>Specific techniques</td><td>15%</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> These percentages are frequently tested. Remember that Lambert's model suggests technique-specific factors account for only about 15% of outcome variance, while extratherapeutic factors contribute the most at 40%. This supports the "common factors" perspective, though it does not negate the importance of ESTs.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Outcome Monitoring</h2>
+        <p><span class="key-term">Routine outcome monitoring (ROM)</span> refers to the systematic tracking of client progress during treatment using standardized measures. Research demonstrates that monitoring outcomes and providing feedback to clinicians improves results, particularly for clients who are not responding well (not-on-track clients).</p>
+
+        <h3>Key Outcome Monitoring Instruments</h3>
+        <ul>
+          <li><span class="key-term">Outcome Questionnaire-45 (OQ-45):</span> Lambert's 45-item self-report measure assessing symptom distress, interpersonal relations, and social role functioning. Most extensively researched feedback tool.</li>
+          <li><span class="key-term">Session Rating Scale (SRS) and Outcome Rating Scale (ORS):</span> Miller and Duncan's ultra-brief (4-item each) measures of the therapeutic alliance and client functioning</li>
+          <li><span class="key-term">Patient Health Questionnaire-9 (PHQ-9):</span> 9-item depression severity measure commonly used in integrated care settings</li>
+          <li><span class="key-term">GAD-7:</span> 7-item measure of generalized anxiety severity</li>
+          <li><span class="key-term">PCOMS (Partners for Change Outcome Management System):</span> An integrated feedback system using the ORS and SRS</li>
+        </ul>
+
+        <h3>The Dose-Effect Model</h3>
+        <p>Howard et al. (1986) proposed the <span class="key-term">dose-effect model</span>, which suggests a log-linear relationship between the number of therapy sessions and improvement. Key findings:</p>
+        <ul>
+          <li>Approximately 50% of clients show clinically significant improvement by session 8</li>
+          <li>Approximately 75% improve by session 26</li>
+          <li>There are diminishing returns with additional sessions, though some clients require longer treatment</li>
+          <li>The rate of improvement is fastest in the earliest sessions (negatively accelerating curve)</li>
+        </ul>
+
+        <h3>Feedback-Informed Treatment</h3>
+        <p>Lambert and colleagues demonstrated that providing therapists with feedback about client progress (via the OQ-45) improved outcomes for <span class="key-term">not-on-track clients</span> by 50-100% compared to treatment-as-usual. This approach has been termed <span class="key-term">feedback-informed treatment (FIT)</span>.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>The Dodo Bird Verdict and Its Critics</h2>
+        <p>The <span class="key-term">Dodo bird verdict</span> (from Rosenzweig, 1936, and later Luborsky et al., 1975) holds that all bona fide psychotherapies produce roughly equivalent outcomes -- "everybody has won, and all must have prizes." Supporting and critiquing evidence includes:</p>
+        <ul>
+          <li><strong>Supporting evidence:</strong> Meta-analyses by Wampold (2001) found minimal differences between active treatments when researcher allegiance and other confounds are controlled</li>
+          <li><strong>Opposing evidence:</strong> For specific disorders, some treatments show clear superiority (e.g., ERP for OCD, exposure therapy for specific phobias, behavioral treatments for autism spectrum disorder)</li>
+          <li><strong>Middle ground:</strong> Most researchers now accept that common factors are powerful, but specific techniques add incremental value for certain conditions</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Exam Tip:</strong> The exam may present scenarios asking you to evaluate whether one treatment is superior to another. Remember: across disorders, differences between bona fide treatments are often small, but for specific conditions (especially anxiety disorders), behavioral and exposure-based treatments have demonstrated superiority.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cultural Considerations in Treatment Selection</h2>
+        <p>EBPP requires that treatment selection account for patient cultural context. Key considerations include:</p>
+        <ul>
+          <li><span class="key-term">Cultural adaptation of ESTs:</span> Research supports that culturally adapted treatments (those modified to account for the client's language, cultural values, and worldview) are more effective for ethnic minority clients than unadapted versions (Griner & Smith, 2006, d = 0.45)</li>
+          <li><span class="key-term">Therapist cultural competence:</span> The therapist's ability to understand and work within the client's cultural framework enhances the therapeutic alliance and improves outcomes</li>
+          <li><span class="key-term">Client treatment preferences:</span> Racial and ethnic minority clients may have preferences for certain treatment approaches or may be less likely to engage with treatments perceived as culturally incongruent</li>
+          <li><span class="key-term">Access and retention:</span> Structural barriers (language, transportation, insurance, stigma) disproportionately affect minority populations and must be considered in treatment planning</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> The EBPP model explicitly includes patient characteristics, culture, and preferences as a co-equal component alongside research evidence. This means that the "best" treatment is not simply the most researched one -- it is the one that integrates the strongest evidence with the specific client's context and values.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Prescriptive Matching and Treatment Resistance</h2>
+        <p>Research on prescriptive treatment matching has identified several principles for improving outcomes with treatment-resistant clients:</p>
+        <ul>
+          <li><span class="key-term">Motivational enhancement:</span> For clients low in motivation, beginning with motivational interviewing (MI) before introducing structured treatments improves engagement and outcomes</li>
+          <li><span class="key-term">Stepped care:</span> Starting with less intensive interventions and stepping up to more intensive treatments as needed is both cost-effective and clinically sound</li>
+          <li><span class="key-term">Alliance rupture repair:</span> Safran and Muran (2000) demonstrated that identifying and repairing alliance ruptures (confrontation ruptures and withdrawal ruptures) is associated with improved outcomes, particularly with difficult-to-engage clients</li>
+          <li><span class="key-term">Therapist effects:</span> Some therapists consistently achieve better outcomes than others. Therapist effects account for approximately 5-8% of outcome variance, comparable to or exceeding the contribution of specific techniques</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Topics</h2>
+        <div class="definition-box">
+          <strong>EBPP three components:</strong> Best available research + clinical expertise + patient characteristics/culture/preferences. All three are essential.
+        </div>
+        <div class="definition-box">
+          <strong>Lambert's percentages:</strong> Extratherapeutic (40%), common factors (30%), expectancy (15%), technique (15%).
+        </div>
+        <div class="definition-box">
+          <strong>Alliance:</strong> Bordin's model = goals + tasks + bond. Consistent predictor (r ~ .28) across orientations and formats.
+        </div>
+        <div class="definition-box">
+          <strong>Dose-effect:</strong> ~50% improved by session 8, ~75% by session 26 (Howard et al., 1986).
+        </div>
+        <p class="citation">References: APA (2006). Evidence-Based Practice in Psychology. Bordin (1979). The generalizability of the psychoanalytic concept of the working alliance. Lambert (1992). Psychotherapy outcome research. Horvath et al. (2011). Alliance in individual psychotherapy. Howard et al. (1986). The dose-effect relationship in psychotherapy.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="assessment-ethics.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Assessment Ethics</div>
+          </div>
+        </a>
+        <a href="index.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Back to</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

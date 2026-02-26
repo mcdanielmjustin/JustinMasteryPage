@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Measuring What Matters: Content & Construct Validity | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; color: var(--text-primary); }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .definition-box h4 { margin: 0 0 12px; color: var(--accent); font-size: 1rem; }
+    .definition-box p { margin: 0; color: var(--text-secondary); }
+    .definition-box ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .definition-box li { margin-bottom: 8px; }
+
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .example-box h4 { margin: 0 0 12px; color: #60a5fa; font-size: 1rem; }
+    .example-box p { margin: 0; color: var(--text-secondary); }
+
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .clinical-note h4 { margin: 0 0 12px; color: #4ade80; font-size: 1rem; }
+    .clinical-note p { margin: 0; color: var(--text-secondary); }
+    .clinical-note ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .clinical-note li { margin-bottom: 8px; }
+
+    .citation { border-left: 3px solid var(--accent); padding-left: 16px; margin: 24px 0; font-style: italic; color: var(--text-muted); }
+
+    .exam-focus { background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 28px; margin: 40px 0; }
+    .exam-focus h3 { color: var(--accent); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    .exam-focus ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .exam-focus li { margin-bottom: 10px; }
+
+    .references { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .references h3 { margin-bottom: 20px; }
+    .reference-list { list-style: none; }
+    .reference-list li { margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; padding-left: 32px; text-indent: -32px; }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Measuring What Matters: Content & Construct Validity</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+            <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link active"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 10</div>
+        <h1>Measuring What Matters: Content & Construct Validity</h1>
+        <div class="chapter-meta">
+          <span>Content, construct, and convergent/divergent validity</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Validity</h2>
+        <p>Validity is the most fundamental consideration in test development and use. It refers to the degree to which evidence and theory support the interpretations of test scores for proposed uses. Unlike reliability, which concerns consistency of measurement, validity addresses whether a test actually measures what it claims to measure and whether inferences drawn from scores are appropriate (AERA et al., 2014).</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <ul>
+            <li><strong>Validity:</strong> The degree to which evidence supports the intended interpretation of test scores for a specific purpose</li>
+            <li><strong>Validation:</strong> The ongoing process of accumulating evidence to support score interpretations</li>
+            <li><strong>Validity Coefficient:</strong> A correlation between test scores and a criterion measure</li>
+            <li><strong>Construct:</strong> A theoretical concept or attribute that a test is designed to measure</li>
+          </ul>
+        </div>
+
+        <p>Contemporary validity theory emphasizes that validity is not a property of the test itself, but rather of the <span class="key-term">interpretations and uses</span> of test scores. A test may be valid for one purpose (e.g., screening for depression) but not for another (e.g., diagnosing specific depressive disorders). Messick (1989) articulated an influential unitary concept of validity, arguing that all validity evidence relates to construct validity.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Sources of Validity Evidence</h2>
+        <p>The Standards for Educational and Psychological Testing (AERA et al., 2014) identifies five major sources of validity evidence. Each provides different information about the appropriateness of score interpretations.</p>
+
+        <h3>Evidence Based on Test Content</h3>
+        <p><span class="key-term">Content validity</span> refers to the degree to which test items adequately sample the domain of content the test is intended to measure. It is established through logical analysis rather than statistical procedures and is particularly important for achievement tests and job performance assessments.</p>
+
+        <div class="definition-box">
+          <h4>Establishing Content Validity</h4>
+          <ul>
+            <li><strong>Domain definition:</strong> Clearly specify the content domain to be measured</li>
+            <li><strong>Test blueprint:</strong> Create a table of specifications linking items to content areas</li>
+            <li><strong>Expert review:</strong> Have subject matter experts evaluate item relevance and representativeness</li>
+            <li><strong>Content validity ratio (CVR):</strong> Quantify agreement among experts about item essentiality</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h4>Content Validity Example</h4>
+          <p>A licensing exam for clinical psychologists should sample knowledge across relevant domains: assessment, diagnosis, treatment, ethics, and research methods. If the exam heavily emphasizes one area while neglecting others, it would have poor content validity for measuring overall competence in clinical psychology.</p>
+        </div>
+
+        <h4>Face Validity</h4>
+        <p><span class="key-term">Face validity</span> refers to whether a test appears to measure what it claims to measure, from the perspective of examinees or untrained observers. While not technically a form of validity evidence, face validity can affect examinee motivation, public acceptance, and perceived fairness. A test can have good construct validity but poor face validity, or vice versa.</p>
+
+        <h3>Evidence Based on Response Processes</h3>
+        <p>This type of evidence examines whether examinees actually engage in the cognitive processes the test intends to measure. Methods include think-aloud protocols, eye-tracking studies, and analysis of response patterns.</p>
+
+        <div class="clinical-note">
+          <h4>Response Process Investigation</h4>
+          <p>If a reading comprehension test is designed to measure inference-making, validity evidence should demonstrate that examinees actually make inferences to answer questions, rather than relying on prior knowledge or test-taking strategies that bypass the intended processes.</p>
+        </div>
+
+        <h3>Evidence Based on Internal Structure</h3>
+        <p>Internal structure evidence examines whether the relationships among test items and components conform to the theoretical structure of the construct. <span class="key-term">Factor analysis</span> is the primary statistical technique for evaluating internal structure.</p>
+
+        <h4>Factor Analysis</h4>
+        <p><span class="key-term">Exploratory factor analysis (EFA)</span> identifies the underlying factor structure without prior hypotheses about the number or nature of factors. <span class="key-term">Confirmatory factor analysis (CFA)</span> tests whether data fit a hypothesized factor structure based on theory.</p>
+
+        <div class="example-box">
+          <h4>Factor Analysis Example</h4>
+          <p>An anxiety measure theorized to assess three components (cognitive, somatic, behavioral) should show three distinct factors in factor analysis. If items from different subscales load on the same factor, or if a single general factor emerges, the theoretical structure is not supported.</p>
+        </div>
+
+        <h3>Evidence Based on Relations to Other Variables</h3>
+        <p>This evidence demonstrates that test scores relate to external variables in ways consistent with the theoretical understanding of the construct. This category includes convergent and discriminant validity evidence, as well as criterion-related validity.</p>
+
+        <h4>Convergent Validity</h4>
+        <p><span class="key-term">Convergent validity</span> is demonstrated when a test correlates strongly with other measures of the same or similar constructs. High correlations with conceptually related measures support the interpretation that the test measures the intended construct.</p>
+
+        <h4>Discriminant (Divergent) Validity</h4>
+        <p><span class="key-term">Discriminant validity</span> is demonstrated when a test shows low correlations with measures of theoretically unrelated constructs. This evidence supports the distinctiveness of the measured construct.</p>
+
+        <div class="definition-box">
+          <h4>Multitrait-Multimethod Matrix</h4>
+          <p>Campbell and Fiske (1959) introduced the <span class="key-term">multitrait-multimethod (MTMM) matrix</span> to evaluate both convergent and discriminant validity simultaneously. The matrix examines correlations among multiple traits measured by multiple methods.</p>
+          <ul>
+            <li><strong>Convergent validity:</strong> High correlations between the same trait measured by different methods (monotrait-heteromethod)</li>
+            <li><strong>Discriminant validity:</strong> Lower correlations between different traits, even when measured by the same method (heterotrait-monomethod)</li>
+          </ul>
+        </div>
+
+        <h3>Evidence Based on Consequences of Testing</h3>
+        <p>This evidence considers the intended and unintended consequences of test use, including potential benefits and harms. It addresses whether test use achieves its intended outcomes and whether any negative consequences are related to construct-irrelevant factors such as bias.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Construct Validity</h2>
+        <p><span class="key-term">Construct validity</span> is the overarching concept that encompasses all validity evidence. It addresses the fundamental question: Does the test measure the theoretical construct it purports to measure? All other forms of validity evidence contribute to construct validity (Cronbach & Meehl, 1955).</p>
+
+        <h3>The Nomological Network</h3>
+        <p>Cronbach and Meehl (1955) introduced the concept of a <span class="key-term">nomological network</span>—the theoretical framework specifying the relationships between a construct and other constructs, as well as observable manifestations. Validity evidence supports or challenges elements of this network.</p>
+
+        <div class="example-box">
+          <h4>Nomological Network for Intelligence</h4>
+          <p>The nomological network for intelligence includes theoretical relationships (intelligence should correlate positively with academic achievement, problem-solving ability, and processing speed) and observable indicators (IQ scores should predict school grades, job performance in complex occupations, and performance on cognitive tasks). Evidence supporting these relationships strengthens construct validity.</p>
+        </div>
+
+        <h3>Threats to Construct Validity</h3>
+        <p>Two major threats can undermine construct validity:</p>
+
+        <h4>Construct Underrepresentation</h4>
+        <p><span class="key-term">Construct underrepresentation</span> occurs when a test fails to capture important aspects of the construct. The test is too narrow, measuring only part of what it should measure.</p>
+
+        <h4>Construct-Irrelevant Variance</h4>
+        <p><span class="key-term">Construct-irrelevant variance</span> occurs when test scores are influenced by factors unrelated to the construct. These irrelevant factors can include test anxiety, reading ability on non-reading tests, or cultural bias.</p>
+
+        <div class="clinical-note">
+          <h4>Addressing Construct Validity Threats</h4>
+          <ul>
+            <li><strong>Underrepresentation:</strong> Ensure comprehensive sampling of the construct domain; use multiple item formats</li>
+            <li><strong>Irrelevant variance:</strong> Minimize irrelevant difficulty sources; provide accommodations when appropriate; evaluate differential item functioning across groups</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Validity Generalization</h2>
+        <p><span class="key-term">Validity generalization</span> refers to the extent to which validity evidence obtained in one context applies to other contexts, populations, or situations. Schmidt and Hunter (1977) demonstrated that much apparent variability in validity coefficients across studies reflects statistical artifacts (sampling error, range restriction, measurement error) rather than true differences.</p>
+
+        <h3>Meta-Analysis of Validity Coefficients</h3>
+        <p>Validity generalization studies use meta-analytic techniques to:</p>
+        <ul>
+          <li>Estimate the mean true validity across studies</li>
+          <li>Determine how much variability remains after correcting for artifacts</li>
+          <li>Identify moderators that explain remaining variability</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Validity Generalization Example</h4>
+          <p>Meta-analyses of cognitive ability tests show that their validity for predicting job performance generalizes across jobs and settings, with corrected validity coefficients typically ranging from .50 to .60 for overall job performance. This suggests that cognitive ability is a valid predictor across many employment contexts.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Test Bias and Fairness</h2>
+        <p>Test bias is a psychometric concept referring to systematic errors in test scores or predictions for members of particular groups. A test is considered biased if it systematically over- or underpredicts criterion performance for certain groups.</p>
+
+        <h3>Types of Bias</h3>
+
+        <h4>Predictive Bias</h4>
+        <p><span class="key-term">Predictive bias</span> exists when a test's regression line for predicting a criterion differs across groups. If the same test score predicts different criterion levels for different groups, selection decisions based on the test may be unfair.</p>
+
+        <h4>Differential Item Functioning (DIF)</h4>
+        <p><span class="key-term">Differential item functioning</span> occurs when examinees of equal ability from different groups have different probabilities of answering an item correctly. DIF analysis identifies potentially biased items that may function differently across demographic groups.</p>
+
+        <div class="definition-box">
+          <h4>Bias vs. Fairness</h4>
+          <p><strong>Bias</strong> is a statistical/psychometric concept referring to systematic measurement error. <strong>Fairness</strong> is a broader concept encompassing social values and judgments about appropriate test use. A test can be psychometrically unbiased yet still raise fairness concerns if its use produces adverse impact on protected groups.</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Evaluating Test Bias</h4>
+          <ul>
+            <li>Compare regression equations across groups (intercepts and slopes)</li>
+            <li>Conduct DIF analyses to identify problematic items</li>
+            <li>Examine whether content represents all groups fairly</li>
+            <li>Consider the consequences of test use for different groups</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Relationship Between Reliability and Validity</h2>
+        <p>Reliability is necessary but not sufficient for validity. A test cannot measure a construct accurately (be valid) if it does not measure consistently (be reliable). However, a test can be highly reliable while measuring the wrong construct.</p>
+
+        <div class="definition-box">
+          <h4>Key Relationships</h4>
+          <ul>
+            <li>Validity cannot exceed the square root of reliability: <strong>r<sub>xy</sub> ≤ √r<sub>xx</sub></strong></li>
+            <li>High reliability does not guarantee validity</li>
+            <li>Low reliability limits the maximum possible validity</li>
+            <li>Both reliability and validity are essential for meaningful measurement</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h4>Reliability-Validity Relationship</h4>
+          <p>A weight scale might reliably measure weight (high reliability) but would have no validity for measuring intelligence. Conversely, a test with reliability of .64 can have maximum validity of only √.64 = .80, regardless of how well the content represents the intended construct.</p>
+        </div>
+      </section>
+
+      <div class="exam-focus">
+        <h3>EPPP Exam Focus Points</h3>
+        <ul>
+          <li><strong>Validity</strong> refers to the appropriateness of interpretations of test scores for specific purposes—not a property of the test itself</li>
+          <li><strong>Content validity</strong> is established through logical analysis and expert judgment, not statistical methods</li>
+          <li><strong>Face validity</strong> is not technically a form of validity evidence, but affects examinee acceptance</li>
+          <li><strong>Construct validity</strong> is the overarching concept; all validity evidence contributes to it</li>
+          <li><strong>Convergent validity:</strong> High correlations with measures of similar constructs</li>
+          <li><strong>Discriminant validity:</strong> Low correlations with measures of unrelated constructs</li>
+          <li>The <strong>MTMM matrix</strong> evaluates both convergent and discriminant validity simultaneously</li>
+          <li><strong>Construct underrepresentation:</strong> Test is too narrow; <strong>Construct-irrelevant variance:</strong> Test measures unintended factors</li>
+          <li><strong>Validity generalization</strong> shows validity evidence can apply across settings when corrected for artifacts</li>
+          <li><strong>Test bias</strong> is systematic measurement error for specific groups; <strong>fairness</strong> involves value judgments about test use</li>
+        </ul>
+      </div>
+
+      <section class="references">
+        <h3>References</h3>
+        <ul class="reference-list">
+          <li>American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing</em>. AERA.</li>
+          <li>Campbell, D. T., & Fiske, D. W. (1959). Convergent and discriminant validation by the multitrait-multimethod matrix. <em>Psychological Bulletin, 56</em>(2), 81-105.</li>
+          <li>Cronbach, L. J., & Meehl, P. E. (1955). Construct validity in psychological tests. <em>Psychological Bulletin, 52</em>(4), 281-302.</li>
+          <li>Messick, S. (1989). Validity. In R. L. Linn (Ed.), <em>Educational measurement</em> (3rd ed., pp. 13-103). American Council on Education/Macmillan.</li>
+          <li>Schmidt, F. L., & Hunter, J. E. (1977). Development of a general solution to the problem of validity generalization. <em>Journal of Applied Psychology, 62</em>(5), 529-540.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="reliability.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Consistency of Measurement: Test Reliability</div>
+          </div>
+        </a>
+        <a href="criterion-validity.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Predicting Outcomes: Criterion-Related Validity</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

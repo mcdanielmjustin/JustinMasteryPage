@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through the Unconscious | Domain 4 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #22c55e; --accent-dim: rgba(34, 197, 94, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 4</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Through the Unconscious</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 4</div>
+        <div class="domain-title">How Therapy Works</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="insight.html" class="chapter-link active"><span class="chapter-number">1</span>Through the Unconscious</a></li>
+        <li class="chapter-item"><a href="cognition.html" class="chapter-link"><span class="chapter-number">2</span>Through Thoughts</a></li>
+        <li class="chapter-item"><a href="conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Through Conditioning</a></li>
+        <li class="chapter-item"><a href="acceptance.html" class="chapter-link"><span class="chapter-number">4</span>Through Acceptance</a></li>
+        <li class="chapter-item"><a href="relationship.html" class="chapter-link"><span class="chapter-number">5</span>Through the Relationship</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">6</span>Through Motivation</a></li>
+        <li class="chapter-item"><a href="systems.html" class="chapter-link"><span class="chapter-number">7</span>Through the System</a></li>
+        <li class="chapter-item"><a href="evidence.html" class="chapter-link"><span class="chapter-number">8</span>Through Evidence</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 8</div>
+        <h1>Through the Unconscious</h1>
+        <div class="chapter-meta">
+          <span>Depth, insight &amp; the analytic tradition</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 4)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 4)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Freud and Classical Psychoanalysis</h2>
+        <p><span class="key-term">Sigmund Freud</span> developed psychoanalysis in the late 19th century, creating the first comprehensive theory of personality and the first systematic psychotherapy. Psychoanalysis is based on the premise that unconscious conflicts, often originating in childhood, drive psychological symptoms and maladaptive behavior.</p>
+
+        <div class="definition-box">
+          <h4>Structural Model of the Mind</h4>
+          <p>Freud's structural model posits three mental structures: (1) <strong>Id</strong> -- operates on the pleasure principle; contains instinctual drives (Eros/life and Thanatos/death); entirely unconscious. (2) <strong>Ego</strong> -- operates on the reality principle; mediates between id impulses, superego demands, and external reality; spans conscious, preconscious, and unconscious. (3) <strong>Superego</strong> -- the moral component, incorporating parental and societal standards; includes the conscience (punitive) and the ego-ideal (aspirational).</p>
+        </div>
+
+        <h3>Defense Mechanisms</h3>
+        <p><span class="key-term">Defense mechanisms</span> are unconscious ego strategies for managing anxiety arising from conflicts between the id, superego, and reality. Key defenses include:</p>
+        <table>
+          <tr><th>Defense</th><th>Definition</th><th>Example</th></tr>
+          <tr><td><strong>Repression</strong></td><td>Pushing threatening material into the unconscious</td><td>Having no memory of a traumatic event</td></tr>
+          <tr><td><strong>Denial</strong></td><td>Refusing to acknowledge external reality</td><td>An alcoholic insisting they have no drinking problem</td></tr>
+          <tr><td><strong>Projection</strong></td><td>Attributing one's unacceptable feelings to others</td><td>"I'm not angry at you -- you're angry at me!"</td></tr>
+          <tr><td><strong>Displacement</strong></td><td>Redirecting impulses toward a safer target</td><td>Yelling at your spouse after a conflict with your boss</td></tr>
+          <tr><td><strong>Reaction formation</strong></td><td>Behaving opposite to an unacceptable impulse</td><td>Being excessively kind to someone you resent</td></tr>
+          <tr><td><strong>Rationalization</strong></td><td>Creating logical justifications for irrational behavior</td><td>"I didn't want that job anyway"</td></tr>
+          <tr><td><strong>Sublimation</strong></td><td>Channeling unacceptable impulses into socially acceptable activities</td><td>Aggressive urges expressed through competitive sports</td></tr>
+          <tr><td><strong>Regression</strong></td><td>Returning to an earlier developmental stage</td><td>An adult throwing a tantrum under stress</td></tr>
+          <tr><td><strong>Undoing</strong></td><td>Attempting to reverse an unacceptable action or thought</td><td>Being excessively generous after having hostile thoughts</td></tr>
+          <tr><td><strong>Intellectualization</strong></td><td>Focusing on abstract/intellectual aspects to avoid emotional content</td><td>Discussing the statistics of cancer rather than one's fear of dying</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Defense Mechanism Hierarchy</h4>
+          <p>Defenses range from <strong>immature/primitive</strong> (denial, projection, splitting) to <strong>mature</strong> (sublimation, humor, suppression). <span class="key-term">Sublimation</span> is considered the most mature defense. <span class="key-term">Repression</span> is considered the most fundamental defense -- the cornerstone of all other defenses. For the EPPP, be able to distinguish between similar defenses: projection vs. displacement, repression vs. suppression (suppression is conscious), rationalization vs. intellectualization.</p>
+        </div>
+
+        <h3>Transference and Countertransference</h3>
+        <p><span class="key-term">Transference</span> occurs when the client unconsciously redirects feelings and attitudes from past relationships (especially with parents) onto the therapist. The analysis of transference is considered the central vehicle of change in psychoanalysis. <span class="key-term">Countertransference</span> refers to the therapist's emotional reactions to the client, which may reflect the therapist's own unresolved conflicts or provide clinically useful information about the client's interpersonal impact.</p>
+
+        <h3>Key Psychoanalytic Techniques</h3>
+        <ul>
+          <li><span class="key-term">Free association</span> -- The patient says whatever comes to mind without censorship; the "fundamental rule" of psychoanalysis</li>
+          <li><span class="key-term">Dream analysis</span> -- Dreams are the "royal road to the unconscious"; manifest content (surface story) vs. latent content (hidden meaning)</li>
+          <li><span class="key-term">Interpretation</span> -- The analyst offers explanations of the patient's unconscious meanings</li>
+          <li><span class="key-term">Analysis of resistance</span> -- Exploring the patient's opposition to the therapeutic process (e.g., missing sessions, changing topics)</li>
+          <li><span class="key-term">Working through</span> -- Repeated examination of unconscious material to produce lasting change</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Ego Psychology</h2>
+        <p><span class="key-term">Ego psychology</span> shifted the emphasis from the id to the adaptive functions of the ego. <span class="key-term">Anna Freud</span> systematized the defense mechanisms in <em>The Ego and the Mechanisms of Defense</em> (1936). <span class="key-term">Heinz Hartmann</span> proposed the concept of the <span class="key-term">conflict-free ego sphere</span> -- autonomous ego functions (perception, memory, learning) that operate independently of instinctual drives.</p>
+
+        <div class="definition-box">
+          <h4>Key Ego Psychology Concepts</h4>
+          <p><strong>Ego autonomy</strong> -- The ego has its own energy source and can function independently of the id. <strong>Adaptation</strong> -- The ego's primary function is to facilitate adaptation to the environment. <strong>Erik Erikson</strong> extended ego psychology across the lifespan with his eight psychosocial stages, emphasizing social and cultural influences on ego development. Erikson's stages emphasize ego identity crises at each developmental period.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Object Relations Theory</h2>
+        <p><span class="key-term">Object relations theory</span> focuses on how early relationships (especially with the mother) are internalized as mental representations ("objects") that shape personality and later relationships. The term "object" refers to significant people in the individual's life.</p>
+
+        <h3>Melanie Klein</h3>
+        <p><span class="key-term">Klein</span> proposed that infants experience two fundamental positions in relating to the mother:</p>
+        <ul>
+          <li><strong>Paranoid-schizoid position</strong> (first few months) -- The infant uses <span class="key-term">splitting</span>, perceiving the mother as either all-good ("good breast") or all-bad ("bad breast"); characterized by persecutory anxiety</li>
+          <li><strong>Depressive position</strong> (from ~6 months) -- The infant integrates good and bad aspects of the mother into a whole object; experiences guilt and concern for having directed aggression at the loved object</li>
+        </ul>
+
+        <h3>Donald Winnicott</h3>
+        <p><span class="key-term">Winnicott</span> introduced several influential concepts:</p>
+        <ul>
+          <li><span class="key-term">Good-enough mother</span> -- The caregiver who adequately (not perfectly) meets the infant's needs, gradually allowing manageable frustrations that promote development</li>
+          <li><span class="key-term">Transitional object</span> -- An object (e.g., a blanket, teddy bear) that represents the infant's first "not-me" possession, bridging the space between internal and external reality</li>
+          <li><span class="key-term">True self vs. false self</span> -- The true self emerges when the good-enough mother mirrors the infant's spontaneous gestures; the false self develops as a protective compliance when the mother substitutes her own gestures for the infant's</li>
+          <li><span class="key-term">Holding environment</span> -- The therapist provides a safe, empathic space analogous to the mother's holding of the infant</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Clinical Application</h4>
+          <p>A client with borderline personality features frequently sees the therapist as either "the best therapist ever" or "completely useless." This <span class="key-term">splitting</span> reflects a failure to achieve Klein's depressive position -- the inability to integrate good and bad qualities into a coherent whole-object representation. Object relations therapy would help the client develop the capacity for ambivalence (holding contradictory feelings simultaneously).</p>
+        </div>
+
+        <h3>Otto Kernberg</h3>
+        <p><span class="key-term">Otto Kernberg</span> integrated object relations theory with ego psychology, creating a comprehensive framework for understanding personality pathology -- particularly borderline and narcissistic personality organization. Kernberg's central construct is the <span class="key-term">object relations unit</span>: a mental structure consisting of a self-representation, an object-representation, and the affect linking them. These internalized units, formed through early relational experiences, become the building blocks of personality structure.</p>
+
+        <div class="definition-box">
+          <h4>Three Levels of Personality Organization</h4>
+          <p>Kernberg proposed that personality can be assessed along a structural continuum defined by three criteria: reality testing, identity integration, and predominant defense mechanisms.</p>
+          <p><strong>Neurotic organization:</strong> Intact reality testing, integrated identity (stable and coherent sense of self and others), and reliance on mature/higher-level defenses (repression, rationalization, intellectualization). These individuals experience circumscribed conflicts but maintain a cohesive sense of who they are.</p>
+          <p><strong>Borderline organization:</strong> Reality testing is generally intact but may falter under stress. The hallmark is <span class="key-term">identity diffusion</span> -- a fragmented, contradictory sense of self and others. Predominant defenses are primitive: <span class="key-term">splitting</span>, projective identification, idealization, devaluation, and omnipotent control.</p>
+          <p><strong>Psychotic organization:</strong> Impaired reality testing, severe identity diffusion, and reliance on primitive defenses. The individual cannot reliably distinguish internal experience from external reality.</p>
+        </div>
+
+        <h4>Transference-Focused Psychotherapy (TFP)</h4>
+        <p>Kernberg developed <span class="key-term">Transference-Focused Psychotherapy (TFP)</span>, a manualized, psychodynamic treatment designed primarily for borderline personality disorder. TFP uses the therapeutic relationship as the primary vehicle of change, with particular emphasis on:</p>
+        <ul>
+          <li><span class="key-term">Confrontation</span> -- Drawing the patient's attention to contradictory or split representations as they emerge in the transference (e.g., "Last week I was the best therapist; today I am useless. Can we look at what is happening?")</li>
+          <li><span class="key-term">Interpretation of primitive defenses</span> -- Specifically targeting splitting, projective identification, idealization, and devaluation as they manifest in the here-and-now of the therapeutic relationship</li>
+          <li>Integration of split self and object representations into more coherent, ambivalent wholes -- moving the patient from the paranoid-schizoid position toward the depressive position</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Kernberg vs. Kohut: A Critical Distinction</h4>
+          <p>Kernberg and <span class="key-term">Kohut</span> offer contrasting approaches to narcissistic and borderline pathology, and this distinction is commonly tested on the EPPP. <strong>Kernberg</strong> views narcissistic and borderline pathology as rooted in aggression and primitive defenses; the therapist actively <span class="key-term">confronts</span> and <span class="key-term">interprets</span> defensive operations, particularly splitting and projective identification. <strong>Kohut</strong>, in contrast, views the same pathology as resulting from empathic failures in development; the therapist provides <span class="key-term">empathic mirroring</span> and functions as a selfobject, allowing the client to resume arrested development through transmuting internalization. In short: Kernberg confronts defenses; Kohut provides empathic attunement.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Self Psychology (Kohut)</h2>
+        <p><span class="key-term">Heinz Kohut</span> developed self psychology, focusing on the development and maintenance of a cohesive sense of self. Kohut argued that narcissistic needs are normal developmental requirements, not pathological. Psychopathology arises from empathic failures by caregivers.</p>
+
+        <h3>Selfobject Needs</h3>
+        <p>Kohut identified three fundamental <span class="key-term">selfobject</span> needs -- needs for others to serve psychological functions for the self:</p>
+        <ul>
+          <li><span class="key-term">Mirroring</span> -- The need to be validated, admired, and recognized ("You are wonderful")</li>
+          <li><span class="key-term">Idealization</span> -- The need to look up to and merge with an admired, powerful other ("You are wonderful and I am part of you")</li>
+          <li><span class="key-term">Twinship/Alter ego</span> -- The need to feel a sense of essential likeness with others ("We are alike")</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Therapeutic Approach in Self Psychology</h4>
+          <p>The therapist functions as an empathic <span class="key-term">selfobject</span> who provides the mirroring and idealization the client missed in development. Inevitable empathic failures (<span class="key-term">optimal frustrations</span>) by the therapist, when repaired through empathic understanding, allow the client to develop internal self-soothing capacities through a process called <span class="key-term">transmuting internalization</span>. The therapist uses <span class="key-term">empathic immersion</span> (experiencing the world from the client's perspective) as the primary therapeutic stance.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Brief Psychodynamic Therapy</h2>
+        <p>Several clinicians adapted psychoanalytic principles into time-limited formats. These <span class="key-term">brief psychodynamic therapies</span> typically involve 12-40 sessions and share key features:</p>
+        <ul>
+          <li>Identification of a <span class="key-term">central conflict or focal theme</span> early in treatment</li>
+          <li>More active therapist role compared to classical psychoanalysis</li>
+          <li>Use of transference interpretation focused specifically on the core theme</li>
+          <li>A predetermined time limit that creates urgency and motivation</li>
+        </ul>
+
+        <h3>Notable Brief Psychodynamic Approaches</h3>
+        <table>
+          <tr><th>Theorist</th><th>Approach</th><th>Key Features</th></tr>
+          <tr><td><strong>Peter Sifneos</strong></td><td>Short-Term Anxiety-Provoking Psychotherapy (STAPP)</td><td>Actively confrontational; requires high motivation and specific oedipal focus; provocative interpretation of defenses</td></tr>
+          <tr><td><strong>Habib Davanloo</strong></td><td>Intensive Short-Term Dynamic Psychotherapy (ISTDP)</td><td>Actively challenges defenses; uses "trial therapy" for assessment; aims to unlock unconscious feelings</td></tr>
+          <tr><td><strong>Hans Strupp &amp; Jeffrey Binder</strong></td><td>Time-Limited Dynamic Psychotherapy (TLDP)</td><td>Focus on the Cyclic Maladaptive Pattern (CMP); 25-30 sessions; emphasizes interpersonal patterns</td></tr>
+          <tr><td><strong>Lester Luborsky</strong></td><td>Supportive-Expressive Therapy</td><td>Identifies the Core Conflictual Relationship Theme (CCRT): wish, response from other, response of self</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Core Conflictual Relationship Theme (CCRT)</h4>
+          <p>Luborsky's <span class="key-term">CCRT</span> method identifies recurring relationship patterns across the client's narratives. Each episode is coded for three components: (1) the client's <strong>wish or need</strong> (e.g., "I want to be accepted"), (2) the <strong>response of the other</strong> (e.g., "Others reject me"), and (3) the <strong>response of the self</strong> (e.g., "I feel depressed and withdraw"). The most frequently occurring pattern becomes the therapeutic focus. This method has been widely used in psychotherapy process research.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Commonly Tested Concepts</h2>
+        <ul>
+          <li>Know all major <span class="key-term">defense mechanisms</span> and be able to identify them in vignettes; <span class="key-term">sublimation</span> = most mature, <span class="key-term">repression</span> = most fundamental</li>
+          <li><span class="key-term">Transference</span> = client's feelings toward therapist; <span class="key-term">countertransference</span> = therapist's feelings toward client</li>
+          <li>Winnicott: <span class="key-term">transitional object</span>, <span class="key-term">good-enough mother</span>, true self/false self</li>
+          <li>Klein: <span class="key-term">paranoid-schizoid</span> and <span class="key-term">depressive positions</span>, splitting</li>
+          <li>Kernberg: three levels of personality organization (<span class="key-term">neurotic</span>, <span class="key-term">borderline</span>, <span class="key-term">psychotic</span>); <span class="key-term">Transference-Focused Psychotherapy (TFP)</span>; confrontation and interpretation of primitive defenses</li>
+          <li>Kernberg vs. Kohut: Kernberg <span class="key-term">confronts</span> primitive defenses; Kohut provides <span class="key-term">empathic mirroring</span></li>
+          <li>Kohut: <span class="key-term">selfobject needs</span> (mirroring, idealization, twinship), <span class="key-term">transmuting internalization</span>, optimal frustration</li>
+          <li>Free association is the <span class="key-term">fundamental rule</span> of psychoanalysis; dreams are the <span class="key-term">royal road to the unconscious</span></li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Freud, S. (1917). <em>Introductory lectures on psycho-analysis.</em> Hogarth Press.</div>
+        <div class="citation">Winnicott, D. W. (1971). <em>Playing and reality.</em> Tavistock Publications.</div>
+        <div class="citation">Kernberg, O. F. (1984). <em>Severe personality disorders: Psychotherapeutic strategies.</em> Yale University Press.</div>
+        <div class="citation">Kohut, H. (1971). <em>The analysis of the self.</em> International Universities Press.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Overview</div>
+          </div>
+        </a>
+        <a href="cognition.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Through Thoughts</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

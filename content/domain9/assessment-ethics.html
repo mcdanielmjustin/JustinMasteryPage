@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment (Std 9) | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Assessment</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology &amp; Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="sidebar-section-label">Part A: APA Ethics Code</li>
+        <li class="chapter-item"><a href="ethics-overview.html" class="chapter-link"><span class="chapter-number">A0</span>Overview & Principles</a></li>
+        <li class="chapter-item"><a href="resolving-ethical-issues.html" class="chapter-link"><span class="chapter-number">A1</span>Resolving Ethical Issues</a></li>
+        <li class="chapter-item"><a href="competence.html" class="chapter-link"><span class="chapter-number">A2</span>Competence</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link"><span class="chapter-number">A3</span>Human Relations</a></li>
+        <li class="chapter-item"><a href="privacy-confidentiality.html" class="chapter-link"><span class="chapter-number">A4</span>Privacy & Confidentiality</a></li>
+        <li class="chapter-item"><a href="advertising.html" class="chapter-link"><span class="chapter-number">A5</span>Advertising</a></li>
+        <li class="chapter-item"><a href="record-keeping-fees.html" class="chapter-link"><span class="chapter-number">A6</span>Record Keeping & Fees</a></li>
+        <li class="chapter-item"><a href="education-training.html" class="chapter-link"><span class="chapter-number">A7</span>Education & Training</a></li>
+        <li class="chapter-item"><a href="research-publication.html" class="chapter-link"><span class="chapter-number">A8</span>Research & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link active"><span class="chapter-number">A9</span>Assessment</a></li>
+        <li class="chapter-item"><a href="therapy-ethics.html" class="chapter-link"><span class="chapter-number">A10</span>Therapy</a></li>
+        <li class="sidebar-section-label">Part B: Psychopharmacology</li>
+        <li class="chapter-item"><a href="pharma-foundations.html" class="chapter-link"><span class="chapter-number">B0</span>Pharmacological Foundations</a></li>
+        <li class="chapter-item"><a href="antidepressants.html" class="chapter-link"><span class="chapter-number">B1</span>Antidepressants</a></li>
+        <li class="chapter-item"><a href="antipsychotics.html" class="chapter-link"><span class="chapter-number">B2</span>Antipsychotics</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">B3</span>Anxiolytics & Sedatives</a></li>
+        <li class="chapter-item"><a href="mood-stabilizers.html" class="chapter-link"><span class="chapter-number">B4</span>Mood Stabilizers</a></li>
+        <li class="chapter-item"><a href="stimulants-adhd.html" class="chapter-link"><span class="chapter-number">B5</span>Stimulants & ADHD Meds</a></li>
+        <li class="sidebar-section-label">Appendix</li>
+        <li class="chapter-item"><a href="professional-issues.html" class="chapter-link"><span class="chapter-number">+</span>Professional Issues</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter A9 of 17</div>
+        <h1>Assessment (Std 9)</h1>
+        <div class="chapter-meta">
+          <span>Test use, informed consent, test security, interpretation</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Standard 9: Assessment</h2>
+        <p>Standard 9 of the APA Ethics Code governs the ethical conduct of psychological assessment. This is one of the most heavily tested standards on the EPPP because assessment is a core professional activity that directly affects clients' lives -- from clinical diagnoses to forensic evaluations, educational placements, and employment decisions.</p>
+        <p>The standard establishes requirements for the proper use, administration, interpretation, and security of psychological tests and assessment instruments. Psychologists must ensure that their assessments are scientifically grounded, culturally appropriate, and conducted with appropriate informed consent.</p>
+        <div class="definition-box">
+          <strong>Assessment vs. Testing</strong>
+          <p><span class="key-term">Psychological assessment</span> is a comprehensive process that integrates information from multiple sources (tests, interviews, observations, records) to answer referral questions. <span class="key-term">Psychological testing</span> refers specifically to the administration and scoring of standardized instruments. Assessment is the broader, clinical process; testing is one component of assessment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.01: Bases for Assessments</h2>
+        <p>Psychologists base the opinions contained in their recommendations, reports, and diagnostic or evaluative statements, including forensic testimony, on information and techniques sufficient to substantiate their findings.</p>
+
+        <h3>9.01(a) -- Sufficient Information</h3>
+        <p>Psychologists provide opinions only after they have conducted an examination of the individual adequate to support their statements or conclusions. When a personal examination is not practical, psychologists document the efforts they made and the results of those efforts, clarify the probable impact of their limited information on the reliability and validity of their opinions, and appropriately limit the nature and extent of their conclusions or recommendations.</p>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>A frequent EPPP scenario: A psychologist is asked to provide a diagnosis or custody recommendation based solely on record review (without examining the individual). Standard 9.01 does not prohibit this, but requires the psychologist to clearly state the limitations and restrict conclusions accordingly. When a personal examination is not practical, the psychologist must document this and qualify their opinions.</p>
+        </div>
+
+        <h3>9.01(b) -- Limitations When Personal Examination Is Not Possible</h3>
+        <p>Except as noted in 9.01(c), psychologists provide opinions of the psychological characteristics of individuals only after they have conducted an examination adequate to support their statements. When, despite reasonable efforts, such an examination is not practical, psychologists document their efforts and the impact on conclusions.</p>
+
+        <h3>9.01(c) -- Record Review Without Examination</h3>
+        <p>When psychologists conduct a record review or provide consultation or supervision and an individual examination is not warranted or necessary, they explain this and the sources of information on which they based their conclusions and recommendations.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.02: Use of Assessments</h2>
+        <p>Psychologists administer, adapt, score, interpret, or use assessment techniques, interviews, tests, or instruments in a manner and for purposes that are appropriate in light of the research on or evidence of the usefulness and proper application of the techniques.</p>
+
+        <h3>9.02(a) -- Appropriate Use</h3>
+        <p>Psychologists use assessment instruments whose validity and reliability have been established for use with members of the population tested. When such validity or reliability has not been established, psychologists describe the strengths and limitations of test results and interpretation.</p>
+
+        <h3>9.02(b) -- Outdated Norms and Cultural Factors</h3>
+        <p>Psychologists use assessment instruments whose validity and reliability have been established for the specific purpose and population. When assessing individuals from populations not represented in the normative sample, psychologists must consider cultural, linguistic, and individual factors that may affect interpretation and clearly note these limitations in reports.</p>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist administers an intelligence test normed on English-speaking Americans to a recent immigrant whose first language is Spanish. The psychologist must note the cultural and linguistic limitations of the assessment, consider using instruments validated for Spanish speakers, and avoid drawing definitive conclusions about intellectual ability based on the potentially biased results.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.03: Informed Consent in Assessments</h2>
+        <p>Psychologists obtain informed consent for assessments, evaluations, or diagnostic services, except when:</p>
+        <ol>
+          <li>Testing is mandated by law or governmental regulations</li>
+          <li>Informed consent is implied because testing is conducted as a routine educational, institutional, or organizational activity (e.g., admission testing)</li>
+          <li>The purpose of the testing is to evaluate decisional capacity</li>
+        </ol>
+
+        <h3>9.03(a) -- Explaining the Purpose</h3>
+        <p>Informed consent includes an explanation of the nature and purpose of the assessment, fees, involvement of third parties, and limits of confidentiality in a language reasonably understandable to the person being assessed or their legal representative.</p>
+
+        <h3>9.03(b) -- Individuals Lacking Capacity</h3>
+        <p>For persons who lack the capacity to consent (e.g., due to cognitive impairment), psychologists provide appropriate explanation, seek the person's assent, consider preferences and best interests, and obtain consent from a legally authorized person.</p>
+
+        <h3>9.03(c) -- Court-Ordered or Mandated Assessment</h3>
+        <p>When services are court ordered or otherwise mandated, psychologists inform the individual of the nature of the anticipated services, including whether the services are court ordered or mandated and any limits of confidentiality, before proceeding.</p>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>Court-ordered assessments still require notification -- the psychologist must tell the individual about the nature of services and limits of confidentiality, even though the person cannot refuse the assessment. Informed consent is modified but not eliminated in mandated evaluations.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.04: Release of Test Data</h2>
+        <p><span class="key-term">Test data</span> refers to raw and scaled scores, client responses to test questions or stimuli, and psychologists' notes and recordings concerning client statements and behavior during an examination. Test data are distinguished from <span class="key-term">test materials</span> (manuals, instruments, protocols, test questions or stimuli).</p>
+
+        <h3>9.04(a) -- Client Request</h3>
+        <p>Pursuant to a client release, psychologists provide test data to the client or other persons identified in the release. Psychologists may refrain from releasing test data to protect a client or others from substantial harm or misuse or misrepresentation of the data or the test, recognizing that in many instances release of confidential information under these circumstances is regulated by law.</p>
+
+        <h3>9.04(b) -- Absent Client Release</h3>
+        <p>In the absence of a client release, psychologists provide test data only as required by law or court order.</p>
+
+        <div class="definition-box">
+          <strong>Test Data vs. Test Materials</strong>
+          <p><span class="key-term">Test data</span> (9.04) = the client's responses, scores, and behavioral observations -- generally released to the client upon request. <span class="key-term">Test materials</span> (9.11) = the test itself (questions, stimuli, manuals, scoring keys) -- protected from release to maintain test security. This distinction is frequently tested on the EPPP.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.05: Test Construction</h2>
+        <p>Psychologists who develop tests and other assessment techniques use appropriate psychometric procedures and current scientific or professional knowledge for test design, standardization, validation, reduction or elimination of bias, and recommendations for use.</p>
+        <p>This standard applies to psychologists who create new assessment instruments and requires that such instruments meet accepted standards for reliability, validity, and fairness.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.06: Interpreting Assessment Results</h2>
+        <p>When interpreting assessment results, including automated interpretations, psychologists take into account the purpose of the assessment as well as the various test factors, test-taking abilities, and other characteristics of the person being assessed, such as situational, personal, linguistic, and cultural differences, that might affect psychologists' judgments or reduce the accuracy of their interpretations. They indicate any significant limitations of their interpretations.</p>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist administering a neuropsychological battery to a client who recently suffered a concussion notes that the client was experiencing headaches and fatigue during testing. The psychologist must note these factors in the report as they may have attenuated test performance, potentially leading to an overestimation of cognitive impairment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.07: Assessment by Unqualified Persons</h2>
+        <p>Psychologists do not promote the use of psychological assessment techniques by unqualified persons, except when such use is conducted for training purposes with appropriate supervision. When psychologists delegate scoring and interpretation to others (e.g., technicians, computer scoring services), they retain responsibility for the appropriate application, interpretation, and use of assessment instruments.</p>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>A psychometrist or testing technician may administer and score tests under supervision, but the psychologist retains full responsibility for interpretation and for ensuring the delegate is properly trained. This connects to Standard 2.05 (Delegation of Work to Others).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.08: Obsolete Tests and Outdated Test Results</h2>
+
+        <h3>9.08(a) -- Obsolete Tests</h3>
+        <p>Psychologists do not base their assessment or intervention decisions or recommendations on data or test results that are outdated for the current purpose.</p>
+
+        <h3>9.08(b) -- Outdated Instruments</h3>
+        <p>Psychologists do not base decisions or recommendations on tests and measures that are obsolete and not useful for the current purpose.</p>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist continuing to use the WISC-III (published 1991) for a cognitive evaluation when the WISC-V (published 2014) is available would potentially violate Standard 9.08, as the older version has outdated norms that may not accurately represent current population characteristics. There may be exceptions (e.g., research comparing results across versions), but for clinical purposes the most current edition should be used.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.09: Test Scoring and Interpretation Services</h2>
+        <p>Psychologists who offer assessment or scoring services to other professionals accurately describe the purpose, norms, validity, reliability, and applications of the procedures and any special qualifications applicable to their use. Psychologists select scoring and interpretation services (including automated services) on the basis of evidence of the validity of the program and procedures as well as on other appropriate considerations.</p>
+
+        <h3>Computer-Based Test Interpretation (CBTI)</h3>
+        <p>Psychologists who use <span class="key-term">computer-based test interpretation</span> services must understand the limitations of such services. Automated interpretations are probabilistic statements based on group data and may not apply to a specific individual. The psychologist, not the computer program, is responsible for the final clinical interpretation.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.10: Explaining Assessment Results</h2>
+        <p>Regardless of whether the scoring and interpretation are done by psychologists, by employees or assistants, or by automated or other outside services, psychologists take reasonable steps to ensure that explanations of results are given to the individual or designated representative unless the nature of the relationship precludes provision of an explanation of results (such as in some organizational consulting, preemployment or security screenings, and forensic evaluations), and this fact has been clearly explained to the person being assessed in advance.</p>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The default rule is that assessment results should be explained to the individual. Exceptions exist for organizational, forensic, and security contexts -- but only when the person was informed in advance that results would not be shared with them. The EPPP tests whether you understand both the rule and its exceptions.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 9.11: Maintaining Test Security</h2>
+        <p>The term <span class="key-term">test materials</span> refers to manuals, instruments, protocols, and test questions or stimuli. Psychologists make reasonable efforts to maintain the integrity and security of test materials and other assessment techniques consistent with law and contractual obligations, and in a manner that permits adherence to this Ethics Code.</p>
+
+        <h3>Balancing Security and Client Rights</h3>
+        <p>Test security concerns must be balanced against clients' rights to access their own data (9.04). The distinction between <strong>test data</strong> (which can be released to clients) and <strong>test materials</strong> (which should be protected) is critical. For example:</p>
+        <ul>
+          <li>A client may receive their scores and responses (test data)</li>
+          <li>A client should not receive the test manual, scoring key, or stimulus materials (test materials)</li>
+          <li>When test data are intertwined with test materials (e.g., a response booklet that includes test questions), the psychologist must use professional judgment to balance client rights with test security</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li>Psychologists base assessment opinions on <strong>sufficient information and appropriate techniques</strong> (9.01). When personal examination is not possible, they must document limitations and qualify their conclusions.</li>
+          <li>Assessment instruments must be <strong>valid and reliable</strong> for the specific population and purpose (9.02). Cultural, linguistic, and individual factors must be considered.</li>
+          <li><strong>Informed consent</strong> is required for assessments except when mandated by law, implied by context, or evaluating decisional capacity (9.03).</li>
+          <li><strong>Test data</strong> (scores, responses, observations) can be released to clients upon request; <strong>test materials</strong> (manuals, questions, stimuli) are protected for test security (9.04 vs. 9.11).</li>
+          <li>Psychologists do not use <strong>obsolete tests</strong> or <strong>outdated test results</strong> for current purposes (9.08).</li>
+          <li><strong>Computer-based interpretations</strong> are tools, not substitutes for clinical judgment; the psychologist retains responsibility for the final interpretation (9.09).</li>
+          <li>Assessment results should be <strong>explained to the individual</strong> unless the person was informed in advance that results would not be shared (9.10).</li>
+          <li>Psychologists retain <strong>full responsibility</strong> for assessment even when administration or scoring is delegated to others (9.07).</li>
+        </ul>
+      </section>
+      <div class="nav-buttons">
+        <a href="research-publication.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Research & Publication</div>
+          </div>
+        </a>
+        <a href="therapy-ethics.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Therapy</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shaping Behavior: Operant Conditioning | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e;
+      --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: var(--success); display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Shaping Behavior: Operant Conditioning</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+            <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link active"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 10</div>
+        <h1>Shaping Behavior: Operant Conditioning</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Operant Conditioning</h2>
+
+        <p>Operant conditioning, also known as instrumental conditioning, is a learning process in which behavior is modified by its consequences. Unlike classical conditioning, which involves automatic responses to stimuli, operant conditioning focuses on voluntary behaviors that are strengthened or weakened based on the reinforcement or punishment that follows them. This fundamental learning paradigm was systematically developed by B.F. Skinner, building on earlier work by Edward Thorndike (Skinner, 1938).</p>
+
+        <p>The core principle underlying operant conditioning is that organisms tend to repeat behaviors that produce favorable consequences and avoid behaviors that produce unfavorable consequences. This simple but powerful mechanism explains a vast range of human and animal behavior, from basic skill acquisition to complex social interactions.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Operant Behavior:</strong> Voluntary behavior that operates on the environment to produce consequences.</p>
+          <p><strong>Reinforcement:</strong> Any consequence that increases the probability of a behavior occurring again.</p>
+          <p><strong>Punishment:</strong> Any consequence that decreases the probability of a behavior occurring again.</p>
+          <p><strong>Contingency:</strong> The relationship between a behavior and its consequence.</p>
+        </div>
+
+        <h3>Historical Foundations</h3>
+
+        <p>Edward Thorndike's pioneering research with cats in puzzle boxes established the groundwork for operant conditioning. Thorndike observed that cats placed in puzzle boxes gradually learned to escape more quickly over successive trials. He formulated the <span class="key-term">Law of Effect</span>, stating that responses followed by satisfying consequences are strengthened, while responses followed by annoying consequences are weakened (Thorndike, 1911).</p>
+
+        <p>B.F. Skinner expanded and refined Thorndike's work, developing the experimental analysis of behavior. Skinner introduced the <span class="key-term">operant chamber</span> (commonly called the "Skinner box"), which allowed precise control and measurement of behavioral contingencies. His radical behaviorism emphasized the environmental control of behavior and rejected mentalistic explanations (Skinner, 1953).</p>
+
+        <div class="citation">
+          Skinner, B. F. (1938). <em>The behavior of organisms: An experimental analysis</em>. Appleton-Century-Crofts. - Skinner's foundational work established the principles and methodology of operant conditioning that continue to guide behavioral research and intervention.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Reinforcement</h2>
+
+        <p>Reinforcement is the process by which consequences increase the likelihood that a behavior will occur again. Understanding the distinction between positive and negative reinforcement is critical for EPPP preparation, as this is a commonly tested area where confusion often arises.</p>
+
+        <h3>Positive Reinforcement</h3>
+
+        <p><span class="key-term">Positive reinforcement</span> occurs when a behavior is followed by the addition of a stimulus that increases the probability of that behavior. The term "positive" refers to the addition (presentation) of something, not to whether it is pleasant. In practice, positive reinforcers are typically stimuli that the organism finds desirable.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Positive Reinforcement</h4>
+          <p>A child completes homework and receives praise from parents. The praise (added stimulus) increases the likelihood that the child will complete homework in the future. In a clinical setting, a therapist might use positive reinforcement by providing verbal praise when a client uses a coping skill appropriately during a session.</p>
+        </div>
+
+        <h3>Negative Reinforcement</h3>
+
+        <p><span class="key-term">Negative reinforcement</span> occurs when a behavior is followed by the removal of an aversive stimulus, which increases the probability of that behavior. The term "negative" refers to the removal (subtraction) of something, not to punishment. Negative reinforcement still strengthens behavior.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Negative Reinforcement</h4>
+          <p>A person with social anxiety leaves a party early (behavior) and experiences relief from anxiety (removal of aversive stimulus). The relief reinforces avoidance behavior, making it more likely to occur in future social situations. This mechanism is central to the maintenance of anxiety disorders and explains why avoidance is so persistent.</p>
+        </div>
+
+        <h3>Primary and Secondary Reinforcers</h3>
+
+        <p><span class="key-term">Primary reinforcers</span> (also called unconditioned reinforcers) are stimuli that are inherently reinforcing without prior learning. These include food, water, warmth, and sexual stimulation - stimuli that satisfy basic biological needs.</p>
+
+        <p><span class="key-term">Secondary reinforcers</span> (also called conditioned reinforcers) acquire their reinforcing properties through association with primary reinforcers. Money, grades, praise, and tokens are common examples. These reinforcers are powerful in human behavior because they can be exchanged for various primary reinforcers (Skinner, 1953).</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Application: Token Economies</h4>
+          <p>Token economies are clinical interventions based on secondary reinforcement. Patients earn tokens (secondary reinforcers) for target behaviors, which can be exchanged for backup reinforcers (items or privileges). Token economies have demonstrated effectiveness in psychiatric hospitals, classrooms, and residential treatment settings (Kazdin, 1982).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Punishment</h2>
+
+        <p>Punishment is the process by which consequences decrease the likelihood that a behavior will occur again. Like reinforcement, punishment can be positive or negative, referring to whether a stimulus is added or removed.</p>
+
+        <h3>Positive Punishment</h3>
+
+        <p><span class="key-term">Positive punishment</span> (also called punishment by application) occurs when a behavior is followed by the addition of an aversive stimulus, decreasing the probability of that behavior. Examples include spanking, verbal reprimands, or receiving a traffic ticket.</p>
+
+        <h3>Negative Punishment</h3>
+
+        <p><span class="key-term">Negative punishment</span> (also called punishment by removal or response cost) occurs when a behavior is followed by the removal of a desired stimulus, decreasing the probability of that behavior. Examples include time-out from reinforcement, loss of privileges, or having a driver's license suspended.</p>
+
+        <table>
+          <tr>
+            <th></th>
+            <th>Add Stimulus (+)</th>
+            <th>Remove Stimulus (-)</th>
+          </tr>
+          <tr>
+            <td><strong>Increase Behavior</strong></td>
+            <td>Positive Reinforcement</td>
+            <td>Negative Reinforcement</td>
+          </tr>
+          <tr>
+            <td><strong>Decrease Behavior</strong></td>
+            <td>Positive Punishment</td>
+            <td>Negative Punishment</td>
+          </tr>
+        </table>
+
+        <h3>Problems with Punishment</h3>
+
+        <p>Research has identified several limitations of punishment as a behavior change strategy (Azrin & Holz, 1966):</p>
+
+        <ul>
+          <li><strong>Temporary suppression:</strong> Punishment often suppresses behavior only temporarily and in the presence of the punishing agent</li>
+          <li><strong>Emotional side effects:</strong> Punishment can produce fear, anxiety, and aggression</li>
+          <li><strong>Escape and avoidance:</strong> The punished individual may learn to escape or avoid the punishing agent rather than change behavior</li>
+          <li><strong>Modeling aggression:</strong> Physical punishment models aggressive behavior for children</li>
+          <li><strong>Does not teach alternatives:</strong> Punishment tells the individual what not to do but does not teach appropriate alternatives</li>
+        </ul>
+
+        <div class="citation">
+          Azrin, N. H., & Holz, W. C. (1966). Punishment. In W. K. Honig (Ed.), <em>Operant behavior: Areas of research and application</em> (pp. 380-447). Appleton-Century-Crofts.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Schedules of Reinforcement</h2>
+
+        <p>The pattern or schedule by which reinforcement is delivered has profound effects on the rate and pattern of responding. Skinner and his colleagues discovered that intermittent reinforcement produces behavior that is more resistant to extinction than continuous reinforcement, a phenomenon known as the <span class="key-term">partial reinforcement effect</span> (Ferster & Skinner, 1957).</p>
+
+        <h3>Continuous vs. Intermittent Reinforcement</h3>
+
+        <p><span class="key-term">Continuous reinforcement (CRF)</span> occurs when every instance of the target behavior is reinforced. This schedule is optimal for initially establishing a new behavior but produces rapid extinction when reinforcement is discontinued.</p>
+
+        <p><span class="key-term">Intermittent (partial) reinforcement</span> occurs when only some instances of the behavior are reinforced. Behavior maintained on intermittent schedules is more resistant to extinction because the organism has learned that not every response produces reinforcement.</p>
+
+        <h3>The Four Basic Schedules</h3>
+
+        <h4>Fixed Ratio (FR)</h4>
+        <p>Reinforcement is delivered after a fixed number of responses. For example, FR-5 means reinforcement occurs after every 5 responses. FR schedules produce high, steady response rates with a brief pause after reinforcement (post-reinforcement pause). Piecework pay is a real-world example.</p>
+
+        <h4>Variable Ratio (VR)</h4>
+        <p>Reinforcement is delivered after a variable number of responses, averaging to a specified number. VR schedules produce the highest and most consistent response rates with no post-reinforcement pause. Gambling operates on a VR schedule, which explains its highly addictive nature.</p>
+
+        <h4>Fixed Interval (FI)</h4>
+        <p>Reinforcement is delivered for the first response after a fixed time period has elapsed. FI schedules produce a characteristic "scalloped" pattern - responding is slow immediately after reinforcement and accelerates as the interval ends. Checking the mailbox for an expected delivery is an example.</p>
+
+        <h4>Variable Interval (VI)</h4>
+        <p>Reinforcement is delivered for the first response after a variable time period, averaging to a specified duration. VI schedules produce steady, moderate response rates. Checking email or social media operates on a VI schedule.</p>
+
+        <div class="definition-box">
+          <h4>Key Points: Schedules of Reinforcement</h4>
+          <p><strong>Ratio schedules</strong> produce higher response rates than interval schedules (ratio schedules depend on response rate).</p>
+          <p><strong>Variable schedules</strong> produce more consistent responding and greater resistance to extinction than fixed schedules.</p>
+          <p><strong>Variable ratio (VR)</strong> produces the highest response rate and greatest resistance to extinction.</p>
+        </div>
+
+        <div class="citation">
+          Ferster, C. B., & Skinner, B. F. (1957). <em>Schedules of reinforcement</em>. Appleton-Century-Crofts. - This comprehensive work documented the lawful relationships between schedules and response patterns.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Shaping and Chaining</h2>
+
+        <h3>Shaping</h3>
+
+        <p><span class="key-term">Shaping</span>, also called the method of successive approximations, is a procedure for teaching new behaviors by reinforcing responses that increasingly resemble the target behavior. The trainer reinforces behaviors that are progressively closer to the desired response while no longer reinforcing earlier approximations (Skinner, 1953).</p>
+
+        <p>Shaping is essential when the target behavior does not occur spontaneously in the organism's repertoire. For example, training a pigeon to turn in a complete circle requires first reinforcing any slight head turn, then quarter turns, half turns, and finally complete rotations.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Shaping Speech in Autism</h4>
+          <p>Applied behavior analysis (ABA) uses shaping to develop speech in nonverbal children with autism. A clinician might first reinforce any vocalization, then vocalizations that resemble consonant sounds, then consonant-vowel combinations, and eventually approximations of words. This systematic approach has been highly effective in early intervention programs (Lovaas, 1987).</p>
+        </div>
+
+        <h3>Chaining</h3>
+
+        <p><span class="key-term">Chaining</span> is a procedure for teaching complex behaviors that consist of a sequence of simpler responses. Each response in the chain produces a stimulus that serves as both a conditioned reinforcer for the previous response and a discriminative stimulus for the next response.</p>
+
+        <h4>Types of Chaining</h4>
+
+        <ul>
+          <li><strong>Forward chaining:</strong> Teaching the first step first, then adding subsequent steps. Used when early steps must be mastered before later steps can be attempted.</li>
+          <li><strong>Backward chaining:</strong> Teaching the last step first, then adding preceding steps. Often preferred because the learner always completes the chain and contacts the terminal reinforcer.</li>
+          <li><strong>Total task presentation:</strong> Teaching all steps together with prompts. Useful for simpler chains or more capable learners.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Application: Teaching Daily Living Skills</h4>
+          <p>Chaining procedures are commonly used to teach daily living skills (dressing, toothbrushing, handwashing) to individuals with developmental disabilities. Backward chaining is often preferred for these tasks because completing the final step provides natural reinforcement (e.g., clean teeth, dry hands).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Stimulus Control</h2>
+
+        <p><span class="key-term">Stimulus control</span> occurs when a behavior is more likely to occur in the presence of a particular stimulus than in its absence. The controlling stimulus is called a <span class="key-term">discriminative stimulus</span> (SD, pronounced "S-D"), which signals that reinforcement is available for a particular response.</p>
+
+        <h3>Discriminative Stimuli</h3>
+
+        <p>A discriminative stimulus (S<sup>D</sup>) is a stimulus in the presence of which a particular response has been reinforced. Through experience, organisms learn to respond differently in the presence versus absence of the S<sup>D</sup>. The S<sup>D</sup> does not elicit the response (as in classical conditioning) but rather sets the occasion for the response by signaling reinforcement availability.</p>
+
+        <p>An <span class="key-term">S-delta</span> (S<sup>Δ</sup>) is a stimulus that signals reinforcement is not available. Through discrimination training, organisms learn to respond in the presence of the S<sup>D</sup> and withhold responding in the presence of the S<sup>Δ</sup>.</p>
+
+        <div class="example-box">
+          <h4>Example: Stimulus Control in Everyday Life</h4>
+          <p>A ringing telephone (S<sup>D</sup>) signals that answering will be reinforced by conversation. The silent telephone (S<sup>Δ</sup>) signals that picking up the receiver will not produce reinforcement. Similarly, an "open" sign on a store (S<sup>D</sup>) signals that entering will be reinforced, while a "closed" sign (S<sup>Δ</sup>) signals it will not.</p>
+        </div>
+
+        <h3>The Three-Term Contingency</h3>
+
+        <p>The relationship between discriminative stimuli, behavior, and consequences is captured in the <span class="key-term">three-term contingency</span> (or ABC model):</p>
+
+        <ul>
+          <li><strong>Antecedent (A):</strong> The discriminative stimulus that precedes behavior</li>
+          <li><strong>Behavior (B):</strong> The operant response</li>
+          <li><strong>Consequence (C):</strong> The reinforcement or punishment that follows</li>
+        </ul>
+
+        <p>This framework is fundamental to functional behavior assessment and the development of behavior intervention plans in clinical and educational settings (Cooper et al., 2020).</p>
+
+        <div class="citation">
+          Cooper, J. O., Heron, T. E., & Heward, W. L. (2020). <em>Applied behavior analysis</em> (3rd ed.). Pearson. - The standard textbook for applied behavior analysis provides comprehensive coverage of stimulus control and its clinical applications.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Escape and Avoidance Learning</h2>
+
+        <p>Escape and avoidance learning are important forms of negative reinforcement that help explain the maintenance of anxiety disorders and other clinical phenomena.</p>
+
+        <h3>Escape Learning</h3>
+
+        <p><span class="key-term">Escape learning</span> occurs when an organism learns to perform a behavior that terminates an ongoing aversive stimulus. The removal of the aversive stimulus serves as negative reinforcement for the escape behavior. For example, taking aspirin to relieve a headache is escape behavior - the behavior is reinforced by termination of the pain.</p>
+
+        <h3>Avoidance Learning</h3>
+
+        <p><span class="key-term">Avoidance learning</span> occurs when an organism learns to perform a behavior that prevents an aversive stimulus from occurring. The avoidance response is made before the aversive stimulus is presented, based on warning signals (discriminative stimuli).</p>
+
+        <h4>Two-Factor Theory of Avoidance</h4>
+
+        <p>Mowrer's (1947) <span class="key-term">two-factor theory</span> explains avoidance learning through a combination of classical and operant conditioning:</p>
+
+        <ol>
+          <li><strong>Factor 1 (Classical conditioning):</strong> A neutral stimulus becomes a conditioned stimulus (CS) for fear through pairing with an aversive unconditioned stimulus</li>
+          <li><strong>Factor 2 (Operant conditioning):</strong> The avoidance response is negatively reinforced by reduction of the conditioned fear</li>
+        </ol>
+
+        <p>This theory explains why avoidance behavior is so resistant to extinction - the organism never remains in the presence of the feared stimulus long enough for extinction to occur.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications: Anxiety Maintenance</h4>
+          <p>Two-factor theory provides a behavioral account of anxiety disorder maintenance. Avoidance prevents exposure to feared situations, thereby preventing extinction of conditioned fear. This explains why exposure therapy, which prevents avoidance and allows extinction to occur, is effective for anxiety disorders. The theory also explains why reassurance-seeking and safety behaviors maintain anxiety (Salkovskis, 1991).</p>
+        </div>
+
+        <div class="citation">
+          Mowrer, O. H. (1947). On the dual nature of learning: A re-interpretation of "conditioning" and "problem-solving." <em>Harvard Educational Review, 17</em>, 102-148.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Clinical Applications</h2>
+
+        <p>Operant conditioning principles form the foundation for numerous evidence-based interventions across clinical, educational, and organizational settings.</p>
+
+        <h3>Applied Behavior Analysis (ABA)</h3>
+
+        <p><span class="key-term">Applied Behavior Analysis</span> is the application of operant conditioning principles to improve socially significant behaviors. ABA is characterized by its focus on observable behavior, reliance on data-based decision making, and emphasis on socially important outcomes. It has become the primary evidence-based treatment for autism spectrum disorder (Lovaas, 1987).</p>
+
+        <h3>Behavioral Activation</h3>
+
+        <p><span class="key-term">Behavioral activation</span> for depression is based on operant principles. Depression is conceptualized as a state of low positive reinforcement - depressed individuals engage in fewer pleasurable activities and receive less positive reinforcement. Treatment involves systematically increasing engagement in reinforcing activities, breaking the cycle of withdrawal and reduced reinforcement (Martell et al., 2010).</p>
+
+        <h3>Contingency Management</h3>
+
+        <p><span class="key-term">Contingency management</span> interventions provide tangible reinforcers contingent on evidence of desired behavior change (typically verified drug abstinence). These interventions have demonstrated robust efficacy for substance use disorders, particularly stimulant use disorders where pharmacological treatments are limited (Higgins et al., 2004).</p>
+
+        <div class="example-box">
+          <h4>Example: Voucher-Based Contingency Management</h4>
+          <p>In voucher-based contingency management for cocaine dependence, patients receive vouchers exchangeable for retail goods contingent on cocaine-negative urine specimens. Voucher values typically start low and increase with consecutive negative specimens, with a reset contingency for positive specimens. Meta-analyses demonstrate significant effects on drug abstinence outcomes.</p>
+        </div>
+
+        <h3>Functional Behavior Assessment</h3>
+
+        <p><span class="key-term">Functional Behavior Assessment (FBA)</span> is a process for identifying the environmental variables that maintain problem behavior. By identifying the function of behavior (what reinforces it), clinicians can develop function-based interventions that address the maintaining contingencies rather than simply suppressing behavior (Hanley et al., 2003).</p>
+
+        <p>Common functions of problem behavior include:</p>
+        <ul>
+          <li><strong>Attention:</strong> Behavior maintained by social reinforcement</li>
+          <li><strong>Escape:</strong> Behavior maintained by negative reinforcement (removal of demands)</li>
+          <li><strong>Access to tangibles:</strong> Behavior maintained by access to preferred items or activities</li>
+          <li><strong>Automatic reinforcement:</strong> Behavior maintained by sensory consequences independent of social mediation</li>
+        </ul>
+
+        <div class="citation">
+          Hanley, G. P., Iwata, B. A., & McCord, B. E. (2003). Functional analysis of problem behavior: A review. <em>Journal of Applied Behavior Analysis, 36</em>(2), 147-185.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+
+        <div class="key-concepts" style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h4 style="color: var(--accent); margin-top: 0;">Commonly Tested Topics for the EPPP</h4>
+          <ul style="color: var(--text-secondary);">
+            <li><strong>Positive vs. Negative:</strong> These terms refer to adding (+) or removing (-) stimuli, NOT to pleasant/unpleasant</li>
+            <li><strong>Reinforcement vs. Punishment:</strong> Reinforcement increases behavior; punishment decreases behavior</li>
+            <li><strong>Negative Reinforcement:</strong> Commonly confused with punishment - remember it INCREASES behavior through stimulus removal</li>
+            <li><strong>Schedules:</strong> VR produces highest rate; variable schedules produce greatest resistance to extinction</li>
+            <li><strong>Partial Reinforcement Effect:</strong> Intermittent reinforcement produces greater resistance to extinction than continuous</li>
+            <li><strong>Shaping vs. Chaining:</strong> Shaping teaches one behavior through successive approximations; chaining links multiple behaviors</li>
+            <li><strong>Discriminative Stimulus:</strong> Signals reinforcement availability; sets occasion for behavior (does not elicit it)</li>
+            <li><strong>Three-Term Contingency:</strong> Antecedent → Behavior → Consequence (ABC)</li>
+            <li><strong>Two-Factor Theory:</strong> Classical conditioning (fear) + operant conditioning (avoidance) explains anxiety maintenance</li>
+            <li><strong>Escape vs. Avoidance:</strong> Escape terminates present aversive; avoidance prevents future aversive</li>
+            <li><strong>Skinner:</strong> Operant conditioning, radical behaviorism, schedules of reinforcement</li>
+            <li><strong>Thorndike:</strong> Law of Effect, puzzle box research</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <p style="font-size: 0.9rem; line-height: 1.9;">
+          Azrin, N. H., & Holz, W. C. (1966). Punishment. In W. K. Honig (Ed.), <em>Operant behavior: Areas of research and application</em> (pp. 380-447). Appleton-Century-Crofts.<br><br>
+          Cooper, J. O., Heron, T. E., & Heward, W. L. (2020). <em>Applied behavior analysis</em> (3rd ed.). Pearson.<br><br>
+          Ferster, C. B., & Skinner, B. F. (1957). <em>Schedules of reinforcement</em>. Appleton-Century-Crofts.<br><br>
+          Hanley, G. P., Iwata, B. A., & McCord, B. E. (2003). Functional analysis of problem behavior: A review. <em>Journal of Applied Behavior Analysis, 36</em>(2), 147-185.<br><br>
+          Higgins, S. T., Heil, S. H., & Lussier, J. P. (2004). Clinical implications of reinforcement as a determinant of substance use disorders. <em>Annual Review of Psychology, 55</em>, 431-461.<br><br>
+          Kazdin, A. E. (1982). The token economy: A decade later. <em>Journal of Applied Behavior Analysis, 15</em>(3), 431-445.<br><br>
+          Lovaas, O. I. (1987). Behavioral treatment and normal educational and intellectual functioning in young autistic children. <em>Journal of Consulting and Clinical Psychology, 55</em>(1), 3-9.<br><br>
+          Martell, C. R., Dimidjian, S., & Herman-Dunn, R. (2010). <em>Behavioral activation for depression: A clinician's guide</em>. Guilford Press.<br><br>
+          Mowrer, O. H. (1947). On the dual nature of learning: A re-interpretation of "conditioning" and "problem-solving." <em>Harvard Educational Review, 17</em>, 102-148.<br><br>
+          Salkovskis, P. M. (1991). The importance of behaviour in the maintenance of anxiety and panic: A cognitive account. <em>Behavioural Psychotherapy, 19</em>(1), 6-19.<br><br>
+          Skinner, B. F. (1938). <em>The behavior of organisms: An experimental analysis</em>. Appleton-Century-Crofts.<br><br>
+          Skinner, B. F. (1953). <em>Science and human behavior</em>. Macmillan.<br><br>
+          Thorndike, E. L. (1911). <em>Animal intelligence: Experimental studies</em>. Macmillan.
+        </p>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="classical-conditioning.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">How Organisms Learn: Classical Conditioning</div>
+          </div>
+        </a>
+        <a href="correlation-regression.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Relationships in Data: Correlation & Regression</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

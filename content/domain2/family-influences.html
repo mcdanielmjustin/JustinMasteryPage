@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School & Family Influences | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>School & Family Influences</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link active"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 9</div>
+        <h1>School & Family Influences</h1>
+        <div class="chapter-meta">
+          <span>Parenting styles, divorce effects, peer relationships</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Family and Social Influences</h2>
+        <p>The family is the primary context for development, but children are also shaped by schools, peers, neighborhoods, and broader cultural systems. This chapter covers parenting styles, the effects of family transitions (especially divorce), sibling and peer relationships, and Bronfenbrenner's ecological systems theory, which provides a comprehensive framework for understanding how multiple environmental layers interact to influence development.</p>
+        <p>For the EPPP, candidates should understand the research on parenting dimensions and their associated outcomes, the factors that mediate children's adjustment to divorce, and how contextual influences operate at multiple levels.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Baumrind's Parenting Styles</h2>
+        <p>Diana Baumrind (1966, 1971) identified parenting styles based on two key dimensions: <span class="key-term">demandingness</span> (control, expectations for mature behavior) and <span class="key-term">responsiveness</span> (warmth, acceptance, sensitivity to the child's needs). Maccoby and Martin (1983) later expanded the framework to include a fourth style.</p>
+
+        <table>
+          <tr><th>Style</th><th>Demandingness</th><th>Responsiveness</th><th>Characteristics</th><th>Child Outcomes</th></tr>
+          <tr><td><strong>Authoritative</strong></td><td>High</td><td>High</td><td>Sets clear standards but is warm and responsive; encourages independence; explains rules; open communication</td><td>Best outcomes: high self-esteem, social competence, academic achievement, self-regulation</td></tr>
+          <tr><td><strong>Authoritarian</strong></td><td>High</td><td>Low</td><td>Strict rules with little warmth; obedience valued over dialogue; punitive discipline; "because I said so"</td><td>Obedient but lower self-esteem, social skills, and happiness; more anxiety and aggression</td></tr>
+          <tr><td><strong>Permissive (Indulgent)</strong></td><td>Low</td><td>High</td><td>Warm and accepting but few demands or controls; avoids confrontation; lenient rules</td><td>Poor self-regulation, impulsivity, low academic achievement; may be socially skilled</td></tr>
+          <tr><td><strong>Uninvolved (Neglectful)</strong></td><td>Low</td><td>Low</td><td>Disengaged; provides basic needs but little guidance, warmth, or attention</td><td>Worst outcomes: attachment problems, poor self-regulation, academic failure, delinquency</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>While the authoritative style is associated with the best outcomes in European-American samples, research has shown important cultural variations. Authoritarian parenting may be associated with positive outcomes in some contexts. For example, Chao (1994) argued that the concept of "authoritarian" fails to capture the meaning of Chinese parenting practices rooted in <em>guan</em> (to govern, but also to care for), which combines strict control with deep involvement and investment. Similarly, Deater-Deckard et al. (1996) found that physical discipline was associated with more behavioral problems in European-American children but not in African-American children, where it may occur within a context of warmth and cultural normativeness. Clinicians must consider cultural context when assessing parenting practices.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Effects of Divorce on Children</h2>
+        <p>Approximately 40-50% of first marriages in the United States end in divorce. Research by Hetherington (Hetherington & Kelly, 2002) and Amato (2001) has clarified both the risks and the protective factors for children experiencing parental divorce.</p>
+
+        <h3>Short-Term Effects</h3>
+        <p>Most children experience an initial period of distress following divorce, including:</p>
+        <ul>
+          <li>Anger, sadness, anxiety, and confusion</li>
+          <li>Behavioral problems (acting out, regression)</li>
+          <li>Academic difficulties</li>
+          <li>Loyalty conflicts between parents</li>
+        </ul>
+        <p>This crisis period typically lasts 1-2 years, after which most children show improved adjustment.</p>
+
+        <h3>Long-Term Effects</h3>
+        <p>Research shows that children of divorce, as a group, show <strong>small but significant</strong> elevations in risk for:</p>
+        <ul>
+          <li>Behavioral and emotional problems</li>
+          <li>Lower academic achievement</li>
+          <li>Problems in their own adult romantic relationships</li>
+          <li>Earlier sexual activity and higher divorce rates in adulthood</li>
+        </ul>
+        <p>However, it is critical to note that the <strong>majority of children from divorced families are well-adjusted</strong>. Amato's (2001) meta-analysis found that effect sizes are small, and that much of the variance attributed to divorce is actually due to pre-divorce conflict, economic decline, and disrupted parenting.</p>
+
+        <h3>Mediating Factors</h3>
+
+        <div class="definition-box">
+          <h4>Key Factors Influencing Children's Adjustment to Divorce</h4>
+          <p><strong>Interparental conflict:</strong> The single strongest predictor of child maladjustment. High-conflict marriages that remain intact may be more harmful than divorce. Children benefit when parents can maintain a cooperative co-parenting relationship post-divorce.</p>
+          <p><strong>Quality of parenting:</strong> Maintenance of warm, consistent, authoritative parenting following divorce is protective.</p>
+          <p><strong>Economic stability:</strong> Divorce typically results in a significant decline in the custodial household's (usually the mother's) income, which accounts for a substantial portion of the negative effects on children.</p>
+          <p><strong>Child characteristics:</strong> Younger children and boys (especially in the first few years) tend to show more difficulty adjusting. Temperamentally difficult children are more vulnerable.</p>
+          <p><strong>Custody arrangement:</strong> Joint custody arrangements are generally associated with better outcomes than sole custody, provided interparental conflict is low.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>Clinical Example: Divorce Assessment</h4>
+          <p>A psychologist is asked to conduct a custody evaluation for a divorcing couple with two children (ages 4 and 9). The evaluation should assess each parent's capacity for authoritative parenting, the level of interparental conflict, each child's attachment relationships and developmental needs, and the feasibility of various custody arrangements. The psychologist notes that the 4-year-old shows regression (bedwetting, clinginess) and the 9-year-old is exhibiting anger and declining grades -- both developmentally typical responses to the divorce crisis. Recommendations focus on reducing interparental conflict, maintaining both parent-child relationships, and age-appropriate therapeutic support.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Adverse Childhood Experiences (ACEs) and Resilience</h2>
+        <p>The <span class="key-term">Adverse Childhood Experiences (ACEs) Study</span> (Felitti et al., 1998), a landmark collaboration between the CDC and Kaiser Permanente involving over 17,000 adults, demonstrated a powerful dose-response relationship between adverse childhood experiences and negative health outcomes in adulthood. This study fundamentally changed how clinicians and public health professionals understand the long-term consequences of childhood adversity.</p>
+
+        <h3>Types of ACEs</h3>
+        <p>The original ACE questionnaire assessed 10 categories of adverse experiences occurring before age 18, grouped into three domains:</p>
+
+        <div class="definition-box">
+          <h4>The Three Domains of ACEs</h4>
+          <p><strong>Abuse:</strong></p>
+          <ul>
+            <li>Physical abuse (hit, kicked, burned, or physically harmed by a caregiver)</li>
+            <li>Emotional abuse (insulted, humiliated, threatened, or made to feel worthless)</li>
+            <li>Sexual abuse (any form of sexual contact or behavior by an older person)</li>
+          </ul>
+          <p><strong>Neglect:</strong></p>
+          <ul>
+            <li>Physical neglect (not enough food, clothing, medical care; lack of supervision)</li>
+            <li>Emotional neglect (not feeling loved, important, or supported by the family)</li>
+          </ul>
+          <p><strong>Household Dysfunction:</strong></p>
+          <ul>
+            <li>Substance abuse (living with someone who was a problem drinker or used drugs)</li>
+            <li>Mental illness (household member with depression, mental illness, or suicide attempt)</li>
+            <li>Domestic violence (witnessing the mother being physically abused)</li>
+            <li>Incarceration (household member went to prison)</li>
+            <li>Parental separation or divorce</li>
+          </ul>
+        </div>
+
+        <h3>Dose-Response Relationship</h3>
+        <p>The ACE score (0&ndash;10) counts the number of categories of adverse experiences. The study's central finding was a <strong>graded dose-response relationship</strong>: as the ACE score increases, the risk for a wide range of negative adult outcomes increases in a stepwise fashion. Compared to individuals with an ACE score of 0, those with a score of 4 or more showed:</p>
+        <ul>
+          <li>4&ndash;12x increased risk for alcoholism, drug abuse, depression, and suicide attempts</li>
+          <li>2&ndash;4x increased risk for smoking, poor self-rated health, 50+ sexual partners, and sexually transmitted infections</li>
+          <li>1.4&ndash;1.6x increased risk for physical inactivity and severe obesity</li>
+          <li>Significantly increased risk for heart disease, cancer, chronic lung disease, liver disease, and skeletal fractures</li>
+        </ul>
+        <p>Critically, ACEs are <strong>common</strong>: approximately two-thirds of participants reported at least one ACE, and about one in eight reported four or more. ACEs also tend to co-occur&mdash;experiencing one category increases the likelihood of experiencing others.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>The ACEs framework has profound implications for clinical practice. Trauma-informed care approaches recognize that many presenting problems (substance use, depression, relationship difficulties, chronic health conditions) may have roots in childhood adversity. Clinicians should routinely screen for ACEs while being sensitive to the potential for retraumatization. The ACEs framework also supports a shift from asking "What is wrong with you?" to "What happened to you?"</p>
+        </div>
+
+        <h3>Resilience and Protective Factors</h3>
+        <p>Despite the powerful impact of ACEs, many individuals exposed to adversity demonstrate <span class="key-term">resilience</span>&mdash;the capacity to adapt successfully in the face of significant adversity, threat, or trauma. Resilience is not an all-or-nothing trait but a dynamic process influenced by the interaction between risk and protective factors.</p>
+
+        <div class="definition-box">
+          <h4>Key Protective Factors</h4>
+          <p><strong>At least one stable, caring adult relationship:</strong> This is consistently identified as the single most important protective factor. A reliable caregiver, teacher, mentor, or other adult who provides consistent support and a sense of safety can buffer the effects of adversity. This finding aligns with attachment theory&mdash;a secure base relationship supports adaptive coping.</p>
+          <p><strong>Self-regulation skills:</strong> The ability to manage emotions, thoughts, and behaviors effectively. Children who can regulate their emotional responses to stress show better adaptation. Executive function skills (inhibitory control, cognitive flexibility, working memory) support self-regulation.</p>
+          <p><strong>Sense of mastery and self-efficacy:</strong> The belief that one can influence one's circumstances and achieve desired outcomes. Children who develop a sense of agency and competence are more likely to persist through adversity.</p>
+          <p><strong>Additional protective factors:</strong> Supportive community networks, faith or spiritual connections, positive school experiences, positive peer relationships, and biological factors (temperament, genetic resilience) also contribute to resilience.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>Exam Example: ACEs and Resilience</h4>
+          <p>A 35-year-old woman presents for therapy with depression, binge eating, and relationship instability. Her history reveals an ACE score of 6 (emotional abuse, physical neglect, domestic violence, parental substance abuse, parental mental illness, parental divorce). Despite this significant adversity, she completed college and maintains steady employment. She attributes her functioning to a grandmother who provided consistent emotional support throughout her childhood. This case illustrates both the dose-response relationship between ACEs and adult outcomes and the powerful buffering effect of a stable, caring adult relationship.</p>
+        </div>
+
+        <div class="citation">Felitti, V. J., Anda, R. F., Nordenberg, D., Williamson, D. F., Spitz, A. M., Edwards, V., Koss, M. P., & Marks, J. S. (1998). Relationship of childhood abuse and household dysfunction to many of the leading causes of death in adults: The Adverse Childhood Experiences (ACE) Study. <em>American Journal of Preventive Medicine, 14</em>(4), 245-258.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Sibling Relationships</h2>
+        <p>Siblings serve as important socialization agents, providing opportunities for companionship, conflict resolution, social skills practice, and emotional support. Key findings from the research include:</p>
+        <ul>
+          <li><strong>Birth order effects:</strong> Sulloway (1996) proposed that firstborns are more conscientious and conventional while laterborns are more open to experience and rebellious. However, large-scale studies (Damian & Roberts, 2015) have found birth order effects on personality to be negligible or nonexistent when family size is controlled</li>
+          <li><strong>Differential parental treatment:</strong> When parents treat siblings differently, and the difference is perceived as unfair, negative sibling relationships and poorer adjustment result (Dunn, 2002)</li>
+          <li><strong>Sibling rivalry:</strong> Most common when siblings are close in age, the same sex, and competing for parental resources</li>
+          <li><strong>Sibling as buffer:</strong> Siblings can serve as a protective factor during family stress (e.g., divorce, parental mental illness)</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Peer Influence</h2>
+        <p>Peers become increasingly important socializing agents from middle childhood through adolescence. Judith Rich Harris (1998) controversially argued in <em>The Nurture Assumption</em> that peers are more influential than parents in personality development, though most developmental psychologists view peers and parents as influencing different domains.</p>
+
+        <h3>Peer Status Categories</h3>
+        <p>Coie, Dodge, and Coppotelli (1982) identified five sociometric status categories based on peer nominations:</p>
+        <ul>
+          <li><strong>Popular:</strong> Liked by many, disliked by few. Socially skilled, cooperative, and prosocial</li>
+          <li><strong>Rejected:</strong> Disliked by many, liked by few. Two subtypes: <em>rejected-aggressive</em> (hostile, disruptive) and <em>rejected-withdrawn</em> (anxious, socially inhibited). Rejected status is the most stable and most predictive of later maladjustment</li>
+          <li><strong>Neglected:</strong> Neither liked nor disliked. Tend to be shy but are not actively disliked; status is unstable and generally not associated with poor outcomes</li>
+          <li><strong>Controversial:</strong> Liked by many AND disliked by many. Often socially active and sometimes aggressive but also possess social skills</li>
+          <li><strong>Average:</strong> Modal category; moderate numbers of likes and dislikes</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Peer rejection in childhood is a significant risk factor for later problems including depression, anxiety, school dropout, and delinquency (Parker & Asher, 1987). Social skills training is one of the most common interventions for rejected children, though its effectiveness varies. Rejected-aggressive children often require additional intervention targeting hostile attribution biases (the tendency to interpret ambiguous social situations as hostile) and anger management, while rejected-withdrawn children may benefit more from social anxiety treatment and graduated exposure to social situations.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Family Life Cycle</h2>
+        <p><span class="key-term">Betty Carter</span> and <span class="key-term">Monica McGoldrick</span> (1989, 2005) developed one of the most influential frameworks for understanding family development over time. Their <span class="key-term">Family Life Cycle</span> model describes a sequence of stages through which families typically progress, each involving specific emotional transitions and developmental tasks that the family must negotiate.</p>
+
+        <h3>Stages of the Family Life Cycle</h3>
+        <table>
+          <tr><th>Stage</th><th>Key Emotional Process</th><th>Developmental Tasks</th></tr>
+          <tr><td><strong>Leaving home: Single young adults</strong></td><td>Accepting emotional and financial responsibility for self</td><td>Differentiation of self from family of origin; developing intimate peer relationships; establishing career identity</td></tr>
+          <tr><td><strong>Joining of families through marriage/union</strong></td><td>Commitment to a new system</td><td>Forming a marital/partnership system; realigning relationships with extended families and friends to include the partner</td></tr>
+          <tr><td><strong>Families with young children</strong></td><td>Accepting new members into the system</td><td>Adjusting the couple system to make space for children; taking on parenting roles; realigning relationships with extended family to include grandparenting roles</td></tr>
+          <tr><td><strong>Families with adolescents</strong></td><td>Increasing flexibility of family boundaries</td><td>Shifting parent-child relationships to permit the adolescent's growing autonomy; refocusing on midlife marital and career issues; beginning to attend to aging parents</td></tr>
+          <tr><td><strong>Launching children and moving on</strong></td><td>Accepting multiple exits from and entries into the family</td><td>Renegotiating the couple system as a dyad; developing adult-to-adult relationships with grown children; realigning relationships to include in-laws and grandchildren; dealing with aging and death of grandparents</td></tr>
+          <tr><td><strong>Families in later life</strong></td><td>Accepting shifting generational roles</td><td>Maintaining functioning and interests in the face of physiological decline; supporting the middle generation; making room for the wisdom and experience of the elderly; dealing with loss of spouse, siblings, and peers; preparation for death and life review</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>The family life cycle model is central to family systems therapy. Symptoms often emerge when families have difficulty navigating a life cycle transition&mdash;when the family becomes "stuck" at a particular stage. For example, a family's inability to renegotiate boundaries during the adolescent stage may lead to either enmeshment (over-involvement that stifles autonomy) or disengagement (emotional cutoff). Carter and McGoldrick emphasize that the model must be adapted for diverse family structures, including single-parent families, divorced and blended families, same-sex couples, and families from different cultural backgrounds. Disruptions from previous generations (unresolved grief, family secrets, intergenerational patterns of dysfunction) can also affect the current family's ability to navigate transitions.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>Exam Example: Family Life Cycle Disruption</h4>
+          <p>A couple presents for therapy reporting increased conflict since their youngest child left for college. They describe feeling "empty" and disconnected, realizing they have focused almost exclusively on parenting for 20 years and have little in common as a couple. According to Carter and McGoldrick's family life cycle model, this couple is struggling with the "launching children and moving on" transition, which requires renegotiating the marital system as a dyad. The therapeutic focus would be on helping them rediscover shared interests, develop a renewed sense of couple identity, and develop adult-to-adult relationships with their children.</p>
+        </div>
+
+        <div class="citation">Carter, B., & McGoldrick, M. (2005). <em>The expanded family life cycle: Individual, family, and social perspectives</em> (3rd ed.). Allyn & Bacon.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Bronfenbrenner's Ecological Systems Theory</h2>
+        <p>Urie Bronfenbrenner (1979) proposed that development occurs within a series of nested environmental systems, each influencing the other. This model emphasizes that children's development cannot be understood in isolation from the multiple contexts in which they live.</p>
+
+        <div class="definition-box">
+          <h4>The Five Systems</h4>
+          <p><strong>Microsystem:</strong> The immediate settings in which the child directly participates (family, school, peer group, neighborhood). Involves face-to-face interactions and bidirectional influences.</p>
+          <p><strong>Mesosystem:</strong> The connections and interactions between microsystems (e.g., how family-school communication affects the child; how parental work stress affects family dynamics).</p>
+          <p><strong>Exosystem:</strong> Settings that the child does not directly participate in but that indirectly affect the child (e.g., parent's workplace policies, school board decisions, community resources).</p>
+          <p><strong>Macrosystem:</strong> The broader cultural context, including cultural values, laws, customs, economic systems, and ideologies that shape all the other systems.</p>
+          <p><strong>Chronosystem:</strong> The dimension of time, including both individual life transitions (e.g., starting school, divorce) and broader historical changes (e.g., the digital revolution, changing gender roles).</p>
+        </div>
+
+        <div class="example-box">
+          <h4>Clinical Example: Applying the Ecological Model</h4>
+          <p>A 10-year-old presents with declining academic performance and increased aggression. An ecological analysis reveals: at the <strong>microsystem</strong> level, increased marital conflict at home and a new, less effective teacher at school; at the <strong>mesosystem</strong> level, poor communication between the school and the parents about the child's behavior; at the <strong>exosystem</strong> level, the father recently lost his job (economic stress); at the <strong>macrosystem</strong> level, cultural norms emphasizing male toughness that reinforce aggressive behavior; and at the <strong>chronosystem</strong> level, the transition to a new school coincided with the family stressors. Effective intervention requires addressing multiple system levels rather than focusing solely on the child's behavior.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Know Baumrind's four parenting styles and their associated child outcomes: authoritative (best outcomes), authoritarian, permissive, uninvolved (worst outcomes)</li>
+          <li>The two key dimensions are demandingness and responsiveness</li>
+          <li>Cultural context moderates the effects of parenting styles -- authoritarian parenting is not universally negative</li>
+          <li>Interparental conflict is the strongest predictor of child adjustment following divorce, not the divorce itself</li>
+          <li>Most children of divorce are well-adjusted; effects are small but significant at the group level</li>
+          <li><strong>ACEs study (Felitti et al., 1998):</strong> Dose-response relationship between adverse childhood experiences (abuse, neglect, household dysfunction) and adult health outcomes. ACE score of 4+ dramatically increases risk. ACEs are common (~2/3 of adults have at least one)</li>
+          <li><strong>Resilience protective factors:</strong> The single most important factor is at least one stable, caring adult relationship. Also: self-regulation skills, sense of mastery/self-efficacy, supportive community</li>
+          <li><strong>Family life cycle (Carter &amp; McGoldrick):</strong> Six stages from leaving home through later life. Symptoms often emerge when families get "stuck" at a transition. Know the launching stage (empty nest) and adolescent stage (boundary flexibility)</li>
+          <li>Know Bronfenbrenner's five systems: microsystem, mesosystem, exosystem, macrosystem, chronosystem</li>
+          <li>Rejected sociometric status (especially rejected-aggressive) is most stable and most predictive of later maladjustment</li>
+          <li>Neglected peer status is unstable and generally not concerning</li>
+          <li>Birth order effects on personality are minimal to nonexistent in large-scale controlled studies</li>
+          <li>Peer influence increases and parental influence relatively decreases from middle childhood through adolescence, but both remain important</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Amato, P. R. (2001). Children of divorce in the 1990s: An update of the Amato and Keith (1991) meta-analysis. <em>Journal of Family Psychology, 15</em>(3), 355-370.</div>
+        <div class="citation">Baumrind, D. (1971). Current patterns of parental authority. <em>Developmental Psychology Monographs, 4</em>(1, Pt. 2), 1-103.</div>
+        <div class="citation">Bronfenbrenner, U. (1979). <em>The ecology of human development.</em> Harvard University Press.</div>
+        <div class="citation">Chao, R. K. (1994). Beyond parental control and authoritarian parenting style: Understanding Chinese parenting through the cultural notion of training. <em>Child Development, 65</em>(4), 1111-1119.</div>
+        <div class="citation">Coie, J. D., Dodge, K. A., & Coppotelli, H. (1982). Dimensions and types of social status: A cross-age perspective. <em>Developmental Psychology, 18</em>(4), 557-570.</div>
+        <div class="citation">Deater-Deckard, K., Dodge, K. A., Bates, J. E., & Pettit, G. S. (1996). Physical discipline among African American and European American mothers. <em>Developmental Psychology, 32</em>(6), 1065-1072.</div>
+        <div class="citation">Carter, B., & McGoldrick, M. (2005). <em>The expanded family life cycle: Individual, family, and social perspectives</em> (3rd ed.). Allyn & Bacon.</div>
+        <div class="citation">Dunn, J. (2002). Sibling relationships. In P. K. Smith & C. H. Hart (Eds.), <em>Blackwell handbook of childhood social development</em> (pp. 223-237). Blackwell.</div>
+        <div class="citation">Felitti, V. J., Anda, R. F., Nordenberg, D., Williamson, D. F., Spitz, A. M., Edwards, V., Koss, M. P., & Marks, J. S. (1998). Relationship of childhood abuse and household dysfunction to many of the leading causes of death in adults: The Adverse Childhood Experiences (ACE) Study. <em>American Journal of Preventive Medicine, 14</em>(4), 245-258.</div>
+        <div class="citation">Harris, J. R. (1998). <em>The nurture assumption: Why children turn out the way they do.</em> Free Press.</div>
+        <div class="citation">Hetherington, E. M., & Kelly, J. (2002). <em>For better or for worse: Divorce reconsidered.</em> Norton.</div>
+        <div class="citation">Maccoby, E. E., & Martin, J. A. (1983). Socialization in the context of the family: Parent-child interaction. In P. H. Mussen (Ed.), <em>Handbook of child psychology</em> (Vol. 4, pp. 1-101). Wiley.</div>
+        <div class="citation">Parker, J. G., & Asher, S. R. (1987). Peer relations and later personal adjustment: Are low-accepted children at risk? <em>Psychological Bulletin, 102</em>(3), 357-389.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="physical-development.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Physical Development</div>
+          </div>
+        </a>
+        <a href="attachment.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Attachment & Emotions</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

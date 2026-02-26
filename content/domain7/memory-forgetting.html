@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory & Forgetting | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 8px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-secondary); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 16px 0; }
+    .example-box strong { color: var(--accent); }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .clinical-note strong { color: #60a5fa; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 12px 16px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 16px; border: 1px solid var(--border); color: var(--text-secondary); }
+    tr:hover td { background: var(--bg-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Memory & Forgetting</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 7</div>
+        <div class="domain-title">Biological Bases of Behavior</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="memory-forgetting.html" class="chapter-link active"><span class="chapter-number">1</span>Memory & Forgetting</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">2</span>Cerebral Cortex</a></li>
+        <li class="chapter-item"><a href="subcortical.html" class="chapter-link"><span class="chapter-number">3</span>Subcortical Structures</a></li>
+        <li class="chapter-item"><a href="emotion-stress.html" class="chapter-link"><span class="chapter-number">4</span>Emotion & Stress</a></li>
+        <li class="chapter-item"><a href="memory-sleep.html" class="chapter-link"><span class="chapter-number">5</span>Memory & Sleep</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">6</span>Neurons & Neurotransmitters</a></li>
+        <li class="chapter-item"><a href="neurological-disorders.html" class="chapter-link"><span class="chapter-number">7</span>Neurological Disorders</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">8</span>Sensation & Perception</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">9</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 9</div>
+        <h1>Memory & Forgetting</h1>
+        <div class="chapter-meta">
+          <span>Encoding, storage, retrieval, amnesia types</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Memory</h2>
+        <p>Memory is the cognitive process by which information is encoded, stored, and retrieved. Understanding memory is essential for the EPPP because memory processes underlie learning, clinical assessment, neuropsychological evaluation, and therapeutic interventions. Disruptions to memory systems are hallmark features of numerous neurological and psychological disorders.</p>
+        <div class="definition-box">
+          <p><strong>Memory:</strong> The persistence of learning over time through the encoding, storage, and retrieval of information. Memory is not a unitary system but rather a collection of interrelated processes supported by distinct neural substrates.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Encoding: Getting Information In</h2>
+        <p>Encoding is the initial processing of information that leads to a mental representation in memory. Not all information that enters the sensory system is encoded into long-term storage; the manner and depth with which we process information significantly determines what is remembered.</p>
+
+        <h3>Levels of Processing (Craik &amp; Lockhart, 1972)</h3>
+        <p>The <span class="key-term">levels-of-processing framework</span> proposes that the depth at which information is processed during encoding determines its durability in memory. Deeper processing leads to more elaborate, longer-lasting, and stronger memory traces.</p>
+        <ul>
+          <li><strong>Structural (shallow) processing:</strong> Encoding based on physical features of the stimulus, such as the appearance of printed words (e.g., "Is this word in uppercase letters?"). This produces the weakest memory traces.</li>
+          <li><strong>Phonemic (intermediate) processing:</strong> Encoding based on how a stimulus sounds (e.g., "Does this word rhyme with 'train'?"). This produces moderate memory strength.</li>
+          <li><strong>Semantic (deep) processing:</strong> Encoding based on the meaning of information (e.g., "Does this word fit in the sentence: 'The _____ crossed the road'?"). This produces the strongest and most durable memories.</li>
+        </ul>
+
+        <h3>Other Encoding Phenomena</h3>
+        <h4>Self-Reference Effect</h4>
+        <p>Information related to the self is processed more deeply and remembered better than information about others. Asking "Does this word describe me?" leads to superior recall compared to semantic processing alone (Rogers, Kuiper, &amp; Kirker, 1977).</p>
+
+        <h4>Elaborative Encoding</h4>
+        <p>The process of linking new information to existing knowledge and forming rich associations. The more connections created, the more retrieval routes are available later.</p>
+
+        <h4>Encoding Specificity Principle (Tulving &amp; Thomson, 1973)</h4>
+        <p>Memory is most effective when the conditions at retrieval match the conditions present at encoding. This principle underlies both <span class="key-term">context-dependent memory</span> (physical environment) and <span class="key-term">state-dependent memory</span> (internal physiological or emotional state).</p>
+
+        <div class="example-box">
+          <p><strong>EPPP Application:</strong> A student who studies in a quiet room will recall material better when tested in a similar quiet environment. Similarly, material learned while in a particular mood is best recalled in that same mood (Bower, 1981).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Storage: Retaining Information</h2>
+        <p>Storage refers to maintaining encoded information over time. The dominant model of memory storage distinguishes three systems based on duration and capacity.</p>
+
+        <h3>The Atkinson-Shiffrin Model (1968)</h3>
+        <p>Also called the <span class="key-term">modal model</span> or <span class="key-term">multi-store model</span>, this framework proposes three sequential stages of memory processing:</p>
+
+        <table>
+          <tr><th>Feature</th><th>Sensory Memory</th><th>Short-Term Memory</th><th>Long-Term Memory</th></tr>
+          <tr><td>Duration</td><td>0.25-4 seconds</td><td>15-30 seconds (without rehearsal)</td><td>Potentially unlimited</td></tr>
+          <tr><td>Capacity</td><td>Large (all sensory input)</td><td>7 +/- 2 items (Miller, 1956)</td><td>Essentially unlimited</td></tr>
+          <tr><td>Encoding</td><td>Modality-specific</td><td>Primarily acoustic</td><td>Primarily semantic</td></tr>
+          <tr><td>Forgetting</td><td>Rapid decay</td><td>Decay and displacement</td><td>Retrieval failure, interference</td></tr>
+        </table>
+
+        <h4>Sensory Memory</h4>
+        <p>The brief retention of sensory information. <span class="key-term">Iconic memory</span> (visual) lasts approximately 0.5 seconds and was demonstrated by Sperling's (1960) partial-report procedure. <span class="key-term">Echoic memory</span> (auditory) persists for 3-4 seconds.</p>
+
+        <h4>Short-Term Memory (STM)</h4>
+        <p>A limited-capacity store that holds information for brief periods. George Miller (1956) established the capacity of STM at <span class="key-term">7 plus or minus 2 items</span>. Capacity can be expanded through <span class="key-term">chunking</span>, the process of grouping individual items into larger meaningful units.</p>
+
+        <h4>Long-Term Memory (LTM)</h4>
+        <p>The relatively permanent and essentially limitless storage system. Transfer from STM to LTM is facilitated by rehearsal, elaboration, and meaningful processing. LTM is divided into two major subsystems:</p>
+        <ul>
+          <li><strong>Explicit (declarative) memory:</strong> Conscious recollection of facts and events
+            <ul>
+              <li><span class="key-term">Episodic memory:</span> Personal experiences and events (Tulving, 1972)</li>
+              <li><span class="key-term">Semantic memory:</span> General knowledge and facts about the world</li>
+            </ul>
+          </li>
+          <li><strong>Implicit (nondeclarative) memory:</strong> Memory without conscious awareness
+            <ul>
+              <li><span class="key-term">Procedural memory:</span> Motor skills and habits (e.g., riding a bicycle)</li>
+              <li><span class="key-term">Priming:</span> Facilitated processing of a stimulus due to prior exposure</li>
+              <li><span class="key-term">Classical conditioning:</span> Learned associations between stimuli</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>Working Memory (Baddeley &amp; Hitch, 1974)</h3>
+        <p>Baddeley's <span class="key-term">working memory model</span> replaced the unitary concept of STM with a multicomponent system that actively manipulates information rather than passively holding it:</p>
+        <ul>
+          <li><strong>Central executive:</strong> An attentional control system that directs focus, coordinates the subsystems, and manages cognitive resources. It has limited capacity and is modality-free.</li>
+          <li><strong>Phonological loop:</strong> Maintains and rehearses verbal and acoustic information. Consists of a phonological store (the "inner ear") and an articulatory rehearsal process (the "inner voice"). Explains the <span class="key-term">word-length effect</span> (shorter words are recalled better because they can be rehearsed faster).</li>
+          <li><strong>Visuospatial sketchpad:</strong> Maintains and manipulates visual and spatial information (the "inner eye"). Used in navigation, mental imagery, and spatial reasoning.</li>
+          <li><strong>Episodic buffer (added 2000):</strong> Integrates information from the phonological loop, visuospatial sketchpad, and long-term memory into unified, coherent episodes. Serves as a limited-capacity temporary store.</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Working memory deficits are observed in ADHD, schizophrenia, traumatic brain injury, and age-related cognitive decline. Neuroimaging consistently implicates the dorsolateral prefrontal cortex in working memory tasks.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Retrieval: Getting Information Out</h2>
+        <p>Retrieval is the process of accessing stored information. The success of retrieval depends on the quality of encoding, the availability of retrieval cues, and the match between encoding and retrieval conditions.</p>
+
+        <h3>Types of Retrieval</h3>
+        <ul>
+          <li><strong>Recall:</strong> Retrieving information without explicit cues. More demanding than recognition. Free recall (produce items in any order), serial recall (produce items in order), and cued recall (use a hint) are subtypes.</li>
+          <li><strong>Recognition:</strong> Identifying previously encountered information from a set of options. Generally easier than recall because the target item serves as its own retrieval cue.</li>
+          <li><strong>Relearning (savings method):</strong> Ebbinghaus's measure showing that previously learned material is relearned faster, even when conscious recall fails. The difference in learning trials is the "savings score."</li>
+        </ul>
+
+        <h3>Retrieval Cues and Context</h3>
+        <p>Effective retrieval depends on the availability and quality of <span class="key-term">retrieval cues</span>. Tulving's encoding specificity principle states that a cue is effective only if it was encoded with the target information at study.</p>
+        <div class="example-box">
+          <p><strong>Example:</strong> Godden and Baddeley (1975) demonstrated context-dependent memory by having divers learn words either underwater or on land. Recall was significantly better when the retrieval environment matched the learning environment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Forgetting</h2>
+        <p>Forgetting is the inability to retrieve previously stored information. Several theories account for why forgetting occurs.</p>
+
+        <h3>Ebbinghaus's Forgetting Curve (1885)</h3>
+        <p>Hermann Ebbinghaus demonstrated that forgetting is most rapid shortly after learning and then levels off. Using nonsense syllables, he showed that approximately 50% of learned material is forgotten within one hour, and about 70% within 24 hours, with the rate of forgetting then declining substantially.</p>
+
+        <h3>Interference Theory</h3>
+        <p>Interference theory holds that forgetting occurs because other information competes with or disrupts the target memory:</p>
+        <ul>
+          <li><strong>Proactive interference:</strong> Previously learned information interferes with the ability to learn or recall new information. ("Old" disrupts "new.")</li>
+          <li><strong>Retroactive interference:</strong> Newly learned information interferes with the ability to recall previously learned information. ("New" disrupts "old.")</li>
+        </ul>
+        <div class="example-box">
+          <p><strong>EPPP Example:</strong> A student studies Domain 6 material, then studies Domain 7. If the Domain 7 material makes it harder to recall Domain 6 content, that is retroactive interference. If the previously studied Domain 6 content makes Domain 7 harder to learn, that is proactive interference.</p>
+        </div>
+
+        <h3>Decay Theory</h3>
+        <p>Proposes that memory traces weaken over time if not accessed or rehearsed. While decay likely contributes to forgetting in sensory and short-term memory, evidence suggests that interference rather than mere time passage is the primary cause of long-term forgetting.</p>
+
+        <h3>Retrieval Failure</h3>
+        <p>Information is available in memory but not accessible due to the absence of appropriate retrieval cues. The <span class="key-term">tip-of-the-tongue (TOT) phenomenon</span> illustrates this: the person knows they know the information but temporarily cannot access it. TOT states increase with age.</p>
+
+        <h3>Motivated Forgetting</h3>
+        <p>Freud proposed that threatening or anxiety-provoking memories may be pushed out of conscious awareness through <span class="key-term">repression</span> (unconscious) or <span class="key-term">suppression</span> (conscious). While controversial, Anderson and Green (2001) demonstrated "think/no-think" suppression effects in laboratory settings.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Amnesia</h2>
+        <p>Amnesia refers to severe memory loss that exceeds normal forgetting. Understanding amnesia types is critical for neuropsychological assessment on the EPPP.</p>
+
+        <h3>Anterograde Amnesia</h3>
+        <p>The inability to form new memories after the onset of amnesia. Patients cannot transfer new information from short-term to long-term storage, yet procedural memory and priming are often preserved.</p>
+        <div class="definition-box">
+          <p><strong>Case of H.M. (Henry Molaison):</strong> Following bilateral medial temporal lobe resection (including the hippocampus) for epilepsy treatment, H.M. developed profound anterograde amnesia. He could not form new declarative memories but retained procedural learning ability, demonstrating the dissociation between explicit and implicit memory systems (Scoville &amp; Milner, 1957).</p>
+        </div>
+
+        <h3>Retrograde Amnesia</h3>
+        <p>The inability to recall memories formed before the onset of amnesia. Retrograde amnesia typically follows <span class="key-term">Ribot's law (temporal gradient)</span>: more recent memories are more vulnerable to disruption than remote memories, because older memories have been more fully consolidated.</p>
+
+        <h3>Other Amnesia Types</h3>
+        <ul>
+          <li><strong>Transient global amnesia:</strong> Temporary anterograde (and sometimes retrograde) amnesia lasting hours, often in older adults. Cause is unclear but may involve transient ischemia.</li>
+          <li><strong>Korsakoff's syndrome:</strong> Amnesia resulting from thiamine (vitamin B1) deficiency, typically due to chronic alcoholism. Characterized by severe anterograde amnesia, confabulation, and damage to the mammillary bodies and dorsomedial thalamus.</li>
+          <li><strong>Dissociative (psychogenic) amnesia:</strong> Memory loss for personal information following psychological trauma, without identifiable neurological damage.</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Korsakoff's syndrome patients produce confabulations -- fabricated memories that fill gaps in recall -- without intent to deceive. This distinguishes the condition from malingering and factitious disorders.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Neural Substrates of Memory</h2>
+        <p>Memory is not localized to a single brain region but depends on distributed neural networks:</p>
+        <ul>
+          <li><strong>Hippocampus:</strong> Critical for consolidation of new declarative memories from short-term to long-term storage. Damage causes anterograde amnesia for declarative information.</li>
+          <li><strong>Amygdala:</strong> Modulates emotional memory consolidation. Emotionally arousing events are remembered better partly through amygdala-hippocampal interactions.</li>
+          <li><strong>Prefrontal cortex:</strong> Involved in working memory, strategic encoding, and retrieval monitoring.</li>
+          <li><strong>Cerebellum and basal ganglia:</strong> Essential for procedural memory and motor skill learning.</li>
+          <li><strong>Perirhinal and entorhinal cortices:</strong> Contribute to recognition memory and serve as relays between neocortex and hippocampus.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Memory Distortions and Constructive Memory</h2>
+        <p>Memory is a reconstructive process, not a perfect recording. Elizabeth Loftus's research on the <span class="key-term">misinformation effect</span> demonstrated that post-event information can alter memory for the original event (Loftus &amp; Palmer, 1974). Leading questions (e.g., "How fast were the cars going when they smashed into each other?" vs. "...hit each other?") systematically influenced speed estimates and even whether participants "remembered" seeing broken glass.</p>
+        <ul>
+          <li><strong>Source monitoring errors:</strong> Misattributing the source of a memory (e.g., confusing something imagined with something experienced).</li>
+          <li><strong>False memories:</strong> Deese-Roediger-McDermott (DRM) paradigm demonstrates that presenting lists of semantically related words reliably produces false memories of non-presented critical lure words.</li>
+          <li><strong>Flashbulb memories:</strong> Vivid, confident memories for emotionally significant events. Despite high subjective confidence, accuracy of these memories declines over time similarly to ordinary memories (Talarico &amp; Rubin, 2003).</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Understanding memory distortion is essential for evaluating the reliability of eyewitness testimony, recovered memories, and children's testimony in forensic contexts. Clinicians must be aware that therapeutic techniques (e.g., guided imagery, hypnosis) can inadvertently create false memories.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Terms Summary</h2>
+        <table>
+          <tr><th>Term</th><th>Definition</th></tr>
+          <tr><td>Encoding</td><td>The process of transforming information into a form that can be stored in memory</td></tr>
+          <tr><td>Chunking</td><td>Grouping individual items into larger meaningful units to increase STM capacity</td></tr>
+          <tr><td>Working memory</td><td>Baddeley's multicomponent system for actively maintaining and manipulating information</td></tr>
+          <tr><td>Episodic memory</td><td>Memory for personally experienced events (part of declarative memory)</td></tr>
+          <tr><td>Semantic memory</td><td>Memory for general knowledge and facts (part of declarative memory)</td></tr>
+          <tr><td>Procedural memory</td><td>Memory for skills and habits (part of nondeclarative memory)</td></tr>
+          <tr><td>Proactive interference</td><td>Old learning disrupts recall of new learning</td></tr>
+          <tr><td>Retroactive interference</td><td>New learning disrupts recall of old learning</td></tr>
+          <tr><td>Anterograde amnesia</td><td>Inability to form new memories after onset of amnesia</td></tr>
+          <tr><td>Retrograde amnesia</td><td>Inability to recall memories formed before onset of amnesia</td></tr>
+          <tr><td>Confabulation</td><td>Fabrication of memories without intent to deceive, seen in Korsakoff's syndrome</td></tr>
+          <tr><td>Misinformation effect</td><td>Post-event information alters memory for the original event (Loftus)</td></tr>
+        </table>
+        <p class="citation">Key references: Atkinson &amp; Shiffrin (1968); Baddeley &amp; Hitch (1974); Craik &amp; Lockhart (1972); Ebbinghaus (1885); Loftus &amp; Palmer (1974); Miller (1956); Scoville &amp; Milner (1957); Tulving (1972).</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+        </a>
+        <a href="cerebral-cortex.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Cerebral Cortex</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

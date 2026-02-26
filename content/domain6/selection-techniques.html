@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selection Techniques | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Selection Techniques</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link active"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 11</div>
+        <h1>Selection Techniques</h1>
+        <div class="chapter-meta">
+          <span>Interviews, assessment centers, biodata, work samples</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Personnel Selection</h2>
+        <p><span class="key-term">Personnel selection</span> refers to the process of choosing individuals for employment based on their potential to perform successfully. Effective selection systems are grounded in job analysis and employ validated assessment methods to predict future job performance.</p>
+        <p>The EPPP tests knowledge of various selection methods, their relative validity, and the legal framework governing their use. Understanding the strengths and limitations of each method is essential.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Employment Interviews</h2>
+        <p>Interviews are the most commonly used selection method, despite historically being among the least valid predictors when conducted in an unstructured format.</p>
+
+        <h3>Unstructured Interviews</h3>
+        <p><span class="key-term">Unstructured interviews</span> lack standardized questions, scoring criteria, or systematic evaluation procedures. Interviewers ask different questions of different candidates, follow up on topics of personal interest, and rely on global impressions.</p>
+        <p>Meta-analyses show unstructured interviews have relatively low validity (r = .20-.38) and are susceptible to numerous biases including first impression effects, similar-to-me bias, contrast effects, and non-verbal cue overweighting (McDaniel et al., 1994).</p>
+
+        <h3>Structured Interviews</h3>
+        <p><span class="key-term">Structured interviews</span> use predetermined, job-related questions asked consistently of all candidates, with standardized scoring rubrics. Research consistently demonstrates their superiority.</p>
+        <div class="definition-box">
+          <h4>Types of Structured Interview Questions</h4>
+          <ul>
+            <li><strong>Behavioral (experience-based) questions:</strong> Ask candidates to describe specific past experiences relevant to job competencies (e.g., "Tell me about a time when you had to manage a conflict between team members"). Based on the premise that past behavior is the best predictor of future behavior.</li>
+            <li><strong>Situational questions:</strong> Present hypothetical job-related scenarios and ask candidates what they would do (e.g., "What would you do if a client became verbally aggressive during a session?"). Based on Locke's goal-setting theory -- intentions predict behavior.</li>
+          </ul>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Meta-analyses (Huffcutt & Arthur, 1994) show that structured interviews have significantly higher validity (r = .44-.57) than unstructured interviews. Structuring the interview reduces bias, increases reliability, and improves legal defensibility. Both behavioral and situational questions have good validity, though behavioral questions may be slightly better for higher-complexity jobs.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Assessment Centers</h2>
+        <p><span class="key-term">Assessment centers</span> are multi-method, multi-assessor evaluation processes that use simulations and exercises to evaluate candidates on job-relevant dimensions. They are most commonly used for managerial and leadership selection and development.</p>
+        <div class="definition-box">
+          <h4>Typical Assessment Center Components</h4>
+          <ul>
+            <li><strong>In-basket exercise:</strong> Candidates respond to memos, emails, and documents that simulate a manager's typical workload, making prioritization and delegation decisions</li>
+            <li><strong>Leaderless group discussion:</strong> Candidates discuss a problem or make a decision as a group without an assigned leader, revealing interpersonal and leadership skills</li>
+            <li><strong>Role play:</strong> Candidates interact with a trained role player in a simulated scenario (e.g., counseling a problem employee)</li>
+            <li><strong>Oral presentation:</strong> Candidates prepare and deliver a presentation on a business-related topic</li>
+            <li><strong>Structured interviews:</strong> Conducted as part of the assessment battery</li>
+          </ul>
+        </div>
+        <p>Assessment centers show moderate criterion-related validity (r = .28-.37) for predicting managerial performance (Arthur et al., 2003). However, they face challenges with <span class="key-term">construct validity</span> -- factor analyses often reveal that ratings cluster by exercise rather than by dimension, suggesting assessors may evaluate exercise performance rather than the intended constructs.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Other Selection Methods</h2>
+
+        <h3>Biodata</h3>
+        <p><span class="key-term">Biographical data (biodata)</span> uses systematically scored information about candidates' life history, experiences, and background to predict job performance. Items may cover education, work history, hobbies, interests, and attitudes.</p>
+        <p>Biodata has demonstrated good criterion-related validity (r = .30-.40) and is one of the best predictors of turnover. It is based on the behavioral consistency principle: past behavior and experiences predict future behavior. A weakness is that the reasons why specific biodata items predict performance are often unclear (lack of construct validity).</p>
+
+        <h3>Work Samples and Situational Judgment Tests</h3>
+        <div class="definition-box">
+          <h4>Work Sample Tests</h4>
+          <p><span class="key-term">Work sample tests</span> require candidates to perform actual tasks representative of the job (e.g., a typing test for a clerical position, a coding exercise for a software developer). They have high content validity and criterion-related validity (r = .33-.54), generate positive applicant reactions, and show smaller racial group differences than cognitive ability tests (Roth et al., 2005).</p>
+        </div>
+        <div class="definition-box">
+          <h4>Situational Judgment Tests (SJTs)</h4>
+          <p><span class="key-term">Situational judgment tests</span> present candidates with written or video scenarios depicting work situations and ask them to choose or rate response options. SJTs show moderate validity (r = .26-.34) and are useful because they measure a combination of cognitive ability, personality, and job knowledge. They show smaller racial group differences than traditional cognitive ability tests.</p>
+        </div>
+
+        <h3>Cognitive Ability Tests</h3>
+        <p><span class="key-term">General cognitive ability (g)</span> tests are among the strongest single predictors of job performance, with meta-analytic validity coefficients around r = .51 (Schmidt & Hunter, 1998). Cognitive ability predicts performance across virtually all jobs, with stronger predictive validity for more complex jobs.</p>
+        <div class="example-box">
+          <h4>The Validity-Diversity Dilemma</h4>
+          <p>While cognitive ability tests are the strongest single predictor of job performance, they also show the largest racial group differences (approximately 1 standard deviation between White and Black means). This creates a tension between maximizing prediction (validity) and minimizing adverse impact (diversity). Strategies to address this include using tests in combination with other predictors, using banding (discussed in Selection Evaluation), or using alternative predictors with less adverse impact.</p>
+        </div>
+
+        <h3>Personality Tests in Selection</h3>
+        <p>The <span class="key-term">Big Five personality traits</span> have been extensively studied as selection predictors. Barrick and Mount's (1991) meta-analysis found that:</p>
+        <table>
+          <tr><th>Big Five Trait</th><th>Validity for Job Performance</th><th>Notes</th></tr>
+          <tr><td>Conscientiousness</td><td>r = .22-.23 (generalizable)</td><td>Predicts performance across all job types</td></tr>
+          <tr><td>Emotional Stability</td><td>r = .13</td><td>General predictor across jobs</td></tr>
+          <tr><td>Extraversion</td><td>r = .13-.15</td><td>Stronger for sales and management roles</td></tr>
+          <tr><td>Agreeableness</td><td>r = .07-.10</td><td>Important for teamwork-oriented jobs</td></tr>
+          <tr><td>Openness</td><td>r = .04-.06</td><td>Predicts training proficiency</td></tr>
+        </table>
+        <p>An important advantage of personality tests is that they show minimal racial group differences, thus producing less adverse impact than cognitive ability tests. Concerns include faking (socially desirable responding) and relatively modest validity coefficients compared to cognitive ability.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Legal Considerations in Selection</h2>
+        <p>Selection practices must comply with federal employment law. Key legislation includes:</p>
+        <div class="definition-box">
+          <h4>Major Employment Laws</h4>
+          <ul>
+            <li><strong>Title VII of the Civil Rights Act (1964):</strong> Prohibits employment discrimination based on race, color, religion, sex, or national origin</li>
+            <li><strong>Age Discrimination in Employment Act (ADEA, 1967):</strong> Protects workers aged 40 and older</li>
+            <li><strong>Americans with Disabilities Act (ADA, 1990):</strong> Prohibits discrimination against qualified individuals with disabilities; requires reasonable accommodations; limits when medical examinations can be administered</li>
+            <li><strong>Civil Rights Act of 1991:</strong> Allows compensatory and punitive damages; prohibits race-norming of test scores</li>
+          </ul>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Distinction: Disparate Treatment vs. Disparate Impact</h4>
+          <ul>
+            <li><strong>Disparate treatment:</strong> Intentional discrimination -- treating individuals differently because of their protected group membership (e.g., asking female applicants about childcare plans but not male applicants). Requires proof of discriminatory intent.</li>
+            <li><strong>Disparate impact (adverse impact):</strong> A facially neutral practice that disproportionately affects a protected group (e.g., a physical strength test that eliminates significantly more female applicants). No intent is required -- the focus is on the outcome. The employer must demonstrate the practice is job-related and consistent with business necessity.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Comparative Validity of Selection Methods</h2>
+        <p>Schmidt and Hunter (1998) provided a landmark summary of the validity of different selection methods:</p>
+        <table>
+          <tr><th>Selection Method</th><th>Validity (r)</th></tr>
+          <tr><td>GMA (cognitive ability) + structured interview</td><td>.63</td></tr>
+          <tr><td>GMA + work sample test</td><td>.63</td></tr>
+          <tr><td>GMA + integrity test</td><td>.65</td></tr>
+          <tr><td>General mental ability (GMA) alone</td><td>.51</td></tr>
+          <tr><td>Work sample tests</td><td>.54</td></tr>
+          <tr><td>Structured interviews</td><td>.51</td></tr>
+          <tr><td>Job knowledge tests</td><td>.48</td></tr>
+          <tr><td>Integrity tests</td><td>.41</td></tr>
+          <tr><td>Unstructured interviews</td><td>.38</td></tr>
+          <tr><td>Assessment centers</td><td>.37</td></tr>
+          <tr><td>Biodata</td><td>.35</td></tr>
+          <tr><td>Conscientiousness</td><td>.31</td></tr>
+          <tr><td>Reference checks</td><td>.26</td></tr>
+          <tr><td>Years of job experience</td><td>.18</td></tr>
+          <tr><td>Years of education</td><td>.10</td></tr>
+          <tr><td>Graphology</td><td>.02</td></tr>
+        </table>
+        <div class="citation">Schmidt, F. L., & Hunter, J. E. (1998). The validity and utility of selection methods in personnel psychology. <em>Psychological Bulletin, 124</em>(2), 262-274.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Structured interviews are significantly more valid than unstructured interviews</li>
+            <li>Behavioral questions = past behavior; situational questions = hypothetical future scenarios</li>
+            <li>Assessment centers use multiple methods and assessors but may lack construct validity</li>
+            <li>Cognitive ability (g) is the strongest single predictor of job performance but produces largest group differences</li>
+            <li>Conscientiousness is the only Big Five trait that generalizes across all job types</li>
+            <li>Work sample tests have high validity and low adverse impact</li>
+            <li>Disparate treatment = intentional; disparate impact = unintentional but disproportionate effect</li>
+            <li>ADA: cannot administer medical exams until after a conditional job offer</li>
+            <li>Civil Rights Act of 1991 prohibits race-norming (adjusting scores by race)</li>
+            <li>Graphology has near-zero validity for predicting job performance</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Arthur, W., Day, E. A., McNelly, T. L., & Edens, P. S. (2003). A meta-analysis of the criterion-related validity of assessment center dimensions. <em>Personnel Psychology, 56</em>(1), 125-153.</div>
+        <div class="citation">Barrick, M. R., & Mount, M. K. (1991). The Big Five personality dimensions and job performance. <em>Personnel Psychology, 44</em>(1), 1-26.</div>
+        <div class="citation">Huffcutt, A. I., & Arthur, W. (1994). Hunter and Hunter revisited: Interview validity for entry-level jobs. <em>Journal of Applied Psychology, 79</em>(2), 184-190.</div>
+        <div class="citation">McDaniel, M. A., Whetzel, D. L., Schmidt, F. L., & Maurer, S. D. (1994). The validity of employment interviews. <em>Journal of Applied Psychology, 79</em>(4), 599-616.</div>
+        <div class="citation">Roth, P. L., Bobko, P., & McFarland, L. A. (2005). A meta-analysis of work sample test validity. <em>Personnel Psychology, 58</em>(4), 1009-1037.</div>
+        <div class="citation">Schmidt, F. L., & Hunter, J. E. (1998). The validity and utility of selection methods in personnel psychology. <em>Psychological Bulletin, 124</em>(2), 262-274.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="job-analysis.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Defining the Work</div>
+          </div>
+        </a>
+        <a href="selection-evaluation.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Evaluating Selection Decisions</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

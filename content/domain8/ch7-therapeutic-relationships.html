@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Therapeutic Relationships & Boundaries – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Therapeutic Relationships &amp; Boundaries</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link active"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 12</div>
+        <h1>Therapeutic Relationships &amp; Boundaries</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Therapeutic Alliance -->
+      <div class="content-section">
+        <h2>The Therapeutic Alliance</h2>
+        <p>The therapeutic alliance is consistently one of the strongest predictors of treatment outcome across all theoretical orientations. Understanding alliance models and their relationship to outcomes is a high-yield EPPP topic.</p>
+
+        <h3>Bordin's Working Alliance Model</h3>
+        <p>Edward Bordin (1979) proposed a pantheoretical model of the <span class="key-term">working alliance</span> comprising three interdependent components:</p>
+        <ul>
+          <li><strong>Tasks:</strong> Agreement between therapist and client on the in-session activities and behaviors that constitute the therapy process</li>
+          <li><strong>Goals:</strong> Mutual agreement on the targets or outcomes of therapy</li>
+          <li><strong>Bond:</strong> The quality of the interpersonal attachment between therapist and client, including mutual trust, respect, acceptance, and confidence</li>
+        </ul>
+        <p>Research consistently demonstrates that the alliance accounts for approximately 5-8% of outcome variance, making it a modest but robust and reliable predictor. Importantly, the client's perception of the alliance is a stronger predictor of outcome than the therapist's perception.</p>
+
+        <h3>Measuring the Therapeutic Alliance</h3>
+        <p>Several validated instruments are used to assess the therapeutic alliance:</p>
+        <ul>
+          <li><strong>Working Alliance Inventory (WAI):</strong> Based on Bordin's model; client, therapist, and observer versions available. Most widely used alliance measure in psychotherapy research.</li>
+          <li><strong>Session Rating Scale (SRS):</strong> Ultra-brief (4-item) visual analog measure designed for session-by-session alliance monitoring as part of routine outcome monitoring (ROM).</li>
+          <li><strong>Helping Alliance Questionnaire (HAq):</strong> Luborsky's measure assessing the client's perception of the therapist as supportive and the sense of working together.</li>
+        </ul>
+        <p>Routine outcome monitoring systems such as the <span class="key-term">OQ-45</span> (Outcome Questionnaire) and <span class="key-term">PCOMS</span> (Partners for Change Outcome Management System) combine alliance measurement with outcome tracking to provide real-time feedback to therapists, reducing deterioration rates and improving outcomes.</p>
+
+        <div class="definition-box">
+          <strong>Alliance Ruptures and Repair:</strong>
+          <p>Alliance <span class="key-term">ruptures</span> are breakdowns in the collaborative relationship, manifested as disagreements about tasks or goals, or strains in the bond. Ruptures can be <strong>withdrawal</strong> (client disengages, becomes compliant but not invested) or <strong>confrontation</strong> (client expresses dissatisfaction or hostility). Successful <span class="key-term">repair</span> of ruptures is associated with improved outcomes and may be a key mechanism of therapeutic change, particularly for clients with interpersonal difficulties.</p>
+        </div>
+
+        <h3>Lambert's Common Factors</h3>
+        <p>Michael Lambert's research identified four common factors that contribute to therapeutic outcome:</p>
+        <table>
+          <tr><th>Factor</th><th>Estimated Contribution</th><th>Description</th></tr>
+          <tr><td>Extratherapeutic Factors</td><td>~40%</td><td>Client variables, spontaneous remission, life events, social support</td></tr>
+          <tr><td>Therapeutic Relationship</td><td>~30%</td><td>Empathy, warmth, acceptance, alliance quality</td></tr>
+          <tr><td>Expectancy/Placebo</td><td>~15%</td><td>Hope, credibility of the treatment rationale</td></tr>
+          <tr><td>Technique</td><td>~15%</td><td>Specific interventions and procedures unique to each approach</td></tr>
+        </table>
+        <p>While these percentages are approximate and debated, they underscore that relationship factors contribute more to outcome than specific techniques alone. This finding supports the common factors perspective and has implications for training and supervision.</p>
+
+        <div class="citation">Bordin, E. S. (1979). The generalizability of the psychoanalytic concept of the working alliance. <em>Psychotherapy: Theory, Research & Practice, 16</em>(3), 252-260.</div>
+      </div>
+
+      <!-- Section 2: Boundaries -->
+      <div class="content-section">
+        <h2>Boundaries, Dual Relationships, and Sexual Ethics</h2>
+
+        <h3>Boundary Crossings vs. Boundary Violations</h3>
+        <p>A <span class="key-term">boundary crossing</span> is a departure from customary therapeutic practice that may or may not be harmful and may in fact be beneficial (e.g., attending a client's graduation, accepting a small handmade gift, a brief hug at termination). A <span class="key-term">boundary violation</span> is a departure that harms or exploits the client and compromises the therapeutic relationship (e.g., sexual contact, exploitative financial arrangements, treating a close friend's child). The ethical question is whether the departure benefits or harms the client and whether it occurs in the context of an evolving pattern toward exploitation.</p>
+
+        <h3>Multiple Relationships (Standard 3.05)</h3>
+        <p><span class="key-term">Standard 3.05</span> states that a psychologist refrains from entering into a multiple (dual) relationship if the relationship could reasonably be expected to impair objectivity, competence, or effectiveness, or could risk exploitation or harm. Multiple relationships that would not reasonably be expected to cause impairment or risk exploitation are not unethical. The standard recognizes that some multiple relationships are unavoidable, particularly in rural, military, and small community settings.</p>
+
+        <div class="example-box">
+          <strong>Boundary Decision-Making:</strong>
+          <p>A psychologist in a small rural town discovers that the only dentist in the area is also a current therapy client. Avoiding dental care entirely would be impractical. The Ethics Code does not prohibit this incidental contact but requires the psychologist to be mindful of how the dual relationship might affect the therapeutic relationship and to take steps to minimize potential harm, such as discussing the situation openly in therapy.</p>
+        </div>
+
+        <h3>Sexual Relationships with Clients</h3>
+        <ul>
+          <li><strong>Standard 10.05:</strong> Psychologists do NOT engage in sexual intimacies with current therapy clients/patients.</li>
+          <li><strong>Standard 10.06:</strong> Psychologists do NOT accept as therapy clients/patients persons with whom they have engaged in sexual intimacies.</li>
+          <li><strong>Standard 10.07:</strong> Psychologists do NOT engage in sexual intimacies with individuals they know to be close relatives, guardians, or significant others of current clients/patients.</li>
+          <li><strong>Standard 10.08 (Two-Year Rule):</strong> Psychologists do NOT engage in sexual intimacies with former clients/patients for at least <span class="key-term">two years after cessation or termination</span> of therapy. Even after two years, the psychologist must demonstrate that the relationship is not exploitative, considering factors such as time elapsed, the nature and duration of therapy, circumstances of termination, the client's personal history, and current mental status. The burden of proof rests entirely on the psychologist.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Critical EPPP Point:</strong>
+          <p>The two-year rule in Standard 10.08 creates a mandatory minimum waiting period, NOT a safe harbor. After two years, sexual contact with a former client is permissible ONLY if the psychologist can demonstrate it is not exploitative across multiple factors. In most clinical scenarios on the EPPP, the answer is that the psychologist should NOT pursue the relationship even after two years, because the power differential and potential for exploitation persist.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Bartering and Financial Issues -->
+      <div class="content-section">
+        <h2>Bartering, Fees, and Financial Arrangements</h2>
+
+        <h3>Standard 6.05: Bartering with Clients</h3>
+        <p><span class="key-term">Bartering</span> is the acceptance of goods, services, or other non-monetary remuneration in exchange for psychological services. Standard 6.05 states that psychologists may barter only if: (a) it is not clinically contraindicated, and (b) the resulting arrangement is not exploitative. In practice, bartering is discouraged but not absolutely prohibited. Bartering is more acceptable when it is common practice in the community (e.g., in some rural or cultural contexts) and when the monetary value of the exchange is clear and equitable.</p>
+
+        <h3>Informed Consent for Treatment (Standard 10.01)</h3>
+        <p>Informed consent for therapy includes the nature and anticipated course of therapy, fees, involvement of third parties, and limits of confidentiality. For clients receiving court-ordered treatment, the psychologist must inform them about these elements even though participation is mandatory. Informed consent is an ongoing process, not a one-time event.</p>
+
+        <h3>Gift-Giving in Therapy</h3>
+        <p>Gift exchange between therapist and client is a common boundary issue. Important considerations include:</p>
+        <ul>
+          <li><strong>Client gifts to therapist:</strong> Small, culturally appropriate gifts (e.g., a holiday card) are generally acceptable. Expensive or frequent gifts may indicate transference dynamics and should be explored therapeutically.</li>
+          <li><strong>Therapist gifts to client:</strong> Generally discouraged as they can blur boundaries, create obligation, or introduce the therapist's personal values. Exceptions may include small gestures at termination of long-term treatment.</li>
+          <li><strong>Cultural context:</strong> In some cultures, gift-giving is an important social norm and refusing a gift may be experienced as a rejection. Cultural sensitivity must guide the response.</li>
+        </ul>
+
+        <h3>Self-Disclosure</h3>
+        <p><span class="key-term">Therapist self-disclosure</span> — sharing personal information or experiences with clients — is viewed differently across theoretical orientations. Psychodynamic approaches traditionally minimize self-disclosure to maintain the "blank screen" necessary for transference analysis. Humanistic and relational approaches view judicious self-disclosure as potentially beneficial for the therapeutic relationship. Research suggests that self-disclosure is most beneficial when it is:</p>
+        <ul>
+          <li>Infrequent and brief</li>
+          <li>Focused on normalizing the client's experience or building the alliance</li>
+          <li>Not used to meet the therapist's own emotional needs</li>
+          <li>Relevant to the client's therapeutic issues</li>
+        </ul>
+      </div>
+
+      <!-- Section 4: Transference and Countertransference -->
+      <div class="content-section">
+        <h2>Transference and Countertransference</h2>
+
+        <div class="definition-box">
+          <strong>Transference:</strong>
+          <p>The client's unconscious redirection of feelings, attitudes, and expectations from past relationships (especially parental) onto the therapist. <span class="key-term">Positive transference</span> (idealization, excessive admiration) can initially facilitate engagement but may impede treatment if unexamined. <span class="key-term">Negative transference</span> (hostility, suspicion) may disrupt the alliance but provides therapeutically valuable material about the client's relational patterns.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Countertransference:</strong>
+          <p>The therapist's emotional reactions to the client, which may be influenced by the therapist's own unresolved conflicts and relational patterns. Contemporary views distinguish between <span class="key-term">classical countertransference</span> (the therapist's neurotic reactions to the client's transference) and <span class="key-term">totalistic countertransference</span> (all of the therapist's emotional reactions to the client). When recognized and managed, countertransference can be a valuable source of clinical information about the client's interpersonal impact.</p>
+        </div>
+
+        <p>Unmanaged countertransference can lead to boundary crossings, burnout, inappropriate self-disclosure, or therapeutic impasse. Supervision, personal therapy, and ongoing self-reflection are the primary means of managing countertransference.</p>
+
+        <h3>Evidence-Based Relationship Elements (Norcross)</h3>
+        <p>John Norcross's APA Division 29 task force identified specific relationship elements that are demonstrably effective, probably effective, or promising based on meta-analytic evidence:</p>
+        <table>
+          <tr><th>Evidence Level</th><th>Relationship Elements</th></tr>
+          <tr><td><strong>Demonstrably Effective</strong></td><td>Alliance, empathy, goal consensus/collaboration, positive regard/affirmation, congruence/genuineness</td></tr>
+          <tr><td><strong>Probably Effective</strong></td><td>Collecting client feedback, repairing alliance ruptures, managing countertransference, promoting treatment credibility</td></tr>
+          <tr><td><strong>Promising</strong></td><td>Self-disclosure, immediacy, emotional expression</td></tr>
+        </table>
+        <p>This research supports the integration of both relationship and technique factors in effective psychotherapy rather than an either/or approach.</p>
+      </div>
+
+      <!-- Section 5: Termination -->
+      <div class="content-section">
+        <h2>Termination and Abandonment</h2>
+        <h3>Therapist Factors and Multicultural Competence</h3>
+        <p>Research demonstrates that therapist variables contribute significantly to outcome variability. Key therapist factors include:</p>
+        <ul>
+          <li><strong>Empathic attunement:</strong> Rogers identified empathy, unconditional positive regard, and genuineness/congruence as the necessary and sufficient conditions for therapeutic change. While the "sufficient" claim is debated, these conditions are consistently associated with positive outcomes.</li>
+          <li><strong>Cultural humility:</strong> An ongoing process of self-reflection and self-critique regarding one's own cultural assumptions. Unlike cultural competence (which implies an achievable endpoint), cultural humility emphasizes the lifelong nature of learning about others' cultural identities and experiences.</li>
+          <li><strong>Therapist effects:</strong> Research shows that approximately 5-9% of outcome variance is attributable to the individual therapist, independent of treatment modality. Some therapists are consistently more effective than others across different clients and presenting problems.</li>
+        </ul>
+
+        <h3>Standard 10.10: Terminating Therapy</h3>
+        <p>Psychologists terminate therapy when it becomes reasonably clear that the client no longer needs the service, is not benefiting from it, or is being harmed by continued treatment. Prior to termination, the psychologist provides <span class="key-term">pretermination counseling</span> and suggests alternative service providers when appropriate.</p>
+
+        <p>Psychologists may terminate for many reasons, but ethical termination requires:</p>
+        <ul>
+          <li>Adequate notice to the client</li>
+          <li>Discussion of the client's current needs and progress</li>
+          <li>Appropriate referrals when continued treatment is needed</li>
+          <li>Documentation of the termination process</li>
+        </ul>
+
+        <p><span class="key-term">Abandonment</span> occurs when a psychologist terminates treatment without reasonable notice or appropriate referral when the client still needs services. Non-payment alone is typically insufficient grounds for immediate termination without providing referral options.</p>
+
+        <h3>Planned Termination vs. Premature Termination</h3>
+        <p><span class="key-term">Planned termination</span> occurs when therapeutic goals have been met and both therapist and client agree that continued treatment is unnecessary. It typically includes review of progress, discussion of relapse prevention strategies, and planning for future needs. <span class="key-term">Premature termination</span> (client-initiated dropout) is a common clinical problem — research suggests that approximately 20-50% of clients terminate prematurely. Factors associated with premature termination include lower socioeconomic status, minority status, younger age, external locus of control, and weaker therapeutic alliance. Addressing potential barriers to continuation early in treatment and monitoring the alliance can reduce premature termination rates.</p>
+      </div>
+
+      <!-- Section 6: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Bordin's alliance:</strong> Tasks + Goals + Bond. Client's perception of alliance is the strongest predictor of outcome.</li>
+          <li><strong>Lambert's common factors:</strong> Extratherapeutic (40%), Relationship (30%), Expectancy (15%), Technique (15%). Relationship factors outweigh specific techniques.</li>
+          <li><strong>Boundary crossing vs. violation:</strong> Crossing may be benign or beneficial; violation involves harm or exploitation. Context matters.</li>
+          <li><strong>Standard 10.05:</strong> NEVER sexual intimacies with current clients. Absolute prohibition.</li>
+          <li><strong>Standard 10.08 (Two-year rule):</strong> Minimum two-year wait after termination. Even after two years, psychologist bears burden of proving non-exploitation.</li>
+          <li><strong>Standard 3.05:</strong> Multiple relationships are prohibited only when they would impair objectivity or risk exploitation. Some are unavoidable.</li>
+          <li><strong>Bartering (Standard 6.05):</strong> Not absolutely prohibited but discouraged. Must not be clinically contraindicated or exploitative.</li>
+          <li><strong>Transference:</strong> Client projects past relationship patterns onto therapist. Both positive and negative forms exist.</li>
+          <li><strong>Countertransference:</strong> Therapist's reactions to client. When unmanaged, leads to boundary problems. When recognized, provides clinical data.</li>
+          <li><strong>Termination (Standard 10.10):</strong> Provide pretermination counseling, referrals, and adequate notice. Abandonment is an ethical violation.</li>
+          <li><strong>Alliance rupture repair:</strong> Successfully repairing alliance ruptures is associated with better outcomes and is a mechanism of change.</li>
+          <li><strong>Self-disclosure:</strong> Most beneficial when infrequent, brief, and focused on normalizing client experience. Psychodynamic tradition minimizes it; humanistic tradition is more accepting.</li>
+          <li><strong>Norcross task force:</strong> Alliance, empathy, and goal consensus are demonstrably effective relationship elements. Collecting client feedback is probably effective.</li>
+          <li><strong>Gift-giving:</strong> Small culturally appropriate gifts from clients are generally acceptable. Expensive or frequent gifts should be explored therapeutically. Cultural context matters.</li>
+          <li><strong>Rogers' necessary conditions:</strong> Empathy, unconditional positive regard, genuineness/congruence. Foundational to all alliance-based approaches.</li>
+          <li><strong>Cultural humility vs. cultural competence:</strong> Humility is an ongoing process of self-reflection; competence implies an achievable endpoint. Current emphasis favors humility.</li>
+          <li><strong>Therapist effects:</strong> 5-9% of outcome variance is attributable to individual therapist. Some therapists consistently more effective than others regardless of treatment approach.</li>
+          <li><strong>OQ-45 / Routine outcome monitoring:</strong> Session-by-session tracking of client outcomes provides real-time feedback to therapists, reduces deterioration rates, and improves outcomes for at-risk clients.</li>
+          <li><strong>WAI:</strong> Working Alliance Inventory. Most widely used alliance measure. Based on Bordin's tasks, goals, and bond model. Client, therapist, and observer versions.</li>
+          <li><strong>Premature termination:</strong> 20-50% of clients drop out. Associated with lower SES, minority status, younger age, weaker alliance. Addressing barriers early reduces dropout.</li>
+          <li><strong>Planned termination:</strong> Includes progress review, relapse prevention, future planning, and referral if needed. Should not be abrupt or unexpected.</li>
+          <li><strong>Dodo bird verdict:</strong> The conclusion (from meta-analyses by Luborsky, Wampold, and others) that different psychotherapy approaches produce roughly equivalent outcomes. Supports the common factors perspective. Named after the Dodo bird in Alice in Wonderland who declared "Everybody has won, and all must have prizes."</li>
+          <li><strong>Corrective emotional experience (Alexander):</strong> The therapeutic relationship provides an opportunity for the client to experience relational patterns differently than in past relationships. Central to psychodynamic and relational approaches.</li>
+          <li><strong>Standard 10.06:</strong> Psychologists may serve as consultants to other professionals who are treating the same client but should clarify roles to avoid confusion and potential conflicts.</li>
+          <li><strong>Rupture-repair sequence:</strong> Alliance ruptures (withdrawal or confrontation markers) followed by successful repair predict better outcomes than alliances that never rupture. The repair process itself is therapeutic.</li>
+          <li><strong>Expectancy/placebo (15%):</strong> Lambert's model: the client's belief that therapy will help accounts for approximately 15% of outcome variance. Instilling hope is a common factor across all effective therapies.</li>
+          <li><strong>Real relationship (Gelso):</strong> Distinguished from transference: the realistic, genuine, person-to-person connection between therapist and client. Comprises genuineness and realistic perceptions. A positive real relationship contributes to outcome.</li>
+          <li><strong>Role induction:</strong> Preparing clients for therapy by explaining the therapy process, roles, and expectations. Associated with reduced premature termination and better alliance development. Sometimes called pretreatment orientation.</li>
+          <li><strong>Frame and boundaries:</strong> The therapy frame (time, place, fee, frequency, confidentiality) provides structure and safety. Deviations from the frame may be clinically meaningful and should be examined, not just corrected.</li>
+          <li><strong>Motivational factors in dropout:</strong> External motivation (court-mandated, pressure from others) is associated with higher dropout rates than internal motivation. Addressing motivation early with MI techniques can improve retention.</li>
+          <li><strong>Informed consent for therapy (10.01):</strong> Must include nature of therapy, anticipated course, fees, third-party involvement, limits of confidentiality. Must be in understandable language. Ongoing process, not one-time event.</li>
+          <li><strong>Outcome expectancies vs. role expectancies:</strong> Outcome = beliefs about whether therapy will be helpful. Role = beliefs about what will happen during therapy. Discrepancies between role expectations and actual therapy predict early dropout.</li>
+          <li><strong>Standard 3.04 (Avoiding Harm):</strong> Psychologists take reasonable steps to avoid harm and minimize unavoidable harm. Applies to all professional roles including therapy, assessment, supervision, and research.</li>
+          <li><strong>Extratherapeutic factors (40%):</strong> Lambert's model: client characteristics and life events outside therapy account for the largest portion of outcome variance. Includes social support, spontaneous remission, and fortuitous life events.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch6-assessment-ethics.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Assessment Ethics: Fairness &amp; Security</div>
+          </div>
+        </a>
+        <a href="ch8-legal-forensic.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Legal &amp; Forensic Psychology</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

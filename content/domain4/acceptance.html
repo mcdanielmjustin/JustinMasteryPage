@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through Acceptance | Domain 4 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #22c55e; --accent-dim: rgba(34, 197, 94, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 4</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Through Acceptance</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 4</div>
+        <div class="domain-title">How Therapy Works</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="insight.html" class="chapter-link"><span class="chapter-number">1</span>Through the Unconscious</a></li>
+        <li class="chapter-item"><a href="cognition.html" class="chapter-link"><span class="chapter-number">2</span>Through Thoughts</a></li>
+        <li class="chapter-item"><a href="conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Through Conditioning</a></li>
+        <li class="chapter-item"><a href="acceptance.html" class="chapter-link active"><span class="chapter-number">4</span>Through Acceptance</a></li>
+        <li class="chapter-item"><a href="relationship.html" class="chapter-link"><span class="chapter-number">5</span>Through the Relationship</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">6</span>Through Motivation</a></li>
+        <li class="chapter-item"><a href="systems.html" class="chapter-link"><span class="chapter-number">7</span>Through the System</a></li>
+        <li class="chapter-item"><a href="evidence.html" class="chapter-link"><span class="chapter-number">8</span>Through Evidence</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 8</div>
+        <h1>Through Acceptance</h1>
+        <div class="chapter-meta">
+          <span>Mindfulness, meaning &amp; third-wave approaches</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 4)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 4)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Acceptance and Commitment Therapy (ACT)</h2>
+        <p><span class="key-term">ACT</span> (pronounced as the word "act") was developed by <span class="key-term">Steven C. Hayes</span> and is rooted in <span class="key-term">Relational Frame Theory (RFT)</span>, a behavioral account of language and cognition. ACT is considered a "third-wave" cognitive-behavioral therapy that emphasizes acceptance rather than thought modification.</p>
+
+        <div class="definition-box">
+          <h4>Psychological Flexibility</h4>
+          <p>The central goal of ACT is to increase <span class="key-term">psychological flexibility</span> -- the ability to contact the present moment fully as a conscious human being and to change or persist in behavior when doing so serves valued ends. Psychological inflexibility (the opposite) is viewed as the root of psychopathology.</p>
+        </div>
+
+        <h3>Six Core Processes (The Hexaflex)</h3>
+        <p>ACT targets six interrelated processes arranged in a hexagonal model:</p>
+        <ol>
+          <li><strong>Acceptance</strong> -- Willingness to experience unwanted thoughts and feelings without trying to control or eliminate them</li>
+          <li><strong>Cognitive Defusion</strong> -- Reducing the literal impact of thoughts; seeing thoughts as mental events rather than truths (e.g., "I'm having the thought that I'm a failure" rather than "I'm a failure")</li>
+          <li><strong>Present Moment Awareness</strong> -- Mindful contact with the here-and-now</li>
+          <li><strong>Self-as-Context</strong> -- Contacting a transcendent sense of self (the "observing self") distinct from the content of experience</li>
+          <li><strong>Values</strong> -- Clarifying what matters most; chosen life directions that are not goals but ongoing patterns of activity</li>
+          <li><strong>Committed Action</strong> -- Taking concrete steps guided by values, even in the presence of difficult internal experiences</li>
+        </ol>
+      </section>
+
+      <section class="content-section">
+        <h2>Dialectical Behavior Therapy (DBT)</h2>
+        <p><span class="key-term">DBT</span> was developed by <span class="key-term">Marsha Linehan</span> originally for the treatment of <span class="key-term">borderline personality disorder (BPD)</span> and chronically suicidal individuals. DBT combines standard cognitive-behavioral techniques with Eastern mindfulness practices and dialectical philosophy.</p>
+
+        <div class="definition-box">
+          <h4>The Biosocial Theory</h4>
+          <p>DBT is grounded in the <span class="key-term">biosocial theory</span>, which proposes that BPD is primarily a disorder of <strong>emotion dysregulation</strong> resulting from the transaction between (1) a biological vulnerability to emotional sensitivity/reactivity and (2) an <strong>invalidating environment</strong> -- one that pervasively negates, dismisses, or punishes the child's emotional experiences.</p>
+        </div>
+
+        <h3>Four Skills Modules</h3>
+        <table>
+          <tr><th>Module</th><th>Focus</th><th>Key Skills</th></tr>
+          <tr><td><strong>Mindfulness</strong></td><td>Core skill; present-moment awareness</td><td>"What" skills (observe, describe, participate) and "How" skills (non-judgmentally, one-mindfully, effectively)</td></tr>
+          <tr><td><strong>Distress Tolerance</strong></td><td>Surviving crises without making things worse</td><td>TIPP (Temperature, Intense exercise, Paced breathing, Paired muscle relaxation), pros/cons, radical acceptance</td></tr>
+          <tr><td><strong>Emotion Regulation</strong></td><td>Understanding and managing emotions</td><td>ABC PLEASE (Accumulate positives, Build mastery, Cope ahead, treat PhysicaL illness, balance Eating, avoid mood-Altering substances, balance Sleep, get Exercise)</td></tr>
+          <tr><td><strong>Interpersonal Effectiveness</strong></td><td>Maintaining self-respect while navigating relationships</td><td>DEAR MAN (Describe, Express, Assert, Reinforce, Mindful, Appear confident, Negotiate), GIVE, FAST</td></tr>
+        </table>
+
+        <h3>Treatment Modes and Structure</h3>
+        <p>Comprehensive DBT includes four modes of treatment:</p>
+        <ul>
+          <li><strong>Individual therapy</strong> -- Weekly sessions focusing on the target hierarchy: (1) life-threatening behaviors, (2) therapy-interfering behaviors, (3) quality-of-life-interfering behaviors, (4) skills acquisition</li>
+          <li><strong>Skills training group</strong> -- Weekly 2.5-hour group to learn and practice the four skills modules</li>
+          <li><strong>Phone coaching</strong> -- Brief between-session calls for in-the-moment skills application</li>
+          <li><strong>Therapist consultation team</strong> -- Regular meetings to support therapist motivation and capability</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>The Dialectical Stance</h4>
+          <p>The core dialectic in DBT is the balance between <span class="key-term">acceptance</span> and <span class="key-term">change</span>. The therapist simultaneously validates the client's experience (acceptance) while pushing for behavioral change. This balancing act is reflected in specific strategies: validation strategies (acceptance) and problem-solving strategies (change). The synthesis of these opposites drives therapeutic progress.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Mindfulness-Based Approaches</h2>
+        <p>Several structured interventions incorporate mindfulness meditation into cognitive-behavioral frameworks:</p>
+
+        <h3>Mindfulness-Based Stress Reduction (MBSR)</h3>
+        <p>Developed by <span class="key-term">Jon Kabat-Zinn</span> at the University of Massachusetts Medical Center, MBSR is an 8-week group program originally designed for chronic pain and stress-related conditions. The program includes body scan meditation, sitting meditation, gentle yoga, and informal mindfulness practices applied to daily activities.</p>
+
+        <h3>Mindfulness-Based Cognitive Therapy (MBCT)</h3>
+        <p>Developed by <span class="key-term">Zindel Segal, Mark Williams, and John Teasdale</span>, MBCT integrates MBSR with elements of CBT specifically for the prevention of depressive relapse. MBCT teaches patients to recognize early warning signs of depression and to disengage from ruminative thought patterns by relating differently to their thoughts. Research demonstrates that MBCT reduces relapse rates for patients with three or more prior depressive episodes.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Existential Therapy</h2>
+        <p>Existential therapy draws on existential philosophy (Kierkegaard, Heidegger, Sartre) and focuses on universal human concerns. Major contributors include <span class="key-term">Rollo May</span>, <span class="key-term">Irvin Yalom</span>, <span class="key-term">Viktor Frankl</span>, and <span class="key-term">Ludwig Binswanger</span>.</p>
+
+        <h3>Yalom's Four Ultimate Concerns</h3>
+        <p><span class="key-term">Irvin Yalom</span> identified four existential givens that form the core of human anxiety:</p>
+        <ol>
+          <li><strong>Death</strong> -- Awareness of mortality and the tension between the wish to continue existing and the inevitability of death</li>
+          <li><strong>Freedom</strong> -- The absence of external structure; the terrifying responsibility of being the author of one's own life</li>
+          <li><strong>Isolation</strong> -- Fundamental existential aloneness; no matter how close our relationships, an unbridgeable gap remains</li>
+          <li><strong>Meaninglessness</strong> -- The absence of inherent meaning in the universe; the challenge of creating one's own meaning</li>
+        </ol>
+
+        <div class="definition-box">
+          <h4>Viktor Frankl and Logotherapy</h4>
+          <p><span class="key-term">Frankl</span> developed <span class="key-term">logotherapy</span> ("therapy through meaning"), influenced by his experiences in Nazi concentration camps. Frankl proposed that the primary human motivation is a <span class="key-term">will to meaning</span>, and that an <span class="key-term">existential vacuum</span> (a sense of meaninglessness) is the source of much psychopathology. His technique of <span class="key-term">paradoxical intention</span> involves instructing clients to intentionally engage in the feared behavior, thereby breaking the anticipatory anxiety cycle.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Commonly Tested Concepts</h2>
+        <ul>
+          <li>ACT aims for <span class="key-term">psychological flexibility</span>, not symptom reduction; uses <span class="key-term">cognitive defusion</span> rather than cognitive restructuring</li>
+          <li>DBT was developed for <span class="key-term">borderline personality disorder</span> by Marsha Linehan; know the four modules</li>
+          <li>DBT's <span class="key-term">DEAR MAN</span> is an interpersonal effectiveness skill; <span class="key-term">TIPP</span> is for distress tolerance</li>
+          <li>The <span class="key-term">biosocial theory</span> links biological emotional vulnerability with an invalidating environment</li>
+          <li>MBCT is specifically for <span class="key-term">relapse prevention in depression</span> (3+ prior episodes)</li>
+          <li>Yalom: four ultimate concerns (<span class="key-term">death, freedom, isolation, meaninglessness</span>)</li>
+          <li>Frankl: <span class="key-term">logotherapy</span>, will to meaning, <span class="key-term">paradoxical intention</span></li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Hayes, S. C., Strosahl, K. D., &amp; Wilson, K. G. (2012). <em>Acceptance and commitment therapy: The process and practice of mindful change</em> (2nd ed.). Guilford Press.</div>
+        <div class="citation">Linehan, M. M. (1993). <em>Cognitive-behavioral treatment of borderline personality disorder.</em> Guilford Press.</div>
+        <div class="citation">Segal, Z. V., Williams, J. M. G., &amp; Teasdale, J. D. (2013). <em>Mindfulness-based cognitive therapy for depression</em> (2nd ed.). Guilford Press.</div>
+        <div class="citation">Yalom, I. D. (1980). <em>Existential psychotherapy.</em> Basic Books.</div>
+        <div class="citation">Frankl, V. E. (1946/1985). <em>Man's search for meaning.</em> Beacon Press.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="conditioning.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Through Conditioning</div>
+          </div>
+        </a>
+        <a href="relationship.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Through the Relationship</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

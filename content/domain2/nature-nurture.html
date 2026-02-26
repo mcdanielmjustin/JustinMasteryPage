@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nature vs. Nurture | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Nature vs. Nurture</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link active"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 9</div>
+        <h1>Nature vs. Nurture</h1>
+        <div class="chapter-meta">
+          <span>Genetics, epigenetics, gene-environment interactions</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of the Nature-Nurture Debate</h2>
+        <p>The nature-nurture question is one of the oldest and most fundamental issues in psychology: To what extent are human characteristics determined by genetic inheritance (nature) versus environmental experience (nurture)? Contemporary developmental psychology has moved well beyond this dichotomy, recognizing that virtually all traits arise from complex interactions between genes and environments.</p>
+        <p>For the EPPP, candidates must understand behavioral genetics methodology, the concept of heritability, epigenetic mechanisms, and the specific types of gene-environment interactions and correlations that shape development.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Behavioral Genetics</h2>
+        <p><span class="key-term">Behavioral genetics</span> is the field that examines the relative contributions of genetic and environmental factors to individual differences in behavior and psychological traits. It relies on several key research designs to disentangle genetic from environmental influences.</p>
+
+        <h3>Twin Studies</h3>
+        <p>Twin studies compare <span class="key-term">monozygotic (MZ) twins</span> (who share 100% of their DNA) with <span class="key-term">dizygotic (DZ) twins</span> (who share approximately 50% of their segregating genes, like any siblings). The logic is straightforward: if MZ twins are more similar on a trait than DZ twins, genetic factors are implicated.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Concordance rate:</strong> The probability that both twins exhibit a given trait when one twin has it. Higher concordance in MZ vs. DZ twins suggests genetic influence.</p>
+          <p><strong>Equal environments assumption:</strong> The critical assumption in twin studies that MZ and DZ twins share environmental influences to the same degree. Violations of this assumption can inflate heritability estimates.</p>
+        </div>
+
+        <p>The landmark Minnesota Study of Twins Reared Apart (Bouchard et al., 1990) found that MZ twins raised in different families showed remarkably similar IQ scores (correlation ~.70), personality traits, and even behavioral quirks, providing compelling evidence for strong genetic influences on many psychological characteristics.</p>
+
+        <h3>Adoption Studies</h3>
+        <p>Adoption studies compare adopted children with both their biological parents (who share genes but not environment) and their adoptive parents (who share environment but not genes). If adopted children more closely resemble their biological parents on a trait, genetic factors are implicated; if they more resemble their adoptive parents, environmental factors are suggested.</p>
+        <p>The Colorado Adoption Project (Plomin et al., 1997) followed adopted and non-adopted children longitudinally, revealing that the correlation between adopted children and their biological parents on cognitive measures actually <strong>increases</strong> with age, while correlations with adoptive parents decrease -- a finding consistent with increasing genetic influence over time.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Adoption Study Interpretation</h4>
+          <p>A researcher examines schizophrenia rates among adults who were adopted at birth. The biological mothers of the adopted-away children had schizophrenia. Results show that these adoptees have elevated schizophrenia rates (~10-15%) compared to adoptees whose biological parents had no psychiatric history (~1-2%), despite being raised by non-schizophrenic adoptive parents. This classic design (Heston, 1966; Kety et al., 1968) demonstrates genetic vulnerability while also highlighting that the majority of at-risk adoptees do <strong>not</strong> develop the disorder, pointing to the importance of environmental factors.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Heritability</h2>
+        <p><span class="key-term">Heritability</span> (h-squared) is a statistic that estimates the proportion of variance in a trait within a population that is attributable to genetic differences among individuals. It ranges from 0.0 (no genetic contribution to individual differences) to 1.0 (all variation due to genetic differences).</p>
+
+        <div class="definition-box">
+          <h4>Critical Misunderstandings About Heritability</h4>
+          <p><strong>Heritability applies to populations, not individuals.</strong> A heritability of .50 for intelligence does NOT mean that 50% of an individual's intelligence is genetic.</p>
+          <p><strong>Heritability does not mean immutability.</strong> A highly heritable trait can still be strongly influenced by environmental intervention (e.g., PKU is nearly 100% genetic but intellectual disability is prevented by dietary modification).</p>
+          <p><strong>Heritability is context-dependent.</strong> It changes across populations, ages, and environments. When environments are more uniform, heritability estimates are higher because less environmental variation exists.</p>
+          <p><strong>Heritability cannot explain group differences.</strong> Even if a trait is highly heritable within groups, differences between groups may be entirely environmental in origin (Lewontin, 1970).</p>
+        </div>
+
+        <p>Heritability estimates for major psychological traits include approximately .50 for general intelligence (with estimates increasing from childhood to adulthood), .40-.60 for personality traits (Big Five), and .60-.80 for schizophrenia and bipolar disorder.</p>
+
+        <h3>Shared vs. Nonshared Environment</h3>
+        <p>Behavioral genetics partitions environmental influence into two components:</p>
+        <ul>
+          <li><strong>Shared environment (c-squared):</strong> Environmental factors that make siblings more similar to each other (e.g., family SES, parenting style, neighborhood). Surprisingly, shared environment accounts for relatively little variance in most traits by adulthood.</li>
+          <li><strong>Nonshared environment (e-squared):</strong> Environmental factors that make siblings different from each other (e.g., differential parental treatment, unique peer groups, random events, measurement error). This component is typically the largest environmental contributor to individual differences.</li>
+        </ul>
+        <p>Plomin and Daniels (1987) published a highly influential paper asking "Why are children in the same family so different from one another?" Their conclusion -- that nonshared environmental influences dominate over shared ones for most psychological traits -- reshaped how psychologists think about family influence.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Epigenetics</h2>
+        <p><span class="key-term">Epigenetics</span> refers to changes in gene expression that do not involve alterations to the DNA sequence itself. These modifications determine whether specific genes are "turned on" or "turned off" and can be influenced by environmental factors including stress, nutrition, toxins, and early caregiving experiences.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>DNA methylation:</strong> The addition of methyl groups to DNA, typically silencing gene expression. Increased methylation of a gene promoter region generally reduces that gene's activity.</p>
+          <p><strong>Histone modification:</strong> Chemical changes to the histone proteins around which DNA is wound, affecting how tightly DNA is packaged and thus how accessible genes are for transcription.</p>
+          <p><strong>Transgenerational epigenetic inheritance:</strong> The transmission of epigenetic marks from one generation to the next without changes in DNA sequence.</p>
+        </div>
+
+        <p>A groundbreaking study by Meaney and colleagues (Weaver et al., 2004) demonstrated that rat pups who received high levels of maternal licking and grooming showed altered methylation patterns at the glucocorticoid receptor gene, resulting in lower stress reactivity throughout life. This effect was reversible through cross-fostering, demonstrating a direct mechanism by which early caregiving shapes gene expression and stress physiology.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Epigenetics provides a biological mechanism for understanding how early adversity (e.g., childhood abuse, neglect) can have lasting effects on stress reactivity, mental health, and even physical health. Studies of human suicide victims with histories of childhood abuse have found increased methylation of the glucocorticoid receptor gene in the hippocampus (McGowan et al., 2009), paralleling the animal findings. This research supports the importance of early intervention and suggests that environmental enrichment may help reverse adverse epigenetic modifications.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Gene-Environment Interactions and Correlations</h2>
+
+        <h3>Gene-Environment Interaction (GxE)</h3>
+        <p><span class="key-term">Gene-environment interaction</span> occurs when the effect of a gene depends on the environment (or vice versa). The same genetic variant may lead to different outcomes depending on environmental conditions.</p>
+        <p>The classic example is Caspi et al. (2003), who found that individuals with the short allele of the 5-HTTLPR serotonin transporter gene were more likely to develop depression following stressful life events than those with the long allele. The gene alone did not cause depression, nor did stress alone -- it was the interaction that mattered. (Note: This finding has been debated in subsequent replication attempts, highlighting the complexity of GxE research.)</p>
+
+        <h3>Gene-Environment Correlations (rGE)</h3>
+        <p>Scarr and McCartney (1983) described three types of <span class="key-term">gene-environment correlation</span>, which explain how genes and environments become linked:</p>
+
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Example</th><th>Age Trend</th></tr>
+          <tr><td><strong>Passive rGE</strong></td><td>Parents provide both genes and environment; the child passively receives both</td><td>Musically gifted parents pass on musical genes AND provide instruments and lessons</td><td>Strongest in early childhood</td></tr>
+          <tr><td><strong>Evocative rGE</strong></td><td>The child's genetically influenced traits elicit particular responses from the environment</td><td>A temperamentally easy baby elicits more positive parenting than a difficult baby</td><td>Stable across development</td></tr>
+          <tr><td><strong>Active rGE</strong></td><td>The child actively selects and creates environments compatible with genetic predispositions (also called "niche-picking")</td><td>An intellectually curious child seeks out libraries, stimulating peers, and academic challenges</td><td>Increases with age as autonomy grows</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Clinical Example: Diathesis-Stress Model</h4>
+          <p>The <span class="key-term">diathesis-stress model</span> is a specific form of gene-environment interaction in which a genetic vulnerability (diathesis) is expressed as a disorder only when triggered by environmental stress. For example, an individual may carry genetic risk for anxiety disorders but only develop symptoms following significant life stressors. The more recently proposed <span class="key-term">differential susceptibility hypothesis</span> (Belsky & Pluess, 2009) extends this concept, suggesting that the same genetic variants that confer vulnerability to adversity also confer enhanced sensitivity to positive environments -- making some individuals "orchids" (highly sensitive to environment, for better or worse) and others "dandelions" (resilient regardless of environment).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Heritability is a population statistic, not an individual measure -- it cannot explain group differences and does not imply immutability</li>
+          <li>Know the three types of gene-environment correlation (passive, evocative, active) and their developmental trajectories (passive decreases, active increases with age)</li>
+          <li>Distinguish between gene-environment interaction (GxE) and gene-environment correlation (rGE)</li>
+          <li>Understand the logic of twin studies (MZ vs. DZ comparisons) and adoption studies (biological vs. adoptive parent comparisons)</li>
+          <li>Know that nonshared environment is typically more important than shared environment for most psychological traits (Plomin & Daniels, 1987)</li>
+          <li>Understand the diathesis-stress model and the differential susceptibility hypothesis as models of gene-environment interaction</li>
+          <li>Be familiar with epigenetics as a mechanism by which environment alters gene expression without changing DNA sequence</li>
+          <li>Heritability of IQ increases with age (from ~.40 in childhood to ~.60-.80 in adulthood) -- a counterintuitive finding</li>
+          <li>The equal environments assumption is a critical methodological issue in twin studies</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Belsky, J., & Pluess, M. (2009). Beyond diathesis stress: Differential susceptibility to environmental influences. <em>Psychological Bulletin, 135</em>(6), 885-908.</div>
+        <div class="citation">Bouchard, T. J., Lykken, D. T., McGue, M., Segal, N. L., & Tellegen, A. (1990). Sources of human psychological differences: The Minnesota Study of Twins Reared Apart. <em>Science, 250</em>(4978), 223-228.</div>
+        <div class="citation">Caspi, A., Sugden, K., Moffitt, T. E., et al. (2003). Influence of life stress on depression: Moderation by a polymorphism in the 5-HTT gene. <em>Science, 301</em>(5631), 386-389.</div>
+        <div class="citation">Heston, L. L. (1966). Psychiatric disorders in foster home reared children of schizophrenic mothers. <em>British Journal of Psychiatry, 112</em>(489), 819-825.</div>
+        <div class="citation">Lewontin, R. C. (1970). Race and intelligence. <em>Bulletin of the Atomic Scientists, 26</em>(3), 2-8.</div>
+        <div class="citation">McGowan, P. O., Sasaki, A., D'Alessio, A. C., et al. (2009). Epigenetic regulation of the glucocorticoid receptor in human brain associates with childhood abuse. <em>Nature Neuroscience, 12</em>(3), 342-348.</div>
+        <div class="citation">Plomin, R., & Daniels, D. (1987). Why are children in the same family so different from one another? <em>Behavioral and Brain Sciences, 10</em>(1), 1-16.</div>
+        <div class="citation">Plomin, R., Fulker, D. W., Corley, R., & DeFries, J. C. (1997). Nature, nurture, and cognitive development from 1 to 16 years: A parent-offspring adoption study. <em>Psychological Science, 8</em>(6), 442-447.</div>
+        <div class="citation">Scarr, S., & McCartney, K. (1983). How people make their own environments: A theory of genotype-environment effects. <em>Child Development, 54</em>(2), 424-435.</div>
+        <div class="citation">Weaver, I. C., Cervoni, N., Champagne, F. A., et al. (2004). Epigenetic programming by maternal behavior. <em>Nature Neuroscience, 7</em>(8), 847-854.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="cognitive-development.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Cognitive Development</div>
+          </div>
+        </a>
+        <a href="prenatal-development.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Prenatal Development</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

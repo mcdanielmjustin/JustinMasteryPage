@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neurodevelopmental Disorders | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Neurodevelopmental</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link active"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 10</div>
+        <h1>Neurodevelopmental Disorders</h1>
+        <div class="chapter-meta">
+          <span>ADHD, autism spectrum, learning disorders, tic disorders</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Neurodevelopmental Disorders</h2>
+        <p>Neurodevelopmental disorders are a group of conditions with onset in the developmental period, typically manifesting early in development and producing impairments in personal, social, academic, or occupational functioning. These disorders frequently co-occur with one another. The DSM-5 neurodevelopmental chapter includes intellectual disabilities, communication disorders, autism spectrum disorder, ADHD, specific learning disorder, and motor disorders (including tic disorders).</p>
+        <div class="definition-box">
+          <h4>Key Concept: Dimensional Approach</h4>
+          <p>DSM-5 moved toward a more <span class="key-term">dimensional approach</span> for neurodevelopmental disorders, using severity levels and specifiers rather than rigid categorical subtypes. This is most evident in ASD (which consolidated previously separate diagnoses) and intellectual disability (which now emphasizes adaptive functioning over IQ scores for severity classification).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Attention-Deficit/Hyperactivity Disorder (ADHD)</h2>
+        <p><span class="key-term">ADHD</span> is characterized by a persistent pattern of inattention and/or hyperactivity-impulsivity that interferes with functioning or development. DSM-5 made several important changes to ADHD criteria compared to DSM-IV.</p>
+        <h3>DSM-5 Criteria Changes</h3>
+        <ul>
+          <li>Age of onset changed from <strong>before age 7 to before age 12</strong></li>
+          <li>For adults (age 17+), only <strong>5 of 9 symptoms</strong> required (instead of 6)</li>
+          <li>ADHD can now be diagnosed <strong>comorbidly with ASD</strong> (previously excluded)</li>
+          <li>Examples of symptom manifestation in older adolescents and adults were added</li>
+          <li>Subtypes were relabeled as <strong>"presentations"</strong> to reflect their potential instability over time</li>
+        </ul>
+        <h3>Presentations</h3>
+        <table>
+          <tr><th>Presentation</th><th>Requirement</th><th>Key Features</th></tr>
+          <tr><td>Predominantly Inattentive</td><td>6+ inattention symptoms (5+ for age 17+)</td><td>Difficulty sustaining attention, does not follow through, loses things, easily distracted, forgetful</td></tr>
+          <tr><td>Predominantly Hyperactive-Impulsive</td><td>6+ hyperactive-impulsive symptoms (5+ for age 17+)</td><td>Fidgets, leaves seat, runs/climbs inappropriately, talks excessively, interrupts, difficulty waiting</td></tr>
+          <tr><td>Combined</td><td>Meets criteria for both presentations</td><td>Most commonly diagnosed presentation</td></tr>
+        </table>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Symptoms must be present in <strong>two or more settings</strong> (home, school, work), must be present for at least 6 months, and must interfere with or reduce the quality of functioning. ADHD persists into adulthood in approximately 50-65% of cases, though hyperactive-impulsive symptoms tend to decline more than inattentive symptoms (Faraone et al., 2006). Executive function deficits (working memory, inhibition, cognitive flexibility) are central to Barkley's (1997) model of ADHD.</p>
+        </div>
+        <h3>Etiology</h3>
+        <ul>
+          <li><strong>Genetics:</strong> ADHD is highly heritable (approximately 74%). It is polygenic, with dopamine-related genes (DRD4, DAT1) implicated.</li>
+          <li><strong>Neurobiology:</strong> Dysregulation of <span class="key-term">dopamine</span> and <span class="key-term">norepinephrine</span> in prefrontal-striatal circuits. Structural imaging shows reduced volume in prefrontal cortex, basal ganglia, and cerebellum.</li>
+          <li><strong>Environmental risk factors:</strong> Prenatal tobacco and alcohol exposure, low birth weight, prematurity, and lead exposure.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Autism Spectrum Disorder (ASD)</h2>
+        <p><span class="key-term">Autism Spectrum Disorder</span> represents one of the most significant diagnostic changes in DSM-5. The previous DSM-IV categories of autistic disorder, Asperger's disorder, childhood disintegrative disorder, and PDD-NOS were consolidated into the single diagnosis of ASD.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <p>ASD requires deficits in <strong>both</strong> of the following domains:</p>
+        <h4>Domain A: Social Communication and Social Interaction (all 3 required)</h4>
+        <ol>
+          <li>Deficits in social-emotional reciprocity (e.g., abnormal social approach, failure of back-and-forth conversation, reduced sharing of interests/emotions)</li>
+          <li>Deficits in nonverbal communicative behaviors (e.g., poor eye contact, abnormalities in body language, deficits in understanding/use of gestures)</li>
+          <li>Deficits in developing, maintaining, and understanding relationships (e.g., difficulty adjusting behavior to social contexts, difficulty sharing imaginative play, absence of interest in peers)</li>
+        </ol>
+        <h4>Domain B: Restricted, Repetitive Behaviors (at least 2 of 4 required)</h4>
+        <ol>
+          <li>Stereotyped or repetitive motor movements, use of objects, or speech (echolalia, idiosyncratic phrases)</li>
+          <li>Insistence on sameness, inflexible adherence to routines, ritualized patterns</li>
+          <li>Highly restricted, fixated interests that are abnormal in intensity or focus</li>
+          <li>Hyper- or hyporeactivity to sensory input or unusual interest in sensory aspects of the environment</li>
+        </ol>
+        <div class="definition-box">
+          <h4>DSM-5 Changes from DSM-IV</h4>
+          <p>DSM-IV used a triad (social interaction, communication, restricted behaviors). DSM-5 collapsed this into a <strong>dyad</strong>: (1) social communication/interaction and (2) restricted/repetitive behaviors. The sensory reactivity criterion (B4) is new. Language delay is no longer part of the ASD criteria but can be noted as a specifier. Importantly, DSM-5 requires specifying <strong>severity levels</strong> for each domain.</p>
+        </div>
+        <h3>Severity Levels</h3>
+        <table>
+          <tr><th>Level</th><th>Social Communication</th><th>Restricted/Repetitive Behaviors</th></tr>
+          <tr><td>Level 1: "Requiring support"</td><td>Without supports, deficits cause noticeable impairments; difficulty initiating interactions; atypical responses</td><td>Inflexibility causes significant interference; difficulty switching between activities</td></tr>
+          <tr><td>Level 2: "Requiring substantial support"</td><td>Marked deficits with limited social initiation; reduced or abnormal response to social overtures</td><td>Inflexibility/RRBs obvious to casual observer; distress with change; difficulty redirecting</td></tr>
+          <tr><td>Level 3: "Requiring very substantial support"</td><td>Severe deficits; very limited initiation; minimal response to social overtures</td><td>Extreme difficulty coping with change; marked distress; great difficulty redirecting</td></tr>
+        </table>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Individuals previously diagnosed with <strong>Asperger's disorder</strong> under DSM-IV would now typically receive a diagnosis of ASD Level 1 ("requiring support") without accompanying intellectual or language impairment. The DSM-5 includes a note that individuals with well-established DSM-IV diagnoses should be given the ASD diagnosis, and those with marked deficits in social communication but not meeting RRB criteria may be evaluated for <span class="key-term">Social (Pragmatic) Communication Disorder</span>, a new DSM-5 diagnosis.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Treatment of ADHD</h2>
+        <h3>Pharmacotherapy</h3>
+        <p>Stimulant medications are the first-line pharmacological treatment for ADHD and are effective in approximately 70-80% of cases:</p>
+        <ul>
+          <li><strong>Methylphenidate</strong> (Ritalin, Concerta): Blocks dopamine and norepinephrine reuptake</li>
+          <li><strong>Amphetamine salts</strong> (Adderall, Vyvanse): Block reuptake and increase release of dopamine and norepinephrine</li>
+        </ul>
+        <p>Non-stimulant options include <strong>atomoxetine</strong> (Strattera, a norepinephrine reuptake inhibitor), <strong>guanfacine</strong> and <strong>clonidine</strong> (alpha-2 agonists), and <strong>bupropion</strong> (off-label). The <span class="key-term">MTA Study</span> (Multimodal Treatment Study of ADHD, 1999) found that medication management was superior to behavioral treatment alone for core ADHD symptoms, while combined treatment was superior for functional outcomes and comorbid conditions.</p>
+        <h3>Behavioral and Psychosocial Interventions</h3>
+        <ul>
+          <li><strong>Behavioral parent training:</strong> Teaching parents contingency management strategies (positive reinforcement, token economies, time-out)</li>
+          <li><strong>Classroom-based behavioral interventions:</strong> Daily report cards, token systems, classroom accommodations (preferential seating, breaks, extended time)</li>
+          <li><strong>Organizational skills training:</strong> Particularly important for the predominantly inattentive presentation</li>
+          <li><strong>Social skills training:</strong> Effectiveness is debated; best when integrated into naturalistic settings</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Common misconceptions about ADHD stimulant medications: (1) Stimulants do not cause a "paradoxical" calming effect unique to ADHD -- they enhance focus in most individuals; the difference is that individuals with ADHD show greater behavioral improvement. (2) The "medication holiday" debate: some families choose to stop medication on weekends/summers, but this may affect social functioning and self-esteem. (3) Long-term stimulant use may temporarily slow growth velocity by approximately 1-3 cm, but adult height appears largely unaffected.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Specific Learning Disorder</h2>
+        <p><span class="key-term">Specific Learning Disorder</span> (SLD) is a unified diagnosis in DSM-5 that replaced the separate DSM-IV categories of reading disorder, mathematics disorder, and disorder of written expression. It requires persistent difficulties learning keystone academic skills, with onset during school-age years.</p>
+        <h3>Specifiers</h3>
+        <ul>
+          <li><strong>With impairment in reading</strong> (encompasses what was formerly called <span class="key-term">dyslexia</span>): word reading accuracy, reading rate/fluency, reading comprehension</li>
+          <li><strong>With impairment in written expression</strong> (encompasses <span class="key-term">dysgraphia</span>): spelling accuracy, grammar/punctuation, clarity/organization</li>
+          <li><strong>With impairment in mathematics</strong> (encompasses <span class="key-term">dyscalculia</span>): number sense, math facts, calculation, math reasoning</li>
+        </ul>
+        <p>SLD affects approximately 5-15% of school-age children. It requires academic skills substantially below age expectations, confirmed by both clinical assessment and standardized testing. The DSM-5 does not require an IQ-achievement discrepancy, moving away from the discrepancy model toward a <span class="key-term">response to intervention (RTI)</span> approach.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Intellectual Disability (Intellectual Developmental Disorder)</h2>
+        <p><span class="key-term">Intellectual disability</span> involves deficits in intellectual functions (reasoning, problem-solving, abstract thinking, academic learning) and adaptive functioning (conceptual, social, and practical domains) with onset during the developmental period.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>A major DSM-5 change: severity levels (mild, moderate, severe, profound) are now determined by <strong>adaptive functioning</strong> rather than IQ score alone. While IQ testing is still used (approximately 2 standard deviations below the mean, or roughly IQ 65-75), the DSM-5 emphasizes that it is the level of adaptive support needed that determines severity. IQ scores are less valid at lower ranges and can be influenced by the Flynn effect and other measurement issues.</p>
+        </div>
+        <table>
+          <tr><th>Severity</th><th>IQ Range (approximate)</th><th>Adaptive Functioning</th></tr>
+          <tr><td>Mild (~85% of ID)</td><td>50-55 to ~70</td><td>May achieve academic skills ~6th grade level; needs support with complex daily living tasks</td></tr>
+          <tr><td>Moderate (~10%)</td><td>35-40 to 50-55</td><td>Academic skills ~2nd grade level; needs support for daily activities</td></tr>
+          <tr><td>Severe (~3-4%)</td><td>20-25 to 35-40</td><td>Limited language and self-care; requires daily supervision</td></tr>
+          <tr><td>Profound (~1-2%)</td><td>Below 20-25</td><td>Dependent on others for all aspects of care; very limited communication</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Tic Disorders and Tourette's Disorder</h2>
+        <p><span class="key-term">Tic disorders</span> involve sudden, rapid, recurrent, nonrhythmic motor movements or vocalizations. Tics can be simple (eye blinking, throat clearing) or complex (facial gestures, echolalia, coprolalia).</p>
+        <h3>DSM-5 Tic Disorder Hierarchy</h3>
+        <ul>
+          <li><strong>Tourette's disorder:</strong> Both multiple motor and one or more vocal tics present at some time (not necessarily concurrently). Onset before age 18. Duration more than 1 year. Tics wax and wane.</li>
+          <li><strong>Persistent (chronic) motor or vocal tic disorder:</strong> Single or multiple motor OR vocal tics (not both). Onset before 18. Duration more than 1 year.</li>
+          <li><strong>Provisional tic disorder:</strong> Single or multiple motor and/or vocal tics. Duration less than 1 year since first onset. Onset before 18.</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p><span class="key-term">Coprolalia</span> (involuntary utterance of obscene words) is often associated with Tourette's in popular culture, but it actually occurs in only about 10-15% of individuals with Tourette's disorder. The most common initial tics are facial (eye blinking, grimacing). Tourette's is highly comorbid with ADHD (approximately 50%) and OCD (approximately 30%). The CSTC circuit implicated in OCD is also involved in tic disorders.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>ADHD age of onset changed to <strong>before age 12</strong> in DSM-5 (from age 7 in DSM-IV)</li>
+          <li>ADHD now uses <strong>"presentations"</strong> instead of "subtypes"; can be comorbid with ASD</li>
+          <li>ASD consolidated autistic disorder, Asperger's, CDD, and PDD-NOS into <strong>one diagnosis</strong></li>
+          <li>ASD uses a <strong>dyad</strong> (social communication + RRBs) instead of DSM-IV's triad</li>
+          <li>ASD severity: Level 1 (requiring support), Level 2 (substantial support), Level 3 (very substantial support)</li>
+          <li>Former Asperger's diagnosis maps to <strong>ASD Level 1 without intellectual/language impairment</strong></li>
+          <li>SLD is a <strong>unified diagnosis</strong> with specifiers for reading, written expression, and mathematics</li>
+          <li>Intellectual disability severity now based on <strong>adaptive functioning</strong>, not IQ alone</li>
+          <li>Tourette's requires both <strong>motor AND vocal tics</strong> for more than 1 year, onset before age 18</li>
+          <li>Coprolalia occurs in only <strong>10-15%</strong> of Tourette's cases</li>
+          <li>ADHD heritability is approximately <strong>74%</strong>; dopamine and norepinephrine are the key neurotransmitters</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Barkley, R. A. (1997). Behavioral inhibition, sustained attention, and executive functions: Constructing a unifying theory of ADHD. <em>Psychological Bulletin, 121</em>(1), 65-94.</div>
+        <div class="citation">Faraone, S. V., Biederman, J., & Mick, E. (2006). The age-dependent decline of attention deficit hyperactivity disorder: A meta-analysis of follow-up studies. <em>Psychological Medicine, 36</em>(2), 159-165.</div>
+        <div class="citation">Faraone, S. V., & Larsson, H. (2019). Genetics of attention deficit hyperactivity disorder. <em>Molecular Psychiatry, 24</em>(4), 562-575.</div>
+        <div class="citation">Lord, C., Elsabbagh, M., Baird, G., & Veenstra-Vanderweele, J. (2018). Autism spectrum disorder. <em>The Lancet, 392</em>(10146), 508-520.</div>
+        <div class="citation">Maenner, M. J., et al. (2020). Prevalence of autism spectrum disorder among children aged 8 years. <em>MMWR Surveillance Summaries, 69</em>(4), 1-12.</div>
+        <div class="citation">Robertson, M. M. (2015). A personal 35 year perspective on Gilles de la Tourette syndrome. <em>The Lancet Psychiatry, 2</em>(1), 88-104.</div>
+        <div class="citation">Schalock, R. L., et al. (2010). <em>Intellectual disability: Definition, classification, and systems of supports</em> (11th ed.). AAIDD.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="eating-sleep.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Eating & Sleep Disorders</div>
+          </div>
+        </a>
+        <a href="personality-disorders.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Personality Disorders</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

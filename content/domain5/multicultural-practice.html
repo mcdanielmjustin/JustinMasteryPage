@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Across the Divide | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f; --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a; --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15); --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav"><div class="nav-left"><a href="../../index.html" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><span class="logo-text">MasteryPage</span></a><div class="breadcrumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="../../textbook.html">Textbook</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="index.html">Domain 5</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>Across the Divide</span></div></div></nav>
+  <div class="content-wrapper">
+    <aside class="sidebar"><div class="sidebar-header"><div class="sidebar-title">Domain 5</div><div class="domain-title">Social &amp; Cultural Psychology</div></div><ul class="chapter-list"><li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li><li class="chapter-item"><a href="cultural-roots.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From</a></li><li class="chapter-item"><a href="shortcuts.html" class="chapter-link"><span class="chapter-number">2</span>The Shortcuts We Take</a></li><li class="chapter-item"><a href="beliefs.html" class="chapter-link"><span class="chapter-number">3</span>What We Believe</a></li><li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">4</span>How We're Moved</a></li><li class="chapter-item"><a href="connection.html" class="chapter-link"><span class="chapter-number">5</span>Why We Connect</a></li><li class="chapter-item"><a href="prejudice.html" class="chapter-link"><span class="chapter-number">6</span>Where We Break</a></li><li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li><li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link active"><span class="chapter-number">8</span>Across the Divide</a></li></ul></aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 8 of 8</div>
+        <h1>Across the Divide &mdash; Multicultural Clinical Practice</h1>
+        <div class="chapter-meta"><span>Multicultural competencies, identity models, DSM-5 cultural formulation, ADDRESSING</span></div>
+      </header>
+      <div class="chapter-actions"><a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a><a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a><a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a></div>
+
+      <section class="content-section">
+        <h2>Sue's Multicultural Competencies</h2>
+        <p>Derald Wing Sue and colleagues developed the foundational framework for multicultural counseling competence, organized around a 3 x 3 matrix:</p>
+        <div class="definition-box">
+          <strong>Three Domains of Multicultural Competence (Sue et al., 1992)</strong>
+          <p><strong>1. Awareness:</strong> Understanding of one's own cultural values, biases, and assumptions, and how these may affect the therapeutic relationship.<br>
+          <strong>2. Knowledge:</strong> Understanding of the worldviews, cultural practices, and historical experiences of culturally different clients.<br>
+          <strong>3. Skills:</strong> The ability to develop and implement culturally appropriate intervention strategies and techniques.</p>
+        </div>
+        <p>These three competencies are applied across three dimensions: (a) attitudes and beliefs, (b) knowledge, and (c) skills, creating a 3 x 3 matrix of nine competency areas.</p>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>A psychologist who is aware of their own cultural biases (awareness) and understands the historical trauma experienced by Native American communities (knowledge) but lacks skills in culturally adapted interventions is not yet fully competent. All three domains must be developed. The EPPP tests this framework frequently.</p>
+        </div>
+        <p class="citation">Sue, D. W., Arredondo, P., &amp; McDavis, R. J. (1992). Multicultural counseling competencies and standards: A call to the profession. Journal of Counseling &amp; Development, 70(4), 477&ndash;486.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>APA Multicultural Guidelines</h2>
+        <p>The APA has published <span class="key-term">Multicultural Guidelines</span> that emphasize that all psychology is embedded in culture and that culture should be considered in all aspects of practice, education, and research. Key principles include:</p>
+        <ul>
+          <li>Psychologists are encouraged to recognize that they themselves are cultural beings with attitudes and beliefs that can influence their practice</li>
+          <li>Psychologists aspire to recognize the importance of multicultural sensitivity, responsiveness, knowledge, and understanding about diverse individuals and communities</li>
+          <li>Psychologists are encouraged to apply culturally appropriate skills in clinical and other applied psychological practices</li>
+          <li>Psychologists strive to use organizational change processes to support culturally informed policy development and practices</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>DSM-5 Cultural Formulation</h2>
+        <div class="definition-box">
+          <strong>Cultural Formulation Interview (CFI)</strong>
+          <p>The DSM-5 includes a <span class="key-term">Cultural Formulation Interview</span> &mdash; a structured set of 16 questions designed to help clinicians understand the impact of culture on a client's presentation. It covers four domains: (1) cultural definition of the problem, (2) cultural perceptions of cause, context, and support, (3) cultural factors affecting self-coping and past help-seeking, and (4) cultural factors affecting current help-seeking.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A Cambodian refugee presents with somatic complaints (headaches, dizziness) rather than reporting depressed mood. Using the CFI, the clinician learns that the client conceptualizes their suffering as "thinking too much" (a culturally recognized idiom of distress in Cambodian culture) and that they have consulted a traditional healer before seeking Western treatment. This information fundamentally shapes the treatment plan.</p>
+        </div>
+        <p>The DSM-5 also includes a <span class="key-term">Glossary of Cultural Concepts of Distress</span> that describes culturally specific syndromes such as <em>ataque de nervios</em> (Latin American), <em>susto</em> (Latin American soul loss), <em>taijin kyofusho</em> (Japanese interpersonal fear), and <em>khyol cap</em> (Cambodian wind attacks).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Racial &amp; Ethnic Identity Models</h2>
+        <h3>Cross's Nigrescence Model (Black Racial Identity)</h3>
+        <div class="definition-box">
+          <strong>Cross's Model (1971, revised 1991)</strong>
+          <p><strong>1. Pre-encounter:</strong> Internalization of dominant-culture values; low salience of race; may hold anti-Black attitudes.<br>
+          <strong>2. Encounter:</strong> A significant experience (often involving racism) shatters the pre-encounter worldview and sparks exploration of racial identity.<br>
+          <strong>3. Immersion-Emersion:</strong> Intense immersion in Black culture; may involve anti-White sentiments (immersion) followed by a more nuanced, less reactive stance (emersion).<br>
+          <strong>4. Internalization:</strong> Secure, confident Black identity integrated with openness to other groups; activism may or may not be present.<br>
+          <strong>5. Internalization-Commitment:</strong> Translation of internalized identity into sustained action toward social justice.</p>
+        </div>
+
+        <h3>Helms' White Racial Identity Model</h3>
+        <div class="definition-box">
+          <strong>Helms' Model</strong>
+          <p><strong>Phase I &mdash; Abandonment of Racism:</strong><br>
+          <em>Contact:</em> Obliviousness to racial issues; colorblind stance.<br>
+          <em>Disintegration:</em> Growing awareness of racial inequality creates moral dilemma and anxiety.<br>
+          <em>Reintegration:</em> Resolution of anxiety through idealization of Whiteness and intolerance toward minorities.<br><br>
+          <strong>Phase II &mdash; Defining a Non-Racist White Identity:</strong><br>
+          <em>Pseudo-independence:</em> Intellectual acknowledgment of White privilege; may still hold paternalistic attitudes.<br>
+          <em>Immersion-Emersion:</em> Active exploration of what it means to be White; seeking accurate information about racism.<br>
+          <em>Autonomy:</em> Internalized non-racist White identity; appreciation of cultural diversity; active commitment to anti-racism.</p>
+        </div>
+        <h3>Cass's Sexual Orientation Identity Development Model</h3>
+        <p><span class="key-term">Vivienne Cass</span> (1979) proposed one of the first and most influential models of <span class="key-term">sexual orientation identity development</span>. The model describes six stages through which individuals progressively integrate their sexual orientation into their overall sense of identity:</p>
+        <div class="definition-box">
+          <strong>Cass's Six Stages (1979)</strong>
+          <p><strong>1. Identity Confusion:</strong> The individual first recognizes that their thoughts, feelings, or behaviors could be labeled as homosexual. This creates confusion and a sense of inner turmoil ("Could this apply to me?").<br>
+          <strong>2. Identity Comparison:</strong> The individual tentatively accepts the possibility of a non-heterosexual identity and begins to explore what this means. Feelings of alienation from heterosexual peers may emerge as the individual recognizes differences ("I may be different from others").<br>
+          <strong>3. Identity Tolerance:</strong> The individual acknowledges that they are likely gay or lesbian and begins seeking out the LGBTQ+ community for social and emotional support. The identity is tolerated rather than fully embraced ("I probably am gay").<br>
+          <strong>4. Identity Acceptance:</strong> The individual accepts (rather than merely tolerates) their sexual orientation and develops increasing contact with the LGBTQ+ community. Selective disclosure to trusted others begins.<br>
+          <strong>5. Identity Pride:</strong> The individual immerses in LGBTQ+ culture and may develop an "us vs. them" stance, with strong pride in the in-group and devaluation of heterosexual norms. Activism and confrontation of homophobia may be prominent.<br>
+          <strong>6. Identity Synthesis:</strong> Sexual orientation becomes integrated into the individual's overall identity rather than being the primary defining characteristic. The rigid us/them dichotomy softens, and the individual views their sexual orientation as one important but not all-encompassing aspect of who they are.</p>
+        </div>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Not all individuals progress through every stage, and some may remain in earlier stages due to environmental constraints, cultural factors, or personal choice. The model is not rigidly linear -- individuals may revisit stages across the lifespan, particularly in response to new social contexts or life transitions. Clinicians should assess where a client falls in this process to inform culturally responsive treatment, recognizing that different stages carry different therapeutic needs (e.g., identity confusion may require exploration and normalization, while identity pride may call for support of activism alongside exploration of relational flexibility).</p>
+        </div>
+        <p class="citation">Cass, V. C. (1979). Homosexual identity formation: A theoretical model. Journal of Homosexuality, 4(3), 219&ndash;235.</p>
+        <p class="citation">Cross, W. E., Jr. (1991). Shades of Black: Diversity in African-American identity. Temple University Press.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>The ADDRESSING Framework</h2>
+        <div class="definition-box">
+          <strong>ADDRESSING Framework (Hays, 2001)</strong>
+          <p>Pamela Hays developed the ADDRESSING framework to help clinicians systematically consider the multiple cultural influences that shape each client's identity:<br>
+          <strong>A</strong> &mdash; Age and generational influences<br>
+          <strong>D</strong> &mdash; Developmental or other Disability<br>
+          <strong>D</strong> &mdash; Disability acquired later in life<br>
+          <strong>R</strong> &mdash; Religion and spiritual orientation<br>
+          <strong>E</strong> &mdash; Ethnic and racial identity<br>
+          <strong>S</strong> &mdash; Socioeconomic status<br>
+          <strong>S</strong> &mdash; Sexual orientation<br>
+          <strong>I</strong> &mdash; Indigenous heritage<br>
+          <strong>N</strong> &mdash; National origin<br>
+          <strong>G</strong> &mdash; Gender</p>
+        </div>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>The ADDRESSING framework reminds clinicians to go beyond race and ethnicity and consider the full range of cultural identities that shape a client's experience. Each dimension represents both potential areas of privilege and potential areas of marginalization. Using this framework systematically during intake and case conceptualization reduces the risk of overlooking important cultural factors.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Barriers to Treatment &amp; Health Disparities</h2>
+        <p>Racial and ethnic minorities face significant barriers to accessing and benefiting from mental health services:</p>
+        <ul>
+          <li><strong>Language barriers:</strong> Lack of linguistically matched providers; loss of nuance through interpreters</li>
+          <li><strong>Cultural stigma:</strong> Many cultures view mental illness as shameful or as a sign of personal weakness</li>
+          <li><strong>Historical mistrust:</strong> Legacies of unethical treatment (e.g., Tuskegee syphilis study, forced sterilization) create distrust of healthcare systems</li>
+          <li><strong>Socioeconomic barriers:</strong> Lack of insurance, transportation, childcare; limited access to providers in underserved areas</li>
+          <li><strong>Clinician bias:</strong> Implicit biases can affect diagnosis, treatment recommendations, and the therapeutic relationship</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example: Diagnostic Disparities</strong>
+          <p>Research consistently shows that African Americans are more likely to be diagnosed with schizophrenia and less likely to be diagnosed with mood disorders compared to White Americans with identical symptoms. This diagnostic disparity likely reflects clinician bias, cultural differences in symptom expression, and the impact of stereotype-driven clinical judgment.</p>
+        </div>
+
+        <h3>Culturally Adapted Interventions</h3>
+        <p>Evidence-based treatments can be culturally adapted without sacrificing their empirical foundation. Adaptations may include: incorporating cultural values and metaphors, modifying the language and delivery format, involving family members (consistent with collectivist values), addressing acculturative stress, and integrating traditional healing practices alongside Western approaches.</p>
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Microaggressions in therapy &mdash; such as a clinician assuming a client's problems stem from their culture, expressing surprise at a client's articulateness, or denying the relevance of race ("I don't see color") &mdash; can severely damage the therapeutic alliance. Clinicians must engage in ongoing self-reflection, seek consultation, and be willing to acknowledge and repair ruptures caused by cultural insensitivity.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Social Justice in Psychology</h2>
+        <p>The multicultural movement in psychology has increasingly emphasized that competence requires not just individual-level intervention but also advocacy and social justice work. Psychologists are called upon to address systemic barriers, advocate for equitable policies, and challenge institutional structures that perpetuate disparities.</p>
+        <p>The APA Multicultural Guidelines explicitly state that psychologists should "strive to use organizational change processes to support culturally informed policy development and practices." This represents a shift from viewing cultural competence as solely an individual clinical skill to recognizing it as a professional and ethical obligation with systemic implications.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Sue's multicultural competencies:</strong> Awareness, Knowledge, Skills. All three must be developed for competent practice.</li>
+          <li><strong>Cross's Nigrescence model:</strong> Five stages of Black racial identity development. Know the encounter stage as the catalyst for exploration.</li>
+          <li><strong>Helms' White racial identity model:</strong> Two phases (abandoning racism, defining non-racist identity) with six statuses. Know Contact (oblivious) through Autonomy (integrated).</li>
+          <li><strong>Cass's Sexual Orientation Identity Development Model (1979):</strong> Six stages -- Identity Confusion, Comparison, Tolerance, Acceptance, Pride, Synthesis. One of the first and most influential models of sexual orientation identity. Not all individuals progress through every stage.</li>
+          <li><strong>ADDRESSING framework</strong> (Hays): Mnemonic for 10 cultural dimensions to consider in assessment. Goes beyond race/ethnicity.</li>
+          <li><strong>DSM-5 Cultural Formulation Interview:</strong> 16 structured questions covering cultural definition of the problem, causes, coping, and help-seeking.</li>
+          <li>Know common <strong>cultural concepts of distress:</strong> ataque de nervios, susto, taijin kyofusho, khyol cap.</li>
+          <li><strong>Barriers to treatment</strong> for minorities: language, stigma, historical mistrust, socioeconomic factors, clinician bias.</li>
+          <li><strong>Culturally adapted interventions</strong> can maintain empirical support while being modified for cultural relevance.</li>
+          <li><strong>Microaggressions in therapy</strong> damage the alliance &mdash; clinicians must practice self-reflection and cultural humility.</li>
+          <li>The EPPP increasingly tests <strong>social justice</strong> as an ethical and professional obligation, not just an optional add-on.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="group-dynamics.html" class="nav-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">When We're Together</div></div></a>
+        <a href="index.html" class="nav-btn"><div style="text-align: right;"><div class="nav-btn-label">Back to</div><div class="nav-btn-title">Domain 5 Overview</div></div><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')"><div class="upgrade-modal"><div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><h3>Upgrade to Unlock</h3><p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p><div class="upgrade-modal-actions"><button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button><a href="../../index.html" class="btn-upgrade">View Plans</a></div></div></div>
+  <script>function chapterAction(action, domainNum) { var tier = 'free'; try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {} if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; } if (action === 'flashcards') window.location.href = '../../index.html'; else if (action === 'quiz-fundamental') window.location.href = '../../index.html'; else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; } }</script>
+</body>
+</html>

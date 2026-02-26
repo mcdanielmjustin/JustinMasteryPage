@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Score Interpretation & Psychometrics – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Test Score Interpretation &amp; Psychometrics</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link active"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 12</div>
+        <h1>Test Score Interpretation &amp; Psychometric Concepts</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Types of Scores -->
+      <div class="content-section">
+        <h2>Types of Derived Scores</h2>
+        <p>Raw scores (the simple count of correct responses) are rarely interpretable on their own. They must be transformed into <span class="key-term">derived scores</span> that allow comparison to a normative or criterion standard. Understanding these transformations is critical for EPPP success.</p>
+
+        <h3>Standard Scores</h3>
+        <p><span class="key-term">Standard scores</span> express an individual's performance in terms of standard deviation units from the mean. They are derived from a linear transformation of z-scores and maintain the shape of the original distribution.</p>
+
+        <table>
+          <tr><th>Score Type</th><th>Mean</th><th>SD</th><th>Common Use</th></tr>
+          <tr><td>z-score</td><td>0</td><td>1</td><td>Statistical computations, foundational metric</td></tr>
+          <tr><td>T-score</td><td>50</td><td>10</td><td>MMPI, many personality measures</td></tr>
+          <tr><td>IQ (Wechsler)</td><td>100</td><td>15</td><td>Wechsler scales, most IQ tests</td></tr>
+          <tr><td>IQ (SB5)</td><td>100</td><td>16</td><td>Stanford-Binet 5</td></tr>
+          <tr><td>Scaled score</td><td>10</td><td>3</td><td>Wechsler subtests</td></tr>
+          <tr><td>Stanine</td><td>5</td><td>~2</td><td>Educational testing, group screening</td></tr>
+          <tr><td>Normal Curve Equivalent</td><td>50</td><td>21.06</td><td>Educational program evaluation</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Linear Transformation Formula:</strong>
+          <p>Standard Score = (desired SD)(z) + desired Mean. For example, to convert a z-score of +1.5 to a T-score: T = (10)(1.5) + 50 = 65. To convert to a Wechsler IQ: IQ = (15)(1.5) + 100 = 122.5. These linear transformations preserve the shape of the original distribution and the relative distances between scores.</p>
+        </div>
+
+        <h3>Percentile Ranks</h3>
+        <p>A <span class="key-term">percentile rank</span> indicates the percentage of individuals in the normative sample who scored at or below a given raw score. Critical distinctions:</p>
+        <ul>
+          <li>Percentile ranks are a <strong>nonlinear transformation</strong> — they compress scores at the extremes and spread them out in the middle of the distribution</li>
+          <li>A percentile rank of 50 corresponds to the mean (z = 0) in a normal distribution</li>
+          <li>The difference between percentile ranks of 50 and 60 represents a much smaller raw score difference than the difference between percentile ranks of 90 and 99</li>
+          <li>Percentile ranks should NOT be averaged or subjected to arithmetic operations due to their ordinal nature</li>
+          <li>Percentile ranks are NOT the same as percentage correct — a percentile rank of 75 means the individual scored higher than 75% of the norm group, not that they answered 75% of items correctly</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Common Score Conversion Reference Points:</strong>
+          <p>The following conversions apply in a normal distribution and are essential for the EPPP: z = -2 = T of 30 = IQ (Wechsler) of 70 = 2nd percentile. z = -1 = T of 40 = IQ of 85 = 16th percentile. z = 0 = T of 50 = IQ of 100 = 50th percentile. z = +1 = T of 60 = IQ of 115 = 84th percentile. z = +2 = T of 70 = IQ of 130 = 98th percentile. Memorize these anchor points and you can derive any other conversion.</p>
+        </div>
+
+        <h3>Stanines</h3>
+        <p><span class="key-term">Stanines</span> (standard nine) divide the normal distribution into nine intervals. Stanines 1-3 are below average, 4-6 are average, and 7-9 are above average. Each stanine except 1 and 9 spans half a standard deviation. Stanines are commonly used in educational group testing because they convey a general performance level without implying false precision.</p>
+
+        <h3>Ipsative vs. Normative Scores</h3>
+        <p><span class="key-term">Normative scores</span> compare an individual's performance to a reference group, allowing meaningful between-person comparisons (e.g., "This person scores higher than 84% of the normative sample on Extraversion"). <span class="key-term">Ipsative scores</span> compare an individual's own scores across scales, indicating relative strengths and weaknesses within the person's profile (e.g., "This person's strongest interest area is Social, relative to their other interests"). Key distinctions:</p>
+        <ul>
+          <li>Ipsative scores (e.g., Kuder) cannot be meaningfully compared across individuals because each person's scores sum to the same total</li>
+          <li>Normative scores (e.g., SII) allow both within-person and between-person comparisons</li>
+          <li>Forced-choice formats typically produce ipsative scores; Likert and true/false formats typically produce normative scores</li>
+          <li>Factor analysis is inappropriate for ipsative data because the constraint violates the mathematical assumptions of the method</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Normalized vs. Linear Standard Scores:</strong>
+          <p><span class="key-term">Linear standard scores</span> (z-scores, T-scores when linearly derived) preserve the shape of the original distribution. If the original distribution is skewed, the standard score distribution will also be skewed. <span class="key-term">Normalized standard scores</span> force the distribution into a normal (bell-shaped) curve regardless of the original shape. Stanines and percentile-based T-scores (as sometimes used in the MMPI) are examples of normalized scores. For a normally distributed variable, linear and normalized standard scores yield identical results. The distinction matters only when the original distribution deviates from normality.</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Problematic Score Types -->
+      <div class="content-section">
+        <h2>Grade Equivalents, Age Equivalents, and Their Limitations</h2>
+        <p><span class="key-term">Grade equivalent (GE)</span> scores express performance in terms of the grade level at which the raw score represents average performance. <span class="key-term">Age equivalent (AE)</span> scores express performance as the age at which the raw score is average. Both are among the most frequently misinterpreted score types.</p>
+
+        <div class="example-box">
+          <strong>Misinterpretation Example:</strong>
+          <p>A third-grader obtains a grade equivalent of 6.2 on a reading comprehension test. This does NOT mean the child reads at a sixth-grade level. It means the child performed as well as the average beginning-sixth-grader would be predicted to perform ON third-grade content. The child has not been exposed to sixth-grade material, and the score is typically extrapolated rather than based on actual data from sixth-graders taking the third-grade test.</p>
+        </div>
+
+        <h3>Basal and Ceiling Rules</h3>
+        <p>Many individually administered tests use <span class="key-term">basal</span> and <span class="key-term">ceiling</span> rules to determine starting and stopping points. The basal is established when the examinee achieves a specified number of consecutive correct responses, and all items below the basal are credited as correct. The ceiling is established when the examinee fails a specified number of consecutive items, and testing stops. Understanding these rules is important because violations (e.g., starting too high or stopping too early) can invalidate scores. Some tests (e.g., WISC-V) use discontinue rules rather than traditional basal/ceiling rules.</p>
+
+        <p>Key limitations of GE and AE scores include:</p>
+        <ul>
+          <li>They represent ordinal, not interval data — the difference between GE 2.0 and 3.0 is not necessarily equal to the difference between GE 8.0 and 9.0</li>
+          <li>They encourage inappropriate comparisons across grade/age levels</li>
+          <li>They are often based on interpolation and extrapolation rather than empirical data</li>
+          <li>Standard deviations vary across grade/age levels, making comparison problematic</li>
+          <li>They can be misleading to parents, teachers, and other non-specialists</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Practice Recommendation:</strong>
+          <p>The Standards for Educational and Psychological Testing (AERA/APA/NCME, 2014) and most measurement experts recommend against using grade and age equivalents for clinical decision-making. Standard scores and percentile ranks provide more psychometrically sound and interpretable alternatives.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: SEM and Confidence Intervals -->
+      <div class="content-section">
+        <h2>Standard Error of Measurement &amp; Confidence Intervals</h2>
+
+        <h3>Standard Error of Measurement (SEM)</h3>
+        <p>The <span class="key-term">Standard Error of Measurement (SEM)</span> quantifies the amount of error in an individual's observed test score. It estimates the standard deviation of the distribution of scores an individual would obtain if tested repeatedly with the same instrument.</p>
+
+        <div class="definition-box">
+          <strong>SEM Formula:</strong>
+          <p>SEM = SD * sqrt(1 - r<sub>xx</sub>), where SD is the standard deviation of the test and r<sub>xx</sub> is the reliability coefficient. Higher reliability produces a smaller SEM, meaning more precise measurement. For a test with SD = 15 and reliability = .91: SEM = 15 * sqrt(1 - .91) = 15 * sqrt(.09) = 15 * .30 = 4.5 points.</p>
+        </div>
+
+        <p>The SEM is used to construct <span class="key-term">confidence intervals</span> around an observed score. A 68% confidence interval is the observed score plus or minus 1 SEM; a 95% confidence interval is the observed score plus or minus approximately 1.96 SEM. For example, if a patient obtains a WAIS-IV FSIQ of 100 with an SEM of 3, the 95% confidence interval is approximately 94 to 106.</p>
+
+        <h3>Regression to the Mean</h3>
+        <p><span class="key-term">Regression to the mean</span> is the statistical phenomenon whereby extreme scores on initial testing tend to be less extreme upon retesting. This occurs because extreme scores include a larger error component, and error is random. On retest, the error component is likely to be smaller, pulling the score toward the population mean. This phenomenon is especially important when interpreting test-retest differences and when making predictions based on extreme scores.</p>
+
+        <div class="clinical-note">
+          <strong>Regression to the Mean in Clinical Context:</strong>
+          <p>Regression to the mean creates a potential confound when evaluating treatment effectiveness. A patient who enters treatment at their worst (most extreme score) is statistically likely to show improvement on retesting even without treatment. This is why randomized controlled trials and control groups are essential — they allow researchers to separate genuine treatment effects from statistical regression. Clinicians must be cautious about attributing post-treatment improvement solely to the intervention, particularly when clients were selected because of extreme scores.</p>
+        </div>
+
+        <h3>Standard Error of the Difference (S<sub>diff</sub>)</h3>
+        <p>The <span class="key-term">Standard Error of the Difference</span> is used to determine whether the difference between two scores (on the same individual) is statistically significant. For example, when comparing WAIS-IV VCI and PRI scores, clinicians need to know whether the observed discrepancy exceeds what would be expected by chance alone. S<sub>diff</sub> = sqrt(SEM<sub>1</sub><sup>2</sup> + SEM<sub>2</sub><sup>2</sup>). A discrepancy is considered statistically significant if it exceeds 1.96 * S<sub>diff</sub> at the .05 level. However, statistical significance does not automatically imply clinical significance — the base rate of the discrepancy in the normative population must also be considered.</p>
+
+        <h3>Standard Error of Estimate (SEE)</h3>
+        <p>The <span class="key-term">Standard Error of Estimate (SEE)</span> quantifies the precision of a predicted score in regression analysis. When using one test to predict performance on another (e.g., using GRE scores to predict graduate school GPA), the SEE indicates how much the actual criterion scores are likely to deviate from the predicted values. The SEE is analogous to the SEM but applies to predicted rather than observed scores. SEE = SD<sub>Y</sub> * sqrt(1 - r<sub>xy</sub><sup>2</sup>).</p>
+
+        <div class="example-box">
+          <strong>Comparing SEM and SEE:</strong>
+          <p>SEM uses <strong>reliability</strong> (r<sub>xx</sub>) and tells us about measurement precision of a single score. SEE uses <strong>validity</strong> (r<sub>xy</sub><sup>2</sup>) and tells us about prediction precision from one variable to another. Both are smaller when the relevant correlation is higher — higher reliability means smaller SEM; higher validity means smaller SEE.</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Norms and Reference Groups -->
+      <div class="content-section">
+        <h2>Normative Interpretation and Reference Groups</h2>
+
+        <h3>Types of Norms</h3>
+        <ul>
+          <li><strong>National norms:</strong> Based on a large, representative sample of the general population. Most commonly used for standardized tests.</li>
+          <li><strong>Local norms:</strong> Developed from a specific community, school district, or clinical setting. May be more relevant for local decision-making.</li>
+          <li><strong>Clinical norms:</strong> Based on samples of individuals with specific diagnoses or presenting problems. Important for distinguishing among clinical groups.</li>
+          <li><strong>Subgroup norms:</strong> Separate norms for demographic subgroups (e.g., age-specific, gender-specific). Essential for accounting for known demographic differences.</li>
+        </ul>
+
+        <h3>Norm-Referenced vs. Criterion-Referenced Interpretation</h3>
+        <p><span class="key-term">Norm-referenced interpretation</span> compares an individual's performance to that of a normative group (e.g., "This score falls at the 84th percentile"). <span class="key-term">Criterion-referenced interpretation</span> evaluates performance against an absolute standard or domain of knowledge (e.g., "The examinee can correctly solve two-digit multiplication problems 90% of the time"). Most clinical psychological tests use norm-referenced interpretation, while many educational and licensure tests (including the EPPP) use criterion-referenced approaches.</p>
+
+        <h3>Ceiling and Floor Effects</h3>
+        <p>A <span class="key-term">ceiling effect</span> occurs when a test lacks sufficient difficulty to discriminate among high-ability examinees — scores cluster at the top. A <span class="key-term">floor effect</span> occurs when a test is too difficult for the target population — scores cluster at the bottom. Both reduce the test's ability to detect meaningful differences and should be considered when selecting instruments for specific populations.</p>
+
+        <h3>Practice Effects</h3>
+        <p><span class="key-term">Practice effects</span> refer to score improvement upon retesting due to familiarity with the test format, content, and strategies rather than genuine improvement in the underlying construct. Practice effects are most pronounced on timed tests, tests involving novel problem-solving, and tests with memorable content. Clinicians must account for practice effects when interpreting test-retest data, especially in neuropsychological monitoring.</p>
+
+        <h3>Reliable Change Index (RCI)</h3>
+        <p>The <span class="key-term">Reliable Change Index</span> (Jacobson & Truax, 1991) determines whether the difference between two test scores exceeds what would be expected from measurement error alone. The RCI formula accounts for the SEM of the test: RCI = (X<sub>2</sub> - X<sub>1</sub>) / S<sub>diff</sub>, where S<sub>diff</sub> = sqrt(2 * SEM<sup>2</sup>). An RCI value greater than 1.96 indicates that the change is statistically reliable at the .05 level (i.e., the change is unlikely due to measurement error alone).</p>
+
+        <div class="example-box">
+          <strong>Applying the RCI:</strong>
+          <p>A patient's WAIS-IV FSIQ increases from 92 at baseline to 101 at 6-month follow-up (a 9-point change). With an SEM of 3.0, S<sub>diff</sub> = sqrt(2 * 9) = 4.24. RCI = 9/4.24 = 2.12, which exceeds 1.96. The 9-point change is therefore statistically reliable — it represents genuine change rather than measurement error. However, the clinician must still consider practice effects and regression to the mean before attributing the change to treatment or recovery.</p>
+        </div>
+
+        <h3>Clinical Significance vs. Statistical Significance</h3>
+        <p><span class="key-term">Clinical significance</span> addresses whether a change is meaningful in practical terms, not just statistically reliable. Jacobson and Truax proposed that clinically significant change requires: (1) the client moves from the dysfunctional range to the functional range, or (2) the client's score at posttreatment is closer to the functional population mean than to the dysfunctional population mean. A change can be statistically reliable but not clinically significant (e.g., a small improvement that leaves the client still in the clinical range), or vice versa.</p>
+
+        <div class="citation">American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing.</em></div>
+      </div>
+
+      <!-- Section 5: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Score conversions:</strong> Know z-score, T-score, IQ, stanine, and percentile rank metrics cold. Be able to convert between them (e.g., z = +2 = T of 70 = IQ of 130 = 98th percentile).</li>
+          <li><strong>SEM formula:</strong> SEM = SD * sqrt(1 - r<sub>xx</sub>). Higher reliability = smaller SEM = more precise measurement.</li>
+          <li><strong>SEE formula:</strong> SEE = SD<sub>Y</sub> * sqrt(1 - r<sub>xy</sub><sup>2</sup>). Uses validity coefficient, not reliability. Applies to prediction.</li>
+          <li><strong>Percentile ranks:</strong> Nonlinear transformation. Cannot be averaged. Compressed at extremes, spread in the middle.</li>
+          <li><strong>Grade/age equivalents:</strong> Ordinal data, often extrapolated, easily misinterpreted. Not recommended for clinical use.</li>
+          <li><strong>Regression to the mean:</strong> Extreme scores become less extreme on retest. Not due to treatment effect — purely statistical.</li>
+          <li><strong>Confidence intervals:</strong> 68% CI = score +/- 1 SEM; 95% CI = score +/- 1.96 SEM.</li>
+          <li><strong>Norm-referenced vs. criterion-referenced:</strong> Norm-referenced compares to a group; criterion-referenced compares to a standard.</li>
+          <li><strong>Practice effects:</strong> Most pronounced on novel, timed tasks. Must be considered in serial testing.</li>
+          <li><strong>Stanines:</strong> M = 5, SD approximately 2. Nine intervals. Appropriate for communicating general performance level.</li>
+          <li><strong>Reliable Change Index:</strong> RCI = (X2 - X1) / Sdiff. Values above 1.96 indicate reliable change at .05 level. Accounts for measurement error.</li>
+          <li><strong>Clinical vs. statistical significance:</strong> Statistical = change exceeds measurement error. Clinical = change moves client from dysfunctional to functional range. Both are needed for comprehensive evaluation.</li>
+          <li><strong>Ceiling/floor effects:</strong> Ceiling = insufficient difficulty, scores cluster at top. Floor = too difficult, scores cluster at bottom. Both reduce discriminative ability.</li>
+          <li><strong>Normal Curve Equivalent (NCE):</strong> M = 50, SD = 21.06. Designed so that 1 and 99 correspond to percentile ranks of 1 and 99. Used in educational program evaluation (especially Title I).</li>
+          <li><strong>Ipsative vs. normative scores:</strong> Ipsative compares individual's scores to each other (Kuder). Normative compares to a reference group (SII). Ipsative scores cannot be meaningfully compared across individuals.</li>
+          <li><strong>Standard Error of the Difference:</strong> S<sub>diff</sub> = sqrt(SEM1<sup>2</sup> + SEM2<sup>2</sup>). Used to determine if discrepancy between two scores on the same individual is statistically significant.</li>
+          <li><strong>Normalized vs. linear scores:</strong> Linear preserves original distribution shape. Normalized forces data into normal curve. Both are identical when original distribution is normal.</li>
+          <li><strong>Base rate of discrepancy:</strong> A score difference can be statistically significant (unlikely due to error) but common in the normative sample. Both statistical significance and base rate should be reported.</li>
+          <li><strong>Regression to the mean confound:</strong> Extreme scorers are likely to score closer to the mean on retest regardless of treatment. This is why control groups are essential in treatment outcome research.</li>
+          <li><strong>Basal/ceiling rules:</strong> Basal = consecutive correct answers establish a starting point. Ceiling/discontinue = consecutive errors establish a stopping point. Violations can invalidate scores.</li>
+          <li><strong>Percentile rank vs. percentage correct:</strong> Percentile rank = position relative to norm group. Percentage correct = proportion of items answered correctly. Different concepts.</li>
+          <li><strong>Standard score metrics summary:</strong> z-score: M=0, SD=1. T-score: M=50, SD=10. IQ/Index: M=100, SD=15. Scaled score: M=10, SD=3. Stanine: M=5, SD~2. NCE: M=50, SD=21.06.</li>
+          <li><strong>Skewness and kurtosis:</strong> Skewness measures asymmetry (positive = tail right, negative = tail left). Kurtosis measures peakedness (leptokurtic = narrow, platykurtic = flat). Both affect interpretation of standard scores.</li>
+          <li><strong>Band interpretation:</strong> Report scores as ranges (confidence intervals) rather than single points. Communicates measurement imprecision to consumers. Overlapping confidence intervals suggest nonsignificant differences.</li>
+          <li><strong>Derived scores hierarchy:</strong> Ratio IQ (obsolete, replaced by deviation IQ) less preferred than deviation standard scores. Deviation scores preferred over percentile ranks for statistical operations. All preferred over grade/age equivalents.</li>
+          <li><strong>True score theory:</strong> Observed score = True score + Error. The foundation of classical test theory (CTT). SEM estimates the standard deviation of the error component.</li>
+          <li><strong>Confidence interval width:</strong> Wider confidence intervals indicate less precise measurement (lower reliability or larger SD). Narrower intervals indicate more precise measurement.</li>
+          <li><strong>Deviation IQ:</strong> Developed by Wechsler to replace the ratio IQ (MA/CA x 100). Compares individual performance to same-age peers using a normal distribution (M=100, SD=15). Standard across modern intelligence tests.</li>
+          <li><strong>Significant vs. unusual discrepancy:</strong> A score difference can be statistically significant (unlikely due to error) yet common in the normative sample (high base rate). Always report both significance and base rate.</li>
+          <li><strong>Interpolation vs. extrapolation:</strong> Grade/age equivalents within the tested range use interpolation (between known data points). Values outside the range use extrapolation (beyond known data points). Extrapolated values are less trustworthy.</li>
+          <li><strong>Standard score comparability:</strong> Standard scores from different tests are directly comparable only when both are based on the normal distribution with the same M and SD. Cross-test comparisons require attention to normative samples and scale metrics.</li>
+          <li><strong>Measurement error is random:</strong> Error component varies randomly across administrations. Systematic errors (construct-irrelevant variance) are validity threats, not reliability threats.</li>
+          <li><strong>Attenuation:</strong> Unreliable measures attenuate (reduce) observed correlations. The correlation for attenuation formula corrects for this: r_corrected = r_xy / sqrt(r_xx * r_yy).</li>
+          <li><strong>T-score calculation:</strong> T = 10z + 50. A T-score of 70 = z of +2.0 = 98th percentile = IQ of 130. Know how to convert between all standard score metrics quickly for the EPPP.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch4-vocational-assessment.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Vocational Assessment &amp; Interest Inventories</div>
+          </div>
+        </a>
+        <a href="ch6-assessment-ethics.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Assessment Ethics: Fairness &amp; Security</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

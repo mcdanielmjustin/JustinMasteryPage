@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperament & Personality | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Temperament & Personality</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link active"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 9</div>
+        <h1>Temperament & Personality</h1>
+        <div class="chapter-meta">
+          <span>Thomas & Chess, Erikson's stages, identity development</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Temperament and Personality Development</h2>
+        <p>Temperament refers to constitutionally based individual differences in emotional reactivity and self-regulation that appear early in life and show moderate stability across development. Personality development, particularly as conceptualized by Erikson's psychosocial stages and Marcia's identity statuses, describes how the self evolves across the lifespan in response to both biological maturation and social experience.</p>
+        <p>For the EPPP, candidates must understand the major temperament classification systems (Thomas & Chess, Kagan), how temperament interacts with environment to shape developmental outcomes, and Erikson's eight psychosocial stages in detail. These topics appear frequently and have direct relevance to clinical assessment and intervention.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Thomas and Chess: The New York Longitudinal Study</h2>
+        <p>Alexander Thomas and Stella Chess (1977) conducted the landmark <span class="key-term">New York Longitudinal Study (NYLS)</span>, following 133 children from infancy into adulthood. They identified nine dimensions of temperament and classified children into three broad temperament types, plus a mixed category.</p>
+
+        <h3>Nine Dimensions of Temperament</h3>
+        <table>
+          <tr><th>Dimension</th><th>Description</th></tr>
+          <tr><td>Activity level</td><td>Amount of physical movement during daily activities</td></tr>
+          <tr><td>Rhythmicity</td><td>Predictability of biological functions (sleep, feeding, elimination)</td></tr>
+          <tr><td>Approach/withdrawal</td><td>Initial response to new stimuli (people, places, foods)</td></tr>
+          <tr><td>Adaptability</td><td>Ease of adjusting to changes in routine or environment</td></tr>
+          <tr><td>Threshold of responsiveness</td><td>Intensity of stimulation needed to elicit a response</td></tr>
+          <tr><td>Intensity of reaction</td><td>Energy level of responses (positive or negative)</td></tr>
+          <tr><td>Quality of mood</td><td>General disposition -- positive vs. negative</td></tr>
+          <tr><td>Distractibility</td><td>Degree to which extraneous stimuli alter ongoing behavior</td></tr>
+          <tr><td>Attention span/persistence</td><td>Length of time devoted to an activity and continuation despite obstacles</td></tr>
+        </table>
+
+        <h3>Three Temperament Types</h3>
+        <div class="definition-box">
+          <h4>Temperament Classifications</h4>
+          <p><strong>Easy temperament (~40% of sample):</strong> Regular biological rhythms, positive approach to new situations, high adaptability, generally positive mood, mild to moderate intensity of reactions. These children are generally a pleasure to parent and adjust readily to new routines.</p>
+          <p><strong>Difficult temperament (~10% of sample):</strong> Irregular biological rhythms, withdrawal from new situations, slow adaptability, predominantly negative mood, intense reactions. These children are at higher risk for behavioral problems, particularly when there is poor goodness of fit with caregivers.</p>
+          <p><strong>Slow-to-warm-up temperament (~15% of sample):</strong> Initially withdrawn and negative in response to new stimuli, but gradually adapt with repeated exposure. Low activity level and mild reactions. May be mislabeled as "shy" but can adjust well given patience and gentle encouragement.</p>
+          <p><strong>Mixed/Unclassifiable (~35%):</strong> Did not fit neatly into any category, showing combinations of traits from multiple types.</p>
+        </div>
+
+        <h3>Goodness of Fit</h3>
+        <p>Thomas and Chess's most important clinical contribution was the concept of <span class="key-term">goodness of fit</span> -- the match between a child's temperament and the demands and expectations of the environment (particularly the parents). When there is a good fit, development proceeds smoothly; when there is a poor fit, the child is at increased risk for behavioral and emotional problems.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Goodness of Fit</h4>
+          <p>A mother describes her 3-year-old as "impossible" -- the child has irregular sleep patterns, intense emotional reactions, and withdraws from new situations. The mother, who values structure and punctuality, feels frustrated and incompetent. Assessment reveals the child has a difficult temperament, and the mother's rigid expectations create a poor goodness of fit. Intervention focuses not on changing the child's temperament but on helping the mother adjust her expectations and parenting strategies: establishing predictable routines (accommodating the child's slower adaptability), preparing the child for transitions, allowing extra time for new situations, and reframing the child's intensity as a sign of passion rather than defiance. This approach exemplifies how temperament-informed parenting can improve outcomes without requiring temperament change.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Kagan's Behavioral Inhibition</h2>
+        <p>Jerome Kagan (1994) conducted extensive longitudinal research on <span class="key-term">behavioral inhibition</span> -- a temperamental trait characterized by heightened vigilance and fearfulness in response to unfamiliar people, objects, and situations. Approximately 15-20% of infants show consistently high reactivity (vigorous limb movements, crying, arching of back) to novel stimuli at 4 months of age.</p>
+
+        <h3>Biological Basis</h3>
+        <p>Kagan proposed that behavioral inhibition has a biological basis in a <span class="key-term">low threshold for arousal in the amygdala</span> and associated limbic circuits. Behaviorally inhibited children show:</p>
+        <ul>
+          <li>Higher resting heart rates and less heart rate variability</li>
+          <li>Greater cortisol reactivity to stress</li>
+          <li>More right frontal EEG asymmetry (associated with withdrawal motivation)</li>
+          <li>Larger pupil dilation in response to novel stimuli</li>
+        </ul>
+
+        <h3>Developmental Trajectory</h3>
+        <p>Approximately two-thirds of highly reactive 4-month-olds become behaviorally inhibited toddlers, and roughly one-third to one-half of behaviorally inhibited toddlers go on to develop social anxiety disorder in adolescence (Kagan & Snidman, 2004). However, the trajectory is not deterministic:</p>
+        <ul>
+          <li>Sensitive, supportive parenting can reduce the behavioral expression of inhibition</li>
+          <li>Overprotective or anxious parenting can exacerbate it</li>
+          <li>The biological reactivity often persists even when behavioral inhibition decreases, suggesting that inhibited children learn to manage (not eliminate) their reactivity</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Behavioral inhibition is one of the strongest temperamental predictors of anxiety disorders, particularly social anxiety disorder. Early identification of behaviorally inhibited children allows for preventive intervention. Research supports the use of graduated exposure to novel situations, parent training to avoid accommodation of avoidance, and cognitive-behavioral strategies. Importantly, parents should be counseled that the goal is not to eliminate the child's temperamental sensitivity but to help the child develop coping skills that prevent the temperament from developing into a clinical disorder.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Erikson's Psychosocial Stages</h2>
+        <p>Erik Erikson (1902-1994) proposed eight stages of psychosocial development spanning the entire lifespan. Each stage presents a central <span class="key-term">psychosocial crisis</span> -- a conflict between two opposing tendencies that must be resolved for healthy development. Successful resolution results in a basic virtue or strength; unsuccessful resolution results in maladaptive tendencies.</p>
+
+        <table>
+          <tr><th>Stage</th><th>Age</th><th>Crisis</th><th>Virtue</th><th>Key Relationships</th></tr>
+          <tr><td>1</td><td>Birth-1 year</td><td><strong>Trust vs. Mistrust</strong></td><td>Hope</td><td>Primary caregiver</td></tr>
+          <tr><td>2</td><td>1-3 years</td><td><strong>Autonomy vs. Shame/Doubt</strong></td><td>Will</td><td>Parents</td></tr>
+          <tr><td>3</td><td>3-6 years</td><td><strong>Initiative vs. Guilt</strong></td><td>Purpose</td><td>Family</td></tr>
+          <tr><td>4</td><td>6-12 years</td><td><strong>Industry vs. Inferiority</strong></td><td>Competence</td><td>School, peers</td></tr>
+          <tr><td>5</td><td>Adolescence</td><td><strong>Identity vs. Role Confusion</strong></td><td>Fidelity</td><td>Peers, role models</td></tr>
+          <tr><td>6</td><td>Young adulthood</td><td><strong>Intimacy vs. Isolation</strong></td><td>Love</td><td>Romantic partners, friends</td></tr>
+          <tr><td>7</td><td>Middle adulthood</td><td><strong>Generativity vs. Stagnation</strong></td><td>Care</td><td>Family, community</td></tr>
+          <tr><td>8</td><td>Late adulthood</td><td><strong>Integrity vs. Despair</strong></td><td>Wisdom</td><td>Humanity, society</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <h4>Stage Details for EPPP</h4>
+          <p><strong>Trust vs. Mistrust:</strong> Resolved through consistent, responsive caregiving. Corresponds closely to Bowlby's attachment theory. When caregivers are unreliable, the infant develops mistrust of the world.</p>
+          <p><strong>Autonomy vs. Shame/Doubt:</strong> Toddlers need to explore and assert independence. Overly controlling or punitive parenting leads to shame and self-doubt. Corresponds to Piaget's sensorimotor/early preoperational period and the development of self-will.</p>
+          <p><strong>Initiative vs. Guilt:</strong> Preschoolers initiate activities and assert power through play. If punished for initiative or made to feel that their desires are always wrong, excessive guilt develops.</p>
+          <p><strong>Industry vs. Inferiority:</strong> School-age children develop competence through academic and social achievements. Failure or negative comparison leads to feelings of inferiority.</p>
+          <p><strong>Identity vs. Role Confusion:</strong> The central crisis of adolescence. Successful resolution results in a coherent sense of self; failure leads to identity confusion. This stage has been extensively elaborated by James Marcia.</p>
+          <p><strong>Generativity vs. Stagnation:</strong> Middle-aged adults seek to contribute to the next generation through parenting, mentoring, or creative work. Failure leads to self-absorption and stagnation.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Identity Development: Marcia's Identity Statuses</h2>
+        <p>James Marcia (1966) operationalized Erikson's identity concept by proposing four <span class="key-term">identity statuses</span> based on two dimensions: whether the individual has experienced an identity <span class="key-term">crisis</span> (a period of active exploration of alternatives) and whether they have made a <span class="key-term">commitment</span> (a firm decision about identity elements such as occupation, ideology, and relationships).</p>
+
+        <table>
+          <tr><th>Status</th><th>Crisis (Exploration)</th><th>Commitment</th><th>Description</th></tr>
+          <tr><td><strong>Identity Achievement</strong></td><td>Yes (resolved)</td><td>Yes</td><td>Has explored alternatives and made firm commitments. Associated with the best psychological outcomes: high self-esteem, mature reasoning, and strong relationships.</td></tr>
+          <tr><td><strong>Moratorium</strong></td><td>Currently in crisis</td><td>No (not yet)</td><td>Actively exploring identity alternatives but has not yet committed. Often characterized by anxiety and questioning, but this is a healthy and necessary process.</td></tr>
+          <tr><td><strong>Foreclosure</strong></td><td>No</td><td>Yes</td><td>Has made commitments without exploration -- typically adopting parents' or authority figures' values without question. Appears stable but may be rigid and defensive when beliefs are challenged.</td></tr>
+          <tr><td><strong>Identity Diffusion</strong></td><td>No</td><td>No</td><td>No exploration and no commitment. May appear apathetic or aimless. Associated with the poorest outcomes when it persists. In early adolescence, this is normative; in late adolescence/adulthood, it is concerning.</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Clinical Example: Assessing Identity Status</h4>
+          <p>A college counseling center psychologist works with a 20-year-old pre-med student who reports feeling lost and questioning everything. She originally chose medicine because "my parents are both doctors and it's what I've always been expected to do," but she is now intensely interested in art and environmental science. She feels anxious, guilty, and uncertain. This student appears to be transitioning from <strong>foreclosure</strong> (committed without exploration, based on parental expectations) to <strong>moratorium</strong> (actively exploring alternatives, experiencing productive anxiety). The psychologist normalizes this process as healthy identity work rather than pathologizing the distress, while helping the student explore her values, interests, and the distinction between her own goals and her parents' expectations.</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Identity development continues beyond adolescence, and many adults revisit identity questions during major life transitions (career change, divorce, retirement). Marcia's framework is useful in clinical assessment for understanding clients' developmental challenges. Moratorium, while anxious, is a necessary precursor to identity achievement. Foreclosed individuals may present for therapy when life events challenge their unexamined commitments, and identity-diffused adults may present with depression, purposelessness, or personality pathology. Erikson noted that societies need to provide a <span class="key-term">psychosocial moratorium</span> -- a sanctioned period of exploration (e.g., college years) -- to facilitate healthy identity development.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Know Thomas and Chess's three temperament types (easy, difficult, slow-to-warm-up) and their approximate prevalence rates (40%, 10%, 15%)</li>
+          <li>Goodness of fit is the match between temperament and environmental demands -- outcomes depend on the interaction, not temperament alone</li>
+          <li>Kagan's behavioral inhibition: biologically based (amygdala reactivity), predicts social anxiety; parenting can moderate the trajectory</li>
+          <li>Know all eight of Erikson's psychosocial stages, their age ranges, crises, and virtues</li>
+          <li>Trust vs. Mistrust (infancy) parallels attachment theory; resolved through consistent caregiving</li>
+          <li>Identity vs. Role Confusion is the central crisis of adolescence</li>
+          <li>Generativity vs. Stagnation (middle adulthood) involves contributing to the next generation</li>
+          <li>Know Marcia's four identity statuses and the two dimensions (exploration/crisis and commitment)</li>
+          <li>Identity Achievement (explored + committed) has the best outcomes; Identity Diffusion (no exploration + no commitment) has the worst outcomes when persistent</li>
+          <li>Foreclosure involves commitment without exploration -- often based on adopting parental values unquestioningly</li>
+          <li>Moratorium (currently exploring, not yet committed) is necessary for achieving identity and is normative in late adolescence</li>
+          <li>Temperament is moderately stable across development but is NOT immutable -- environment shapes its expression</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Erikson, E. H. (1963). <em>Childhood and society</em> (2nd ed.). Norton.</div>
+        <div class="citation">Erikson, E. H. (1968). <em>Identity: Youth and crisis.</em> Norton.</div>
+        <div class="citation">Kagan, J. (1994). <em>Galen's prophecy: Temperament in human nature.</em> Basic Books.</div>
+        <div class="citation">Kagan, J., & Snidman, N. (2004). <em>The long shadow of temperament.</em> Harvard University Press.</div>
+        <div class="citation">Marcia, J. E. (1966). Development and validation of ego-identity status. <em>Journal of Personality and Social Psychology, 3</em>(5), 551-558.</div>
+        <div class="citation">Rothbart, M. K., & Bates, J. E. (2006). Temperament. In N. Eisenberg (Ed.), <em>Handbook of child psychology: Vol. 3. Social, emotional, and personality development</em> (6th ed., pp. 99-166). Wiley.</div>
+        <div class="citation">Thomas, A., & Chess, S. (1977). <em>Temperament and development.</em> Brunner/Mazel.</div>
+        <div class="citation">Thomas, A., Chess, S., & Birch, H. G. (1968). <em>Temperament and behavior disorders in children.</em> New York University Press.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="moral-development.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Moral Development</div>
+          </div>
+        </a>
+        <a href="index.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Back to</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

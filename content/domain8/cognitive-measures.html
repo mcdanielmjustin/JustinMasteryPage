@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Other Cognitive Measures | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Other Cognitive Measures</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link active"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 9</div>
+        <h1>Other Cognitive Measures</h1>
+        <div class="chapter-meta">
+          <span>Kaufman, Raven's, PPVT, Leiter, culture-fair tests</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Alternative Cognitive Measures</h2>
+        <p>While the Wechsler scales and Stanford-Binet are the most widely used individual intelligence tests, several alternative instruments serve important roles in cognitive assessment. These instruments are particularly valuable for populations where language, motor ability, or cultural factors may affect performance on traditional IQ tests. For the EPPP, you should know the structure, theoretical basis, and appropriate populations for each instrument.</p>
+        <div class="clinical-note">
+          <strong>When to Use Alternatives:</strong> Alternative cognitive measures are typically selected when the examinee has limited English proficiency, a motor or sensory disability, a cultural background that makes traditional verbally-loaded tests inappropriate, or when a brief screening (rather than comprehensive assessment) is needed.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Kaufman Assessment Battery for Children, Second Edition (KABC-II)</h2>
+        <p>The <span class="key-term">KABC-II</span> (Kaufman & Kaufman, 2004) is an individually administered intelligence test for children ages 3-18. It is unique in offering two different theoretical models for interpretation.</p>
+
+        <h3>Dual Theoretical Model</h3>
+        <p>The KABC-II can be interpreted using either of two frameworks:</p>
+        <ul>
+          <li><span class="key-term">Cattell-Horn-Carroll (CHC) model:</span> The default interpretive framework; yields a Fluid-Crystallized Index (FCI) as the global score. Includes five CHC broad abilities: Gc (Crystallized), Gf (Fluid), Gsm (Short-Term Memory), Gv (Visual Processing), Glr (Long-Term Storage and Retrieval).</li>
+          <li><span class="key-term">Luria model:</span> Based on Luria's neuropsychological theory; yields a Mental Processing Index (MPI) that deliberately excludes measures of acquired knowledge (crystallized ability). The Luria model includes Sequential Processing, Simultaneous Processing, Learning, and Planning.</li>
+        </ul>
+
+        <h3>When to Use the Luria Model</h3>
+        <p>The Luria/MPI model is recommended when the examiner wants to minimize the influence of language and crystallized knowledge on the global score. This is particularly appropriate for:</p>
+        <ul>
+          <li>Children from non-mainstream cultural or linguistic backgrounds</li>
+          <li>English Language Learners (ELLs)</li>
+          <li>Children whose educational opportunities have been limited</li>
+          <li>Any situation where acquired knowledge may not represent the child's cognitive potential</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>KABC-II Global Scores:</strong> FCI (CHC model) = Fluid-Crystallized Index, includes all 5 scales. MPI (Luria model) = Mental Processing Index, excludes the Knowledge/Crystallized scale. Both use M = 100, SD = 15.
+        </div>
+
+        <h3>Kaufman Brief Intelligence Test, Second Edition (KBIT-2)</h3>
+        <p>The <span class="key-term">KBIT-2</span> (Kaufman & Kaufman, 2004) is a brief screening measure of verbal and nonverbal intelligence for ages 4-90. It yields three scores:</p>
+        <ul>
+          <li>Verbal Score (Riddles and Verbal Knowledge subtests)</li>
+          <li>Nonverbal Score (Matrices subtest)</li>
+          <li>IQ Composite (M = 100, SD = 15)</li>
+        </ul>
+        <p>The KBIT-2 takes approximately 15-30 minutes and is used for screening purposes. It is not a substitute for a comprehensive intelligence test.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Raven's Progressive Matrices</h2>
+        <p><span class="key-term">Raven's Progressive Matrices</span> (Raven, 1938, with multiple subsequent editions) is one of the most widely used nonverbal measures of <span class="key-term">fluid intelligence (Gf)</span> and abstract reasoning. It is considered the prototypical measure of Spearman's g factor.</p>
+
+        <h3>Versions</h3>
+        <ul>
+          <li><span class="key-term">Standard Progressive Matrices (SPM):</span> 60 items in 5 sets (A through E) of increasing difficulty. For ages 6 to adult. Most widely used version.</li>
+          <li><span class="key-term">Coloured Progressive Matrices (CPM):</span> Easier version for children ages 5-11 and individuals with cognitive impairment. Uses colored backgrounds to maintain attention.</li>
+          <li><span class="key-term">Advanced Progressive Matrices (APM):</span> More difficult version for above-average adults and adolescents.</li>
+        </ul>
+
+        <h3>Test Description</h3>
+        <p>Each item presents a visual pattern (matrix) with a missing piece. The examinee selects the correct piece from multiple options. Items progress from simple pattern completion to complex abstract reasoning involving multiple simultaneous rules.</p>
+
+        <h3>Strengths and Limitations</h3>
+        <ul>
+          <li><strong>Strengths:</strong> Minimal verbal demands; can be administered to non-English speakers; strong measure of Gf and g; widely researched cross-culturally; brief administration</li>
+          <li><strong>Limitations:</strong> Measures only one narrow facet of intelligence (nonverbal reasoning); no verbal, memory, or processing speed components; not a substitute for comprehensive cognitive assessment; still shows cultural effects despite being "nonverbal"</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Key Point:</strong> Raven's matrices is the best single measure of Spearman's g and fluid intelligence. However, "nonverbal" does not mean "culture-free" -- research shows that cultural factors (familiarity with multiple-choice format, exposure to abstract visual patterns, test-taking attitudes) still influence performance.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Peabody Picture Vocabulary Test (PPVT-5)</h2>
+        <p>The <span class="key-term">PPVT-5</span> (Dunn, 2019) measures <span class="key-term">receptive vocabulary</span>, which is used as an estimate of verbal ability and scholastic aptitude. It requires no reading, writing, or oral responses.</p>
+
+        <h3>Administration</h3>
+        <ul>
+          <li>The examiner says a word and the examinee selects the picture (from four options) that best represents that word</li>
+          <li>Ages 2:6 through 90+</li>
+          <li>Takes approximately 10-15 minutes</li>
+          <li>Yields a standard score (M = 100, SD = 15), percentile rank, stanine, and age equivalent</li>
+        </ul>
+
+        <h3>Uses and Limitations</h3>
+        <ul>
+          <li>Screening for verbal ability, particularly when the examinee cannot produce oral responses (e.g., autism, selective mutism, severe speech impairment)</li>
+          <li>Often paired with the <span class="key-term">Expressive Vocabulary Test (EVT-3)</span> to compare receptive and expressive language abilities</li>
+          <li>Not a measure of overall intelligence -- it assesses only receptive vocabulary (a narrow aspect of crystallized ability)</li>
+          <li>Significantly influenced by language exposure and educational opportunity</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> The PPVT is a measure of receptive vocabulary only, not overall intelligence. Using it as a sole estimate of IQ would overrepresent crystallized verbal ability and miss fluid reasoning, processing speed, working memory, and visual-spatial abilities.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Leiter International Performance Scale, Third Edition (Leiter-3)</h2>
+        <p>The <span class="key-term">Leiter-3</span> (Roid, Miller, Pomplun, & Koch, 2013) is a completely nonverbal intelligence test that requires no verbal instructions from the examiner and no verbal responses from the examinee. It uses pantomime and gestural instructions.</p>
+
+        <h3>Structure</h3>
+        <ul>
+          <li>Ages 3-75+</li>
+          <li>Two batteries: Cognitive Battery and Attention/Memory Battery</li>
+          <li><strong>Cognitive Battery subtests:</strong> Figure Ground, Form Completion, Classification/Analogies, Sequential Order -- yield a nonverbal IQ (M = 100, SD = 15)</li>
+          <li><strong>Attention/Memory Battery:</strong> Attention Sustained, Forward Memory, Reverse Memory, Nonverbal Stroop -- yield attention and memory composites</li>
+        </ul>
+
+        <h3>Appropriate Populations</h3>
+        <ul>
+          <li>Individuals who are deaf or hard of hearing</li>
+          <li>Non-English speakers and English Language Learners</li>
+          <li>Individuals with autism spectrum disorder who have limited verbal abilities</li>
+          <li>Individuals with motor speech disorders</li>
+          <li>Anyone for whom a completely nonverbal assessment is preferred</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Leiter-3 vs. Raven's:</strong> Both are nonverbal, but the Leiter-3 is more comprehensive, measuring multiple cognitive abilities (classification, sequential reasoning, memory, attention) rather than just matrix reasoning. The Leiter also uses nonverbal administration instructions, making it appropriate when the examinee cannot understand verbal directions.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cognitive Abilities Test (CogAT)</h2>
+        <p>The <span class="key-term">CogAT</span> (Lohman & Hagen, 2001) is a group-administered test of cognitive abilities used primarily in educational settings for identifying gifted students, predicting academic achievement, and informing instructional decisions.</p>
+
+        <h3>Structure</h3>
+        <ul>
+          <li>Three batteries: Verbal, Quantitative, and Nonverbal</li>
+          <li>Yields a composite score and separate battery scores</li>
+          <li>Available for grades K-12</li>
+          <li>Group administration makes it efficient for school-wide screening</li>
+        </ul>
+
+        <h3>Score Profiles</h3>
+        <p>The CogAT uses a unique <span class="key-term">ability profile</span> system that describes the pattern of scores across the three batteries:</p>
+        <ul>
+          <li>Profile level (A = above average, B = average, etc.)</li>
+          <li>Profile pattern (e.g., V+ indicates verbal strength; N- indicates nonverbal weakness)</li>
+          <li>Profiles are used to suggest differentiated instructional strategies</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Culture-Fair and Culture-Free Testing</h2>
+        <p>The concepts of <span class="key-term">culture-fair</span> and <span class="key-term">culture-free</span> testing represent different approaches to minimizing cultural bias in cognitive assessment:</p>
+
+        <h3>Culture-Free Tests</h3>
+        <p>Culture-free tests aim to be completely independent of cultural influence. This is now widely recognized as an <span class="key-term">impossible ideal</span> because all cognitive tests are affected to some degree by the examinee's cultural background, educational opportunity, familiarity with testing situations, and test-taking strategies.</p>
+
+        <h3>Culture-Fair Tests</h3>
+        <p>Culture-fair tests (sometimes called "culture-reduced" tests) attempt to minimize cultural bias without claiming to eliminate it entirely. Strategies include:</p>
+        <ul>
+          <li>Using nonverbal stimuli and response formats</li>
+          <li>Reducing language demands in both instructions and responses</li>
+          <li>Using abstract geometric or figural content rather than content tied to specific cultural knowledge</li>
+          <li>Providing practice items to ensure the examinee understands the task format</li>
+          <li>Developing norms that include representative samples of diverse populations</li>
+        </ul>
+
+        <h3>Cattell's Culture Fair Intelligence Test (CFIT)</h3>
+        <p>Raymond Cattell developed the <span class="key-term">CFIT</span> specifically to measure fluid intelligence while minimizing cultural influence. It uses four subtests: Series, Classifications, Matrices, and Conditions, all using abstract figures. Three difficulty levels (Scales 1, 2, 3) are available for different age ranges and ability levels.</p>
+
+        <div class="example-box">
+          <strong>EPPP Critical Point:</strong> No test is truly culture-free. Even nonverbal tests show group differences related to cultural factors such as familiarity with testing formats, experience with abstract visual patterns, and motivation to perform in testing situations. The appropriate term is "culture-reduced" or "culture-fair," and clinicians must still consider cultural context when interpreting results.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Nonverbal Assessment: Best Practices</h2>
+        <p>When assessing individuals for whom standard verbal-loaded tests are inappropriate, clinicians should follow these guidelines:</p>
+        <ul>
+          <li>Select instruments normed on populations that include the examinee's demographic group</li>
+          <li>Consider whether nonverbal instructions (as in the Leiter-3) are necessary, or whether nonverbal test content with verbal instructions (as in Raven's) is sufficient</li>
+          <li>Use multiple measures rather than a single nonverbal test to get a more comprehensive picture</li>
+          <li>Report results with appropriate caveats about the limitations of nonverbal assessment</li>
+          <li>Recognize that nonverbal IQ scores may underrepresent the abilities of verbally strong individuals</li>
+          <li>Avoid using a single nonverbal screening measure as a definitive measure of intellectual functioning</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Comparison Table</h2>
+        <table>
+          <tr><th>Instrument</th><th>Ages</th><th>Format</th><th>Primary Measures</th><th>Key Feature</th></tr>
+          <tr><td>KABC-II</td><td>3-18</td><td>Individual</td><td>Gf, Gc, Gsm, Gv, Glr</td><td>Dual model (CHC and Luria); MPI excludes crystallized</td></tr>
+          <tr><td>KBIT-2</td><td>4-90</td><td>Individual (brief)</td><td>Verbal, Nonverbal, Composite</td><td>15-30 min screening tool</td></tr>
+          <tr><td>Raven's SPM</td><td>6-adult</td><td>Individual or group</td><td>Fluid intelligence (Gf)</td><td>Best single measure of g; minimal verbal demands</td></tr>
+          <tr><td>PPVT-5</td><td>2:6-90+</td><td>Individual</td><td>Receptive vocabulary (Gc)</td><td>No verbal response required; vocabulary screening only</td></tr>
+          <tr><td>Leiter-3</td><td>3-75+</td><td>Individual</td><td>Nonverbal IQ, attention, memory</td><td>Completely nonverbal administration and response; pantomime instructions</td></tr>
+          <tr><td>CogAT</td><td>K-12</td><td>Group</td><td>Verbal, Quantitative, Nonverbal</td><td>Group-administered; used for gifted screening and instructional planning</td></tr>
+          <tr><td>CFIT</td><td>4-adult</td><td>Group or individual</td><td>Fluid intelligence (Gf)</td><td>Cattell's culture-fair test; abstract figural items</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Summary</h2>
+        <div class="definition-box">
+          <strong>KABC-II:</strong> Dual interpretive models. CHC model yields FCI (includes crystallized). Luria model yields MPI (excludes crystallized). Use Luria/MPI for culturally/linguistically diverse children.
+        </div>
+        <div class="definition-box">
+          <strong>Raven's:</strong> Prototypical measure of Spearman's g and fluid intelligence. Nonverbal but NOT culture-free.
+        </div>
+        <div class="definition-box">
+          <strong>PPVT:</strong> Receptive vocabulary only. Not a substitute for comprehensive IQ testing. Useful when examinee cannot produce oral responses.
+        </div>
+        <div class="definition-box">
+          <strong>Leiter-3:</strong> Completely nonverbal (administration and response). Best choice for deaf/hard of hearing or severely language-impaired individuals.
+        </div>
+        <div class="definition-box">
+          <strong>Culture-free vs. culture-fair:</strong> No test is culture-free. Culture-fair tests minimize but do not eliminate cultural influence. Always consider cultural context in interpretation.
+        </div>
+        <p class="citation">References: Kaufman & Kaufman (2004). KABC-II Manual. Raven (2003). Raven's Progressive Matrices. Dunn (2019). PPVT-5 Manual. Roid et al. (2013). Leiter-3 Manual. Cattell & Cattell (1973). Culture Fair Intelligence Test.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="wechsler-sb.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Wechsler & Stanford-Binet</div>
+          </div>
+        </a>
+        <a href="mmpi.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">MMPI-2/MMPI-3</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

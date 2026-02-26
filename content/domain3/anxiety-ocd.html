@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anxiety & OCD | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Anxiety & OCD</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link active"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 10</div>
+        <h1>Anxiety Disorders & OCD</h1>
+        <div class="chapter-meta">
+          <span>GAD, phobias, panic, social anxiety, OCD, etiology</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Anxiety Disorders</h2>
+        <p>Anxiety disorders are among the most prevalent psychiatric conditions, affecting approximately 31% of adults at some point during their lives (Kessler et al., 2005). The DSM-5 categorizes anxiety disorders as conditions characterized by excessive fear and anxiety along with related behavioral disturbances. <span class="key-term">Fear</span> is the emotional response to a real or perceived imminent threat, while <span class="key-term">anxiety</span> is the anticipation of a future threat.</p>
+        <div class="definition-box">
+          <h4>Key Distinction: Fear vs. Anxiety</h4>
+          <p><strong>Fear</strong> involves surges of autonomic arousal necessary for fight-or-flight, thoughts of immediate danger, and escape behaviors. <strong>Anxiety</strong> involves muscle tension, vigilance in preparation for future danger, and cautious or avoidant behaviors. Both can overlap, but the distinction is clinically important for differential diagnosis.</p>
+        </div>
+        <p>Anxiety disorders differ from normal developmental anxiety by being excessive, persistent (typically lasting 6 months or more), and causing clinically significant distress or impairment. The DSM-5 reorganized the anxiety chapter by removing OCD and PTSD into their own chapters, though they share features with anxiety disorders.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Generalized Anxiety Disorder (GAD)</h2>
+        <p><span class="key-term">Generalized Anxiety Disorder</span> is characterized by persistent and excessive worry about a variety of domains, including work, health, family, finances, and everyday matters. The worry is difficult to control and is associated with at least three somatic or cognitive symptoms.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Excessive anxiety and worry occurring more days than not for at least 6 months, about a number of events or activities.</li>
+          <li><strong>Criterion B:</strong> The individual finds it difficult to control the worry.</li>
+          <li><strong>Criterion C:</strong> The anxiety and worry are associated with three or more of the following (only one required in children): restlessness or feeling keyed up, being easily fatigued, difficulty concentrating or mind going blank, irritability, muscle tension, sleep disturbance.</li>
+          <li><strong>Criterion D:</strong> The disturbance causes clinically significant distress or impairment.</li>
+          <li><strong>Criterion E:</strong> Not attributable to substances or another medical condition.</li>
+          <li><strong>Criterion F:</strong> Not better explained by another mental disorder.</li>
+        </ol>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>GAD has the highest comorbidity rate of any anxiety disorder. Approximately 90% of individuals with GAD have at least one comorbid disorder, most commonly MDD. The <span class="key-term">intolerance of uncertainty model</span> (Dugas et al., 1998) posits that individuals with GAD have difficulty tolerating ambiguous situations, which fuels the worry cycle.</p>
+        </div>
+        <h3>Epidemiology</h3>
+        <p>Lifetime prevalence of GAD is approximately 5.7% in adults. Women are twice as likely as men to be diagnosed. GAD has a gradual onset, with a median age of onset of 30 years, which is later than most other anxiety disorders. It tends to follow a chronic, waxing-and-waning course.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Specific Phobias</h2>
+        <p><span class="key-term">Specific phobia</span> involves marked and disproportionate fear or anxiety about a specific object or situation that is actively avoided or endured with intense distress. The DSM-5 identifies five specifier subtypes:</p>
+        <ul>
+          <li><strong>Animal type</strong> (e.g., spiders, dogs, insects) -- typically onset in childhood</li>
+          <li><strong>Natural environment type</strong> (e.g., heights, storms, water)</li>
+          <li><strong>Blood-injection-injury (BII) type</strong> -- uniquely associated with a <span class="key-term">vasovagal response</span> (fainting)</li>
+          <li><strong>Situational type</strong> (e.g., airplanes, elevators, enclosed places)</li>
+          <li><strong>Other type</strong> (e.g., choking, vomiting, loud sounds)</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>A patient faints at the sight of blood during a medical procedure. Unlike other phobias that involve sustained sympathetic arousal, BII phobia involves an initial sympathetic spike followed by a parasympathetic rebound, producing bradycardia and hypotension. This is why <strong>applied tension</strong> (Ost & Sterner, 1987) is the treatment of choice for BII phobia, rather than standard relaxation techniques.</p>
+        </div>
+        <p>Specific phobias are the most common anxiety disorder, with a lifetime prevalence of approximately 12.5%. They are often acquired through direct traumatic experience, observation, or informational transmission (Rachman, 1977).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Social Anxiety Disorder</h2>
+        <p><span class="key-term">Social Anxiety Disorder</span> (SAD) involves marked fear or anxiety about social situations in which the individual may be scrutinized by others. The individual fears acting in a way that will be negatively evaluated, leading to humiliation, embarrassment, or rejection.</p>
+        <h3>Key Features</h3>
+        <ul>
+          <li>The social situations almost always provoke fear or anxiety</li>
+          <li>Situations are avoided or endured with intense fear or anxiety</li>
+          <li>The fear is out of proportion to the actual threat posed</li>
+          <li>Duration of at least 6 months</li>
+          <li>Specify if <strong>performance only</strong> (limited to speaking or performing in public)</li>
+        </ul>
+        <div class="citation">Cognitive models (Clark & Wells, 1995) emphasize that individuals with SAD shift attention inward to monitor their own behavior and appearance, creating a distorted self-image that perpetuates anxiety in social situations.</div>
+        <p>SAD has a lifetime prevalence of approximately 12% in the United States and typically begins in the mid-teens, often following a history of social inhibition or shyness. The <span class="key-term">performance only</span> specifier was new in DSM-5 and distinguishes individuals whose fears are restricted to public speaking or performance contexts.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Panic Disorder and Agoraphobia</h2>
+        <h3>Panic Disorder</h3>
+        <p><span class="key-term">Panic disorder</span> is characterized by recurrent, unexpected panic attacks -- abrupt surges of intense fear or discomfort that reach a peak within minutes. At least one attack must be followed by one month or more of persistent concern about additional attacks or maladaptive behavioral changes related to the attacks.</p>
+        <h4>Panic Attack Symptoms (4 or more required)</h4>
+        <ol>
+          <li>Palpitations, pounding heart, or accelerated heart rate</li>
+          <li>Sweating</li>
+          <li>Trembling or shaking</li>
+          <li>Sensations of shortness of breath or smothering</li>
+          <li>Feelings of choking</li>
+          <li>Chest pain or discomfort</li>
+          <li>Nausea or abdominal distress</li>
+          <li>Feeling dizzy, unsteady, light-headed, or faint</li>
+          <li>Chills or heat sensations</li>
+          <li>Paresthesias (numbness or tingling)</li>
+          <li>Derealization or depersonalization</li>
+          <li>Fear of losing control or "going crazy"</li>
+          <li>Fear of dying</li>
+        </ol>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>The <span class="key-term">anxiety sensitivity model</span> (Reiss & McNally, 1985) proposes that individuals with panic disorder have elevated fear of anxiety-related sensations themselves, believing these sensations have harmful consequences. Clark's (1986) <span class="key-term">cognitive model of panic</span> emphasizes catastrophic misinterpretation of benign bodily sensations as the core mechanism.</p>
+        </div>
+        <h3>Agoraphobia</h3>
+        <p>In DSM-5, <span class="key-term">agoraphobia</span> is diagnosed as a separate disorder from panic disorder. It involves marked fear or anxiety about two or more of the following five situations: using public transportation, being in open spaces, being in enclosed places, standing in line or being in a crowd, and being outside of the home alone. The fear is that escape might be difficult or help unavailable in the event of panic-like symptoms.</p>
+        <p>Approximately one-third to one-half of individuals with panic disorder also develop agoraphobia. Notably, agoraphobia can occur without a history of panic disorder.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Obsessive-Compulsive Disorder (OCD)</h2>
+        <p><span class="key-term">OCD</span> is characterized by the presence of obsessions, compulsions, or both. Although OCD was reclassified into its own chapter in DSM-5 (Obsessive-Compulsive and Related Disorders), it remains a commonly tested topic tested alongside anxiety disorders on the EPPP.</p>
+        <div class="definition-box">
+          <h4>Obsessions vs. Compulsions</h4>
+          <p><strong>Obsessions</strong> are recurrent, persistent, intrusive, and unwanted thoughts, urges, or images that cause marked anxiety or distress. The individual attempts to ignore, suppress, or neutralize them. <strong>Compulsions</strong> are repetitive behaviors or mental acts that the individual feels driven to perform in response to an obsession or according to rigid rules. They are aimed at preventing or reducing anxiety or a dreaded event but are not realistically connected to what they are designed to neutralize.</p>
+        </div>
+        <h3>Common OCD Symptom Dimensions</h3>
+        <table>
+          <tr><th>Dimension</th><th>Obsessions</th><th>Compulsions</th></tr>
+          <tr><td>Contamination</td><td>Fear of germs, dirt, illness</td><td>Excessive washing, cleaning</td></tr>
+          <tr><td>Symmetry</td><td>Need for exactness, order</td><td>Arranging, ordering, counting</td></tr>
+          <tr><td>Forbidden thoughts</td><td>Aggressive, sexual, or religious intrusions</td><td>Mental rituals, checking</td></tr>
+          <tr><td>Harm</td><td>Fear of causing harm to self/others</td><td>Checking locks, stoves, appliances</td></tr>
+          <tr><td>Hoarding</td><td>Distress at discarding items</td><td>Excessive saving, acquiring</td></tr>
+        </table>
+        <h3>DSM-5 Specifiers</h3>
+        <p>The DSM-5 includes an <span class="key-term">insight specifier</span> for OCD: good or fair insight, poor insight, or absent insight/delusional beliefs. Approximately 4% of individuals with OCD have absent insight, meaning they are completely convinced their OCD beliefs are true.</p>
+        <p>The <span class="key-term">tic-related specifier</span> applies when the individual has a current or past history of a tic disorder. Tic-related OCD has an earlier onset, more frequent male predominance, and higher rates of symmetry/ordering compulsions.</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Distinguishing OCD from OCPD: In OCD, obsessions are ego-dystonic (experienced as unwanted and distressing). In OCPD, the preoccupation with orderliness and perfectionism is ego-syntonic (consistent with the person's self-image). Individuals with OCPD rarely seek treatment for these traits because they see them as desirable.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Etiological Models of Anxiety and OCD</h2>
+        <h3>Biological Models</h3>
+        <ul>
+          <li><strong>Neurotransmitters:</strong> Dysregulation of GABA (inhibitory), serotonin (5-HT), and norepinephrine is implicated across anxiety disorders. OCD is particularly linked to serotonin dysfunction, supported by the efficacy of SSRIs and clomipramine (a serotonergic TCA).</li>
+          <li><strong>Neuroanatomy:</strong> The amygdala plays a central role in fear conditioning. The cortico-striato-thalamo-cortical (CSTC) circuit is implicated in OCD. Hyperactivity in the orbitofrontal cortex and caudate nucleus is a consistent finding in neuroimaging studies of OCD (Saxena et al., 1998).</li>
+          <li><strong>Genetics:</strong> Heritability estimates for anxiety disorders range from 30-50%. First-degree relatives of individuals with OCD have a 4-5 times increased risk of developing OCD.</li>
+        </ul>
+        <h3>Behavioral Models</h3>
+        <p>Mowrer's (1960) <span class="key-term">two-factor theory</span> remains foundational. Fear is initially acquired through classical conditioning (Factor 1) and maintained through operant conditioning via negative reinforcement of avoidance behavior (Factor 2). This model provides the rationale for <span class="key-term">exposure and response prevention (ERP)</span>, the gold-standard behavioral treatment for OCD and many anxiety disorders.</p>
+        <h3>Cognitive Models</h3>
+        <ul>
+          <li><strong>Attentional bias:</strong> Individuals with anxiety disorders show preferential attention to threat-related stimuli (MacLeod et al., 1986).</li>
+          <li><strong>Catastrophic misinterpretation:</strong> Clark's (1986) model of panic; Wells' (1995) metacognitive model of GAD.</li>
+          <li><strong>Inflated responsibility:</strong> Salkovskis (1985) proposed that OCD arises from the belief that one has the power and duty to prevent harm, leading to neutralizing compulsions.</li>
+          <li><strong>Thought-action fusion:</strong> The belief that thinking about an action is morally equivalent to performing it, or that thinking about an event makes it more likely to occur (Rachman, 1993).</li>
+        </ul>
+        <div class="citation">Barlow's (2000) triple vulnerability model proposes that anxiety disorders arise from the interaction of generalized biological vulnerability, generalized psychological vulnerability (early experiences of unpredictability/uncontrollability), and specific psychological vulnerability (learning to focus anxiety on particular stimuli).</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Evidence-Based Treatments for Anxiety and OCD</h2>
+        <h3>Psychotherapy</h3>
+        <ul>
+          <li><strong>Exposure and Response Prevention (ERP):</strong> The gold-standard treatment for OCD. Involves systematic exposure to feared stimuli (obsession triggers) while preventing the compulsive response. Approximately 60-70% of patients show significant improvement. Based on the principle that anxiety habituates with prolonged exposure and that preventing compulsions breaks the negative reinforcement cycle.</li>
+          <li><strong>Cognitive-Behavioral Therapy (CBT):</strong> First-line treatment for all anxiety disorders. For GAD, targets intolerance of uncertainty and worry beliefs. For social anxiety, involves cognitive restructuring of negative self-evaluations and behavioral experiments with video feedback. For panic disorder, involves interoceptive exposure (deliberately producing feared bodily sensations) and cognitive restructuring of catastrophic misinterpretations.</li>
+          <li><strong>Acceptance and Commitment Therapy (ACT):</strong> Emerging evidence for anxiety disorders; emphasizes psychological flexibility, acceptance of internal experiences, and values-based action rather than symptom elimination.</li>
+          <li><strong>Applied relaxation:</strong> Ost's method teaching rapid relaxation skills; effective for GAD.</li>
+        </ul>
+        <h3>Pharmacotherapy</h3>
+        <ul>
+          <li><strong>SSRIs:</strong> First-line pharmacological treatment for all anxiety disorders and OCD. Higher doses are typically needed for OCD (e.g., fluoxetine 60-80 mg) compared to depression (20 mg). Onset of therapeutic effect is 4-6 weeks for anxiety, and up to 8-12 weeks for OCD.</li>
+          <li><strong>SNRIs:</strong> Venlafaxine and duloxetine are effective for GAD and social anxiety disorder.</li>
+          <li><strong>Benzodiazepines:</strong> Effective for acute anxiety relief but not recommended as first-line treatment due to risk of dependence, tolerance, and withdrawal. They do not treat OCD.</li>
+          <li><strong>Clomipramine:</strong> A serotonergic TCA that is effective for OCD, sometimes used when SSRIs fail. Has more side effects than SSRIs.</li>
+          <li><strong>Buspirone:</strong> A 5-HT1A partial agonist used for GAD; slow onset (2-4 weeks); no abuse potential; not effective for OCD or panic.</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>For OCD specifically, the combination of ERP with an SSRI produces the best outcomes. The NICE guidelines recommend stepped care: (1) low-intensity CBT including ERP for mild OCD, (2) higher-intensity CBT with ERP or SSRI for moderate OCD, (3) combined CBT/ERP plus SSRI for severe OCD, and (4) clomipramine or augmentation with an antipsychotic for treatment-resistant cases. Approximately 40-60% of OCD patients are classified as treatment-resistant with first-line approaches.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Separation Anxiety Disorder</h2>
+        <p><span class="key-term">Separation Anxiety Disorder</span> is characterized by developmentally inappropriate and excessive fear or anxiety concerning separation from attachment figures. While historically categorized as a childhood-onset disorder in DSM-IV, the DSM-5 moved it to the anxiety disorders chapter, recognizing that it can be diagnosed across the lifespan, including in adults.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Developmentally inappropriate and excessive fear or anxiety concerning separation from those to whom the individual is attached, as evidenced by at least three of the following:
+            <ul>
+              <li>Recurrent excessive distress when anticipating or experiencing separation from home or major attachment figures</li>
+              <li>Persistent and excessive worry about losing major attachment figures or about possible harm to them (e.g., illness, injury, disaster, death)</li>
+              <li>Persistent and excessive worry about experiencing an untoward event (e.g., getting lost, being kidnapped, having an accident) that causes separation from a major attachment figure</li>
+              <li>Persistent reluctance or refusal to go out, away from home, to school, to work, or elsewhere because of fear of separation</li>
+              <li>Persistent and excessive fear of or reluctance about being alone or without major attachment figures at home or in other settings</li>
+              <li>Persistent reluctance or refusal to sleep away from home or to go to sleep without being near a major attachment figure</li>
+              <li>Repeated nightmares involving the theme of separation</li>
+              <li>Repeated complaints of physical symptoms (e.g., headaches, stomachaches, nausea, vomiting) when separation from major attachment figures occurs or is anticipated</li>
+            </ul>
+          </li>
+          <li><strong>Criterion B:</strong> The fear, anxiety, or avoidance is persistent, lasting at least <strong>4 weeks in children and adolescents</strong> and typically <strong>6 months or more in adults</strong>.</li>
+          <li><strong>Criterion C:</strong> The disturbance causes clinically significant distress or impairment in social, academic, occupational, or other important areas of functioning.</li>
+          <li><strong>Criterion D:</strong> The disturbance is not better explained by another mental disorder.</li>
+        </ol>
+        <div class="definition-box">
+          <h4>Key Distinction: Duration Requirement</h4>
+          <p>The DSM-5 applies a differential duration threshold: <strong>4 weeks</strong> for children and adolescents versus <strong>6 months</strong> for adults. This reflects the recognition that brief separation fears are normative in childhood but more clinically significant when persistent in adulthood.</p>
+        </div>
+        <h3>Epidemiology and Course</h3>
+        <p>Separation anxiety disorder is the <span class="key-term">most common anxiety disorder in children under 12</span>, with a prevalence of approximately 4% in children and 1-2% in adults. Onset typically occurs in childhood, though adult-onset cases are increasingly recognized. The disorder tends to fluctuate in severity and may re-emerge during periods of stress.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Somatic complaints, particularly <span class="key-term">headaches and stomachaches</span>, are a hallmark presentation in children with separation anxiety disorder, especially on school mornings or in anticipation of separation. These physical symptoms often lead to medical evaluation before the anxiety disorder is identified. In adults, separation anxiety frequently manifests as excessive concern about the well-being of children or a spouse and reluctance to be apart from them.</p>
+        </div>
+        <h3>Differential Diagnosis</h3>
+        <p>Separation anxiety disorder must be distinguished from agoraphobia (fear of being unable to escape, not specifically about separation from attachment figures), generalized anxiety disorder (worry about multiple topics, not limited to separation), and social anxiety disorder (avoidance of social scrutiny, not separation). In children, school refusal may stem from separation anxiety, social anxiety, or specific phobia of the school environment, and careful assessment is needed to determine the primary driving fear.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Body Dysmorphic Disorder (BDD)</h2>
+        <p><span class="key-term">Body Dysmorphic Disorder</span> is classified under Obsessive-Compulsive and Related Disorders in the DSM-5. It is characterized by a preoccupation with one or more perceived defects or flaws in physical appearance that are not observable or appear only slight to others. Despite the minimal or nonexistent nature of the appearance concerns, individuals with BDD experience significant distress and functional impairment.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Preoccupation with one or more perceived defects or flaws in physical appearance that are not observable or appear only slight to others.</li>
+          <li><strong>Criterion B:</strong> At some point during the course of the disorder, the individual has performed <span class="key-term">repetitive behaviors</span> (e.g., mirror checking, excessive grooming, skin picking, reassurance seeking) or <span class="key-term">mental acts</span> (e.g., comparing his or her appearance with that of others) in response to the appearance concerns.</li>
+          <li><strong>Criterion C:</strong> The preoccupation causes clinically significant distress or impairment in social, occupational, or other important areas of functioning.</li>
+          <li><strong>Criterion D:</strong> The appearance preoccupation is not better explained by concerns with body fat or weight in an individual whose symptoms meet diagnostic criteria for an eating disorder.</li>
+        </ol>
+        <h3>DSM-5 Specifiers</h3>
+        <ul>
+          <li><strong>With muscle dysmorphia:</strong> The individual is preoccupied with the idea that his or her body build is too small or insufficiently muscular. This specifier applies even if the individual is also preoccupied with other body areas.</li>
+          <li><strong>Insight specifier:</strong> With good or fair insight, with poor insight, or with absent insight/delusional beliefs.</li>
+        </ul>
+        <div class="definition-box">
+          <h4>Repetitive Behaviors in BDD</h4>
+          <p>The repetitive behaviors in BDD are compulsive in nature and functionally analogous to OCD compulsions. Common behaviors include: <span class="key-term">mirror checking</span> (or mirror avoidance), excessive grooming, <span class="key-term">skin picking</span> to remove perceived flaws, camouflaging (with makeup, clothing, hats, posture), <span class="key-term">reassurance seeking</span> about appearance, comparing appearance with others, and excessive exercise (particularly in muscle dysmorphia). These behaviors are time-consuming and difficult to resist or control.</p>
+        </div>
+        <h3>Epidemiology and Clinical Features</h3>
+        <p>BDD has a point prevalence of approximately <strong>2%</strong> in the general population, with higher rates (7-8%) in dermatology and cosmetic surgery settings. Onset is typically during adolescence (mean age 16-17), and the course is usually chronic without treatment. The most common areas of concern involve the skin (e.g., acne, scars, wrinkles), hair (e.g., thinning, excessive body hair), and nose, though any body part can be the focus.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>BDD carries a significantly elevated <span class="key-term">suicide risk</span>, with approximately 80% of individuals reporting lifetime suicidal ideation and 24-28% reporting suicide attempts. Comorbidity is high: approximately 75% of individuals with BDD have comorbid <span class="key-term">major depressive disorder</span>, and 30-40% have comorbid OCD. Cosmetic procedures rarely improve BDD symptoms and may worsen them. Individuals with absent insight may present with delusional intensity and were historically diagnosed with "delusional disorder, somatic type," but DSM-5 allows the BDD diagnosis regardless of insight level.</p>
+        </div>
+        <h3>Treatment</h3>
+        <p><span class="key-term">CBT with exposure and response prevention (ERP)</span> is the first-line psychotherapy for BDD. Exposure involves confronting avoided situations (e.g., going out without camouflage, reducing mirror checking), while response prevention targets the repetitive behaviors. SSRIs are the first-line pharmacological treatment, often at higher doses similar to those used for OCD. Serotonergic medications are significantly more effective than non-serotonergic medications for BDD.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Hoarding Disorder</h2>
+        <p><span class="key-term">Hoarding Disorder</span> was introduced as a standalone diagnosis in the DSM-5, classified under Obsessive-Compulsive and Related Disorders. Previously, hoarding was considered a symptom or subtype of OCD. Research has demonstrated that hoarding is a distinct condition with unique neurobiological, cognitive, and behavioral features that warrant independent diagnostic status.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Persistent difficulty discarding or parting with possessions, regardless of their actual value.</li>
+          <li><strong>Criterion B:</strong> This difficulty is due to a perceived need to save the items and to distress associated with discarding them.</li>
+          <li><strong>Criterion C:</strong> The difficulty discarding possessions results in the accumulation of possessions that congest and clutter active living areas and substantially compromises their intended use. If living areas are uncluttered, it is only because of the interventions of third parties (e.g., family members, cleaners, authorities).</li>
+          <li><strong>Criterion D:</strong> The hoarding causes clinically significant distress or impairment in social, occupational, or other important areas of functioning (including maintaining a safe environment for oneself or others).</li>
+          <li><strong>Criterion E:</strong> The hoarding is not attributable to another medical condition (e.g., brain injury, cerebrovascular disease, Prader-Willi syndrome).</li>
+          <li><strong>Criterion F:</strong> The hoarding is not better explained by the symptoms of another mental disorder.</li>
+        </ol>
+        <h3>DSM-5 Specifiers</h3>
+        <ul>
+          <li><strong>With excessive acquisition:</strong> If difficulty discarding possessions is accompanied by excessive acquiring of items that are not needed or for which there is no available space.</li>
+          <li><strong>Insight specifier:</strong> With good or fair insight, with poor insight, or with absent insight/delusional beliefs.</li>
+        </ul>
+        <div class="definition-box">
+          <h4>Key Distinction: Hoarding Disorder vs. OCD Hoarding</h4>
+          <p>Hoarding in the context of hoarding disorder is <span class="key-term">ego-syntonic</span> -- individuals value their possessions and experience distress at the thought of discarding them. Hoarding in the context of OCD is <span class="key-term">ego-dystonic</span> -- the accumulation is driven by obsessions (e.g., fear of contamination preventing disposal, need for symmetry/completeness) and is experienced as unwanted. This distinction is critical for differential diagnosis and treatment planning.</p>
+        </div>
+        <h3>Epidemiology and Course</h3>
+        <p>Hoarding disorder has a prevalence of approximately <strong>2-6%</strong> in the general population, making it substantially more common than OCD. Symptoms typically emerge in adolescence (ages 11-15), become clinically significant in the mid-20s to 30s, and worsen progressively with age. The disorder is equally prevalent in males and females, though clinical samples are predominantly female. Hoarding disorder is associated with significant health and safety risks, including fire hazards, falls, unsanitary living conditions, and social isolation.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Hoarding disorder is notoriously difficult to treat. Standard OCD treatments (ERP alone) have limited efficacy for hoarding. The most effective approach is <span class="key-term">CBT with motivational interviewing</span>, which addresses the ambivalence about change, cognitive distortions about possessions (emotional attachment, perceived utility, aesthetic value), and skills deficits in organizing, decision-making, and categorizing. Home-based sessions are more effective than office-only treatment. Neuroimaging studies show distinct patterns from OCD, with abnormal activity in the anterior cingulate cortex and insula during decision-making about possessions.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Trichotillomania (Hair-Pulling Disorder)</h2>
+        <p><span class="key-term">Trichotillomania</span>, also known as hair-pulling disorder, is classified under Obsessive-Compulsive and Related Disorders in the DSM-5. It is a body-focused repetitive behavior disorder characterized by the recurrent, compulsive pulling out of one's own hair, resulting in noticeable hair loss.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Recurrent pulling out of one's hair, resulting in hair loss.</li>
+          <li><strong>Criterion B:</strong> Repeated attempts to decrease or stop hair pulling.</li>
+          <li><strong>Criterion C:</strong> The hair pulling causes clinically significant distress or impairment in social, occupational, or other important areas of functioning.</li>
+          <li><strong>Criterion D:</strong> The hair pulling or hair loss is not attributable to another medical condition (e.g., a dermatological condition).</li>
+          <li><strong>Criterion E:</strong> The hair pulling is not better explained by the symptoms of another mental disorder (e.g., attempts to improve a perceived defect in appearance in BDD).</li>
+        </ol>
+        <div class="definition-box">
+          <h4>Pulling Styles</h4>
+          <p>Trichotillomania typically involves two styles of pulling: <span class="key-term">focused pulling</span> (deliberate pulling in response to a negative emotion or urge, with full awareness) and <span class="key-term">automatic pulling</span> (pulling that occurs outside of awareness, often during sedentary activities such as reading, watching TV, or talking on the phone). Most individuals engage in a mixture of both styles. Note that while the DSM-IV required a rising tension-before and relief-after cycle, the <strong>DSM-5 removed this criterion</strong>, as research showed many individuals do not experience this pattern.</p>
+        </div>
+        <h3>Epidemiology and Clinical Features</h3>
+        <p>Trichotillomania has a prevalence of approximately <strong>1-2%</strong> and is significantly more common in females than males (approximately 10:1 ratio in adults). The most common sites of pulling are the scalp, eyebrows, and eyelids, though any body area with hair may be targeted. Onset is most common around puberty (ages 10-13). A subset of individuals engage in <span class="key-term">trichophagia</span> (eating pulled hair), which can lead to trichobezoars (hairballs) requiring surgical removal -- a rare but potentially life-threatening complication.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Habit reversal training (HRT)</span> is the first-line behavioral treatment for trichotillomania. HRT has three core components: (1) <strong>awareness training</strong> -- learning to identify pulling urges, triggers, and behaviors in real time; (2) <strong>competing response training</strong> -- engaging in a physically incompatible behavior (e.g., clenching fists, sitting on hands) when an urge to pull arises; and (3) <strong>social support</strong> -- enlisting others to provide encouragement and reinforcement. HRT is often embedded within a broader CBT framework. SSRIs have shown inconsistent results for trichotillomania, unlike their efficacy in OCD, and N-acetylcysteine (NAC) has shown some promise as an adjunctive pharmacological agent.</p>
+        </div>
+        <h3>Comorbidity</h3>
+        <p>Trichotillomania is frequently comorbid with <span class="key-term">excoriation (skin-picking) disorder</span>, OCD, major depressive disorder, and other anxiety disorders. Co-occurrence with excoriation disorder is particularly common, reflecting the shared classification as body-focused repetitive behavior disorders.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Excoriation (Skin-Picking) Disorder</h2>
+        <p><span class="key-term">Excoriation disorder</span>, also known as skin-picking disorder or dermatillomania, is classified under Obsessive-Compulsive and Related Disorders in the DSM-5. It was newly added as a formal diagnosis in DSM-5 and, like trichotillomania, is categorized as a body-focused repetitive behavior disorder.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Recurrent skin picking resulting in skin lesions.</li>
+          <li><strong>Criterion B:</strong> Repeated attempts to decrease or stop skin picking.</li>
+          <li><strong>Criterion C:</strong> The skin picking causes clinically significant distress or impairment in social, occupational, or other important areas of functioning.</li>
+          <li><strong>Criterion D:</strong> The skin picking is not attributable to the physiological effects of a substance (e.g., cocaine) or another medical condition (e.g., scabies).</li>
+          <li><strong>Criterion E:</strong> The skin picking is not better explained by symptoms of another mental disorder (e.g., delusions or tactile hallucinations in psychotic disorder, attempts to improve perceived defect in BDD, stereotypies in stereotypic movement disorder, intention to harm oneself in nonsuicidal self-injury).</li>
+        </ol>
+        <div class="definition-box">
+          <h4>Behavioral Pattern</h4>
+          <p>Like trichotillomania, excoriation disorder involves both <span class="key-term">focused picking</span> (deliberate, in response to negative emotions or urges) and <span class="key-term">automatic picking</span> (outside of awareness, during sedentary activities). The picking may target healthy skin, minor skin irregularities (e.g., pimples, calluses, scabs), or lesions from previous picking. Common sites include the face, arms, and hands. Individuals may use fingernails, tweezers, pins, or other implements. A similar tension/relief cycle may be present, though it is not required for diagnosis.</p>
+        </div>
+        <h3>Epidemiology and Clinical Features</h3>
+        <p>Excoriation disorder has a prevalence of approximately <strong>1.4%</strong> in the general population and is predominantly diagnosed in females (approximately 75% of cases). Onset can occur at any age but frequently begins in adolescence, often coinciding with or following the onset of acne or other dermatological conditions. The course is typically chronic, with waxing and waning symptom severity. Significant medical complications can include tissue damage, scarring, and infection.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>Treatment for excoriation disorder closely parallels that for trichotillomania. <span class="key-term">Habit reversal training (HRT)</span> combined with <span class="key-term">CBT</span> is the first-line psychotherapy. The treatment approach includes awareness training to identify triggers and high-risk situations, competing response training to substitute incompatible behaviors, and stimulus control strategies (e.g., covering mirrors, wearing gloves, keeping hands occupied). SSRIs are sometimes used but evidence is mixed. N-acetylcysteine has also shown preliminary efficacy as a glutamate-modulating agent.</p>
+        </div>
+        <h3>Differential Diagnosis</h3>
+        <p>Excoriation disorder must be distinguished from: <span class="key-term">nonsuicidal self-injury</span> (which involves intentional self-harm for emotional regulation, not repetitive picking driven by urge/habit), <span class="key-term">BDD</span> (where skin picking is motivated by attempts to fix perceived appearance flaws), <span class="key-term">psychotic disorders</span> (where picking may be driven by delusions of parasitosis or tactile hallucinations), and <span class="key-term">substance-induced picking</span> (particularly stimulant-induced formication). When skin picking occurs exclusively in the context of one of these other conditions, excoriation disorder should not be diagnosed.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>GAD requires worry on more days than not for at least <strong>6 months</strong> plus 3+ associated symptoms (only 1 for children)</li>
+          <li>BII phobia is unique among phobias for its <strong>vasovagal/fainting response</strong>; treated with applied tension, not relaxation</li>
+          <li>Panic attacks are a <strong>specifier</strong> in DSM-5, not a separate disorder -- they can occur across multiple disorders</li>
+          <li>Agoraphobia is now a <strong>separate diagnosis</strong> from panic disorder in DSM-5</li>
+          <li>OCD obsessions are <strong>ego-dystonic</strong>; OCPD traits are <strong>ego-syntonic</strong></li>
+          <li>ERP (Exposure and Response Prevention) is the first-line psychotherapy for OCD</li>
+          <li>Mowrer's <strong>two-factor theory</strong>: classical conditioning acquires fear; operant conditioning (negative reinforcement) maintains avoidance</li>
+          <li>The CSTC circuit (orbitofrontal cortex, caudate, thalamus) is the key neural pathway in OCD</li>
+          <li>SSRIs are first-line pharmacotherapy for all anxiety disorders and OCD; higher doses are typically needed for OCD</li>
+          <li>Social anxiety disorder's <strong>performance only</strong> specifier is new to DSM-5</li>
+          <li><strong>Separation anxiety disorder</strong> was moved from childhood-onset disorders to the anxiety chapter in DSM-5; can be diagnosed in adults (6-month duration vs. 4 weeks in children); most common anxiety disorder in children under 12</li>
+          <li><strong>Body dysmorphic disorder</strong> involves preoccupation with perceived flaws not observable to others; repetitive behaviors (mirror checking, reassurance seeking); high suicide risk; CBT with ERP is first-line treatment; cosmetic procedures are generally ineffective</li>
+          <li><strong>Hoarding disorder</strong> is a standalone DSM-5 diagnosis distinct from OCD; hoarding in HD is ego-syntonic (valued) vs. ego-dystonic in OCD; CBT with motivational interviewing is first-line treatment; standard ERP alone has limited efficacy</li>
+          <li><strong>Trichotillomania</strong>: DSM-5 removed the tension/relief criterion; habit reversal training (HRT) is first-line behavioral treatment, not ERP; SSRIs have inconsistent efficacy unlike in OCD</li>
+          <li><strong>Excoriation disorder</strong> is new to DSM-5 as a formal diagnosis; shares treatment approach with trichotillomania (HRT + CBT); must differentiate from nonsuicidal self-injury, BDD-related picking, and substance-induced picking</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Barlow, D. H. (2000). Unraveling the mysteries of anxiety and its disorders from the perspective of emotion theory. <em>American Psychologist, 55</em>(11), 1247-1263.</div>
+        <div class="citation">Clark, D. M. (1986). A cognitive approach to panic. <em>Behaviour Research and Therapy, 24</em>(4), 461-470.</div>
+        <div class="citation">Clark, D. M., & Wells, A. (1995). A cognitive model of social phobia. In R. G. Heimberg et al. (Eds.), <em>Social phobia: Diagnosis, assessment, and treatment</em> (pp. 69-93). Guilford Press.</div>
+        <div class="citation">Dugas, M. J., Gagnon, F., Ladouceur, R., & Freeston, M. H. (1998). Generalized anxiety disorder: A preliminary test of a conceptual model. <em>Behaviour Research and Therapy, 36</em>(2), 215-226.</div>
+        <div class="citation">Kessler, R. C., Berglund, P., Demler, O., Jin, R., Merikangas, K. R., & Walters, E. E. (2005). Lifetime prevalence and age-of-onset distributions of DSM-IV disorders. <em>Archives of General Psychiatry, 62</em>(6), 593-602.</div>
+        <div class="citation">Mowrer, O. H. (1960). <em>Learning theory and behavior</em>. Wiley.</div>
+        <div class="citation">Ost, L. G., & Sterner, U. (1987). Applied tension: A specific behavioral method for treatment of blood phobia. <em>Behaviour Research and Therapy, 25</em>(1), 25-29.</div>
+        <div class="citation">Rachman, S. (1977). The conditioning theory of fear-acquisition: A critical examination. <em>Behaviour Research and Therapy, 15</em>(5), 375-387.</div>
+        <div class="citation">Salkovskis, P. M. (1985). Obsessional-compulsive problems: A cognitive-behavioural analysis. <em>Behaviour Research and Therapy, 23</em>(5), 571-583.</div>
+        <div class="citation">Saxena, S., Brody, A. L., Schwartz, J. M., & Baxter, L. R. (1998). Neuroimaging and frontal-subcortical circuitry in obsessive-compulsive disorder. <em>British Journal of Psychiatry, 173</em>(S35), 26-37.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Overview</div>
+          </div>
+        </a>
+        <a href="mood-disorders.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Mood Disorders</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

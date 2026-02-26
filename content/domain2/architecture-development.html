@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Architecture of Development | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/content/domain2/">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        The Architecture of Development
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan &amp; Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link active"><span class="chapter-number">1</span>The Architecture of Development</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath</a></li>
+        <li class="chapter-item"><a href="awakening-infancy.html" class="chapter-link"><span class="chapter-number">3</span>The Awakening &mdash; Infancy &amp; Toddlerhood</a></li>
+        <li class="chapter-item"><a href="discovering-early-childhood.html" class="chapter-link"><span class="chapter-number">4</span>Discovering the World &mdash; Early Childhood</a></li>
+        <li class="chapter-item"><a href="building-competence.html" class="chapter-link"><span class="chapter-number">5</span>Building Competence &mdash; Middle Childhood</a></li>
+        <li class="chapter-item"><a href="transformation-adolescence.html" class="chapter-link"><span class="chapter-number">6</span>Transformation &mdash; Adolescence</a></li>
+        <li class="chapter-item"><a href="long-horizon-adulthood.html" class="chapter-link"><span class="chapter-number">7</span>The Long Horizon &mdash; Adulthood &amp; Aging</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 7</div>
+        <h1>The Architecture of Development</h1>
+        <div class="chapter-meta">
+          <span>Domain 2: Lifespan &amp; Developmental Stages</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Grand Theories of Development -->
+      <div class="content-section">
+        <h2>Grand Theories of Development</h2>
+        <p>Developmental psychology rests on a handful of towering theoretical frameworks that have shaped how clinicians and researchers conceptualize human growth across the lifespan. These <span class="key-term">grand theories</span> provide organizing structures for understanding the timing, sequence, and mechanisms of change from conception through death.</p>
+
+        <h3>Piaget's Cognitive-Developmental Theory</h3>
+        <p><span class="key-term">Jean Piaget</span> (1896&ndash;1980) proposed that children actively construct their understanding of the world through a series of qualitatively distinct cognitive stages. Central to his theory are the processes of <span class="key-term">assimilation</span> (incorporating new experiences into existing schemas) and <span class="key-term">accommodation</span> (modifying existing schemas to fit new information). The dynamic tension between these processes drives cognitive growth through a process Piaget called <span class="key-term">equilibration</span>.</p>
+
+        <div class="definition-box">
+          <strong>Schema</strong>
+          <p>A cognitive framework or concept that organizes and interprets information. Schemas change with development, becoming more complex and abstract as the child matures through Piaget's stages.</p>
+        </div>
+
+        <table>
+          <tr><th>Stage</th><th>Age Range</th><th>Key Features</th></tr>
+          <tr><td>Sensorimotor</td><td>Birth&ndash;2 years</td><td>Object permanence, goal-directed behavior, mental representation</td></tr>
+          <tr><td>Preoperational</td><td>2&ndash;7 years</td><td>Symbolic thought, egocentrism, centration, irreversibility</td></tr>
+          <tr><td>Concrete Operational</td><td>7&ndash;11 years</td><td>Conservation, classification, seriation, logical operations on concrete objects</td></tr>
+          <tr><td>Formal Operational</td><td>11+ years</td><td>Abstract reasoning, hypothetical-deductive thinking, propositional thought</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 5-year-old watches as water is poured from a short, wide glass into a tall, narrow glass and says there is now "more water." This illustrates the preoperational child's failure to conserve, driven by centration on a single perceptual dimension (height).</p>
+        </div>
+
+        <p class="citation">Piaget, J. (1952). The origins of intelligence in children. International Universities Press.</p>
+
+        <h3>Vygotsky's Sociocultural Theory</h3>
+        <p><span class="key-term">Lev Vygotsky</span> (1896&ndash;1934) challenged Piaget's view of the solitary child-as-scientist by emphasizing that cognitive development is fundamentally a social and cultural process. Vygotsky argued that higher mental functions&mdash;including logical memory, voluntary attention, and conceptual thinking&mdash;originate in social interactions before being internalized by the individual.</p>
+
+        <div class="definition-box">
+          <strong>Zone of Proximal Development (ZPD)</strong>
+          <p>The distance between what a learner can do independently and what they can accomplish with the guidance of a more skilled partner. Learning is most effective when instruction targets this zone rather than tasks the child can already perform or those far beyond current capacity.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Scaffolding</strong>
+          <p>The process by which a more knowledgeable other (parent, teacher, peer) provides temporary, adjustable support to help a learner master a task within their ZPD. As competence increases, the support is gradually withdrawn.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Vygotsky's ZPD concept has direct implications for educational psychology and intervention planning. Clinicians conducting psychoeducational assessments may distinguish between a child's independent performance level and their assisted performance level, using the gap to guide recommendations for instructional strategies and accommodations.</p>
+        </div>
+
+        <p class="citation">Vygotsky, L. S. (1978). Mind in society: The development of higher psychological processes. Harvard University Press.</p>
+      </div>
+
+      <!-- Section 2: Erikson's Psychosocial Framework -->
+      <div class="content-section">
+        <h2>Erikson's Psychosocial Framework</h2>
+        <p><span class="key-term">Erik Erikson</span> (1902&ndash;1994) extended psychoanalytic theory by proposing eight stages of <span class="key-term">psychosocial development</span> spanning the entire lifespan. Unlike Freud, whose stages ended in adolescence, Erikson emphasized that personality development continues through adulthood and old age. Each stage presents a central <span class="key-term">crisis</span>&mdash;a turning point where the individual negotiates between two opposing tendencies.</p>
+
+        <table>
+          <tr><th>Stage</th><th>Age</th><th>Crisis</th><th>Virtue</th></tr>
+          <tr><td>1</td><td>Infancy (0&ndash;18 mo)</td><td>Trust vs. Mistrust</td><td>Hope</td></tr>
+          <tr><td>2</td><td>Toddlerhood (18 mo&ndash;3 yr)</td><td>Autonomy vs. Shame/Doubt</td><td>Will</td></tr>
+          <tr><td>3</td><td>Early Childhood (3&ndash;5 yr)</td><td>Initiative vs. Guilt</td><td>Purpose</td></tr>
+          <tr><td>4</td><td>Middle Childhood (6&ndash;11 yr)</td><td>Industry vs. Inferiority</td><td>Competence</td></tr>
+          <tr><td>5</td><td>Adolescence (12&ndash;18 yr)</td><td>Identity vs. Role Confusion</td><td>Fidelity</td></tr>
+          <tr><td>6</td><td>Young Adulthood (18&ndash;40 yr)</td><td>Intimacy vs. Isolation</td><td>Love</td></tr>
+          <tr><td>7</td><td>Middle Adulthood (40&ndash;65 yr)</td><td>Generativity vs. Stagnation</td><td>Care</td></tr>
+          <tr><td>8</td><td>Late Adulthood (65+ yr)</td><td>Ego Integrity vs. Despair</td><td>Wisdom</td></tr>
+        </table>
+
+        <p>Successful resolution of each crisis does not mean entirely avoiding the negative pole. Rather, a healthy outcome involves a favorable ratio between the positive and negative tendencies, producing an emergent <span class="key-term">ego strength</span> (virtue) that equips the person for subsequent stages.</p>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 45-year-old professional who mentors younger colleagues, volunteers in the community, and invests in raising children is displaying <span class="key-term">generativity</span>&mdash;the concern for guiding the next generation that characterizes Erikson's seventh stage.</p>
+        </div>
+
+        <p class="citation">Erikson, E. H. (1963). Childhood and society (2nd ed.). W. W. Norton.</p>
+      </div>
+
+      <!-- Section 3: Bronfenbrenner's Ecological Systems Model -->
+      <div class="content-section">
+        <h2>Bronfenbrenner's Ecological Systems Model</h2>
+        <p><span class="key-term">Urie Bronfenbrenner</span> (1917&ndash;2005) proposed that development occurs within a set of nested environmental systems, each influencing the individual in distinct but interconnected ways. His <span class="key-term">ecological systems theory</span> (later revised as the <span class="key-term">bioecological model</span>) shifted the focus from exclusively child-centered factors to the broader contexts in which development unfolds.</p>
+
+        <div class="definition-box">
+          <strong>The Five Systems</strong>
+          <p><strong>Microsystem:</strong> Immediate settings where the child directly interacts (family, school, peer group).<br>
+          <strong>Mesosystem:</strong> Connections between microsystems (e.g., parent-teacher relationship).<br>
+          <strong>Exosystem:</strong> Settings that indirectly affect the child (e.g., parent's workplace policies).<br>
+          <strong>Macrosystem:</strong> Cultural values, laws, customs, and ideologies.<br>
+          <strong>Chronosystem:</strong> Changes over time in the child or the environment (e.g., historical events, life transitions).</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A child's academic performance declines after their parent loses a job (exosystem influence), which increases marital conflict at home (microsystem effect). This chain of influence across ecological levels illustrates the interconnection of Bronfenbrenner's systems.</p>
+        </div>
+
+        <p>In his later work, Bronfenbrenner emphasized <span class="key-term">proximal processes</span>&mdash;the enduring forms of interaction between the developing person and their immediate environment&mdash;as the primary engines of development. These processes operate differently depending on the characteristics of the person, the context, and the time period.</p>
+
+        <p class="citation">Bronfenbrenner, U. (1979). The ecology of human development. Harvard University Press.</p>
+      </div>
+
+      <!-- Section 4: Nature, Nurture, and Epigenetics -->
+      <div class="content-section">
+        <h2>Nature, Nurture, and Epigenetics</h2>
+        <p>The <span class="key-term">nature versus nurture</span> debate has been a central tension in developmental psychology for over a century. Contemporary perspectives recognize that the question is not which factor matters more but rather how genetic and environmental influences interact across the lifespan.</p>
+
+        <h3>Behavioral Genetics</h3>
+        <p>Twin studies, adoption studies, and family studies have established that virtually every psychological trait shows some degree of <span class="key-term">heritability</span>&mdash;the proportion of observed variance in a trait attributable to genetic differences within a population. However, heritability is a population statistic, not an individual-level measure, and it does not imply genetic determinism.</p>
+
+        <h3>Gene-Environment Interaction and Correlation</h3>
+        <p><span class="key-term">Gene-environment interaction (G x E)</span> occurs when the effect of a gene depends on the environment, or vice versa. For example, the short allele of the 5-HTTLPR serotonin transporter gene has been associated with increased risk for depression, but primarily in individuals exposed to significant life stress (Caspi et al., 2003).</p>
+        <p><span class="key-term">Gene-environment correlation (rGE)</span> occurs when genetic predispositions influence environmental exposure. Three types include: <strong>passive rGE</strong> (parents provide both genes and environment), <strong>evocative rGE</strong> (a child's genetically influenced traits elicit particular environmental responses), and <strong>active rGE</strong> (individuals seek out environments compatible with their genetic tendencies).</p>
+
+        <div class="definition-box">
+          <strong>Epigenetics</strong>
+          <p>The study of heritable changes in gene expression that do not involve alterations to the DNA sequence itself. Epigenetic mechanisms&mdash;such as DNA methylation and histone modification&mdash;can be influenced by environmental factors including nutrition, stress, and toxin exposure, effectively serving as a molecular bridge between nature and nurture.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Relevance</strong>
+          <p>Research on early adversity and epigenetics has shown that childhood maltreatment can alter glucocorticoid receptor gene methylation, affecting the stress response system (McGowan et al., 2009). These findings have profound implications for understanding intergenerational transmission of trauma and the biological mechanisms underlying resilience and vulnerability.</p>
+        </div>
+
+        <p class="citation">Caspi, A., et al. (2003). Influence of life stress on depression: Moderation by a polymorphism in the 5-HTT gene. Science, 301(5631), 386&ndash;389.</p>
+      </div>
+
+      <!-- Section 5: Critical Periods and Sensitive Periods -->
+      <div class="content-section">
+        <h2>Critical Periods and Sensitive Periods</h2>
+        <p>The timing of experiences matters profoundly in development. Two related but distinct concepts describe windows of heightened developmental susceptibility.</p>
+
+        <div class="definition-box">
+          <strong>Critical Period</strong>
+          <p>A strictly defined time window during which certain experiences must occur for development to proceed normally. If the window is missed, the capacity may be permanently lost. Example: Hubel and Wiesel's research on monocular deprivation in kittens demonstrated a critical period for visual cortex development.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Sensitive Period</strong>
+          <p>A broader time window during which the organism is especially responsive to certain environmental stimuli, and development proceeds most efficiently. Unlike critical periods, development can still occur outside the sensitive period, though typically with greater effort and potentially less optimal outcomes. Language acquisition is a classic example of a sensitive period.</p>
+        </div>
+
+        <p>The distinction between these concepts has significant implications for intervention. If a capacity has a true critical period, early identification and intervention are essential. If a sensitive period is involved, later intervention remains possible but may need to be more intensive.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>The concept of sensitive periods informs early intervention programs for children with developmental delays or those at environmental risk. Programs like Head Start and early childhood mental health consultation are predicated on the understanding that the first few years of life represent a sensitive period for cognitive, social, and emotional development.</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Research Methods in Developmental Psychology -->
+      <div class="content-section">
+        <h2>Research Methods in Developmental Psychology</h2>
+        <p>Studying change over time presents unique methodological challenges. Developmental researchers employ specialized designs to disentangle the effects of age, historical period, and individual differences.</p>
+
+        <h3>Longitudinal Designs</h3>
+        <p>In a <span class="key-term">longitudinal design</span>, the same group of participants is studied repeatedly over an extended period. This allows researchers to track individual developmental trajectories and identify predictors of later outcomes. However, longitudinal studies are expensive, time-consuming, and vulnerable to <span class="key-term">attrition</span> (participant dropout) and <span class="key-term">practice effects</span> (improved performance from repeated testing).</p>
+
+        <h3>Cross-Sectional Designs</h3>
+        <p>A <span class="key-term">cross-sectional design</span> compares groups of participants at different ages at a single point in time. This approach is faster and less expensive than longitudinal research but cannot track individual change and is vulnerable to <span class="key-term">cohort effects</span>&mdash;differences between age groups that reflect generational differences in experiences rather than developmental change per se.</p>
+
+        <div class="definition-box">
+          <strong>Cohort Effect</strong>
+          <p>A difference between groups in a cross-sectional study that is attributable to the unique historical experiences of each generation rather than to age-related development. For example, differences in technology use between 20-year-olds and 70-year-olds tested today may reflect generational exposure rather than cognitive aging.</p>
+        </div>
+
+        <h3>Sequential Designs</h3>
+        <p><span class="key-term">Sequential designs</span> (also called cohort-sequential or cross-sequential designs) combine elements of both longitudinal and cross-sectional approaches by studying multiple cohorts over time. This powerful strategy, championed by K. Warner Schaie, allows researchers to separate the effects of age, cohort, and time of measurement.</p>
+
+        <table>
+          <tr><th>Design</th><th>Strengths</th><th>Limitations</th></tr>
+          <tr><td>Longitudinal</td><td>Tracks individual change; identifies causal antecedents</td><td>Expensive; attrition; practice effects; cohort-specific</td></tr>
+          <tr><td>Cross-Sectional</td><td>Efficient; no attrition; quick results</td><td>Cohort effects; cannot measure individual change</td></tr>
+          <tr><td>Sequential</td><td>Separates age, cohort, and time effects</td><td>Complex; expensive; still subject to some attrition</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A researcher in 1990 begins studying cognitive abilities in groups of 20-, 40-, and 60-year-olds, then retests each group every 10 years. By 2010, she can compare age effects (within-person change), cohort effects (between-group differences at the same age), and time-of-measurement effects. This is a sequential design.</p>
+        </div>
+
+        <p class="citation">Schaie, K. W. (1996). Intellectual development in adulthood: The Seattle Longitudinal Study. Cambridge University Press.</p>
+      </div>
+
+      <!-- EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Piaget's stages:</strong> Know the age ranges, key achievements (object permanence, conservation, abstract reasoning), and the processes of assimilation, accommodation, and equilibration.</li>
+          <li><strong>Vygotsky's ZPD and scaffolding:</strong> Understand how they differ from Piaget's view of the child as an independent discoverer. Vygotsky emphasizes social mediation of learning.</li>
+          <li><strong>Erikson's eight stages:</strong> Be able to identify the crisis and virtue associated with each stage. Exam questions frequently present a clinical vignette and ask which psychosocial stage is most relevant.</li>
+          <li><strong>Bronfenbrenner's systems:</strong> Know the five levels (micro, meso, exo, macro, chrono) and be able to classify examples into the correct system.</li>
+          <li><strong>Gene-environment interaction vs. correlation:</strong> Distinguish between G x E (moderation) and rGE (passive, evocative, active). Epigenetics provides the molecular mechanism.</li>
+          <li><strong>Critical vs. sensitive periods:</strong> Critical periods are strict and time-limited; sensitive periods are broader windows of enhanced (but not exclusive) receptivity.</li>
+          <li><strong>Research designs:</strong> Longitudinal tracks individuals over time; cross-sectional compares age groups at one point; sequential combines both. Know the confounds for each (attrition, cohort effects, practice effects).</li>
+          <li><strong>Cohort effects:</strong> A frequent EPPP topic. Remember that cross-sectional designs are most vulnerable to cohort effects, while longitudinal designs are most vulnerable to attrition.</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Overview</div>
+          </div>
+        </a>
+        <a href="conception-prenatal.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">From Conception to First Breath</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

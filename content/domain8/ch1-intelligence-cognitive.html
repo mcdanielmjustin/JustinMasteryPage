@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligence & Cognitive Assessment – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Intelligence &amp; Cognitive Assessment</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link active"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 12</div>
+        <h1>Intelligence &amp; Cognitive Assessment</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~25 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: Theories of Intelligence -->
+      <div class="content-section">
+        <h2>Theories of Intelligence</h2>
+        <p>Theories of intelligence form the conceptual foundation for every cognitive assessment instrument used in clinical practice. The EPPP expects examinees to distinguish among major theoretical frameworks and understand how each has shaped test construction and interpretation.</p>
+
+        <h3>Spearman's g Factor</h3>
+        <p>Charles Spearman (1904) used factor analysis to propose that a single <span class="key-term">general intelligence factor (g)</span> underlies performance across all cognitive tasks. Spearman's two-factor theory holds that every test measures g plus a task-specific factor (s). Contemporary research consistently shows that g accounts for approximately 40-50% of variance in cognitive test batteries, making it the single most powerful predictor of academic and occupational performance.</p>
+
+        <div class="definition-box">
+          <strong>g Factor:</strong>
+          <p>A latent construct reflecting general mental ability that influences performance across all cognitive domains. It is extracted as the first unrotated factor in principal components analysis of cognitive test batteries and is highly heritable (h2 approximately 0.50-0.80 in adulthood).</p>
+        </div>
+
+        <h3>Thurstone's Primary Mental Abilities</h3>
+        <p>Louis Thurstone (1938) used factor analysis to identify seven <span class="key-term">primary mental abilities</span>: Verbal Comprehension, Word Fluency, Number Facility, Spatial Visualization, Associative Memory, Perceptual Speed, and Reasoning. Thurstone's multifactor approach challenged Spearman's single-g model by arguing that intelligence is better understood as a profile of distinct abilities rather than a single general factor. Modern reconciliation recognizes that both Spearman and Thurstone were partially correct: g exists at the broad level, and group factors (akin to Thurstone's primaries) exist at a more specific level.</p>
+
+        <h3>Gardner's Theory of Multiple Intelligences</h3>
+        <p>Howard Gardner (1983) proposed that intelligence comprises eight relatively independent <span class="key-term">multiple intelligences</span>: linguistic, logical-mathematical, spatial, bodily-kinesthetic, musical, interpersonal, intrapersonal, and naturalistic. While highly influential in education, Gardner's theory has been criticized for lacking empirical support from factor-analytic research, blurring the distinction between intelligence and talent/aptitude, and having limited practical assessment utility. Most psychometric researchers do not classify Gardner's model as a theory of intelligence in the traditional psychometric sense.</p>
+
+        <h3>Cattell-Horn Gf-Gc Theory</h3>
+        <p>Raymond Cattell (1963) proposed two broad abilities: <span class="key-term">fluid intelligence (Gf)</span> — the capacity for novel reasoning, pattern recognition, and problem-solving independent of acquired knowledge — and <span class="key-term">crystallized intelligence (Gc)</span> — the accumulated store of verbal knowledge, skills, and cultural information. Gf peaks in early adulthood and declines with aging, whereas Gc remains stable or increases throughout the lifespan. John Horn later expanded the model to include additional broad abilities such as short-term memory (Gsm), processing speed (Gs), long-term retrieval (Glr), and auditory processing (Ga).</p>
+
+        <h3>Carroll's Three-Stratum Theory and CHC Theory</h3>
+        <p>John Carroll's (1993) meta-analytic review of factor-analytic studies produced the <span class="key-term">three-stratum theory</span>: Stratum III is g, Stratum II includes broad abilities (Gf, Gc, Gv, Ga, Gs, Gsm, Glr, Grw), and Stratum I encompasses approximately 70 narrow abilities. The modern <span class="key-term">Cattell-Horn-Carroll (CHC) theory</span> integrates the Cattell-Horn and Carroll frameworks and is the most widely endorsed model for test development and interpretation. Both the Woodcock-Johnson IV and the KABC-II use CHC as an organizing framework.</p>
+
+        <div class="citation">Carroll, J. B. (1993). <em>Human cognitive abilities: A survey of factor-analytic studies.</em> Cambridge University Press.</div>
+      </div>
+
+      <!-- Section 2: Wechsler Scales -->
+      <div class="content-section">
+        <h2>Wechsler Intelligence Scales</h2>
+        <p>The Wechsler scales are the most widely used individually administered intelligence tests in clinical practice. David Wechsler defined intelligence as "the aggregate or global capacity of the individual to act purposefully, think rationally, and deal effectively with the environment."</p>
+
+        <h3>WAIS-IV (Ages 16-90)</h3>
+        <p>The Wechsler Adult Intelligence Scale, Fourth Edition yields a <span class="key-term">Full Scale IQ (FSIQ)</span> along with four index scores:</p>
+        <ul>
+          <li><strong>Verbal Comprehension Index (VCI):</strong> Similarities, Vocabulary, Information — measures crystallized ability and verbal concept formation</li>
+          <li><strong>Perceptual Reasoning Index (PRI):</strong> Block Design, Matrix Reasoning, Visual Puzzles — assesses fluid reasoning and visual-spatial processing</li>
+          <li><strong>Working Memory Index (WMI):</strong> Digit Span, Arithmetic — taps short-term auditory memory and mental manipulation</li>
+          <li><strong>Processing Speed Index (PSI):</strong> Symbol Search, Coding — measures speed of visual scanning and graphomotor output</li>
+        </ul>
+        <p>All Wechsler IQ and index scores use a metric of <span class="key-term">M = 100, SD = 15</span>. Subtest scaled scores have M = 10, SD = 3. The Wechsler classification system labels IQ ranges: 130+ = Very Superior, 120-129 = Superior, 110-119 = High Average, 90-109 = Average, 80-89 = Low Average, 70-79 = Borderline, 69 and below = Extremely Low (formerly Intellectual Disability range).</p>
+
+        <h3>WISC-V (Ages 6-16)</h3>
+        <p>The Wechsler Intelligence Scale for Children, Fifth Edition introduced a five-factor structure by splitting PRI into <span class="key-term">Visual Spatial Index (VSI)</span> and <span class="key-term">Fluid Reasoning Index (FRI)</span>. The five primary index scores are VCI, VSI, FRI, WMI, and PSI. The WISC-V also provides ancillary index scores such as the Quantitative Reasoning Index, General Ability Index (GAI), and Cognitive Proficiency Index (CPI).</p>
+
+        <div class="definition-box">
+          <strong>GAI vs. FSIQ:</strong>
+          <p>The <span class="key-term">General Ability Index (GAI)</span> is computed from VCI and PRI/FRI subtests only, excluding Working Memory and Processing Speed. This makes the GAI a useful supplementary score when an examinee has significant processing speed or working memory deficits (e.g., ADHD, traumatic brain injury) that may depress the FSIQ below the level of overall reasoning ability. The <span class="key-term">Cognitive Proficiency Index (CPI)</span> combines WMI and PSI, capturing the efficiency and automaticity of cognitive processing.</p>
+        </div>
+
+        <h3>WPPSI-IV (Ages 2:6-7:7)</h3>
+        <p>The Wechsler Preschool and Primary Scale of Intelligence, Fourth Edition includes age-appropriate subtests for younger children. For ages 2:6 to 3:11, only three index scores are available (VCI, VSI, WMI). For ages 4:0 to 7:7, the full five-index structure is available. Notable subtests include Bug Search, Picture Memory, and Zoo Locations.</p>
+
+        <div class="example-box">
+          <strong>Clinical Example:</strong>
+          <p>A 35-year-old patient obtains a WAIS-IV VCI of 112, PRI of 98, WMI of 82, and PSI of 79. The 33-point VCI-PSI discrepancy suggests a meaningful cognitive profile with relative weaknesses in processing speed and working memory. This pattern warrants further neuropsychological investigation for possible attentional or processing difficulties.</p>
+        </div>
+
+        <table>
+          <tr><th>Wechsler Scale</th><th>Age Range</th><th>Index Scores</th><th>IQ Metric</th></tr>
+          <tr><td>WAIS-IV</td><td>16-90 years</td><td>VCI, PRI, WMI, PSI</td><td>M=100, SD=15</td></tr>
+          <tr><td>WISC-V</td><td>6-16 years</td><td>VCI, VSI, FRI, WMI, PSI</td><td>M=100, SD=15</td></tr>
+          <tr><td>WPPSI-IV</td><td>2:6-7:7 years</td><td>VCI, VSI, FRI, WMI, PSI</td><td>M=100, SD=15</td></tr>
+        </table>
+      </div>
+
+      <!-- Section 3: Stanford-Binet -->
+      <div class="content-section">
+        <h2>Stanford-Binet Intelligence Scales, Fifth Edition (SB5)</h2>
+        <p>The SB5 (Roid, 2003) measures five cognitive factors — <span class="key-term">Fluid Reasoning, Knowledge, Quantitative Reasoning, Visual-Spatial Processing, and Working Memory</span> — each assessed through both verbal and nonverbal routes, yielding a 5 x 2 matrix of 10 subtests. The SB5 is rooted in CHC theory and provides a Full Scale IQ, Nonverbal IQ, Verbal IQ, and five Factor Index scores.</p>
+
+        <div class="definition-box">
+          <strong>SB5 Score Metric:</strong>
+          <p>The SB5 uses M = 100, SD = <span class="key-term">16</span> for composite scores (unlike Wechsler's SD = 15). Subtest scaled scores use M = 10, SD = 3. This difference in standard deviation is a frequently tested EPPP distinction: an SB5 IQ of 68 is exactly 2 SD below the mean, while a Wechsler IQ of 70 is 2 SD below its mean.</p>
+        </div>
+
+        <p>The SB5 covers a wide age range (2-85+ years) and has an extended IQ range from 40 to 160, making it especially useful for assessing individuals at the extremes of the distribution. Its nonverbal subtests require pointing or manipulative responses only, making it suitable for individuals with speech or language impairments.</p>
+
+        <h3>Sternberg's Triarchic Theory of Intelligence</h3>
+        <p>Robert Sternberg (1985) proposed that intelligence comprises three aspects: <span class="key-term">analytical intelligence</span> (academic problem-solving, the type measured by traditional IQ tests), <span class="key-term">creative intelligence</span> (the ability to deal with novel situations and generate new ideas), and <span class="key-term">practical intelligence</span> (adaptation to, shaping of, and selection of real-world environments — "street smarts"). Sternberg argued that traditional IQ tests overemphasize analytical intelligence while neglecting creative and practical abilities. His Sternberg Triarchic Abilities Test (STAT) was designed to measure all three components, though it has not achieved widespread clinical adoption.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Consideration:</strong>
+          <p>When comparing IQ scores across Wechsler and SB5 instruments, clinicians must account for the different standard deviations. A Wechsler FSIQ of 85 (1 SD below mean) corresponds roughly to an SB5 FSIQ of 84 (1 SD below mean on that scale). At the tails of the distribution, this discrepancy becomes more meaningful for diagnostic classification.</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Kaufman Tests -->
+      <div class="content-section">
+        <h2>Kaufman Assessment Instruments</h2>
+        <p>Alan and Nadeen Kaufman developed assessment tools grounded in neuropsychological and cognitive theory, offering alternatives to the Wechsler scales.</p>
+
+        <h3>KABC-II (Ages 3-18)</h3>
+        <p>The Kaufman Assessment Battery for Children, Second Edition offers a unique <span class="key-term">dual-theoretical framework</span>. Examiners can interpret results using either the <span class="key-term">Luria neuropsychological model</span> (which yields a Mental Processing Index excluding acquired knowledge) or the <span class="key-term">CHC model</span> (which yields a Fluid-Crystallized Index including crystallized ability). The Luria model is recommended for linguistically or culturally diverse examinees, as it excludes verbal knowledge from the global score.</p>
+
+        <div class="clinical-note">
+          <strong>Selecting Between Luria and CHC Models:</strong>
+          <p>The examiner selects the interpretive model before administration based on the referral question and examinee characteristics. The <strong>Luria model</strong> is preferred when: (1) the examinee is bilingual or English is a second language, (2) cultural background differs significantly from the standardization sample, or (3) the referral question focuses on processing abilities rather than acquired knowledge. The <strong>CHC model</strong> is preferred when: (1) a comprehensive picture including crystallized ability is needed, (2) the examinee's cultural and linguistic background is well-represented in the norms, or (3) comparison with other CHC-based instruments is desired.</p>
+        </div>
+
+        <p>The KABC-II Luria scales include Sequential Processing (Gsm), Simultaneous Processing (Gv), Learning Ability (Glr), and Planning Ability (Gf). Under the CHC interpretation, Knowledge/Gc is added as a fifth scale.</p>
+
+        <h3>KAIT (Ages 11-85+)</h3>
+        <p>The Kaufman Adolescent and Adult Intelligence Test explicitly distinguishes Gf and Gc. It includes subtests like Rebus Learning and Logical Steps (Gf) and Definitions and Auditory Comprehension (Gc). The KAIT provides Fluid, Crystallized, and Composite IQ scores.</p>
+
+        <h3>Woodcock-Johnson IV (WJ-IV)</h3>
+        <p>The <span class="key-term">WJ-IV Tests of Cognitive Abilities</span> (Schrank, McGrew, & Mather, 2014) is a comprehensive CHC-based cognitive battery that assesses 7 broad CHC abilities across 18 tests. It provides a General Intellectual Ability (GIA) score as well as cluster scores for Comprehension-Knowledge (Gc), Fluid Reasoning (Gf), Short-Term Working Memory (Gwm), Processing Speed (Gs), Auditory Processing (Ga), Long-Term Retrieval (Glr), and Visual Processing (Gv). The WJ-IV is unique in its comprehensive coverage of CHC factors and its co-norming with the WJ-IV Tests of Achievement, allowing direct comparisons between cognitive abilities and academic achievement.</p>
+
+        <div class="example-box">
+          <strong>Ability-Achievement Discrepancy Analysis:</strong>
+          <p>The co-norming of the WJ-IV cognitive and achievement batteries allows for direct statistical comparison between predicted and actual achievement scores. A significant discrepancy between a child's cognitive ability (e.g., GIA = 105) and reading achievement (e.g., Basic Reading Skills = 78) may contribute to the identification of a specific learning disability, though modern practice emphasizes <span class="key-term">patterns of strengths and weaknesses (PSW)</span> analysis rather than simple discrepancy models. The PSW approach examines whether specific cognitive weaknesses are consistent with and can account for the specific academic deficits observed.</p>
+        </div>
+
+        <div class="citation">Kaufman, A. S., & Kaufman, N. L. (2004). <em>Kaufman Assessment Battery for Children, Second Edition.</em> Pearson.</div>
+      </div>
+
+      <!-- Section 5: Specialized Measures -->
+      <div class="content-section">
+        <h2>Specialized Cognitive Measures</h2>
+
+        <h3>Raven's Progressive Matrices</h3>
+        <p><span class="key-term">Raven's Progressive Matrices</span> is a nonverbal measure of fluid intelligence and abstract reasoning widely considered one of the best single measures of g. The test requires examinees to identify the missing piece in a series of visual patterns of increasing complexity. Because it requires no verbal responses and minimal cultural knowledge, it is frequently described as a "culture-fair" or "culture-reduced" measure. Three versions exist: Coloured Progressive Matrices (ages 5-11), Standard Progressive Matrices (ages 6-80), and Advanced Progressive Matrices (above-average adolescents and adults).</p>
+
+        <h3>Peabody Picture Vocabulary Test (PPVT-5)</h3>
+        <p>The PPVT is a receptive vocabulary test in which the examinee points to one of four pictures that best represents a spoken word. It yields a standard score (M = 100, SD = 15) and is commonly used as a brief estimate of verbal ability. It is not a comprehensive intelligence test but can serve as a screening measure for crystallized verbal knowledge.</p>
+
+        <h3>Vineland Adaptive Behavior Scales (Vineland-3)</h3>
+        <p>While not an intelligence test per se, the <span class="key-term">Vineland-3</span> is essential in the assessment of intellectual disability. It measures adaptive behavior across four domains: Communication, Daily Living Skills, Socialization, and Motor Skills, yielding an Adaptive Behavior Composite. A diagnosis of intellectual disability requires both significantly subaverage intellectual functioning (IQ approximately 70 or below) and concurrent deficits in adaptive behavior.</p>
+
+        <div class="definition-box">
+          <strong>Intellectual Disability Classification (DSM-5):</strong>
+          <p>The DSM-5 classifies severity of intellectual disability based on adaptive functioning rather than IQ alone: <strong>Mild</strong> (approximately IQ 55-70), <strong>Moderate</strong> (approximately IQ 40-55), <strong>Severe</strong> (approximately IQ 25-40), and <strong>Profound</strong> (IQ below approximately 25). However, the DSM-5 emphasizes that severity should be determined by the level of support needed across conceptual, social, and practical domains.</p>
+        </div>
+
+        <h3>Nonverbal and Culture-Reduced Intelligence Tests</h3>
+        <p>Several tests minimize language and cultural demands to provide fairer assessment of diverse populations:</p>
+        <table>
+          <tr><th>Test</th><th>Age Range</th><th>Key Features</th></tr>
+          <tr><td>Raven's Progressive Matrices</td><td>5-80+</td><td>Pattern completion; best single measure of g; minimal verbal demands</td></tr>
+          <tr><td>Leiter International Performance Scale, 3rd Ed. (Leiter-3)</td><td>3-75+</td><td>Completely nonverbal administration and response; no spoken language required</td></tr>
+          <tr><td>Universal Nonverbal Intelligence Test, 2nd Ed. (UNIT-2)</td><td>5-21</td><td>Uses gestures for instruction; six subtests measuring memory and reasoning</td></tr>
+          <tr><td>Test of Nonverbal Intelligence, 4th Ed. (TONI-4)</td><td>6-89</td><td>Abstract/figural problem-solving; pointing response only; brief screening measure</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Culture-Reduced vs. Culture-Free:</strong>
+          <p>No test is truly "culture-free" — even nonverbal tests involve culturally influenced processes such as test-taking familiarity, motivation, and comfort with abstract reasoning tasks. The preferred term is <span class="key-term">culture-reduced</span>, acknowledging that while verbal and cultural knowledge demands have been minimized, cultural factors can never be entirely eliminated from any assessment context.</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Achievement Testing and Learning Disability Assessment -->
+      <div class="content-section">
+        <h2>Achievement Testing and Learning Disability Assessment</h2>
+        <p>Achievement tests measure acquired knowledge and academic skills in areas such as reading, mathematics, and written language. When paired with cognitive assessment, achievement testing forms the basis for identifying specific learning disabilities and developing educational interventions.</p>
+
+        <h3>Woodcock-Johnson IV Tests of Achievement (WJ-IV ACH)</h3>
+        <p>The <span class="key-term">WJ-IV Tests of Achievement</span> (Schrank, Mather, & McGrew, 2014) is a comprehensive, individually administered achievement battery. It yields cluster scores for <span class="key-term">Broad Reading</span> (Letter-Word Identification, Passage Comprehension, Sentence Reading Fluency), <span class="key-term">Broad Mathematics</span> (Calculation, Applied Problems, Math Facts Fluency), and <span class="key-term">Broad Written Language</span> (Spelling, Writing Samples, Sentence Writing Fluency), along with additional clusters for oral language, academic skills, and academic applications. A critical feature is that the WJ-IV Achievement is <span class="key-term">co-normed with the WJ-IV Tests of Cognitive Abilities</span>, meaning both tests were standardized on the same normative sample. This co-norming allows for statistically precise comparisons between cognitive abilities and academic achievement — a key component of learning disability evaluation.</p>
+
+        <h3>Wechsler Individual Achievement Test, Fourth Edition (WIAT-4)</h3>
+        <p>The <span class="key-term">WIAT-4</span> (Pearson, 2020) is a comprehensive, individually administered achievement test yielding composite scores for <span class="key-term">Reading</span> (Word Reading, Pseudoword Decoding, Reading Comprehension, Oral Reading Fluency), <span class="key-term">Mathematics</span> (Numerical Operations, Math Problem Solving, Math Fluency), <span class="key-term">Written Language</span> (Spelling, Sentence Composition, Essay Composition), and <span class="key-term">Oral Language</span> (Listening Comprehension, Oral Expression). The WIAT-4 is <span class="key-term">co-normed with the WAIS-IV and WISC-V</span>, facilitating direct ability-achievement comparisons when the corresponding Wechsler cognitive measure is used. The co-norming across Wechsler products is a major practical advantage for clinicians who use Wechsler scales as their primary cognitive measures.</p>
+
+        <h3>Kaufman Test of Educational Achievement, Third Edition (KTEA-3)</h3>
+        <p>The <span class="key-term">KTEA-3</span> (Kaufman & Kaufman, 2014) measures achievement in reading, mathematics, written language, and oral language for individuals ages 4-25. A distinguishing feature of the KTEA-3 is its <span class="key-term">error analysis system</span>, which provides qualitative information about the types of errors examinees make on specific subtests (e.g., phonological errors in reading, procedural errors in math computation). This error analysis guides targeted intervention planning by identifying the specific skill deficits underlying low scores. The KTEA-3 also includes a comprehensive form and a brief form for screening purposes.</p>
+
+        <h3>Learning Disability Assessment Models</h3>
+        <p>The identification of <span class="key-term">specific learning disabilities (SLD)</span> has been guided by several assessment models, each with distinct theoretical and methodological foundations:</p>
+
+        <div class="definition-box">
+          <strong>IDEA Definition of Specific Learning Disability:</strong>
+          <p>The Individuals with Disabilities Education Act (<span class="key-term">IDEA</span>) defines a specific learning disability as "a disorder in one or more of the basic psychological processes involved in understanding or in using language, spoken or written, which disorder may manifest itself in the imperfect ability to listen, think, speak, read, write, spell, or do mathematical calculations." IDEA specifies that the disability is not primarily the result of visual, hearing, or motor disabilities; intellectual disability; emotional disturbance; cultural disadvantage; environmental deprivation; or limited English proficiency. Achievement must be <span class="key-term">below the expected level</span> given the individual's age, state-approved grade-level standards, or intellectual development.</p>
+        </div>
+
+        <h3>Ability-Achievement Discrepancy Model</h3>
+        <p>The traditional <span class="key-term">ability-achievement discrepancy model</span> identifies a learning disability when there is a significant gap between a student's measured cognitive ability (IQ) and academic achievement. For example, a student with an IQ of 110 but a reading standard score of 78 would show a substantial discrepancy suggesting that reading performance is significantly below what would be predicted from overall cognitive ability. Criticisms of this model include: (1) it creates a "wait to fail" problem — a discrepancy may not emerge until the student has fallen significantly behind; (2) it is not supported by research showing that discrepant and non-discrepant low achievers respond differently to interventions; and (3) it disadvantages students with lower IQ scores who may have genuine learning disabilities but do not show a sufficient IQ-achievement gap.</p>
+
+        <h3>Response to Intervention (RTI)</h3>
+        <p>The <span class="key-term">Response to Intervention (RTI)</span> model uses a multi-tiered system of supports to identify and serve students with learning difficulties:</p>
+        <ul>
+          <li><strong>Tier 1:</strong> High-quality, evidence-based instruction for all students in the general education classroom, with universal screening to identify at-risk students</li>
+          <li><strong>Tier 2:</strong> Targeted, small-group interventions for students not making adequate progress in Tier 1, with progress monitoring to track response</li>
+          <li><strong>Tier 3:</strong> Intensive, individualized interventions for students who do not respond adequately to Tier 2 supports. Students who fail to respond at Tier 3 may be referred for comprehensive evaluation for special education eligibility</li>
+        </ul>
+        <p>RTI was endorsed by IDEA 2004 as an acceptable alternative to the discrepancy model. Its strengths include early identification and intervention, but critics argue that it does not identify the cognitive processing deficits underlying the learning difficulty and that there is no consensus on what constitutes "adequate response" to intervention.</p>
+
+        <h3>Pattern of Strengths and Weaknesses (PSW) Model</h3>
+        <p>The <span class="key-term">Pattern of Strengths and Weaknesses (PSW)</span> model, also known as the <span class="key-term">concordance-discordance model</span>, represents a third approach to SLD identification. The PSW model examines whether:</p>
+        <ul>
+          <li>There is a <strong>concordance</strong> (consistency) between a specific cognitive processing weakness and a specific academic deficit (e.g., weak phonological processing paired with weak reading decoding)</li>
+          <li>There is a <strong>discordance</strong> (inconsistency) between the student's overall cognitive ability and the specific area of academic weakness</li>
+          <li>Cognitive strengths exist in areas unrelated to the academic deficit, ruling out global intellectual deficiency</li>
+        </ul>
+        <p>The PSW model is considered the most theoretically grounded approach, as it directly examines the pattern of cognitive and academic functioning predicted by learning disability theory. It requires comprehensive cognitive and achievement testing and relies on CHC theory to identify the specific cognitive processes underlying academic skills.</p>
+
+        <table>
+          <tr><th>Model</th><th>Core Method</th><th>Strengths</th><th>Limitations</th></tr>
+          <tr><td>Ability-Achievement Discrepancy</td><td>IQ-achievement gap</td><td>Simple, widely understood</td><td>Wait to fail; not empirically validated; disadvantages lower-IQ students</td></tr>
+          <tr><td>RTI (3-tier model)</td><td>Response to evidence-based intervention</td><td>Early intervention; prevents over-identification</td><td>Does not identify cognitive basis; no consensus on "adequate response"</td></tr>
+          <tr><td>PSW / Concordance-Discordance</td><td>Cognitive-academic profile analysis</td><td>Theoretically grounded; identifies specific processing deficits</td><td>Complex; requires comprehensive testing; limited consensus on operationalization</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Integrating Achievement and Cognitive Data:</strong>
+          <p>Modern best practice in SLD assessment typically integrates elements of multiple models. A thorough evaluation includes comprehensive cognitive testing (to identify processing strengths and weaknesses), achievement testing (to document academic deficits), evidence of inadequate response to intervention (ruling out instructional quality as the primary cause), and consideration of exclusionary factors (intellectual disability, sensory impairment, cultural or linguistic factors, inadequate instruction). Co-normed cognitive-achievement batteries (WJ-IV, WIAT-4/Wechsler scales) provide the strongest statistical foundation for comparing abilities and achievements.</p>
+        </div>
+      </div>
+
+      <!-- Section 7: Routine Outcome Monitoring -->
+      <div class="content-section">
+        <h2>Routine Outcome Monitoring &amp; Measurement-Based Care</h2>
+        <p><span class="key-term">Routine Outcome Monitoring (ROM)</span> and <span class="key-term">Measurement-Based Care (MBC)</span> involve the systematic, repeated administration of standardized measures throughout treatment to track patient progress, inform clinical decision-making, and improve outcomes. This approach has become a best-practice standard in contemporary clinical psychology and is increasingly represented on the EPPP.</p>
+
+        <h3>Measurement-Based Care (MBC)</h3>
+        <p><span class="key-term">Measurement-Based Care</span> is the practice of using standardized, validated outcome measures at regular intervals to guide treatment decisions. Research consistently demonstrates that MBC improves treatment outcomes, reduces deterioration rates, and helps clinicians identify patients who are not responding to treatment — often before the clinician would notice clinically. Key principles of MBC include:</p>
+        <ul>
+          <li><strong>Routine administration:</strong> Measures are given at every session or at regular intervals (e.g., weekly, biweekly), not just at intake and discharge</li>
+          <li><strong>Real-time feedback:</strong> Scores are reviewed immediately to inform the current session's clinical focus</li>
+          <li><strong>Clinical decision rules:</strong> Established thresholds or algorithms guide when to modify, intensify, or change treatment approaches</li>
+          <li><strong>Patient engagement:</strong> Sharing results with patients increases transparency, collaboration, and therapeutic alliance</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Lambert's Patient-Focused Research:</strong>
+          <p>Michael Lambert's research at Brigham Young University demonstrated that routine outcome monitoring with a <span class="key-term">signal-alarm system</span> significantly improves therapy outcomes. Using the OQ-45 administered at each session, Lambert's system generates alerts when a patient's trajectory deviates from expected recovery curves — identifying patients who are <span class="key-term">at risk of treatment failure or deterioration</span> before it becomes clinically obvious. When therapists received these feedback alerts, outcomes improved significantly: deterioration rates were cut in half, and more patients achieved clinically significant change. Lambert's work established that <span class="key-term">therapists are generally poor at detecting patient deterioration</span> without systematic measurement, tending to overestimate their patients' progress.</p>
+        </div>
+
+        <h3>OQ-45 (Outcome Questionnaire-45)</h3>
+        <p>The <span class="key-term">OQ-45</span> (Lambert et al., 1996) is a 45-item self-report measure designed for repeated administration throughout therapy to track patient progress. It yields a Total Score and three subscale scores:</p>
+        <ul>
+          <li><strong>Symptom Distress (SD):</strong> 25 items assessing depression, anxiety, and somatic symptoms — the primary index of intrapsychic distress</li>
+          <li><strong>Interpersonal Relations (IR):</strong> 11 items measuring satisfaction with and functioning in interpersonal relationships</li>
+          <li><strong>Social Role (SR):</strong> 9 items assessing functioning in work, school, and other social roles</li>
+        </ul>
+        <p>The OQ-45 uses a cutoff score of 63 to distinguish between clinical and non-clinical populations and a <span class="key-term">Reliable Change Index (RCI)</span> of 14 points to determine whether change is statistically meaningful rather than due to measurement error. The combination of crossing the clinical cutoff AND achieving reliable change defines <span class="key-term">clinically significant change</span> (Jacobson & Truax, 1991).</p>
+
+        <h3>PHQ-9 (Patient Health Questionnaire-9)</h3>
+        <p>The <span class="key-term">PHQ-9</span> (Kroenke, Spitzer, & Williams, 2001) is a 9-item self-report depression screening and severity measure. Each item corresponds to one of the nine DSM-5 diagnostic criteria for Major Depressive Disorder, rated from 0 (not at all) to 3 (nearly every day) over the past two weeks. Total scores range from 0 to 27 with established severity cutoffs:</p>
+        <table>
+          <tr><th>Score Range</th><th>Severity</th><th>Suggested Clinical Action</th></tr>
+          <tr><td>0-4</td><td>Minimal / None</td><td>No treatment indicated</td></tr>
+          <tr><td>5-9</td><td>Mild</td><td>Watchful waiting; repeat at follow-up</td></tr>
+          <tr><td>10-14</td><td>Moderate</td><td>Treatment plan; consider counseling and/or pharmacotherapy</td></tr>
+          <tr><td>15-19</td><td>Moderately Severe</td><td>Active treatment with pharmacotherapy and/or psychotherapy</td></tr>
+          <tr><td>20-27</td><td>Severe</td><td>Immediate initiation of pharmacotherapy; consider referral to specialist</td></tr>
+        </table>
+        <p>The PHQ-9 is freely available (no copyright cost), making it one of the most widely used outcome measures in primary care, integrated behavioral health, and clinical research. A score of 10 or greater has a sensitivity of 88% and specificity of 88% for detecting Major Depressive Disorder.</p>
+
+        <h3>GAD-7 (Generalized Anxiety Disorder-7)</h3>
+        <p>The <span class="key-term">GAD-7</span> (Spitzer, Kroenke, Williams, & Lowe, 2006) is a 7-item self-report measure assessing the severity of generalized anxiety symptoms over the past two weeks. Items are rated from 0 (not at all) to 3 (nearly every day), with total scores ranging from 0 to 21. Severity cutoffs are:</p>
+        <ul>
+          <li><strong>0-4:</strong> Minimal anxiety</li>
+          <li><strong>5-9:</strong> Mild anxiety</li>
+          <li><strong>10-14:</strong> Moderate anxiety</li>
+          <li><strong>15-21:</strong> Severe anxiety</li>
+        </ul>
+        <p>While developed for GAD, the GAD-7 also demonstrates good sensitivity for detecting panic disorder, social anxiety disorder, and PTSD. Like the PHQ-9, it is freely available and widely used as a brief screening and outcome monitoring tool.</p>
+
+        <h3>PCL-5 (PTSD Checklist for DSM-5)</h3>
+        <p>The <span class="key-term">PCL-5</span> (Weathers et al., 2013) is a 20-item self-report measure corresponding to the 20 DSM-5 symptom criteria for PTSD, organized across the four DSM-5 symptom clusters: intrusion, avoidance, negative alterations in cognitions and mood, and alterations in arousal and reactivity. Items are rated from 0 (not at all) to 4 (extremely), yielding a total severity score ranging from 0 to 80. A preliminary cutoff score of <span class="key-term">31-33</span> has been recommended for probable PTSD diagnosis, though the optimal cutoff varies by population and context. The PCL-5 can be used for screening, provisional diagnosis, and monitoring treatment response in trauma-focused therapy.</p>
+
+        <h3>AUDIT (Alcohol Use Disorders Identification Test)</h3>
+        <p>The <span class="key-term">AUDIT</span> (Saunders et al., 1993) is a 10-item screening instrument developed by the World Health Organization to identify individuals with hazardous or harmful alcohol use. It covers three domains: hazardous alcohol use (items 1-3, assessing consumption), dependence symptoms (items 4-6), and harmful alcohol use (items 7-10, assessing consequences). Total scores range from 0 to 40, with a cutoff of 8 or above suggesting hazardous drinking. The AUDIT is unique among alcohol screening measures in its focus on identifying <span class="key-term">at-risk drinking patterns</span> before the development of full dependence, making it suitable for use in primary care and prevention contexts. A briefer version, the <span class="key-term">AUDIT-C</span>, uses only the first three consumption items as an initial screen.</p>
+
+        <h3>Columbia Suicide Severity Rating Scale (C-SSRS)</h3>
+        <p>The <span class="key-term">C-SSRS</span> (Posner et al., 2011) is a structured interview tool for assessing suicidal ideation and behavior. It distinguishes between <span class="key-term">passive ideation</span> (wishes to be dead), <span class="key-term">active ideation without plan</span>, <span class="key-term">active ideation with plan</span>, <span class="key-term">active ideation with intent</span>, and <span class="key-term">active ideation with plan and intent</span>, as well as actual attempts, interrupted attempts, aborted attempts, and preparatory behaviors. The C-SSRS has been adopted by the FDA, multiple federal agencies, and numerous health systems as a standard tool for suicide risk assessment. Its structured severity rating helps clinicians make more consistent and defensible risk management decisions.</p>
+
+        <div class="example-box">
+          <strong>MBC in Practice:</strong>
+          <p>A therapist treating a patient with comorbid depression and anxiety administers the PHQ-9 and GAD-7 at each session. Over the first four sessions of CBT, the PHQ-9 drops from 18 (moderately severe) to 12 (moderate) and the GAD-7 from 14 (moderate) to 9 (mild), indicating meaningful improvement in both symptom domains. At session 8, the PHQ-9 unexpectedly rises to 16. The therapist uses this feedback to explore recent stressors, discovers a job loss, and adjusts the treatment plan to include behavioral activation targeting the new situational depression. Without routine monitoring, this deterioration might not have been detected until it became clinically obvious weeks later.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinically Significant Change:</strong>
+          <p>The concept of <span class="key-term">clinically significant change</span> (Jacobson & Truax, 1991) requires two conditions: (1) the patient must cross the threshold from the clinical to the non-clinical distribution (i.e., post-treatment scores fall within the normal range), and (2) the magnitude of change must exceed the <span class="key-term">Reliable Change Index (RCI)</span>, ensuring that the observed change is unlikely due to measurement error alone. The RCI is calculated using the standard error of measurement of the instrument. This dual criterion prevents both overinterpretation of small changes within the clinical range and dismissal of genuine improvement that does not quite reach the non-clinical range.</p>
+        </div>
+
+        <div class="citation">Lambert, M. J. (2013). <em>Bergin and Garfield's handbook of psychotherapy and behavior change</em> (6th ed.). Wiley.</div>
+        <div class="citation">Kroenke, K., Spitzer, R. L., & Williams, J. B. W. (2001). The PHQ-9: Validity of a brief depression severity measure. <em>Journal of General Internal Medicine, 16</em>(9), 606-613.</div>
+      </div>
+
+      <!-- Section 8: EPPP Exam Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <p>High-yield facts and distinctions for the EPPP:</p>
+        <ul>
+          <li><strong>Wechsler vs. SB5 SD:</strong> Wechsler uses SD = 15; Stanford-Binet 5 uses SD = 16. This is one of the most commonly tested psychometric distinctions on the EPPP.</li>
+          <li><strong>CHC Theory:</strong> Know the major broad abilities (Gf, Gc, Gv, Ga, Gs, Gsm, Glr) and that CHC integrates Carroll's three-stratum model with Cattell-Horn Gf-Gc theory.</li>
+          <li><strong>WISC-V vs. WAIS-IV:</strong> The WISC-V has five index scores (adding VSI and FRI); the WAIS-IV has four (PRI instead of separate VSI and FRI).</li>
+          <li><strong>KABC-II dual model:</strong> Luria model excludes acquired knowledge; CHC model includes it. The Luria model is preferred for culturally/linguistically diverse examinees.</li>
+          <li><strong>Gf vs. Gc aging:</strong> Fluid intelligence declines with age; crystallized intelligence remains stable or increases.</li>
+          <li><strong>Raven's:</strong> Best single nonverbal measure of g; considered culture-reduced (not culture-free).</li>
+          <li><strong>Intellectual disability:</strong> Requires both subaverage IQ (approximately 70 or below) AND concurrent adaptive behavior deficits. DSM-5 severity is based on adaptive functioning, not IQ cutoffs alone.</li>
+          <li><strong>Vineland-3:</strong> Primary measure of adaptive behavior; uses a semi-structured interview format.</li>
+          <li><strong>Spearman's g:</strong> The first factor extracted in factor analysis of cognitive batteries; accounts for 40-50% of variance.</li>
+          <li><strong>GAI:</strong> The General Ability Index excludes working memory and processing speed, providing a purer measure of reasoning for examinees with attentional or processing deficits.</li>
+          <li><strong>WJ-IV:</strong> Most comprehensive CHC-based battery. Co-normed with achievement tests for direct ability-achievement comparisons. Seven broad CHC abilities.</li>
+          <li><strong>PSW model:</strong> Patterns of strengths and weaknesses approach to learning disability identification. Examines whether specific cognitive weaknesses account for specific academic deficits.</li>
+          <li><strong>Leiter-3:</strong> Completely nonverbal — no spoken language required for administration or response. Appropriate for deaf/hard-of-hearing, ESL, and nonverbal examinees.</li>
+          <li><strong>Culture-reduced vs. culture-free:</strong> No test is truly culture-free. Even nonverbal tests involve culturally influenced processes (test-taking familiarity, motivation). Use "culture-reduced."</li>
+          <li><strong>Thurstone:</strong> Seven primary mental abilities. Challenged single-g model. Modern view reconciles both: g at broad level, group factors at specific level.</li>
+          <li><strong>Gardner:</strong> Eight multiple intelligences. Influential in education but lacks factor-analytic support. Not a traditional psychometric theory of intelligence.</li>
+          <li><strong>Sternberg's Triarchic Theory:</strong> Analytical, creative, and practical intelligence. The STAT (Sternberg Triarchic Abilities Test) was developed to assess all three components.</li>
+          <li><strong>Flynn effect:</strong> IQ scores have been rising approximately 3 points per decade over the 20th century. Norms become outdated; using old norms overestimates abilities.</li>
+          <li><strong>WPPSI-IV:</strong> Ages 2:6 to 7:7. Two age bands: younger (3 indices) and older (5 indices). Age-appropriate subtests like Bug Search and Zoo Locations.</li>
+          <li><strong>DAS-II (Differential Ability Scales):</strong> Yields a General Conceptual Ability (GCA) score. Unique in allowing profile analysis of specific cognitive abilities with good floor for low-functioning examinees.</li>
+          <li><strong>Wechsler classification system:</strong> 130+ = Very Superior, 120-129 = Superior, 110-119 = High Average, 90-109 = Average, 80-89 = Low Average, 70-79 = Borderline, 69 and below = Extremely Low.</li>
+          <li><strong>Subtest scaled scores:</strong> M = 10, SD = 3 across all Wechsler tests. Scores of 7-13 are considered average range. Scores below 7 or above 13 warrant clinical attention.</li>
+          <li><strong>KABC-II Luria model:</strong> Excludes Knowledge/Gc scale. Yields Mental Processing Index. Preferred for culturally/linguistically diverse examinees to avoid confounding cognitive processing with acquired knowledge.</li>
+          <li><strong>Cattell-Horn distinction:</strong> Gf peaks in early adulthood and declines; Gc continues to grow throughout adulthood. This differential aging pattern is one of the strongest arguments against a unitary g model.</li>
+          <li><strong>PPVT-5:</strong> Receptive vocabulary measure (M = 100, SD = 15). Not a comprehensive IQ test but used as a brief estimate of crystallized verbal ability. Requires only a pointing response.</li>
+          <li><strong>Adaptive behavior requirement:</strong> Both AAIDD and DSM-5 require deficits in adaptive functioning for an intellectual disability diagnosis. IQ alone is insufficient. Vineland-3 and ABAS-3 are the primary adaptive measures.</li>
+          <li><strong>Carroll's Three-Stratum Model:</strong> Stratum III = g (general intelligence). Stratum II = broad abilities (Gf, Gc, Gv, etc.). Stratum I = narrow abilities (specific skills). CHC theory integrates this with Cattell-Horn.</li>
+          <li><strong>Simultaneous vs. sequential processing (KABC-II):</strong> Simultaneous = integrating stimuli into a gestalt. Sequential = processing stimuli in serial order. These map onto Luria's Block 2 functions.</li>
+          <li><strong>DAS-II:</strong> General Conceptual Ability (GCA) score. Good floor for low-functioning examinees. Diagnostic subtests are separate from core battery, allowing profile analysis without inflating or deflating the global score.</li>
+          <li><strong>Extended IQ ranges:</strong> SB5 extends to IQ 40-160. Important for assessing individuals at the extremes (gifted identification or intellectual disability classification).</li>
+          <li><strong>Processing Speed Index:</strong> PSI is the most sensitive Wechsler index to neurological conditions, TBI, ADHD, and aging effects. Often the first index to decline in neurodegenerative disorders.</li>
+          <li><strong>Test-retest practice effects:</strong> Performance IQ/nonverbal indices show larger practice effects than verbal indices on retest. Must be accounted for in serial cognitive assessment.</li>
+          <li><strong>Mean subtest scaled score:</strong> All Wechsler subtests use M = 10, SD = 3. SB5 subtests also use M = 10, SD = 3. Index/composite scores use M = 100, but with different SDs (Wechsler = 15, SB5 = 16).</li>
+          <li><strong>Scatter analysis:</strong> Significant variability among subtest scores (scatter) may indicate specific cognitive strengths and weaknesses, brain dysfunction, or learning disabilities. Must use statistical significance and base rates to interpret.</li>
+          <li><strong>IQ stability:</strong> IQ scores become more stable with age. After age 6-7, test-retest correlations are typically .85-.95 over short intervals. Infant measures (e.g., Bayley) have low predictive validity for later IQ.</li>
+          <li><strong>Bayley Scales:</strong> Developmental assessment for infants/toddlers (1-42 months). Yields cognitive, language, motor, social-emotional, and adaptive behavior composite scores. Low predictive validity for later childhood IQ due to qualitative differences in infant vs. child cognition.</li>
+          <li><strong>WJ-IV Achievement:</strong> Broad Reading, Broad Math, Broad Written Language clusters. Co-normed with WJ-IV Cognitive — allows direct ability-achievement comparisons from the same normative sample.</li>
+          <li><strong>WIAT-4:</strong> Individually administered; Reading, Math, Written Language, Oral Language composites. Co-normed with WAIS-IV/WISC-V for direct discrepancy analysis with Wechsler cognitive scales.</li>
+          <li><strong>KTEA-3:</strong> Reading, Math, Written Language, Oral Language. Distinctive error analysis feature that identifies specific error types to guide targeted intervention planning.</li>
+          <li><strong>Ability-achievement discrepancy model:</strong> Traditional IQ-achievement gap approach. Criticized for "wait to fail" problem, lack of empirical support, and disadvantaging lower-IQ students.</li>
+          <li><strong>RTI (Response to Intervention):</strong> 3-tier model — Tier 1 (universal), Tier 2 (targeted small group), Tier 3 (intensive individualized). IDEA 2004 endorsed RTI as alternative to discrepancy model. Focuses on intervention response, not cognitive processes.</li>
+          <li><strong>PSW (Pattern of Strengths and Weaknesses):</strong> Concordance-discordance model. Examines whether specific cognitive processing weakness is consistent with specific academic deficit while other cognitive abilities are intact. Most theoretically grounded approach. Based on CHC theory.</li>
+          <li><strong>IDEA definition of SLD:</strong> Disorder in basic psychological processes; achievement below expected level. Excludes intellectual disability, sensory impairment, cultural/linguistic factors, inadequate instruction.</li>
+          <li><strong>Co-normed batteries:</strong> WJ-IV cognitive + achievement share same normative sample. WIAT-4 co-normed with WAIS-IV/WISC-V. Co-norming provides the strongest statistical basis for ability-achievement comparison.</li>
+          <li><strong>Measurement-Based Care (MBC):</strong> Routine use of standardized outcome measures to guide treatment decisions. Research shows MBC improves outcomes and reduces deterioration rates. Therapists are poor at detecting deterioration without systematic measurement.</li>
+          <li><strong>Lambert's signal-alarm system:</strong> Using the OQ-45 at each session, alerts clinicians when patients deviate from expected recovery curves. Cut deterioration rates in half. Established that therapists overestimate patient progress without data.</li>
+          <li><strong>OQ-45:</strong> 45 items, 3 subscales (Symptom Distress, Interpersonal Relations, Social Role). Clinical cutoff = 63. RCI = 14 points. Designed for repeated session-by-session administration.</li>
+          <li><strong>PHQ-9:</strong> 9 items mapping to DSM-5 MDD criteria. Scores 0-27. Cutoffs: 5 = mild, 10 = moderate, 15 = moderately severe, 20 = severe. Score of 10+ has 88% sensitivity/specificity for MDD. Freely available.</li>
+          <li><strong>GAD-7:</strong> 7 items, scores 0-21. Cutoffs: 5 = mild, 10 = moderate, 15 = severe. Good sensitivity for GAD, panic, social anxiety, and PTSD. Freely available. Paired with PHQ-9 in many settings.</li>
+          <li><strong>PCL-5:</strong> 20 items mapping to DSM-5 PTSD criteria across 4 clusters. Scores 0-80. Provisional diagnostic cutoff of 31-33. Used for screening, diagnosis, and treatment monitoring.</li>
+          <li><strong>AUDIT:</strong> 10-item WHO alcohol screening tool. Cutoff of 8+ suggests hazardous drinking. Three domains: consumption, dependence, consequences. AUDIT-C is the 3-item brief version.</li>
+          <li><strong>C-SSRS:</strong> Columbia Suicide Severity Rating Scale. Structured interview distinguishing passive ideation, active ideation (with/without plan/intent), and suicidal behavior. FDA-endorsed standard for suicide risk assessment.</li>
+          <li><strong>Clinically significant change (Jacobson & Truax):</strong> Requires BOTH crossing from clinical to non-clinical distribution AND exceeding the Reliable Change Index (RCI). RCI ensures change is not due to measurement error alone.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Overview</div>
+          </div>
+        </a>
+        <a href="ch2-personality-assessment.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Personality Assessment</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

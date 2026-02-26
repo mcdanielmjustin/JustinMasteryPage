@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How We're Moved | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>How We're Moved</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 5</div>
+        <div class="domain-title">Social &amp; Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cultural-roots.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From</a></li>
+        <li class="chapter-item"><a href="shortcuts.html" class="chapter-link"><span class="chapter-number">2</span>The Shortcuts We Take</a></li>
+        <li class="chapter-item"><a href="beliefs.html" class="chapter-link"><span class="chapter-number">3</span>What We Believe</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link active"><span class="chapter-number">4</span>How We're Moved</a></li>
+        <li class="chapter-item"><a href="connection.html" class="chapter-link"><span class="chapter-number">5</span>Why We Connect</a></li>
+        <li class="chapter-item"><a href="prejudice.html" class="chapter-link"><span class="chapter-number">6</span>Where We Break</a></li>
+        <li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">7</span>When We're Together</a></li>
+        <li class="chapter-item"><a href="multicultural-practice.html" class="chapter-link"><span class="chapter-number">8</span>Across the Divide</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 8</div>
+        <h1>How We're Moved &mdash; Persuasion, Conformity &amp; Resistance</h1>
+        <div class="chapter-meta">
+          <span>ELM, Cialdini's principles, Asch, Milgram, compliance techniques</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction: Social Influence</h2>
+        <p>Social influence &mdash; the myriad ways in which people change each other's attitudes, beliefs, and behaviors &mdash; lies at the heart of social psychology. This chapter covers three major categories: persuasion (deliberate attitude change), conformity (adjusting to group norms), and obedience (complying with authority). These are among the most heavily tested topics on the EPPP.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>The Elaboration Likelihood Model (ELM)</h2>
+        <div class="definition-box">
+          <strong>Elaboration Likelihood Model (Petty &amp; Cacioppo, 1986)</strong>
+          <p>The ELM proposes two distinct routes to persuasion:<br>
+          <strong>Central route:</strong> The audience carefully evaluates the quality and logic of the arguments. Requires high motivation and ability to process the message. Produces durable, resistant attitude change.<br>
+          <strong>Peripheral route:</strong> The audience relies on superficial cues (source attractiveness, number of arguments, emotional appeals) rather than argument quality. Used when motivation or ability to process is low. Produces temporary, less resistant attitude change.</p>
+        </div>
+
+        <table>
+          <tr><th>Feature</th><th>Central Route</th><th>Peripheral Route</th></tr>
+          <tr><td>Processing depth</td><td>Deep, systematic</td><td>Shallow, heuristic</td></tr>
+          <tr><td>What matters</td><td>Argument quality</td><td>Source cues (expertise, attractiveness)</td></tr>
+          <tr><td>Audience state</td><td>High motivation, high ability</td><td>Low motivation or low ability</td></tr>
+          <tr><td>Attitude change</td><td>Durable, resistant to counter-persuasion</td><td>Temporary, easily reversed</td></tr>
+          <tr><td>Behavioral impact</td><td>Strong</td><td>Weak</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A consumer deeply researches car safety ratings, fuel efficiency data, and engineering reviews before purchasing (central route). Another consumer buys the same car because a celebrity endorses it in a commercial (peripheral route). The first consumer's attitude toward the car will be more persistent and predictive of future behavior.</p>
+        </div>
+        <p class="citation">Petty, R. E., &amp; Cacioppo, J. T. (1986). The elaboration likelihood model of persuasion. Advances in Experimental Social Psychology, 19, 123&ndash;205.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Hovland's Communication Model</h2>
+        <p>Carl Hovland and the Yale Communication Research Program (1950s) identified four key variables that affect persuasion effectiveness:</p>
+
+        <h3>Source Variables</h3>
+        <ul>
+          <li><strong>Credibility:</strong> Expert, trustworthy sources are more persuasive</li>
+          <li><strong>Attractiveness:</strong> Physically attractive and likable sources are more persuasive (especially via the peripheral route)</li>
+          <li><strong>Sleeper effect:</strong> Over time, the persuasive impact of a low-credibility source may increase as the message is dissociated from its source</li>
+        </ul>
+
+        <h3>Message Variables</h3>
+        <ul>
+          <li><strong>Fear appeals:</strong> Moderate fear is most effective; too little does not motivate, too much causes defensive avoidance. Most effective when paired with clear, actionable recommendations</li>
+          <li><strong>One-sided vs. two-sided arguments:</strong> Two-sided messages (acknowledging opposing views) are more effective with educated or initially skeptical audiences</li>
+          <li><strong>Primacy vs. recency:</strong> When two opposing messages are presented back-to-back, the first message has more impact (primacy). When there is a delay between messages, the second has more impact (recency)</li>
+        </ul>
+
+        <h3>Audience Variables</h3>
+        <ul>
+          <li><strong>Need for cognition:</strong> People high in need for cognition are more persuaded by strong arguments (central route)</li>
+          <li><strong>Self-monitoring:</strong> High self-monitors are more responsive to image-based appeals; low self-monitors to quality-based appeals</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Sleeper Effect</strong>
+          <p>A delayed increase in the persuasive impact of a message from a non-credible source. Initially, the message is discounted because of its source. Over time, the message content is remembered but the source is forgotten, allowing the message to exert delayed influence.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cialdini's Six Principles of Influence</h2>
+        <p>Robert Cialdini (1984) identified six principles that underlie most influence and compliance strategies. These are essential EPPP material:</p>
+
+        <ol>
+          <li><strong>Reciprocity:</strong> People feel obligated to return favors. "I did something for you, now you owe me."</li>
+          <li><strong>Commitment and Consistency:</strong> Once people commit to a position, they feel pressure to behave consistently with it. This underlies the foot-in-the-door technique.</li>
+          <li><strong>Social Proof:</strong> People look to others to determine correct behavior, especially in ambiguous situations. "Everyone else is doing it."</li>
+          <li><strong>Authority:</strong> People tend to obey legitimate authority figures. This relates directly to Milgram's research.</li>
+          <li><strong>Liking:</strong> We are more easily persuaded by people we like. Factors: physical attractiveness, similarity, compliments, familiarity, association.</li>
+          <li><strong>Scarcity:</strong> People value things more when they are rare or dwindling. "Limited time offer" and "Only 3 left!" exploit this principle.</li>
+        </ol>
+        <p class="citation">Cialdini, R. B. (2001). Influence: Science and practice (4th ed.). Allyn &amp; Bacon.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Conformity</h2>
+
+        <h3>Asch's Line Studies (1951)</h3>
+        <p>Solomon Asch demonstrated that people will conform to a clearly incorrect majority. Participants judged which comparison line matched a standard line &mdash; an objectively easy task. When confederates unanimously gave the wrong answer, approximately <strong>75% of participants conformed at least once</strong>, and the overall conformity rate across trials was about <strong>37%</strong>.</p>
+
+        <div class="definition-box">
+          <strong>Two Types of Social Influence</strong>
+          <p><strong>Normative influence:</strong> Conforming to be liked and accepted by the group (going along to get along). Driven by the desire for social approval. Produces public compliance without private acceptance.<br>
+          <strong>Informational influence:</strong> Conforming because we believe the group has better information than we do. Driven by the desire to be correct. Produces private acceptance (true attitude change).</p>
+        </div>
+
+        <p>Key findings from Asch's research on factors that affect conformity:</p>
+        <ul>
+          <li>Conformity increases with group size &mdash; but only up to about 3&ndash;4 members; beyond that, additional members add little</li>
+          <li>Conformity <strong>drops sharply</strong> when there is even one dissenter (ally), even if the dissenter gives a different wrong answer</li>
+          <li>Conformity increases when the task is more difficult or ambiguous</li>
+          <li>Conformity increases when responses are public (vs. private)</li>
+          <li>Conformity varies by culture &mdash; higher in collectivist cultures</li>
+        </ul>
+
+        <h3>Obedience: Milgram's Studies (1963)</h3>
+        <div class="definition-box">
+          <strong>Milgram's Obedience Paradigm</strong>
+          <p>Stanley Milgram studied obedience to authority by instructing participants ("teachers") to administer increasingly severe electric shocks to a confederate ("learner") for wrong answers. In the baseline condition, <strong>65% of participants administered the maximum 450-volt shock</strong>, despite hearing screams and pleas to stop. The shocks were not real, but participants believed they were.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Factors That Reduced Obedience in Milgram's Variations</strong>
+          <p>Obedience decreased when: the learner was in the same room (proximity), another "teacher" refused to continue (social support for defiance), the experimenter gave orders by telephone (reduced authority presence), or the study was conducted in a less prestigious setting. Obedience increased when the participant only had an indirect role (e.g., reading the word pairs while another person delivered the shock).</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical &amp; Ethical Note</strong>
+          <p>Milgram's study is a landmark in both social psychology and research ethics. Participants experienced significant distress, which contributed to the development of stronger ethical guidelines, including the requirement for informed consent and debriefing. The APA's current Ethics Code (Standard 8.07) requires that deception be justified and that participants be debriefed as early as feasible.</p>
+        </div>
+        <p class="citation">Milgram, S. (1963). Behavioral study of obedience. Journal of Abnormal and Social Psychology, 67(4), 371&ndash;378.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Compliance Techniques</h2>
+        <table>
+          <tr><th>Technique</th><th>Strategy</th><th>Principle</th></tr>
+          <tr><td><strong>Foot-in-the-door</strong></td><td>Start with a small request, then escalate to the larger target request</td><td>Commitment &amp; consistency</td></tr>
+          <tr><td><strong>Door-in-the-face</strong></td><td>Start with an unreasonably large request (that will be refused), then retreat to the target request</td><td>Reciprocity (reciprocal concessions)</td></tr>
+          <tr><td><strong>Lowball</strong></td><td>Get agreement to an attractive deal, then reveal hidden costs or change the terms</td><td>Commitment &amp; consistency</td></tr>
+          <tr><td><strong>That's-not-all</strong></td><td>Before the person decides, sweeten the deal by adding bonuses or reducing the price</td><td>Reciprocity</td></tr>
+        </table>
+
+        <h3>Reactance Theory</h3>
+        <div class="definition-box">
+          <strong>Psychological Reactance (Brehm, 1966)</strong>
+          <p>When people perceive that their freedom to choose is being threatened or eliminated, they experience <span class="key-term">reactance</span> &mdash; a motivational state directed toward restoring the threatened freedom. This often results in doing the opposite of what is demanded. The "forbidden fruit" effect and the "Romeo and Juliet effect" (parental opposition intensifying romantic attraction) are examples of reactance.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Application</strong>
+          <p>Reactance is clinically relevant in working with resistant clients. Paradoxical interventions (prescribing the symptom) and motivational interviewing (rolling with resistance) are both strategies that leverage or reduce reactance. When a therapist says "You probably aren't ready to change yet," the client's reactance may motivate them to prove the therapist wrong.</p>
+        </div>
+
+        <h3>Minority Influence</h3>
+        <p>Serge Moscovici demonstrated that consistent minorities can influence the majority, particularly through <span class="key-term">informational influence</span>. A minority position that is maintained consistently over time leads the majority to re-examine the issue more deeply (central processing), which can produce genuine private attitude change &mdash; even when the majority does not publicly agree.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>ELM</strong>: Central route = deep processing, durable change; Peripheral route = superficial cues, temporary change. Know what determines which route is used (motivation and ability).</li>
+          <li><strong>Sleeper effect:</strong> Low-credibility source gains persuasive power over time as source is forgotten.</li>
+          <li><strong>Cialdini's 6 principles:</strong> Reciprocity, commitment/consistency, social proof, authority, liking, scarcity. Be able to match techniques to principles.</li>
+          <li><strong>Asch conformity:</strong> ~75% conformed at least once; one dissenter dramatically reduces conformity.</li>
+          <li><strong>Normative vs. informational influence:</strong> Normative = acceptance by group; informational = accuracy.</li>
+          <li><strong>Milgram obedience:</strong> 65% obeyed to maximum shock. Know factors that increase and decrease obedience.</li>
+          <li><strong>Compliance techniques:</strong> Know foot-in-the-door (small then large), door-in-the-face (large then small), and lowball.</li>
+          <li><strong>Reactance theory:</strong> Threatened freedom motivates opposing behavior. Relevant to paradoxical interventions in therapy.</li>
+          <li><strong>Minority influence:</strong> Consistency is the key to a minority changing the majority's views.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="beliefs.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">What We Believe</div>
+          </div>
+        </a>
+        <a href="connection.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Why We Connect</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

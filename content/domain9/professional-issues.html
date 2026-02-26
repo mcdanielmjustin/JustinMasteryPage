@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Practice Issues | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Professional Issues</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology &amp; Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="sidebar-section-label">Part A: APA Ethics Code</li>
+        <li class="chapter-item"><a href="ethics-overview.html" class="chapter-link"><span class="chapter-number">A0</span>Overview & Principles</a></li>
+        <li class="chapter-item"><a href="resolving-ethical-issues.html" class="chapter-link"><span class="chapter-number">A1</span>Resolving Ethical Issues</a></li>
+        <li class="chapter-item"><a href="competence.html" class="chapter-link"><span class="chapter-number">A2</span>Competence</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link"><span class="chapter-number">A3</span>Human Relations</a></li>
+        <li class="chapter-item"><a href="privacy-confidentiality.html" class="chapter-link"><span class="chapter-number">A4</span>Privacy & Confidentiality</a></li>
+        <li class="chapter-item"><a href="advertising.html" class="chapter-link"><span class="chapter-number">A5</span>Advertising</a></li>
+        <li class="chapter-item"><a href="record-keeping-fees.html" class="chapter-link"><span class="chapter-number">A6</span>Record Keeping & Fees</a></li>
+        <li class="chapter-item"><a href="education-training.html" class="chapter-link"><span class="chapter-number">A7</span>Education & Training</a></li>
+        <li class="chapter-item"><a href="research-publication.html" class="chapter-link"><span class="chapter-number">A8</span>Research & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">A9</span>Assessment</a></li>
+        <li class="chapter-item"><a href="therapy-ethics.html" class="chapter-link"><span class="chapter-number">A10</span>Therapy</a></li>
+        <li class="sidebar-section-label">Part B: Psychopharmacology</li>
+        <li class="chapter-item"><a href="pharma-foundations.html" class="chapter-link"><span class="chapter-number">B0</span>Pharmacological Foundations</a></li>
+        <li class="chapter-item"><a href="antidepressants.html" class="chapter-link"><span class="chapter-number">B1</span>Antidepressants</a></li>
+        <li class="chapter-item"><a href="antipsychotics.html" class="chapter-link"><span class="chapter-number">B2</span>Antipsychotics</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">B3</span>Anxiolytics & Sedatives</a></li>
+        <li class="chapter-item"><a href="mood-stabilizers.html" class="chapter-link"><span class="chapter-number">B4</span>Mood Stabilizers</a></li>
+        <li class="chapter-item"><a href="stimulants-adhd.html" class="chapter-link"><span class="chapter-number">B5</span>Stimulants & ADHD Meds</a></li>
+        <li class="sidebar-section-label">Appendix</li>
+        <li class="chapter-item"><a href="professional-issues.html" class="chapter-link active"><span class="chapter-number">+</span>Professional Issues</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Appendix</div>
+        <h1>Professional Practice Issues</h1>
+        <div class="chapter-meta">
+          <span>Malpractice, supervision, licensure, scope</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+<section class="content-section">
+        <h2>Overview of Professional Issues</h2>
+        <p>This chapter covers the legal, regulatory, and professional practice issues that define the practice of psychology. Topics include <span class="key-term">malpractice liability</span>, supervision models, licensure and credentialing, prescriptive authority, telepsychology, and forensic psychology. These areas are tested on the EPPP because they define the boundaries and responsibilities of professional practice.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Malpractice and Professional Liability</h2>
+        <p><span class="key-term">Malpractice</span> is a form of professional negligence in which a practitioner's conduct falls below the accepted standard of care, resulting in harm to the client. Malpractice claims against psychologists are civil (not criminal) actions.</p>
+
+        <h3>The Four D's of Malpractice</h3>
+        <p>To prevail in a malpractice lawsuit, the plaintiff must prove all four elements (the "Four D's"):</p>
+        <div class="definition-box">
+          <strong>The Four D's</strong>
+          <p><strong>1. Duty:</strong> A professional relationship existed, creating a duty of care. <strong>2. Dereliction:</strong> The psychologist breached (deviated from) the standard of care. <strong>3. Damage:</strong> The client suffered actual harm or injury. <strong>4. Direct causation:</strong> The breach of duty directly caused the damage.</p>
+        </div>
+        <p>All four elements must be established. If any one is missing, the malpractice claim fails.</p>
+
+        <h3>Common Grounds for Malpractice Claims</h3>
+        <table>
+          <tr><th>Claim Type</th><th>Description</th></tr>
+          <tr><td>Sexual misconduct</td><td>Sexual relationships with clients; most common basis for ethics complaints and malpractice suits against psychologists</td></tr>
+          <tr><td>Breach of confidentiality</td><td>Unauthorized disclosure of client information</td></tr>
+          <tr><td>Failure to warn/protect</td><td>Failure to take reasonable steps when a client poses a danger to an identifiable third party (Tarasoff duty)</td></tr>
+          <tr><td>Abandonment</td><td>Improper termination of the therapeutic relationship without adequate notice or referral</td></tr>
+          <tr><td>Negligent diagnosis or treatment</td><td>Failure to properly assess, diagnose, or treat; use of inappropriate treatment methods</td></tr>
+          <tr><td>Failure to obtain informed consent</td><td>Treating without adequate disclosure of risks, benefits, and alternatives</td></tr>
+          <tr><td>Negligent supervision</td><td>Supervisor liability for acts of supervisees (vicarious liability/respondeat superior)</td></tr>
+          <tr><td>Defamation</td><td>False statements in reports or testimony that harm the client's reputation</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The most common reason for ethics complaints against psychologists is <strong>sexual dual relationships</strong>. The most common reason for malpractice payouts varies by source but includes sexual misconduct, failure to warn/protect, and incorrect treatment. Know the Four D's cold -- they appear frequently on the EPPP.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Supervision Models and Responsibilities</h2>
+        <p>Clinical supervision is a core competency in professional psychology and carries significant ethical and legal responsibilities.</p>
+
+        <h3>Models of Supervision</h3>
+        <table>
+          <tr><th>Model</th><th>Key Features</th></tr>
+          <tr><td><strong>Psychotherapy-based models</strong></td><td>Apply a specific therapeutic orientation to supervision (e.g., psychodynamic supervision focuses on transference/countertransference in the supervisory relationship; CBT supervision uses skill-building and behavioral rehearsal)</td></tr>
+          <tr><td><strong>Developmental models</strong> (e.g., Stoltenberg & Delworth's IDM)</td><td>Supervisees progress through stages of increasing competence; supervisors adapt their style (from more directive to more consultative) as the supervisee develops. Three levels: beginner (high motivation, limited skills), intermediate (fluctuating motivation, growing awareness), advanced (stable motivation, strong skills)</td></tr>
+          <tr><td><strong>Social role models</strong> (e.g., Bernard's Discrimination Model)</td><td>Supervisor flexibly adopts different roles (teacher, counselor, consultant) across different focus areas (intervention, conceptualization, personalization) depending on the supervisee's needs</td></tr>
+          <tr><td><strong>Competency-based supervision</strong></td><td>Focuses on developing specific, measurable competencies; aligned with the competence constellation model</td></tr>
+        </table>
+
+        <h3>Legal and Ethical Responsibilities of Supervisors</h3>
+        <ul>
+          <li><strong>Vicarious liability (respondeat superior):</strong> Supervisors may be held legally responsible for the negligent acts of their supervisees. The supervisor has a duty to properly oversee the supervisee's work.</li>
+          <li><strong>Direct liability:</strong> Supervisors can be held directly liable for their own negligent supervision (e.g., failing to review cases, providing inadequate guidance, failing to identify supervisee impairment).</li>
+          <li>Supervisors must establish clear expectations, provide regular feedback, document supervision sessions, and ensure supervisees practice within their competence.</li>
+          <li>Supervisors must not engage in sexual relationships with supervisees (Standard 7.07).</li>
+          <li>The <strong>informed consent</strong> process in therapy should include disclosure that the therapist is being supervised and the supervisor's name and role.</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A pre-doctoral intern provides therapy to a suicidal client but does not conduct a formal risk assessment or develop a safety plan. The supervisor does not review the case or ask about high-risk clients. If the client attempts suicide, the supervisor could be held liable under both vicarious liability (for the intern's negligence) and direct liability (for inadequate supervision).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Licensure and Certification</h2>
+        <p>Understanding the distinction between licensure, certification, and credentialing is important for both professional practice and the EPPP.</p>
+
+        <h3>Key Definitions</h3>
+        <table>
+          <tr><th>Term</th><th>Definition</th></tr>
+          <tr><td><strong>Licensure</strong></td><td>A <span class="key-term">state-granted legal authorization</span> to practice psychology. Licensure is mandatory for independent practice and is governed by each state's psychology licensing board. It is a form of <strong>statutory law</strong>.</td></tr>
+          <tr><td><strong>Certification</strong></td><td>A <span class="key-term">voluntary credential</span> awarded by a professional organization (not the state) indicating that a psychologist has met specific standards of training and competence in a specialty area. Example: Board certification by ABPP.</td></tr>
+          <tr><td><strong>Credentialing</strong></td><td>A general term encompassing both licensure and certification, as well as institutional privileges (e.g., hospital credentialing).</td></tr>
+          <tr><td><strong>ABPP</strong></td><td>The <span class="key-term">American Board of Professional Psychology</span> offers board certification in specialty areas (clinical, counseling, neuropsychology, forensic, etc.). ABPP certification is voluntary and indicates advanced competence.</td></tr>
+        </table>
+
+        <h3>Typical Licensure Requirements</h3>
+        <ul>
+          <li>Doctoral degree in psychology from an accredited program (APA or CPA accredited, or equivalent)</li>
+          <li>Supervised professional experience (typically 1-2 years postdoctoral)</li>
+          <li>Passing score on the <strong>EPPP</strong> (Examination for Professional Practice in Psychology)</li>
+          <li>Additional state-specific requirements (e.g., jurisprudence exam, oral examination, state-specific written exam)</li>
+          <li>Continuing education for license renewal</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>Licensure is <strong>mandatory and state-regulated</strong>; certification (e.g., ABPP) is <strong>voluntary and organization-based</strong>. Licensure laws define the scope of practice; certification indicates specialty competence within that scope. State licensing boards have the authority to discipline licensees, including suspending or revoking licenses.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Scope of Practice</h2>
+        <p><span class="key-term">Scope of practice</span> is defined by state statute and describes the range of professional activities a licensed psychologist is legally permitted to perform. Key issues include:</p>
+        <ul>
+          <li>Scope varies significantly across states (e.g., some states permit psychologists to prescribe medications, most do not)</li>
+          <li>Practice acts may define psychology broadly (e.g., "the assessment and treatment of mental and emotional disorders") or narrowly</li>
+          <li>Practicing outside one's legally defined scope of practice can result in charges of practicing without a license</li>
+          <li>Scope of practice laws serve a <strong>consumer protection</strong> function by ensuring only qualified individuals provide psychological services</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Prescriptive Authority</h2>
+        <p>The question of whether psychologists should have the legal authority to prescribe psychotropic medications has been a major professional issue.</p>
+        <ul>
+          <li>Currently, psychologists in a small number of jurisdictions have obtained <span class="key-term">prescriptive authority</span> (e.g., New Mexico, Louisiana, Illinois, Iowa, Idaho, Colorado, and the U.S. military and Indian Health Service)</li>
+          <li>Prescriptive authority typically requires additional postdoctoral training in psychopharmacology (a master's-level program in clinical psychopharmacology)</li>
+          <li>The APA has adopted a policy supporting the pursuit of prescriptive authority for appropriately trained psychologists</li>
+          <li>Opposition comes primarily from organized medicine (AMA) and some within psychology who argue it changes the profession's identity</li>
+          <li>The Department of Defense's Psychopharmacology Demonstration Project (PDP) demonstrated that appropriately trained psychologists could safely and effectively prescribe medications</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Telepsychology</h2>
+        <p><span class="key-term">Telepsychology</span> refers to the provision of psychological services using telecommunication technologies (videoconferencing, telephone, online platforms, mobile apps). Key considerations include:</p>
+        <ul>
+          <li><strong>Competence:</strong> Psychologists must be competent in the use of the technology and understand its limitations</li>
+          <li><strong>Informed consent:</strong> Must address the unique risks of telehealth (privacy, technology failures, emergency protocols)</li>
+          <li><strong>Confidentiality:</strong> Use of encrypted, HIPAA-compliant platforms; awareness of risks to privacy in the client's environment</li>
+          <li><strong>Interjurisdictional practice:</strong> Psychologists must be licensed in the state where the client is located (this is the most common regulatory challenge); PSYPACT (Psychology Interjurisdictional Compact) allows telepsychology across participating states</li>
+          <li><strong>Emergency management:</strong> Providers must have a plan for managing crises when the client is at a remote location (e.g., knowing local emergency resources)</li>
+          <li><strong>APA Guidelines:</strong> The APA published Guidelines for the Practice of Telepsychology (2013) addressing these issues</li>
+        </ul>
+        <div class="definition-box">
+          <strong>PSYPACT</strong>
+          <p>The <span class="key-term">Psychology Interjurisdictional Compact (PSYPACT)</span> is an interstate agreement that allows licensed psychologists in participating states to practice telepsychology and conduct temporary in-person practice across state lines without requiring additional licensure in each state.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Forensic Psychology Issues</h2>
+        <p><span class="key-term">Forensic psychology</span> involves the application of psychological knowledge to legal questions. Forensic psychologists must navigate the tension between the therapeutic role (serving the client's interests) and the forensic role (serving the legal system's interests).</p>
+
+        <h3>Key Forensic Concepts</h3>
+        <ul>
+          <li><strong>Dual-role conflicts:</strong> Psychologists should generally avoid serving as both therapist and forensic evaluator for the same client (different obligations, potential for conflicting interests)</li>
+          <li><strong>Competence to stand trial:</strong> The legal standard (from Dusky v. United States, 1960) requires that the defendant has a rational and factual understanding of the proceedings and can consult with their attorney</li>
+          <li><strong>Insanity defense:</strong> Various legal standards exist (M'Naghten, ALI/Model Penal Code, irresistible impulse); most require showing the defendant did not know the nature/quality of the act or that it was wrong</li>
+          <li><strong>Custody evaluations:</strong> The standard is the "best interests of the child"; evaluators must be impartial and evaluate all parties involved</li>
+          <li><strong>Risk assessment:</strong> Predicting future violence (actuarial tools vs. clinical judgment vs. structured professional judgment)</li>
+        </ul>
+
+        <h3>Specialty Guidelines for Forensic Psychology</h3>
+        <p>The APA published the <em>Specialty Guidelines for Forensic Psychology</em> (2013), which address:</p>
+        <ul>
+          <li>The importance of impartiality and objectivity in forensic work</li>
+          <li>Clarification of the psychologist's role (who is the client -- the retaining party, the examinee, or the court?)</li>
+          <li>Appropriate methods for conducting forensic assessments</li>
+          <li>Limits on providing opinions beyond the scope of the data</li>
+          <li>The distinction between therapeutic and forensic roles</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist is asked by an attorney to evaluate a client for competency to stand trial. The psychologist has been providing therapy to this individual for two years. The psychologist should decline the forensic evaluation because serving as both therapist and forensic evaluator creates a dual-role conflict. The psychologist should recommend that an independent forensic evaluator conduct the competency assessment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Other Professional Issues</h2>
+
+        <h3>Duty to Report Colleague Impairment</h3>
+        <p>When a psychologist becomes aware that a colleague may be impaired (due to substance abuse, mental illness, or personal problems), the first step is typically informal resolution (Standard 1.04) -- speaking directly with the colleague. If the impairment poses a risk of harm to clients and informal resolution is ineffective, reporting to the licensing board or ethics committee may be necessary (Standard 1.05).</p>
+
+        <h3>Record Keeping and Retention</h3>
+        <ul>
+          <li>APA guidelines recommend retaining records for a minimum of <strong>7 years</strong> after the last date of service for adults, and <strong>3 years after a minor reaches age of majority</strong></li>
+          <li>State laws may impose different (often longer) retention requirements</li>
+          <li>Records must be maintained securely and disposed of in a manner that protects confidentiality (e.g., shredding, secure electronic deletion)</li>
+          <li>Psychologists should plan for record transfer in the event of incapacity, retirement, or death</li>
+        </ul>
+
+        <h3>Termination and Abandonment</h3>
+        <p>Psychologists terminate therapy when it becomes reasonably clear that the client no longer needs the service, is not likely to benefit, or is being harmed. Except where precluded by the actions of the client, the psychologist provides pretermination counseling and suggests alternative service providers as appropriate. Abrupt termination without reasonable notice and referral options may constitute <span class="key-term">abandonment</span>.</p>
+
+        <h3>Managed Care Issues</h3>
+        <ul>
+          <li>Psychologists must balance the financial constraints of managed care with their ethical obligations to clients</li>
+          <li>If a managed care organization limits sessions, the psychologist must inform the client and advocate for continued treatment if clinically needed</li>
+          <li>Psychologists should not provide inaccurate diagnoses solely to obtain insurance reimbursement</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Social Media and Electronic Communications Ethics</h2>
+        <p>The rapid expansion of digital technology has introduced new ethical challenges for psychologists. <span class="key-term">Social media</span>, email, text messaging, online therapy platforms, and other electronic communications create novel boundary, confidentiality, and competence issues that psychologists must navigate carefully.</p>
+
+        <h3>APA Telepsychology Guidelines (2013)</h3>
+        <p>The APA published the <em>Guidelines for the Practice of Telepsychology</em> in 2013, providing a framework for the ethical delivery of psychological services via telecommunication technologies. Key principles include:</p>
+        <ul>
+          <li><strong>Informed consent for telehealth:</strong> Psychologists must obtain informed consent that specifically addresses the unique risks of technology-mediated services, including potential breaches of confidentiality, technology failures, procedures for emergencies, and the limitations of the medium (e.g., inability to read nonverbal cues fully via telephone).</li>
+          <li><strong>Competence in technology:</strong> Psychologists must ensure they are competent not only in the clinical services they provide but also in the <span class="key-term">technology used to deliver them</span>. This includes understanding encryption, platform security, data storage, and how to troubleshoot common technical issues.</li>
+          <li><strong>Confidentiality risks:</strong> Telehealth introduces risks that do not exist in traditional face-to-face practice -- data breaches, unsecured Wi-Fi networks, screen visibility in the client's environment, and the possibility that others may overhear or observe sessions on the client's end.</li>
+          <li><strong>Interjurisdictional practice:</strong> Psychologists must be aware of and comply with laws governing the practice of psychology in the jurisdiction where the <em>client</em> is located, not just where the psychologist is located.</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Informed Consent for Telehealth</strong>
+          <p>Informed consent for telepsychology must address, at minimum: the nature of the service, the technology being used, potential risks to confidentiality (e.g., data breaches, recording), procedures for technology failure, emergency protocols including local resources near the client, whether sessions may be recorded, and the limitations of the technology for the specific type of service being provided.</p>
+        </div>
+
+        <h3>Social Media Boundary Issues</h3>
+        <p>Social media has blurred the boundaries between the personal and professional lives of psychologists. Key ethical considerations include:</p>
+        <ul>
+          <li><strong>Googling clients:</strong> Searching for client information online without their knowledge or consent raises ethical concerns regarding privacy and the therapeutic relationship. Some argue it can compromise clinical objectivity by introducing extraclinical information. The APA has not issued a blanket prohibition, but psychologists should carefully consider whether the information is clinically necessary, document the rationale, and consider discussing the search with the client.</li>
+          <li><strong>Accepting friend/follow requests:</strong> Psychologists should generally <span class="key-term">not accept friend or follow requests</span> from current clients on personal social media accounts, as this constitutes a boundary crossing (or boundary violation) that compromises professional objectivity and confidentiality. Even acknowledging a therapeutic relationship online could breach confidentiality.</li>
+          <li><strong>Social media discovery:</strong> Clients may search for information about their psychologist online. Psychologists should proactively manage their digital footprint and consider discussing social media boundaries during the informed consent process.</li>
+          <li><strong>Testimonials and endorsements:</strong> The APA Ethics Code (Standard 5.05) prohibits psychologists from soliciting testimonials from current clients or others who, because of their circumstances, are vulnerable to undue influence. Online reviews and social media endorsements present modern challenges to this standard.</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist receives a Facebook friend request from a current therapy client. Accepting the request would create a dual relationship (personal and professional), expose the psychologist's personal life to the client and the client's personal posts to the psychologist, and could inadvertently reveal the therapeutic relationship to mutual connections. The appropriate response is to decline the request and address the issue therapeutically in the next session, discussing boundaries and the rationale for maintaining them.</p>
+        </div>
+
+        <h3>Email and Text Communication with Clients</h3>
+        <ul>
+          <li>Email and text messages sent between psychologists and clients become part of the <span class="key-term">clinical record</span> and are potentially discoverable in legal proceedings.</li>
+          <li>Standard email and SMS are <strong>not encrypted</strong> and do not meet HIPAA security requirements. Psychologists should use encrypted email platforms or secure patient portals when communicating clinical information electronically.</li>
+          <li>Informed consent should specify the acceptable methods and scope of electronic communication (e.g., email for scheduling only, not clinical content).</li>
+          <li>Response time expectations should be established clearly -- clients should be informed that email and text are not appropriate for emergencies.</li>
+        </ul>
+
+        <h3>Online Therapy Platforms and HIPAA Compliance</h3>
+        <p>The proliferation of online therapy platforms (e.g., video-based telehealth services) has increased access to mental health care but also introduces compliance requirements:</p>
+        <ul>
+          <li>All platforms used for telehealth must be <span class="key-term">HIPAA-compliant</span>, meaning they employ end-to-end encryption, have signed Business Associate Agreements (BAAs) with the provider, and maintain appropriate data storage and access controls.</li>
+          <li>Consumer-grade platforms (e.g., standard Zoom, FaceTime, Skype) were temporarily permitted during the COVID-19 public health emergency, but standard practice requires HIPAA-compliant platforms.</li>
+          <li>Psychologists are responsible for verifying platform compliance regardless of what the platform company claims.</li>
+        </ul>
+
+        <h3>Digital Native vs. Digital Immigrant Considerations</h3>
+        <p>The distinction between <span class="key-term">digital natives</span> (individuals who grew up with digital technology) and <span class="key-term">digital immigrants</span> (individuals who adopted technology later in life) is relevant to both service delivery and competence:</p>
+        <ul>
+          <li>Younger clients may prefer text-based communication and may have different expectations about response times and platform accessibility.</li>
+          <li>Older clients may be less comfortable with technology and may require additional support in using telehealth platforms.</li>
+          <li>Psychologists must assess each client's <strong>technological competence</strong> and comfort level as part of the informed consent process for telepsychology.</li>
+          <li>Training programs are increasingly recognizing the need to prepare psychologists for technology-mediated practice, but a significant generational competence gap may exist among practitioners.</li>
+        </ul>
+
+        <h3>Social Media Posts by Psychologists</h3>
+        <p>Psychologists who maintain a social media presence must be mindful of maintaining <span class="key-term">professional boundaries publicly</span>:</p>
+        <ul>
+          <li>Public posts expressing strong political, religious, or social opinions may affect the therapeutic relationship with clients who hold different views and may encounter those posts.</li>
+          <li>Sharing clinical vignettes on social media -- even when de-identified -- risks breaching confidentiality if clients recognize themselves or if the details are insufficient to fully obscure identity.</li>
+          <li>Psychologists should consider maintaining separate personal and professional social media accounts.</li>
+          <li>Self-disclosure through social media is involuntary and ongoing, unlike controlled self-disclosure in therapy, and its effects on the therapeutic relationship may be unpredictable.</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The EPPP tests whether you understand that <strong>existing ethical principles</strong> (confidentiality, boundaries, competence, informed consent) <strong>apply to new technologies</strong>. No fundamentally new ethical principles are created by social media or telehealth -- rather, familiar principles must be <em>applied</em> to novel contexts. When in doubt on an EPPP question about technology ethics, apply the foundational standards (informed consent, confidentiality, competence, multiple relationships) to the technological scenario.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Novel and Emerging Treatments</h2>
+        <p>Several non-traditional biological treatments have become increasingly important in the treatment of psychiatric disorders. Psychologists -- even those who do not prescribe -- are expected to understand these treatments because they assess patient response, collaborate with prescribers, and may be asked about them by clients. These topics are appearing with increasing frequency on the EPPP.</p>
+
+        <h3>Electroconvulsive Therapy (ECT)</h3>
+        <div class="definition-box">
+          <strong>Electroconvulsive Therapy (ECT)</strong>
+          <p><span class="key-term">ECT</span> involves the administration of a brief, controlled electrical current to the brain under general anesthesia and muscle relaxation, inducing a generalized seizure. Despite its controversial history, ECT remains one of the most effective treatments available for certain severe psychiatric conditions.</p>
+        </div>
+        <ul>
+          <li><strong>Mechanism:</strong> The exact mechanism is unknown, but theories include enhanced GABAergic transmission, serotonin sensitization, increased BDNF (brain-derived neurotrophic factor), normalization of HPA axis function, and anticonvulsant effects from repeated seizure induction.</li>
+          <li><strong>Indications:</strong> Severe treatment-resistant depression, depression with psychotic features, <span class="key-term">acute suicidality</span> (ECT has the fastest onset of antidepressant effect of any treatment), catatonia, severe mania unresponsive to medications, and (rarely) treatment-resistant schizophrenia.</li>
+          <li><strong>Electrode placement:</strong> <span class="key-term">Bilateral</span> (bitemporal) placement is generally more effective but associated with greater cognitive side effects. <span class="key-term">Right unilateral</span> (non-dominant hemisphere) placement produces fewer cognitive side effects while maintaining efficacy when administered at adequate stimulus intensity (typically 6x seizure threshold).</li>
+          <li><strong>Side effects:</strong> The primary cognitive side effect is <span class="key-term">retrograde amnesia</span> (loss of memories formed before treatment), which is usually temporary but can be persistent for events close in time to the treatment. Anterograde amnesia (difficulty forming new memories) also occurs acutely but typically resolves within weeks. Headache and muscle soreness are common transient effects.</li>
+          <li><strong>Course:</strong> A typical acute course involves 6-12 sessions (usually 3 per week), with noticeable improvement often occurring after 2-4 treatments. Maintenance ECT (weekly to monthly sessions) may be used to prevent relapse.</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>ECT is the <strong>fastest-acting treatment for severe depression and acute suicidality</strong> -- faster than any medication. Right unilateral electrode placement with adequate stimulus intensity is the preferred approach when minimizing cognitive side effects is a priority. The most commonly tested ECT fact: <strong>retrograde amnesia</strong> is the primary cognitive side effect, and bilateral placement causes more memory impairment than right unilateral.</p>
+        </div>
+
+        <h3>Transcranial Magnetic Stimulation (TMS)</h3>
+        <div class="definition-box">
+          <strong>Transcranial Magnetic Stimulation (TMS)</strong>
+          <p><span class="key-term">TMS</span> is a non-invasive neuromodulation technique that uses focused magnetic pulses to stimulate or inhibit neural activity in specific brain regions. It does not require anesthesia or sedation, and the patient remains awake and alert throughout the procedure.</p>
+        </div>
+        <ul>
+          <li><strong>Mechanism:</strong> A magnetic coil placed against the scalp generates rapidly alternating magnetic fields that induce electrical currents in underlying cortical tissue. <span class="key-term">Repetitive TMS (rTMS)</span> -- the form used therapeutically -- applies repeated pulses to produce lasting changes in neural excitability.</li>
+          <li><strong>FDA-cleared indications:</strong> Treatment-resistant major depressive disorder (MDD) -- the primary indication -- and obsessive-compulsive disorder (OCD). The FDA clearance for depression targets the <span class="key-term">left dorsolateral prefrontal cortex (DLPFC)</span>, an area associated with reduced activity in depression.</li>
+          <li><strong>High-frequency vs. low-frequency:</strong> High-frequency stimulation (e.g., 10 Hz) of the left DLPFC is excitatory and is the standard depression protocol. Low-frequency stimulation (e.g., 1 Hz) is inhibitory and may be used on the right DLPFC or for other applications.</li>
+          <li><strong>Advantages over ECT:</strong> No anesthesia required, no seizure induced, no cognitive side effects (no memory impairment), outpatient procedure, can drive immediately after treatment.</li>
+          <li><strong>Limitations:</strong> Generally less effective than ECT for severe treatment-resistant depression; requires daily sessions over 4-6 weeks (typical course: 20-30 sessions); rare risk of seizure (~0.1%).</li>
+        </ul>
+
+        <h3>Ketamine and Esketamine</h3>
+        <div class="definition-box">
+          <strong>Ketamine / Esketamine</strong>
+          <p><span class="key-term">Ketamine</span> is an NMDA receptor antagonist that was originally developed as an anesthetic. It has been found to produce <strong>rapid antidepressant effects</strong> -- often within hours -- in contrast to traditional antidepressants, which typically require weeks. <span class="key-term">Esketamine (Spravato)</span> is the S-enantiomer of ketamine, delivered as a nasal spray and FDA-approved for treatment-resistant depression (2019).</p>
+        </div>
+        <ul>
+          <li><strong>Mechanism:</strong> Ketamine is an <span class="key-term">NMDA receptor antagonist</span> that triggers downstream effects including increased AMPA receptor signaling, enhanced BDNF release, and rapid synaptogenesis (formation of new synaptic connections). This represents a fundamentally different mechanism than traditional monoamine-based antidepressants.</li>
+          <li><strong>Onset of action:</strong> Antidepressant effects can occur within <strong>hours</strong> of a single infusion (compared to 4-8 weeks for SSRIs), making ketamine a potentially life-saving option for acutely suicidal patients.</li>
+          <li><strong>Administration:</strong> IV ketamine is administered off-label in clinical settings (infusion clinics). Esketamine (Spravato) nasal spray is FDA-approved and must be administered in a certified healthcare setting under direct observation due to dissociative effects and abuse potential (REMS program).</li>
+          <li><strong>Side effects:</strong> <span class="key-term">Dissociative symptoms</span> (feeling detached from reality), dizziness, nausea, increased blood pressure, sedation. Effects are typically transient (resolving within 2 hours).</li>
+          <li><strong>Abuse potential:</strong> Ketamine is a Schedule III controlled substance with known abuse and dependence potential. This is a significant concern for long-term use and requires careful patient selection and monitoring.</li>
+        </ul>
+
+        <h3>Psychedelic-Assisted Therapy</h3>
+        <p>Research on <span class="key-term">psychedelic-assisted therapy</span> has re-emerged as a significant area of psychiatric treatment research. Key developments include:</p>
+        <ul>
+          <li><strong>Psilocybin for depression:</strong> Psilocybin (the active compound in "magic mushrooms") has received <span class="key-term">FDA breakthrough therapy designation</span> for treatment-resistant depression and major depressive disorder. It acts primarily as a 5-HT2A receptor agonist, producing profound alterations in consciousness that, when combined with psychological support, may lead to lasting improvements in mood and outlook.</li>
+          <li><strong>MDMA for PTSD:</strong> MDMA (3,4-methylenedioxymethamphetamine) has been studied in <span class="key-term">Phase 3 clinical trials</span> for PTSD. MDMA-assisted therapy involves administering MDMA in conjunction with psychotherapy sessions; the MDMA is hypothesized to reduce fear responses and enhance therapeutic alliance, facilitating trauma processing. MDMA increases release of serotonin, dopamine, norepinephrine, and oxytocin.</li>
+          <li><strong>Therapeutic model:</strong> Unlike traditional pharmacotherapy (daily medication), psychedelic-assisted therapy typically involves only 1-3 dosing sessions, each accompanied by extensive preparatory and integration psychotherapy sessions. The psychotherapy component is considered integral to the treatment, not incidental.</li>
+          <li><strong>Regulatory status:</strong> As of the mid-2020s, these substances remain Schedule I controlled substances for general use. Clinical use requires specific regulatory authorization (FDA-approved clinical trials, or state-level exemptions where available).</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example: Comparing Novel Biological Treatments</strong>
+          <p>A patient with severe, treatment-resistant depression has failed multiple adequate trials of SSRIs, SNRIs, and augmentation strategies. The treatment team considers the following options: (1) ECT -- fastest onset, most effective for severe/treatment-resistant depression, but requires anesthesia and causes transient memory impairment. (2) TMS -- non-invasive, no cognitive side effects, but less effective than ECT for severe cases and requires daily sessions for weeks. (3) IV ketamine or esketamine -- rapid onset (hours), but effects may be short-lived without repeated dosing, and carries abuse potential. The choice depends on severity, urgency (acute suicidality favors ECT or ketamine), patient preference, and treatment history.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li>Malpractice requires proving all <strong>Four D's: Duty, Dereliction, Damage, and Direct causation</strong>.</li>
+          <li><strong>Sexual misconduct</strong> is the most common basis for ethics complaints against psychologists.</li>
+          <li>Supervisors are liable for supervisees' acts (<strong>vicarious liability</strong>) and for their own negligent supervision (<strong>direct liability</strong>).</li>
+          <li><strong>Licensure</strong> is mandatory and state-regulated; <strong>certification</strong> (e.g., ABPP) is voluntary and indicates specialty competence.</li>
+          <li>Practicing outside the legal <strong>scope of practice</strong> constitutes practicing without a license.</li>
+          <li><strong>Prescriptive authority</strong> for psychologists exists in a limited number of states and requires additional postdoctoral training.</li>
+          <li>In <strong>telepsychology</strong>, psychologists must be licensed where the <em>client</em> is located; PSYPACT facilitates interstate practice.</li>
+          <li>Forensic psychologists should avoid <strong>dual-role conflicts</strong> (therapist and forensic evaluator for the same person).</li>
+          <li><strong>Competency to stand trial</strong> (Dusky standard) requires rational/factual understanding of proceedings and ability to consult with counsel.</li>
+          <li>APA recommends retaining adult records for <strong>7 years</strong> after last service; for minors, <strong>3 years after reaching majority</strong>.</li>
+          <li>Termination without adequate notice and referral may constitute <strong>abandonment</strong>.</li>
+          <li><strong>Telepsychology informed consent</strong> must address technology-specific risks (data breaches, emergency protocols, platform security) beyond standard informed consent elements.</li>
+          <li>Psychologists should generally <strong>not accept social media friend/follow requests</strong> from current clients -- this constitutes a boundary crossing that compromises confidentiality and professional objectivity.</li>
+          <li>Email and text communications with clients become part of the <strong>clinical record</strong> and must use encrypted, HIPAA-compliant channels for clinical content.</li>
+          <li><strong>ECT</strong> is the fastest-acting treatment for severe depression and acute suicidality; <strong>retrograde amnesia</strong> is its primary cognitive side effect; right unilateral placement produces fewer cognitive effects than bilateral.</li>
+          <li><strong>TMS</strong> (repetitive TMS targeting the left DLPFC) is FDA-cleared for treatment-resistant MDD and OCD; it is non-invasive, requires no anesthesia, and causes no cognitive side effects.</li>
+          <li><strong>Ketamine/esketamine</strong> are NMDA antagonists producing rapid antidepressant effects (within hours); esketamine (Spravato) nasal spray is FDA-approved for treatment-resistant depression but carries abuse potential and dissociative side effects.</li>
+          <li><strong>Psilocybin</strong> (5-HT2A agonist) has FDA breakthrough therapy designation for depression; <strong>MDMA-assisted therapy</strong> has been studied in Phase 3 trials for PTSD.</li>
+        </ul>
+      </section>
+      <section class="content-section">
+        <h2>References</h2>
+        <p class="citation">American Psychological Association. (2013). Guidelines for the practice of telepsychology. <em>American Psychologist, 68</em>(9), 791-800.</p>
+        <p class="citation">American Psychological Association. (2013). Specialty guidelines for forensic psychology. <em>American Psychologist, 68</em>(1), 7-19.</p>
+        <p class="citation">American Psychological Association. (2017). Ethical principles of psychologists and code of conduct (2002, amended effective June 1, 2010, and January 1, 2017). https://www.apa.org/ethics/code</p>
+        <p class="citation">Kolmes, K. (2012). Social media in the future of professional psychology. <em>Professional Psychology: Research and Practice, 43</em>(6), 606-612.</p>
+        <p class="citation">Kramer, G. M., & Luxton, D. D. (2016). Telemental health for children and adolescents: An overview of legal, regulatory, and risk management issues. <em>Journal of Child and Adolescent Psychopharmacology, 26</em>(3), 198-203.</p>
+        <p class="citation">UK ECT Review Group. (2003). Efficacy and safety of electroconvulsive therapy in depressive disorders: A systematic review and meta-analysis. <em>The Lancet, 361</em>(9360), 799-808.</p>
+        <p class="citation">George, M. S., & Post, R. M. (2011). Daily left prefrontal repetitive transcranial magnetic stimulation for acute treatment of medication-resistant depression. <em>American Journal of Psychiatry, 168</em>(4), 356-364.</p>
+        <p class="citation">Berman, R. M., et al. (2000). Antidepressant effects of ketamine in depressed patients. <em>Biological Psychiatry, 47</em>(4), 351-354.</p>
+        <p class="citation">Carhart-Harris, R. L., et al. (2021). Trial of psilocybin versus escitalopram for depression. <em>New England Journal of Medicine, 384</em>(15), 1402-1411.</p>
+        <p class="citation">Mitchell, J. M., et al. (2021). MDMA-assisted therapy for severe PTSD: A randomized, double-blind, placebo-controlled phase 3 study. <em>Nature Medicine, 27</em>(6), 1025-1033.</p>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="stimulants-adhd.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Stimulants & ADHD Meds</div>
+          </div>
+        </a>
+        <div></div>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

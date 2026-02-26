@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizational Change | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Org Change</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link active"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 11 of 11</div>
+        <h1>Organizational Change</h1>
+        <div class="chapter-meta">
+          <span>Change models, resistance, organizational development</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Organizational Change</h2>
+        <p>Organizational change encompasses the processes, strategies, and models used to transition organizations from their current state to a desired future state. The EPPP tests knowledge of classic change models, organizational development interventions, resistance to change, and the role of organizational culture.</p>
+        <p>Understanding change is critical because most organizational interventions -- whether involving restructuring, culture change, or new technology implementation -- require systematic change management to succeed.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Lewin's Change Model</h2>
+        <p><span class="key-term">Kurt Lewin</span> (1947) developed one of the most influential models of planned change, conceptualizing the change process as moving through three sequential stages.</p>
+        <div class="definition-box">
+          <h4>Lewin's Three-Stage Model</h4>
+          <ol>
+            <li><strong>Unfreezing:</strong> Creating motivation and readiness for change by disrupting the current equilibrium. This involves helping people recognize that the current situation is inadequate, reducing resistance, and building urgency. Techniques include presenting disconfirming data, creating a felt need, and ensuring psychological safety.</li>
+            <li><strong>Changing (Moving):</strong> Implementing the actual change -- learning new behaviors, values, attitudes, or structures. This stage involves cognitive restructuring, identification with new role models, and scanning the environment for new information.</li>
+            <li><strong>Refreezing:</strong> Stabilizing the change by integrating new behaviors into the organizational culture, norms, and practices. This involves reinforcing new patterns, establishing supporting structures, and ensuring the change is sustained over time.</li>
+          </ol>
+        </div>
+
+        <h3>Lewin's Force Field Analysis</h3>
+        <p><span class="key-term">Force field analysis</span> is Lewin's diagnostic tool for understanding the forces that support and resist change. The current state is maintained by an equilibrium between:</p>
+        <ul>
+          <li><strong>Driving forces:</strong> Factors pushing toward change (competitive pressure, new technology, declining performance, leadership vision)</li>
+          <li><strong>Restraining forces:</strong> Factors resisting change (habit, fear of the unknown, resource limitations, organizational inertia)</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Lewin argued that <strong>reducing restraining forces</strong> is generally more effective than increasing driving forces for producing lasting change. Increasing driving forces without addressing restraining forces can create tension and instability. This insight has important implications for managing resistance -- work to understand and reduce resistance rather than simply pushing harder for change.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Kotter's Eight-Step Model</h2>
+        <p><span class="key-term">John Kotter</span> (1996) expanded on Lewin's model to provide a more detailed, practical framework for leading organizational change:</p>
+        <div class="definition-box">
+          <h4>Kotter's Eight Steps</h4>
+          <ol>
+            <li><strong>Establish a sense of urgency:</strong> Examine competitive realities; identify crises and opportunities (unfreezing)</li>
+            <li><strong>Create a guiding coalition:</strong> Assemble a group with enough power and influence to lead the change</li>
+            <li><strong>Develop a vision and strategy:</strong> Create a clear vision to direct the change effort and strategies for achieving it</li>
+            <li><strong>Communicate the change vision:</strong> Use every vehicle possible to communicate the new vision and strategies</li>
+            <li><strong>Empower broad-based action:</strong> Remove obstacles, change systems or structures that undermine the vision (changing)</li>
+            <li><strong>Generate short-term wins:</strong> Plan for and create visible performance improvements; recognize and reward contributors</li>
+            <li><strong>Consolidate gains and produce more change:</strong> Use increased credibility to change structures, systems, and policies</li>
+            <li><strong>Anchor new approaches in the culture:</strong> Articulate the connections between new behaviors and organizational success (refreezing)</li>
+          </ol>
+        </div>
+        <p>Kotter emphasized that the stages should be followed sequentially and that the most common errors include failing to establish sufficient urgency (Step 1) and declaring victory too early before changes are anchored in the culture (Step 8).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Organizational Development (OD)</h2>
+        <p><span class="key-term">Organizational development</span> is a planned, systematic approach to improving organizational effectiveness through the application of behavioral science knowledge. OD is distinguished by its emphasis on humanistic values, collaboration, and long-term change.</p>
+
+        <h3>Action Research</h3>
+        <p><span class="key-term">Action research</span>, developed by Kurt Lewin, is both a research approach and a change methodology. It involves a cyclical process:</p>
+        <ol>
+          <li><strong>Problem identification:</strong> Recognizing that a change is needed</li>
+          <li><strong>Data gathering:</strong> Collecting information about the problem (surveys, interviews, observations)</li>
+          <li><strong>Data feedback:</strong> Sharing findings with organizational members</li>
+          <li><strong>Action planning:</strong> Collaboratively developing interventions based on the data</li>
+          <li><strong>Implementation:</strong> Carrying out the planned changes</li>
+          <li><strong>Evaluation:</strong> Assessing the effects and recycling through the process</li>
+        </ol>
+
+        <h3>OD Interventions</h3>
+        <div class="definition-box">
+          <h4>Common OD Interventions</h4>
+          <ul>
+            <li><strong>Survey feedback:</strong> Systematically collecting data through questionnaires, analyzing results, and feeding them back to organizational members for discussion and action planning</li>
+            <li><strong>Team building:</strong> Activities designed to improve team functioning, including clarifying roles, improving communication, and resolving conflicts</li>
+            <li><strong>Process consultation:</strong> An OD consultant helps the client organization perceive, understand, and act upon process events (communication patterns, decision-making, conflict) -- the consultant facilitates rather than prescribes solutions (Schein, 1969)</li>
+            <li><strong>Sensitivity training (T-groups):</strong> Small, unstructured groups that increase self-awareness and interpersonal sensitivity. Less commonly used today due to ethical concerns and variable effectiveness.</li>
+            <li><strong>Quality of work life (QWL):</strong> Programs to improve the overall work experience, including job redesign, participative management, and flexible work arrangements</li>
+            <li><strong>Total quality management (TQM):</strong> Organization-wide approach emphasizing continuous improvement, customer focus, and employee involvement (Deming, Juran)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Appreciative Inquiry</h2>
+        <p><span class="key-term">Appreciative Inquiry (AI)</span>, developed by <span class="key-term">David Cooperrider and Suresh Srivastva</span> (1987), represents a fundamental departure from traditional organizational development approaches. Rather than identifying problems and deficits to fix, AI focuses on discovering what works well in an organization and amplifying those strengths.</p>
+        <div class="definition-box">
+          <h4>The 4D Cycle of Appreciative Inquiry</h4>
+          <ol>
+            <li><strong>Discovery ("What gives life?"):</strong> Identifying and appreciating the best of what currently exists -- peak experiences, core strengths, and positive moments in the organization's history through interviews and storytelling</li>
+            <li><strong>Dream ("What might be?"):</strong> Envisioning what the organization could become if its strengths were fully leveraged. Members collaboratively create a shared image of a preferred future.</li>
+            <li><strong>Design ("What should be?"):</strong> Crafting the social architecture -- developing provocative propositions (design statements) that describe the ideal organization and bridge the best of the present with the desired future</li>
+            <li><strong>Destiny ("What will be?"):</strong> Implementing the design through ongoing innovation, commitment, and action. This phase sustains the change through empowerment and continuous learning.</li>
+          </ol>
+        </div>
+        <div class="example-box">
+          <h4>Strengths-Based vs. Deficit-Based Approaches</h4>
+          <p>Traditional OD follows a deficit-based model: identify a problem, diagnose causes, develop solutions, and implement fixes. Appreciative Inquiry inverts this by asking "What is working?" rather than "What is broken?" The assumption is that organizations grow in the direction of what they study -- focusing on problems generates more problem-finding, while focusing on strengths generates energy, innovation, and positive change. This makes AI particularly useful when organizations need to build morale and engagement during transformational change.</p>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>For the EPPP, know that Appreciative Inquiry is a <strong>strengths-based OD intervention</strong> that contrasts with traditional problem-solving approaches. The 4D cycle (Discovery, Dream, Design, Destiny) is the key framework. AI is rooted in social constructionism -- the idea that organizations are socially constructed and can be reimagined through positive dialogue.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Resistance to Change</h2>
+        <p><span class="key-term">Resistance to change</span> is a natural response that can stem from individual and organizational factors. Understanding the sources of resistance is essential for managing change effectively.</p>
+        <div class="definition-box">
+          <h4>Sources of Resistance</h4>
+          <p><strong>Individual sources:</strong></p>
+          <ul>
+            <li>Habit and inertia -- comfort with the familiar</li>
+            <li>Fear of the unknown -- uncertainty about consequences</li>
+            <li>Economic insecurity -- concerns about job loss or reduced pay</li>
+            <li>Selective perception -- filtering information to maintain current beliefs</li>
+            <li>Loss of control -- feeling powerless in the change process</li>
+          </ul>
+          <p><strong>Organizational sources:</strong></p>
+          <ul>
+            <li>Structural inertia -- built-in mechanisms that maintain stability</li>
+            <li>Group norms -- pressure to conform to established patterns</li>
+            <li>Threat to expertise -- changes may make specialized knowledge obsolete</li>
+            <li>Threat to power relationships -- changes may redistribute authority</li>
+            <li>Previous failed change efforts -- cynicism about new initiatives</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Strategies for Overcoming Resistance</h4>
+          <p>Kotter and Schlesinger (1979) identified six strategies, ranging from collaborative to coercive: (1) <strong>Education and communication</strong> -- explain the rationale; (2) <strong>Participation and involvement</strong> -- involve resistors in planning; (3) <strong>Facilitation and support</strong> -- provide training and resources; (4) <strong>Negotiation and agreement</strong> -- offer incentives; (5) <strong>Manipulation and co-optation</strong> -- give resistors a symbolic role; (6) <strong>Explicit and implicit coercion</strong> -- use authority to force compliance (last resort).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Organizational Culture</h2>
+        <p><span class="key-term">Organizational culture</span> refers to the shared assumptions, values, beliefs, and norms that shape behavior within an organization. Edgar Schein (1985, 2010) proposed three levels of culture:</p>
+        <div class="definition-box">
+          <h4>Schein's Three Levels of Organizational Culture</h4>
+          <ol>
+            <li><strong>Artifacts:</strong> Visible, tangible elements (physical layout, dress code, rituals, logos, published values) -- easy to observe but difficult to interpret</li>
+            <li><strong>Espoused values:</strong> Stated strategies, goals, and philosophies -- what the organization says it values (may or may not align with actual behavior)</li>
+            <li><strong>Basic underlying assumptions:</strong> Unconscious, taken-for-granted beliefs about human nature, relationships, and reality -- the deepest and most difficult to change level, but the essence of culture</li>
+          </ol>
+        </div>
+        <p>Culture change is among the most challenging forms of organizational change because basic assumptions are deeply embedded and often unconscious. Successful culture change typically requires leadership modeling, alignment of reward systems, hiring for cultural fit, and sustained attention over years rather than months.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Lewin's three stages: unfreeze, change (move), refreeze</li>
+            <li>Force field analysis: driving forces vs. restraining forces; reducing restraining forces is more effective</li>
+            <li>Kotter's eight steps: establish urgency, guiding coalition, vision, communicate, empower, short-term wins, consolidate, anchor in culture</li>
+            <li>Action research: cyclical process of data gathering, feedback, planning, action, evaluation</li>
+            <li>Process consultation (Schein): consultant helps client understand process events, does not prescribe solutions</li>
+            <li>Survey feedback: collect data via questionnaires, feed results back to members for collaborative planning</li>
+            <li>Sensitivity training (T-groups): unstructured groups for interpersonal awareness; less common today</li>
+            <li>Appreciative Inquiry (Cooperrider & Srivastva): strengths-based OD; 4D cycle: Discovery, Dream, Design, Destiny</li>
+            <li>AI contrasts with deficit-based problem-solving; focuses on what works rather than what is broken</li>
+            <li>Schein's three levels of culture: artifacts (visible), espoused values (stated), basic assumptions (deepest)</li>
+            <li>Basic underlying assumptions are the deepest, most resistant to change, and represent the essence of culture</li>
+            <li>Resistance stems from both individual factors (fear, habit) and organizational factors (structural inertia, norms)</li>
+            <li>Participation and involvement is generally the most recommended strategy for reducing resistance</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Cooperrider, D. L., & Srivastva, S. (1987). Appreciative inquiry in organizational life. In R. W. Woodman & W. A. Pasmore (Eds.), <em>Research in organizational change and development</em> (Vol. 1, pp. 129-169). JAI Press.</div>
+        <div class="citation">Kotter, J. P. (1996). <em>Leading change</em>. Harvard Business School Press.</div>
+        <div class="citation">Kotter, J. P., & Schlesinger, L. A. (1979). Choosing strategies for change. <em>Harvard Business Review, 57</em>(2), 106-114.</div>
+        <div class="citation">Lewin, K. (1947). Frontiers in group dynamics. <em>Human Relations, 1</em>(1), 5-41.</div>
+        <div class="citation">Schein, E. H. (1969). <em>Process consultation: Its role in organization development</em>. Addison-Wesley.</div>
+        <div class="citation">Schein, E. H. (2010). <em>Organizational culture and leadership</em> (4th ed.). Jossey-Bass.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="decision-making.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Making Better Decisions</div>
+          </div>
+        </a>
+        <a href="index.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Back to</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

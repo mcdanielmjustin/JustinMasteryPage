@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personality Assessment – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Personality Assessment</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link active"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 12</div>
+        <h1>Personality Assessment</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~30 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- Section 1: MMPI Family -->
+      <div class="content-section">
+        <h2>The MMPI Family of Instruments</h2>
+        <p>The Minnesota Multiphasic Personality Inventory is the most widely used and researched objective personality test in clinical psychology. Understanding its structure, validity scales, and interpretive strategies is essential for the EPPP.</p>
+
+        <h3>MMPI-2 (567 Items)</h3>
+        <p>The <span class="key-term">MMPI-2</span> (Butcher et al., 1989) consists of 567 true/false items and yields scores on 10 clinical scales, 3 traditional validity scales, and numerous supplementary and content scales. Clinical scale scores are reported as <span class="key-term">T-scores (M = 50, SD = 10)</span>, with scores at or above T = 65 considered clinically significant.</p>
+
+        <p>The three primary <span class="key-term">validity scales</span> assess test-taking attitude:</p>
+        <ul>
+          <li><strong>L (Lie) Scale:</strong> Detects naive or unsophisticated attempts to present oneself in an overly favorable light. High L scores suggest denial of common human faults.</li>
+          <li><strong>F (Infrequency) Scale:</strong> Contains items rarely endorsed by the normative sample. Elevated F scores may indicate random responding, exaggeration of symptoms (faking bad), genuine severe psychopathology, or item comprehension difficulties.</li>
+          <li><strong>K (Correction) Scale:</strong> A more subtle measure of defensiveness. High K scores suggest sophisticated denial of problems; low K scores suggest excessive self-criticism or a "cry for help." K-corrected scores are added to five clinical scales (Hs, Pd, Pt, Sc, Ma).</li>
+        </ul>
+
+        <table>
+          <tr><th>Scale</th><th>Number</th><th>Name</th><th>Elevated Score Suggests</th></tr>
+          <tr><td>1</td><td>Hs</td><td>Hypochondriasis</td><td>Excessive somatic concern, health preoccupation</td></tr>
+          <tr><td>2</td><td>D</td><td>Depression</td><td>Dysphoria, pessimism, psychomotor retardation</td></tr>
+          <tr><td>3</td><td>Hy</td><td>Hysteria</td><td>Somatic symptoms under stress, denial, need for approval</td></tr>
+          <tr><td>4</td><td>Pd</td><td>Psychopathic Deviate</td><td>Authority conflict, impulsivity, family discord</td></tr>
+          <tr><td>5</td><td>Mf</td><td>Masculinity-Femininity</td><td>Nontraditional gender role interests</td></tr>
+          <tr><td>6</td><td>Pa</td><td>Paranoia</td><td>Suspiciousness, sensitivity, persecutory ideation</td></tr>
+          <tr><td>7</td><td>Pt</td><td>Psychasthenia</td><td>Anxiety, obsessiveness, worry, rumination</td></tr>
+          <tr><td>8</td><td>Sc</td><td>Schizophrenia</td><td>Unusual thinking, alienation, perceptual disturbance</td></tr>
+          <tr><td>9</td><td>Ma</td><td>Hypomania</td><td>Elevated mood, grandiosity, overactivity, impulsivity</td></tr>
+          <tr><td>0</td><td>Si</td><td>Social Introversion</td><td>Social withdrawal, introversion, shyness</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Code Types:</strong>
+          <p>MMPI-2 interpretation often relies on <span class="key-term">code types</span> — the two or three highest clinical scale elevations. For example, a 2-7 code type (Depression and Psychasthenia elevated) suggests anxious depression with rumination and self-criticism. A 4-9 code type (Psychopathic Deviate and Hypomania) suggests impulsive, antisocial, and sensation-seeking behavior. Code type interpretation requires that both scales be elevated at or above T = 65 and be well-defined (i.e., separated from the next highest scale by at least 5 T-score points).</p>
+        </div>
+
+        <h3>MMPI-2-RF (338 Items)</h3>
+        <p>The <span class="key-term">MMPI-2-RF</span> (Ben-Porath & Tellegen, 2008) is a restructured and shortened version of the MMPI-2. It uses Restructured Clinical (RC) Scales that removed the "demoralization" component shared across clinical scales, providing more discriminant measures. The MMPI-2-RF includes Higher-Order (H-O) scales (Emotional/Internalizing Dysfunction, Thought Dysfunction, Behavioral/Externalizing Dysfunction), 9 RC scales, Specific Problems scales, Interest scales, and PSY-5 scales.</p>
+
+        <h3>MMPI-3 (335 Items)</h3>
+        <p>The <span class="key-term">MMPI-3</span> (Ben-Porath & Tellegen, 2020) is the newest version, featuring updated norms, modernized item content, and new validity scales. It maintains the restructured framework of the MMPI-2-RF while incorporating updated normative data. Notably, the MMPI-3 does not use the traditional clinical scales from the MMPI-2.</p>
+
+        <h3>MMPI Validity Scale Interpretation Patterns</h3>
+        <p>Understanding validity scale configurations is essential for EPPP success:</p>
+        <table>
+          <tr><th>Pattern</th><th>Configuration</th><th>Interpretation</th></tr>
+          <tr><td>Faking Good / Defensive</td><td>High L, High K, Low F</td><td>Denying problems; presenting overly favorable self-image. Common in custody evaluations, employment screening.</td></tr>
+          <tr><td>Faking Bad / Exaggeration</td><td>Low L, Low K, High F</td><td>Overreporting symptoms; may indicate malingering, cry for help, or genuine severe distress.</td></tr>
+          <tr><td>Random Responding</td><td>Elevated F, Elevated VRIN</td><td>Inconsistent responding suggesting carelessness, confusion, or inability to read items.</td></tr>
+          <tr><td>All True / Acquiescence</td><td>Elevated F, Elevated TRIN (True)</td><td>Yea-saying response pattern; endorsing items indiscriminately.</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>VRIN and TRIN:</strong>
+          <p><span class="key-term">VRIN (Variable Response Inconsistency)</span> consists of item pairs with similar or opposite content; inconsistent responses across these pairs suggest random or careless responding. <span class="key-term">TRIN (True Response Inconsistency)</span> identifies acquiescence (all true) or nay-saying (all false) patterns. Both scales are critical for determining profile validity before interpreting clinical scales.</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Other Objective Measures -->
+      <div class="content-section">
+        <h2>Other Objective Personality Measures</h2>
+
+        <h3>Test Construction Approaches for Personality Measures</h3>
+        <p>Understanding the construction method of each personality test helps explain its strengths and limitations:</p>
+        <ul>
+          <li><strong>Empirical/criterion keying (MMPI):</strong> Items selected based on their ability to discriminate between groups (e.g., clinical vs. normal). Items need not have obvious face validity — a true response to "I like mechanics magazines" can appear on a clinical scale because it empirically distinguished groups.</li>
+          <li><strong>Factor analytic (NEO-PI-R, 16PF):</strong> Items selected based on their loading on underlying factors derived from statistical analysis. Produces theoretically coherent scales.</li>
+          <li><strong>Rational/theoretical (PAI, MCMI):</strong> Items written to represent specific constructs based on theory and clinical expertise, then refined empirically.</li>
+          <li><strong>Sequential system (MCMI-IV):</strong> Millon combined theoretical derivation, internal structural validation, and external criterion validation in a multi-step process.</li>
+        </ul>
+
+        <h3>NEO-PI-R and the Big Five</h3>
+        <p>The <span class="key-term">NEO Personality Inventory-Revised</span> (Costa & McCrae, 1992) measures the Five-Factor Model (FFM) of personality, often remembered as <span class="key-term">OCEAN</span>:</p>
+        <ul>
+          <li><strong>Openness to Experience:</strong> Imagination, curiosity, aesthetic sensitivity, intellectual interests</li>
+          <li><strong>Conscientiousness:</strong> Organization, dependability, self-discipline, achievement striving</li>
+          <li><strong>Extraversion:</strong> Sociability, assertiveness, positive emotionality, activity level</li>
+          <li><strong>Agreeableness:</strong> Trust, altruism, compliance, tender-mindedness</li>
+          <li><strong>Neuroticism:</strong> Emotional instability, anxiety, hostility, vulnerability to stress</li>
+        </ul>
+        <p>Each domain includes six facet scales for a total of 30 facets. The NEO-PI-R is more commonly used in personality research and non-clinical settings rather than diagnostic decision-making.</p>
+
+        <h3>MCMI-IV</h3>
+        <p>The <span class="key-term">Millon Clinical Multiaxial Inventory, Fourth Edition</span> (Millon, 2015) is specifically designed to assess personality disorders and clinical syndromes as conceptualized in DSM-5. It contains 195 true/false items and yields scores on personality pattern scales, severe personality pathology scales, clinical syndrome scales, and severe clinical syndrome scales. The MCMI uses <span class="key-term">Base Rate (BR) scores</span> rather than T-scores, with BR = 75 indicating the presence of a trait and BR = 85 indicating prominence. This approach accounts for the base rates of disorders in clinical populations.</p>
+
+        <h3>PAI (Personality Assessment Inventory)</h3>
+        <p>The <span class="key-term">PAI</span> (Morey, 1991) uses 344 items rated on a 4-point scale (unlike MMPI's true/false format). It includes 4 validity scales, 11 clinical scales, 5 treatment consideration scales, and 2 interpersonal scales. Each clinical scale has conceptually derived subscales. The PAI is notable for its non-overlapping items (unlike the MMPI-2) and its inclusion of treatment-relevant dimensions such as Aggression, Suicidal Ideation, and Treatment Rejection.</p>
+
+        <h3>16PF (Cattell)</h3>
+        <p>Raymond Cattell's <span class="key-term">Sixteen Personality Factor Questionnaire</span> was developed through lexical factor analysis and identifies 16 primary personality factors (e.g., Warmth, Reasoning, Emotional Stability, Dominance) and 5 global factors. It is used primarily in personnel selection and occupational settings rather than clinical diagnosis.</p>
+
+        <h3>Beck Depression Inventory-II (BDI-II) and Other Symptom Measures</h3>
+        <p>While not comprehensive personality measures, brief symptom inventories are frequently used in clinical assessment and are tested on the EPPP:</p>
+        <ul>
+          <li><strong>BDI-II:</strong> 21-item self-report measure of depressive symptom severity. Uses a 0-3 Likert scale; total score ranges from 0-63. Cutoffs: 0-13 = minimal, 14-19 = mild, 20-28 = moderate, 29-63 = severe depression. The BDI-II is a symptom severity measure, not a diagnostic tool.</li>
+          <li><strong>Beck Anxiety Inventory (BAI):</strong> 21-item self-report focusing on somatic symptoms of anxiety, making it useful for distinguishing anxiety from depression.</li>
+          <li><strong>Symptom Checklist-90-Revised (SCL-90-R):</strong> 90-item self-report measuring nine primary symptom dimensions and three global indices. The Global Severity Index (GSI) provides an overall measure of psychological distress.</li>
+        </ul>
+
+        <div class="citation">Costa, P. T., & McCrae, R. R. (1992). <em>Revised NEO Personality Inventory (NEO-PI-R) and NEO Five-Factor Inventory professional manual.</em> Psychological Assessment Resources.</div>
+      </div>
+
+      <!-- Section 3: Projective Methods -->
+      <div class="content-section">
+        <h2>Projective Assessment Techniques</h2>
+        <p>Projective techniques are based on the <span class="key-term">projective hypothesis</span> — the idea that when presented with ambiguous stimuli, individuals project their unconscious needs, conflicts, and personality dynamics onto their responses. While controversial, these measures remain part of many clinical assessment batteries.</p>
+
+        <h3>Rorschach Inkblot Test</h3>
+        <p>The Rorschach consists of 10 symmetrical inkblots (5 achromatic, 2 red and gray, 3 multicolored). Responses are coded for <span class="key-term">determinants</span> (form, color, shading, movement), <span class="key-term">content</span> (human, animal, anatomy, etc.), <span class="key-term">location</span> (whole blot, common detail, unusual detail), and <span class="key-term">organizational activity</span>.</p>
+
+        <p>Two primary scoring systems dominate contemporary practice:</p>
+        <ul>
+          <li><strong>Exner Comprehensive System (CS):</strong> The most widely used system for decades, providing normative data and structural summary variables. Key indices include the Depression Index (DEPI), Schizophrenia Index (SCZI), and Coping Deficit Index (CDI).</li>
+          <li><strong>R-PAS (Rorschach Performance Assessment System):</strong> A newer, empirically based system that addresses normative and psychometric limitations of the CS. R-PAS uses optimized administration with response prompt procedures (R-Optimized) to control response count.</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>Rorschach Interpretation Example:</strong>
+          <p>A patient who provides predominantly pure Form (F) responses with few Color or Movement determinants and few Human content responses may be interpreted as emotionally constricted, avoidant of affective experience, and interpersonally withdrawn. Such a profile is often seen in individuals with avoidant or schizoid personality features.</p>
+        </div>
+
+        <h3>Thematic Apperception Test (TAT)</h3>
+        <p>The <span class="key-term">TAT</span> (Murray, 1943) presents a series of ambiguous picture cards and asks examinees to create stories about what is happening, what led up to it, and what will happen. Interpretation is based on Murray's <span class="key-term">need-press theory</span>: "needs" are the internal motivations of the protagonist, and "press" is the environmental forces acting on the protagonist. Common themes assessed include achievement motivation, affiliation needs, power dynamics, and relational patterns. The TAT lacks standardized administration and scoring, which limits its psychometric properties.</p>
+
+        <h3>Other Projective Methods</h3>
+        <ul>
+          <li><strong>Sentence Completion Tests:</strong> Stems such as "My mother always..." are completed by the examinee. The Rotter Incomplete Sentences Blank (RISB) provides a structured scoring system yielding an overall adjustment score.</li>
+          <li><strong>Draw-A-Person (DAP):</strong> The examinee draws a human figure; interpretations are based on drawing features (size, placement, omissions, proportions). Empirical support for specific sign interpretations is weak, though the test can serve as a rapport-building tool and behavioral observation opportunity.</li>
+          <li><strong>Children's Apperception Test (CAT):</strong> Leopold Bellak's adaptation of the TAT for children ages 3-10, featuring animal figures in anthropomorphic situations rather than human figures. Based on the assumption that young children identify more readily with animals than people. A human figure version (CAT-H) is also available.</li>
+          <li><strong>Roberts Apperception Test for Children (Roberts-2):</strong> Presents stimulus cards depicting children and adults in everyday situations. Unlike the TAT, it has a standardized scoring system that yields T-scores across clinically relevant scales (Anxiety, Depression, Aggression, etc.), providing stronger psychometric support than the TAT.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Response Style Assessment Across Instruments:</strong>
+          <p>A critical concept across all personality assessment is <span class="key-term">response style</span> — the manner in which an individual approaches a test independent of the content. Response styles include social desirability/impression management (presenting favorably), malingering/symptom exaggeration (presenting unfavorably), acquiescence (tendency to agree), and random responding. Every objective personality test includes validity scales to detect response styles. On projective tests, response style is assessed through behavioral observation, protocol consistency, and specific test variables (e.g., high Lambda on the Rorschach suggests a detached, avoidant approach).</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Objective vs. Projective -->
+      <div class="content-section">
+        <h2>Objective vs. Projective Assessment: The Debate</h2>
+        <p>A long-standing debate in psychological assessment concerns the relative merits of objective (self-report) versus projective (performance-based) personality measures.</p>
+
+        <div class="definition-box">
+          <strong>Incremental Validity:</strong>
+          <p><span class="key-term">Incremental validity</span> refers to the extent to which a test adds predictive power beyond what is already provided by existing measures. The critical question for projective tests is whether they provide clinically useful information beyond what objective measures and clinical interviews yield. Research suggests that select Rorschach variables (e.g., Thought Disorder Index, Oral Dependency) demonstrate incremental validity beyond self-report measures for specific clinical questions.</p>
+        </div>
+
+        <table>
+          <tr><th>Dimension</th><th>Objective Tests</th><th>Projective Tests</th></tr>
+          <tr><td>Stimuli</td><td>Structured items (true/false, Likert)</td><td>Ambiguous stimuli (inkblots, pictures)</td></tr>
+          <tr><td>Scoring</td><td>Standardized, quantitative</td><td>Variable; some systems standardized (R-PAS)</td></tr>
+          <tr><td>Reliability</td><td>Generally high (alpha > .80)</td><td>Variable; interrater reliability can be high with standardized systems</td></tr>
+          <tr><td>Validity</td><td>Extensive empirical support</td><td>More limited; select variables well-supported</td></tr>
+          <tr><td>Response Bias</td><td>Vulnerable to impression management</td><td>Less transparent purpose; harder to fake</td></tr>
+          <tr><td>Theoretical Basis</td><td>Empirical/construct-based</td><td>Psychodynamic/projective hypothesis</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Clinical Integration:</strong>
+          <p>Best practice in comprehensive personality assessment involves a multimethod approach that integrates findings from clinical interview, objective self-report inventories, and selectively chosen performance-based measures. This approach maximizes convergent and discriminant validity and provides the most complete picture of personality functioning.</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Malingering & Effort Testing -->
+      <div class="content-section">
+        <h2>Malingering Detection &amp; Effort Testing</h2>
+        <p>Assessing the validity of an examinee's self-report and test performance is a foundational requirement in both forensic and clinical assessment. <span class="key-term">Malingering</span> is the intentional fabrication or exaggeration of physical or psychological symptoms motivated by external incentives (e.g., financial compensation, avoidance of criminal prosecution, obtaining medications). Distinguishing malingering from genuine psychopathology requires specialized instruments and a multimethod approach.</p>
+
+        <h3>Performance Validity Tests (PVTs) vs. Symptom Validity Tests (SVTs)</h3>
+        <p>A critical distinction in effort testing involves the type of validity being assessed:</p>
+        <ul>
+          <li><strong>Performance Validity Tests (PVTs):</strong> Assess whether an examinee is putting forth adequate effort on cognitive or neuropsychological tasks. PVTs typically use tasks that appear difficult but are actually very easy, so that poor performance is more indicative of poor effort than genuine impairment. Examples include the TOMM and VSVT.</li>
+          <li><strong>Symptom Validity Tests (SVTs):</strong> Assess whether an examinee is accurately reporting symptoms versus exaggerating or fabricating them. SVTs are embedded within or administered alongside self-report inventories. Examples include the MMPI validity scales and the SIRS-2.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Base Rates of Malingering:</strong>
+          <p>Estimated base rates of malingering vary significantly across settings. In <span class="key-term">forensic settings</span> (personal injury litigation, disability evaluations, criminal forensic evaluations), base rates of malingered neurocognitive dysfunction are estimated at approximately <span class="key-term">30-40%</span>, and malingered psychiatric symptoms at approximately 15-20%. In <span class="key-term">clinical settings</span> (general outpatient, inpatient psychiatric), base rates are substantially lower, estimated at approximately <span class="key-term">5-10%</span>. These base rates have important implications for the positive predictive value of validity indicators: a test that correctly identifies 90% of malingerers will produce more false positives in low-base-rate clinical settings than in high-base-rate forensic settings.</p>
+        </div>
+
+        <h3>SIRS-2 (Structured Interview of Reported Symptoms, Second Edition)</h3>
+        <p>The <span class="key-term">SIRS-2</span> (Rogers, Sewell, & Gillard, 2010) is widely regarded as the <span class="key-term">gold standard for the detection of malingered mental disorders</span>. It is a structured interview consisting of 172 items organized across multiple detection strategies:</p>
+        <ul>
+          <li><strong>Rare Symptoms (RS):</strong> Symptoms that are uncommonly endorsed even by genuinely disordered individuals</li>
+          <li><strong>Symptom Combinations (SC):</strong> Pairs of symptoms that rarely co-occur in genuine clinical presentations</li>
+          <li><strong>Improbable and Absurd Symptoms (IA):</strong> Symptoms that are preposterous or fantastical</li>
+          <li><strong>Blatant Symptoms (BL):</strong> Obvious, exaggerated indicators of psychopathology</li>
+          <li><strong>Subtle Symptoms (SU):</strong> Items that appear pathological but are actually common experiences</li>
+          <li><strong>Symptom Severity (SEV):</strong> Endorsement of extreme severity across multiple symptom domains</li>
+          <li><strong>Symptom Selectivity (SEL):</strong> Indiscriminate endorsement of symptoms across many categories rather than a focused clinical presentation</li>
+          <li><strong>Reported vs. Observed Symptoms (RO):</strong> Discrepancies between self-reported symptoms and clinician-observed behavior during the interview</li>
+        </ul>
+        <p>The SIRS-2 classifies respondents into categories: Genuine, Indeterminate, or Feigning. Its classification accuracy is exceptionally high, with sensitivity and specificity typically exceeding 0.90 for the detection of feigned mental disorders.</p>
+
+        <h3>M-FAST (Miller Forensic Assessment of Symptoms Test)</h3>
+        <p>The <span class="key-term">M-FAST</span> (Miller, 2001) is a brief, 25-item structured screening interview designed to identify individuals who may be malingering psychiatric symptoms. It serves as a <span class="key-term">screening tool</span> rather than a definitive measure — individuals who score above the cutoff on the M-FAST should be administered the SIRS-2 for comprehensive assessment. The M-FAST can be administered in approximately 5-10 minutes, making it practical for routine use in forensic intake settings. It uses detection strategies including reported vs. observed symptoms, extreme symptom endorsement, rare symptom combinations, unusual hallucinations, unusual symptom course, and negative image.</p>
+
+        <div class="example-box">
+          <strong>Forensic Assessment Example:</strong>
+          <p>A defendant facing felony charges claims to experience auditory hallucinations commanding him to commit violent acts. On the M-FAST, he endorses 18 of 25 items (cutoff = 6), including bizarre symptoms such as hallucinations that can be turned on and off at will and visual hallucinations in only one eye. The evaluator administers the SIRS-2 as follow-up, which classifies the presentation as Feigning across six of eight primary scales. The MMPI-3 is also administered and reveals F and Fp scores above T = 100 with a valid VRIN. The convergence of findings across multiple validity measures provides strong evidence for malingered psychotic symptoms.</p>
+        </div>
+
+        <h3>TOMM (Test of Memory Malingering)</h3>
+        <p>The <span class="key-term">TOMM</span> (Tombaugh, 1996) is a 50-item visual recognition test designed to detect feigned memory impairment. The examinee is shown 50 line drawings and then asked to identify each target drawing from a pair (one target, one foil) across two learning trials and an optional retention trial. The task is designed to be very easy — genuinely impaired individuals, including those with documented dementia or amnesia, typically score well above chance (25 out of 50). Scores <span class="key-term">below chance performance</span> (significantly below 50% accuracy) are particularly diagnostic of malingering, as they indicate the examinee is actually recognizing the correct answers and deliberately selecting the wrong ones. The standard cutoff is a score below 45/50 on Trial 2 or the Retention Trial.</p>
+
+        <h3>Victoria Symptom Validity Test (VSVT)</h3>
+        <p>The <span class="key-term">VSVT</span> (Slick, Hopp, Strauss, & Thompson, 1997) is a computerized forced-choice test of memory that uses a two-alternative recognition format. Like the TOMM, it exploits the principle that <span class="key-term">below-chance responding</span> on a two-choice task is statistically improbable unless the examinee possesses the knowledge to select the correct answer but deliberately avoids it. The VSVT also classifies performance into difficulty levels (easy, hard) to assess whether the examinee's performance profile is consistent with genuine memory impairment or with feigning.</p>
+
+        <h3>MMPI-3 Validity Indicators for Malingering</h3>
+        <p>The MMPI family includes several validity scales specifically relevant to detecting overreporting and malingering:</p>
+        <table>
+          <tr><th>Scale</th><th>Full Name</th><th>What It Detects</th></tr>
+          <tr><td>F</td><td>Infrequency</td><td>Items rarely endorsed by the normative sample; elevated scores suggest overreporting, random responding, or genuine severe pathology</td></tr>
+          <tr><td>Fb</td><td>Back Infrequency</td><td>Infrequent responses to items in the latter half of the test; detects declining effort or shift in response style</td></tr>
+          <tr><td>Fp</td><td>Infrequent Psychopathology</td><td>Items rarely endorsed even by genuine psychiatric patients; elevated Fp is the <span class="key-term">strongest single MMPI indicator of malingering</span> because it differentiates faking from genuine severe pathology</td></tr>
+          <tr><td>FBS</td><td>Symptom Validity Scale</td><td>Originally developed for personal injury malingering; detects somatic and cognitive symptom overreporting in litigation contexts</td></tr>
+          <tr><td>RBS</td><td>Response Bias Scale</td><td>Identifies overreporting of memory complaints specifically; useful in neuropsychological contexts</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Multimethod Validity Assessment:</strong>
+          <p>No single validity measure should be used in isolation to determine malingering. Best practice requires convergent evidence from <span class="key-term">multiple validity indicators</span> across different methods — embedded validity indicators within cognitive tests, standalone PVTs, self-report SVTs, structured interviews, and behavioral observations. Discrepancies between self-reported disability and observed functioning (e.g., poor test performance but intact real-world behavior) also contribute to the clinical picture. The Slick, Sherman, and Iverson (1999) criteria provide a widely adopted framework for classifying malingered neurocognitive dysfunction as Definite, Probable, or Possible based on converging evidence.</p>
+        </div>
+
+        <div class="citation">Rogers, R., Sewell, K. W., & Gillard, N. D. (2010). <em>Structured Interview of Reported Symptoms, 2nd edition (SIRS-2) professional manual.</em> Psychological Assessment Resources.</div>
+        <div class="citation">Tombaugh, T. N. (1996). <em>Test of Memory Malingering (TOMM).</em> Multi-Health Systems.</div>
+      </div>
+
+      <!-- Section 6: Behavioral Assessment -->
+      <div class="content-section">
+        <h2>Behavioral Assessment</h2>
+        <p>Behavioral assessment encompasses a range of methods for directly measuring observable behavior and its environmental determinants. Unlike personality inventories that infer underlying traits, behavioral assessment focuses on what individuals do, the contexts in which they do it, and the consequences that maintain the behavior.</p>
+
+        <h3>Functional Behavioral Assessment (FBA)</h3>
+        <p>A <span class="key-term">Functional Behavioral Assessment (FBA)</span> is a systematic process for identifying the variables that reliably predict and maintain problem behavior. The cornerstone of FBA is <span class="key-term">ABC analysis</span> — examining the Antecedent (what happens before the behavior), the Behavior itself (operationally defined), and the Consequence (what happens after the behavior).</p>
+
+        <p>FBA identifies the <span class="key-term">function</span> of a behavior — the purpose it serves for the individual. Research has identified four primary functions of behavior:</p>
+        <ul>
+          <li><strong>Attention:</strong> Behavior is maintained by social attention from others (e.g., peers, teachers, caregivers)</li>
+          <li><strong>Escape/Avoidance:</strong> Behavior is maintained by removal of or avoidance of an aversive stimulus (e.g., a task demand, social interaction)</li>
+          <li><strong>Tangible:</strong> Behavior is maintained by access to preferred items, activities, or privileges</li>
+          <li><strong>Automatic/Sensory:</strong> Behavior is maintained by the sensory stimulation it produces, independent of social mediation (e.g., self-stimulatory behavior)</li>
+        </ul>
+
+        <p>FBA methods are classified as <span class="key-term">indirect</span> (interviews, rating scales, record review — relying on informant report) or <span class="key-term">direct</span> (systematic observation of behavior in natural or analogue settings). Direct methods include descriptive analysis (observing naturally occurring antecedents and consequences) and experimental functional analysis (systematically manipulating antecedent and consequence conditions to test hypothesized functions).</p>
+
+        <div class="example-box">
+          <strong>FBA Example:</strong>
+          <p>A school psychologist observes that a 9-year-old's disruptive outbursts (Behavior) consistently occur when the teacher presents a difficult math worksheet (Antecedent) and result in the child being sent to the hallway (Consequence — removal from the task). The hypothesized function is escape from academic demands. A replacement behavior such as requesting a break or asking for help serves the same function more appropriately.</p>
+        </div>
+
+        <h3>Direct Behavioral Observation Methods</h3>
+        <p>Direct observation methods provide quantitative data on the occurrence and characteristics of target behaviors:</p>
+        <ul>
+          <li><strong>Event/Frequency Recording:</strong> Counting each occurrence of a discrete behavior within a specified time period. Best used for behaviors with a clear beginning and end that do not occur at very high rates. Data are often converted to rate (frequency per unit time).</li>
+          <li><strong>Duration Recording:</strong> Measuring the total amount of time a behavior occurs during an observation session. Useful for behaviors where the concern is how long the behavior lasts (e.g., tantrum duration, time on task).</li>
+          <li><strong>Latency Recording:</strong> Measuring the time elapsed between a stimulus (e.g., a teacher's instruction) and the onset of the target behavior. Useful for assessing compliance or response speed.</li>
+          <li><strong>Interval Recording:</strong> The observation period is divided into equal time intervals, and the observer records whether the behavior occurs during each interval. Three primary methods exist:
+            <ul>
+              <li><strong>Whole Interval Recording:</strong> Behavior is scored as occurring only if it occurs throughout the entire interval. Tends to <em>underestimate</em> behavior occurrence.</li>
+              <li><strong>Partial Interval Recording:</strong> Behavior is scored as occurring if it happens at any point during the interval. Tends to <em>overestimate</em> behavior occurrence.</li>
+              <li><strong>Momentary Time Sampling:</strong> Behavior is scored as occurring only if it is happening at the exact moment the interval ends. Provides the most accurate estimate of duration and is the most practical for observers monitoring multiple students.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Inter-Observer Agreement (IOA):</strong>
+          <p><span class="key-term">Inter-observer agreement</span> (also called interrater reliability for observational data) is the degree to which two or more independent observers record the same data when observing the same behavior simultaneously. IOA is typically calculated as the number of agreements divided by the total number of agreements plus disagreements, multiplied by 100. An IOA of 80% or higher is generally considered acceptable for research and clinical practice. Low IOA suggests problems with the operational definition, observer training, or observation system complexity.</p>
+        </div>
+
+        <h3>Behavioral Rating Scales</h3>
+        <p>Behavioral rating scales provide standardized, norm-referenced assessments of behavior across informants and settings. Key instruments include:</p>
+
+        <h3>Achenbach System of Empirically Based Assessment (ASEBA)</h3>
+        <p>The <span class="key-term">ASEBA</span> is an empirically derived system that uses factor-analytic methods to identify syndromes of co-occurring behavioral and emotional problems. The system includes multiple informant-specific forms:</p>
+        <ul>
+          <li><strong>CBCL (Child Behavior Checklist):</strong> Completed by parents/caregivers for ages 1.5-18</li>
+          <li><strong>TRF (Teacher's Report Form):</strong> Completed by teachers for ages 6-18</li>
+          <li><strong>YSR (Youth Self-Report):</strong> Self-report for ages 11-18</li>
+        </ul>
+        <p>The ASEBA yields <span class="key-term">broadband scales</span> — Internalizing (anxious, depressive, withdrawn behaviors) and Externalizing (aggressive, rule-breaking behaviors) — as well as <span class="key-term">narrowband syndrome scales</span> (e.g., Anxious/Depressed, Withdrawn/Depressed, Somatic Complaints, Social Problems, Thought Problems, Attention Problems, Rule-Breaking Behavior, Aggressive Behavior). The multi-informant approach allows cross-informant comparisons to identify situational versus pervasive problems. Scores are reported as T-scores (M = 50, SD = 10), with T = 64-69 in the borderline clinical range and T = 70+ in the clinical range.</p>
+
+        <h3>BASC-3 (Behavior Assessment System for Children, Third Edition)</h3>
+        <p>The <span class="key-term">BASC-3</span> (Reynolds & Kamphaus, 2015) is a multimethod, multidimensional assessment system that includes:</p>
+        <ul>
+          <li><strong>Parent Rating Scales (PRS):</strong> Completed by parents for ages 2-21</li>
+          <li><strong>Teacher Rating Scales (TRS):</strong> Completed by teachers for ages 2-21</li>
+          <li><strong>Self-Report of Personality (SRP):</strong> Self-report for ages 6-25</li>
+        </ul>
+        <p>The BASC-3 measures both maladaptive behavior through <span class="key-term">clinical scales</span> (Hyperactivity, Aggression, Conduct Problems, Anxiety, Depression, Somatization, Attention Problems, Atypicality, Withdrawal) and positive behavior through <span class="key-term">adaptive scales</span> (Adaptability, Social Skills, Leadership, Activities of Daily Living, Functional Communication). Unlike the ASEBA which is purely empirically derived, the BASC-3 was constructed using a rational-empirical approach. The BASC-3 includes validity indices (F Index for faking bad, L Index for faking good, V Index for random responding, Response Pattern Index, Consistency Index) to detect invalid profiles.</p>
+
+        <h3>Conners Rating Scales (Conners-4)</h3>
+        <p>The <span class="key-term">Conners-4</span> (Conners, 2022) is specifically designed for the assessment of <span class="key-term">ADHD</span> and related problems in children and adolescents ages 6-18. It includes parent, teacher, and self-report forms and yields content scales, DSM-5 Symptom scales (Inattention, Hyperactivity/Impulsivity), and an ADHD Index. The Conners-4 is aligned with DSM-5 diagnostic criteria and provides probability scores for ADHD presentations (Predominantly Inattentive, Predominantly Hyperactive-Impulsive, Combined). It also assesses oppositional behavior, emotional distress, and impairment across settings.</p>
+
+        <h3>Vineland Adaptive Behavior Scales, Third Edition (Vineland-3)</h3>
+        <p>The <span class="key-term">Vineland-3</span> (Sparrow, Cicchetti, & Saulnier, 2016) is the most widely used measure of <span class="key-term">adaptive behavior</span> — the collection of conceptual, social, and practical skills that are performed in everyday life. It measures four broad domains:</p>
+        <ul>
+          <li><strong>Communication:</strong> Receptive, Expressive, and Written communication skills</li>
+          <li><strong>Daily Living Skills:</strong> Personal, Domestic, and Community skills</li>
+          <li><strong>Socialization:</strong> Interpersonal Relationships, Play and Leisure, and Coping Skills</li>
+          <li><strong>Motor Skills:</strong> Gross Motor and Fine Motor (available for ages 0-9)</li>
+        </ul>
+        <p>The Vineland-3 yields an Adaptive Behavior Composite (ABC) and domain standard scores (M = 100, SD = 15). It is primarily administered via <span class="key-term">semi-structured interview</span> with a caregiver or respondent who knows the individual well, though parent/caregiver and teacher rating forms are also available. The Vineland-3 is essential for diagnosing intellectual disability, as both DSM-5 and AAIDD require documented deficits in adaptive functioning alongside subaverage intellectual ability.</p>
+
+        <h3>Behavioral Interviews</h3>
+        <p>The behavioral interview is a fundamental assessment tool for gathering information about target behaviors, their antecedents, consequences, and maintaining variables. Behavioral interviews can be <span class="key-term">unstructured</span> (open-ended, flexible format guided by clinical judgment) or <span class="key-term">structured</span> (predetermined questions asked in a standardized order).</p>
+
+        <p><span class="key-term">Bergan's behavioral consultation model</span> provides a four-stage framework for conducting behavioral interviews in consultative settings:</p>
+        <ol>
+          <li><strong>Problem Identification Interview:</strong> Operationally define the target behavior, establish baseline data collection procedures, and identify tentative antecedents and consequences</li>
+          <li><strong>Problem Analysis Interview:</strong> Review baseline data, analyze the conditions maintaining the behavior, develop a hypothesis about behavioral function, and design an intervention plan</li>
+          <li><strong>Treatment Implementation:</strong> Implement the intervention and monitor data collection to assess treatment integrity</li>
+          <li><strong>Treatment Evaluation Interview:</strong> Compare post-intervention data to baseline, determine whether goals have been met, and decide on continuation, modification, or termination of the intervention</li>
+        </ol>
+
+        <h3>Self-Monitoring</h3>
+        <p><span class="key-term">Self-monitoring</span> involves having the individual observe and record their own behavior. While useful for increasing self-awareness and promoting behavior change, self-monitoring is subject to two key limitations:</p>
+        <ul>
+          <li><strong>Reactivity:</strong> The act of self-monitoring itself tends to change the behavior being monitored — typically in a therapeutic direction (e.g., smokers who record each cigarette tend to smoke less). This reactivity effect is actually beneficial in clinical interventions but compromises accuracy for assessment purposes.</li>
+          <li><strong>Accuracy:</strong> Self-monitoring data may be inaccurate due to forgetting, social desirability, difficulty detecting covert behaviors (e.g., automatic thoughts), or inconsistent recording. Training, simple recording systems, and external verification improve accuracy.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Multi-Method Behavioral Assessment:</strong>
+          <p>Best practice in behavioral assessment involves using multiple methods (direct observation, rating scales, interviews, self-monitoring) across multiple informants (parent, teacher, self-report) and settings (home, school, clinic). Convergent findings across methods and informants strengthen confidence in assessment conclusions, while discrepancies provide clinically useful information about situational specificity of behavior.</p>
+        </div>
+      </div>
+
+      <!-- Section 6: Structured Diagnostic Interviews -->
+      <div class="content-section">
+        <h2>Structured and Semi-Structured Diagnostic Interviews</h2>
+        <p>Structured and semi-structured diagnostic interviews provide systematic procedures for assessing psychiatric diagnoses based on specific diagnostic criteria. These instruments improve the reliability and standardization of the diagnostic process compared to unstructured clinical interviews.</p>
+
+        <h3>SCID-5-CV and SCID-5-RV</h3>
+        <p>The <span class="key-term">Structured Clinical Interview for DSM-5 (SCID-5)</span> is the gold standard semi-structured diagnostic interview for adults. Two versions are available: the <span class="key-term">Clinician Version (SCID-5-CV)</span> for routine clinical use and the <span class="key-term">Research Version (SCID-5-RV)</span> for research studies requiring more detailed diagnostic assessment. The SCID-5 is organized into diagnostic modules covering mood disorders, psychotic disorders, substance use disorders, anxiety disorders, obsessive-compulsive disorders, trauma- and stressor-related disorders, somatic symptom disorders, eating disorders, and personality disorders (a separate SCID-5-PD). Administration requires <span class="key-term">clinical training and expertise</span>, as interviewers must make clinical judgments about symptom severity, differential diagnosis, and the credibility of patient reports. The SCID-5 is considered the <span class="key-term">gold standard for diagnostic reliability in research</span> settings.</p>
+
+        <h3>MINI (Mini International Neuropsychiatric Interview)</h3>
+        <p>The <span class="key-term">MINI</span> (Sheehan et al., 1998) is a brief, <span class="key-term">fully structured</span> diagnostic interview designed for use in primary care and clinical trials. It can be administered in approximately <span class="key-term">15-20 minutes</span>, making it substantially briefer than the SCID. The MINI uses a branching logic format with yes/no questions that map directly onto DSM-5 and ICD diagnostic criteria. It covers major depressive episode, dysthymia, suicidality, manic/hypomanic episodes, panic disorder, agoraphobia, social anxiety disorder, OCD, PTSD, alcohol and substance use disorders, psychotic disorders, anorexia and bulimia, GAD, and antisocial personality disorder. The MINI demonstrates good <span class="key-term">sensitivity</span> (ability to identify true cases) and is well-suited for screening in busy clinical settings, though its brevity may sacrifice some diagnostic precision compared to the SCID.</p>
+
+        <h3>K-SADS (Kiddie Schedule for Affective Disorders and Schizophrenia)</h3>
+        <p>The <span class="key-term">K-SADS</span> (Kaufman et al., 1997) is a <span class="key-term">semi-structured diagnostic interview</span> designed for children and adolescents ages 6-18. A key feature is that the interviewer conducts separate interviews with both the <span class="key-term">child and parent</span>, then integrates information from both sources to generate summary ratings. This multi-informant approach addresses the well-documented finding that children and parents often provide discrepant reports of symptoms, particularly for internalizing disorders. The K-SADS covers mood disorders, psychotic disorders, anxiety disorders, behavioral disorders, substance abuse, eating disorders, and tic disorders. <span class="key-term">Present and lifetime versions</span> allow assessment of both current and past episodes. Like the SCID, the K-SADS requires administration by a trained clinician who can make clinical judgments about symptom presence and severity.</p>
+
+        <h3>DISC (Diagnostic Interview Schedule for Children)</h3>
+        <p>The <span class="key-term">DISC</span> (Shaffer et al., 2000) is a <span class="key-term">fully structured</span> diagnostic interview for children and adolescents. Unlike the K-SADS, the DISC is designed to be administered by <span class="key-term">lay interviewers</span> (i.e., individuals without clinical training), making it practical for large-scale epidemiological studies. It includes parallel <span class="key-term">youth and parent versions</span>. The fully structured format means that questions are read exactly as written with no clinical judgment required during administration, though the trade-off is less flexibility to probe or clarify ambiguous responses. The DISC covers anxiety disorders, mood disorders, disruptive behavior disorders, substance use disorders, and other conditions.</p>
+
+        <div class="definition-box">
+          <strong>Structured vs. Semi-Structured Interviews:</strong>
+          <p>In a <span class="key-term">fully structured interview</span> (e.g., MINI, DISC), questions are read verbatim in a fixed order, and the interviewer does not deviate from the script — no clinical judgment is required during administration, and lay interviewers can administer them. In a <span class="key-term">semi-structured interview</span> (e.g., SCID-5, K-SADS), the interviewer follows a general framework and specific probes but has the flexibility to ask follow-up questions, rephrase items, and use clinical judgment to rate responses. Semi-structured interviews require clinician administration but allow for greater nuance and clinical contextualization.</p>
+        </div>
+
+        <h3>Advantages of Structured and Semi-Structured Interviews</h3>
+        <ul>
+          <li><strong>Increased reliability:</strong> Standardized questions and scoring procedures improve diagnostic agreement across clinicians. Inter-rater reliability (measured by <span class="key-term">kappa coefficients</span>) is substantially higher for structured interviews than for unstructured clinical interviews.</li>
+          <li><strong>Reduced clinician bias:</strong> Structured formats minimize the impact of confirmation bias, anchoring, and other cognitive heuristics that can distort unstructured clinical judgment.</li>
+          <li><strong>Standardized coverage:</strong> All relevant diagnostic categories are systematically assessed, reducing the likelihood of overlooking comorbid conditions or less salient diagnoses.</li>
+          <li><strong>Research utility:</strong> Essential for ensuring diagnostic consistency across sites in multi-site research studies and clinical trials.</li>
+        </ul>
+
+        <h3>Disadvantages of Structured and Semi-Structured Interviews</h3>
+        <ul>
+          <li><strong>Time-consuming:</strong> Full administration of the SCID-5 can take 45-90 minutes or longer, which may be impractical in busy clinical settings.</li>
+          <li><strong>May feel impersonal:</strong> The structured format may disrupt rapport-building, particularly if the interviewer rigidly adheres to the script without attending to the patient's emotional state.</li>
+          <li><strong>Less flexibility for clinical judgment:</strong> Fully structured interviews (DISC, MINI) do not allow the interviewer to probe ambiguous responses, contextualize symptoms, or exercise clinical judgment — potentially leading to false positives or false negatives.</li>
+          <li><strong>Training requirements:</strong> Semi-structured interviews (SCID-5, K-SADS) require substantial training to administer reliably, limiting their accessibility in some settings.</li>
+          <li><strong>Cultural considerations:</strong> Structured interviews may not fully account for cultural variation in symptom expression, idioms of distress, or culturally normative behaviors that could be misinterpreted as pathological.</li>
+        </ul>
+
+        <table>
+          <tr><th>Interview</th><th>Type</th><th>Population</th><th>Administrator</th><th>Duration</th><th>Key Feature</th></tr>
+          <tr><td>SCID-5</td><td>Semi-structured</td><td>Adults</td><td>Clinician</td><td>45-90 min</td><td>Gold standard for research; DSM-5 modules</td></tr>
+          <tr><td>MINI</td><td>Fully structured</td><td>Adults</td><td>Clinician or trained interviewer</td><td>15-20 min</td><td>Brief; good sensitivity; primary care use</td></tr>
+          <tr><td>K-SADS</td><td>Semi-structured</td><td>Ages 6-18</td><td>Clinician</td><td>45-75 min</td><td>Interviews child AND parent; present &amp; lifetime</td></tr>
+          <tr><td>DISC</td><td>Fully structured</td><td>Children/Adolescents</td><td>Lay interviewer</td><td>60-120 min</td><td>No clinical training needed; epidemiological use</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Clinical Integration of Diagnostic Interviews:</strong>
+          <p>Structured and semi-structured interviews are best used as part of a comprehensive assessment battery rather than as standalone diagnostic tools. Interview findings should be integrated with behavioral observations, self-report measures, collateral information, and clinical history. When interview results conflict with other data sources, the clinician must use professional judgment to reconcile discrepancies and arrive at the most accurate diagnostic formulation.</p>
+        </div>
+      </div>
+
+      <!-- Section 7: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>MMPI-2 validity scales:</strong> L = naive faking good; F = faking bad, random responding, or severe pathology; K = sophisticated defensiveness. K corrections are added to 5 clinical scales.</li>
+          <li><strong>MMPI T-scores:</strong> Clinical significance at T = 65 or above. Remember the metric: M = 50, SD = 10.</li>
+          <li><strong>Code types:</strong> Know the most common (2-7/7-2 = anxious depression; 4-9/9-4 = antisocial impulsivity; 1-3/3-1 = conversion V).</li>
+          <li><strong>MMPI-2-RF vs. MMPI-2:</strong> RF uses Restructured Clinical scales that separate demoralization from specific psychopathology constructs.</li>
+          <li><strong>MCMI uses Base Rate scores</strong> (BR 75 = presence, BR 85 = prominence), NOT T-scores. This is a frequently tested distinction.</li>
+          <li><strong>NEO-PI-R:</strong> Measures Big Five (OCEAN). Used more in research and non-clinical settings. Not a diagnostic tool.</li>
+          <li><strong>PAI features:</strong> 4-point Likert scale; non-overlapping items; includes treatment planning scales (Suicidal Ideation, Treatment Rejection, Aggression).</li>
+          <li><strong>Rorschach:</strong> Know determinants (form, color, movement, shading), the distinction between Exner CS and R-PAS, and that R-PAS uses optimized administration.</li>
+          <li><strong>TAT:</strong> Murray's need-press theory. Lacks standardized scoring, which limits psychometric evidence.</li>
+          <li><strong>Projective hypothesis:</strong> Ambiguous stimuli elicit projection of unconscious material. Less susceptible to deliberate faking than self-report measures.</li>
+          <li><strong>Incremental validity:</strong> The key question for projective tests — do they add predictive value beyond objective measures?</li>
+          <li><strong>VRIN/TRIN:</strong> VRIN = random/careless responding. TRIN = acquiescence (all true) or nay-saying (all false). Both must be valid before interpreting clinical scales.</li>
+          <li><strong>Faking good pattern:</strong> High L, High K, Low F. Common in custody evaluations and employment screening.</li>
+          <li><strong>Faking bad pattern:</strong> Low L, Low K, High F. May indicate malingering, cry for help, or genuine severe psychopathology.</li>
+          <li><strong>BDI-II:</strong> 21 items, severity measure (not diagnostic). Cutoffs: minimal (0-13), mild (14-19), moderate (20-28), severe (29-63).</li>
+          <li><strong>SCL-90-R:</strong> 90 items, nine symptom dimensions, Global Severity Index (GSI) for overall distress. Self-report.</li>
+          <li><strong>CAT:</strong> Bellak's projective test for children ages 3-10 with animal figures. Based on assumption that young children identify more readily with animals.</li>
+          <li><strong>Roberts-2:</strong> Apperception test for children with standardized scoring (T-scores) — stronger psychometric support than TAT. Depicts everyday situations.</li>
+          <li><strong>Response style:</strong> Social desirability, malingering, acquiescence, random responding. All objective tests include validity scales to detect these. Projective tests assess through behavioral observation and protocol variables.</li>
+          <li><strong>Test construction methods:</strong> Empirical/criterion keying (MMPI), factor analytic (NEO-PI-R, 16PF), rational/theoretical (PAI), sequential system (MCMI).</li>
+          <li><strong>Conversion V (1-3/3-1):</strong> MMPI code type with elevated Hs and Hy with lower D. Classic pattern for conversion disorder/somatic symptom concerns.</li>
+          <li><strong>Rorschach Lambda:</strong> High Lambda (>0.99) suggests overly simplistic, avoidant, or constricted approach to the inkblots. Important for assessing response style on projective measures.</li>
+          <li><strong>16PF (Cattell):</strong> Measures 16 primary personality factors identified through factor analysis. Yields five global factors similar to the Big Five. Used in both clinical and occupational settings.</li>
+          <li><strong>MMPI-3:</strong> The newest version (2020) features 335 items, updated norms, and restructured scales. Maintains the empirical keying tradition while incorporating contemporary psychometric advances.</li>
+          <li><strong>Malingering detection:</strong> MMPI patterns (high F, low K, high Fp), Structured Interview of Reported Symptoms (SIRS-2), and inconsistency within/between test results. Critical in forensic and disability evaluations.</li>
+          <li><strong>SIRS-2:</strong> Gold standard for detecting malingered mental disorders. Uses 8 detection strategies: rare symptoms, symptom combinations, improbable symptoms, blatant symptoms, subtle symptoms, severity, selectivity, reported vs. observed. Classifies as Genuine, Indeterminate, or Feigning.</li>
+          <li><strong>M-FAST:</strong> 25-item brief screening tool for malingered psychopathology. Cutoff = 6. Positive screens should be followed by the SIRS-2. Administered in 5-10 minutes.</li>
+          <li><strong>TOMM:</strong> 50-item visual recognition PVT. Below-chance performance (below 45/50 on Trial 2) indicates malingering. Even patients with documented dementia typically score well above chance.</li>
+          <li><strong>PVTs vs. SVTs:</strong> Performance Validity Tests assess effort on cognitive tasks (TOMM, VSVT). Symptom Validity Tests assess accuracy of symptom reporting (MMPI validity scales, SIRS-2). Both are needed in forensic evaluations.</li>
+          <li><strong>MMPI-3 Fp scale:</strong> Infrequent Psychopathology — strongest single MMPI indicator of malingering because items are rarely endorsed even by genuine psychiatric patients. Differentiates faking from true severe pathology.</li>
+          <li><strong>Base rates of malingering:</strong> Forensic settings approximately 30-40% for neurocognitive feigning; clinical settings approximately 5-10%. Base rates affect positive predictive value of validity indicators.</li>
+          <li><strong>Sentence completion tests:</strong> RISB yields an overall adjustment score. Semi-structured format is less susceptible to faking than forced-choice but more standardized than fully open-ended projectives.</li>
+          <li><strong>FBA and ABC analysis:</strong> Antecedent-Behavior-Consequence. Four functions of behavior: attention, escape, tangible, automatic/sensory. Direct (observation) vs. indirect (informant report) methods.</li>
+          <li><strong>Interval recording bias:</strong> Whole interval = underestimates; partial interval = overestimates; momentary time sampling = most accurate estimate of duration.</li>
+          <li><strong>IOA:</strong> Inter-observer agreement. Agreements / (agreements + disagreements) x 100. 80% or higher is acceptable.</li>
+          <li><strong>ASEBA (CBCL/TRF/YSR):</strong> Empirically derived. Broadband scales: Internalizing and Externalizing. Narrowband syndrome scales. Multi-informant. T-scores with T = 70+ clinical range.</li>
+          <li><strong>BASC-3:</strong> Clinical scales AND adaptive scales (unlike ASEBA which focuses on problems). Includes validity indices (F, L, V). Parent, Teacher, and Self-Report forms. Rational-empirical construction.</li>
+          <li><strong>Conners-4:</strong> ADHD-focused rating scale. Parent, teacher, self-report. DSM-5 aligned. Probability scores for ADHD presentations.</li>
+          <li><strong>Vineland-3:</strong> Adaptive behavior (Communication, Daily Living Skills, Socialization, Motor). Semi-structured interview format. Essential for intellectual disability diagnosis. M = 100, SD = 15.</li>
+          <li><strong>Bergan's behavioral consultation model:</strong> Four stages — Problem Identification, Problem Analysis, Treatment Implementation, Treatment Evaluation.</li>
+          <li><strong>Self-monitoring reactivity:</strong> The act of self-monitoring changes the behavior being monitored, typically in a therapeutic direction. Useful for intervention, problematic for assessment accuracy.</li>
+          <li><strong>SCID-5:</strong> Semi-structured; gold standard for research; clinician-administered; DSM-5 modules. CV = Clinician Version, RV = Research Version.</li>
+          <li><strong>MINI:</strong> Fully structured; 15-20 minutes; good sensitivity; designed for primary care and clinical trials. Substantially briefer than SCID.</li>
+          <li><strong>K-SADS:</strong> Semi-structured; ages 6-18; interviews BOTH child and parent; present and lifetime versions. Clinician-administered.</li>
+          <li><strong>DISC:</strong> Fully structured; lay interviewers can administer; youth and parent versions. Used in epidemiological research.</li>
+          <li><strong>Structured vs. semi-structured interviews:</strong> Structured = verbatim questions, no clinical judgment, lay interviewers okay (MINI, DISC). Semi-structured = flexible probing, requires clinician (SCID-5, K-SADS). Both improve reliability (kappa) over unstructured interviews.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch1-intelligence-cognitive.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Intelligence &amp; Cognitive Assessment</div>
+          </div>
+        </a>
+        <a href="ch3-neuropsych-clinical.html" class="nav-btn">
+          <div>
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Neuropsych Screening &amp; Clinical Measurement</div>
+          </div>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

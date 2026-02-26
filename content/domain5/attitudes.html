@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attitudes | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Attitudes</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link active"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 9</div>
+        <h1>Attitudes</h1>
+        <div class="chapter-meta">
+          <span>Attitude formation, cognitive dissonance, attitude-behavior link</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Attitudes</h2>
+        <p>An <span class="key-term">attitude</span> is an evaluation of an object, person, group, issue, or concept along a dimension ranging from positive to negative. Attitudes are among the most studied constructs in social psychology because they influence perception, judgment, and behavior across virtually every domain of human life.</p>
+        <p>Attitudes have three components, known as the <span class="key-term">ABC model</span>: <strong>Affective</strong> (emotional reactions), <strong>Behavioral</strong> (actions or intentions toward the object), and <strong>Cognitive</strong> (beliefs about the object). These three components do not always align, which is a source of much theoretical interest.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Attitude Formation</h2>
+        <p>Attitudes can be acquired through several learning mechanisms, each of which has distinct implications for how resistant the attitude is to change.</p>
+
+        <h3>Classical Conditioning</h3>
+        <p>Attitudes can be formed through <span class="key-term">classical conditioning</span> when a neutral stimulus is repeatedly paired with a stimulus that already elicits a positive or negative emotional response. For example, a product (neutral stimulus) paired with attractive models (unconditioned stimulus) may come to evoke positive feelings on its own. Staats and Staats (1958) demonstrated that nonsense syllables paired with positive or negative words acquired the evaluative tone of those words.</p>
+
+        <h3>Operant Conditioning</h3>
+        <p>Attitudes that are reinforced (praised, rewarded) are strengthened, while attitudes that are punished tend to be suppressed. Insko (1965) showed that participants' attitudes on a topic could be shaped by the experimenter simply saying "good" each time the participant expressed a particular attitude.</p>
+
+        <h3>Observational Learning</h3>
+        <p>Attitudes are also acquired through <span class="key-term">modeling</span> (Bandura, 1977). Children adopt the attitudes of parents, peers, and media figures through observation. This mechanism is particularly important in the transmission of prejudice and stereotypes across generations.</p>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>When a question asks about attitude formation, consider which learning mechanism is most prominent. Classically conditioned attitudes are often emotional and difficult to change through logic alone. Operantly conditioned attitudes are maintained by their consequences. Observationally learned attitudes may be held without direct personal experience with the attitude object.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cognitive Dissonance Theory</h2>
+        <p>Leon Festinger's (1957) <span class="key-term">cognitive dissonance theory</span> is one of the most influential theories in social psychology. It proposes that holding two psychologically inconsistent cognitions (thoughts, beliefs, attitudes) simultaneously creates an aversive state of arousal called dissonance, which the individual is motivated to reduce.</p>
+
+        <h3>Ways to Reduce Dissonance</h3>
+        <ul>
+          <li><strong>Change one of the cognitions:</strong> Modify a belief or attitude to make it consistent with the other. ("Smoking isn't actually that dangerous.")</li>
+          <li><strong>Add new cognitions:</strong> Introduce new information that bridges the inconsistency. ("I exercise regularly, which offsets the risks.")</li>
+          <li><strong>Reduce the importance:</strong> Trivialize the inconsistency. ("Life is short -- you have to enjoy it.")</li>
+        </ul>
+
+        <h3>Classic Paradigms</h3>
+        <div class="definition-box">
+          <h4>Induced Compliance (Festinger &amp; Carlsmith, 1959)</h4>
+          <p>Participants performed a boring task and were then paid either $1 or $20 to tell the next participant the task was enjoyable. Those paid $1 rated the task as more enjoyable than those paid $20. The $1 participants had <span class="key-term">insufficient justification</span> for lying, creating dissonance that was reduced by changing their attitude toward the task. The $20 participants had sufficient external justification and experienced no dissonance.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Free Choice Paradigm (Brehm, 1956)</h4>
+          <p>After making a difficult choice between two equally attractive alternatives, people increase their liking of the chosen alternative and decrease their liking of the rejected one. This <span class="key-term">spreading of alternatives</span> effect reduces post-decisional dissonance.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Effort Justification</h4>
+          <p>People who undergo a difficult or unpleasant experience to attain a goal tend to value that goal more highly than those who attain it easily. This explains phenomena such as the increased loyalty of fraternity/sorority members who endured severe initiations (Aronson &amp; Mills, 1959).</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Clinical Application</h4>
+          <p>Dissonance can be used therapeutically. Motivational interviewing leverages dissonance by helping clients recognize the discrepancy between their current behavior and their stated values or goals. This dissonance becomes a motivational force for change.</p>
+        </div>
+        <div class="citation">Festinger, L. (1957). A theory of cognitive dissonance. Stanford University Press.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Self-Perception Theory</h2>
+        <p>Daryl Bem's (1967, 1972) <span class="key-term">self-perception theory</span> offers an alternative explanation for the findings attributed to cognitive dissonance. Bem proposed that when internal cues are weak or ambiguous, people infer their own attitudes by observing their own behavior and the context in which it occurs -- just as an outside observer would.</p>
+
+        <h3>Key Differences from Dissonance Theory</h3>
+        <table>
+          <tr><th>Feature</th><th>Cognitive Dissonance</th><th>Self-Perception</th></tr>
+          <tr><td><strong>Mechanism</strong></td><td>Aversive arousal from inconsistency</td><td>Calm inference from behavior</td></tr>
+          <tr><td><strong>Applies when</strong></td><td>Behavior contradicts strong prior attitudes</td><td>Attitudes are weak, ambiguous, or newly formed</td></tr>
+          <tr><td><strong>Emotional state</strong></td><td>Discomfort that motivates attitude change</td><td>No discomfort -- simply a rational inference</td></tr>
+        </table>
+        <p>Research suggests both theories are correct but apply in different circumstances. Dissonance theory better explains attitude change when there is a strong prior attitude that is contradicted by behavior. Self-perception theory better explains attitude formation when there is no strong prior attitude (Fazio, Zanna, &amp; Cooper, 1977).</p>
+
+        <div class="definition-box">
+          <h4>Overjustification Effect</h4>
+          <p>A key prediction of self-perception theory: when people receive external rewards for an activity they already enjoy (intrinsically motivated), they may infer that they are doing it for the reward rather than for enjoyment, thereby reducing intrinsic motivation. Lepper, Greene, and Nisbett (1973) demonstrated this with children who lost interest in drawing after being given expected rewards for it.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Attitude-Behavior Consistency</h2>
+        <p>A central question in attitude research is whether attitudes actually predict behavior. Early research (LaPiere, 1934) suggested a weak link, but subsequent work identified the conditions under which attitudes strongly predict behavior.</p>
+
+        <h3>Factors That Increase Attitude-Behavior Consistency</h3>
+        <ul>
+          <li><strong>Attitude strength:</strong> Strong attitudes (held with certainty, accessible, formed through direct experience) better predict behavior.</li>
+          <li><strong>Attitude specificity:</strong> Specific attitudes predict specific behaviors better than general attitudes predict general behaviors (principle of compatibility; Ajzen &amp; Fishbein, 1977).</li>
+          <li><strong>Self-awareness:</strong> When people are made self-aware (e.g., in front of a mirror), their behavior becomes more consistent with their attitudes.</li>
+          <li><strong>Low situational pressure:</strong> When situational forces are weak, attitudes have greater influence on behavior.</li>
+          <li><strong>Attitude accessibility:</strong> Attitudes that come to mind quickly and easily are better predictors of behavior.</li>
+        </ul>
+
+        <h3>Theory of Planned Behavior (Ajzen, 1991)</h3>
+        <p>The <span class="key-term">Theory of Planned Behavior</span> (TPB) is the most widely used model for predicting behavior from attitudes. It proposes that behavior is determined by <strong>behavioral intention</strong>, which is influenced by three factors:</p>
+        <ol>
+          <li><strong>Attitude toward the behavior:</strong> One's overall evaluation of performing the behavior (not toward the object in general).</li>
+          <li><strong>Subjective norms:</strong> Perceived social pressure to perform or not perform the behavior -- what important others think one should do.</li>
+          <li><strong>Perceived behavioral control:</strong> One's perception of how easy or difficult it is to perform the behavior. This is similar to Bandura's concept of self-efficacy.</li>
+        </ol>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>The TPB is a frequently tested model. Remember that it predicts <strong>behavioral intention</strong>, not behavior directly. Also note that <strong>perceived behavioral control</strong> can influence behavior directly (not just through intention) when actual control is limited. The TPB is an extension of the earlier Theory of Reasoned Action, which included only attitudes and subjective norms.</p>
+        </div>
+        <div class="citation">Ajzen, I. (1991). The theory of planned behavior. Organizational Behavior and Human Decision Processes, 50(2), 179-211.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Implicit vs. Explicit Attitudes</h2>
+        <p>An important distinction in modern attitude research is between <span class="key-term">explicit attitudes</span> (conscious, deliberate evaluations that people can report) and <span class="key-term">implicit attitudes</span> (automatic, unconscious evaluations that operate outside awareness).</p>
+
+        <h3>Dual Attitude Models</h3>
+        <p>Wilson, Lindsey, and Schooler (2000) proposed that people can hold different implicit and explicit attitudes toward the same object simultaneously. Explicit attitudes are activated when the person has the motivation and cognitive resources for deliberate processing. Implicit attitudes are activated automatically and may influence behavior when the person is distracted, under time pressure, or lacking motivation to override automatic responses.</p>
+
+        <div class="definition-box">
+          <h4>Measuring Implicit Attitudes</h4>
+          <p>Implicit attitudes are measured using reaction-time-based tasks such as the <span class="key-term">Implicit Association Test</span> (IAT; Greenwald, McGhee, &amp; Schwartz, 1998), evaluative priming tasks, and the Affect Misattribution Procedure (AMP). These measures assess the strength of associations between concepts and evaluations by measuring response latencies rather than self-reported evaluations.</p>
+        </div>
+
+        <h3>When Do Implicit vs. Explicit Attitudes Predict Behavior?</h3>
+        <ul>
+          <li><strong>Explicit attitudes</strong> better predict deliberate, controlled behaviors (e.g., voting decisions made after careful thought).</li>
+          <li><strong>Implicit attitudes</strong> better predict spontaneous, uncontrolled behaviors (e.g., nonverbal behavior during interracial interactions, snap judgments).</li>
+          <li>The MODE model (Fazio, 1990) proposes that Motivation and Opportunity serve as Determinants of whether behavior is guided by explicit attitudes (deliberate processing) or implicit attitudes (spontaneous processing).</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Attitude Change: Additional Theories</h2>
+
+        <h3>Balance Theory (Heider, 1958)</h3>
+        <p>Fritz Heider's <span class="key-term">balance theory</span> proposes that people prefer consistency (balance) among their attitudes and relationships. In a triad of a person (P), another person (O), and an attitude object (X), the system is balanced when the product of the three relationships is positive. When the system is imbalanced, there is pressure to restore balance by changing one of the relationships.</p>
+
+        <div class="example-box">
+          <h4>Balance Theory Example</h4>
+          <p>If you (P) like your friend (O), and your friend likes a political candidate (X) that you dislike, the triad is imbalanced. To restore balance, you might: (1) change your attitude toward the candidate (come to like X), (2) change your evaluation of your friend (come to dislike O), or (3) decide your friend doesn't really like the candidate (misperceive the O-X relationship).</p>
+        </div>
+
+        <h3>Functional Approach to Attitudes (Katz, 1960)</h3>
+        <p>Daniel Katz proposed that attitudes serve different psychological functions, and that attitude change requires addressing the specific function the attitude serves:</p>
+        <ul>
+          <li><strong>Utilitarian function:</strong> Attitudes that help maximize rewards and minimize punishments.</li>
+          <li><strong>Knowledge function:</strong> Attitudes that help organize and make sense of the world.</li>
+          <li><strong>Ego-defensive function:</strong> Attitudes that protect self-esteem and defend against internal conflicts.</li>
+          <li><strong>Value-expressive function:</strong> Attitudes that express central values and identity.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Integration</h4>
+          <p>Understanding the function an attitude serves is critical for effective intervention. Attempting to change an ego-defensive attitude by presenting rational arguments (targeting the knowledge function) will likely be ineffective. Instead, the clinician must address the underlying anxiety or threat that the attitude defends against. Similarly, cognitive-behavioral approaches to attitude change align with targeting the knowledge and utilitarian functions, while psychodynamic approaches may be better suited to ego-defensive attitudes.</p>
+        </div>
+        <div class="citation">Bem, D. J. (1972). Self-perception theory. Advances in Experimental Social Psychology, 6, 1-62.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Attitude Measurement</h2>
+        <p>Understanding how attitudes are measured is relevant for the EPPP because measurement method can influence results and interpretation.</p>
+
+        <h3>Self-Report Measures</h3>
+        <ul>
+          <li><strong>Likert scale:</strong> Respondents indicate their level of agreement with a series of statements on a numerical scale (e.g., 1 = Strongly Disagree to 5 = Strongly Agree). The most widely used explicit attitude measure.</li>
+          <li><strong>Semantic differential scale (Osgood):</strong> Respondents rate an object on a series of bipolar adjective pairs (e.g., good-bad, strong-weak, active-passive). Captures evaluative, potency, and activity dimensions of meaning.</li>
+          <li><strong>Thurstone scale:</strong> A set of statements with predetermined scale values. Respondents indicate which statements they agree with, and their attitude score is the average scale value of endorsed items.</li>
+          <li><strong>Bogus pipeline:</strong> Participants are led to believe that a physiological monitoring device can detect their true attitudes, which motivates more honest responding on self-report measures. Used in research on socially sensitive topics like prejudice.</li>
+        </ul>
+
+        <h3>Limitations of Self-Report</h3>
+        <p>Self-report measures are susceptible to <span class="key-term">social desirability bias</span> -- the tendency to present oneself in a favorable light. This is especially problematic when measuring attitudes about sensitive topics (prejudice, drug use, sexual behavior). Implicit measures partially address this limitation by assessing attitudes outside conscious control.</p>
+
+        <div class="example-box">
+          <h4>EPPP Integration</h4>
+          <p>Attitudes are among the most tested topics in the social psychology section of the EPPP. Critical topics include: cognitive dissonance (especially the insufficient justification paradigm), the difference between dissonance theory and self-perception theory, the Theory of Planned Behavior and its components, factors affecting attitude-behavior consistency, the distinction between implicit and explicit attitudes, and when each type predicts behavior. Be ready to apply these concepts to clinical vignettes involving motivation for behavior change.</p>
+        </div>
+        <div class="citation">Festinger, L., &amp; Carlsmith, J. M. (1959). Cognitive consequences of forced compliance. Journal of Abnormal and Social Psychology, 58(2), 203-210.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cognitive Consistency Theories</h2>
+        <p>Cognitive dissonance theory is part of a broader family of <span class="key-term">cognitive consistency theories</span> that share the assumption that people are motivated to maintain consistency among their cognitions.</p>
+
+        <h3>Key Consistency Theories Compared</h3>
+        <table>
+          <tr><th>Theory</th><th>Theorist</th><th>Focus</th></tr>
+          <tr><td>Balance Theory</td><td>Heider (1958)</td><td>Consistency among triadic relationships (P-O-X)</td></tr>
+          <tr><td>Congruity Theory</td><td>Osgood &amp; Tannenbaum (1955)</td><td>Consistency between attitude toward a source and attitude toward the position they advocate</td></tr>
+          <tr><td>Cognitive Dissonance</td><td>Festinger (1957)</td><td>Consistency between cognitions, especially after counterattitudinal behavior</td></tr>
+          <tr><td>Self-Affirmation Theory</td><td>Steele (1988)</td><td>Proposes that dissonance can be reduced by affirming an unrelated important value rather than changing the inconsistent cognition</td></tr>
+        </table>
+
+        <p>Steele's <span class="key-term">self-affirmation theory</span> is a particularly important alternative to dissonance theory for the EPPP. It proposes that the discomfort of dissonance stems from a threat to overall self-integrity, not from the logical inconsistency itself. Therefore, any affirmation of self-worth -- even in an unrelated domain -- can reduce dissonance without changing the inconsistent cognition. This has been applied to health behavior interventions: having people affirm their values before receiving threatening health information reduces defensive processing.</p>
+
+        <h3>The Role of Affect in Attitudes</h3>
+        <p>Research by Zajonc (1980) demonstrated that affective reactions can be independent of and precede cognitive appraisals -- the <span class="key-term">"affect as information"</span> model. People sometimes evaluate objects based on how they feel ("How do I feel about this?") rather than what they think. This is particularly relevant when cognitive resources are limited. Schwarz and Clore (1983) found that people reported greater life satisfaction on sunny days than on rainy days -- their current mood served as information for their evaluative judgment, even though weather is irrelevant to life satisfaction.</p>
+
+        <div class="clinical-note">
+          <h4>Attitudes in Therapeutic Context</h4>
+          <p>Attitudes toward therapy, toward the therapist, and toward the presenting problem all influence treatment outcomes. Research on client expectations shows that positive expectations (attitudes toward the likelihood of therapeutic benefit) predict better outcomes -- a finding consistent with the concept of the placebo effect and the common factors approach to psychotherapy. Understanding attitude formation and change processes helps clinicians build positive treatment expectations and address negative attitudes that may function as barriers to engagement.</p>
+        </div>
+
+        <div class="definition-box">
+          <h4>Attitude Inoculation in Clinical Settings</h4>
+          <p>McGuire's inoculation theory has been applied in clinical prevention programs. For example, school-based substance abuse prevention programs that expose adolescents to weak peer pressure arguments and help them practice refusal skills are more effective than programs that simply provide information about the dangers of drug use. By "inoculating" students against persuasive peer pressure, these programs build resistance to real-world social influence. This approach has also been applied to anti-smoking campaigns and media literacy interventions.</p>
+        </div>
+        <p>Relapse prevention in cognitive-behavioral therapy similarly "inoculates" clients by preparing them for anticipated challenges and rehearsing coping responses before the challenges occur. This parallels the inoculation process of exposure to weakened threats followed by practice in resisting them.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="biases-heuristics.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Biases & Heuristics</div>
+          </div>
+        </a>
+        <a href="persuasion.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Persuasion</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

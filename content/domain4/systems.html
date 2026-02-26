@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through the System | Domain 4 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #22c55e; --accent-dim: rgba(34, 197, 94, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 4</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Through the System</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 4</div>
+        <div class="domain-title">How Therapy Works</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="insight.html" class="chapter-link"><span class="chapter-number">1</span>Through the Unconscious</a></li>
+        <li class="chapter-item"><a href="cognition.html" class="chapter-link"><span class="chapter-number">2</span>Through Thoughts</a></li>
+        <li class="chapter-item"><a href="conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Through Conditioning</a></li>
+        <li class="chapter-item"><a href="acceptance.html" class="chapter-link"><span class="chapter-number">4</span>Through Acceptance</a></li>
+        <li class="chapter-item"><a href="relationship.html" class="chapter-link"><span class="chapter-number">5</span>Through the Relationship</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">6</span>Through Motivation</a></li>
+        <li class="chapter-item"><a href="systems.html" class="chapter-link active"><span class="chapter-number">7</span>Through the System</a></li>
+        <li class="chapter-item"><a href="evidence.html" class="chapter-link"><span class="chapter-number">8</span>Through Evidence</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 8</div>
+        <h1>Through the System</h1>
+        <div class="chapter-meta">
+          <span>Family therapy &amp; group dynamics</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 4)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 4)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Systems Theory Foundation</h2>
+        <p>Family therapy approaches share a foundation in <span class="key-term">general systems theory</span>, which views the family as an interconnected system rather than a collection of individuals. Key systems concepts include:</p>
+        <ul>
+          <li><span class="key-term">Circular causality</span> -- Behavior in families is mutually influenced; A affects B, and B affects A simultaneously, rather than in a linear cause-effect chain</li>
+          <li><span class="key-term">Homeostasis</span> -- Families tend to maintain stability and resist change; symptoms may serve a homeostatic function in the system</li>
+          <li><span class="key-term">Equifinality</span> -- Different initial conditions can lead to the same outcome; many paths lead to the same family pattern</li>
+          <li><span class="key-term">Identified patient (IP)</span> -- The family member presented as "the problem"; systemic therapists view the IP's symptoms as reflecting dysfunction in the larger family system</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>First-Order vs. Second-Order Change</h4>
+          <p><strong>First-order change</strong> involves surface-level modifications within the existing system structure (e.g., a family changes which parent enforces rules, but the dysfunctional pattern continues). <strong>Second-order change</strong> involves a fundamental transformation of the system's structure or rules themselves (e.g., the family reorganizes its hierarchy entirely). Most family therapies aim for second-order change.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Structural Family Therapy (Minuchin)</h2>
+        <p><span class="key-term">Salvador Minuchin</span> developed structural family therapy, which focuses on the organization of the family system -- its <span class="key-term">structure</span>. The therapist actively intervenes to reorganize dysfunctional family structures, particularly boundaries and hierarchies.</p>
+
+        <h3>Key Structural Concepts</h3>
+        <ul>
+          <li><span class="key-term">Subsystems</span> -- Functional units within the family: spousal/marital subsystem, parental subsystem, sibling subsystem. Each has distinct roles and rules.</li>
+          <li><span class="key-term">Boundaries</span> -- Rules defining who participates in a subsystem and how. Range from <span class="key-term">enmeshed</span> (diffuse, overly permeable boundaries with excessive closeness) to <span class="key-term">disengaged</span> (rigid boundaries with emotional distance). Healthy families have <span class="key-term">clear boundaries</span>.</li>
+          <li><span class="key-term">Hierarchy</span> -- The distribution of power and authority; healthy families have parents in a position of authority over children</li>
+          <li><span class="key-term">Coalitions</span> -- Alliances between family members, often across generational lines (e.g., a parent and child aligning against the other parent)</li>
+        </ul>
+
+        <h3>Structural Techniques</h3>
+        <table>
+          <tr><th>Technique</th><th>Description</th></tr>
+          <tr><td><strong>Joining</strong></td><td>The therapist accommodates to the family's style to build rapport; entering the family system before attempting to change it</td></tr>
+          <tr><td><strong>Enactment</strong></td><td>Asking family members to interact with each other in session rather than talking to the therapist, so the therapist can observe actual patterns</td></tr>
+          <tr><td><strong>Boundary making</strong></td><td>Strengthening or loosening boundaries between subsystems (e.g., having enmeshed parent-child dyad sit farther apart)</td></tr>
+          <tr><td><strong>Unbalancing</strong></td><td>Deliberately siding with one family member to shift the power structure and disrupt a dysfunctional hierarchy</td></tr>
+          <tr><td><strong>Restructuring</strong></td><td>Actively reorganizing the family's transactional patterns through directives, seating changes, and task assignments</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Clinical Example</h4>
+          <p>A mother and her 14-year-old daughter are enmeshed -- they share everything, the daughter sleeps in the mother's bed, and the father is disengaged from the family. The structural therapist would work to strengthen the <span class="key-term">parental subsystem boundary</span> (bringing the parents together as a team), create appropriate distance in the mother-daughter subsystem, and draw the father back into the family. The daughter's presenting problem (e.g., school refusal) is understood as reflecting the dysfunctional structure.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Strategic Family Therapy (Haley)</h2>
+        <p><span class="key-term">Jay Haley</span> and <span class="key-term">Cloe Madanes</span> developed strategic family therapy, which focuses on solving the presenting problem through specific directives and interventions. Strategic therapists are less concerned with insight and more focused on changing the behavioral sequences that maintain symptoms.</p>
+
+        <h3>Key Concepts and Techniques</h3>
+        <ul>
+          <li><span class="key-term">Directives</span> -- The therapist assigns specific tasks for the family to perform between sessions; these may be straightforward or paradoxical</li>
+          <li><span class="key-term">Paradoxical interventions</span> -- Prescribing the symptom or instructing the family to continue the problematic behavior. The rationale: if a symptom is involuntary, prescribing it makes it voluntary (and therefore controllable); if the family resists the directive, they must abandon the symptom</li>
+          <li><span class="key-term">Reframing</span> -- Offering a new interpretation of behavior that changes its meaning (e.g., reframing a teenager's rebellion as "a healthy attempt at independence")</li>
+          <li><span class="key-term">Ordeal therapy</span> -- Assigning a task that is more difficult than the symptom itself, making the symptom less "worth" maintaining</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>The MRI Group</h4>
+          <p>The <span class="key-term">Mental Research Institute (MRI)</span> in Palo Alto (Watzlawick, Weakland, Fisch) is closely associated with strategic/brief therapy. Their key concept: problems are maintained by the very <span class="key-term">attempted solutions</span> people use. Therapy focuses on interrupting the cycle of failed solutions. The MRI group also contributed foundational communication theory, including the axiom that "one cannot not communicate."</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Bowenian Family Therapy</h2>
+        <p><span class="key-term">Murray Bowen</span> developed one of the most comprehensive family systems theories, emphasizing multigenerational transmission of emotional patterns and the centrality of <span class="key-term">differentiation of self</span>.</p>
+
+        <h3>Core Bowenian Concepts</h3>
+        <ul>
+          <li><span class="key-term">Differentiation of self</span> -- The ability to maintain one's own sense of self while in emotional contact with others; the capacity to distinguish between thinking and feeling. Low differentiation = emotional fusion with others</li>
+          <li><span class="key-term">Triangulation</span> -- When a two-person relationship becomes stressed, a third person is drawn in to stabilize it (e.g., parents in conflict focus on a child's behavior). Triangles are the basic unit of relationship systems</li>
+          <li><span class="key-term">Nuclear family emotional system</span> -- Four patterns of managing anxiety: marital conflict, dysfunction in one spouse, impairment of one or more children, emotional distance</li>
+          <li><span class="key-term">Multigenerational transmission process</span> -- Emotional patterns and levels of differentiation are transmitted across generations</li>
+          <li><span class="key-term">Emotional cutoff</span> -- Managing unresolved attachment by reducing or cutting off emotional contact with family; appears to resolve the problem but actually increases vulnerability</li>
+          <li><span class="key-term">Genogram</span> -- A multigenerational family diagram used to map family patterns, relationships, and emotional processes across at least three generations</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Narrative Therapy (White &amp; Epston)</h2>
+        <p><span class="key-term">Michael White</span> and <span class="key-term">David Epston</span> developed narrative therapy, a postmodern approach grounded in <span class="key-term">social constructionist epistemology</span>. Narrative therapy holds that people make meaning of their lives through stories, and that problems arise when individuals become dominated by oppressive, deficit-saturated narratives about themselves. The central therapeutic task is to help clients separate themselves from problem-saturated stories and construct new, preferred narratives.</p>
+
+        <h3>Core Philosophy</h3>
+        <div class="definition-box">
+          <h4>"The Person Is Not the Problem; the Problem Is the Problem"</h4>
+          <p>This foundational axiom of narrative therapy rejects the idea that pathology resides within the individual. Instead, problems are understood as separate entities that influence people's lives. This philosophical stance shifts the therapeutic conversation from diagnosis and internal deficits to the relationship between the person and the problem, opening space for agency and resistance.</p>
+        </div>
+
+        <h3>Key Concepts and Techniques</h3>
+        <ul>
+          <li><span class="key-term">Externalization</span> -- The signature technique of narrative therapy. The problem is linguistically separated from the person's identity, turning it into an external entity that can be examined, resisted, and overcome. Externalization uses language that positions the problem as something that acts upon the person rather than something the person is.</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Externalizing Conversation</h4>
+          <p>Rather than asking "Why are you so anxious?" a narrative therapist might ask: <em>"When does Anxiety visit you? What tricks does Anxiety use to convince you that you can't cope? Have there been times when you stood up to Anxiety and didn't let it push you around?"</em> This language externalizes the problem (Anxiety) as a separate agent, preserves the client's sense of self as competent, and opens space for identifying moments of agency.</p>
+        </div>
+
+        <ul>
+          <li><span class="key-term">Dominant stories</span> -- The prevailing narratives that organize a person's understanding of themselves and their experience. When dominant stories are problem-saturated (e.g., "I am a failure," "Our family is broken"), they filter out evidence of competence, strength, and positive experience.</li>
+          <li><span class="key-term">Alternative stories (preferred stories)</span> -- New narratives that are more empowering, multidimensional, and reflective of the person's values and hopes. The therapeutic goal is to help clients <span class="key-term">re-author</span> their lives according to preferred stories.</li>
+          <li><span class="key-term">Unique outcomes</span> -- Exceptions to the dominant problem story -- moments when the person successfully resisted, escaped, or was not influenced by the problem. These are the entry points for constructing alternative narratives. The therapist actively inquires about times when the problem did not dominate.</li>
+          <li><span class="key-term">Re-authoring</span> -- The process of weaving unique outcomes into a coherent new narrative about the person's identity, values, and capabilities. Re-authoring conversations help clients thicken the alternative story by connecting unique outcomes to intentions, values, hopes, and commitments.</li>
+        </ul>
+
+        <h3>Narrative Practices</h3>
+        <ul>
+          <li><span class="key-term">Definitional ceremonies / outsider witness practices</span> -- Structured rituals in which an audience (outsider witnesses) listens to the client tell their story, then reflects back what struck them -- without offering interpretations, advice, or judgments. The audience's reflections help thicken the client's preferred story by acknowledging it through multiple perspectives. Drawn from anthropological work on rites of passage.</li>
+          <li><span class="key-term">Therapeutic letters and documents</span> -- White and Epston used letters summarizing sessions, certificates of achievement, and other documents to make therapeutic gains tangible and enduring. These documents serve as external records of the client's preferred story and can be revisited long after therapy ends.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Philosophical Foundations</h4>
+          <p>Narrative therapy is deeply influenced by the work of French philosopher <span class="key-term">Michel Foucault</span>, particularly his analysis of <span class="key-term">power/knowledge</span> -- the idea that dominant discourses in society (including psychiatric and psychological discourses) shape what is considered "normal" and "pathological." Narrative therapists are attuned to how cultural, institutional, and professional power can produce problem-saturated identities. They adopt a <span class="key-term">decentered but influential</span> therapeutic stance -- the therapist is curious and facilitative but does not position themselves as the expert on the client's life. The client is always the primary author of their own story.</p>
+        </div>
+
+        <h3>Application in Family Therapy</h3>
+        <p>In family contexts, narrative therapy externalizes problems that the family has internalized as belonging to one member (often the identified patient). By positioning the problem as external to all family members, the entire family can collaborate against it rather than blaming a single individual. Family members are invited to share their own unique outcomes and to serve as witnesses to each other's preferred stories, strengthening new narratives through collective acknowledgment.</p>
+
+        <div class="example-box">
+          <h4>Family Narrative Example</h4>
+          <p>A family presents with their 10-year-old son, who has been labeled "the angry kid" at home and school. The narrative therapist externalizes the problem: <em>"It sounds like Anger has been getting a lot of power in your family. When did Anger first start bossing everyone around? Are there times when your family has teamed up and not let Anger take over dinner time?"</em> The family identifies several "Anger-free evenings" (unique outcomes), and together they explore what made those evenings possible -- collaboration that re-authors the family's story from "broken family with an angry child" to "family that sometimes wins against Anger."</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Milan Systemic Family Therapy</h2>
+        <p>The <span class="key-term">Milan group</span> (Selvini Palazzoli, Boscolo, Cecchin, and Prata) developed a systemic approach that uses specific interviewing and intervention techniques:</p>
+        <ul>
+          <li><span class="key-term">Circular questioning</span> -- Asking one family member to comment on the relationship between two other family members (e.g., "Who do you think is most upset when Mom and Dad argue?"). This reveals systemic patterns and perceptions that direct questioning cannot access.</li>
+          <li><span class="key-term">Hypothesizing</span> -- The therapy team develops tentative hypotheses about the family's relational patterns before and during the session, using these hypotheses to guide questioning</li>
+          <li><span class="key-term">Neutrality</span> -- The therapist avoids siding with any family member and maintains curiosity about all perspectives; later revised to "<span class="key-term">curiosity</span>" by Cecchin</li>
+          <li><span class="key-term">Positive connotation</span> -- Reframing the symptom and each family member's behavior as serving a positive, protective function for the family system</li>
+          <li><span class="key-term">Rituals and invariant prescriptions</span> -- Assigning ritualized behavioral tasks designed to disrupt the family's repetitive interaction patterns</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Experiential Family Therapy</h2>
+        <h3>Virginia Satir</h3>
+        <p><span class="key-term">Satir</span> emphasized emotional experience and communication patterns. She identified four dysfunctional <span class="key-term">communication stances</span> people adopt under stress:</p>
+        <ol>
+          <li><strong>Placator</strong> -- Agrees with everything to avoid conflict; ignores own needs</li>
+          <li><strong>Blamer</strong> -- Finds fault with others; aggressive and dominating</li>
+          <li><strong>Super-reasonable (computer)</strong> -- Intellectualizes and detaches from feelings</li>
+          <li><strong>Irrelevant (distracter)</strong> -- Changes the subject; uses humor or distraction to deflect</li>
+        </ol>
+        <p>The healthy alternative is the <span class="key-term">congruent communicator</span>, who expresses feelings directly and honestly while respecting others. Satir used techniques such as <span class="key-term">family sculpting</span> (having members physically position themselves to represent family dynamics) and <span class="key-term">family reconstruction</span>.</p>
+
+        <h3>Carl Whitaker</h3>
+        <p><span class="key-term">Whitaker</span> practiced <span class="key-term">experiential/symbolic family therapy</span>, an intuitive, provocative approach that used humor, absurdity, and the therapist's own emotional reactions. Whitaker believed that growth occurs through emotional experience in the session rather than through insight or education. He often used co-therapy and insisted on treating the entire family.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Group Therapy</h2>
+        <h3>Yalom's Therapeutic (Curative) Factors</h3>
+        <p><span class="key-term">Irvin Yalom</span> identified 11 <span class="key-term">therapeutic factors</span> (originally "curative factors") that operate in group therapy:</p>
+        <table>
+          <tr><th>#</th><th>Factor</th><th>Description</th></tr>
+          <tr><td>1</td><td><strong>Instillation of hope</strong></td><td>Seeing others improve inspires optimism</td></tr>
+          <tr><td>2</td><td><strong>Universality</strong></td><td>Realizing "I am not alone" -- others share similar struggles</td></tr>
+          <tr><td>3</td><td><strong>Imparting information</strong></td><td>Psychoeducation and advice from therapist and members</td></tr>
+          <tr><td>4</td><td><strong>Altruism</strong></td><td>Helping others enhances one's own self-esteem and sense of purpose</td></tr>
+          <tr><td>5</td><td><strong>Corrective recapitulation of the primary family group</strong></td><td>The group re-creates family dynamics, allowing corrective emotional experiences</td></tr>
+          <tr><td>6</td><td><strong>Development of socializing techniques</strong></td><td>Learning social skills through group interaction</td></tr>
+          <tr><td>7</td><td><strong>Imitative behavior</strong></td><td>Modeling -- observing and imitating adaptive behaviors of others</td></tr>
+          <tr><td>8</td><td><strong>Interpersonal learning</strong></td><td>Gaining insight into one's interpersonal impact through feedback</td></tr>
+          <tr><td>9</td><td><strong>Group cohesiveness</strong></td><td>The sense of belonging and acceptance; the group analog of the therapeutic alliance</td></tr>
+          <tr><td>10</td><td><strong>Catharsis</strong></td><td>Emotional release and expression of feelings in a safe context</td></tr>
+          <tr><td>11</td><td><strong>Existential factors</strong></td><td>Confronting fundamental issues of existence (responsibility, mortality, meaning)</td></tr>
+        </table>
+
+        <h3>Stages of Group Development</h3>
+        <p>Groups typically progress through predictable <span class="key-term">stages of development</span>:</p>
+        <ol>
+          <li><strong>Forming (Orientation)</strong> -- Members are polite, anxious, dependent on the leader; establishing ground rules; superficial interaction</li>
+          <li><strong>Storming (Conflict)</strong> -- Struggles for dominance, resistance to the leader and to group norms; interpersonal conflicts emerge; members test boundaries</li>
+          <li><strong>Norming (Cohesion)</strong> -- Group identity develops; trust increases; norms are established; members cooperate and support one another</li>
+          <li><strong>Working (Performing)</strong> -- Productive therapeutic work occurs; high cohesion, mutual support, self-disclosure; members give and receive honest feedback</li>
+          <li><strong>Termination (Adjourning)</strong> -- Consolidation of gains; addressing feelings of loss; reviewing accomplishments; planning for continued growth</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>Group Leadership Styles</h4>
+          <p>Research suggests that the most effective group leaders balance <strong>emotional stimulation</strong> (challenging, confronting) with <strong>caring</strong> (warmth, support). Leaders who are too confrontational without sufficient caring produce casualties. Leaders must also manage group dynamics such as <span class="key-term">scapegoating</span> (targeting one member), <span class="key-term">monopolizing</span> (one member dominating), and <span class="key-term">subgrouping</span> (cliques forming within the group).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Types of Group Therapy</h2>
+        <p>Groups vary widely in their theoretical orientation, structure, and goals:</p>
+        <table>
+          <tr><th>Type</th><th>Focus</th><th>Structure</th></tr>
+          <tr><td><strong>Psychoeducational groups</strong></td><td>Teaching skills and information (e.g., anger management, social skills)</td><td>Structured curriculum, leader-directed</td></tr>
+          <tr><td><strong>Process/interpersonal groups</strong></td><td>Exploring here-and-now interpersonal dynamics (Yalom's model)</td><td>Unstructured; interactions among members are the primary vehicle for change</td></tr>
+          <tr><td><strong>Support/self-help groups</strong></td><td>Mutual aid among people with shared concerns (e.g., AA, grief support)</td><td>May be peer-led; emphasis on shared experience</td></tr>
+          <tr><td><strong>CBT groups</strong></td><td>Applying CBT techniques in a group format</td><td>Structured; skills-based with homework</td></tr>
+          <tr><td><strong>Psychodynamic groups</strong></td><td>Exploring unconscious processes and transference within the group</td><td>Semi-structured; therapist interprets group dynamics</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <h4>Open vs. Closed Groups</h4>
+          <p><strong>Open groups</strong> allow new members to join at any time (e.g., drop-in support groups). They provide ongoing accessibility but may disrupt cohesion with each new member. <strong>Closed groups</strong> have a fixed membership from the start and do not admit new members once the group begins. They tend to develop stronger cohesion and allow for deeper interpersonal work, but a member dropping out can significantly impact group dynamics. <strong>Slow-open groups</strong> replace departing members gradually, maintaining a balance between stability and accessibility.</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Ethical Considerations in Group Therapy</h4>
+          <p>Group therapy raises unique ethical issues: (1) <span class="key-term">confidentiality</span> is more difficult to ensure because the therapist cannot control what members share outside the group; the therapist must emphasize confidentiality expectations but cannot guarantee them. (2) <span class="key-term">Informed consent</span> must address the unique risks of group treatment, including potential breaches of confidentiality by other members. (3) The therapist must screen members for suitability -- clients who are acutely suicidal, psychotic, or extremely socially phobic may not be appropriate for group treatment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Commonly Tested Concepts</h2>
+        <ul>
+          <li><span class="key-term">Minuchin</span> = structural family therapy = boundaries (enmeshed/disengaged), subsystems, hierarchy, joining, enactment</li>
+          <li><span class="key-term">Haley</span> = strategic family therapy = directives, paradoxical interventions, reframing</li>
+          <li><span class="key-term">Bowen</span> = differentiation of self, triangulation, genogram, multigenerational transmission</li>
+          <li><span class="key-term">Satir</span> = four communication stances (placator, blamer, super-reasonable, irrelevant), family sculpting</li>
+          <li><span class="key-term">Whitaker</span> = experiential/symbolic; intuitive, provocative, uses co-therapy</li>
+          <li><span class="key-term">White &amp; Epston</span> = narrative therapy = externalization ("the person is not the problem"), dominant vs. alternative stories, unique outcomes, re-authoring, therapeutic letters, definitional ceremonies</li>
+          <li>Narrative therapy is grounded in <span class="key-term">social constructionism</span> and influenced by <span class="key-term">Foucault's</span> power/knowledge framework</li>
+          <li>Know <span class="key-term">Yalom's 11 therapeutic factors</span> -- especially universality, group cohesiveness, interpersonal learning, and catharsis</li>
+          <li><span class="key-term">Group cohesiveness</span> is the group equivalent of the therapeutic alliance in individual therapy</li>
+          <li>Stages of group development: <span class="key-term">forming, storming, norming, working, termination</span></li>
+          <li>The <span class="key-term">identified patient (IP)</span> reflects the systemic view that the "symptomatic" member carries the family's dysfunction</li>
+          <li><span class="key-term">Circular causality</span> distinguishes systems thinking from linear (cause-effect) thinking</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Minuchin, S. (1974). <em>Families and family therapy.</em> Harvard University Press.</div>
+        <div class="citation">Haley, J. (1976). <em>Problem-solving therapy.</em> Jossey-Bass.</div>
+        <div class="citation">Bowen, M. (1978). <em>Family therapy in clinical practice.</em> Jason Aronson.</div>
+        <div class="citation">White, M., &amp; Epston, D. (1990). <em>Narrative means to therapeutic ends.</em> W. W. Norton.</div>
+        <div class="citation">White, M. (2007). <em>Maps of narrative practice.</em> W. W. Norton.</div>
+        <div class="citation">Satir, V. (1972). <em>Peoplemaking.</em> Science and Behavior Books.</div>
+        <div class="citation">Yalom, I. D., &amp; Leszcz, M. (2020). <em>The theory and practice of group psychotherapy</em> (6th ed.). Basic Books.</div>
+        <div class="citation">Tuckman, B. W. (1965). Developmental sequence in small groups. <em>Psychological Bulletin, 63</em>(6), 384-399.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="motivation.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Through Motivation</div>
+          </div>
+        </a>
+        <a href="evidence.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Through Evidence</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>
