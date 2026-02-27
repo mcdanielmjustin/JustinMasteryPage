@@ -650,6 +650,44 @@
     let answered = false;
     let missed   = []; // { q, missedInfo }
 
+    // ── Session persistence (localStorage) ───────────────────────────────────
+    const SESSION_KEY = 'spot_session_' + JSON.stringify({
+      d: DOMAIN_CODES.slice().sort().join(','),
+      n: COUNT, t: TYPE_FILTER, m: MODE_FILTER,
+    });
+
+    function saveSession() {
+      try {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({
+          pool, current, correct,
+          missed: missed.map(({ q, missedInfo }) => ({ qId: q.id, missedInfo })),
+        }));
+      } catch(e) { /* quota exceeded — ignore */ }
+    }
+
+    function clearSession() {
+      try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
+    }
+
+    function tryRestoreSession(qById) {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return false;
+        const s = JSON.parse(raw);
+        if (!s.pool || !s.pool.length || s.current >= s.pool.length) return false;
+        const restoredPool = s.pool.map(q => qById[q.id]).filter(Boolean);
+        if (restoredPool.length !== s.pool.length) return false;
+        pool    = restoredPool;
+        current = s.current || 0;
+        correct = s.correct || 0;
+        missed  = (s.missed || []).map(({ qId, missedInfo }) => {
+          const q = qById[qId];
+          return q ? { q, missedInfo } : null;
+        }).filter(Boolean);
+        return true;
+      } catch(e) { return false; }
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
     function escHtml(s) {
       return String(s)
@@ -718,7 +756,15 @@
         return;
       }
 
-      // Fisher-Yates shuffle then trim to COUNT
+      // Try to restore a saved session first
+      const qById = {};
+      all.forEach(q => qById[q.id] = q);
+      if (tryRestoreSession(qById)) {
+        showQuestion();
+        return;
+      }
+
+      // Fresh session — Fisher-Yates shuffle then trim to COUNT
       for (let i = all.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [all[i], all[j]] = [all[j], all[i]];
@@ -736,6 +782,7 @@
       } else {
         missed.push({ q, missedInfo });
       }
+      saveSession();
 
       const fp = document.getElementById('feedback-panel');
       fp.className = 'feedback-panel ' + (isCorrect ? 'correct' : 'wrong');
@@ -1047,6 +1094,7 @@
       }
 
       document.getElementById('screen-results').style.display = 'flex';
+      clearSession();
     }
 
     function restartSession() {

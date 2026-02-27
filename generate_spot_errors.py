@@ -79,6 +79,9 @@ Error types to use (vary them):
 Rules:
 - The error must be factually verifiable from the passage context.
 - The error must be subtle enough to test careful reading but clear enough to have a definitive answer.
+- The error must NOT be contradicted or revealed by other text in the same passage. Before finalising,
+  scan all other sentences — if any sentence contains the correct term or implies the correct fact,
+  choose a different fact to modify.
 - Distractors must sound plausible (describe something that COULD be an error in this passage topic) but must NOT be errors that were actually introduced.
 - Options should be stated as: "The passage incorrectly states [X]; it should say [Y]."
 - Keep the modified passage clearly readable — only change the ONE error word/phrase.
@@ -118,10 +121,15 @@ Error types to use (vary them):
 - Wrong test/scale name (e.g., "WAIS" instead of "MMPI")
 
 Rules:
+- Only use source passages that can be split into at least 4 sentences. If the passage has fewer
+  than 4 sentences, respond with an empty JSON object: {}
 - sentences[] contains the MODIFIED text (with the error already present in the target sentence).
 - error_original must appear verbatim in sentences[target_sentence_index].
 - original_sentence is the correct (unmodified) version of the target sentence.
 - The error must be subtle but clearly wrong; one definitive answer only.
+- The error must NOT be contradicted or revealed by other sentences in the list. Scan all other
+  sentences — if any contains the correct term or implies the correct fact, choose a different
+  sentence or a different fact to modify.
 - Each element of sentences[] is one complete sentence — do not split mid-sentence.
 
 Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
@@ -151,8 +159,11 @@ Splitting rules (strictly enforced):
 - NEVER cut mid-clause. Every phrase must be a grammatically self-contained unit.
   Bad: "...and is appropriate when both variables are measured on" (ends mid-clause)
   Good: "...and is appropriate when both variables are measured on interval or ratio scales"
-- Every phrase must be 6–18 words. If any phrase would fall under 6 words, pick a
-  different sentence or different split points.
+- Every phrase must be 6–20 words.
+- If the natural split leaves a short tail (e.g., " of the evidence.", " rather than
+  treatment.", " as the independent variable."), do NOT make it a separate phrase —
+  merge it into the preceding phrase so that phrase ends with the sentence's closing
+  punctuation. Only split where both sides of the cut are at least 6 words.
 - phrases[] joined together must equal modified_sentence exactly, character-for-character.
 
 STEP 3 — INTRODUCE THE ERROR
@@ -167,6 +178,8 @@ STEP 3 — INTRODUCE THE ERROR
     • Wrong direction only when genuinely non-obvious in context
 - Avoid generic, well-known swaps like "positive/negative reinforcement" — the error
   should require specific factual recall, not pattern matching.
+- The error must NOT be contradicted or revealed by any other phrase in the same sentence.
+  If another phrase contains the correct term, choose a different fact to modify.
 - error_original must appear verbatim in phrases[target_phrase_index].
 
 Respond ONLY with valid JSON (no markdown, no extra text):
@@ -189,9 +202,15 @@ For each passage you receive, you will:
    CORRECT definition of similar length. Distractors should be similar enough to cause genuine
    confusion (e.g., if target is "dopamine", use "serotonin", "norepinephrine", "acetylcholine").
 
-Error types for the target definition:
-- Swapped number or value, wrong mechanism, wrong associated researcher/name,
-  reversed relationship, wrong associated condition or scale
+Error types for the target definition (in order of preference):
+1. Wrong researcher/author name (e.g., "Cronbach and Henry" instead of "Cronbach and Meehl")
+2. Wrong associated scale, test, or instrument name
+3. Wrong numerical value or statistic
+4. Wrong mechanism or process
+5. Wrong associated condition, disorder, or drug
+6. Direction reversal ONLY as a last resort — and only when it is genuinely non-obvious in context.
+   Do NOT use "increases"/"decreases", "higher"/"lower", "above"/"below" reversals unless
+   the context makes them impossible to guess without real knowledge.
 
 Rules:
 - Shuffle the target position — don't always put it at index 0.
@@ -314,6 +333,8 @@ def generate_passage_click(client: anthropic.Anthropic, passage: dict,
             )
             result = extract_json(msg.content[0].text)
 
+            # Model signals passage too short by returning {}
+            assert result, "model returned empty result (passage too short)"
             assert 'sentences' in result and isinstance(result['sentences'], list)
             assert len(result['sentences']) >= 2
             tsi = result.get('target_sentence_index', -1)
@@ -358,22 +379,34 @@ def generate_sentence_click(client: anthropic.Anthropic, passage: dict,
 
             assert 'modified_sentence' in result
             assert 'phrases' in result and isinstance(result['phrases'], list)
-            assert len(result['phrases']) == 4, \
-                f"expected 4 phrases, got {len(result['phrases'])}"
+            assert len(result['phrases']) >= 3, \
+                f"too few phrases: {len(result['phrases'])}"
+
+            # ── Post-process 1: merge any short tail phrase into its predecessor ──
+            phrases = list(result['phrases'])
             tpi = result.get('target_phrase_index', -1)
-            assert 1 <= tpi <= 3, \
-                f"target_phrase_index must be 1–3 (not the first phrase), got {tpi}"
+            while len(phrases) > 2 and len(phrases[-1].split()) < 5:
+                if tpi == len(phrases) - 1:   # error was in the tail — merge pulls it in
+                    tpi = len(phrases) - 2
+                phrases[-2] = phrases[-2] + phrases[-1]
+                phrases.pop()
+            result['phrases'] = phrases
+            result['target_phrase_index'] = tpi
+
+            # ── Post-process 2: trust phrases as ground truth for the sentence ──
+            result['modified_sentence'] = ''.join(phrases)
+
+            assert len(result['phrases']) >= 3, "fewer than 3 phrases after merging tails"
+            assert 1 <= tpi <= len(phrases) - 1, \
+                f"target_phrase_index must not be the first phrase, got {tpi}"
             assert 'error_original' in result
             assert result['error_original'] in result['phrases'][tpi], \
                 "error_original not found in target phrase"
-            # No phrase should be fewer than 4 words
+            # No phrase should be fewer than 5 words after merging
             for idx, ph in enumerate(result['phrases']):
                 wc = len(ph.split())
-                assert wc >= 4, \
+                assert wc >= 5, \
                     f"phrase {idx} too short ({wc} words): {ph!r}"
-            # Phrases must reassemble to modified_sentence exactly
-            assert ''.join(result['phrases']) == result['modified_sentence'], \
-                "phrases do not concatenate to modified_sentence"
             assert 'error_correct' in result
             assert result['error_original'].strip() != result['error_correct'].strip(), \
                 "error_original equals error_correct — model failed to introduce a real error"
@@ -506,6 +539,10 @@ def process_domain(client: anthropic.Anthropic, domain_code: str,
         existing_mode_count = sum(1 for q in questions if get_mode(q) == mode)
         seq_n = existing_mode_count + 1
 
+    # passage_click needs at least 4 sentences — filter short passages before sampling
+    if mode == 'passage_click':
+        todo = [p for p in todo if p['passage'].count('.') >= 3]
+
     if count:
         random.shuffle(todo)
         todo = todo[:count]
@@ -595,6 +632,10 @@ def main():
 
     for code in domains:
         process_domain(client, code, args.count, args.resume, args.mode)
+
+    print("\nRebuilding spot_data.js bundle...")
+    import subprocess
+    subprocess.run([sys.executable, 'build_spot_bundle.py'], check=False)
 
     print("\nDone.")
 
