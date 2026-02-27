@@ -676,6 +676,7 @@
     // ── Load question files ───────────────────────────────────────────────────
     async function loadData() {
       const all = [];
+      const errors = [];
       for (const code of DOMAIN_CODES) {
         try {
           const res  = await fetch(`data/${code}_spot.json`);
@@ -683,6 +684,7 @@
           // even on a successful read. Let JSON.parse throw if the file is missing.
           const data = await res.json();
           let qs = data.questions || [];
+          const beforeFilter = qs.length;
           if (TYPE_FILTER !== 'all') {
             qs = qs.filter(q => q.passage_type === TYPE_FILTER);
           }
@@ -690,16 +692,24 @@
             qs = qs.filter(q => qMode(q) === MODE_FILTER);
           }
           all.push(...qs);
+          console.log(`${code}: ${beforeFilter} total → ${qs.length} after filter (type=${TYPE_FILTER}, mode=${MODE_FILTER})`);
         } catch (e) {
+          errors.push(`${code}: ${e.message}`);
           console.warn(`Could not load ${code}_spot.json:`, e.message);
         }
       }
 
       if (all.length === 0) {
+        const debugInfo = [
+          `Domains: ${DOMAIN_CODES.join(', ') || '(none)'}`,
+          `Mode filter: ${MODE_FILTER}`,
+          `Type filter: ${TYPE_FILTER}`,
+          errors.length ? `Errors: ${errors.join('; ')}` : null,
+        ].filter(Boolean).join(' | ');
         document.getElementById('screen-loading').innerHTML =
           `<div style="color:var(--red);font-size:14px;text-align:center;padding:20px;">
             No questions found for the selected domains and mode.<br>
-            <small style="color:var(--text3)">Try a different mode or run generate_spot_errors.py to create questions.</small>
+            <small style="color:var(--text3);display:block;margin-top:8px;">${debugInfo}</small>
           </div>`;
         return;
       }
