@@ -679,7 +679,8 @@
       for (const code of DOMAIN_CODES) {
         try {
           const res  = await fetch(`data/${code}_spot.json`);
-          if (!res.ok) throw new Error(res.status);
+          // Don't check res.ok — file:// protocol returns status 0 with ok=false
+          // even on a successful read. Let JSON.parse throw if the file is missing.
           const data = await res.json();
           let qs = data.questions || [];
           if (TYPE_FILTER !== 'all') {
