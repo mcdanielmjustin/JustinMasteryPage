@@ -636,7 +636,7 @@
     const MODE_LABELS = {
       mc:            'Multiple Choice',
       passage_click: 'Click Sentence',
-      sentence_click:'Click Word',
+      sentence_click:'Click the Phrase',
       vocab:         'Vocab Drill',
     };
 
@@ -774,8 +774,14 @@
       document.getElementById('q-num').textContent =
         `Question ${current + 1} of ${pool.length}`;
       document.getElementById('q-domain-badge').textContent = q.domain_code;
-      document.getElementById('q-type-badge').textContent   =
-        MODE_LABELS[qMode(q)] || TYPE_LABELS[q.passage_type] || q.passage_type;
+      const mode = qMode(q);
+      const typeBadgeEl = document.getElementById('q-type-badge');
+      if (mode === 'sentence_click') {
+        typeBadgeEl.innerHTML =
+          'Click the Phrase &nbsp;<span class="q-badge badge-teal" style="padding:2px 8px;">Find the Error</span>';
+      } else {
+        typeBadgeEl.textContent = MODE_LABELS[mode] || TYPE_LABELS[q.passage_type] || q.passage_type;
+      }
       document.getElementById('q-chapter').textContent = q.chapter_title;
       document.getElementById('q-section').textContent  = q.section || '';
 
@@ -894,7 +900,7 @@
         'Click a sentence &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
     }
 
-    // ── Renderer: Click the Word/Phrase ───────────────────────────────────────
+    // ── Renderer: Click the Phrase ────────────────────────────────────────────
     function renderSentenceClick(q, body) {
       const card = document.createElement('div');
       card.className = 'passage-card';
