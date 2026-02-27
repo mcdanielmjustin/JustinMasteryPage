@@ -132,13 +132,16 @@
     .q-chapter { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
     .q-section  { font-size: 11px; color: var(--text3); margin-bottom: 20px; }
 
-    /* Passage */
+    /* Generic question body */
+    #question-body { margin-bottom: 8px; }
+
+    /* Passage card (used by mc and passage_click) */
     .passage-card {
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px 26px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
     .passage-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
@@ -159,7 +162,6 @@
       font-weight: 600;
       border-bottom: 2px solid rgba(251,191,36,0.55);
       animation: highlightPop 0.5s ease-out both;
-      /* Reset browser default mark style */
       display: inline;
     }
     .passage-instruction {
@@ -167,7 +169,7 @@
       margin-top: 14px; font-style: italic;
     }
 
-    /* Options */
+    /* ── MC options ──────────────────────────────────────────────────────── */
     .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
     .option-btn {
       background: rgba(255,255,255,0.03);
@@ -212,6 +214,105 @@
       background: rgba(52,211,153,0.05);
     }
     .option-btn.reveal .opt-letter { background: rgba(52,211,153,0.15); color: var(--green); }
+
+    /* ── passage_click mode ──────────────────────────────────────────────── */
+    .passage-sentences { display: flex; flex-direction: column; gap: 8px; }
+    .clickable-sentence {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text2);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .clickable-sentence:hover:not(.sentence-correct):not(.sentence-wrong) {
+      border-color: rgba(45,212,191,0.45);
+      background: rgba(45,212,191,0.05);
+    }
+    .clickable-sentence.sentence-correct {
+      border-color: var(--green);
+      background: rgba(52,211,153,0.08);
+      animation: correctPulse 0.6s ease-out;
+      color: var(--text);
+    }
+    .clickable-sentence.sentence-wrong {
+      border-color: var(--red);
+      background: rgba(248,113,113,0.08);
+      animation: wrongShake 0.4s ease-out;
+    }
+
+    /* ── sentence_click mode ─────────────────────────────────────────────── */
+    .phrase-container {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text2);
+    }
+    .clickable-phrase {
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 1px 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .clickable-phrase:hover:not(.phrase-correct):not(.phrase-wrong) {
+      background: rgba(45,212,191,0.15);
+      color: var(--teal-light);
+      border-radius: 3px;
+    }
+    .clickable-phrase.phrase-correct {
+      background: rgba(251,191,36,0.22);
+      color: #fde68a;
+      border-bottom: 2px solid rgba(251,191,36,0.55);
+      animation: highlightPop 0.5s ease-out both;
+    }
+    .clickable-phrase.phrase-wrong {
+      background: rgba(248,113,113,0.15);
+      color: var(--red);
+      animation: wrongShake 0.4s ease-out;
+      border-radius: 3px;
+    }
+
+    /* ── vocab mode ──────────────────────────────────────────────────────── */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .vocab-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .vocab-card:hover:not(.vocab-correct):not(.vocab-wrong) {
+      border-color: rgba(45,212,191,0.4);
+      background: rgba(45,212,191,0.06);
+    }
+    .vocab-card.vocab-correct {
+      border-color: var(--green);
+      background: rgba(52,211,153,0.08);
+      animation: correctPulse 0.6s ease-out;
+    }
+    .vocab-card.vocab-wrong {
+      border-color: var(--red);
+      background: rgba(248,113,113,0.08);
+      animation: wrongShake 0.4s ease-out;
+    }
+    .vocab-term {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .vocab-def {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.6;
+    }
 
     /* Keyboard hint */
     .kbd-hint {
@@ -376,6 +477,39 @@
       font-size: 11px; color: var(--text3); margin-top: 8px;
     }
     .review-error-line strong { color: var(--text2); }
+
+    /* Review vocab grid — smaller cards */
+    .review-vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .review-vocab-grid .vocab-card {
+      font-size: 12px;
+      padding: 12px;
+      pointer-events: none;
+    }
+    .review-vocab-grid .vocab-term { font-size: 12px; }
+    .review-vocab-grid .vocab-def  { font-size: 11px; }
+
+    /* Review sentences */
+    .review-sentences { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .review-sentence {
+      font-size: 13px; line-height: 1.7; color: var(--text2);
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+    .review-sentence.sentence-correct {
+      border-color: rgba(52,211,153,0.4);
+      background: rgba(52,211,153,0.06);
+    }
+
+    @media (max-width: 600px) {
+      .vocab-grid, .review-vocab-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -416,13 +550,8 @@
       <div class="q-chapter" id="q-chapter"></div>
       <div class="q-section"  id="q-section"></div>
 
-      <div class="passage-card">
-        <div class="passage-label">&#128270; Read carefully &mdash; one fact has been changed</div>
-        <div class="passage-text" id="passage-text"></div>
-        <div class="passage-instruction">Select the option that correctly identifies the error.</div>
-      </div>
-
-      <div class="options-list" id="options-list"></div>
+      <!-- Mode-specific question content injected here -->
+      <div id="question-body"></div>
 
       <div class="kbd-hint" id="kbd-hint">
         <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue
@@ -490,10 +619,11 @@
   </div>
 
   <script>
-    const params      = new URLSearchParams(location.search);
+    const params       = new URLSearchParams(location.search);
     const DOMAIN_CODES = (params.get('domains') || '').split(',').filter(Boolean);
     const COUNT        = parseInt(params.get('count') || '20', 10);
     const TYPE_FILTER  = params.get('type') || 'all';
+    const MODE_FILTER  = params.get('mode') || 'all';
 
     const TYPE_LABELS = {
       paragraph:    'Paragraph',
@@ -502,11 +632,18 @@
       example:      'Example',
     };
 
+    const MODE_LABELS = {
+      mc:            'Multiple Choice',
+      passage_click: 'Click Sentence',
+      sentence_click:'Click Word',
+      vocab:         'Vocab Drill',
+    };
+
     let pool     = [];
     let current  = 0;
     let correct  = 0;
     let answered = false;
-    let missed   = []; // {q, chosenIdx}
+    let missed   = []; // { q, missedInfo }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
     function escHtml(s) {
@@ -522,20 +659,18 @@
       let idx = text.indexOf(errOrig);
       let matched = errOrig;
       if (idx === -1) {
-        // Case-insensitive fallback
         const lower = text.toLowerCase();
         idx = lower.indexOf(errOrig.toLowerCase());
         if (idx !== -1) matched = text.slice(idx, idx + errOrig.length);
       }
-      if (idx === -1) return escHtml(text); // can't find — skip highlight
+      if (idx === -1) return escHtml(text);
       return escHtml(text.slice(0, idx)) +
         `<mark class="error-highlight">${escHtml(matched)}</mark>` +
         escHtml(text.slice(idx + matched.length));
     }
 
-    function highlightError(q) {
-      document.getElementById('passage-text').innerHTML =
-        buildHighlightedPassage(q.modified_passage || '', q.error_original || '');
+    function qMode(q) {
+      return q.mode || 'mc';
     }
 
     // ── Load question files ───────────────────────────────────────────────────
@@ -550,6 +685,9 @@
           if (TYPE_FILTER !== 'all') {
             qs = qs.filter(q => q.passage_type === TYPE_FILTER);
           }
+          if (MODE_FILTER !== 'all') {
+            qs = qs.filter(q => qMode(q) === MODE_FILTER);
+          }
           all.push(...qs);
         } catch (e) {
           console.warn(`Could not load ${code}_spot.json:`, e.message);
@@ -559,8 +697,8 @@
       if (all.length === 0) {
         document.getElementById('screen-loading').innerHTML =
           `<div style="color:var(--red);font-size:14px;text-align:center;padding:20px;">
-            No questions found for the selected domains.<br>
-            <small style="color:var(--text3)">Run generate_spot_errors.py to create questions.</small>
+            No questions found for the selected domains and mode.<br>
+            <small style="color:var(--text3)">Try a different mode or run generate_spot_errors.py to create questions.</small>
           </div>`;
         return;
       }
@@ -574,7 +712,41 @@
       showQuestion();
     }
 
-    // ── Render a question ─────────────────────────────────────────────────────
+    // ── Shared post-answer logic ──────────────────────────────────────────────
+    function onAnswered(isCorrect, q, missedInfo) {
+      answered = true;
+
+      if (isCorrect) {
+        correct++;
+      } else {
+        missed.push({ q, missedInfo });
+      }
+
+      const fp = document.getElementById('feedback-panel');
+      fp.className = 'feedback-panel ' + (isCorrect ? 'correct' : 'wrong');
+      fp.style.display = 'block';
+
+      document.getElementById('feedback-header').innerHTML =
+        isCorrect ? '&#10003; Correct!' : '&#10007; Not quite';
+      document.getElementById('feedback-body').textContent = q.explanation;
+      document.getElementById('feedback-error-info').innerHTML =
+        `<strong>Error in question:</strong> &ldquo;${escHtml(q.error_original)}&rdquo;` +
+        ` &nbsp;&rarr;&nbsp; ` +
+        `<strong>Should be:</strong> &ldquo;${escHtml(q.error_correct)}&rdquo;`;
+
+      document.getElementById('nav-score').textContent = `${correct} / ${current + 1}`;
+
+      const nb = document.getElementById('next-btn');
+      nb.style.display = 'block';
+      nb.textContent   =
+        current + 1 < pool.length ? 'Next Question \u2192' : 'See Results \u2192';
+
+      setTimeout(() => {
+        fp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 120);
+    }
+
+    // ── Show question dispatcher ──────────────────────────────────────────────
     function showQuestion() {
       const q = pool[current];
       answered = false;
@@ -592,22 +764,53 @@
         `Question ${current + 1} of ${pool.length}`;
       document.getElementById('q-domain-badge').textContent = q.domain_code;
       document.getElementById('q-type-badge').textContent   =
-        TYPE_LABELS[q.passage_type] || q.passage_type;
+        MODE_LABELS[qMode(q)] || TYPE_LABELS[q.passage_type] || q.passage_type;
       document.getElementById('q-chapter').textContent = q.chapter_title;
       document.getElementById('q-section').textContent  = q.section || '';
 
-      // Passage (plain text until answered)
-      document.getElementById('passage-text').textContent = q.modified_passage;
+      // Reset feedback
+      const fp = document.getElementById('feedback-panel');
+      fp.style.display = 'none';
+      fp.className = 'feedback-panel';
+      document.getElementById('next-btn').style.display = 'none';
 
-      // Options — shuffle display order via Fisher-Yates on indices
+      // Render mode-specific content
+      const body = document.getElementById('question-body');
+      body.innerHTML = '';
+      const mode = qMode(q);
+      if      (mode === 'mc')             renderMC(q, body);
+      else if (mode === 'passage_click')  renderPassageClick(q, body);
+      else if (mode === 'sentence_click') renderSentenceClick(q, body);
+      else if (mode === 'vocab')          renderVocab(q, body);
+
+      // Show quiz screen
+      document.getElementById('screen-loading').style.display = 'none';
+      document.getElementById('screen-quiz').style.display    = 'block';
+    }
+
+    // ── Renderer: Multiple Choice ─────────────────────────────────────────────
+    function renderMC(q, body) {
+      // Passage card
+      const card = document.createElement('div');
+      card.className = 'passage-card';
+      card.innerHTML = `
+        <div class="passage-label">&#128270; Read carefully &mdash; one fact has been changed</div>
+        <div class="passage-text" id="passage-text">${escHtml(q.modified_passage)}</div>
+        <div class="passage-instruction">Select the option that correctly identifies the error.</div>
+      `;
+      body.appendChild(card);
+
+      // Options
+      const ol = document.createElement('div');
+      ol.className = 'options-list';
+      body.appendChild(ol);
+
       const indices = [0, 1, 2, 3];
       for (let i = 3; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [indices[i], indices[j]] = [indices[j], indices[i]];
       }
       const letters = ['A', 'B', 'C', 'D'];
-      const ol = document.getElementById('options-list');
-      ol.innerHTML = '';
       indices.forEach((origIdx, displayIdx) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
@@ -616,77 +819,167 @@
           <div class="opt-letter">${letters[displayIdx]}</div>
           <div class="opt-text">${escHtml(q.options[origIdx])}</div>
         `;
-        btn.onclick = () => selectOption(btn, origIdx, q);
+        btn.onclick = () => {
+          if (answered) return;
+          const isCorrect = origIdx === q.correct_option_index;
+          ol.querySelectorAll('.option-btn').forEach(b => {
+            b.disabled = true;
+            const bi = parseInt(b.dataset.origIdx);
+            if (bi === q.correct_option_index) {
+              b.classList.add(bi === origIdx ? 'correct' : 'reveal');
+            }
+          });
+          if (isCorrect) btn.classList.add('correct');
+          else           btn.classList.add('wrong');
+          // Highlight error in passage
+          document.getElementById('passage-text').innerHTML =
+            buildHighlightedPassage(q.modified_passage, q.error_original);
+          onAnswered(isCorrect, q, { type: 'mc', optionIdx: origIdx });
+        };
         ol.appendChild(btn);
       });
 
-      // Keyboard hint
+      // Kbd hint
       document.getElementById('kbd-hint').innerHTML =
         '<kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
-
-      // Reset feedback
-      const fp = document.getElementById('feedback-panel');
-      fp.style.display = 'none';
-      fp.className = 'feedback-panel';
-      document.getElementById('next-btn').style.display = 'none';
-
-      // Show quiz screen
-      document.getElementById('screen-loading').style.display = 'none';
-      document.getElementById('screen-quiz').style.display    = 'block';
     }
 
-    // ── Handle answer selection ───────────────────────────────────────────────
-    function selectOption(btn, origIdx, q) {
-      if (answered) return;
-      answered = true;
+    // ── Renderer: Click the Sentence ──────────────────────────────────────────
+    function renderPassageClick(q, body) {
+      const card = document.createElement('div');
+      card.className = 'passage-card';
+      card.innerHTML = `<div class="passage-label">&#128270; Click the sentence that contains the error</div>`;
 
-      const isCorrect = origIdx === q.correct_option_index;
+      const sentencesDiv = document.createElement('div');
+      sentencesDiv.className = 'passage-sentences';
 
-      // Disable all, reveal correct
-      document.querySelectorAll('.option-btn').forEach(b => {
-        b.disabled = true;
-        const bi = parseInt(b.dataset.origIdx);
-        if (bi === q.correct_option_index) {
-          b.classList.add(bi === origIdx ? 'correct' : 'reveal');
-        }
+      q.sentences.forEach((sentence, idx) => {
+        const div = document.createElement('div');
+        div.className = 'clickable-sentence';
+        div.textContent = sentence;
+        div.onclick = () => {
+          if (answered) return;
+          const isCorrect = idx === q.target_sentence_index;
+
+          sentencesDiv.querySelectorAll('.clickable-sentence').forEach((el, i) => {
+            el.style.pointerEvents = 'none';
+            if (i === q.target_sentence_index) {
+              el.classList.add('sentence-correct');
+              el.innerHTML = buildHighlightedPassage(
+                q.sentences[q.target_sentence_index], q.error_original);
+            }
+          });
+          if (!isCorrect) div.classList.add('sentence-wrong');
+
+          onAnswered(isCorrect, q, { type: 'passage_click', sentenceIdx: idx });
+        };
+        sentencesDiv.appendChild(div);
       });
 
-      if (isCorrect) {
-        btn.classList.add('correct');
-        correct++;
-      } else {
-        btn.classList.add('wrong');
-        missed.push({ q, chosenIdx: origIdx });
+      card.appendChild(sentencesDiv);
+      body.appendChild(card);
+
+      document.getElementById('kbd-hint').innerHTML =
+        'Click a sentence &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
+    }
+
+    // ── Renderer: Click the Word/Phrase ───────────────────────────────────────
+    function renderSentenceClick(q, body) {
+      const card = document.createElement('div');
+      card.className = 'passage-card';
+      card.innerHTML = `<div class="passage-label">&#128270; Click the word or phrase that contains the error</div>`;
+
+      const sentenceDiv = document.createElement('div');
+      sentenceDiv.className = 'phrase-container';
+
+      q.phrases.forEach((phrase, idx) => {
+        const span = document.createElement('span');
+        span.className = 'clickable-phrase';
+        span.textContent = phrase;
+        span.onclick = () => {
+          if (answered) return;
+          const isCorrect = idx === q.target_phrase_index;
+
+          sentenceDiv.querySelectorAll('.clickable-phrase').forEach((el, i) => {
+            el.style.pointerEvents = 'none';
+            if (i === q.target_phrase_index) {
+              el.classList.add('phrase-correct');
+              el.innerHTML = buildHighlightedPassage(
+                q.phrases[q.target_phrase_index], q.error_original);
+            }
+          });
+          if (!isCorrect) span.classList.add('phrase-wrong');
+
+          onAnswered(isCorrect, q, { type: 'sentence_click', phraseIdx: idx });
+        };
+        sentenceDiv.appendChild(span);
+      });
+
+      card.appendChild(sentenceDiv);
+      body.appendChild(card);
+
+      document.getElementById('kbd-hint').innerHTML =
+        'Click a phrase &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
+    }
+
+    // ── Renderer: Vocab Drill ─────────────────────────────────────────────────
+    function renderVocab(q, body) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `<div class="passage-label" style="margin-bottom:14px;">&#128270; Click the card with the error in its definition</div>`;
+
+      const grid = document.createElement('div');
+      grid.className = 'vocab-grid';
+
+      // Shuffle display order
+      const displayOrder = [...q.entries.keys()];
+      for (let i = displayOrder.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [displayOrder[i], displayOrder[j]] = [displayOrder[j], displayOrder[i]];
       }
 
-      // Highlight error in passage
-      highlightError(q);
+      displayOrder.forEach(origIdx => {
+        const entry = q.entries[origIdx];
+        const card  = document.createElement('div');
+        card.className = 'vocab-card';
+        card.dataset.origIdx = origIdx;
 
-      // Feedback panel
-      const fp = document.getElementById('feedback-panel');
-      fp.className = 'feedback-panel ' + (isCorrect ? 'correct' : 'wrong');
-      fp.style.display = 'block';
+        const termEl = document.createElement('div');
+        termEl.className = 'vocab-term';
+        termEl.textContent = entry.term;
 
-      document.getElementById('feedback-header').innerHTML =
-        isCorrect ? '&#10003; Correct!' : '&#10007; Not quite';
-      document.getElementById('feedback-body').textContent = q.explanation;
-      document.getElementById('feedback-error-info').innerHTML =
-        `<strong>Error in passage:</strong> &ldquo;${escHtml(q.error_original)}&rdquo;` +
-        ` &nbsp;&rarr;&nbsp; ` +
-        `<strong>Should be:</strong> &ldquo;${escHtml(q.error_correct)}&rdquo;`;
+        const defEl = document.createElement('div');
+        defEl.className = 'vocab-def';
+        defEl.textContent = entry.definition;
 
-      document.getElementById('nav-score').textContent = `${correct} / ${current + 1}`;
+        card.appendChild(termEl);
+        card.appendChild(defEl);
 
-      // Next button
-      const nb = document.getElementById('next-btn');
-      nb.style.display = 'block';
-      nb.textContent   =
-        current + 1 < pool.length ? 'Next Question \u2192' : 'See Results \u2192';
+        card.onclick = () => {
+          if (answered) return;
+          const isCorrect = origIdx === q.target_entry_index;
 
-      // Auto-scroll feedback into view
-      setTimeout(() => {
-        fp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 120);
+          grid.querySelectorAll('.vocab-card').forEach(el => {
+            el.style.pointerEvents = 'none';
+            const oi = parseInt(el.dataset.origIdx);
+            if (oi === q.target_entry_index) {
+              el.classList.add('vocab-correct');
+              el.querySelector('.vocab-def').innerHTML =
+                buildHighlightedPassage(
+                  q.entries[q.target_entry_index].definition, q.error_original);
+            }
+          });
+          if (!isCorrect) card.classList.add('vocab-wrong');
+
+          onAnswered(isCorrect, q, { type: 'vocab', entryIdx: origIdx });
+        };
+        grid.appendChild(card);
+      });
+
+      wrapper.appendChild(grid);
+      body.appendChild(wrapper);
+
+      document.getElementById('kbd-hint').innerHTML =
+        'Click a card &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
     }
 
     // ── Navigation ────────────────────────────────────────────────────────────
@@ -725,10 +1018,8 @@
       document.getElementById('results-sub').textContent   =
         `You caught ${correct} out of ${pool.length} errors.`;
 
-      // Score ring
       document.getElementById('score-ring').style.setProperty('--pct', pct + '%');
 
-      // Review button
       if (missed.length > 0) {
         const rb = document.getElementById('btn-review');
         rb.textContent   = `Review Missed (${missed.length})`;
@@ -742,7 +1033,6 @@
       current = 0; correct = 0; answered = false;
       missed = [];
       document.getElementById('btn-review').style.display = 'none';
-      // Re-shuffle pool
       for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -753,33 +1043,100 @@
     }
 
     // ── Review Missed ─────────────────────────────────────────────────────────
+    function buildReviewContent(q, missedInfo) {
+      const mode = qMode(q);
+
+      if (mode === 'mc') {
+        const passageHtml = buildHighlightedPassage(q.modified_passage || '', q.error_original || '');
+        const chosenText  = escHtml(q.options[missedInfo.optionIdx] || '');
+        const correctText = escHtml(q.options[q.correct_option_index] || '');
+        return `
+          <div class="review-passage">${passageHtml}</div>
+          <div class="review-answer-row">
+            <div class="review-choice wrong">&#10007; You chose: ${chosenText}</div>
+            <div class="review-choice correct">&#10003; Correct: ${correctText}</div>
+          </div>`;
+      }
+
+      if (mode === 'passage_click') {
+        const sentencesHtml = q.sentences.map((s, i) => {
+          const cls     = i === q.target_sentence_index ? 'sentence-correct' : '';
+          const content = i === q.target_sentence_index
+            ? buildHighlightedPassage(s, q.error_original) : escHtml(s);
+          return `<div class="review-sentence ${cls}">${content}</div>`;
+        }).join('');
+        const chosenSentence  = escHtml(q.sentences[missedInfo.sentenceIdx] || '');
+        const correctSentence = escHtml(q.sentences[q.target_sentence_index] || '');
+        return `
+          <div class="review-sentences">${sentencesHtml}</div>
+          <div class="review-answer-row">
+            <div class="review-choice wrong">&#10007; You clicked: &ldquo;${chosenSentence}&rdquo;</div>
+            <div class="review-choice correct">&#10003; Error was in: &ldquo;${correctSentence}&rdquo;</div>
+          </div>`;
+      }
+
+      if (mode === 'sentence_click') {
+        const phrasesHtml = q.phrases.map((p, i) => {
+          const cls     = i === q.target_phrase_index ? 'phrase-correct' : '';
+          const content = i === q.target_phrase_index
+            ? buildHighlightedPassage(p, q.error_original) : escHtml(p);
+          return `<span class="clickable-phrase ${cls}" style="pointer-events:none;">${content}</span>`;
+        }).join('');
+        const chosenPhrase  = escHtml(q.phrases[missedInfo.phraseIdx] || '');
+        const correctPhrase = escHtml(q.phrases[q.target_phrase_index] || '');
+        return `
+          <div class="review-passage"><span class="phrase-container">${phrasesHtml}</span></div>
+          <div class="review-answer-row">
+            <div class="review-choice wrong">&#10007; You clicked: &ldquo;${chosenPhrase}&rdquo;</div>
+            <div class="review-choice correct">&#10003; Error was in: &ldquo;${correctPhrase}&rdquo;</div>
+          </div>`;
+      }
+
+      if (mode === 'vocab') {
+        const cardsHtml = q.entries.map((e, i) => {
+          const cls    = i === q.target_entry_index ? 'vocab-correct' : '';
+          const defHtml = i === q.target_entry_index
+            ? buildHighlightedPassage(e.definition, q.error_original) : escHtml(e.definition);
+          return `
+            <div class="vocab-card ${cls}" style="pointer-events:none;">
+              <div class="vocab-term">${escHtml(e.term)}</div>
+              <div class="vocab-def">${defHtml}</div>
+            </div>`;
+        }).join('');
+        const chosenTerm  = escHtml((q.entries[missedInfo.entryIdx] || {}).term || '');
+        const correctTerm = escHtml((q.entries[q.target_entry_index] || {}).term || '');
+        return `
+          <div class="review-vocab-grid">${cardsHtml}</div>
+          <div class="review-answer-row">
+            <div class="review-choice wrong">&#10007; You clicked: ${chosenTerm}</div>
+            <div class="review-choice correct">&#10003; Error was in: ${correctTerm}</div>
+          </div>`;
+      }
+
+      return '';
+    }
+
     function showReview() {
       document.getElementById('screen-results').style.display = 'none';
       const list = document.getElementById('review-list');
       list.innerHTML = '';
 
-      missed.forEach(({ q, chosenIdx }, i) => {
+      missed.forEach(({ q, missedInfo }, i) => {
         const card = document.createElement('div');
         card.className = 'review-card';
         card.style.animationDelay = (i * 0.05) + 's';
 
-        const passageHtml  = buildHighlightedPassage(q.modified_passage || '', q.error_original || '');
-        const chosenText   = escHtml(q.options[chosenIdx] || '');
-        const correctText  = escHtml(q.options[q.correct_option_index] || '');
-        const chapterLine  = escHtml(q.chapter_title) +
+        const chapterLine = escHtml(q.chapter_title) +
           (q.section ? ' &middot; ' + escHtml(q.section) : '');
+        const modeBadge   = MODE_LABELS[qMode(q)] || 'MC';
 
         card.innerHTML = `
           <div class="review-card-meta">
             <span class="q-badge badge-teal">${escHtml(q.domain_code)}</span>
-            <span class="q-badge badge-teal">${escHtml(TYPE_LABELS[q.passage_type] || q.passage_type)}</span>
+            <span class="q-badge badge-teal">${escHtml(modeBadge)}</span>
             <span class="review-card-chapter">${chapterLine}</span>
           </div>
-          <div class="review-passage">${passageHtml}</div>
-          <div class="review-answer-row">
-            <div class="review-choice wrong">&#10007; You chose: ${chosenText}</div>
-            <div class="review-choice correct">&#10003; Correct: ${correctText}</div>
-          </div>
+          ${buildReviewContent(q, missedInfo)}
           <div class="review-explanation">
             ${escHtml(q.explanation)}
             <div class="review-error-line">
@@ -805,14 +1162,17 @@
 
     // ── Keyboard shortcuts ────────────────────────────────────────────────────
     document.addEventListener('keydown', e => {
-      // 1–4: select option (before answering)
-      if (['1', '2', '3', '4'].includes(e.key) && !answered) {
+      const q    = pool[current];
+      const mode = q ? qMode(q) : 'mc';
+
+      // 1–4: select option (MC only, before answering)
+      if (['1', '2', '3', '4'].includes(e.key) && !answered && mode === 'mc') {
         const btns = document.querySelectorAll('.option-btn:not(:disabled)');
-        const idx = parseInt(e.key) - 1;
+        const idx  = parseInt(e.key) - 1;
         if (btns[idx]) btns[idx].click();
         return;
       }
-      // Enter or → : next question (after answering)
+      // Enter or → : advance (after answering)
       if ((e.key === 'Enter' || e.key === 'ArrowRight') && answered) {
         const nb = document.getElementById('next-btn');
         if (nb && nb.style.display !== 'none') nb.click();

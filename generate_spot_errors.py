@@ -4,15 +4,15 @@ generate_spot_errors.py
 Reads {DOMAIN}_passages.json files, calls Claude to generate "spot the error"
 questions, and writes {DOMAIN}_spot.json to data/.
 
-Each question:
-  - Takes a passage from the book
-  - Introduces exactly ONE factual error
-  - Provides 4 MC options: one correctly identifies the error; three are
-    plausible-sounding but wrong (describe changes that weren't made)
-  - Provides an explanation
+Modes:
+  mc             (default) Multiple-choice — pick the option naming the error
+  passage_click  Click the sentence containing the error
+  sentence_click Click the wrong phrase within a single sentence
+  vocab          Click the vocab card with a flawed definition
 
 Run:
   python3 generate_spot_errors.py --domain PMET --count 50
+  python3 generate_spot_errors.py --domain PMET --mode passage_click --count 50
   python3 generate_spot_errors.py --all --count 40   # 40 per domain
   python3 generate_spot_errors.py --all              # all passages
 
@@ -21,6 +21,7 @@ Options:
   --all           Process all 9 domains
   --count N       Max passages per domain (default: all)
   --resume        Skip passages already written to output file
+  --mode MODE     Question mode: mc | passage_click | sentence_click | vocab
 """
 
 import json, pathlib, argparse, time, random, sys, os
@@ -100,6 +101,108 @@ Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
 The correct_option_index is 0-based (0 = first option is correct, 1 = second, etc.).
 Shuffle the correct answer position — don't always put it first."""
 
+PASSAGE_CLICK_PROMPT = """You are an expert EPPP (Examination for Professional Practice in Psychology) content creator.
+Your task is to create "Spot the Error — Click the Sentence" questions from psychology study passages.
+
+For each passage you receive, you will:
+1. Split the passage into individual sentences (aim for 3–8 sentences).
+2. Introduce EXACTLY ONE subtle but clear factual error into one of those sentences.
+3. Return the full sentence list (with the modified sentence in place), the target index, the original sentence, and error details.
+
+Error types to use (vary them):
+- Key term substitution (e.g., "CS" for "US", "reinforcement" for "punishment")
+- Name swap (e.g., "Watson" instead of "Pavlov", "Beck" instead of "Ellis")
+- Number/value change (e.g., "-55 mV" instead of "-70 mV", "30%" instead of "50%")
+- Concept reversal (e.g., "increases" instead of "decreases")
+- Wrong disorder/condition name (e.g., "histrionic" instead of "borderline")
+- Wrong test/scale name (e.g., "WAIS" instead of "MMPI")
+
+Rules:
+- sentences[] contains the MODIFIED text (with the error already present in the target sentence).
+- error_original must appear verbatim in sentences[target_sentence_index].
+- original_sentence is the correct (unmodified) version of the target sentence.
+- The error must be subtle but clearly wrong; one definitive answer only.
+- Each element of sentences[] is one complete sentence — do not split mid-sentence.
+
+Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
+{
+  "sentences": ["First sentence.", "Second sentence with error.", "Third sentence."],
+  "target_sentence_index": 1,
+  "original_sentence": "Second sentence original (correct version).",
+  "error_original": "the wrong text as it appears in the modified sentence",
+  "error_correct": "what the text should actually say",
+  "explanation": "Clear explanation of the error and the correct information."
+}"""
+
+SENTENCE_CLICK_PROMPT = """You are an expert EPPP (Examination for Professional Practice in Psychology) content creator.
+Your task is to create "Spot the Error — Click the Phrase" questions from psychology study passages.
+
+For each passage you receive, you will:
+1. Extract the single most fact-dense sentence from the passage.
+2. Modify ONE phrase in that sentence with a subtle factual error.
+3. Split the modified sentence into 4–6 meaningful clickable phrases at natural language boundaries
+   (comma, semicolon, colon, or clear noun-phrase boundaries).
+
+Error types to use (vary them):
+- Key term substitution, name swap, number/value change, concept reversal, wrong disorder/drug/scale name
+
+Rules:
+- phrases[] concatenated must equal modified_sentence exactly (including all spaces and punctuation).
+- error_original must appear verbatim in phrases[target_phrase_index].
+- Each phrase should be a meaningful chunk (avoid single-word phrases where possible).
+- The target phrase should be small enough that clicking it is a meaningful choice.
+- Aim for 4–6 phrases total.
+
+Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
+{
+  "modified_sentence": "The full modified sentence as one string.",
+  "phrases": ["First phrase", ", second phrase with error", ", third phrase."],
+  "target_phrase_index": 1,
+  "error_original": "second phrase with error",
+  "error_correct": "correct second phrase",
+  "explanation": "Clear explanation of the error and the correct information."
+}"""
+
+VOCAB_PROMPT = """You are an expert EPPP (Examination for Professional Practice in Psychology) content creator.
+Your task is to create "Spot the Error — Vocab Card" questions from psychology study passages.
+
+For each passage you receive, you will:
+1. Identify the single most important key term defined or described in the passage.
+2. Write a concise definition (2–3 sentences) for that term with EXACTLY ONE subtle factual error.
+3. Write 3 distractor entries: closely related terms from the SAME domain/category, each with a
+   CORRECT definition of similar length. Distractors should be similar enough to cause genuine
+   confusion (e.g., if target is "dopamine", use "serotonin", "norepinephrine", "acetylcholine").
+
+Error types for the target definition:
+- Swapped number or value, wrong mechanism, wrong associated researcher/name,
+  reversed relationship, wrong associated condition or scale
+
+Rules:
+- Shuffle the target position — don't always put it at index 0.
+- All 4 definitions should be similar in length and style.
+- Distractors must be plausible vocab from the same domain — not obscure or unrelated terms.
+- error_original must appear verbatim in entries[target_entry_index].definition.
+
+Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
+{
+  "entries": [
+    {"term": "Target Term", "definition": "Definition with exactly one subtle error.", "is_target": true},
+    {"term": "Similar Term A", "definition": "Correct definition of similar length.", "is_target": false},
+    {"term": "Similar Term B", "definition": "Correct definition of similar length.", "is_target": false},
+    {"term": "Similar Term C", "definition": "Correct definition of similar length.", "is_target": false}
+  ],
+  "target_entry_index": 0,
+  "error_original": "the wrong text as it appears in the target definition",
+  "error_correct": "what the text should actually say",
+  "explanation": "Clear explanation of the error and the correct information."
+}"""
+
+MODE_ID_PREFIXES = {
+    'passage_click': 'PC',
+    'sentence_click': 'SC',
+    'vocab':          'VD',
+}
+
 
 def build_user_prompt(passage: dict) -> str:
     return f"""Domain: {passage['domain_name']}
@@ -168,6 +271,144 @@ def generate_question(client: anthropic.Anthropic, passage: dict,
     return None
 
 
+def generate_passage_click(client: anthropic.Anthropic, passage: dict,
+                           retries: int = 3) -> dict | None:
+    """Returns mode-specific result dict (no id/metadata) or None on failure."""
+    for attempt in range(retries):
+        try:
+            msg = client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=2048,
+                messages=[{"role": "user", "content": build_user_prompt(passage)}],
+                system=PASSAGE_CLICK_PROMPT,
+            )
+            raw = msg.content[0].text.strip().lstrip('`').lstrip('json').rstrip('`').strip()
+            result = json.loads(raw)
+
+            assert 'sentences' in result and isinstance(result['sentences'], list)
+            assert len(result['sentences']) >= 2
+            tsi = result.get('target_sentence_index', -1)
+            assert 0 <= tsi < len(result['sentences']), "target_sentence_index out of range"
+            assert 'original_sentence' in result
+            assert 'error_original' in result
+            assert result['error_original'] in result['sentences'][tsi], \
+                f"error_original not found in target sentence"
+            assert 'error_correct' in result
+            assert 'explanation' in result
+
+            return result
+
+        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+            print(f"    Parse error (attempt {attempt+1}): {e}")
+            if attempt < retries - 1:
+                time.sleep(2)
+        except anthropic.RateLimitError:
+            wait = 15 * (attempt + 1)
+            print(f"    Rate limit — waiting {wait}s...")
+            time.sleep(wait)
+        except Exception as e:
+            print(f"    API error (attempt {attempt+1}): {e}")
+            if attempt < retries - 1:
+                time.sleep(3)
+
+    return None
+
+
+def generate_sentence_click(client: anthropic.Anthropic, passage: dict,
+                            retries: int = 3) -> dict | None:
+    """Returns mode-specific result dict (no id/metadata) or None on failure."""
+    for attempt in range(retries):
+        try:
+            msg = client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=2048,
+                messages=[{"role": "user", "content": build_user_prompt(passage)}],
+                system=SENTENCE_CLICK_PROMPT,
+            )
+            raw = msg.content[0].text.strip().lstrip('`').lstrip('json').rstrip('`').strip()
+            result = json.loads(raw)
+
+            assert 'modified_sentence' in result
+            assert 'phrases' in result and isinstance(result['phrases'], list)
+            assert len(result['phrases']) >= 2
+            tpi = result.get('target_phrase_index', -1)
+            assert 0 <= tpi < len(result['phrases']), "target_phrase_index out of range"
+            assert 'error_original' in result
+            assert result['error_original'] in result['phrases'][tpi], \
+                f"error_original not found in target phrase"
+            assert 'error_correct' in result
+            assert 'explanation' in result
+
+            return result
+
+        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+            print(f"    Parse error (attempt {attempt+1}): {e}")
+            if attempt < retries - 1:
+                time.sleep(2)
+        except anthropic.RateLimitError:
+            wait = 15 * (attempt + 1)
+            print(f"    Rate limit — waiting {wait}s...")
+            time.sleep(wait)
+        except Exception as e:
+            print(f"    API error (attempt {attempt+1}): {e}")
+            if attempt < retries - 1:
+                time.sleep(3)
+
+    return None
+
+
+def generate_vocab(client: anthropic.Anthropic, passage: dict,
+                   retries: int = 3) -> dict | None:
+    """Returns mode-specific result dict (no id/metadata) or None on failure."""
+    for attempt in range(retries):
+        try:
+            msg = client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=2048,
+                messages=[{"role": "user", "content": build_user_prompt(passage)}],
+                system=VOCAB_PROMPT,
+            )
+            raw = msg.content[0].text.strip().lstrip('`').lstrip('json').rstrip('`').strip()
+            result = json.loads(raw)
+
+            assert 'entries' in result and isinstance(result['entries'], list)
+            assert len(result['entries']) == 4
+            assert all('term' in e and 'definition' in e and 'is_target' in e
+                       for e in result['entries'])
+            tei = result.get('target_entry_index', -1)
+            assert 0 <= tei < 4, "target_entry_index out of range"
+            assert result['entries'][tei]['is_target'] is True
+            assert 'error_original' in result
+            assert result['error_original'] in result['entries'][tei]['definition'], \
+                "error_original not found in target definition"
+            assert 'error_correct' in result
+            assert 'explanation' in result
+
+            return result
+
+        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+            print(f"    Parse error (attempt {attempt+1}): {e}")
+            if attempt < retries - 1:
+                time.sleep(2)
+        except anthropic.RateLimitError:
+            wait = 15 * (attempt + 1)
+            print(f"    Rate limit — waiting {wait}s...")
+            time.sleep(wait)
+        except Exception as e:
+            print(f"    API error (attempt {attempt+1}): {e}")
+            if attempt < retries - 1:
+                time.sleep(3)
+
+    return None
+
+
+MODE_GENERATORS = {
+    'passage_click': generate_passage_click,
+    'sentence_click': generate_sentence_click,
+    'vocab':          generate_vocab,
+}
+
+
 def load_existing(path: pathlib.Path) -> dict:
     """Return {id: question} for already-generated questions."""
     if not path.exists():
@@ -177,8 +418,13 @@ def load_existing(path: pathlib.Path) -> dict:
     return {q['id']: q for q in data.get('questions', [])}
 
 
+def get_mode(q: dict) -> str:
+    """Return the mode of a question (defaults to 'mc' for legacy questions)."""
+    return q.get('mode', 'mc')
+
+
 def process_domain(client: anthropic.Anthropic, domain_code: str,
-                   count: int | None, resume: bool):
+                   count: int | None, resume: bool, mode: str = 'mc'):
     src = DATA / f"{domain_code}_passages.json"
     if not src.exists():
         print(f"  SKIP: {src} not found")
@@ -189,30 +435,76 @@ def process_domain(client: anthropic.Anthropic, domain_code: str,
     passages = data['passages']
 
     dst = DATA / f"{domain_code}_spot.json"
-    existing = load_existing(dst) if resume else {}
 
-    # Filter to passages not yet done
-    todo = [p for p in passages if not resume or p['id'] not in existing]
+    # Always load all existing questions to preserve them when appending
+    all_existing: list = []
+    if dst.exists():
+        with open(dst, encoding='utf-8') as f:
+            existing_data = json.load(f)
+        all_existing = existing_data.get('questions', [])
+
+    if resume:
+        # Determine which passages for this mode are already done
+        same_mode = [q for q in all_existing if get_mode(q) == mode]
+        questions = list(all_existing)  # start with everything
+
+        if mode == 'mc':
+            done_ids = {q['id'] for q in same_mode}
+            todo = [p for p in passages if p['id'] not in done_ids]
+        else:
+            done_passage_ids = {q['source_passage_id'] for q in same_mode
+                                if 'source_passage_id' in q}
+            todo = [p for p in passages if p['id'] not in done_passage_ids]
+    else:
+        # Start fresh for this mode; preserve questions of other modes
+        other_mode_qs = [q for q in all_existing if get_mode(q) != mode]
+        questions = list(other_mode_qs)
+        todo = list(passages)
+
+    # Sequential ID counter for new modes
+    seq_n = 1
+    if mode != 'mc':
+        existing_mode_count = sum(1 for q in questions if get_mode(q) == mode)
+        seq_n = existing_mode_count + 1
+
     if count:
-        # Sample evenly across chapters
         random.shuffle(todo)
         todo = todo[:count]
 
     if not todo:
-        print(f"  {domain_code}: nothing to do ({len(existing)} already done)")
+        print(f"  {domain_code} [{mode}]: nothing to do ({len(all_existing)} total existing)")
         return
 
-    print(f"\n  {domain_code}: generating {len(todo)} questions "
-          f"(+{len(existing)} existing)...")
+    generate_fn = generate_question if mode == 'mc' else MODE_GENERATORS[mode]
 
-    questions = list(existing.values())
+    print(f"\n  {domain_code} [{mode}]: generating {len(todo)} questions "
+          f"(+{len(all_existing)} existing)...")
+
     errors = 0
 
     for i, passage in enumerate(todo, 1):
         print(f"    [{i}/{len(todo)}] {passage['chapter_title'][:50]}...", end=' ', flush=True)
-        q = generate_question(client, passage)
-        if q:
-            questions.append(q)
+        result = generate_fn(client, passage)
+        if result:
+            if mode == 'mc':
+                # generate_question returns a complete question dict with id
+                questions.append(result)
+            else:
+                prefix = MODE_ID_PREFIXES[mode]
+                q = {
+                    "id":                f"{domain_code}-{prefix}-{seq_n:04d}",
+                    "mode":              mode,
+                    "domain_code":       passage['domain_code'],
+                    "domain_name":       passage['domain_name'],
+                    "chapter_file":      passage['chapter_file'],
+                    "chapter_title":     passage['chapter_title'],
+                    "section":           passage.get('section', ''),
+                    "passage_type":      passage['passage_type'],
+                    "source_passage_id": passage['id'],
+                    **result,
+                }
+                questions.append(q)
+                seq_n += 1
             print("OK")
         else:
             errors += 1
@@ -222,10 +514,10 @@ def process_domain(client: anthropic.Anthropic, domain_code: str,
 
     # Write output
     out = {
-        "domain_code":   domain_code,
-        "domain_name":   DOMAIN_NAMES[domain_code],
+        "domain_code":     domain_code,
+        "domain_name":     DOMAIN_NAMES[domain_code],
         "total_questions": len(questions),
-        "questions":     questions,
+        "questions":       questions,
     }
     with open(dst, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
@@ -243,6 +535,9 @@ def main():
                         help='Max passages per domain')
     parser.add_argument('--resume', action='store_true',
                         help='Skip already-generated questions')
+    parser.add_argument('--mode', default='mc',
+                        choices=['mc', 'passage_click', 'sentence_click', 'vocab'],
+                        help='Question mode to generate (default: mc)')
     parser.add_argument('--api-key', default=None,
                         help='Anthropic API key (overrides env / .env)')
     args = parser.parse_args()
@@ -260,7 +555,7 @@ def main():
         domains = [args.domain]
 
     for code in domains:
-        process_domain(client, code, args.count, args.resume)
+        process_domain(client, code, args.count, args.resume, args.mode)
 
     print("\nDone.")
 

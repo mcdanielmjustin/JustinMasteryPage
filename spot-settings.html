@@ -341,6 +341,35 @@
         </div>
       </div>
 
+      <!-- Exercise Mode -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Exercise Mode</div>
+        </div>
+        <div class="diff-row" style="flex-wrap:wrap; gap:10px;">
+          <button class="diff-btn" data-mode="mc" onclick="selectMode('mc')">
+            <div class="d-title">Multiple Choice</div>
+            <div class="d-desc">Select the option naming the error</div>
+          </button>
+          <button class="diff-btn" data-mode="passage_click" onclick="selectMode('passage_click')">
+            <div class="d-title">Click the Sentence</div>
+            <div class="d-desc">Click the sentence with the error</div>
+          </button>
+          <button class="diff-btn" data-mode="sentence_click" onclick="selectMode('sentence_click')">
+            <div class="d-title">Click the Word</div>
+            <div class="d-desc">Click the wrong phrase in a sentence</div>
+          </button>
+          <button class="diff-btn" data-mode="vocab" onclick="selectMode('vocab')">
+            <div class="d-title">Vocab Drill</div>
+            <div class="d-desc">Find the card with the flawed definition</div>
+          </button>
+          <button class="diff-btn active" data-mode="all" onclick="selectMode('all')">
+            <div class="d-title">All Modes</div>
+            <div class="d-desc">Mix of all question types</div>
+          </button>
+        </div>
+      </div>
+
       <!-- Passage Type -->
       <div class="section-card">
         <div class="section-label-row">
@@ -380,6 +409,10 @@
           <span class="sum-label">Passage Type</span>
           <span class="sum-value" id="sum-type">All Types</span>
         </div>
+        <div class="sum-item">
+          <span class="sum-label">Mode</span>
+          <span class="sum-value" id="sum-mode">All Modes</span>
+        </div>
       </div>
 
       <button class="start-btn" id="start-btn" onclick="startSession()" disabled>
@@ -394,6 +427,7 @@
       domains: new Set(),
       count: 20,
       type: 'all',
+      mode: 'all',
     };
 
     const DOMAIN_COUNTS = {}; // populated by checkAvailability()
@@ -402,6 +436,14 @@
       all:          'All Types',
       definition:   'Definitions',
       clinical_note:'Clinical Notes',
+    };
+
+    const MODE_LABELS = {
+      mc:            'Multiple Choice',
+      passage_click: 'Click the Sentence',
+      sentence_click:'Click the Word',
+      vocab:         'Vocab Drill',
+      all:           'All Modes',
     };
 
     // ── Availability check ────────────────────────────────────────────────────
@@ -477,8 +519,16 @@
 
     function selectType(t) {
       state.type = t;
-      document.querySelectorAll('.diff-btn').forEach(b => {
+      document.querySelectorAll('.diff-btn[data-type]').forEach(b => {
         b.classList.toggle('active', b.dataset.type === t);
+      });
+      updateSummary();
+    }
+
+    function selectMode(m) {
+      state.mode = m;
+      document.querySelectorAll('.diff-btn[data-mode]').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === m);
       });
       updateSummary();
     }
@@ -502,6 +552,7 @@
         totalQ > 0 ? totalQ.toLocaleString() + ' available' : '\u2014';
 
       document.getElementById('sum-type').textContent = TYPE_LABELS[state.type];
+      document.getElementById('sum-mode').textContent = MODE_LABELS[state.mode];
 
       // Select All label
       const allBtnCodes = [...document.querySelectorAll('.domain-btn')].map(b => b.dataset.code);
@@ -528,6 +579,7 @@
         domains: [...state.domains].join(','),
         count:   state.count,
         type:    state.type,
+        mode:    state.mode,
       });
       location.href = 'spot-exercise.html?' + p.toString();
     }
