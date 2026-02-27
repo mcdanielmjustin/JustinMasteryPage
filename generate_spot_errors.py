@@ -137,30 +137,46 @@ Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
 SENTENCE_CLICK_PROMPT = """You are an expert EPPP (Examination for Professional Practice in Psychology) content creator.
 Your task is to create "Spot the Error — Click the Phrase" questions from psychology study passages.
 
-For each passage you receive, you will:
-1. Extract the single most fact-dense sentence from the passage.
-2. Modify ONE phrase in that sentence with a subtle factual error.
-3. Split the modified sentence into 4–6 meaningful clickable phrases at natural language boundaries
-   (comma, semicolon, colon, or clear noun-phrase boundaries).
+STEP 1 — SELECT THE RIGHT SENTENCE
+From the passage, pick the single sentence that:
+- Is at least 20 words long
+- Contains 2 or more distinct, verifiable factual claims
+- Has natural split points (commas, conjunctions, relative clauses) that produce 4 meaningful chunks
+If no single sentence meets all criteria, combine 2 adjacent sentences from the passage.
 
-Error types to use (vary them):
-- Key term substitution, name swap, number/value change, concept reversal, wrong disorder/drug/scale name
+STEP 2 — SPLIT INTO EXACTLY 4 PHRASES
+Splitting rules (strictly enforced):
+- Split ONLY at complete grammatical boundaries: end of a clause, before a coordinating
+  conjunction ("and", "but", "or", "while"), or at a comma that separates full ideas
+- NEVER cut mid-clause. Every phrase must be a grammatically self-contained unit.
+  Bad: "...and is appropriate when both variables are measured on" (ends mid-clause)
+  Good: "...and is appropriate when both variables are measured on interval or ratio scales"
+- Every phrase must be 6–18 words. If any phrase would fall under 6 words, pick a
+  different sentence or different split points.
+- phrases[] joined together must equal modified_sentence exactly, character-for-character.
 
-Rules:
-- phrases[] concatenated must equal modified_sentence exactly (including all spaces and punctuation).
+STEP 3 — INTRODUCE THE ERROR
+- Place the error in phrase index 1 or 2 ONLY (middle phrases — never first or last).
+- The error must be embedded inside a substantive phrase of at least 6 words.
+- Error types (vary these — do NOT always use simple reversals):
+    • Wrong researcher name (e.g., "Bandura" instead of "Skinner")
+    • Wrong scale or test name (e.g., "WAIS" instead of "MMPI-2")
+    • Wrong numerical value (e.g., "80%" instead of "95%", "-65 mV" instead of "-70 mV")
+    • Wrong mechanism (e.g., "GABA" instead of "glutamate")
+    • Wrong associated disorder or condition
+    • Wrong direction only when genuinely non-obvious in context
+- Avoid generic, well-known swaps like "positive/negative reinforcement" — the error
+  should require specific factual recall, not pattern matching.
 - error_original must appear verbatim in phrases[target_phrase_index].
-- Each phrase should be a meaningful chunk (avoid single-word phrases where possible).
-- The target phrase should be small enough that clicking it is a meaningful choice.
-- Aim for 4–6 phrases total.
 
-Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
+Respond ONLY with valid JSON (no markdown, no extra text):
 {
   "modified_sentence": "The full modified sentence as one string.",
-  "phrases": ["First phrase", ", second phrase with error", ", third phrase."],
+  "phrases": ["Complete clause one,", " complete clause two containing the error,", " complete clause three,", " and complete clause four."],
   "target_phrase_index": 1,
-  "error_original": "second phrase with error",
-  "error_correct": "correct second phrase",
-  "explanation": "Clear explanation of the error and the correct information."
+  "error_original": "the wrong text as it appears verbatim in the target phrase",
+  "error_correct": "what it should actually say",
+  "explanation": "Clear explanation of why this is wrong and what the correct information is."
 }"""
 
 VOCAB_PROMPT = """You are an expert EPPP (Examination for Professional Practice in Psychology) content creator.
@@ -204,6 +220,22 @@ MODE_ID_PREFIXES = {
 }
 
 
+def extract_json(text: str) -> dict:
+    """Extract the first complete JSON object from text that may have preamble or suffix."""
+    start = text.find('{')
+    if start == -1:
+        raise ValueError("No JSON object found in response")
+    depth = 0
+    for i, ch in enumerate(text[start:], start):
+        if ch == '{':
+            depth += 1
+        elif ch == '}':
+            depth -= 1
+            if depth == 0:
+                return json.loads(text[start:i + 1])
+    raise ValueError("No complete JSON object in response")
+
+
 def build_user_prompt(passage: dict) -> str:
     return f"""Domain: {passage['domain_name']}
 Chapter: {passage['chapter_title']}
@@ -229,9 +261,7 @@ def generate_question(client: anthropic.Anthropic, passage: dict,
                 system=SYSTEM_PROMPT,
             )
             raw = msg.content[0].text.strip()
-            # Strip any accidental markdown fences
-            raw = raw.lstrip('`').lstrip('json').rstrip('`').strip()
-            result = json.loads(raw)
+            result = extract_json(raw)
 
             # Basic validation
             assert 'modified_passage' in result
@@ -255,7 +285,7 @@ def generate_question(client: anthropic.Anthropic, passage: dict,
                 "explanation":       result['explanation'],
             }
 
-        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+        except (json.JSONDecodeError, AssertionError, KeyError, ValueError) as e:
             print(f"    Parse error (attempt {attempt+1}): {e}")
             if attempt < retries - 1:
                 time.sleep(2)
@@ -282,8 +312,7 @@ def generate_passage_click(client: anthropic.Anthropic, passage: dict,
                 messages=[{"role": "user", "content": build_user_prompt(passage)}],
                 system=PASSAGE_CLICK_PROMPT,
             )
-            raw = msg.content[0].text.strip().lstrip('`').lstrip('json').rstrip('`').strip()
-            result = json.loads(raw)
+            result = extract_json(msg.content[0].text)
 
             assert 'sentences' in result and isinstance(result['sentences'], list)
             assert len(result['sentences']) >= 2
@@ -298,7 +327,7 @@ def generate_passage_click(client: anthropic.Anthropic, passage: dict,
 
             return result
 
-        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+        except (json.JSONDecodeError, AssertionError, KeyError, ValueError) as e:
             print(f"    Parse error (attempt {attempt+1}): {e}")
             if attempt < retries - 1:
                 time.sleep(2)
@@ -325,23 +354,34 @@ def generate_sentence_click(client: anthropic.Anthropic, passage: dict,
                 messages=[{"role": "user", "content": build_user_prompt(passage)}],
                 system=SENTENCE_CLICK_PROMPT,
             )
-            raw = msg.content[0].text.strip().lstrip('`').lstrip('json').rstrip('`').strip()
-            result = json.loads(raw)
+            result = extract_json(msg.content[0].text)
 
             assert 'modified_sentence' in result
             assert 'phrases' in result and isinstance(result['phrases'], list)
-            assert len(result['phrases']) >= 2
+            assert len(result['phrases']) == 4, \
+                f"expected 4 phrases, got {len(result['phrases'])}"
             tpi = result.get('target_phrase_index', -1)
-            assert 0 <= tpi < len(result['phrases']), "target_phrase_index out of range"
+            assert 1 <= tpi <= 3, \
+                f"target_phrase_index must be 1–3 (not the first phrase), got {tpi}"
             assert 'error_original' in result
             assert result['error_original'] in result['phrases'][tpi], \
-                f"error_original not found in target phrase"
+                "error_original not found in target phrase"
+            # No phrase should be fewer than 4 words
+            for idx, ph in enumerate(result['phrases']):
+                wc = len(ph.split())
+                assert wc >= 4, \
+                    f"phrase {idx} too short ({wc} words): {ph!r}"
+            # Phrases must reassemble to modified_sentence exactly
+            assert ''.join(result['phrases']) == result['modified_sentence'], \
+                "phrases do not concatenate to modified_sentence"
             assert 'error_correct' in result
+            assert result['error_original'].strip() != result['error_correct'].strip(), \
+                "error_original equals error_correct — model failed to introduce a real error"
             assert 'explanation' in result
 
             return result
 
-        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+        except (json.JSONDecodeError, AssertionError, KeyError, ValueError) as e:
             print(f"    Parse error (attempt {attempt+1}): {e}")
             if attempt < retries - 1:
                 time.sleep(2)
@@ -368,8 +408,7 @@ def generate_vocab(client: anthropic.Anthropic, passage: dict,
                 messages=[{"role": "user", "content": build_user_prompt(passage)}],
                 system=VOCAB_PROMPT,
             )
-            raw = msg.content[0].text.strip().lstrip('`').lstrip('json').rstrip('`').strip()
-            result = json.loads(raw)
+            result = extract_json(msg.content[0].text)
 
             assert 'entries' in result and isinstance(result['entries'], list)
             assert len(result['entries']) == 4
@@ -386,7 +425,7 @@ def generate_vocab(client: anthropic.Anthropic, passage: dict,
 
             return result
 
-        except (json.JSONDecodeError, AssertionError, KeyError) as e:
+        except (json.JSONDecodeError, AssertionError, KeyError, ValueError) as e:
             print(f"    Parse error (attempt {attempt+1}): {e}")
             if attempt < retries - 1:
                 time.sleep(2)
