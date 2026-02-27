@@ -48,6 +48,9 @@ def load_api_key(args_key: str | None) -> str:
 
 DATA = pathlib.Path("data")
 
+# Sections to skip across all modes — bibliography/citation entries aren't useful for EPPP drill
+SKIP_SECTIONS = {'references', 'reference list', 'bibliography', 'reference', 'references list'}
+
 DOMAIN_NAMES = {
     "PMET": "Psychometrics & Research Methods",
     "LDEV": "Lifespan & Developmental Stages",
@@ -127,9 +130,11 @@ Rules:
 - error_original must appear verbatim in sentences[target_sentence_index].
 - original_sentence is the correct (unmodified) version of the target sentence.
 - The error must be subtle but clearly wrong; one definitive answer only.
-- The error must NOT be contradicted or revealed by other sentences in the list. Scan all other
-  sentences — if any contains the correct term or implies the correct fact, choose a different
-  sentence or a different fact to modify.
+- CRITICAL anti-reveal rule: After choosing your error, read every other sentence carefully.
+  If ANY other sentence contains the correct term, states the correct direction, or provides
+  context that makes the error immediately obvious (e.g., sentence 3 says "correlations appear
+  weaker" while your error in sentence 2 says "inflates"), you MUST choose a different fact to
+  modify. The student must need domain knowledge to spot the error — not just careful reading.
 - Each element of sentences[] is one complete sentence — do not split mid-sentence.
 
 Respond ONLY with valid JSON in this exact format (no markdown, no extra text):
@@ -159,7 +164,7 @@ Splitting rules (strictly enforced):
 - NEVER cut mid-clause. Every phrase must be a grammatically self-contained unit.
   Bad: "...and is appropriate when both variables are measured on" (ends mid-clause)
   Good: "...and is appropriate when both variables are measured on interval or ratio scales"
-- Every phrase must be 6–20 words.
+- Every phrase must be at least 5 words (aim for 6–20 words for the middle phrases).
 - If the natural split leaves a short tail (e.g., " of the evidence.", " rather than
   treatment.", " as the independent variable."), do NOT make it a separate phrase —
   merge it into the preceding phrase so that phrase ends with the sentence's closing
@@ -286,6 +291,8 @@ def generate_question(client: anthropic.Anthropic, passage: dict,
             assert 'modified_passage' in result
             assert 'options' in result and len(result['options']) == 4
             assert 0 <= result.get('correct_option_index', -1) <= 3
+            assert result.get('error_original', '').strip() != result.get('error_correct', '').strip(), \
+                "error_original equals error_correct — model failed to introduce a real error"
 
             return {
                 "id":                passage['id'],
@@ -336,7 +343,8 @@ def generate_passage_click(client: anthropic.Anthropic, passage: dict,
             # Model signals passage too short by returning {}
             assert result, "model returned empty result (passage too short)"
             assert 'sentences' in result and isinstance(result['sentences'], list)
-            assert len(result['sentences']) >= 2
+            assert len(result['sentences']) >= 4, \
+                f"only {len(result['sentences'])} sentences, need >= 4"
             tsi = result.get('target_sentence_index', -1)
             assert 0 <= tsi < len(result['sentences']), "target_sentence_index out of range"
             assert 'original_sentence' in result
@@ -345,6 +353,16 @@ def generate_passage_click(client: anthropic.Anthropic, passage: dict,
                 f"error_original not found in target sentence"
             assert 'error_correct' in result
             assert 'explanation' in result
+
+            # Anti-reveal verbatim check: error_correct must not appear in non-target sentences
+            ec_lower = result['error_correct'].lower()
+            for i, sent in enumerate(result['sentences']):
+                if i == tsi:
+                    continue
+                if ec_lower in sent.lower():
+                    raise ValueError(
+                        f"Anti-reveal: '{result['error_correct']}' found verbatim in sentence {i}"
+                    )
 
             return result
 
@@ -382,11 +400,12 @@ def generate_sentence_click(client: anthropic.Anthropic, passage: dict,
             assert len(result['phrases']) >= 3, \
                 f"too few phrases: {len(result['phrases'])}"
 
-            # ── Post-process 1: merge any short tail phrase into its predecessor ──
+            # ── Post-process 1: merge short tail phrases into predecessor ──
+            # Keeps 4-phrase items as 4; merges only when last phrase is < 5 words.
             phrases = list(result['phrases'])
             tpi = result.get('target_phrase_index', -1)
             while len(phrases) > 2 and len(phrases[-1].split()) < 5:
-                if tpi == len(phrases) - 1:   # error was in the tail — merge pulls it in
+                if tpi == len(phrases) - 1:
                     tpi = len(phrases) - 2
                 phrases[-2] = phrases[-2] + phrases[-1]
                 phrases.pop()
@@ -402,10 +421,10 @@ def generate_sentence_click(client: anthropic.Anthropic, passage: dict,
             assert 'error_original' in result
             assert result['error_original'] in result['phrases'][tpi], \
                 "error_original not found in target phrase"
-            # No phrase should be fewer than 5 words after merging
+            # Every phrase must be at least 4 words
             for idx, ph in enumerate(result['phrases']):
                 wc = len(ph.split())
-                assert wc >= 5, \
+                assert wc >= 4, \
                     f"phrase {idx} too short ({wc} words): {ph!r}"
             assert 'error_correct' in result
             assert result['error_original'].strip() != result['error_correct'].strip(), \
@@ -539,9 +558,17 @@ def process_domain(client: anthropic.Anthropic, domain_code: str,
         existing_mode_count = sum(1 for q in questions if get_mode(q) == mode)
         seq_n = existing_mode_count + 1
 
-    # passage_click needs at least 4 sentences — filter short passages before sampling
+    # Skip references / bibliography sections across all modes — not useful for drill
+    todo = [p for p in todo
+            if p.get('section', '').lower().strip() not in SKIP_SECTIONS]
+
+    # passage_click: need >= 4 real sentences (not just period count — decimals/abbrevs skew that)
     if mode == 'passage_click':
-        todo = [p for p in todo if p['passage'].count('.') >= 3]
+        import re as _re
+        def _sentence_count(text: str) -> int:
+            parts = _re.split(r'(?<=[.!?])\s+', text.strip())
+            return len([p for p in parts if len(p.split()) >= 4])
+        todo = [p for p in todo if _sentence_count(p['passage']) >= 4]
 
     if count:
         random.shuffle(todo)
