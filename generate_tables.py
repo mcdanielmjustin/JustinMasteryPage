@@ -29,6 +29,7 @@ DATA = pathlib.Path("data")
 
 DOMAIN_DIRS = {
     "BPSY": pathlib.Path("content/domain7"),
+    "CASS": pathlib.Path("content/domain8"),
     "CPAT": pathlib.Path("content/domain3"),
     "LDEV": pathlib.Path("content/domain2"),
     "PETH": pathlib.Path("content/domain9"),
@@ -36,6 +37,7 @@ DOMAIN_DIRS = {
 
 DOMAIN_NAMES = {
     "BPSY": "Biopsychology",
+    "CASS": "Clinical Assessment",
     "CPAT": "Psychopathology",
     "LDEV": "Lifespan & Developmental Stages",
     "PETH": "Psychopharmacology & Ethics",
