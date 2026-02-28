@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete the Table | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --bg2: #0f0f11;
+      --bg3: #18181b;
+      --card: #1c1c1f;
+      --teal: #2dd4bf;
+      --teal-light: #5eead4;
+      --teal-dark: #0d9488;
+      --text: #fafafa;
+      --text2: #a8a8b3;
+      --text3: #6b6b76;
+      --border: rgba(255,255,255,0.07);
+      --border-teal: rgba(45,212,191,0.28);
+      --green: #34d399;
+      --green-rgb: 52,211,153;
+      --red: #f87171;
+      --red-rgb: 248,113,113;
+      --teal-rgb: 45,212,191;
+      --amber: #fbbf24;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%     { transform: translateX(-6px); }
+      75%     { transform: translateX(6px); }
+    }
+    @keyframes correctPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
+      60%  { box-shadow: 0 0 0 10px rgba(52,211,153,0); }
+      100% { box-shadow: none; }
+    }
+    @keyframes available-pulse {
+      0%, 100% { border-color: var(--teal); }
+      50%      { border-color: var(--teal-light); box-shadow: 0 0 0 3px rgba(45,212,191,0.25); }
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:10; height:60px;
+      background: rgba(9,9,11,0.9); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 24px; gap: 16px;
+    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-icon {
+      width:32px; height:32px; border-radius:8px;
+      background: linear-gradient(135deg,#9333ea,#6d28d9);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:15px; color:#fff;
+    }
+    .logo-title { font-weight:700; font-size:14px; }
+    .nav-spacer { flex: 1; }
+    .nav-meta   { font-size: 12px; color: var(--text3); text-align: right; }
+    .nav-score  { font-weight: 600; color: var(--teal-light); font-size: 14px; }
+
+    /* ── LAYOUT ──────────────────────────────────────────────────────────── */
+    .page {
+      padding-top: 60px;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* ── PROGRESS ────────────────────────────────────────────────────────── */
+    .progress-wrap { width: 100%; height: 3px; background: rgba(255,255,255,0.06); }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal-dark), var(--teal-light));
+      transition: width 0.4s ease;
+    }
+
+    /* ── LOADING ─────────────────────────────────────────────────────────── */
+    #screen-loading {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px;
+      padding: 80px 24px; width: 100%;
+    }
+    .loading-text { font-size: 14px; color: var(--text2); }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 2px solid var(--border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* ── QUIZ SCREEN ─────────────────────────────────────────────────────── */
+    #screen-quiz {
+      display: none;
+      width: 100%; max-width: 820px;
+      padding: 32px 24px 80px;
+      animation: fadeInUp 0.4s ease-out both;
+    }
+
+    .q-meta {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .q-num {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--text3); text-transform: uppercase;
+    }
+    .q-badge {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 3px 10px;
+      border-radius: 20px; border: 1px solid;
+    }
+    .badge-teal { color: var(--teal-light); border-color: rgba(45,212,191,0.35); background: rgba(45,212,191,0.08); }
+
+    .q-chapter { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
+    .q-section  { font-size: 11px; color: var(--text3); margin-bottom: 20px; }
+
+    /* ── TABLE ───────────────────────────────────────────────────────────── */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .exercise-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .exercise-table th {
+      background: var(--bg3);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      color: var(--teal-light);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .exercise-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .exercise-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+    /* Drop target cell */
+    .drop-target {
+      background: rgba(45,212,191,0.04) !important;
+      border: 2px dashed var(--teal) !important;
+      min-width: 140px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .drop-target.drag-over {
+      background: rgba(var(--teal-rgb),0.12) !important;
+      border-color: var(--teal-light) !important;
+    }
+    .drop-target.available {
+      animation: available-pulse 1s ease-in-out infinite;
+    }
+    .drop-target.drop-correct {
+      background: rgba(var(--green-rgb),0.15) !important;
+      border: 2px solid var(--green) !important;
+      color: var(--green);
+      font-weight: 600;
+      animation: correctPulse 0.6s ease-out both;
+    }
+    .drop-target.drop-wrong {
+      animation: shake 0.3s ease-out;
+      border-color: var(--red) !important;
+    }
+    /* Chip parked in cell (pre-submit) */
+    .drop-target.drop-placed {
+      background: rgba(var(--teal-rgb), 0.06) !important;
+      border-color: var(--teal) !important;
+      color: var(--text);
+      cursor: pointer; /* click to unplace */
+    }
+    /* Wrong cell revealed after submit */
+    .drop-target.drop-wrong-reveal {
+      background: rgba(var(--red-rgb), 0.12) !important;
+      border: 2px solid var(--red) !important;
+      color: var(--red);
+      font-weight: 600;
+      animation: shake 0.4s ease-out;
+    }
+    .drop-hint {
+      color: var(--text3);
+      font-style: italic;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    /* ── CHIPS PANEL ─────────────────────────────────────────────────────── */
+    .chips-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal);
+      margin: 20px 0 10px;
+    }
+    .chips-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .answer-chip {
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg3);
+      cursor: grab;
+      user-select: none;
+      font-size: 13px;
+      color: var(--text2);
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+      line-height: 1.4;
+    }
+    .answer-chip:active { cursor: grabbing; }
+    .answer-chip:hover  { border-color: rgba(45,212,191,0.4); background: rgba(45,212,191,0.06); }
+    .answer-chip.selected {
+      border-color: var(--teal);
+      background: rgba(var(--teal-rgb),0.12);
+      color: var(--text);
+    }
+
+    /* ── FEEDBACK PANEL ──────────────────────────────────────────────────── */
+    .feedback-panel {
+      display: none;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-top: 20px;
+      animation: fadeInUp 0.3s ease-out both;
+    }
+    .feedback-panel.correct { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3); }
+    .feedback-panel.wrong   { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
+    .feedback-header {
+      font-size: 14px; font-weight: 700; margin-bottom: 8px;
+    }
+    .feedback-panel.correct .feedback-header { color: var(--green); }
+    .feedback-panel.wrong   .feedback-header { color: var(--red); }
+    .feedback-body  { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .feedback-value {
+      font-size: 12px; color: var(--text3);
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Submit button */
+    .submit-btn {
+      display: none;
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid rgba(45,212,191,0.4);
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 14px; font-weight: 600; color: var(--teal-light);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.02em;
+      margin-top: 20px;
+    }
+    .submit-btn:hover { background: rgba(45,212,191,0.08); border-color: var(--teal); }
+
+    /* Next button */
+    .next-btn {
+      display: none;
+      width: 100%;
+      background: linear-gradient(135deg, var(--teal-dark), #0f766e);
+      border: none; border-radius: 12px;
+      padding: 14px;
+      font-size: 14px; font-weight: 700; color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      letter-spacing: 0.02em;
+      margin-top: 16px;
+    }
+    .next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── RESULTS ─────────────────────────────────────────────────────────── */
+    #screen-results {
+      display: none;
+      width: 100%; max-width: 560px;
+      padding: 60px 24px 80px;
+      text-align: center;
+      animation: fadeInUp 0.5s ease-out both;
+    }
+    .results-eyebrow {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
+    }
+    .results-score {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(3.5rem, 12vw, 5rem);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 8px 0 4px;
+    }
+    .results-label { font-size: 13px; color: var(--text3); margin-bottom: 32px; }
+    .stats-row { display: flex; justify-content: center; gap: 24px; margin-bottom: 36px; }
+    .stat-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .stat-n     { font-size: 22px; font-weight: 700; color: var(--teal-light); }
+    .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+    .results-btns { display: flex; flex-direction: column; gap: 10px; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal-dark), #0f766e);
+      border: none; border-radius: 12px;
+      padding: 13px 20px; font-size: 14px; font-weight: 700; color: #fff;
+      cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 20px; font-size: 13px; font-weight: 500; color: var(--text2);
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      display: block;
+    }
+    .btn-outline:hover { border-color: rgba(45,212,191,0.4); color: var(--teal-light); }
+
+    /* ── REVIEW ──────────────────────────────────────────────────────────── */
+    #screen-review {
+      display: none;
+      width: 100%; max-width: 820px;
+      padding: 24px 24px 80px;
+      animation: fadeInUp 0.4s ease-out both;
+    }
+    .review-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .review-title { font-size: 16px; font-weight: 600; }
+    #review-list { display: flex; flex-direction: column; gap: 28px; }
+
+    /* Review card */
+    .review-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 22px;
+    }
+    .review-card-meta {
+      font-size: 11px; color: var(--text3); margin-bottom: 12px;
+    }
+    .review-explanation {
+      font-size: 13px; color: var(--text2); line-height: 1.6;
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .review-answer-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--green); margin-top: 12px;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .exercise-table th, .exercise-table td { font-size: 12px; padding: 8px 10px; }
+      .answer-chip { font-size: 12px; padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-icon">M</div>
+      <span class="logo-title">MasteryPage</span>
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-meta" id="nav-meta"></div>
+    <div class="nav-score" id="nav-score"></div>
+  </nav>
+
+  <div class="page">
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <!-- Loading -->
+    <div id="screen-loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading questions&hellip;</div>
+    </div>
+
+    <!-- Quiz -->
+    <div id="screen-quiz">
+      <div class="q-meta">
+        <span class="q-num" id="q-num">Question 1 of 20</span>
+        <span class="q-badge badge-teal" id="q-domain-badge"></span>
+        <span class="q-badge badge-teal" id="q-mode-badge"></span>
+      </div>
+      <div class="q-chapter" id="q-chapter"></div>
+      <div class="q-section"  id="q-section"></div>
+
+      <div id="question-body"></div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">Submit Answer</button>
+
+      <div class="feedback-panel" id="feedback-panel">
+        <div class="feedback-header" id="feedback-header"></div>
+        <div class="feedback-body"   id="feedback-body"></div>
+        <div class="feedback-value"  id="feedback-value"></div>
+      </div>
+
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()"></button>
+    </div>
+
+    <!-- Results -->
+    <div id="screen-results">
+      <div class="results-eyebrow">Session Complete</div>
+      <div class="results-score" id="results-pct">0%</div>
+      <div class="results-label" id="results-label">score</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-n" id="stat-correct">&mdash;</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n" id="stat-missed">&mdash;</div>
+          <div class="stat-label">Missed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-n" id="stat-total">&mdash;</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+      <div class="results-btns">
+        <button class="btn-primary" onclick="restartSession()">Try Again</button>
+        <button class="btn-outline" id="btn-review" onclick="showReview()" style="display:none">Review Missed</button>
+        <a class="btn-outline" href="table-settings.html">Change Settings</a>
+        <a class="btn-outline" href="index.html">Home</a>
+      </div>
+    </div>
+
+    <!-- Review Missed -->
+    <div id="screen-review">
+      <div class="review-header">
+        <button class="btn-outline" onclick="closeReview()">&larr; Back to Results</button>
+        <div class="review-title">Questions You Missed</div>
+      </div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- .page -->
+
+  <script src="data/table_data.js"></script>
+  <script>
+    const params       = new URLSearchParams(location.search);
+    const DOMAIN_CODES = (params.get('domains') || '').split(',').filter(Boolean);
+    const COUNT        = parseInt(params.get('count') || '20', 10);
+    const MODE         = params.get('mode') || 'one'; // 'one' | 'few' | 'all'
+
+    let pool           = [];
+    let current        = 0;
+    let correct        = 0;  // first-try correct count (no wrong attempts)
+    let answered       = false;
+    let currentWrong   = false; // any wrong attempt on current question
+    let missed         = []; // { q, wrongAttempts }
+
+    // Multi-blank state (rebuilt each question)
+    // blank: {row, col, value, placedText, placedOrigIdx}
+    let blanks       = [];
+    const blankMap   = new Map();   // "row,col" → blank obj
+    const dtMap      = new Map();   // "row,col" → <td> element
+    let chipEls      = [];          // live chip elements in panel
+    let chipsLabelEl = null;
+    let chipsPanelEl = null;
+
+    // Tap-to-select
+    let selectedChip = null;
+
+    // ── Session persistence ───────────────────────────────────────────────
+    const SESSION_KEY = 'table_session_' + JSON.stringify({
+      d: DOMAIN_CODES.slice().sort().join(','),
+      n: COUNT, m: MODE,
+    });
+
+    function saveSession() {
+      try {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({
+          pool: pool.map(q => q.id),
+          current, correct,
+          missed: missed.map(({ q }) => ({ qId: q.id })),
+        }));
+      } catch(e) {}
+    }
+
+    function clearSession() {
+      try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
+    }
+
+    function tryRestoreSession(qById) {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return false;
+        const s = JSON.parse(raw);
+        if (!s.pool || !s.pool.length || s.current >= s.pool.length) return false;
+        const restoredPool = s.pool.map(id => qById[id]).filter(Boolean);
+        if (restoredPool.length !== s.pool.length) return false;
+        pool    = restoredPool;
+        current = s.current || 0;
+        correct = s.correct || 0;
+        missed  = (s.missed || []).map(({ qId }) => {
+          const q = qById[qId];
+          return q ? { q } : null;
+        }).filter(Boolean);
+        return true;
+      } catch(e) { return false; }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Max length of any option string before a question is excluded.
+    // Keeps all four chips readable; mirrors filter in table-settings.html.
+    const MAX_OPT_LEN = 140;
+
+    function isUsable(q) {
+      return q.options.every(o => o.length <= MAX_OPT_LEN);
+    }
+
+    // ── Load data ─────────────────────────────────────────────────────────
+    function loadData() {
+      const tableData = window.__TABLE_DATA || {};
+      const all = [];
+      const missing = [];
+
+      for (const code of DOMAIN_CODES) {
+        const data = tableData[code];
+        if (!data) { missing.push(code); continue; }
+        all.push(...(data.questions || []).filter(isUsable));
+      }
+
+      if (all.length === 0) {
+        const debugInfo = [
+          `Domains: ${DOMAIN_CODES.join(', ') || '(none)'}`,
+          missing.length ? `Not in bundle: ${missing.join(', ')}` : null,
+        ].filter(Boolean).join(' | ');
+        document.getElementById('screen-loading').innerHTML =
+          `<div style="color:var(--red);font-size:14px;text-align:center;padding:20px;">
+            No questions found for the selected domains.<br>
+            <small style="color:var(--text3);display:block;margin-top:8px;">${debugInfo}</small>
+          </div>`;
+        return;
+      }
+
+      shuffle(all);
+      let fullPool;
+      if (MODE === 'all') {
+        const expanded = expandPool(all);
+        shuffle(expanded);
+        fullPool = expanded;
+      } else {
+        fullPool = all;
+      }
+
+      const qById = {};
+      fullPool.forEach(q => qById[q.id] = q);
+
+      if (tryRestoreSession(qById)) {
+        showQuestion();
+        return;
+      }
+
+      pool = fullPool.slice(0, COUNT);
+      showQuestion();
+    }
+
+    // ── Show question ─────────────────────────────────────────────────────
+    const MODE_LABELS = { one: 'One Blank', few: 'Three Blanks', all: 'Full Table' };
+
+    function showQuestion() {
+      const q = pool[current];
+      answered     = false;
+      currentWrong = false;
+      selectedChip = null;
+      chipEls      = [];
+      chipsLabelEl = null;
+      chipsPanelEl = null;
+      blanks = [];
+      blankMap.clear();
+      dtMap.clear();
+
+      document.getElementById('submit-btn').style.display = 'block';
+      document.getElementById('next-btn').style.display   = 'none';
+
+      document.getElementById('progress-fill').style.width =
+        (current / pool.length * 100) + '%';
+      document.getElementById('nav-score').textContent = `${correct} / ${current}`;
+      document.getElementById('nav-meta').textContent  = `${pool.length - current} left`;
+      document.getElementById('q-num').textContent = `Question ${current + 1} of ${pool.length}`;
+      document.getElementById('q-domain-badge').textContent = q.domain_code;
+      document.getElementById('q-mode-badge').textContent   = MODE_LABELS[MODE];
+      document.getElementById('q-chapter').textContent = q.chapter_title;
+      document.getElementById('q-section').textContent  = q.section || '';
+
+      const fp = document.getElementById('feedback-panel');
+      fp.style.display = 'none';
+      fp.className = 'feedback-panel';
+
+      const body = document.getElementById('question-body');
+      body.innerHTML = '';
+      renderTableFill(q, body);
+
+      document.getElementById('screen-loading').style.display = 'none';
+      document.getElementById('screen-quiz').style.display    = 'block';
+    }
+
+    // ── Select blanks for current question based on MODE ─────────────────
+    function blankObj(row, col, value) {
+      return { row, col, value, placedText: null, placedOrigIdx: null };
+    }
+
+    function selectBlanks(q) {
+      // Chunk sub-questions carry their own blank set
+      if (q._chunkBlanks) {
+        return q._chunkBlanks.map(b => blankObj(b.row, b.col, b.value));
+      }
+
+      const primary = blankObj(q.blank_row, q.blank_col, q.correct_value);
+      if (MODE === 'one') return [primary];
+
+      // All non-empty, non-primary cells are candidates
+      const candidates = [];
+      q.rows.forEach((row, ri) => {
+        row.forEach((cell, ci) => {
+          const isPrimary = ri === q.blank_row && ci === q.blank_col;
+          if (isPrimary || !cell || cell === 'BLANK' || !cell.trim()) return;
+          candidates.push(blankObj(ri, ci, cell));
+        });
+      });
+      shuffle(candidates);
+
+      if (MODE === 'few') {
+        const extra = [];
+        const usedRows = new Set([q.blank_row]);
+        for (const c of candidates) {
+          if (extra.length >= 2) break;
+          if (!usedRows.has(c.row)) { extra.push(c); usedRows.add(c.row); }
+        }
+        if (extra.length < 2) {
+          for (const c of candidates) {
+            if (extra.length >= 2) break;
+            if (!extra.some(x => x.row === c.row && x.col === c.col)) extra.push(c);
+          }
+        }
+        return [primary, ...extra];
+      }
+
+      // MODE === 'all': every cell
+      return [primary, ...candidates];
+    }
+
+    // ── Pool expansion: split 'all' mode questions into row-chunk sub-Qs ──
+    function getAllBlanks(q) {
+      const primary = { row: q.blank_row, col: q.blank_col, value: q.correct_value };
+      const others  = [];
+      q.rows.forEach((row, ri) => {
+        row.forEach((cell, ci) => {
+          if (ri === q.blank_row && ci === q.blank_col) return;
+          if (!cell || cell === 'BLANK' || !cell.trim()) return;
+          others.push({ row: ri, col: ci, value: cell });
+        });
+      });
+      shuffle(others);
+      return [primary, ...others];
+    }
+
+    function expandPool(rawPool) {
+      const expanded = [];
+      rawPool.forEach(q => {
+        const allBlanks  = getAllBlanks(q);
+        const chunkSize  = Math.max(2, Math.floor(10 / q.headers.length));
+        const byRow      = new Map();
+        allBlanks.forEach(b => {
+          if (!byRow.has(b.row)) byRow.set(b.row, []);
+          byRow.get(b.row).push(b);
+        });
+        const rowNums = [...byRow.keys()].sort((a, b) => a - b);
+        const groups  = [];
+        for (let i = 0; i < rowNums.length; i += chunkSize) {
+          const chunk = [];
+          for (let j = i; j < Math.min(i + chunkSize, rowNums.length); j++)
+            chunk.push(...byRow.get(rowNums[j]));
+          groups.push(chunk);
+        }
+        if (groups.length <= 1) {
+          expanded.push(q);
+        } else {
+          groups.forEach((chunkBlanks, idx) => expanded.push({
+            ...q,
+            id:           `${q.id}-P${idx + 1}`,
+            _chunkBlanks: chunkBlanks,
+            _chunkLabel:  `Part ${idx + 1} of ${groups.length}`,
+          }));
+        }
+      });
+      return expanded;
+    }
+
+    // ── Chip helpers ──────────────────────────────────────────────────────
+    function makeChip(text, origIdx) {
+      const chip = document.createElement('div');
+      chip.className    = 'answer-chip';
+      chip.draggable    = true;
+      chip.dataset.text = text;
+      if (origIdx != null) chip.dataset.origIdx = String(origIdx);
+      chip.textContent  = text;
+
+      chip.ondragstart = e => {
+        e.dataTransfer.setData('text', text);
+        if (origIdx != null) e.dataTransfer.setData('origIdx', String(origIdx));
+        e.dataTransfer.effectAllowed = 'move';
+      };
+
+      chip.onclick = () => {
+        if (answered) return;
+        if (selectedChip === chip) {
+          chip.classList.remove('selected');
+          dtMap.forEach(td => td.classList.remove('available'));
+          selectedChip = null;
+        } else {
+          chipEls.forEach(c => c.classList.remove('selected'));
+          chip.classList.add('selected');
+          dtMap.forEach((td, key) => {
+            if (blankMap.get(key)?.placedText === null) td.classList.add('available');
+          });
+          selectedChip = chip;
+        }
+      };
+      return chip;
+    }
+
+    function returnChip(text, origIdx) {
+      const chip = makeChip(text, origIdx != null ? origIdx : null);
+      chipsPanelEl.appendChild(chip);
+      chipEls.push(chip);
+    }
+
+    // ── Place a chip into a cell (no correctness feedback yet) ───────────
+    function placeChip(key, text, origIdx, chipEl) {
+      const blank = blankMap.get(key);
+      const td    = dtMap.get(key);
+      if (!blank || !td || answered) return;
+
+      // If cell already occupied, return its chip first
+      if (blank.placedText !== null) {
+        returnChip(blank.placedText, blank.placedOrigIdx);
+      }
+
+      // Remove incoming chip from panel
+      if (chipEl && chipEl.isConnected) {
+        const idx = chipEls.indexOf(chipEl);
+        if (idx !== -1) chipEls.splice(idx, 1);
+        chipEl.remove();
+      }
+
+      blank.placedText    = text;
+      blank.placedOrigIdx = origIdx != null ? origIdx : null;
+
+      td.className = 'drop-target drop-placed';
+      td.innerHTML = escHtml(text);
+    }
+
+    // ── Wire a cell to accept chip placements ─────────────────────────────
+    function wirePlaceTarget(key, td) {
+      td.ondragover  = e => { e.preventDefault(); if (!answered) td.classList.add('drag-over'); };
+      td.ondragleave = () => td.classList.remove('drag-over');
+
+      td.ondrop = e => {
+        e.preventDefault();
+        td.classList.remove('drag-over');
+        if (answered) return;
+        const text    = e.dataTransfer.getData('text');
+        const rawIdx  = e.dataTransfer.getData('origIdx');
+        const origIdx = rawIdx ? parseInt(rawIdx) : null;
+        const chipEl  = chipEls.find(c => c.dataset.text === text && c.isConnected);
+        // Clear any tap-selected chip state — drag completed the placement
+        if (selectedChip) {
+          chipEls.forEach(c => c.classList.remove('selected'));
+          dtMap.forEach(t => t.classList.remove('available'));
+          selectedChip = null;
+        }
+        placeChip(key, text, origIdx, chipEl);
+      };
+
+      td.onclick = () => {
+        if (answered) return;
+        const blank = blankMap.get(key);
+        if (!blank) return;
+
+        if (selectedChip) {
+          // Place the selected chip
+          const text    = selectedChip.dataset.text;
+          const origIdx = selectedChip.dataset.origIdx != null ? parseInt(selectedChip.dataset.origIdx) : null;
+          const chip    = selectedChip;
+          chipEls.forEach(c => c.classList.remove('selected'));
+          dtMap.forEach(t => t.classList.remove('available'));
+          selectedChip = null;
+          placeChip(key, text, origIdx, chip);
+        } else if (blank.placedText !== null) {
+          // Tap occupied cell with no chip selected → return chip to panel
+          returnChip(blank.placedText, blank.placedOrigIdx);
+          blank.placedText    = null;
+          blank.placedOrigIdx = null;
+          td.className = 'drop-target';
+          td.innerHTML = '<span class="drop-hint">Drop here</span>';
+        }
+      };
+    }
+
+    // ── Render: Table Fill ────────────────────────────────────────────────
+    function renderTableFill(q, body) {
+      blanks = selectBlanks(q);
+      blanks.forEach(b => blankMap.set(`${b.row},${b.col}`, b));
+      const activeKeys = new Set(blanks.map(b => `${b.row},${b.col}`));
+
+      // Instruction line (chunk label if applicable)
+      const chunkLabel = q._chunkLabel || '';
+      const instrText  =
+        MODE === 'one' ? 'One cell is hidden \u2014 select the correct answer, then submit.' :
+        MODE === 'few' ? 'Three cells are hidden \u2014 place each chip, then submit.'       :
+        chunkLabel     ? `${chunkLabel} \u2014 place each chip, then submit.`               :
+                         'Every cell is hidden \u2014 place all chips, then submit.';
+      const instrEl = document.createElement('p');
+      instrEl.style.cssText = 'font-size:12px;color:var(--text3);margin-bottom:14px;font-style:italic;';
+      instrEl.textContent = instrText;
+      body.appendChild(instrEl);
+
+      // ── Table ──
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-wrapper';
+      const table = document.createElement('table');
+      table.className = 'exercise-table';
+
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      q.headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      q.rows.forEach((row, ri) => {
+        const tr = document.createElement('tr');
+        row.forEach((cell, ci) => {
+          const td  = document.createElement('td');
+          const key = `${ri},${ci}`;
+          if (activeKeys.has(key)) {
+            td.className = 'drop-target';
+            td.dataset.key = key;
+            const hint = document.createElement('span');
+            hint.className   = 'drop-hint';
+            hint.textContent = 'Drop here';
+            td.appendChild(hint);
+            dtMap.set(key, td);
+            wirePlaceTarget(key, td);
+          } else {
+            // 'BLANK' sentinel means primary blank is not in this chunk → show correct value
+            td.textContent = (cell === 'BLANK') ? q.correct_value : cell;
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      wrapper.appendChild(table);
+      body.appendChild(wrapper);
+
+      // ── Chips ──
+      chipsLabelEl = document.createElement('div');
+      chipsLabelEl.className   = 'chips-label';
+      chipsLabelEl.textContent = MODE === 'one' ? 'Choose the correct answer:' :
+                                 MODE === 'few' ? 'Place each value in its blank:' :
+                                                  'Drag every chip to where it belongs:';
+      body.appendChild(chipsLabelEl);
+
+      chipsPanelEl = document.createElement('div');
+      chipsPanelEl.className = 'chips-panel';
+      body.appendChild(chipsPanelEl);
+
+      if (MODE === 'one') {
+        shuffle([0, 1, 2, 3]).forEach(i => {
+          const chip = makeChip(q.options[i], i);
+          chipsPanelEl.appendChild(chip);
+          chipEls.push(chip);
+        });
+      } else {
+        shuffle([...blanks]).forEach(b => {
+          const chip = makeChip(b.value, null);
+          chipsPanelEl.appendChild(chip);
+          chipEls.push(chip);
+        });
+      }
+    }
+
+    // ── Submit answer ─────────────────────────────────────────────────────
+    function submitAnswer() {
+      const q = pool[current];
+      if (answered) return;
+      answered = true;
+
+      let anyWrong = false;
+      blanks.forEach(b => {
+        const td = dtMap.get(`${b.row},${b.col}`);
+        const isCorrect = b.placedText !== null && (
+          MODE === 'one'
+            ? b.placedOrigIdx === q.correct_option_index
+            : b.placedText.trim().toLowerCase() === b.value.trim().toLowerCase()
+        );
+        if (isCorrect) {
+          td.className = 'drop-target drop-correct';
+          td.innerHTML = escHtml(b.value);
+        } else {
+          anyWrong = true;
+          td.className = 'drop-target drop-wrong-reveal';
+          td.innerHTML  = escHtml(b.value); // correct value shown in red cell
+        }
+      });
+
+      currentWrong = anyWrong;
+      if (!currentWrong) correct++;
+
+      chipsLabelEl.style.display = 'none';
+      chipsPanelEl.style.display = 'none';
+      document.getElementById('submit-btn').style.display = 'none';
+
+      const fp = document.getElementById('feedback-panel');
+      fp.className     = anyWrong ? 'feedback-panel wrong' : 'feedback-panel correct';
+      fp.style.display = 'block';
+      document.getElementById('feedback-header').textContent =
+        anyWrong ? 'Check highlighted cells above' : '\u2713 All correct!';
+      document.getElementById('feedback-body').textContent = q.explanation;
+      document.getElementById('feedback-value').innerHTML  =
+        MODE === 'one'
+          ? `<strong>Answer:</strong> &ldquo;${escHtml(q.correct_value)}&rdquo;`
+          : `<strong>Key answer:</strong> &ldquo;${escHtml(q.correct_value)}&rdquo;`;
+
+      const nb = document.getElementById('next-btn');
+      nb.style.display = 'block';
+      nb.textContent   = current + 1 < pool.length ? 'Next \u2192' : 'See Results \u2192';
+
+      document.getElementById('nav-score').textContent = `${correct} / ${current + 1}`;
+      saveSession();
+      setTimeout(() => fp.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 120);
+    }
+
+    // ── Next question ─────────────────────────────────────────────────────
+    function nextQuestion() {
+      const q = pool[current];
+
+      // Record in missed if they had any wrong cells on submit
+      if (currentWrong) {
+        missed.push({ q });
+      }
+
+      current++;
+      saveSession();
+
+      if (current >= pool.length) {
+        showResults();
+      } else {
+        showQuestion();
+      }
+    }
+
+    // ── Results ───────────────────────────────────────────────────────────
+    function showResults() {
+      document.getElementById('screen-quiz').style.display    = 'none';
+      document.getElementById('screen-results').style.display = 'block';
+
+      const total = pool.length;
+      const pct   = total > 0 ? Math.round(correct / total * 100) : 0;
+      document.getElementById('results-pct').textContent   = pct + '%';
+      document.getElementById('results-label').textContent = `${correct} correct out of ${total}`;
+      document.getElementById('stat-correct').textContent  = correct;
+      document.getElementById('stat-missed').textContent   = total - correct;
+      document.getElementById('stat-total').textContent    = total;
+
+      if (missed.length > 0) {
+        document.getElementById('btn-review').style.display = 'block';
+      }
+
+      document.getElementById('progress-fill').style.width = '100%';
+      clearSession();
+    }
+
+    function restartSession() {
+      clearSession();
+      location.href = location.href.split('?')[0] + '?' + new URLSearchParams({
+        domains: DOMAIN_CODES.join(','),
+        count:   COUNT,
+        mode:    MODE,
+      }).toString();
+    }
+
+    // ── Review ────────────────────────────────────────────────────────────
+    function showReview() {
+      document.getElementById('screen-results').style.display = 'none';
+      document.getElementById('screen-review').style.display  = 'block';
+      renderReview();
+    }
+
+    function closeReview() {
+      document.getElementById('screen-review').style.display  = 'none';
+      document.getElementById('screen-results').style.display = 'block';
+    }
+
+    function renderReview() {
+      const list = document.getElementById('review-list');
+      list.innerHTML = '';
+
+      missed.forEach(({ q }) => {
+        const card = document.createElement('div');
+        card.className = 'review-card';
+
+        // Meta
+        const meta = document.createElement('div');
+        meta.className = 'review-card-meta';
+        meta.textContent = `${q.domain_code} \u00b7 ${q.chapter_title}${q.section ? ' \u00b7 ' + q.section : ''}`;
+        card.appendChild(meta);
+
+        // Table (read-only with correct value revealed)
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
+        const table = document.createElement('table');
+        table.className = 'exercise-table';
+
+        const thead = document.createElement('thead');
+        const hr = document.createElement('tr');
+        q.headers.forEach(h => {
+          const th = document.createElement('th');
+          th.textContent = h;
+          hr.appendChild(th);
+        });
+        thead.appendChild(hr);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        q.rows.forEach((row, ri) => {
+          const tr = document.createElement('tr');
+          row.forEach((cell, ci) => {
+            const td = document.createElement('td');
+            // Show all real values; 'BLANK' sentinel → correct value
+            td.textContent = (cell === 'BLANK') ? q.correct_value : cell;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        wrapper.appendChild(table);
+        card.appendChild(wrapper);
+
+        // Answer label
+        const ansLabel = document.createElement('div');
+        ansLabel.className = 'review-answer-label';
+        ansLabel.textContent = `\u2713 Correct answer: \u201c${q.correct_value}\u201d`;
+        card.appendChild(ansLabel);
+
+        // Explanation
+        const expl = document.createElement('div');
+        expl.className = 'review-explanation';
+        expl.textContent = q.explanation;
+        card.appendChild(expl);
+
+        list.appendChild(card);
+      });
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────
+    loadData();
+  </script>
+</body>
+</html>

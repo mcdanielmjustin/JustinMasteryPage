@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete the Table &mdash; Settings | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --bg2: #0f0f11;
+      --bg3: #18181b;
+      --card: #1c1c1f;
+      --teal: #2dd4bf;
+      --teal-light: #5eead4;
+      --teal-dark: #0d9488;
+      --text: #fafafa;
+      --text2: #a8a8b3;
+      --text3: #6b6b76;
+      --border: rgba(255,255,255,0.07);
+      --border-teal: rgba(45,212,191,0.28);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.08; }
+      50%       { opacity: 0.15; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(100px);
+      pointer-events: none; animation: pulseGlow 6s ease-in-out infinite; z-index: 0;
+    }
+    .blob-teal   { width:500px; height:500px; background:#0d9488; top:-150px; right:-140px; }
+    .blob-purple { width:450px; height:450px; background:#9333ea; bottom:-140px; left:-120px; animation-delay:3s; }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:10; height:64px;
+      background: rgba(9,9,11,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 32px; gap: 16px;
+    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-icon {
+      width:34px; height:34px; border-radius:8px;
+      background: linear-gradient(135deg,#9333ea,#6d28d9);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:16px; color:#fff;
+    }
+    .logo-title { font-weight:700; font-size:15px; }
+    .logo-sub   { font-size:10px; color:var(--text3); letter-spacing:0.06em; display:block; }
+    .breadcrumb { font-size:13px; color:var(--text3); display:flex; align-items:center; gap:6px; }
+    .breadcrumb span { color:var(--text2); }
+
+    .page {
+      position:relative; z-index:1;
+      padding: 100px 24px 60px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(45,212,191,0.1);
+      border: 1px solid var(--border-teal);
+      border-radius: 40px; padding: 6px 16px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--teal-light); text-transform: uppercase; margin-bottom: 16px;
+    }
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+    }
+    h1 em {
+      font-style: italic;
+      background: linear-gradient(90deg, var(--teal-dark), var(--teal-light), var(--teal-dark));
+      background-size: 600px 100%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; animation: shimmer 4s linear infinite;
+    }
+    .subtitle { font-size: 14px; color: #fff; margin-top: 12px; max-width: 480px; line-height: 1.6; }
+
+    .settings-wrap {
+      width: 100%; max-width: 680px;
+      display: flex; flex-direction: column; gap: 24px;
+      animation: fadeInUp 0.7s ease-out 0.1s both;
+    }
+
+    .section-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 26px;
+    }
+    .section-label-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal-light);
+    }
+    .select-all-btn {
+      background: none; border: none;
+      font-size: 11px; font-weight: 600;
+      color: var(--teal); cursor: pointer;
+      padding: 0; text-transform: uppercase;
+      letter-spacing: 0.06em; transition: color 0.2s;
+    }
+    .select-all-btn:hover { color: var(--teal-light); }
+    .select-all-btn:disabled { color: var(--text3); cursor: default; }
+
+    /* Domain grid — 3 domains in a row */
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .domain-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+      text-align: left;
+      position: relative;
+      color: #fff;
+    }
+    .domain-btn .d-name { font-size: 12px; color: #fff; line-height: 1.3; }
+    .domain-btn .d-count {
+      font-size: 10px; color: #fff;
+      margin-top: 5px;
+      min-height: 14px;
+    }
+    .domain-btn.active {
+      background: rgba(45,212,191,0.72);
+      border-color: var(--teal-light);
+      box-shadow: 0 0 0 1px var(--teal-light), 0 0 18px rgba(45,212,191,0.45), inset 0 0 24px rgba(45,212,191,0.2);
+      color: #fff;
+    }
+    .domain-btn.active .d-name  { color: #fff; font-weight: 600; }
+    .domain-btn.active .d-count { color: #fff; }
+    .domain-btn:hover:not(.active):not(.locked) { border-color: rgba(45,212,191,0.35); background: rgba(45,212,191,0.05); }
+    .domain-btn.locked { opacity: 0.42; }
+    .domain-btn.locked .d-count { font-style: italic; }
+
+    .d-count.loading {
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.05) 25%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.05) 75%);
+      background-size: 200px 100%;
+      animation: shimmer 1.2s infinite linear;
+      border-radius: 4px;
+      height: 12px;
+      width: 70%;
+    }
+
+    /* Question count */
+    .count-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .count-btn {
+      flex: 1; min-width: 70px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 15px; font-weight: 600; color: #fff;
+    }
+    .count-btn.active {
+      background: rgba(45,212,191,0.1);
+      border-color: rgba(45,212,191,0.5);
+      color: var(--teal-light);
+    }
+    .count-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
+
+    /* Summary bar */
+    .summary-bar {
+      background: rgba(45,212,191,0.07);
+      border: 1px solid var(--border-teal);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+    }
+    .sum-item { display: flex; flex-direction: column; gap: 2px; }
+    .sum-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
+    .sum-value { font-size: 13px; font-weight: 600; color: var(--teal-light); }
+
+    .start-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--teal-dark), #0f766e);
+      border: none; border-radius: 14px;
+      padding: 16px;
+      font-size: 15px; font-weight: 700; color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .start-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .warn { font-size: 12px; color: #f87171; padding: 8px 0; display: none; }
+
+    @media (max-width: 600px) {
+      .domains-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-teal"></div>
+  <div class="blob blob-purple"></div>
+
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-icon">M</div>
+      <div><span class="logo-title">MasteryPage</span><span class="logo-sub">MASTERY PREP PLATFORM</span></div>
+    </a>
+    <div class="breadcrumb"><span>/</span><span>Complete the Table</span></div>
+  </nav>
+
+  <div class="page">
+
+    <div class="header">
+      <div class="eyebrow">&#128203; Table Recall Drill</div>
+      <h1>Complete the <em>Table</em></h1>
+      <p class="subtitle">A comparison table appears with one or more cells hidden. Drag the correct chip into each blank &mdash; from a single targeted cell to rebuilding the entire table from memory.</p>
+    </div>
+
+    <div class="settings-wrap">
+
+      <!-- Domain Selection -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Domain</div>
+          <button class="select-all-btn" id="select-all-btn" onclick="selectAllAvailable()" disabled>Select All</button>
+        </div>
+        <div class="domains-grid">
+          <button class="domain-btn" data-code="BPSY" onclick="toggleDomain('BPSY')">
+            <div class="d-name">Biopsychology</div>
+            <div class="d-count loading" id="count-BPSY"></div>
+          </button>
+          <button class="domain-btn" data-code="LDEV" onclick="toggleDomain('LDEV')">
+            <div class="d-name">Lifespan Dev</div>
+            <div class="d-count loading" id="count-LDEV"></div>
+          </button>
+          <button class="domain-btn" data-code="PETH" onclick="toggleDomain('PETH')">
+            <div class="d-name">Psychopharmacology &amp; Ethics</div>
+            <div class="d-count loading" id="count-PETH"></div>
+          </button>
+        </div>
+        <div id="domain-warn" class="warn">Select at least one domain to continue.</div>
+      </div>
+
+      <!-- Question Count -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Number of Questions</div>
+        </div>
+        <div class="count-row">
+          <button class="count-btn" data-n="10" onclick="selectCount(10)">10</button>
+          <button class="count-btn active" data-n="20" onclick="selectCount(20)">20</button>
+          <button class="count-btn" data-n="30" onclick="selectCount(30)">30</button>
+          <button class="count-btn" data-n="40" onclick="selectCount(40)">40</button>
+        </div>
+      </div>
+
+      <!-- Challenge Mode -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Challenge</div>
+        </div>
+        <div class="diff-row">
+          <button class="diff-btn active" data-mode="one" onclick="selectMode('one')">
+            <div class="d-title">One Blank</div>
+            <div class="d-desc">One cell hidden; pick from four options</div>
+          </button>
+          <button class="diff-btn" data-mode="few" onclick="selectMode('few')">
+            <div class="d-title">Three Blanks</div>
+            <div class="d-desc">Three cells hidden across different rows</div>
+          </button>
+          <button class="diff-btn" data-mode="all" onclick="selectMode('all')">
+            <div class="d-title">Full Table</div>
+            <div class="d-desc">Every cell hidden &mdash; rebuild from memory</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary + Start -->
+      <div class="summary-bar">
+        <div class="sum-item">
+          <span class="sum-label">Domain</span>
+          <span class="sum-value" id="sum-domain">None selected</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Questions</span>
+          <span class="sum-value" id="sum-count">20</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Available</span>
+          <span class="sum-value" id="sum-available">&mdash;</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Challenge</span>
+          <span class="sum-value" id="sum-mode">One Blank</span>
+        </div>
+      </div>
+
+      <button class="start-btn" id="start-btn" onclick="startSession()" disabled>
+        Start Session &rarr;
+      </button>
+
+    </div>
+  </div>
+
+  <script src="data/table_data.js"></script>
+  <script>
+    const state = {
+      domains: new Set(),
+      count: 20,
+      mode: 'one',
+    };
+
+    const DOMAIN_COUNTS = {};
+
+    const MODE_LABELS = {
+      one:  'One Blank',
+      few:  'Three Blanks',
+      all:  'Full Table',
+    };
+
+    // Max length of any option string before the question is filtered out.
+    // Keeps chips readable; mirrors the filter in table-exercise.html.
+    const MAX_OPT_LEN = 140;
+
+    function isUsable(q) {
+      return q.options.every(o => o.length <= MAX_OPT_LEN);
+    }
+
+    function checkAvailability() {
+      const codes    = ['BPSY', 'LDEV', 'PETH'];
+      const tableData = window.__TABLE_DATA || {};
+
+      codes.forEach(code => {
+        const countEl = document.getElementById(`count-${code}`);
+        const btn     = document.querySelector(`[data-code="${code}"]`);
+        const data    = tableData[code];
+        const n       = data ? (data.questions || []).filter(isUsable).length : 0;
+
+        countEl.classList.remove('loading');
+        if (n > 0) {
+          DOMAIN_COUNTS[code] = n;
+          countEl.textContent = `${n.toLocaleString()} question${n === 1 ? '' : 's'}`;
+        } else {
+          countEl.textContent = 'Not yet available';
+          btn.classList.add('locked');
+          if (state.domains.has(code)) {
+            state.domains.delete(code);
+            btn.classList.remove('active');
+          }
+        }
+      });
+
+      const selectAllBtn = document.getElementById('select-all-btn');
+      if (Object.keys(DOMAIN_COUNTS).length > 0) {
+        selectAllBtn.disabled = false;
+      }
+      updateSummary();
+    }
+
+    function toggleDomain(code) {
+      if (state.domains.has(code)) {
+        state.domains.delete(code);
+      } else {
+        state.domains.add(code);
+      }
+      document.querySelectorAll('.domain-btn').forEach(b => {
+        b.classList.toggle('active', state.domains.has(b.dataset.code));
+      });
+      updateSummary();
+    }
+
+    function selectAllAvailable() {
+      const allBtns  = document.querySelectorAll('.domain-btn');
+      const allCodes = [...allBtns].map(b => b.dataset.code);
+      const allSelected = allCodes.every(c => state.domains.has(c));
+      if (allSelected) {
+        allCodes.forEach(c => state.domains.delete(c));
+      } else {
+        allCodes.forEach(c => state.domains.add(c));
+      }
+      allBtns.forEach(b => b.classList.toggle('active', state.domains.has(b.dataset.code)));
+      updateSummary();
+    }
+
+    function selectCount(n) {
+      state.count = n;
+      document.querySelectorAll('.count-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.n) === n);
+      });
+      updateSummary();
+    }
+
+    function selectMode(m) {
+      state.mode = m;
+      document.querySelectorAll('.diff-btn[data-mode]').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === m);
+      });
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const codes     = [...state.domains];
+      const available = Object.keys(DOMAIN_COUNTS);
+
+      document.getElementById('sum-domain').textContent =
+        codes.length === 0                                          ? 'None selected' :
+        codes.length === available.length && available.length > 1  ? 'All Available' :
+        codes.length <= 3                                           ? codes.join(', ') :
+        codes.length + ' Domains';
+
+      const totalQ = codes.reduce((s, c) => s + (DOMAIN_COUNTS[c] || 0), 0);
+      document.getElementById('sum-count').textContent = state.count;
+      document.getElementById('sum-available').textContent =
+        totalQ > 0 ? totalQ.toLocaleString() + ' available' : '\u2014';
+      document.getElementById('sum-mode').textContent = MODE_LABELS[state.mode];
+
+      const allBtnCodes = [...document.querySelectorAll('.domain-btn')].map(b => b.dataset.code);
+      const allSelected = allBtnCodes.length > 0 && allBtnCodes.every(c => state.domains.has(c));
+      document.getElementById('select-all-btn').textContent =
+        allSelected ? 'Deselect All' : 'Select All';
+
+      const warn = document.getElementById('domain-warn');
+      const btn  = document.getElementById('start-btn');
+      if (codes.length === 0) {
+        warn.style.display = 'block';
+        btn.disabled = true;
+      } else {
+        warn.style.display = 'none';
+        btn.disabled = false;
+      }
+    }
+
+    function startSession() {
+      if (state.domains.size === 0) return;
+      const p = new URLSearchParams({
+        domains: [...state.domains].join(','),
+        count:   state.count,
+        mode:    state.mode,
+      });
+      location.href = 'table-exercise.html?' + p.toString();
+    }
+
+    checkAvailability();
+  </script>
+</body>
+</html>
