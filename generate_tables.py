@@ -29,12 +29,14 @@ DATA = pathlib.Path("data")
 
 DOMAIN_DIRS = {
     "BPSY": pathlib.Path("content/domain7"),
+    "CPAT": pathlib.Path("content/domain3"),
     "LDEV": pathlib.Path("content/domain2"),
     "PETH": pathlib.Path("content/domain9"),
 }
 
 DOMAIN_NAMES = {
     "BPSY": "Biopsychology",
+    "CPAT": "Psychopathology",
     "LDEV": "Lifespan & Developmental Stages",
     "PETH": "Psychopharmacology & Ethics",
 }
