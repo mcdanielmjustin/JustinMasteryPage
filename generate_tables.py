@@ -33,6 +33,10 @@ DOMAIN_DIRS = {
     "CPAT": pathlib.Path("content/domain3"),
     "LDEV": pathlib.Path("content/domain2"),
     "PETH": pathlib.Path("content/domain9"),
+    "PMET": pathlib.Path("content/domain1"),
+    "PTHE": pathlib.Path("content/domain4"),
+    "SOCU": pathlib.Path("content/domain5"),
+    "WDEV": pathlib.Path("content/domain6"),
 }
 
 DOMAIN_NAMES = {
@@ -41,6 +45,10 @@ DOMAIN_NAMES = {
     "CPAT": "Psychopathology",
     "LDEV": "Lifespan & Developmental Stages",
     "PETH": "Psychopharmacology & Ethics",
+    "PMET": "Psychological Measurement",
+    "PTHE": "Psychological Theories",
+    "SOCU": "Social & Cultural Foundations",
+    "WDEV": "Workplace & Organizational Psychology",
 }
 
 # ── Glossary-like table headers to skip ───────────────────────────────────────
@@ -367,7 +375,8 @@ def process_domain(client: anthropic.Anthropic, domain_code: str,
         if generated >= needed:
             break
 
-        print(f"    [{i}/{len(todo)}] {table['chapter_file']} / {table['section'][:40] or 'n/a'}...",
+        section_safe = (table['section'][:40] or 'n/a').encode('ascii', errors='replace').decode('ascii')
+        print(f"    [{i}/{len(todo)}] {table['chapter_file']} / {section_safe}...",
               end=' ', flush=True)
 
         result = generate_question(client, table)

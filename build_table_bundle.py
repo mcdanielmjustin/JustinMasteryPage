@@ -13,7 +13,7 @@ Run after any question generation:
 import json, pathlib
 
 DATA    = pathlib.Path("data")
-DOMAINS = ["BPSY", "CASS", "CPAT", "LDEV", "PETH"]
+DOMAINS = ["BPSY", "CASS", "CPAT", "LDEV", "PETH", "PMET", "PTHE", "SOCU", "WDEV"]
 
 entries = []
 for code in DOMAINS:
