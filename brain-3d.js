@@ -737,6 +737,12 @@ function setHover(mesh) {
  * Passing null clears selection.
  */
 function selectRegion(mesh) {
+  // Lesion mode: clicks toggle damage instead of opening the info panel
+  if (lesionActive) {
+    if (mesh) toggleDamageRegion(mesh);
+    return;
+  }
+
   if (selectedMesh === mesh) return;
 
   // Clear previous selection's emissive + outline
@@ -767,6 +773,11 @@ let animFrameId = null;
 let autoRotate  = true;
 let lastTs      = 0;
 let idleTimer   = null;
+
+// ── Lesion Simulator state ────────────────────────────────────────────────────
+let lesionActive   = false;        // true = clicking a region applies damage
+let damagedRegions = new Set();    // Set<regionId> of currently-damaged regions
+let lesionPulseT   = 0;            // phase (radians) for pulsing red emissive
 
 // ── Glass-brain toggle state ──────────────────────────────────────────────────
 let glassActive     = false;  // true = subcortical revealed
@@ -1373,6 +1384,174 @@ function setPathway(name, visible) {
   if (p) { if (visible) p.show(); else p.hide(); }
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// LESION SIMULATOR — Chunk 3E
+// Damage Mode: click any brain region → turns dark red with pulsing emissive.
+// Pathways that pass through the damaged region are dimmed to grey.
+// Multi-region compound syndromes: all damaged regionIds are sent to
+// window.updateLesionPanel() defined in brain-exercise.html, which reads
+// window.__BRAIN_DATA.regions[id].info.syndromes and renders the deficit list.
+// ══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Maps each region ID to the names of pathways that anatomically pass through
+ * it.  Used to dim the correct pathway(s) when a region is damaged.
+ */
+const REGION_PATHWAY_MAP = {
+  // ── Cortical ───────────────────────────────────────────────────────────────
+  motor_cortex:        ['corticospinal', 'language_arcuate'],
+  frontal_lobe:        ['corticospinal'],
+  prefrontal_cortex:   [],
+  brocas_area:         ['language_arcuate'],
+  parietal_lobe:       ['language_arcuate'],
+  somatosensory_cortex:[],
+  temporal_lobe:       ['visual_temporal', 'visual_nasal', 'language_arcuate'],
+  wernickes_area:      ['language_arcuate'],
+  occipital_lobe:      ['visual_temporal', 'visual_nasal'],
+  cerebellum:          [],
+  brainstem:           ['corticospinal', 'dopamine_nigrostriatal'],
+  // ── Subcortical ───────────────────────────────────────────────────────────
+  hippocampus:         ['papez'],
+  amygdala:            [],
+  thalamus:            ['papez', 'visual_temporal', 'visual_nasal'],
+  hypothalamus:        [],
+  mamillary_bodies:    ['papez'],
+  caudate:             ['dopamine_nigrostriatal'],
+  putamen:             ['dopamine_nigrostriatal'],
+  globus_pallidus:     ['dopamine_nigrostriatal'],
+  substantia_nigra:    ['dopamine_nigrostriatal'],
+  corpus_callosum:     [],
+  fornix:              ['papez'],
+  internal_capsule:    ['corticospinal'],
+};
+
+/** Apply deep-red damage appearance to a single mesh (idempotent). */
+function _applyDamageMat(mesh) {
+  if (mesh.userData._damageApplied) return;
+  mesh.userData._damageApplied  = true;
+  mesh.userData._origColor      = mesh.material.color.clone();
+  mesh.userData._origEmissive   = mesh.material.emissive.clone();
+  mesh.userData._origEmissiveInt= mesh.material.emissiveIntensity;
+  mesh.material.color.set(0x9B1010);
+  mesh.material.emissive.set(0x9B1010);
+  mesh.material.emissiveIntensity = 0.18;
+}
+
+/** Remove damage appearance from a single mesh (idempotent). */
+function _removeDamageMat(mesh) {
+  if (!mesh.userData._damageApplied) return;
+  mesh.material.color.copy(mesh.userData._origColor);
+  mesh.material.emissive.copy(mesh.userData._origEmissive);
+  mesh.material.emissiveIntensity = mesh.userData._origEmissiveInt;
+  delete mesh.userData._damageApplied;
+  delete mesh.userData._origColor;
+  delete mesh.userData._origEmissive;
+  delete mesh.userData._origEmissiveInt;
+}
+
+/**
+ * Toggle damage on a region.  If not yet damaged → damage it and dim affected
+ * pathways.  If already damaged → undamage it and restore pathways.
+ * Called by selectRegion() when lesionActive is true.
+ */
+function toggleDamageRegion(mesh) {
+  const rid = mesh.userData.regionId;
+  if (!rid) return;
+
+  if (damagedRegions.has(rid)) {
+    damagedRegions.delete(rid);
+    regionMeshes.forEach(m => { if (m.userData.regionId === rid) _removeDamageMat(m); });
+  } else {
+    damagedRegions.add(rid);
+    regionMeshes.forEach(m => { if (m.userData.regionId === rid) _applyDamageMat(m); });
+  }
+
+  updatePathwayDimming();
+
+  const resetBtn = document.getElementById('btn-reset-lesions');
+  if (resetBtn) resetBtn.style.display = damagedRegions.size > 0 ? '' : 'none';
+
+  // Broadcast to brain-exercise.html deficit panel
+  window.updateLesionPanel && window.updateLesionPanel(Array.from(damagedRegions));
+}
+
+/**
+ * Recalculate which pathways should be dimmed based on current damagedRegions.
+ * A pathway is dimmed whenever any region in its anatomical course is damaged.
+ */
+function updatePathwayDimming() {
+  const dimSet = new Set();
+  for (const rid of damagedRegions) {
+    (REGION_PATHWAY_MAP[rid] || []).forEach(n => dimSet.add(n));
+  }
+
+  pathways.forEach(p => {
+    const tube = p._tube.material;
+    const pts  = p._points.material;
+    const shouldDim = p.group.visible && dimSet.has(p.name);
+
+    if (shouldDim && !tube.userData._lesionDimmed) {
+      // Store originals, apply grey
+      tube.userData._lesionDimmed = pts.userData._lesionDimmed = true;
+      tube.userData._lesionOrigC  = tube.color.clone();
+      tube.userData._lesionOrigOp = tube.opacity;
+      pts.userData._lesionOrigC   = pts.color.clone();
+      pts.userData._lesionOrigOp  = pts.opacity;
+      tube.color.setHex(0x555566);  tube.opacity = 0.12;
+      pts.color.setHex(0x555566);   pts.opacity  = 0.08;
+
+    } else if (!shouldDim && tube.userData._lesionDimmed) {
+      // Restore originals
+      tube.userData._lesionDimmed = pts.userData._lesionDimmed = false;
+      tube.color.copy(tube.userData._lesionOrigC);
+      tube.opacity = tube.userData._lesionOrigOp;
+      pts.color.copy(pts.userData._lesionOrigC);
+      pts.opacity = pts.userData._lesionOrigOp;
+    }
+  });
+}
+
+/**
+ * Clear all lesion damage: restore mesh materials, undim pathways, hide panel.
+ * Called by the Reset button and when toggling lesion mode off.
+ */
+function resetLesions() {
+  regionMeshes.forEach(m => { if (m.userData._damageApplied) _removeDamageMat(m); });
+  damagedRegions.clear();
+
+  pathways.forEach(p => {
+    const tube = p._tube.material;
+    const pts  = p._points.material;
+    if (tube.userData._lesionDimmed) {
+      tube.userData._lesionDimmed = pts.userData._lesionDimmed = false;
+      tube.color.copy(tube.userData._lesionOrigC);
+      tube.opacity = tube.userData._lesionOrigOp;
+      pts.color.copy(pts.userData._lesionOrigC);
+      pts.opacity  = pts.userData._lesionOrigOp;
+    }
+  });
+
+  window.updateLesionPanel && window.updateLesionPanel([]);
+  const resetBtn = document.getElementById('btn-reset-lesions');
+  if (resetBtn) resetBtn.style.display = 'none';
+}
+
+/**
+ * Toggle Damage Mode on/off.
+ * Called via window.__brain3d.toggleLesionMode() from the UI button.
+ */
+function toggleLesionMode() {
+  lesionActive = !lesionActive;
+  const modeBtn = document.getElementById('btn-damage-mode');
+  if (modeBtn) modeBtn.classList.toggle('active', lesionActive);
+  const panel = document.getElementById('lesion-panel');
+  if (panel) panel.style.display = lesionActive ? '' : 'none';
+  if (!lesionActive) {
+    resetLesions();
+    selectRegion(null);   // clear gold outline if a region was selected
+  }
+}
+
 // Build the disc now — ASSEMBLE SCENE has already run so `scene` is populated.
 discMesh = buildCrossDisc();
 
@@ -1409,6 +1588,15 @@ function animate(ts) {
 
   // Advance pathway particle animations
   if (pathways.length) pathways.forEach(p => p.animate(delta));
+
+  // Lesion pulse — red emissive oscillation on all currently-damaged meshes
+  if (lesionActive && damagedRegions.size > 0) {
+    lesionPulseT = (lesionPulseT + delta * 2.2) % (Math.PI * 2);
+    const pulse = 0.14 + 0.10 * Math.sin(lesionPulseT);
+    regionMeshes.forEach(m => {
+      if (m.userData._damageApplied && m.visible) m.material.emissiveIntensity = pulse;
+    });
+  }
 
   // Per-frame hover raycasting — filter by visibility so hidden subcortical
   // structures aren't hit before the glass-brain toggle reveals them.
@@ -1581,6 +1769,8 @@ window.__brain3d = {
   Pathway, pathways, showPathway, hidePathway,
   // Chunk 3C — Named pathway toggle
   setPathway,
+  // Chunk 3E — Lesion Simulator
+  toggleLesionMode, resetLesions,
 };
 
 // Auto-mount if the page already has view=3d on load

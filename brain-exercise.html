@@ -565,6 +565,62 @@
     .pathway-btn.active              { border-color: rgba(255,255,255,0.22); color: var(--text); background: rgba(255,255,255,0.06); }
     .pathway-btn.active .path-dot   { box-shadow: 0 0 7px 3px; }
 
+    /* ── Lesion Simulator (Chunk 3E) ──────────────────────────────────────── */
+    .lesion-ctrl-row {
+      position: absolute; bottom: 14px; left: 14px;
+      display: flex; align-items: center; gap: 8px; z-index: 12;
+    }
+    .damage-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 13px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      border: 1.5px solid rgba(255,255,255,0.12); background: rgba(9,9,11,0.80);
+      color: var(--text2); cursor: pointer; transition: all 0.2s;
+      backdrop-filter: blur(6px);
+    }
+    .damage-btn:hover           { border-color: rgba(255,80,80,0.45); color: #ff8888; }
+    .damage-btn.active          { border-color: #ef4444; color: #fca5a5; background: rgba(239,68,68,0.15); }
+    .damage-btn.active::before  { content: ''; display: inline-block; width: 7px; height: 7px;
+                                    border-radius: 50%; background: #ef4444;
+                                    box-shadow: 0 0 6px 2px rgba(239,68,68,0.7);
+                                    margin-right: 4px; }
+    .damage-btn.reset-btn       { border-color: rgba(255,255,255,0.10); color: var(--text3); font-size: 11px; padding: 6px 10px; }
+    .damage-btn.reset-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text2); }
+
+    .lesion-panel {
+      position: absolute; top: 14px; right: 14px; bottom: 56px; width: 196px;
+      background: rgba(9,9,11,0.88); border: 1px solid rgba(239,68,68,0.28);
+      border-radius: 12px; backdrop-filter: blur(10px); z-index: 12;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .lesion-panel-header {
+      padding: 10px 13px 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      color: #fca5a5; text-transform: uppercase; border-bottom: 1px solid rgba(239,68,68,0.18);
+      flex-shrink: 0;
+    }
+    #lesion-panel-content {
+      flex: 1; overflow-y: auto; padding: 8px 11px 10px;
+      scrollbar-width: thin; scrollbar-color: rgba(239,68,68,0.25) transparent;
+    }
+    .lesion-empty {
+      font-size: 11px; color: var(--text3); font-style: italic; padding: 6px 0;
+    }
+    .lesion-region-block { margin-bottom: 12px; }
+    .lesion-region-block:last-child { margin-bottom: 0; }
+    .lesion-region-name {
+      font-size: 11px; font-weight: 700; color: #fca5a5;
+      margin-bottom: 4px; display: flex; align-items: center; gap: 5px;
+    }
+    .lesion-region-name::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #ef4444; box-shadow: 0 0 4px rgba(239,68,68,0.7); flex-shrink: 0;
+    }
+    .lesion-deficit-item {
+      font-size: 10.5px; color: var(--text2); line-height: 1.45;
+      padding: 3px 0 3px 11px; border-left: 2px solid rgba(239,68,68,0.30);
+      margin-bottom: 2px;
+    }
+    .lesion-deficit-item strong { color: var(--text); font-weight: 600; }
+
     @media (max-width: 500px) {
       .question-card { padding: 18px; }
       .q-text { font-size: 14px; }
@@ -2015,6 +2071,36 @@
         </button>
       </div>
 
+      <!-- Lesion Simulator controls — bottom-left overlay (Chunk 3E) -->
+      <div class="lesion-ctrl-row">
+        <button id="btn-damage-mode" class="damage-btn"
+                onclick="(function(){
+                  const b=document.getElementById('btn-damage-mode');
+                  const panel=document.getElementById('lesion-panel');
+                  const on=!b.classList.contains('active');
+                  b.classList.toggle('active',on);
+                  if(window.__brain3d) window.__brain3d.toggleLesionMode();
+                  if(panel) panel.style.display = on ? '' : 'none';
+                  if(!on && window.__brain3d) window.__brain3d.resetLesions();
+                })()"
+                title="Damage Mode: click any brain structure to simulate a lesion and see clinical deficits">
+          ☠ Damage Mode
+        </button>
+        <button id="btn-reset-lesions" class="damage-btn reset-btn"
+                onclick="if(window.__brain3d){window.__brain3d.resetLesions();
+                  window.updateLesionPanel&&window.updateLesionPanel([]);}"
+                style="display:none"
+                title="Clear all lesions">Reset</button>
+      </div>
+
+      <!-- Lesion deficit panel — right overlay, shown only in damage mode (Chunk 3E) -->
+      <div id="lesion-panel" class="lesion-panel" style="display:none">
+        <div class="lesion-panel-header">Lesion Deficits</div>
+        <div id="lesion-panel-content">
+          <div class="lesion-empty">Click a structure to simulate damage</div>
+        </div>
+      </div>
+
       <button id="btn-glass-brain" class="brain3d-overlay-btn"
               onclick="if(window.__brain3d) window.__brain3d.toggleGlass()"
               title="Reveal subcortical structures (glass brain)">⬡ Glass Brain</button>
@@ -2780,6 +2866,55 @@
     const btn = document.getElementById(__PATHWAY_BTN[name]);
     if (btn) btn.classList.toggle('active', __pathwayState[name]);
   }
+
+  // ── Lesion Panel Updater — global so brain-3d.js can call it ─────────────
+  // Called by toggleDamageRegion() in brain-3d.js with the current Set of
+  // damaged regionIds. Renders one block per damaged region showing all
+  // clinical syndromes from brain_data.js regions[id].info.syndromes.
+  window.updateLesionPanel = function updateLesionPanel(regionIds) {
+    const content = document.getElementById('lesion-panel-content');
+    const resetBtn = document.getElementById('btn-reset-lesions');
+    if (!content) return;
+
+    // Show/hide reset button based on whether any regions are damaged.
+    if (resetBtn) resetBtn.style.display = regionIds.length > 0 ? '' : 'none';
+
+    if (regionIds.length === 0) {
+      content.innerHTML = '<div class="lesion-empty">Click a structure to simulate damage</div>';
+      return;
+    }
+
+    const data = window.__BRAIN_DATA && window.__BRAIN_DATA.regions;
+    let html = '';
+
+    for (const rid of regionIds) {
+      const regionData = data && data[rid];
+      const label = regionData ? regionData.label : rid.replace(/_/g, ' ');
+      const syndromes = (regionData && regionData.info && regionData.info.syndromes) || [];
+
+      html += `<div class="lesion-region-block">`;
+      html += `<div class="lesion-region-name">${label}</div>`;
+
+      if (syndromes.length === 0) {
+        html += `<div class="lesion-deficit-item" style="color:var(--text3);font-style:italic">No deficit data</div>`;
+      } else {
+        for (const s of syndromes) {
+          // Split on first colon to bold the syndrome name if present.
+          const colonIdx = s.indexOf(':');
+          if (colonIdx > 0) {
+            const sName = s.slice(0, colonIdx).trim();
+            const sDesc = s.slice(colonIdx + 1).trim();
+            html += `<div class="lesion-deficit-item" title="${s}"><strong>${sName}:</strong> ${sDesc}</div>`;
+          } else {
+            html += `<div class="lesion-deficit-item" title="${s}">${s}</div>`;
+          }
+        }
+      }
+      html += `</div>`;
+    }
+
+    content.innerHTML = html;
+  };
   </script>
 </body>
 </html>
