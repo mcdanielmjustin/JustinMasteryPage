@@ -1335,8 +1335,10 @@
     // Clear chart, build section containers
     buildChartSections(enc);
 
-    // Clear behavioral tags
+    // Clear behavioral tags and reset slot index
     document.getElementById('tag-overlay').innerHTML = '';
+    _tagSlotIdx = 0;
+    cancelTagStagger();
 
     // Build phase dots
     buildPhaseDots(enc.encounter.phases.length);
@@ -1424,6 +1426,9 @@
     // Avatar emotion
     setAvatarState(phase.avatar_emotion || 'idle');
 
+    // Cancel any pending tag stagger from previous phase
+    cancelTagStagger();
+
     // Hide advance button during typewriter (shown after in manual mode)
     document.getElementById('btn-advance').classList.add('hidden');
 
@@ -1450,17 +1455,23 @@
       dots.classList.add('hidden');
       const spd = SPEED_CONFIG[CFG.speed] || SPEED_CONFIG.normal;
       runTypewriter(phase.dialogue || '', spd.charMs, () => {
-        // After typewriter: reveal chart items, then tags
+        // Reveal chart items and behavioral tags with stagger
         revealChartItems(phase.chart_reveals || []);
         revealBehavioralTags(phase.behavioral_tags || []);
 
-        state.phaseRunning = false;
+        // Wait for all staggered reveals to finish before enabling advance
+        const chartMs = (phase.chart_reveals  || []).length * 90;
+        const tagMs   = (phase.behavioral_tags || []).length * 150;
+        const revealMs = Math.max(chartMs, tagMs, 0);
 
-        if (CFG.speed === 'manual') {
-          document.getElementById('btn-advance').classList.remove('hidden');
-        } else {
-          startAutoAdvance(spd.holdMs);
-        }
+        setTimeout(() => {
+          state.phaseRunning = false;
+          if (CFG.speed === 'manual') {
+            document.getElementById('btn-advance').classList.remove('hidden');
+          } else {
+            startAutoAdvance(spd.holdMs);
+          }
+        }, revealMs);
       });
     };
 
@@ -1521,20 +1532,26 @@
     { top: '68%',  left: '6%'  },
     { top: '68%',  right: '6%' },
   ];
-  let _tagSlotIdx = 0;
+  let _tagSlotIdx   = 0;
+  let _tagTimeouts  = [];
+
+  function cancelTagStagger() {
+    _tagTimeouts.forEach(t => clearTimeout(t));
+    _tagTimeouts = [];
+  }
 
   function revealBehavioralTags(tags) {
     if (!CFG.showTags || !tags.length) return;
     const overlay = document.getElementById('tag-overlay');
 
-    // Fade existing tags to 50% if already 8+
+    // Fade existing tags to 50% if stage is already full
     const existing = overlay.querySelectorAll('.behavior-tag');
     if (existing.length >= 8) {
       existing.forEach(t => { t.style.opacity = '0.45'; });
     }
 
     tags.forEach((tag, idx) => {
-      setTimeout(() => {
+      const tid = setTimeout(() => {
         const el = document.createElement('span');
         el.className = 'behavior-tag ' + getTagColor(tag);
         el.textContent = tag;
@@ -1546,6 +1563,7 @@
 
         overlay.appendChild(el);
       }, idx * 150);
+      _tagTimeouts.push(tid);
     });
   }
 
@@ -1622,13 +1640,14 @@
     root.classList.add('state-' + emotion);
     state.avatarState = emotion;
 
-    // Restart tear animations on tearful state
+    // Restart tearFall animation on group when switching to tearful
     if (emotion === 'tearful') {
-      root.querySelectorAll('#avatar-tear path, #avatar-tear ellipse').forEach(el => {
-        el.style.animation = 'none';
-        el.offsetHeight;
-        el.style.animation = '';
-      });
+      const tearGroup = document.getElementById('avatar-tear');
+      if (tearGroup) {
+        tearGroup.style.animation = 'none';
+        tearGroup.offsetHeight; // force reflow
+        tearGroup.style.animation = '';
+      }
     }
   }
 
