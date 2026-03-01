@@ -678,6 +678,39 @@ brainGroup.add(subcorticalGroup);
 // Add to regionMeshes so raycasting includes them once visible
 regionMeshes.push(...subcorticalMeshes);
 
+// ── Pathology auxiliary mesh: lateral ventricle (Chunk 4B — Huntington's) ────
+// Follows the caudate arc, positioned just superior and medial to it. Normally
+// near-invisible (scale 0.01); expands during Huntington's pathology to show
+// hydrocephalus ex vacuo — the vacated CSF space as the caudate shrinks.
+// NOT added to regionMeshes (non-interactive; raycasting would be confusing here).
+let lateralVentricleMesh = null;
+{
+  const pts = [
+    new THREE.Vector3( 0.40,  0.42,  0.68),  // frontal horn
+    new THREE.Vector3( 0.42,  0.52,  0.44),  // body (arches over caudate head)
+    new THREE.Vector3( 0.40,  0.56,  0.18),  // body
+    new THREE.Vector3( 0.38,  0.56, -0.08),  // posterior body
+    new THREE.Vector3( 0.36,  0.50, -0.34),  // atrium (junction of horns)
+    new THREE.Vector3( 0.35,  0.30, -0.54),  // temporal horn entry
+    new THREE.Vector3( 0.35,  0.10, -0.58),  // temporal horn
+    new THREE.Vector3( 0.35, -0.08, -0.44),  // temporal horn tip (near hippocampus)
+  ];
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const geo   = new THREE.TubeGeometry(curve, 80, 0.07, 8, false);
+  const mat   = new THREE.MeshPhysicalMaterial({
+    color:       new THREE.Color(0x60C0E8),   // CSF light blue
+    roughness:   0.08,
+    metalness:   0.12,
+    transparent: true,
+    opacity:     0.62,
+    side:        THREE.DoubleSide,
+  });
+  lateralVentricleMesh = new THREE.Mesh(geo, mat);
+  lateralVentricleMesh.scale.setScalar(0.01);  // near-invisible until pathology fires
+  lateralVentricleMesh.visible = false;
+  brainGroup.add(lateralVentricleMesh);
+}
+
 // Medial cut-face disc (non-interactive decoration)
 brainGroup.add(buildMedialFace());
 
@@ -1618,6 +1651,95 @@ const PATHOLOGY_DEFS = {
       { regionId: 'internal_capsule',  scaleFactor: 1.06, targetColor: 0x6A6060 },
     ],
   },
+
+  // ── Chunk 4B additions ──────────────────────────────────────────────────────
+
+  huntingtons: {
+    label:       "Huntington's",
+    badgeColor:  '#70B080',
+    description: "Striatal neurodegeneration — caudate + putamen atrophy with hydrocephalus ex vacuo",
+    affected: [
+      // Caudate: severe atrophy — hallmark "butterfly sign" on axial MRI
+      { regionId: 'caudate',         scaleFactor: 0.50, targetColor: 0x3A1A08 },
+      // Putamen: strong dorsolateral gradient of cell loss
+      { regionId: 'putamen',         scaleFactor: 0.68, targetColor: 0x3E2010 },
+      // Globus pallidus: secondary degeneration from striatal input loss
+      { regionId: 'globus_pallidus', scaleFactor: 0.76, targetColor: 0x403028 },
+    ],
+    // Special mesh: lateral ventricle expands (hydrocephalus ex vacuo) as caudate shrinks
+    onTick(t) {
+      if (!lateralVentricleMesh) return;
+      lateralVentricleMesh.visible = t > 0.01;
+      lateralVentricleMesh.scale.setScalar(Math.max(0.01, t));
+    },
+    onClear() {
+      if (!lateralVentricleMesh) return;
+      lateralVentricleMesh.visible = false;
+      lateralVentricleMesh.scale.setScalar(0.01);
+    },
+  },
+
+  split_brain: {
+    label:       'Split-Brain',
+    badgeColor:  '#E0A040',
+    description: "Corpus callosotomy — midsagittal section; left hand / right hand disconnection",
+    affected: [
+      // Fornix: secondary disconnection — hippocampal-mamillary pathway loses callosal context
+      { regionId: 'fornix', scaleFactor: 0.92, targetColor: 0x2C2010 },
+    ],
+    // CC: squish along the superior-inferior (Y) axis to create a visible sever plane + darken
+    onTick(t) {
+      regionMeshes.forEach(m => {
+        if (m.userData.regionId !== 'corpus_callosum') return;
+        if (!m.userData._sbOrig) {
+          m.userData._sbOrig = { scale: m.scale.clone(), color: m.material.color.clone() };
+        }
+        const orig   = m.userData._sbOrig;
+        const squish = 1 - 0.92 * t;   // Y axis compresses to 8% → visible sever gap
+        m.scale.set(orig.scale.x, orig.scale.y * squish, orig.scale.z);
+        m.material.color.lerpColors(orig.color, new THREE.Color(0x0E0808), t);
+      });
+    },
+    onClear() {
+      regionMeshes.forEach(m => {
+        if (m.userData.regionId !== 'corpus_callosum' || !m.userData._sbOrig) return;
+        m.scale.copy(m.userData._sbOrig.scale);
+        m.material.color.copy(m.userData._sbOrig.color);
+        delete m.userData._sbOrig;
+      });
+    },
+  },
+
+  korsakoff: {
+    label:       'Korsakoff',
+    badgeColor:  '#D08040',
+    description: "Thiamine (B1) deficiency — mamillary body necrosis + mediodorsal thalamic damage",
+    affected: [
+      // Primary: bilateral mamillary body necrosis (pathognomonic)
+      { regionId: 'mamillary_bodies', scaleFactor: 0.42, targetColor: 0x2C1008 },
+      // Mediodorsal thalamic nucleus — critical for declarative memory consolidation
+      { regionId: 'thalamus',         scaleFactor: 0.80, targetColor: 0x442C20 },
+      // Secondary: hippocampal degeneration accelerated by metabolic damage
+      { regionId: 'hippocampus',      scaleFactor: 0.88, targetColor: 0x503028 },
+      // Fornix: dysfunctional tract (upstream input to mamillary bodies disrupted)
+      { regionId: 'fornix',           scaleFactor: 0.85, targetColor: 0x4A3820 },
+    ],
+  },
+
+  tbi_frontal: {
+    label:       'TBI Frontal',
+    badgeColor:  '#C06060',
+    description: "Orbitofrontal contusion — coup impact + contrecoup posterior damage",
+    affected: [
+      // Coup: orbitofrontal strikes the bony orbital plate of the frontal skull base
+      { regionId: 'prefrontal_cortex', scaleFactor: 0.87, targetColor: 0x481E14 },
+      { regionId: 'frontal_lobe',      scaleFactor: 0.91, targetColor: 0x502818 },
+      // Contrecoup: anterior temporal poles strike the tentorial edge
+      { regionId: 'temporal_lobe',     scaleFactor: 0.94, targetColor: 0x4A2618 },
+      // Contrecoup: occipital poles rebound against the posterior occipital bone
+      { regionId: 'occipital_lobe',    scaleFactor: 0.95, targetColor: 0x482416 },
+    ],
+  },
 };
 
 /**
@@ -1680,6 +1802,7 @@ function clearPathology() {
  * Used when switching pathologies without the user having to see a double-tween.
  */
 function _snapClearPathology() {
+  const wasKey = activePathology;   // capture before nulling
   regionMeshes.forEach(m => {
     const orig = m.userData._pathorig;
     if (orig) {
@@ -1692,6 +1815,7 @@ function _snapClearPathology() {
   pathologyT      = 0;
   pathologyDir    = 0;
   activePathology = null;
+  PATHOLOGY_DEFS[wasKey]?.onClear?.();   // restore special meshes (ventricle, CC squish)
   window.onPathologyChange && window.onPathologyChange(null);
 }
 
@@ -1722,11 +1846,15 @@ function tickPathologyTween(delta) {
     m.material.color.lerpColors(orig.color, targ.color, t);
   });
 
+  // onTick hook — for pathologies with special mesh effects (ventricle, CC squish)
+  PATHOLOGY_DEFS[activePathology]?.onTick?.(t);
+
   // Animation complete
   if (pathologyT >= 1.0 && pathologyDir === 1) {
     pathologyDir = 0;   // fully affected — stop
   } else if (pathologyT <= 0.0 && pathologyDir === -1) {
     // Fully restored — clean up userData and clear active state
+    const wasKey = activePathology;   // capture before nulling
     regionMeshes.forEach(m => {
       if (m.userData._pathorig) {
         m.scale.copy(m.userData._pathorig.scale);
@@ -1737,6 +1865,7 @@ function tickPathologyTween(delta) {
     });
     pathologyDir    = 0;
     activePathology = null;
+    PATHOLOGY_DEFS[wasKey]?.onClear?.();   // restore special meshes on tween completion
     window.onPathologyChange && window.onPathologyChange(null);
   }
 }

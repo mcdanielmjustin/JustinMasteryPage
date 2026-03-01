@@ -2112,6 +2112,34 @@
           <span class="path-dot" style="background:#A05858; color:#A05858;"></span>
           MCA Stroke
         </button>
+        <button id="btn-path-huntingtons" class="pathway-btn path-disease-btn"
+                style="--badge:#70B080"
+                onclick="togglePathology3d('huntingtons')"
+                title="Huntington's Disease: CAG repeat expansion → striatal neurodegeneration. Watch caudate shrink and lateral ventricles expand (hydrocephalus ex vacuo).">
+          <span class="path-dot" style="background:#70B080; color:#70B080;"></span>
+          Huntington's
+        </button>
+        <button id="btn-path-splitbrain" class="pathway-btn path-disease-btn"
+                style="--badge:#E0A040"
+                onclick="togglePathology3d('split_brain')"
+                title="Split-Brain (Callosotomy): surgical midsagittal section severs interhemispheric connections. Watch corpus callosum compress into a dark sever plane.">
+          <span class="path-dot" style="background:#E0A040; color:#E0A040;"></span>
+          Split-Brain
+        </button>
+        <button id="btn-path-korsakoff" class="pathway-btn path-disease-btn"
+                style="--badge:#D08040"
+                onclick="togglePathology3d('korsakoff')"
+                title="Korsakoff Syndrome: thiamine (B1) deficiency from chronic alcoholism. Watch mamillary bodies dramatically shrink — the most dramatic atrophy in the brain.">
+          <span class="path-dot" style="background:#D08040; color:#D08040;"></span>
+          Korsakoff
+        </button>
+        <button id="btn-path-tbi" class="pathway-btn path-disease-btn"
+                style="--badge:#C06060"
+                onclick="togglePathology3d('tbi_frontal')"
+                title="TBI Frontal: orbitofrontal coup + contrecoup occipital damage from head acceleration. Watch frontal (coup) and occipital (contrecoup) darken and shrink.">
+          <span class="path-dot" style="background:#C06060; color:#C06060;"></span>
+          TBI Frontal
+        </button>
       </div>
 
       <!-- Lesion Simulator controls — bottom-left overlay (Chunk 3E) -->
@@ -2912,11 +2940,18 @@
 
   // ── Pathology Overlay toggles — global (Chunk 4A) ───────────────────────────
   // Only one pathology active at a time. Clicking an active pathology deactivates it.
-  const __pathology3dState = { alzheimers: false, parkinsons: false, mca_stroke: false };
-  const __pathology3dBtn   = {
-    alzheimers: 'btn-path-alzheimers',
-    parkinsons: 'btn-path-parkinsons',
-    mca_stroke: 'btn-path-mca',
+  const __pathology3dState = {
+    alzheimers: false, parkinsons: false, mca_stroke: false,
+    huntingtons: false, split_brain: false, korsakoff: false, tbi_frontal: false,
+  };
+  const __pathology3dBtn = {
+    alzheimers:  'btn-path-alzheimers',
+    parkinsons:  'btn-path-parkinsons',
+    mca_stroke:  'btn-path-mca',
+    huntingtons: 'btn-path-huntingtons',
+    split_brain: 'btn-path-splitbrain',
+    korsakoff:   'btn-path-korsakoff',
+    tbi_frontal: 'btn-path-tbi',
   };
 
   function togglePathology3d(key) {
