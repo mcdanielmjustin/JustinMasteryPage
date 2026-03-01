@@ -433,6 +433,23 @@
       animation: questionSlide .35s ease both;
     }
 
+    /* Case context strip — patient reminder above question */
+    .case-strip {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      background: rgba(255,255,255,.02); border: 1px solid var(--border);
+      border-radius: 10px; padding: 9px 14px;
+      font-size: 12px;
+    }
+    .case-domain-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 2px 8px; border-radius: 5px;
+      background: var(--accent-glow); color: var(--accent-light);
+      border: 1px solid var(--accent-ring); flex-shrink: 0;
+    }
+    .case-patient-label { font-weight: 600; color: var(--text2); }
+    .case-strip-sep { width: 1px; height: 12px; background: var(--border); flex-shrink: 0; }
+    .case-setting-label { color: var(--text3); font-style: italic; }
+
     /* Question header row */
     .q-header {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -1002,6 +1019,14 @@
   ════════════════════════════════════════════════════════════ -->
   <div id="screen-question" class="screen">
     <div class="question-wrap" id="question-wrap">
+
+      <!-- Case context reminder (populated by transitionToQuestion) -->
+      <div class="case-strip" id="case-strip">
+        <span class="case-domain-badge" id="case-domain-badge"></span>
+        <span class="case-patient-label" id="case-patient-label"></span>
+        <span class="case-strip-sep"></span>
+        <span class="case-setting-label" id="case-setting-label"></span>
+      </div>
 
       <div class="q-header">
         <span class="q-type-badge" id="q-type-badge"></span>
@@ -1620,13 +1645,20 @@
   }
 
   function transitionToQuestion() {
+    const enc = state.pool[state.encIdx];
+
+    // Populate case strip before screen transition
+    document.getElementById('case-domain-badge').textContent  = enc.domain_code;
+    document.getElementById('case-patient-label').textContent = enc.encounter.patient.label;
+    document.getElementById('case-setting-label').textContent = enc.encounter.setting;
+
     const encScreen = document.getElementById('screen-encounter');
     encScreen.classList.add('fading-out');
     setTimeout(() => {
       encScreen.classList.remove('fading-out');
       showScreen('question');
       state.qIdx = 0;
-      renderQuestion(state.pool[state.encIdx].questions[0]);
+      renderQuestion(enc.questions[0]);
     }, 380);
   }
 
@@ -1886,8 +1918,9 @@
       advBtn.textContent = 'Next →';
       advBtn.onclick = advancePhase;
       state.reviewMode = false;
+      // Restore the question screen as-is (DOM preserved, state.answered intact)
+      // Do NOT call renderQuestion — that would reset answered and allow double-scoring
       showScreen('question');
-      renderQuestion(state.pool[state.encIdx].questions[state.qIdx]);
     };
   }
 
@@ -2010,6 +2043,32 @@
 
   function newSession()   { location.href = 'clinical-presentation-settings.html'; }
   function retrySession() { location.reload(); }
+
+  /* ════════════════════════════════════════════════════════════════
+     KEYBOARD SHORTCUTS  (question screen only)
+  ════════════════════════════════════════════════════════════════ */
+  document.addEventListener('keydown', (e) => {
+    // Only active on the question screen
+    const active = document.querySelector('.screen.active');
+    if (!active || active.id !== 'screen-question') return;
+
+    // A/B/C/D — select answer (only before answering)
+    if (!state.answered) {
+      const key = e.key.toUpperCase();
+      if (['A','B','C','D'].includes(key)) {
+        e.preventDefault();
+        const btn = document.querySelector(`.option-btn[data-letter="${key}"]`);
+        if (btn && !btn.disabled) selectAnswer(key);
+        return;
+      }
+    }
+
+    // Enter — advance to next question once feedback is visible
+    if (state.answered && e.key === 'Enter') {
+      e.preventDefault();
+      nextQuestion();
+    }
+  });
 
   /* ════════════════════════════════════════════════════════════════
      BOOT
