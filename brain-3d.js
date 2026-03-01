@@ -1021,6 +1021,145 @@ function setVascTerritory(mode) {
   }
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// PATHWAY ANIMATION ENGINE — Chunk 3B
+// Generic class for animated neural pathway tracts with flowing signal particles.
+// Chunk 3C / 3D instantiate concrete pathways; this file only defines the engine.
+// ══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Renders a neural pathway as:
+ *   1. A semi-transparent TubeGeometry (static tract anatomy)
+ *   2. Glowing signal particles flowing along the tract each frame
+ *
+ * Particles are evenly pre-spaced on the curve so they never bunch up.
+ * The tube is exempt from clipping planes (renderOrder 3) so it reads clearly
+ * even when the cross-section slider is active.
+ *
+ * Usage (Chunk 3C/3D):
+ *   const p = new Pathway({ name: 'corticospinal', waypoints: [...], color: 0xf59e0b });
+ *   pathways.push(p);
+ *   scene.add(p.group);   // attach to world scene, NOT brainGroup
+ *   p.show();
+ */
+class Pathway {
+  /**
+   * @param {object}            opts
+   * @param {string}            opts.name          Identifier (e.g. 'corticospinal')
+   * @param {THREE.Vector3[]}   opts.waypoints     ≥2 world-space control points
+   * @param {number}            opts.color         Hex color (e.g. 0xf59e0b)
+   * @param {number}            [opts.speed=0.18]  Fraction of curve travelled per second
+   * @param {number}            [opts.particleCount=20]  Simultaneous flowing particles
+   * @param {number}            [opts.radius=0.022]      Tube radius (world units)
+   * @param {boolean}           [opts.loop=false]  Closed curve (use two instances for
+   *                                               bidirectional tracts instead)
+   */
+  constructor({ name, waypoints, color, speed = 0.18, particleCount = 20, radius = 0.022, loop = false }) {
+    this.name  = name;
+    this.speed = speed;
+    this.n     = particleCount;
+    this.loop  = loop;
+    this._t    = 0;   // master phase, advances each frame, wraps at 1.0
+
+    // ─── Curve ─────────────────────────────────────────────────────────────
+    this.curve = new THREE.CatmullRomCurve3(waypoints, loop, 'catmullrom', 0.5);
+
+    // Evenly pre-spaced offsets so particles are uniformly distributed at t=0
+    this._offsets = new Float32Array(particleCount);
+    for (let i = 0; i < particleCount; i++) this._offsets[i] = i / particleCount;
+
+    const tColor = new THREE.Color(color);
+    this.group   = new THREE.Group();
+    this.group.visible = false;
+
+    // ─── Tube (static anatomy visualization) ───────────────────────────────
+    const tubeGeo = new THREE.TubeGeometry(this.curve, 80, radius, 6, loop);
+    const tubeMat = new THREE.MeshPhysicalMaterial({
+      color:             tColor,
+      emissive:          tColor,
+      emissiveIntensity: 0.28,
+      transparent:       true,
+      opacity:           0.38,
+      depthWrite:        false,
+      metalness:         0,
+      roughness:         0.55,
+    });
+    this._tube             = new THREE.Mesh(tubeGeo, tubeMat);
+    this._tube.renderOrder = 3;
+    this.group.add(this._tube);
+
+    // ─── Particles (flowing signal) ─────────────────────────────────────────
+    const posArr     = new Float32Array(particleCount * 3);
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+      color:           tColor,
+      size:            0.068,
+      map:             Pathway._particleTex(),
+      transparent:     true,
+      opacity:         0.92,
+      blending:        THREE.AdditiveBlending,
+      depthWrite:      false,
+      sizeAttenuation: true,
+    });
+
+    this._points             = new THREE.Points(particleGeo, particleMat);
+    this._points.renderOrder = 4;
+    this._posAttr            = particleGeo.getAttribute('position');
+    this.group.add(this._points);
+  }
+
+  /** Advance particle positions by `delta` seconds. Call once per animate() frame. */
+  animate(delta) {
+    if (!this.group.visible) return;
+    this._t = (this._t + delta * this.speed) % 1.0;
+    const pt = new THREE.Vector3();
+    for (let i = 0; i < this.n; i++) {
+      this.curve.getPoint((this._t + this._offsets[i]) % 1.0, pt);
+      this._posAttr.setXYZ(i, pt.x, pt.y, pt.z);
+    }
+    this._posAttr.needsUpdate = true;
+  }
+
+  show()    { this.group.visible = true;  }
+  hide()    { this.group.visible = false; }
+
+  dispose() {
+    this._tube.geometry.dispose();
+    this._tube.material.dispose();
+    this._points.geometry.dispose();
+    this._points.material.dispose();
+    // Shared particle texture is NOT disposed here — use Pathway._tex = null to free globally
+  }
+
+  // ─── Shared particle texture (canvas radial gradient, created once) ─────────
+  static _tex = null;
+  static _particleTex() {
+    if (Pathway._tex) return Pathway._tex;
+    const size   = 64;
+    const cvs    = document.createElement('canvas');
+    cvs.width    = cvs.height = size;
+    const ctx    = cvs.getContext('2d');
+    const half   = size / 2;
+    const grad   = ctx.createRadialGradient(half, half, 0, half, half, half);
+    grad.addColorStop(0.0, 'rgba(255,255,255,1.0)');
+    grad.addColorStop(0.3, 'rgba(255,255,255,0.7)');
+    grad.addColorStop(1.0, 'rgba(255,255,255,0.0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+    Pathway._tex = new THREE.CanvasTexture(cvs);
+    return Pathway._tex;
+  }
+}
+
+/** All registered pathway instances.  Populated in Chunk 3C / 3D. */
+const pathways = [];
+
+function showPathway(name) { pathways.find(p => p.name === name)?.show(); }
+function hidePathway(name) { pathways.find(p => p.name === name)?.hide(); }
+function hideAllPathways() { pathways.forEach(p => p.hide()); }
+
 // Build the disc now — ASSEMBLE SCENE has already run so `scene` is populated.
 discMesh = buildCrossDisc();
 
@@ -1054,6 +1193,9 @@ function animate(ts) {
 
   // Recompute world-space clip plane to follow brainGroup rotation (auto or manual)
   if (csMode) updateCrossSection();
+
+  // Advance pathway particle animations
+  if (pathways.length) pathways.forEach(p => p.animate(delta));
 
   // Per-frame hover raycasting — filter by visibility so hidden subcortical
   // structures aren't hit before the glass-brain toggle reveals them.
@@ -1184,6 +1326,9 @@ function unmount() {
   hoveredMesh  = null;
   selectedMesh = null;
   outlinePass.selectedObjects = [];
+  // Hide all pathway animations
+  hideAllPathways();
+
   // Reset vascular territory overlay
   if (vasc3dGroups) {
     vasc3dGroups.mca.visible = vasc3dGroups.aca.visible = vasc3dGroups.pca.visible = false;
@@ -1211,7 +1356,15 @@ function unmount() {
 
 // ── Expose API ────────────────────────────────────────────────────────────────
 // corticalMeshes + subcorticalMeshes exposed for reference; toggleGlass for the UI button.
-window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes, toggleGlass, setCsMode, setCsSlider, setVascTerritory };
+window.__brain3d = {
+  mount, unmount,
+  corticalMeshes, subcorticalMeshes,
+  toggleGlass,
+  setCsMode, setCsSlider,
+  setVascTerritory,
+  // Chunk 3B — Pathway Animation Engine
+  Pathway, pathways, showPathway, hidePathway,
+};
 
 // Auto-mount if the page already has view=3d on load
 (function autoMountOnLoad() {
