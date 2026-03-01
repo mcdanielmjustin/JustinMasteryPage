@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Encounter — Mastery Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ══════════════════════════════════════════════════════════════
+       DESIGN TOKENS
+    ══════════════════════════════════════════════════════════════ */
+    :root {
+      --bg:           #09090b;
+      --bg2:          #0c0c0e;
+      --bg3:          #121214;
+      --surface:      #13131a;
+      --surface2:     #1a1a24;
+      --accent:       #6366f1;
+      --accent-light: #818cf8;
+      --accent-dark:  #4f46e5;
+      --accent-glow:  rgba(99,102,241,0.18);
+      --accent-ring:  rgba(99,102,241,0.25);
+      --green:        #34d399;
+      --green-bg:     rgba(52,211,153,0.08);
+      --green-ring:   rgba(52,211,153,0.3);
+      --red:          #f87171;
+      --red-bg:       rgba(248,113,113,0.08);
+      --red-ring:     rgba(248,113,113,0.25);
+      --orange:       #fb923c;
+      --blue:         #60a5fa;
+      --purple:       #a78bfa;
+      --gold:         #d4a054;
+      --text:         #fafafa;
+      --text2:        #a8a8b3;
+      --text3:        #6b6b76;
+      --border:       rgba(255,255,255,0.07);
+      --border2:      rgba(255,255,255,0.04);
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       KEYFRAME ANIMATIONS  (all defined here for all chunks)
+    ══════════════════════════════════════════════════════════════ */
+
+    /* ── Utility ── */
+    @keyframes spin         { to { transform: rotate(360deg); } }
+    @keyframes pulse        { 0%,100%{opacity:.08;} 50%{opacity:.15;} }
+    @keyframes fadeInUp     { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:none;} }
+    @keyframes fadeIn       { from{opacity:0;} to{opacity:1;} }
+    @keyframes shimmer      { 0%{background-position:-400px 0;} 100%{background-position:400px 0;} }
+
+    /* ── Answer feedback ── */
+    @keyframes correctPulse { 0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,0);} 50%{box-shadow:0 0 0 8px rgba(52,211,153,.28);} }
+    @keyframes wrongShake   { 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-6px);} 40%,80%{transform:translateX(6px);} }
+
+    /* ── Encounter ── */
+    @keyframes phaseSlideIn  { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:none;} }
+    @keyframes questionSlide { from{opacity:0;transform:scale(.96);} to{opacity:1;transform:scale(1);} }
+    @keyframes tagPop        { 0%{transform:scale(0);opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1);opacity:1;} }
+    @keyframes chartReveal   { from{opacity:0;transform:translateX(-8px);} to{opacity:1;transform:none;} }
+    @keyframes pop           { 0%{transform:scale(.6);opacity:0;} 70%{transform:scale(1.06);} 100%{transform:scale(1);opacity:1;} }
+
+    /* ── Speech bubble ── */
+    @keyframes dotBlink      { 0%,80%,100%{opacity:0;} 40%{opacity:1;} }
+    @keyframes bubbleIn      { from{opacity:0;transform:translateY(8px) scale(.97);} to{opacity:1;transform:none;} }
+
+    /* ── Score ring ── */
+    @keyframes scoreRingFill {
+      from { stroke-dashoffset: var(--ring-full, 314); }
+      to   { stroke-dashoffset: var(--ring-offset, 0); }
+    }
+
+    /* ── Avatar: body states ── */
+    @keyframes breathe      { 0%,100%{transform:scaleY(1.000);} 50%{transform:scaleY(1.012);} }
+    @keyframes breatheFast  { 0%,100%{transform:scaleY(1.000);} 50%{transform:scaleY(1.020);} }
+    @keyframes postureBow   { from{transform:translateY(0) rotate(0deg);} to{transform:translateY(4px) rotate(-3deg);} }
+
+    /* ── Avatar: head/face ── */
+    @keyframes jawSpeak     { 0%,100%{transform:translateY(0);} 50%{transform:translateY(3px);} }
+    @keyframes headTilt     { 0%,100%{transform:rotate(0deg);} 50%{transform:rotate(-6deg);} }
+    @keyframes microShake   { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-2px);} 75%{transform:translateX(2px);} }
+    @keyframes gazeAvert    { 0%,100%{transform:translateX(0);} 50%{transform:translateX(-5px);} }
+
+    /* ── Avatar: hands/body ── */
+    @keyframes fidgetHand   { 0%,100%{transform:rotate(0deg);} 30%{transform:rotate(-4deg);} 70%{transform:rotate(4deg);} }
+
+    /* ── Avatar: tearful ── */
+    @keyframes tearFall     { 0%{opacity:0;transform:translateY(0);} 20%{opacity:.85;} 100%{opacity:0;transform:translateY(28px);} }
+
+    /* ── Auto-advance bar ── */
+    @keyframes autoAdvance  { from{width:0%;} to{width:100%;} }
+
+    /* ══════════════════════════════════════════════════════════════
+       AVATAR STATE CLASSES  (applied to #avatar-root)
+    ══════════════════════════════════════════════════════════════ */
+    .state-idle       #avatar-body  { animation: breathe 4s ease-in-out infinite; }
+    .state-speaking   #avatar-jaw   { animation: jawSpeak .32s ease-in-out infinite; }
+    .state-speaking   #avatar-body  { animation: breathe 3s ease-in-out infinite; }
+    .state-distressed #avatar-body  { animation: postureBow .8s ease forwards, breathe 5s ease-in-out infinite .8s; }
+    .state-tearful    #avatar-tear  { animation: tearFall 2.4s ease-in-out infinite; }
+    .state-tearful    #avatar-body  { animation: breathe 6s ease-in-out infinite; }
+    .state-anxious    #avatar-body  { animation: breatheFast 1.8s ease-in-out infinite; }
+    .state-anxious    #avatar-hand  { animation: fidgetHand .65s ease-in-out infinite alternate; }
+    .state-agitated   #avatar-head  { animation: microShake .42s ease-in-out infinite; }
+    .state-agitated   #avatar-body  { animation: breatheFast 1.2s ease-in-out infinite; }
+    .state-guarded    #avatar-eyes  { animation: gazeAvert 3.2s ease-in-out infinite; }
+    .state-guarded    #avatar-body  { animation: breathe 5s ease-in-out infinite; }
+    .state-flat_affect #avatar-body { animation: breathe 8s ease-in-out infinite; }
+    .state-confused   #avatar-head  { animation: headTilt 2.2s ease-in-out infinite; }
+    .state-hopeful    #avatar-body  { animation: breathe 3.5s ease-in-out infinite; }
+
+    /* ══════════════════════════════════════════════════════════════
+       AMBIENT BLOBS
+    ══════════════════════════════════════════════════════════════ */
+    .blob {
+      position: fixed; border-radius: 50%;
+      filter: blur(120px); pointer-events: none;
+      animation: pulse 7s ease-in-out infinite; z-index: 0;
+    }
+    .blob-a { width: 560px; height: 560px; background: #6366f1; top: -220px; right: -180px; }
+    .blob-b { width: 440px; height: 440px; background: #4f46e5; bottom: -140px; left: -120px; animation-delay: 3.5s; }
+
+    /* ══════════════════════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════════════════════ */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      height: 58px;
+      background: rgba(9,9,11,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 20px; gap: 12px;
+    }
+    .back-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text3); text-decoration: none;
+      transition: color .2s; flex-shrink: 0;
+    }
+    .back-btn:hover { color: var(--accent-light); }
+    .nav-sep  { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; }
+    .logo-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; color: #fff;
+    }
+    .logo-title { font-weight: 700; font-size: 14px; }
+    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .nav-progress {
+      font-size: 12px; font-weight: 600; color: var(--text3);
+      letter-spacing: .04em; display: none;
+    }
+    .nav-progress.visible { display: block; }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCREEN SYSTEM
+    ══════════════════════════════════════════════════════════════ */
+    .screen { position: relative; z-index: 1; display: none; }
+    .screen.active { display: block; }
+    .screen.fading-out { opacity: 0; transition: opacity .35s ease; pointer-events: none; }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCREEN — LOADING
+    ══════════════════════════════════════════════════════════════ */
+    #screen-loading.active {
+      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - 58px);
+      padding: 24px;
+    }
+
+    .loader-card {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 44px 52px;
+      max-width: 360px; width: 100%;
+      animation: fadeInUp .5s ease-out both;
+    }
+    .loader-module-icon {
+      font-size: 38px; line-height: 1; margin-bottom: 2px;
+      filter: drop-shadow(0 0 18px rgba(99,102,241,.4));
+    }
+    .loader-spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(99,102,241,.18);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .72s linear infinite;
+    }
+    .loader-status {
+      font-size: 14px; font-weight: 600; color: var(--text2);
+      text-align: center; min-height: 20px;
+      transition: color .3s;
+    }
+    .loader-status.error { color: var(--red); }
+    .loader-bar-track {
+      width: 100%; height: 4px;
+      background: rgba(255,255,255,.06);
+      border-radius: 2px; overflow: hidden;
+    }
+    .loader-bar-fill {
+      height: 100%; background: var(--accent); border-radius: 2px;
+      transition: width .4s ease; width: 0%;
+    }
+    .loader-detail {
+      font-size: 12px; color: var(--text3);
+      text-align: center; min-height: 18px;
+    }
+    .loader-back {
+      display: none; font-size: 13px; font-weight: 600;
+      color: var(--accent-light); text-decoration: none;
+      border: 1px solid var(--accent-ring); border-radius: 8px;
+      padding: 8px 20px; transition: background .2s;
+    }
+    .loader-back:hover { background: var(--accent-glow); }
+    .loader-back.visible { display: inline-block; }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCREEN — ENCOUNTER  (populated in Chunk 3 & 4)
+    ══════════════════════════════════════════════════════════════ */
+    #screen-encounter.active { display: block; min-height: calc(100vh - 58px); }
+
+    /* Encounter layout skeleton — populated by Chunk 4 */
+    .encounter-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      grid-template-rows: 1fr auto;
+      gap: 0;
+      min-height: calc(100vh - 58px);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0;
+      position: relative;
+    }
+
+    /* Patient stage — left column */
+    .patient-stage {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 32px 28px 24px;
+      position: relative;
+      border-right: 1px solid var(--border);
+    }
+
+    /* Chart panel — right column */
+    .chart-panel {
+      display: flex; flex-direction: column;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .chart-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .chart-title {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--text3);
+    }
+    .chart-body {
+      flex: 1; overflow-y: auto; padding: 14px 0 20px;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent;
+    }
+    .chart-section { margin-bottom: 16px; }
+    .chart-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--text3);
+      padding: 0 20px 6px; border-bottom: 1px solid var(--border2);
+      margin-bottom: 6px;
+    }
+    .chart-row {
+      display: flex; gap: 10px;
+      padding: 5px 20px; font-size: 12px; line-height: 1.45;
+      animation: chartReveal .35s ease forwards;
+      opacity: 0;
+    }
+    .chart-key {
+      color: var(--text3); flex-shrink: 0;
+      min-width: 80px; font-weight: 500;
+    }
+    .chart-val { color: var(--text2); }
+
+    /* Phase controls — full-width bottom row */
+    .phase-controls {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      position: relative;
+    }
+    .phase-indicator { display: flex; align-items: center; gap: 14px; }
+    .phase-num {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--accent-light);
+    }
+    .phase-dots { display: flex; align-items: center; gap: 6px; }
+    .phase-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border); transition: background .25s;
+    }
+    .phase-dot.done    { background: var(--accent-dark); }
+    .phase-dot.current { background: var(--accent-light); width: 8px; height: 8px; }
+
+    /* Advance button */
+    .btn-advance {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #fff;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      border: none; border-radius: 10px; padding: 10px 22px;
+      cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .btn-advance:hover { background: var(--accent-light); transform: translateY(-1px); }
+    .btn-advance:active { transform: none; }
+    .btn-advance.hidden { display: none; }
+
+    /* Auto-advance progress bar */
+    .auto-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: transparent; overflow: hidden; display: none;
+    }
+    .auto-bar.running { display: block; }
+    .auto-bar-fill {
+      height: 100%; background: var(--accent);
+      width: 0%; animation: none;
+    }
+
+    /* Patient info bar */
+    .patient-info-bar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,.025);
+      border: 1px solid var(--border);
+      border-radius: 10px; margin-bottom: 20px;
+      width: 100%; max-width: 420px;
+    }
+    .patient-label { font-size: 13px; font-weight: 600; color: var(--text); }
+    .patient-setting { font-size: 11px; color: var(--text3); }
+    .patient-info-sep { width: 1px; height: 16px; background: var(--border); }
+
+    /* Speech bubble */
+    .speech-bubble {
+      position: relative;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 16px 16px 16px 4px;
+      padding: 14px 18px;
+      max-width: 380px; width: 100%;
+      margin-bottom: 16px;
+      min-height: 60px;
+      animation: bubbleIn .3s ease-out;
+    }
+    .speech-bubble.hidden { display: none; }
+    .bubble-tail {
+      position: absolute; bottom: -8px; left: 18px;
+      width: 14px; height: 8px;
+      background: rgba(255,255,255,.05);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+    .clinician-probe {
+      font-size: 11px; font-style: italic; color: var(--text3);
+      margin-bottom: 8px; display: none;
+    }
+    .clinician-probe.visible { display: block; }
+    .bubble-dots { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+    .bubble-dots span {
+      width: 6px; height: 6px; background: var(--text3); border-radius: 50%;
+      animation: dotBlink 1.2s ease-in-out infinite;
+    }
+    .bubble-dots span:nth-child(2) { animation-delay: .2s; }
+    .bubble-dots span:nth-child(3) { animation-delay: .4s; }
+    .bubble-dots.hidden { display: none; }
+    .bubble-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+    /* Behavioral tags overlay */
+    .tag-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 60px;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .behavior-tag {
+      position: absolute;
+      font-size: 10px; font-weight: 700; letter-spacing: .04em;
+      padding: 4px 10px; border-radius: 20px;
+      animation: tagPop .32s cubic-bezier(.34,1.56,.64,1) forwards;
+      opacity: 0;
+      white-space: nowrap;
+    }
+    .tag-red    { background: rgba(248,113,113,.15); color: var(--red);    border: 1px solid rgba(248,113,113,.3); }
+    .tag-orange { background: rgba(251,146,60,.15);  color: var(--orange); border: 1px solid rgba(251,146,60,.3); }
+    .tag-blue   { background: rgba(96,165,250,.15);  color: var(--blue);   border: 1px solid rgba(96,165,250,.3); }
+    .tag-purple { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
+
+    /* Avatar container */
+    .avatar-wrap {
+      width: 200px; height: 320px;
+      position: relative; flex-shrink: 0;
+    }
+    #avatar-root {
+      width: 100%; height: 100%;
+      overflow: visible;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCREEN — QUESTION  (populated in Chunk 5)
+    ══════════════════════════════════════════════════════════════ */
+    #screen-question.active {
+      display: flex; flex-direction: column;
+      min-height: calc(100vh - 58px);
+      padding: 28px 24px 60px;
+    }
+
+    .question-wrap {
+      max-width: 720px; width: 100%; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 20px;
+      animation: questionSlide .35s ease both;
+    }
+
+    /* Question header row */
+    .q-header {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .q-type-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+      border: 1px solid transparent;
+    }
+    .q-encounter-counter {
+      font-size: 12px; font-weight: 600; color: var(--text3);
+      margin-left: auto;
+    }
+    .q-multi-indicator {
+      font-size: 11px; font-weight: 600; color: var(--text3);
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 6px; padding: 3px 9px; display: none;
+    }
+    .q-multi-indicator.visible { display: inline-block; }
+
+    /* Question prompt */
+    .q-prompt {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.25rem; line-height: 1.45; color: var(--text);
+    }
+
+    /* Answer options */
+    .options-grid { display: flex; flex-direction: column; gap: 10px; }
+    .option-btn {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(255,255,255,.025); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 18px; cursor: pointer; text-align: left;
+      transition: border-color .2s, background .2s, transform .15s;
+      user-select: none; width: 100%;
+    }
+    .option-btn:hover:not([disabled]) {
+      background: rgba(255,255,255,.045);
+      border-color: var(--accent-ring);
+      transform: translateX(2px);
+    }
+    .option-btn.correct { border-color: var(--green) !important; background: var(--green-bg) !important; animation: correctPulse .6s ease; }
+    .option-btn.wrong   { border-color: var(--red)   !important; background: var(--red-bg)   !important; animation: wrongShake .4s ease; }
+    .option-btn.dimmed  { opacity: .4; cursor: default; }
+    .option-btn[disabled] { cursor: default; }
+
+    .option-letter {
+      width: 28px; height: 28px; flex-shrink: 0; border-radius: 7px;
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--text3);
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .option-btn.correct .option-letter { background: rgba(52,211,153,.2); border-color: var(--green); color: var(--green); }
+    .option-btn.wrong   .option-letter { background: rgba(248,113,113,.2); border-color: var(--red);   color: var(--red); }
+    .option-content { flex: 1; }
+    .option-text { font-size: 14px; color: var(--text2); line-height: 1.5; }
+    .option-btn.correct .option-text,
+    .option-btn.wrong   .option-text { color: var(--text); }
+
+    /* Feedback panel */
+    .feedback-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height .4s ease;
+      border-radius: 12px;
+    }
+    .feedback-panel.visible { max-height: 700px; }
+    .feedback-inner {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .feedback-header {
+      padding: 14px 20px;
+      font-size: 15px; font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .feedback-header.correct { background: rgba(52,211,153,.08); color: var(--green); border-bottom: 1px solid rgba(52,211,153,.18); }
+    .feedback-header.wrong   { background: rgba(248,113,113,.07); color: var(--red);   border-bottom: 1px solid rgba(248,113,113,.18); }
+    .feedback-explanation {
+      padding: 16px 20px;
+      font-size: 13px; color: var(--text2); line-height: 1.65;
+      border-bottom: 1px solid var(--border);
+    }
+    .feedback-distractors { padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 8px; }
+    .distractor-row { display: flex; gap: 10px; font-size: 12px; }
+    .distractor-letter { color: var(--text3); font-weight: 700; flex-shrink: 0; min-width: 56px; }
+    .distractor-text   { color: var(--text3); line-height: 1.5; }
+    .feedback-actions {
+      display: flex; gap: 10px; padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,.015);
+    }
+
+    /* ── Shared button styles ── */
+    .btn-primary {
+      flex: 1; padding: 13px 18px;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      color: #fff; font-family: inherit; font-size: 14px; font-weight: 700;
+      border: none; border-radius: 10px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(99,102,241,.28);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,.38); }
+    .btn-secondary {
+      padding: 13px 18px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      color: var(--text2); font-family: inherit; font-size: 14px; font-weight: 600;
+      border-radius: 10px; cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.07); border-color: var(--accent-ring); }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCREEN — RESULTS  (populated in Chunk 6)
+    ══════════════════════════════════════════════════════════════ */
+    #screen-results.active {
+      display: flex; flex-direction: column;
+      min-height: calc(100vh - 58px);
+      padding: 40px 24px 60px;
+    }
+
+    .results-inner {
+      max-width: 680px; width: 100%; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 28px;
+      animation: fadeInUp .5s ease-out both;
+    }
+    .results-hero { text-align: center; padding: 24px 0 12px; }
+    .results-hero h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1;
+    }
+    .results-hero h1 em { font-style: italic; color: var(--accent-light); }
+
+    /* Score ring */
+    .results-ring-wrap { margin: 24px auto 0; width: 130px; height: 130px; position: relative; }
+    .results-ring-wrap svg { width: 100%; height: 100%; }
+    .ring-bg   { fill: none; stroke: rgba(255,255,255,.06); stroke-width: 10; }
+    .ring-fill { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; }
+    .ring-text-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ring-pct   { font-family: 'Instrument Serif', serif; font-size: 2rem; line-height: 1; }
+    .ring-label { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+    /* Summary stats row */
+    .results-summary {
+      background: rgba(255,255,255,.025); border: 1px solid var(--accent-ring);
+      border-radius: 16px; padding: 20px 24px;
+      display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-around;
+    }
+    .rs-item { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .rs-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; }
+    .rs-val   { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: var(--accent-light); }
+
+    /* Type breakdown */
+    .type-breakdown { display: flex; flex-direction: column; gap: 10px; }
+    .breakdown-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+    .type-row-item {
+      background: rgba(255,255,255,.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 10px 16px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .type-badge-sm {
+      font-size: 10px; font-weight: 700; letter-spacing: .06em;
+      padding: 3px 8px; border-radius: 5px; border: 1px solid transparent;
+      white-space: nowrap; min-width: 80px; text-align: center;
+    }
+    .type-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+    .type-bar-fill  { height: 100%; border-radius: 3px; transition: width .8s .2s ease; width: 0%; }
+    .type-fraction  { font-size: 12px; font-weight: 600; color: var(--text2); width: 36px; text-align: right; }
+
+    /* Domain breakdown */
+    .domain-breakdown { display: flex; flex-direction: column; gap: 10px; }
+    .db-row {
+      background: rgba(255,255,255,.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .db-domain { font-size: 11px; font-weight: 700; color: var(--accent-light); width: 44px; flex-shrink: 0; }
+    .db-track  { flex: 1; height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+    .db-fill   { height: 100%; border-radius: 3px; background: var(--accent); transition: width .8s .2s ease; width: 0%; }
+    .db-fill.high { background: var(--green); }
+    .db-fill.mid  { background: #fbbf24; }
+    .db-fill.low  { background: var(--red); }
+    .db-score  { font-size: 12px; font-weight: 600; color: var(--text2); width: 36px; text-align: right; }
+
+    /* Replay list */
+    .replay-section { display: flex; flex-direction: column; gap: 10px; }
+    .replay-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); }
+    .replay-row {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+    }
+    .replay-outcome { font-size: 15px; font-weight: 700; flex-shrink: 0; width: 20px; }
+    .replay-outcome.correct { color: var(--green); }
+    .replay-outcome.wrong   { color: var(--red); }
+    .replay-label  { flex: 1; font-size: 13px; color: var(--text2); }
+    .replay-domain { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .06em; flex-shrink: 0; }
+    .btn-replay {
+      padding: 6px 14px; font-size: 12px; font-weight: 600;
+      color: var(--accent-light); background: rgba(99,102,241,.08);
+      border: 1px solid var(--accent-ring); border-radius: 7px;
+      cursor: pointer; flex-shrink: 0; transition: background .2s;
+    }
+    .btn-replay:hover { background: var(--accent-glow); }
+
+    /* Results action buttons */
+    .results-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════════════════════ */
+    @media (max-width: 760px) {
+      .encounter-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .patient-stage { border-right: none; border-bottom: 1px solid var(--border); }
+      .chart-panel   { border-left: none; border-top: 1px solid var(--border); max-height: 260px; }
+      .phase-controls { grid-column: 1; }
+      .avatar-wrap { width: 150px; height: 240px; }
+      #screen-question.active { padding: 20px 16px 60px; }
+      #screen-results.active  { padding: 24px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+
+  <!-- ── Nav ── -->
+  <nav>
+    <a href="clinical-presentation-settings.html" class="back-btn" id="nav-back">← Settings</a>
+    <div class="nav-sep"></div>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">M</div>
+      <span class="logo-title">MasteryPage</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-progress" id="nav-progress"></span>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SCREEN: LOADING
+  ════════════════════════════════════════════════════════════ -->
+  <div id="screen-loading" class="screen active">
+    <div class="loader-card">
+      <div class="loader-module-icon">⚕</div>
+      <div class="loader-spinner"></div>
+      <div class="loader-status" id="loader-status">Loading encounters…</div>
+      <div class="loader-bar-track">
+        <div class="loader-bar-fill" id="loader-fill"></div>
+      </div>
+      <div class="loader-detail" id="loader-detail">Preparing patient cases</div>
+      <a href="clinical-presentation-settings.html" class="loader-back" id="loader-back">← Back to Settings</a>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SCREEN: ENCOUNTER  (shell — Chunks 3 & 4 populate this)
+  ════════════════════════════════════════════════════════════ -->
+  <div id="screen-encounter" class="screen">
+    <div class="encounter-layout">
+
+      <!-- Left: patient stage -->
+      <div class="patient-stage" id="patient-stage">
+
+        <!-- Speech bubble -->
+        <div class="speech-bubble hidden" id="speech-bubble">
+          <div class="bubble-tail"></div>
+          <div class="clinician-probe" id="clinician-probe"></div>
+          <div class="bubble-dots" id="bubble-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="bubble-text" id="bubble-text"></div>
+        </div>
+
+        <!-- Patient info bar -->
+        <div class="patient-info-bar" id="patient-info-bar">
+          <span class="patient-label" id="patient-label">—</span>
+          <div class="patient-info-sep"></div>
+          <span class="patient-setting" id="patient-setting">—</span>
+        </div>
+
+        <!-- Avatar container (SVG injected by Chunk 3) -->
+        <div class="avatar-wrap" id="avatar-wrap">
+          <!-- Chunk 3: inline SVG avatar placed here -->
+        </div>
+
+        <!-- Behavioral tag overlay -->
+        <div class="tag-overlay" id="tag-overlay"></div>
+
+      </div>
+
+      <!-- Right: clinical chart -->
+      <div class="chart-panel" id="chart-panel">
+        <div class="chart-header">
+          <span>📋</span>
+          <span class="chart-title">Clinical Chart</span>
+        </div>
+        <div class="chart-body" id="chart-body"></div>
+      </div>
+
+      <!-- Bottom: phase controls -->
+      <div class="phase-controls" id="phase-controls">
+        <div class="phase-indicator">
+          <span class="phase-num" id="phase-label">—</span>
+          <div class="phase-dots" id="phase-dots"></div>
+        </div>
+        <button class="btn-advance hidden" id="btn-advance" onclick="advancePhase()">
+          Next <span>→</span>
+        </button>
+        <div class="auto-bar" id="auto-bar">
+          <div class="auto-bar-fill" id="auto-bar-fill"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SCREEN: QUESTION  (shell — Chunk 5 populates this)
+  ════════════════════════════════════════════════════════════ -->
+  <div id="screen-question" class="screen">
+    <div class="question-wrap" id="question-wrap">
+
+      <div class="q-header">
+        <span class="q-type-badge" id="q-type-badge"></span>
+        <span class="q-multi-indicator" id="q-multi"></span>
+        <span class="q-encounter-counter" id="q-counter"></span>
+      </div>
+
+      <div class="q-prompt" id="q-prompt"></div>
+
+      <div class="options-grid" id="options-grid"></div>
+
+      <div class="feedback-panel" id="feedback-panel">
+        <div class="feedback-inner">
+          <div class="feedback-header" id="feedback-header"></div>
+          <div class="feedback-explanation" id="feedback-explanation"></div>
+          <div class="feedback-distractors" id="feedback-distractors"></div>
+          <div class="feedback-actions">
+            <button class="btn-secondary" id="btn-review-enc" onclick="reviewEncounter()">Review Case</button>
+            <button class="btn-primary"   id="btn-next-q"     onclick="nextQuestion()">Next →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       SCREEN: RESULTS  (shell — Chunk 6 populates this)
+  ════════════════════════════════════════════════════════════ -->
+  <div id="screen-results" class="screen">
+    <div class="results-inner">
+
+      <div class="results-hero">
+        <div class="results-ring-wrap">
+          <svg viewBox="0 0 130 130">
+            <circle class="ring-bg" cx="65" cy="65" r="52"
+              transform="rotate(-90 65 65)"/>
+            <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="52"
+              stroke-dasharray="326.7" stroke-dashoffset="326.7"
+              transform="rotate(-90 65 65)"/>
+          </svg>
+          <div class="ring-text-overlay">
+            <span class="ring-pct" id="ring-pct">—</span>
+            <span class="ring-label">score</span>
+          </div>
+        </div>
+        <h1 id="results-heading" style="margin-top:20px;">Session <em>Complete</em></h1>
+      </div>
+
+      <div class="results-summary" id="results-summary"></div>
+
+      <div class="type-breakdown">
+        <div class="breakdown-title">By Question Type</div>
+        <div id="type-rows"></div>
+      </div>
+
+      <div class="domain-breakdown">
+        <div class="breakdown-title">By Domain</div>
+        <div id="domain-rows"></div>
+      </div>
+
+      <div class="replay-section">
+        <div class="replay-title">Case Review</div>
+        <div id="replay-list"></div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn-primary"   onclick="newSession()">New Session</button>
+        <button class="btn-secondary" onclick="retrySession()">Try Again</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  /* ════════════════════════════════════════════════════════════════
+     CONSTANTS
+  ════════════════════════════════════════════════════════════════ */
+  const ALL_DOMAINS  = ['PMET','LDEV','CPAT','PTHE','SOCU','WDEV','BPSY','CASS','PETH'];
+
+  const LEVEL_LABELS = { 1:'Foundational', 2:'Intermediate', 3:'Advanced', 4:'Expert' };
+
+  const SPEED_CONFIG = {
+    slow:   { charMs: 50, holdMs: 3000 },
+    normal: { charMs: 30, holdMs: 1500 },
+    fast:   { charMs: 12, holdMs: 500  },
+    manual: { charMs: 30, holdMs: 0    },
+  };
+
+  const TYPE_BADGE = {
+    primary_diagnosis:     { label: 'Diagnosis',    color: '#6366f1' },
+    differential_diagnosis:{ label: 'Differential', color: '#60a5fa' },
+    immediate_intervention:{ label: 'Urgent Care',  color: '#f87171' },
+    treatment_planning:    { label: 'Treatment',    color: '#34d399' },
+    risk_assessment:       { label: 'Risk',         color: '#fb923c' },
+    dsm_criteria:          { label: 'DSM-5-TR',     color: '#a78bfa' },
+    cultural_consideration:{ label: 'Cultural',     color: '#2dd4bf' },
+    assessment_tool:       { label: 'Assessment',   color: '#d4a054' },
+  };
+
+  /* ════════════════════════════════════════════════════════════════
+     CONFIG — parsed from URLSearchParams
+  ════════════════════════════════════════════════════════════════ */
+  const sp = new URLSearchParams(location.search);
+
+  const CFG = {
+    domains:   sp.get('domains') === 'mixed'
+                 ? ALL_DOMAINS
+                 : (sp.get('domains') || ALL_DOMAINS.join(',')).split(',').filter(Boolean),
+    levels:    (sp.get('levels') || '1,2,3,4').split(',').map(Number),
+    count:     parseInt(sp.get('count'))  || 10,
+    order:     sp.get('order')  || 'shuffled',
+    speed:     sp.get('speed')  || 'normal',
+    showTags:  sp.get('tags')   !== '0',
+    showChart: sp.get('chart')  !== '0',
+  };
+
+  /* ════════════════════════════════════════════════════════════════
+     SESSION STATE
+  ════════════════════════════════════════════════════════════════ */
+  const state = {
+    pool:           [],   // EncounterObject[] after filter + sort + slice
+    encIdx:         0,    // current encounter index
+    phaseIdx:       0,    // current phase index within encounter
+    qIdx:           0,    // current question index within encounter
+    answered:       false,
+    phaseRunning:   false,
+    typewriterInt:  null,
+    autoAdvanceInt: null,
+    avatarState:    'idle',
+    domainScores:   {},   // { CODE: { correct, total } }
+    typeScores:     {},   // { type: { correct, total } }
+    sessionAnswers: [],   // [ { encId, qId, type, correct, domain } ]
+    reviewMode:     false,
+  };
+
+  /* ════════════════════════════════════════════════════════════════
+     SCREEN MANAGER
+  ════════════════════════════════════════════════════════════════ */
+  function showScreen(name) {
+    // Clear running intervals
+    clearInterval(state.typewriterInt);
+    clearInterval(state.autoAdvanceInt);
+
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+
+    // Update nav back target based on screen
+    const backBtn = document.getElementById('nav-back');
+    if (name === 'encounter' || name === 'question') {
+      backBtn.href = 'clinical-presentation-settings.html';
+    }
+
+    // Show/hide nav progress counter
+    const navProg = document.getElementById('nav-progress');
+    if (name === 'encounter' || name === 'question') {
+      navProg.textContent = `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
+      navProg.classList.add('visible');
+    } else {
+      navProg.classList.remove('visible');
+    }
+  }
+
+  function showError(msg) {
+    const status = document.getElementById('loader-status');
+    const detail = document.getElementById('loader-detail');
+    const back   = document.getElementById('loader-back');
+    const spinner = document.querySelector('.loader-spinner');
+    status.textContent = msg;
+    status.classList.add('error');
+    detail.textContent = '';
+    if (spinner) spinner.style.display = 'none';
+    back.classList.add('visible');
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     HELPERS
+  ════════════════════════════════════════════════════════════════ */
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function escapeHtml(s) {
+    if (!s) return '';
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function getStoredScores() {
+    try { return JSON.parse(localStorage.getItem('encounter_scores') || '{}'); }
+    catch { return {}; }
+  }
+
+  function getStoredTypeScores() {
+    try { return JSON.parse(localStorage.getItem('encounter_type_scores') || '{}'); }
+    catch { return {}; }
+  }
+
+  function persistScores() {
+    // Accumulate domain scores into localStorage
+    const allDomain = getStoredScores();
+    Object.entries(state.domainScores).forEach(([d, s]) => {
+      allDomain[d] = allDomain[d] || { correct: 0, total: 0 };
+      allDomain[d].correct += s.correct;
+      allDomain[d].total   += s.total;
+    });
+    localStorage.setItem('encounter_scores', JSON.stringify(allDomain));
+
+    const allType = getStoredTypeScores();
+    Object.entries(state.typeScores).forEach(([t, s]) => {
+      allType[t] = allType[t] || { correct: 0, total: 0 };
+      allType[t].correct += s.correct;
+      allType[t].total   += s.total;
+    });
+    localStorage.setItem('encounter_type_scores', JSON.stringify(allType));
+  }
+
+  function initDomainScores() {
+    for (const enc of state.pool) {
+      const d = enc.domain_code;
+      if (!state.domainScores[d]) state.domainScores[d] = { correct: 0, total: 0 };
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     POOL SORTING
+  ════════════════════════════════════════════════════════════════ */
+  function sortPool(pool) {
+    if (CFG.order === 'weakest') {
+      const stored = getStoredScores();
+      const byDomain = {};
+      pool.forEach(e => {
+        if (!byDomain[e.domain_code]) byDomain[e.domain_code] = [];
+        byDomain[e.domain_code].push(e);
+      });
+      const domainOrder = Object.keys(byDomain).sort((a, b) => {
+        const aS = stored[a], bS = stored[b];
+        const aA = aS && aS.total ? aS.correct / aS.total : 0.5;
+        const bA = bS && bS.total ? bS.correct / bS.total : 0.5;
+        return aA - bA;
+      });
+      return domainOrder.flatMap(d => shuffle(byDomain[d]));
+    }
+    if (CFG.order === 'sequential') {
+      return pool.slice().sort((a, b) =>
+        (a.domain_code + a.subdomain).localeCompare(b.domain_code + b.subdomain)
+      );
+    }
+    return shuffle(pool.slice());
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     DATA LOADING
+  ════════════════════════════════════════════════════════════════ */
+  async function loadEncounters() {
+    const fillEl  = document.getElementById('loader-fill');
+    const statusEl = document.getElementById('loader-status');
+    const detailEl = document.getElementById('loader-detail');
+
+    let pool = [];
+
+    for (let i = 0; i < CFG.domains.length; i++) {
+      const d = CFG.domains[i];
+      statusEl.textContent = `Loading ${d}…`;
+      detailEl.textContent = `${i + 1} of ${CFG.domains.length} domains`;
+      fillEl.style.width = ((i / CFG.domains.length) * 85) + '%';
+
+      try {
+        const r = await fetch(`data/${d}_presentations.json`);
+        if (!r.ok) {
+          console.warn(`[loader] ${d}: HTTP ${r.status} — skipping`);
+          continue;
+        }
+        const data = await r.json();
+        const allEnc = data.encounters || [];
+        const filtered = allEnc.filter(e => CFG.levels.includes(e.difficulty_level));
+        pool.push(...filtered);
+        console.log(`[loader] ${d}: ${filtered.length}/${allEnc.length} encounters matched`);
+      } catch (err) {
+        console.warn(`[loader] ${d}: fetch failed —`, err.message);
+      }
+    }
+
+    fillEl.style.width = '90%';
+    statusEl.textContent = 'Building session…';
+    detailEl.textContent = `${pool.length} encounter${pool.length !== 1 ? 's' : ''} available`;
+
+    if (pool.length === 0) {
+      showError('No encounters match your settings. Go back and adjust your filters.');
+      return;
+    }
+
+    // Sort and slice
+    pool = sortPool(pool);
+    state.pool = pool.slice(0, CFG.count);
+    initDomainScores();
+
+    // Log summary for verification
+    const dist = {};
+    state.pool.forEach(e => { dist[e.domain_code] = (dist[e.domain_code] || 0) + 1; });
+    console.log(`[loader] Pool ready: ${state.pool.length} encounters`, dist);
+    console.log(`[loader] CFG:`, CFG);
+
+    fillEl.style.width = '100%';
+    detailEl.textContent = `${state.pool.length} encounters ready`;
+
+    await new Promise(r => setTimeout(r, 380));
+
+    // Transition to encounter screen
+    state.encIdx   = 0;
+    state.phaseIdx = 0;
+    state.qIdx     = 0;
+    showScreen('encounter');
+    startEncounter(state.pool[0]);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     ENCOUNTER ENGINE  (Chunks 3 & 4 fill in the animation bodies)
+  ════════════════════════════════════════════════════════════════ */
+
+  function startEncounter(enc) {
+    // Patient info bar
+    document.getElementById('patient-label').textContent   = enc.encounter.patient.label || '—';
+    document.getElementById('patient-setting').textContent = enc.encounter.setting || '—';
+
+    // Clear chart, build section containers
+    buildChartSections(enc);
+
+    // Clear behavioral tags
+    document.getElementById('tag-overlay').innerHTML = '';
+
+    // Build phase dots
+    buildPhaseDots(enc.encounter.phases.length);
+
+    // Set initial avatar state
+    setAvatarState(enc.encounter.patient.initial_avatar_state || 'idle');
+
+    // Hide speech bubble until first phase
+    const bubble = document.getElementById('speech-bubble');
+    bubble.classList.add('hidden');
+    document.getElementById('bubble-text').textContent = '';
+    document.getElementById('clinician-probe').classList.remove('visible');
+
+    // Reset state
+    state.phaseIdx = 0;
+    state.phaseRunning = false;
+    state.reviewMode = false;
+
+    // Update nav progress
+    document.getElementById('nav-progress').textContent =
+      `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
+    document.getElementById('nav-progress').classList.add('visible');
+
+    // Start first phase
+    startPhase(enc.encounter.phases[0]);
+  }
+
+  function buildChartSections(enc) {
+    const body = document.getElementById('chart-body');
+    body.innerHTML = '';
+
+    // Collect all categories that appear in this encounter
+    const cats = new Set();
+    enc.encounter.phases.forEach(ph =>
+      (ph.chart_reveals || []).forEach(r => cats.add(r.category))
+    );
+
+    // Render one empty section div per category (in canonical order)
+    const CATEGORY_ORDER = [
+      'Chief Complaint',
+      'History of Present Illness',
+      'Mental Status Examination',
+      'Psychosocial History',
+      'Collateral / Context',
+      'Labs / Observations',
+    ];
+    CATEGORY_ORDER.forEach(cat => {
+      if (!cats.has(cat)) return;
+      const sec = document.createElement('div');
+      sec.className = 'chart-section';
+      sec.id = 'chart-sec-' + cat.replace(/[^a-zA-Z0-9]/g, '-');
+      sec.innerHTML = `<div class="chart-section-label">${escapeHtml(cat)}</div>`;
+      body.appendChild(sec);
+    });
+  }
+
+  function buildPhaseDots(count) {
+    const container = document.getElementById('phase-dots');
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'phase-dot' + (i === 0 ? ' current' : '');
+      dot.id = `phase-dot-${i}`;
+      container.appendChild(dot);
+    }
+  }
+
+  function updatePhaseDots(currentIdx) {
+    const enc = state.pool[state.encIdx];
+    enc.encounter.phases.forEach((_, i) => {
+      const dot = document.getElementById(`phase-dot-${i}`);
+      if (!dot) return;
+      dot.className = 'phase-dot' +
+        (i < currentIdx ? ' done' : i === currentIdx ? ' current' : '');
+    });
+  }
+
+  function startPhase(phase) {
+    state.phaseRunning = true;
+
+    // Update phase label and dots
+    document.getElementById('phase-label').textContent = phase.phase_label || phase.phase_id;
+    updatePhaseDots(state.phaseIdx);
+
+    // Avatar emotion
+    setAvatarState(phase.avatar_emotion || 'idle');
+
+    // Hide advance button during typewriter (shown after in manual mode)
+    document.getElementById('btn-advance').classList.add('hidden');
+
+    // Stop any existing auto-advance bar
+    stopAutoAdvance();
+
+    // Animate speech bubble in
+    const bubble = document.getElementById('speech-bubble');
+    bubble.classList.remove('hidden');
+    bubble.style.animation = 'none';
+    bubble.offsetHeight; // reflow
+    bubble.style.animation = '';
+
+    const probe   = document.getElementById('clinician-probe');
+    const dots    = document.getElementById('bubble-dots');
+    const bubText = document.getElementById('bubble-text');
+
+    bubText.textContent = '';
+    dots.classList.remove('hidden');
+    probe.classList.remove('visible');
+    probe.textContent = '';
+
+    const startTypewriter = () => {
+      dots.classList.add('hidden');
+      const spd = SPEED_CONFIG[CFG.speed] || SPEED_CONFIG.normal;
+      runTypewriter(phase.dialogue || '', spd.charMs, () => {
+        // After typewriter: reveal chart items, then tags
+        revealChartItems(phase.chart_reveals || []);
+        revealBehavioralTags(phase.behavioral_tags || []);
+
+        state.phaseRunning = false;
+
+        if (CFG.speed === 'manual') {
+          document.getElementById('btn-advance').classList.remove('hidden');
+        } else {
+          startAutoAdvance(spd.holdMs);
+        }
+      });
+    };
+
+    if (phase.clinician_prompt) {
+      probe.textContent = `Clinician: "${phase.clinician_prompt}"`;
+      probe.classList.add('visible');
+      setTimeout(() => {
+        dots.classList.remove('hidden');
+        setTimeout(startTypewriter, 600);
+      }, 800);
+    } else {
+      setTimeout(startTypewriter, 600);
+    }
+  }
+
+  function runTypewriter(text, charMs, onComplete) {
+    clearInterval(state.typewriterInt);
+    const el = document.getElementById('bubble-text');
+    el.textContent = '';
+    let i = 0;
+    state.typewriterInt = setInterval(() => {
+      el.textContent += text[i++];
+      if (i >= text.length) {
+        clearInterval(state.typewriterInt);
+        state.typewriterInt = null;
+        if (onComplete) onComplete();
+      }
+    }, charMs);
+  }
+
+  function revealChartItems(reveals) {
+    if (!CFG.showChart || !reveals.length) return;
+    reveals.forEach((item, idx) => {
+      setTimeout(() => {
+        const secId = 'chart-sec-' + item.category.replace(/[^a-zA-Z0-9]/g, '-');
+        const sec = document.getElementById(secId);
+        if (!sec) return;
+        const row = document.createElement('div');
+        row.className = 'chart-row';
+        row.style.animationDelay = '0ms';
+        row.innerHTML = `<span class="chart-key">${escapeHtml(item.label)}</span><span class="chart-val">${escapeHtml(item.value)}</span>`;
+        sec.appendChild(row);
+        // Scroll chart body to show new item
+        const chartBody = document.getElementById('chart-body');
+        chartBody.scrollTop = chartBody.scrollHeight;
+      }, idx * 90);
+    });
+  }
+
+  // Tag positioning — 8 preset positions distributed around the stage
+  const TAG_POSITIONS = [
+    { top: '12%',  left: '4%'  },
+    { top: '12%',  right: '4%' },
+    { top: '30%',  left: '2%'  },
+    { top: '30%',  right: '2%' },
+    { top: '52%',  left: '4%'  },
+    { top: '52%',  right: '4%' },
+    { top: '68%',  left: '6%'  },
+    { top: '68%',  right: '6%' },
+  ];
+  let _tagSlotIdx = 0;
+
+  function revealBehavioralTags(tags) {
+    if (!CFG.showTags || !tags.length) return;
+    const overlay = document.getElementById('tag-overlay');
+
+    // Fade existing tags to 50% if already 8+
+    const existing = overlay.querySelectorAll('.behavior-tag');
+    if (existing.length >= 8) {
+      existing.forEach(t => { t.style.opacity = '0.45'; });
+    }
+
+    tags.forEach((tag, idx) => {
+      setTimeout(() => {
+        const el = document.createElement('span');
+        el.className = 'behavior-tag ' + getTagColor(tag);
+        el.textContent = tag;
+        el.style.animationDelay = '0ms';
+
+        const pos = TAG_POSITIONS[_tagSlotIdx % TAG_POSITIONS.length];
+        _tagSlotIdx++;
+        Object.assign(el.style, pos);
+
+        overlay.appendChild(el);
+      }, idx * 150);
+    });
+  }
+
+  function getTagColor(tag) {
+    const t = tag.toLowerCase();
+    const redTerms = ['si','hi','self-harm','suicid','homicid','agitat','substance','intoxic','withdrawal'];
+    const purpleTerms = ['hallucin','delus','thought disorder','paranoi','dereali','depersonal','dissoci'];
+    const orangeTerms = ['anhedonia','flat affect','psychomotor','grandiosi','flight of ideas','pressured','poverty'];
+    if (redTerms.some(k => t.includes(k)))    return 'tag-red';
+    if (purpleTerms.some(k => t.includes(k))) return 'tag-purple';
+    if (orangeTerms.some(k => t.includes(k))) return 'tag-orange';
+    return 'tag-blue';
+  }
+
+  function startAutoAdvance(holdMs) {
+    const bar  = document.getElementById('auto-bar');
+    const fill = document.getElementById('auto-bar-fill');
+    bar.classList.add('running');
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    fill.offsetHeight; // reflow
+    fill.style.transition = `width ${holdMs}ms linear`;
+    fill.style.width = '100%';
+
+    state.autoAdvanceInt = setTimeout(() => {
+      bar.classList.remove('running');
+      fill.style.width = '0%';
+      advancePhase();
+    }, holdMs);
+  }
+
+  function stopAutoAdvance() {
+    clearTimeout(state.autoAdvanceInt);
+    state.autoAdvanceInt = null;
+    const bar  = document.getElementById('auto-bar');
+    const fill = document.getElementById('auto-bar-fill');
+    bar.classList.remove('running');
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+  }
+
+  function advancePhase() {
+    if (state.phaseRunning) return;
+    stopAutoAdvance();
+    document.getElementById('btn-advance').classList.add('hidden');
+
+    state.phaseIdx++;
+    const enc = state.pool[state.encIdx];
+    if (state.phaseIdx >= enc.encounter.phases.length) {
+      transitionToQuestion();
+    } else {
+      startPhase(enc.encounter.phases[state.phaseIdx]);
+    }
+  }
+
+  function transitionToQuestion() {
+    const encScreen = document.getElementById('screen-encounter');
+    encScreen.classList.add('fading-out');
+    setTimeout(() => {
+      encScreen.classList.remove('fading-out');
+      showScreen('question');
+      state.qIdx = 0;
+      renderQuestion(state.pool[state.encIdx].questions[0]);
+    }, 380);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     AVATAR STATE  (SVG wired in Chunk 3)
+  ════════════════════════════════════════════════════════════════ */
+  function setAvatarState(emotion) {
+    const root = document.getElementById('avatar-root');
+    if (!root) return;
+    root.className = root.className.replace(/\bstate-\S+/g, '').trim();
+    root.classList.add('state-' + emotion);
+    state.avatarState = emotion;
+
+    // Restart tear animations on tearful state
+    if (emotion === 'tearful') {
+      root.querySelectorAll('#avatar-tear path, #avatar-tear ellipse').forEach(el => {
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = '';
+      });
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     QUESTION ENGINE  (Chunk 5 adds full rendering)
+  ════════════════════════════════════════════════════════════════ */
+  function renderQuestion(q) {
+    const enc = state.pool[state.encIdx];
+
+    // Type badge
+    const badgeConf = TYPE_BADGE[q.type] || { label: q.type, color: '#6366f1' };
+    const badge = document.getElementById('q-type-badge');
+    badge.textContent = badgeConf.label;
+    badge.style.background = badgeConf.color + '1a';
+    badge.style.color = badgeConf.color;
+    badge.style.borderColor = badgeConf.color + '44';
+
+    // Encounter counter
+    document.getElementById('q-counter').textContent =
+      `Encounter ${state.encIdx + 1} / ${state.pool.length}`;
+
+    // Multi-question indicator
+    const multiEl = document.getElementById('q-multi');
+    if (enc.questions.length > 1) {
+      multiEl.textContent = `Q ${state.qIdx + 1} of ${enc.questions.length}`;
+      multiEl.classList.add('visible');
+    } else {
+      multiEl.classList.remove('visible');
+    }
+
+    // Prompt
+    document.getElementById('q-prompt').textContent = q.prompt;
+
+    // Options
+    const grid = document.getElementById('options-grid');
+    grid.innerHTML = '';
+    ['A','B','C','D'].forEach(letter => {
+      if (!q.options[letter]) return;
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.dataset.letter = letter;
+      btn.onclick = () => selectAnswer(letter);
+      btn.innerHTML = `
+        <div class="option-letter">${letter}</div>
+        <div class="option-content">
+          <div class="option-text">${escapeHtml(q.options[letter])}</div>
+        </div>`;
+      grid.appendChild(btn);
+    });
+
+    // Hide feedback panel
+    const fp = document.getElementById('feedback-panel');
+    fp.classList.remove('visible');
+    document.getElementById('feedback-header').className = 'feedback-header';
+    document.getElementById('feedback-header').textContent = '';
+    document.getElementById('feedback-explanation').textContent = '';
+    document.getElementById('feedback-distractors').innerHTML = '';
+
+    // Next button label
+    const isLastQ = state.qIdx >= enc.questions.length - 1;
+    const isLastEnc = state.encIdx >= state.pool.length - 1;
+    document.getElementById('btn-next-q').textContent =
+      isLastQ && isLastEnc ? 'See Results →' :
+      isLastQ              ? 'Next Encounter →' :
+                             'Next Question →';
+
+    state.answered = false;
+
+    // Re-animate card
+    const wrap = document.getElementById('question-wrap');
+    wrap.style.animation = 'none';
+    wrap.offsetHeight;
+    wrap.style.animation = '';
+  }
+
+  function selectAnswer(letter) {
+    if (state.answered) return;
+    state.answered = true;
+
+    const enc = state.pool[state.encIdx];
+    const q   = enc.questions[state.qIdx];
+    const isCorrect = letter === q.correct_answer;
+
+    // Lock + style options
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.disabled = true;
+      const l = btn.dataset.letter;
+      if (l === q.correct_answer)        btn.classList.add('correct');
+      else if (l === letter)             btn.classList.add('wrong');
+      else                               btn.classList.add('dimmed');
+    });
+
+    // Score tracking
+    const domain = enc.domain_code;
+    state.domainScores[domain] = state.domainScores[domain] || { correct: 0, total: 0 };
+    state.domainScores[domain].total++;
+    state.typeScores[q.type] = state.typeScores[q.type] || { correct: 0, total: 0 };
+    state.typeScores[q.type].total++;
+    if (isCorrect) {
+      state.domainScores[domain].correct++;
+      state.typeScores[q.type].correct++;
+    }
+
+    state.sessionAnswers.push({
+      encId: enc.id,
+      qId:   q.question_id,
+      type:  q.type,
+      correct: isCorrect,
+      domain,
+      encLabel: enc.encounter.patient.label,
+      subdomain: enc.subdomain,
+    });
+
+    showFeedback(q, isCorrect);
+  }
+
+  function showFeedback(q, isCorrect) {
+    const header = document.getElementById('feedback-header');
+    header.className = 'feedback-header ' + (isCorrect ? 'correct' : 'wrong');
+    header.innerHTML = isCorrect
+      ? '<span>✓</span> Correct!'
+      : `<span>✗</span> Incorrect — the correct answer is <strong>${q.correct_answer}</strong>`;
+
+    document.getElementById('feedback-explanation').textContent = q.explanation || '';
+
+    // Distractor rationale
+    const dr = q.distractor_rationale || {};
+    const distEl = document.getElementById('feedback-distractors');
+    distEl.innerHTML = '';
+    ['A','B','C','D'].forEach(letter => {
+      if (letter === q.correct_answer || !dr[letter]) return;
+      const row = document.createElement('div');
+      row.className = 'distractor-row';
+      row.innerHTML = `<span class="distractor-letter">Why not ${letter}?</span><span class="distractor-text">${escapeHtml(dr[letter])}</span>`;
+      distEl.appendChild(row);
+    });
+
+    // Slide open feedback panel
+    const fp = document.getElementById('feedback-panel');
+    fp.classList.add('visible');
+
+    // Scroll to show feedback
+    fp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    const enc = state.pool[state.encIdx];
+    state.qIdx++;
+    if (state.qIdx < enc.questions.length) {
+      renderQuestion(enc.questions[state.qIdx]);
+    } else {
+      nextEncounter();
+    }
+  }
+
+  function nextEncounter() {
+    state.encIdx++;
+    state.qIdx = 0;
+    _tagSlotIdx = 0;  // reset tag positioning
+    if (state.encIdx >= state.pool.length) {
+      persistScores();
+      showScreen('results');
+      buildResults();
+    } else {
+      showScreen('encounter');
+      startEncounter(state.pool[state.encIdx]);
+    }
+  }
+
+  function reviewEncounter() {
+    // Show the encounter in read-only mode (all phases complete)
+    state.reviewMode = true;
+    const enc = state.pool[state.encIdx];
+    showScreen('encounter');
+
+    // Rebuild chart with ALL reveals immediately (no animation)
+    buildChartSections(enc);
+    const chartBody = document.getElementById('chart-body');
+    enc.encounter.phases.forEach(phase => {
+      (phase.chart_reveals || []).forEach(item => {
+        const secId = 'chart-sec-' + item.category.replace(/[^a-zA-Z0-9]/g, '-');
+        const sec = document.getElementById(secId);
+        if (!sec) return;
+        const row = document.createElement('div');
+        row.className = 'chart-row';
+        row.style.opacity = '1';
+        row.style.animation = 'none';
+        row.innerHTML = `<span class="chart-key">${escapeHtml(item.label)}</span><span class="chart-val">${escapeHtml(item.value)}</span>`;
+        sec.appendChild(row);
+      });
+    });
+
+    // Show last phase dialogue, all tags
+    document.getElementById('tag-overlay').innerHTML = '';
+    _tagSlotIdx = 0;
+    enc.encounter.phases.forEach(phase => {
+      (phase.behavioral_tags || []).forEach((tag, idx) => {
+        const el = document.createElement('span');
+        el.className = 'behavior-tag ' + getTagColor(tag);
+        el.textContent = tag;
+        el.style.opacity = '1';
+        el.style.animation = 'none';
+        const pos = TAG_POSITIONS[_tagSlotIdx % TAG_POSITIONS.length];
+        _tagSlotIdx++;
+        Object.assign(el.style, pos);
+        document.getElementById('tag-overlay').appendChild(el);
+      });
+    });
+
+    // Patient info
+    document.getElementById('patient-label').textContent   = enc.encounter.patient.label;
+    document.getElementById('patient-setting').textContent = enc.encounter.setting;
+
+    // Last phase label + all dots done
+    const lastPhase = enc.encounter.phases[enc.encounter.phases.length - 1];
+    document.getElementById('phase-label').textContent = lastPhase.phase_label;
+    buildPhaseDots(enc.encounter.phases.length);
+    enc.encounter.phases.forEach((_, i) => {
+      const dot = document.getElementById(`phase-dot-${i}`);
+      if (dot) dot.className = 'phase-dot done';
+    });
+
+    // Last phase dialogue shown statically
+    document.getElementById('bubble-text').textContent = lastPhase.dialogue || '';
+    document.getElementById('speech-bubble').classList.remove('hidden');
+    document.getElementById('bubble-dots').classList.add('hidden');
+
+    // Avatar at last-phase emotion
+    setAvatarState(lastPhase.avatar_emotion || 'idle');
+
+    // Replace advance button with "Return to Question"
+    const advBtn = document.getElementById('btn-advance');
+    advBtn.textContent = '← Return to Question';
+    advBtn.classList.remove('hidden');
+    advBtn.onclick = () => {
+      advBtn.textContent = 'Next →';
+      advBtn.onclick = advancePhase;
+      state.reviewMode = false;
+      showScreen('question');
+      renderQuestion(state.pool[state.encIdx].questions[state.qIdx]);
+    };
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     RESULTS  (Chunk 6 adds full ring animation + replay list)
+  ════════════════════════════════════════════════════════════════ */
+  function buildResults() {
+    const answers = state.sessionAnswers;
+    const total   = answers.length;
+    const correct = answers.filter(a => a.correct).length;
+    const pct     = total ? Math.round((correct / total) * 100) : 0;
+
+    // Heading
+    const heading = document.getElementById('results-heading');
+    if (pct >= 80)      heading.innerHTML = 'Great <em>Work!</em>';
+    else if (pct >= 60) heading.innerHTML = 'Session <em>Complete</em>';
+    else                heading.innerHTML = 'Keep <em>Practicing</em>';
+
+    // Score ring animation
+    const ring  = document.getElementById('ring-fill');
+    const circ  = 2 * Math.PI * 52;
+    const offset = circ * (1 - pct / 100);
+    ring.style.stroke = pct >= 70 ? 'var(--accent)' : pct >= 50 ? 'var(--orange)' : 'var(--red)';
+    setTimeout(() => {
+      ring.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
+      ring.style.strokeDashoffset = offset;
+    }, 100);
+
+    // Animate pct counter
+    const pctEl = document.getElementById('ring-pct');
+    pctEl.style.color = pct >= 70 ? 'var(--accent-light)' : pct >= 50 ? 'var(--orange)' : 'var(--red)';
+    let cur = 0;
+    const step = pct / 60;
+    const intv = setInterval(() => {
+      cur = Math.min(cur + step, pct);
+      pctEl.textContent = Math.round(cur) + '%';
+      if (cur >= pct) clearInterval(intv);
+    }, 16);
+
+    // Summary stats
+    const domainsUsed = [...new Set(answers.map(a => a.domain))];
+    document.getElementById('results-summary').innerHTML = `
+      <div class="rs-item"><span class="rs-label">Score</span><span class="rs-val">${pct}%</span></div>
+      <div class="rs-item"><span class="rs-label">Correct</span><span class="rs-val">${correct}/${total}</span></div>
+      <div class="rs-item"><span class="rs-label">Encounters</span><span class="rs-val">${state.pool.length}</span></div>
+      <div class="rs-item"><span class="rs-label">Domains</span><span class="rs-val">${domainsUsed.length}</span></div>
+    `;
+
+    // Type breakdown
+    const typeRows = document.getElementById('type-rows');
+    typeRows.innerHTML = '';
+    Object.entries(state.typeScores).forEach(([type, s]) => {
+      if (!s.total) return;
+      const conf  = TYPE_BADGE[type] || { label: type, color: '#6366f1' };
+      const tPct  = Math.round((s.correct / s.total) * 100);
+      const row   = document.createElement('div');
+      row.className = 'type-row-item';
+      row.innerHTML = `
+        <span class="type-badge-sm" style="color:${conf.color};background:${conf.color}1a;border-color:${conf.color}44">${conf.label}</span>
+        <div class="type-bar-track"><div class="type-bar-fill" style="background:${conf.color}" data-pct="${tPct}"></div></div>
+        <span class="type-fraction">${s.correct}/${s.total}</span>`;
+      typeRows.appendChild(row);
+    });
+    setTimeout(() => {
+      typeRows.querySelectorAll('.type-bar-fill').forEach(el => el.style.width = el.dataset.pct + '%');
+    }, 200);
+
+    // Domain breakdown
+    const domRows = document.getElementById('domain-rows');
+    domRows.innerHTML = '';
+    domainsUsed.sort().forEach(d => {
+      const s  = state.domainScores[d] || { correct: 0, total: 0 };
+      const dp = s.total ? Math.round((s.correct / s.total) * 100) : 0;
+      const cls = dp >= 75 ? 'high' : dp >= 50 ? 'mid' : 'low';
+      const row = document.createElement('div');
+      row.className = 'db-row';
+      row.innerHTML = `
+        <span class="db-domain">${d}</span>
+        <div class="db-track"><div class="db-fill ${cls}" data-pct="${dp}"></div></div>
+        <span class="db-score">${s.correct}/${s.total}</span>`;
+      domRows.appendChild(row);
+    });
+    setTimeout(() => {
+      domRows.querySelectorAll('.db-fill').forEach(el => el.style.width = el.dataset.pct + '%');
+    }, 200);
+
+    // Encounter replay list
+    // Group answers by encounter
+    const encMap = {};
+    answers.forEach(a => {
+      if (!encMap[a.encId]) encMap[a.encId] = { label: a.encLabel, domain: a.domain, subdomain: a.subdomain, correct: 0, total: 0, encIdx: null };
+      encMap[a.encId].total++;
+      if (a.correct) encMap[a.encId].correct++;
+    });
+    state.pool.forEach((enc, idx) => {
+      if (encMap[enc.id]) encMap[enc.id].encIdx = idx;
+    });
+
+    const replayList = document.getElementById('replay-list');
+    replayList.innerHTML = '';
+    Object.entries(encMap).forEach(([encId, info]) => {
+      const allCorrect = info.correct === info.total;
+      const row = document.createElement('div');
+      row.className = 'replay-row';
+      row.innerHTML = `
+        <span class="replay-outcome ${allCorrect ? 'correct' : 'wrong'}">${allCorrect ? '✓' : '✗'}</span>
+        <span class="replay-label">${escapeHtml(info.label || '—')} — ${escapeHtml(info.subdomain || '—')}</span>
+        <span class="replay-domain">${escapeHtml(info.domain)}</span>
+        <button class="btn-replay" onclick="replayEncounter(${info.encIdx})">Review</button>`;
+      replayList.appendChild(row);
+    });
+  }
+
+  function replayEncounter(idx) {
+    if (idx === null || idx < 0) return;
+    state.encIdx = idx;
+    state.qIdx   = 0;
+    reviewEncounter();
+  }
+
+  function newSession()   { location.href = 'clinical-presentation-settings.html'; }
+  function retrySession() { location.reload(); }
+
+  /* ════════════════════════════════════════════════════════════════
+     BOOT
+  ════════════════════════════════════════════════════════════════ */
+  loadEncounters().catch(err => {
+    showError('Error loading encounters: ' + err.message);
+    console.error('[boot]', err);
+  });
+  </script>
+
+</body>
+</html>
