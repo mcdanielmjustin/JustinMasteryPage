@@ -1037,6 +1037,269 @@ window.__BRAIN_DATA = {
       "target_region": "temporal_lobe",
       "distractor_regions": ["cerebellum", "motor_cortex", "prefrontal_cortex"],
       "explanation": "Episodic memory (personal autobiographical events) depends critically on the hippocampus in the medial temporal lobe. Intact procedural learning (piano motor sequences) relies on the cerebellum and basal ganglia — preserved with hippocampal damage. The double dissociation between episodic and procedural memory confirms medial temporal lobe as the critical structure for declarative/episodic encoding."
+    },
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       CHUNK 1C — MEDIAL / SUBCORTICAL QUESTIONS (BRAIN-051 – BRAIN-075)
+       Topics: corpus callosum · cingulate · thalamus · hypothalamus ·
+               mamillary bodies · hippocampus · amygdala · fornix ·
+               medial frontal · occipital medial
+       ───────────────────────────────────────────────────────────────────────── */
+
+    {
+      "id": "BRAIN-051",
+      "type": "case_to_location",
+      "category": "aphasia",
+      "question": "A patient who underwent corpus callosotomy for intractable epilepsy reaches into a bag with his left hand and grasps an unseen object. He cannot name it verbally — but when asked to select the matching object from a lineup using his left hand alone, he immediately does so correctly. His spontaneous speech, reading, and memory are otherwise intact. Which structure's disconnection produces this specific naming failure?",
+      "target_region": "corpus_callosum",
+      "distractor_regions": ["wernickes_area", "temporal_lobe", "thalamus"],
+      "explanation": "Split-brain (callosotomy) severs interhemispheric communication. Tactile input from the left hand travels to the right somatosensory cortex, which is now disconnected from the left hemisphere's language areas. The patient 'knows' the object — demonstrated by correct non-verbal matching with the left hand (right hemisphere intact) — but cannot verbalize it because verbal naming requires left hemisphere access, which the severed corpus callosum now blocks. This is a pure disconnection syndrome: both hemispheres are intact, but they cannot communicate. The double dissociation (knows object via touch, cannot name it) is a classic EPPP demonstration of hemispheric specialization and callosal transfer."
+    },
+    {
+      "id": "BRAIN-052",
+      "type": "deficit_to_location",
+      "category": "visual",
+      "question": "A patient with a left posterior cerebral artery infarct can speak fluently, comprehend normally, and write coherently from dictation — yet he is completely unable to read, even single letters he just wrote moments ago. He also has right homonymous hemianopia. Which structure's damage best explains the specific reading-without-writing dissociation?",
+      "target_region": "corpus_callosum",
+      "distractor_regions": ["wernickes_area", "occipital_lobe", "temporal_lobe"],
+      "explanation": "Pure alexia without agraphia (posterior disconnection syndrome) requires two lesions: left occipital cortex (causing right hemianopia) AND the corpus callosum splenium. The splenial damage disconnects the intact right occipital cortex from left hemisphere language areas (Wernicke's, angular gyrus). Visual text is processed by the right hemisphere but cannot cross the splenium to reach the left's reading circuits. Writing is preserved because it relies on left hemisphere motor memory, not visual input. The key differentiator from Wernicke's aphasia is preserved writing and comprehension. This splenial disconnection mechanism — seen with left PCA infarct — is the high-yield EPPP explanation for reading-without-writing dissociation."
+    },
+    {
+      "id": "BRAIN-053",
+      "type": "deficit_to_location",
+      "category": "motor",
+      "question": "After surgery to clip an anterior communicating artery aneurysm, a patient's left hand acts autonomously — it unbuttons his shirt while his right hand buttons it, involuntarily grasps objects, and opposes his intentional movements. He is fully aware these movements are not under his conscious control but cannot suppress them. Which structure was most likely damaged?",
+      "target_region": "corpus_callosum",
+      "distractor_regions": ["medial_frontal", "motor_cortex", "frontal_lobe"],
+      "explanation": "Alien hand syndrome (callosal-frontal type) results from damage to the corpus callosum body or genu, often with supplementary motor area (medial frontal) involvement. Anterior communicating artery territory infarcts frequently involve the genu and adjacent white matter. The left hand acts autonomously because interhemispheric inhibitory control is severed — the right hemisphere generates left-hand movements without suppression from the left hemisphere's executive system. Preserved awareness distinguishes this from neglect (no awareness) or psychosis (no insight). The ACoA aneurysm — alien hand association is high-yield for EPPP neurological presentations."
+    },
+    {
+      "id": "BRAIN-054",
+      "type": "case_to_location",
+      "category": "executive",
+      "question": "A 50-year-old woman with bilateral anterior cerebral artery infarcts is alert, follows simple commands, and has no aphasia. Yet she lies motionless for hours, speaks only in brief phrases when directly addressed, shows no facial expression, and is completely indifferent to her surroundings. Self-report questionnaires show no subjective sadness or depressed mood. Which region's bilateral damage most directly produces this syndrome?",
+      "target_region": "cingulate_gyrus",
+      "distractor_regions": ["frontal_lobe", "thalamus", "medial_frontal"],
+      "explanation": "Abulia/akinetic mutism is the signature syndrome of bilateral anterior cingulate cortex (ACC) damage. The ACC provides the motivational 'will to act' — connecting limbic emotional circuits with motor output pathways. Bilateral ACC destruction produces a profound reduction in spontaneous behavior: no initiation of speech or movement, flat affect, and complete indifference. Unlike depression (subjective distress, preserved motivation in structured settings), abulia shows no subjective suffering and language is preserved when directly cued. Unlike frontal lobe syndrome (disinhibition, poor judgment), abulia presents as hypoinitiation, not disinhibition. Bilateral ACA infarction is the prototypical structural cause."
+    },
+    {
+      "id": "BRAIN-055",
+      "type": "location_to_deficit",
+      "category": "executive",
+      "question": "Damage to the highlighted region would most likely produce:",
+      "highlighted_region": "cingulate_gyrus",
+      "options": [
+        "Profound reduction in spontaneous behavior (abulia), impaired response inhibition, and conflict-monitoring failure — without primary sensory, motor, or language deficit",
+        "Non-fluent effortful speech with agrammatism and intact auditory comprehension",
+        "Severe anterograde amnesia for declarative memories with intact procedural learning",
+        "Contralateral burning pain and allodynia (central post-stroke pain)"
+      ],
+      "correct_option_index": 0,
+      "explanation": "The anterior cingulate cortex (ACC, BA 24/32) mediates conflict monitoring, motivational drive, error detection, and behavioral initiation. Bilateral ACC damage produces abulia — profound apathy and poverty of spontaneous speech and movement — and impaired response inhibition (failures on Stroop, go/no-go). Language structure is intact (unlike Broca's aphasia, option 2), declarative memory is spared (unlike hippocampal lesions, option 3), and the syndrome is not primarily painful (unlike thalamic Dejerine-Roussy, option 4). The cingulate participates in the Papez circuit but its primary clinical presentation is behavioral dysregulation and motivational failure, not amnesia."
+    },
+    {
+      "id": "BRAIN-056",
+      "type": "case_to_location",
+      "category": "sensory",
+      "question": "A 64-year-old man who had a right hemisphere stroke 8 weeks ago now presents with intractable burning pain and extreme hypersensitivity on his left arm and face — light touch causes severe pain (allodynia). Initially after the stroke he had left-sided numbness; the numbness has partially resolved but is replaced by this constant burning dysesthesia. Standard opioids provide minimal relief. Which structure is damaged?",
+      "target_region": "thalamus",
+      "distractor_regions": ["parietal_lobe", "somatosensory_cortex", "brainstem"],
+      "explanation": "Thalamic pain syndrome (Dejerine-Roussy syndrome) follows infarction of the right thalamus, particularly the ventral posterolateral (VPL) nucleus. The initial phase shows contralateral hemisensory loss; as the injured thalamus partially recovers, deafferentation leads to pathological spontaneous firing and hypersensitivity — producing the characteristic burning dysesthesia and allodynia of central post-stroke pain (CPSP). The pain is of CENTRAL origin (thalamus generating pathological signals), not peripheral tissue damage — hence opioid resistance. Treatment often requires anticonvulsants (gabapentin, pregabalin) or antidepressants (TCAs). The temporal pattern of initial sensory loss followed by delayed burning pain is diagnostic of thalamic infarct."
+    },
+    {
+      "id": "BRAIN-057",
+      "type": "deficit_to_location",
+      "category": "aphasia",
+      "question": "A patient with a left thalamic hemorrhage produces fluent speech but speaks very quietly (hypophonia) and makes occasional semantic word substitutions. Formal testing shows comprehension mostly preserved, REPETITION INTACT (unlike cortical aphasia), and symptoms that fluctuate considerably from hour to hour. Which structure is damaged, producing this atypical aphasia pattern?",
+      "target_region": "thalamus",
+      "distractor_regions": ["wernickes_area", "temporal_lobe", "brocas_area"],
+      "explanation": "Thalamic aphasia (subcortical aphasia) from dominant (left) thalamic lesions has distinctive features that differentiate it from cortical aphasias: (1) PRESERVED REPETITION — the perisylvian language circuit is structurally intact; (2) hypophonia — reduced vocal output volume; (3) semantic paraphasias with relative fluency; (4) fluctuating severity throughout the day. The thalamus (especially mediodorsal and pulvinar nuclei) modulates cortical language area activation via thalamocortical projections. Without thalamic gating, language cortex is hypoactivated but structurally undamaged. Preserved repetition is the key discriminator — cortical aphasias of similar fluency (Wernicke's, conduction) show impaired repetition, while thalamic aphasia preserves it."
+    },
+    {
+      "id": "BRAIN-058",
+      "type": "deficit_to_location",
+      "category": "memory",
+      "question": "A patient with Korsakoff syndrome has bilateral diencephalic lesions on MRI, including mamillary body atrophy. In addition to the mamillary bodies, which structure contains the critical thalamic damage — connected via the mamillothalamic tract — that contributes to the anterograde amnesia and confabulation of this syndrome?",
+      "target_region": "thalamus",
+      "distractor_regions": ["hippocampus", "frontal_lobe", "temporal_lobe"],
+      "explanation": "Korsakoff amnesia involves bilateral damage to BOTH mamillary bodies AND the mediodorsal and anterior thalamic nuclei — all connected via the mamillothalamic tract. The anterior thalamic nucleus is the Papez circuit relay (mamillary bodies → anterior thalamus → cingulate → hippocampus), while the mediodorsal nucleus connects to prefrontal cortex and contributes to the executive-confabulation component. Thiamine (vitamin B1) deficiency renders diencephalic structures selectively vulnerable — hence the pattern matches chronic alcoholism. This is a DIENCEPHALIC amnesia distinct from medial temporal (hippocampal) amnesia: both cause anterograde amnesia, but Korsakoff produces prominent confabulation and the lesion is in the thalamus, not the hippocampus."
+    },
+    {
+      "id": "BRAIN-059",
+      "type": "deficit_to_location",
+      "category": "executive",
+      "question": "Bilateral electrolytic lesions of a specific hypothalamic nucleus cause experimental animals to completely stop eating and will starve to death unless force-fed — despite having no impairment in the physical ability to eat. Humans with tumors or strokes selectively affecting this region similarly develop aphagia and profound weight loss. Which region is damaged?",
+      "target_region": "hypothalamus",
+      "distractor_regions": ["frontal_lobe", "amygdala", "thalamus"],
+      "explanation": "The lateral hypothalamus (LH) is the 'hunger center.' It contains orexin/hypocretin neurons and other populations that generate hunger drive and appetitive motivation. Bilateral LH lesions abolish hunger — animals and patients lose the desire to seek and consume food, not the physical ability to eat. This is the classic EPPP double dissociation: LH damage = aphagia/starvation (no hunger); ventromedial hypothalamus (VMH) damage = hyperphagia/obesity (no satiety). The amygdala influences food-related reward but does not generate primary hunger drive, and frontal lobe damage produces disinhibited eating rather than aphagia. The LH = hunger, VMH = satiety mnemonic is among the most tested neuropsychology facts on the EPPP."
+    },
+    {
+      "id": "BRAIN-060",
+      "type": "case_to_location",
+      "category": "executive",
+      "question": "A teenager with a craniopharyngioma (a benign tumor at the base of the brain) develops dramatic obesity over 6 months. Caregivers observe that she eats continuously without apparent satiety — she finishes a full meal and immediately requests more, reporting no feeling of fullness. Endocrine workup shows multiple hypothalamic hormone deficiencies. Which hypothalamic subregion has been specifically disrupted to produce the hyperphagia?",
+      "target_region": "hypothalamus",
+      "distractor_regions": ["frontal_lobe", "thalamus", "amygdala"],
+      "explanation": "Craniopharyngiomas arise near the hypothalamic-pituitary axis and characteristically compress the ventromedial hypothalamus (VMH) — the 'satiety center.' VMH destruction eliminates the satiety signal: the patient never perceives fullness, causing hyperphagia and severe obesity. Unlike frontal lobe hyperphagia (disinhibited eating, patient can be redirected), VMH hyperphagia is driven by absent interoceptive satiety signaling — the patient genuinely does not feel full regardless of caloric intake. Craniopharyngioma-induced hypothalamic obesity is a well-established and high-yield EPPP clinical scenario. The double dissociation — lateral hypothalamus lesion = aphagia; ventromedial lesion = hyperphagia — is one of the most tested facts in EPPP neuropsychology."
+    },
+    {
+      "id": "BRAIN-061",
+      "type": "location_to_deficit",
+      "category": "executive",
+      "question": "Damage to the highlighted region would most likely produce:",
+      "highlighted_region": "hypothalamus",
+      "options": [
+        "Disruption of autonomic regulation, circadian rhythm, thermoregulation, hunger/satiety balance, and fluid homeostasis — without primary language, motor, or declarative memory deficit",
+        "Severe anterograde amnesia with confabulation and intact procedural memory",
+        "Contralateral burning pain and allodynia (central post-stroke pain syndrome)",
+        "Profound bilateral leg weakness greater than arm weakness with urinary incontinence"
+      ],
+      "correct_option_index": 0,
+      "explanation": "The hypothalamus is the master homeostatic regulator. Its nuclei control: (1) autonomic NS via hypothalamospinal tract; (2) circadian rhythms via suprachiasmatic nucleus (photic input); (3) thermoregulation; (4) hunger/satiety via lateral vs. ventromedial nuclei; (5) fluid balance via supraoptic/paraventricular ADH release. Option 2 describes mamillary body/thalamic damage (Korsakoff). Option 3 describes thalamic damage (Dejerine-Roussy). Option 4 describes medial frontal/ACA territory infarct. Hypothalamic damage presents as endocrine, autonomic, and homeostatic dysregulation — not primarily cognitive or motor — which is what distinguishes it from all cortical and thalamic syndromes."
+    },
+    {
+      "id": "BRAIN-062",
+      "type": "case_to_location",
+      "category": "memory",
+      "question": "A 58-year-old man with chronic alcohol dependence is admitted malnourished and acutely confused, with ataxia and bilateral eye movement abnormalities. IV thiamine clears the acute confusion, but he is left with dense anterograde amnesia: he cannot recall any new events and has gaps spanning the past decade of autobiographical memory. When asked what he did this morning, he confidently describes detailed but demonstrably false activities (confabulation) without awareness that his answers are fabricated. MRI shows bilateral signal abnormality in the posterior hypothalamic region. Which structures are the critical lesion site?",
+      "target_region": "mamillary_bodies",
+      "distractor_regions": ["hippocampus", "thalamus", "frontal_lobe"],
+      "explanation": "This is Korsakoff syndrome following Wernicke's encephalopathy. The mamillary bodies (posterior hypothalamus, visible as bilateral signal change or atrophy on MRI) are the pathognomonic lesion site. They are the Papez circuit relay receiving hippocampal projections via fornix, then projecting to anterior thalamus — bilateral destruction disrupts declarative memory consolidation. Confabulation (confident false memories without awareness of fabrication) is the characteristic behavioral feature distinguishing Korsakoff from hippocampal amnesia, where patients typically recognize their own memory failure. Immediate parenteral thiamine prevents progression; once mamillary body neuronal loss is established, Korsakoff amnesia is largely permanent."
+    },
+    {
+      "id": "BRAIN-063",
+      "type": "case_to_location",
+      "category": "memory",
+      "question": "An unkempt, malnourished man is brought to the ER obtunded. He has a broad-based ataxic gait and bilateral lateral gaze palsies. After IV thiamine, the eye movement abnormality and ataxia largely resolve over 48 hours. He remains awake and conversational — but now demonstrates severe anterograde amnesia and elaborately confabulates when asked about recent events. Subsequent MRI shows bilateral posterior hypothalamic atrophy. Which structure's bilateral destruction explains the persistent amnestic syndrome despite thiamine treatment?",
+      "target_region": "mamillary_bodies",
+      "distractor_regions": ["cerebellum", "brainstem", "hippocampus"],
+      "explanation": "This is the Wernicke-Korsakoff progression. Wernicke's encephalopathy (acute): confusion + ataxia (cerebellar vermis) + ophthalmoplegia (CN VI/III nuclei in brainstem) — all thiamine-vulnerable structures that respond to treatment. With thiamine, acute signs resolve; but if mamillary body damage is already established, the patient transitions to Korsakoff's psychosis (chronic): anterograde amnesia + confabulation. Cerebellar (ataxia) and brainstem (eye movements) signs respond to thiamine; mamillary body neuronal loss does not reverse. MRI showing bilateral mamillary body atrophy is the pathognomonic imaging finding of this transition. Immediate IV thiamine (before glucose) is the critical intervention to prevent permanent Korsakoff."
+    },
+    {
+      "id": "BRAIN-064",
+      "type": "case_to_location",
+      "category": "memory",
+      "question": "In 1953, Henry Molaison (H.M.) underwent bilateral medial temporal resection for intractable epilepsy. Post-operatively, his IQ, language, and personality were unchanged. He could learn new motor skills (mirror tracing performance improved with practice). He knew everyone from before surgery. But he could not recognize physicians he had seen daily for years, could not remember conversations from minutes earlier, and perpetually experienced each day as if starting fresh. Which structure was bilaterally destroyed, producing this specific amnestic profile?",
+      "target_region": "hippocampus",
+      "distractor_regions": ["thalamus", "frontal_lobe", "amygdala"],
+      "explanation": "H.M.'s case established the hippocampus as specifically essential for encoding and consolidating new declarative (explicit) memories — both episodic (events) and semantic (new facts). The dissociations are decisive: preserved motor skill learning (mirror tracing) shows procedural memory uses cerebellum/striatum, not hippocampus. Preserved remote autobiographical memory shows long-term storage is distributed in neocortex, not hippocampus. Preserved intelligence and language shows frontal and perisylvian systems are intact. Only new long-term declarative memory is abolished. This double dissociation between declarative and non-declarative memory systems is foundational EPPP neuropsychology and the most important single case study in memory research."
+    },
+    {
+      "id": "BRAIN-065",
+      "type": "location_to_deficit",
+      "category": "memory",
+      "question": "Damage to the highlighted region would most likely produce:",
+      "highlighted_region": "hippocampus",
+      "options": [
+        "Severe anterograde amnesia for new declarative (episodic and semantic) memories, with intact procedural learning, intact remote long-term memory, and preserved intelligence",
+        "Contralateral burning pain with allodynia and an initial phase of hemisensory loss",
+        "Profound personality change, disinhibition, poor social judgment, and impulsivity with intact explicit memory",
+        "Ipsilateral limb ataxia, intention tremor, and dysdiadochokinesia with preserved strength"
+      ],
+      "correct_option_index": 0,
+      "explanation": "Bilateral hippocampal damage produces the purest declarative memory syndrome: complete inability to form new long-term explicit (declarative) memories, while procedural memory (cerebellum/basal ganglia), remote long-term memories (neocortical storage), and intelligence (frontal/parietal) are preserved. This is the H.M. syndrome. Option 2 (central pain + initial sensory loss) is thalamic Dejerine-Roussy. Option 3 (personality/disinhibition) is prefrontal or orbitofrontal cortex damage. Option 4 (ataxia with normal strength) is cerebellar damage. The hippocampus is the ENCODING and CONSOLIDATION structure for explicit memory — it temporarily holds traces while they are consolidated to cortex, then its own involvement is no longer required."
+    },
+    {
+      "id": "BRAIN-066",
+      "type": "case_to_location",
+      "category": "memory",
+      "question": "A 72-year-old retired professor has a 2-year history of forgetting appointments, losing objects daily, and failing to recall recent conversations, while memories from decades ago remain vivid. He can recall lifelong friends but cannot retain new people's names. Neuropsychological testing shows: isolated anterograde episodic memory impairment, intact language, intact praxis, and intact executive function on structured tasks. MRI shows bilateral medial temporal volume loss. Which structure shows the earliest and most prominent pathology?",
+      "target_region": "hippocampus",
+      "distractor_regions": ["frontal_lobe", "temporal_lobe", "thalamus"],
+      "explanation": "Early Alzheimer's disease follows a hippocampal-first progression (Braak staging I–II). Amyloid plaques and neurofibrillary tangles appear first in the entorhinal cortex and CA1 hippocampal subfield, producing the hallmark early symptom: anterograde episodic memory failure. Language, visuospatial, praxis, and executive functions are primarily cortical and are affected later. Hippocampal volume loss on MRI (medial temporal atrophy) is the earliest detectable structural biomarker. This episodic-memory-first pattern distinguishes AD from frontotemporal dementia (executive and personality deficits first) and Lewy body dementia (visuospatial deficits and fluctuating attention first), making it an essential differential diagnosis for the EPPP."
+    },
+    {
+      "id": "BRAIN-067",
+      "type": "case_to_location",
+      "category": "executive",
+      "question": "A 30-year-old man recovers from herpes simplex encephalitis. Family notes dramatic behavioral changes: he constantly picks up and mouths objects within reach (hyperorality), makes uninhibited sexual remarks to strangers (hypersexuality), shows no fear when threatened and no aggression when previously easily angered (placidity), cannot identify familiar objects by sight despite being able to describe their visual features (visual agnosia), and seems compelled to attend to every stimulus in the environment (hypermetamorphosis). Which structures are primarily damaged?",
+      "target_region": "amygdala",
+      "distractor_regions": ["hippocampus", "temporal_lobe", "frontal_lobe"],
+      "explanation": "Klüver-Bucy syndrome results from bilateral amygdala and anterior temporal lobe damage. The amygdala is the critical structure for the core behavioral features: placidity (loss of fear and aggression — amygdala mediates threat appraisal), hyperorality (amygdala regulates oral exploratory behavior), and hypersexuality (disinhibited reward-seeking). Visual agnosia reflects adjacent temporal association cortex damage; hypermetamorphosis reflects loss of stimulus filtering. Herpes simplex virus preferentially infects temporal lobes via the olfactory-limbic route, causing bilateral amygdala and temporal destruction. The syndrome is also seen after bilateral temporal lobectomy, advanced Alzheimer's disease, and frontotemporal dementia. Klüver-Bucy is among the highest-yield amygdala syndromes for the EPPP."
+    },
+    {
+      "id": "BRAIN-068",
+      "type": "case_to_location",
+      "category": "sensory",
+      "question": "A patient with Urbach-Wiethe disease (bilateral amygdala calcification from lipoid proteinosis) undergoes classical fear conditioning: a neutral tone (CS) is paired with mild electric shock (US). Normal subjects develop conditioned fear (skin conductance response and self-reported fear to tone alone). This patient shows no skin conductance response and reports no fear to the tone after extensive conditioning — yet she explicitly remembers every detail of the conditioning session and correctly describes what was paired with what. Which structure's loss best explains the absent conditioned fear despite intact declarative memory?",
+      "target_region": "amygdala",
+      "distractor_regions": ["hippocampus", "cingulate_gyrus", "thalamus"],
+      "explanation": "The amygdala (basolateral complex) is essential for acquiring and expressing classically conditioned fear. LeDoux's 'low road': auditory CS → auditory thalamus → lateral amygdala triggers fast, automatic conditioned fear (SCR, behavioral). The hippocampus encodes the DECLARATIVE memory of the session (what happened, where, when) — which is intact here. The classic double dissociation: amygdala damage = no conditioned fear but normal declarative memory of the event; hippocampal damage = conditioned fear remains but no declarative memory of training. This dissociation demonstrates that emotional conditioning (amygdala) and explicit memory (hippocampus) are parallel, independent memory systems — a cornerstone of EPPP affective neuroscience and the neurobiology of anxiety disorders."
+    },
+    {
+      "id": "BRAIN-069",
+      "type": "location_to_deficit",
+      "category": "executive",
+      "question": "Damage to the highlighted region would most likely produce:",
+      "highlighted_region": "amygdala",
+      "options": [
+        "Impaired fear conditioning, inability to recognize fearful facial expressions, emotional blunting, and placidity — with intact declarative memory for events",
+        "Non-fluent effortful speech with agrammatism, right hemiplegia, and intact auditory comprehension",
+        "Severe anterograde amnesia for all new explicit memories with intact procedural skill learning",
+        "Contralateral loss of touch discrimination, proprioception, and two-point discrimination"
+      ],
+      "correct_option_index": 0,
+      "explanation": "The amygdala is the brain's emotional appraisal center. Bilateral damage impairs: fear conditioning (cannot acquire CS-US fear associations), recognition of fearful facial expressions, and assignment of emotional significance to stimuli — producing placidity. Declarative memory for events is preserved because the hippocampus is intact. Option 2 (non-fluent speech + weakness) is Broca's area/motor cortex damage. Option 3 (anterograde amnesia) is hippocampal damage. Option 4 (sensory loss) is somatosensory cortex or thalamic damage. Clinically, amygdala hyperreactivity is implicated in PTSD and anxiety disorders — the converse of the placidity seen with bilateral destruction — making it the amygdala's most testable clinical relevance for the EPPP."
+    },
+    {
+      "id": "BRAIN-070",
+      "type": "case_to_location",
+      "category": "memory",
+      "question": "A 28-year-old man presents with episodic 'thunderclap' headaches that resolve within 30 minutes, sometimes followed by brief syncope when he tilts his head back. Between episodes, coworkers note that he sometimes cannot recall events from the previous several days. MRI reveals a smooth round cystic lesion at the foramen of Monro in the roof of the third ventricle. Which specific anatomical structure is most directly compressed by this lesion, producing the episodic memory impairment?",
+      "target_region": "fornix",
+      "distractor_regions": ["corpus_callosum", "hippocampus", "thalamus"],
+      "explanation": "Colloid cysts arise at the foramen of Monro (roof of third ventricle) and compress the fornix columns as they arch through this region en route to the mamillary bodies. Fornix compression disrupts hippocampal output — the postcommissural fornix carries hippocampal projections to mamillary bodies, breaking the Papez circuit relay essential for episodic memory. Position-dependent headaches and syncope reflect intermittent CSF obstruction (colloid cyst acting as a ball valve at the foramen of Monro). Colloid cysts are benign but potentially lethal — sudden CSF obstruction causes acute hydrocephalus and sudden death. The specific anatomy — fornix compressed by third-ventricle colloid cyst at the foramen of Monro — is a classic EPPP structural neuroanatomy question."
+    },
+    {
+      "id": "BRAIN-071",
+      "type": "location_to_deficit",
+      "category": "memory",
+      "question": "Damage to the highlighted region would most likely produce:",
+      "highlighted_region": "fornix",
+      "options": [
+        "Anterograde amnesia for declarative memories, by disconnecting hippocampal output from the mamillary bodies and interrupting the Papez memory circuit",
+        "Non-fluent speech with intact comprehension and impaired repetition",
+        "Contralateral motor weakness with spasticity and upper motor neuron signs",
+        "Contralateral homonymous hemianopia"
+      ],
+      "correct_option_index": 0,
+      "explanation": "The fornix is the principal efferent tract of the hippocampus: postcommissural fibers project to mamillary bodies; precommissural fibers project to septal nuclei and hypothalamus. Bilateral fornix damage disconnects the hippocampus from the Papez circuit (hippocampus → fornix → mamillary bodies → anterior thalamus → cingulate → hippocampus), producing anterograde amnesia qualitatively similar to bilateral hippocampal lesions. The fornix is damaged in Korsakoff syndrome, surgical transection, and colloid cyst compression at the foramen of Monro. Options 2–4 describe conduction aphasia (arcuate fasciculus), motor cortex damage, and occipital cortex damage respectively — entirely different structures and presentations."
+    },
+    {
+      "id": "BRAIN-072",
+      "type": "case_to_location",
+      "category": "vascular",
+      "question": "A 70-year-old hypertensive man wakes with right leg weakness far more severe than any arm weakness — he cannot lift the right leg at all, but the right arm has only mild drift. He also reports urinary urgency and had one episode of incontinence. MRI-DWI shows an acute infarct on the medial surface of the left hemisphere. Which structure is damaged, and which arterial territory does this represent?",
+      "target_region": "medial_frontal",
+      "distractor_regions": ["frontal_lobe", "parietal_lobe", "temporal_lobe"],
+      "explanation": "Left anterior cerebral artery (ACA) territory infarct damages the medial frontal and parietal cortex. The motor and sensory homunculus maps the LEG on the medial cortical surface (ACA territory), while the arm and face are represented laterally (MCA territory). ACA occlusion therefore produces contralateral LEG > arm weakness and sensory loss — the opposite of the arm-face predominant pattern of MCA stroke. Urinary incontinence reflects damage to the paracentral lobule's bladder inhibitory center. This leg-predominant UMN syndrome with incontinence on medial cortex MRI is pathognomonic for ACA territory stroke and tests the clinically critical homunculus geography: leg = medial (ACA), arm/face = lateral (MCA)."
+    },
+    {
+      "id": "BRAIN-073",
+      "type": "case_to_location",
+      "category": "motor",
+      "question": "Following resection of a left medial frontal lobe tumor (anterior to the paracentral lobule), a patient develops mutism and right hemiplegia. Over 3 weeks both resolve nearly completely. During recovery, she shows a specific deficit: she cannot reach for a stationary cup on verbal command ('reach for it now'), but catches a ball thrown toward her reflexively without difficulty. She also struggles with tasks requiring both hands to move simultaneously. Which region was most critically damaged?",
+      "target_region": "medial_frontal",
+      "distractor_regions": ["motor_cortex", "frontal_lobe", "corpus_callosum"],
+      "explanation": "The supplementary motor area (SMA, BA 6, medial frontal) mediates internally-generated (self-initiated, planned) voluntary movements and bimanual coordination. After SMA resection, the classic SMA syndrome develops: transient contralateral hemiplegia and mutism that resolve as ipsilateral SMA compensates. The hallmark is selective inability to self-initiate movements on command, while externally-triggered responses (catching a thrown object) are preserved. This internally-generated vs. externally-triggered dissociation is pathognomonic for SMA damage and distinguishes it from primary motor cortex lesions (persistent deficits, no task specificity) and frontal executive lesions (planning deficits without this motor initiation pattern)."
+    },
+    {
+      "id": "BRAIN-074",
+      "type": "case_to_location",
+      "category": "visual",
+      "question": "A 75-year-old woman with severe hypertension has a bilateral posterior cerebral artery infarct. When her physician holds up a blue pen and asks 'what do you see?', she confidently says 'a pencil.' She bumps into furniture walking to her chair. Confrontation visual field testing reveals dense bilateral visual loss. Yet she insists her vision is 'fine' and elaborately describes the hospital room decor she cannot actually see. Pupillary light reflexes are brisk bilaterally. Which syndrome and which cortical region?",
+      "target_region": "occipital_medial",
+      "distractor_regions": ["temporal_lobe", "parietal_lobe", "thalamus"],
+      "explanation": "Anton's syndrome (visual anosognosia) is cortical blindness with denial of blindness and confabulation of visual experiences. Bilateral destruction of primary visual cortex (V1), located on the medial occipital surface along the calcarine sulcus (supplied by PCA), produces complete cortical blindness. Preserved pupillary light reflexes confirm intact optic nerves and pretectal pathway — the blindness is cortical, not retinal or geniculate. The intact frontal lobe generates plausible confabulated visual reports without feedback from destroyed V1. Anton's syndrome is pathognomonic for bilateral calcarine cortex destruction and is distinguished from parietal neglect (visual input present but spatially ignored) and hemianopia (unilateral, partial field loss)."
+    },
+    {
+      "id": "BRAIN-075",
+      "type": "deficit_to_location",
+      "category": "visual",
+      "question": "A patient with a left temporal lobe glioma compressing the inferior optic radiations (Meyer's loop) develops right superior quadrantanopia — loss of the upper-right visual field quadrant ('pie in the sky' defect). The inferior optic radiations that are compressed in the temporal lobe terminate on a specific bank of the calcarine sulcus. Which medial occipital region and calcarine bank processes the superior visual field that is now lost?",
+      "target_region": "occipital_medial",
+      "distractor_regions": ["occipital_lobe", "parietal_lobe", "temporal_lobe"],
+      "explanation": "The calcarine sulcus organizes V1 retinotopically: the LOWER BANK (lingual gyrus) receives inferior optic radiations (Meyer's loop, traveling through the temporal lobe) and represents the SUPERIOR visual field. The UPPER BANK (cuneus) receives superior optic radiations (traveling through the parietal lobe) and represents the INFERIOR visual field. Therefore, temporal lobe damage compressing Meyer's loop causes loss of superior visual field ('pie in the sky'). Conversely, parietal lobe damage to superior radiations causes loss of inferior visual field ('pie in the floor'). Knowing which calcarine bank processes which quadrant — lingual = superior field, cuneus = inferior field — is high-yield for EPPP visual pathway localization questions."
     }
   ]
 };
