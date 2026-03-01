@@ -1224,6 +1224,145 @@ function hideAllPathways() { pathways.forEach(p => p.hide()); }
   brainGroup.add(p.group);   // add to brainGroup — rotates with brain
 }
 
+// ── Chunk 3D: Visual Pathway — Temporal (Uncrossed) Fibers ──────────────────
+// Left temporal retinal fibers run IPSILATERALLY: left retina → optic nerve →
+// lateral optic chiasm (no crossing) → left LGN → optic radiations →
+// Meyer's loop (anterior temporal sweep, explains "pie in the sky" deficit) →
+// left V1.  Warm pink #F4A0C0.
+//
+// KEY EDUCATIONAL POINT: visual_temporal + visual_nasal converge on the SAME
+// left LGN → V1, so damage to left V1 causes RIGHT homonymous hemianopia from
+// BOTH eyes — that's the anatomy of homonymous field defects.
+{
+  const p = new Pathway({
+    name:          'visual_temporal',
+    color:         0xF4A0C0,
+    speed:         0.28,       // fast — visual processing is rapid (< 100 ms)
+    particleCount: 22,
+    radius:        0.016,
+    loop:          false,
+    waypoints: [
+      new THREE.Vector3( 0.72,  0.00,  2.04),   // left retina / eye
+      new THREE.Vector3( 0.56, -0.08,  1.52),   // left optic nerve
+      new THREE.Vector3( 0.38, -0.16,  0.90),   // optic nerve approaching chiasm
+      new THREE.Vector3( 0.20, -0.30,  0.14),   // optic chiasm — temporal fibers (lateral, no cross)
+      new THREE.Vector3( 0.46,  0.08, -0.36),   // left LGN (posterolateral thalamus)
+      new THREE.Vector3( 0.72, -0.10, -0.20),   // entering optic radiations — temporal lobe
+      new THREE.Vector3( 0.80, -0.28,  0.08),   // Meyer's loop — anterior temporal sweep
+      new THREE.Vector3( 0.78, -0.20, -0.34),   // Meyer's loop — curving posterior
+      new THREE.Vector3( 0.80,  0.08, -0.82),   // optic radiations ascending toward V1
+      new THREE.Vector3( 0.78,  0.30, -1.12),   // optic radiations posterior
+      new THREE.Vector3( 0.75,  0.50, -1.40),   // V1 (primary visual cortex, calcarine sulcus)
+    ],
+  });
+  pathways.push(p);
+  brainGroup.add(p.group);
+  // Left retina sphere — attached to pathway group so it shows/hides with the pathway
+  const lRet = new THREE.Mesh(
+    new THREE.SphereGeometry(0.055, 12, 8),
+    new THREE.MeshBasicMaterial({ color: 0xF4A0C0, transparent: true, opacity: 0.90 })
+  );
+  lRet.position.set(0.72, 0.00, 2.04);
+  p.group.add(lRet);
+}
+
+// ── Chunk 3D: Visual Pathway — Nasal (Crossed) Fibers ────────────────────────
+// Right nasal retinal fibers CROSS the optic chiasm at the midline, then join
+// the left LGN → Meyer's loop → left V1 — the same destination as the temporal
+// pathway.  Teal #60C8C0.
+// Crossing segment: x goes -0.38 → 0.00 → +0.46 (right → midline → left LGN).
+{
+  const p = new Pathway({
+    name:          'visual_nasal',
+    color:         0x60C8C0,
+    speed:         0.28,
+    particleCount: 22,
+    radius:        0.016,
+    loop:          false,
+    waypoints: [
+      new THREE.Vector3(-0.72,  0.00,  2.04),   // right retina (contralateral)
+      new THREE.Vector3(-0.56, -0.08,  1.52),   // right optic nerve
+      new THREE.Vector3(-0.38, -0.16,  0.90),   // approaching chiasm from right
+      new THREE.Vector3( 0.00, -0.30,  0.14),   // optic chiasm — nasal fibers CROSS midline
+      new THREE.Vector3( 0.46,  0.08, -0.36),   // left LGN (converges with temporal stream)
+      new THREE.Vector3( 0.72, -0.10, -0.20),   // optic radiations — temporal lobe
+      new THREE.Vector3( 0.80, -0.28,  0.08),   // Meyer's loop — anterior sweep
+      new THREE.Vector3( 0.78, -0.20, -0.34),   // Meyer's loop — curving posterior
+      new THREE.Vector3( 0.80,  0.08, -0.82),   // optic radiations ascending
+      new THREE.Vector3( 0.78,  0.30, -1.12),   // optic radiations posterior
+      new THREE.Vector3( 0.75,  0.50, -1.40),   // V1 (same destination as temporal)
+    ],
+  });
+  pathways.push(p);
+  brainGroup.add(p.group);
+  // Right retina sphere
+  const rRet = new THREE.Mesh(
+    new THREE.SphereGeometry(0.055, 12, 8),
+    new THREE.MeshBasicMaterial({ color: 0x60C8C0, transparent: true, opacity: 0.90 })
+  );
+  rRet.position.set(-0.72, 0.00, 2.04);
+  p.group.add(rRet);
+}
+
+// ── Chunk 3D: Language Pathway — Arcuate Fasciculus ──────────────────────────
+// Left-hemisphere language circuit: Wernicke's area (BA22, posterior STG) →
+// arcuate fasciculus (C-shaped white matter arc through parietal operculum) →
+// Broca's area (BA44/45, inferior frontal gyrus) → primary motor cortex
+// (larynx/lip representation, lateral precentral).
+// Damage to the arc alone = conduction aphasia (impaired repetition, fluent
+// speech, intact comprehension).  Violet #9060D0.
+{
+  const p = new Pathway({
+    name:          'language_arcuate',
+    color:         0x9060D0,
+    speed:         0.20,
+    particleCount: 20,
+    radius:        0.018,
+    loop:          false,
+    waypoints: [
+      new THREE.Vector3( 0.75,  0.18, -0.28),   // Wernicke's area (posterior STG, BA22)
+      new THREE.Vector3( 0.84,  0.36, -0.08),   // ascending into arcuate fasciculus
+      new THREE.Vector3( 0.88,  0.64,  0.14),   // arcuate fasciculus — superior arc
+      new THREE.Vector3( 0.86,  0.76,  0.44),   // arc turning anteriorly
+      new THREE.Vector3( 0.82,  0.62,  0.72),   // anterior segment of arcuate
+      new THREE.Vector3( 0.78,  0.32,  0.80),   // Broca's area (IFG, BA44/45)
+      new THREE.Vector3( 0.72,  0.60,  0.36),   // ascending to precentral gyrus
+      new THREE.Vector3( 0.64,  0.88,  0.24),   // motor cortex — larynx/lip representation
+    ],
+  });
+  pathways.push(p);
+  brainGroup.add(p.group);
+}
+
+// ── Chunk 3D: Dopamine Nigrostriatal Pathway ──────────────────────────────────
+// Substantia nigra pars compacta → ascending nigrostriatal fibers (medial
+// forebrain bundle / lateral hypothalamus) → striatum (putamen → caudate head).
+// Dopamine depletion along this tract is the defining pathology of Parkinson's
+// disease.  Progressive SN neuron loss → striatal DA deficit → bradykinesia,
+// rigidity, resting tremor.  Orange-amber #E86010.
+{
+  const p = new Pathway({
+    name:          'dopamine_nigrostriatal',
+    color:         0xE86010,
+    speed:         0.18,
+    particleCount: 22,
+    radius:        0.018,
+    loop:          false,
+    waypoints: [
+      new THREE.Vector3( 0.20, -0.72, -0.44),   // substantia nigra pars compacta
+      new THREE.Vector3( 0.22, -0.52, -0.28),   // nigrostriatal fibers ascending
+      new THREE.Vector3( 0.26, -0.24, -0.10),   // medial forebrain bundle
+      new THREE.Vector3( 0.34,  0.04,  0.04),   // striatal territory entry
+      new THREE.Vector3( 0.46,  0.18,  0.06),   // GP / putamen border
+      new THREE.Vector3( 0.56,  0.18,  0.08),   // putamen
+      new THREE.Vector3( 0.50,  0.26,  0.40),   // toward caudate body
+      new THREE.Vector3( 0.44,  0.26,  0.62),   // caudate head
+    ],
+  });
+  pathways.push(p);
+  brainGroup.add(p.group);
+}
+
 /**
  * Set a named pathway visible or hidden.
  * Called via window.__brain3d.setPathway(name, visible) from brain-exercise.html.

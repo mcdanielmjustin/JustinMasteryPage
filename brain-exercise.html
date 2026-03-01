@@ -1995,6 +1995,24 @@
           <span class="path-dot" style="background:#5B9BD5; color:#5B9BD5;"></span>
           Corticospinal
         </button>
+        <button id="btn-path-visual" class="pathway-btn"
+                onclick="togglePathway('visual')"
+                title="Visual System: bilateral retinas → optic chiasm (nasal fibers cross, temporal don't) → LGN → Meyer's loop → V1. Explains homonymous hemianopia patterns.">
+          <span class="path-dot" style="background:#F4A0C0; color:#F4A0C0;"></span>
+          Visual System
+        </button>
+        <button id="btn-path-language" class="pathway-btn"
+                onclick="togglePathway('language_arcuate')"
+                title="Arcuate Fasciculus: Wernicke's area → arcuate white matter arc → Broca's area → motor cortex. Damage = conduction aphasia (impaired repetition).">
+          <span class="path-dot" style="background:#9060D0; color:#9060D0;"></span>
+          Language
+        </button>
+        <button id="btn-path-dopamine" class="pathway-btn"
+                onclick="togglePathway('dopamine_nigrostriatal')"
+                title="Dopamine Nigrostriatal: substantia nigra pars compacta → striatum (putamen + caudate). Depleted in Parkinson's disease.">
+          <span class="path-dot" style="background:#E86010; color:#E86010;"></span>
+          Dopamine
+        </button>
       </div>
 
       <button id="btn-glass-brain" class="brain3d-overlay-btn"
@@ -2736,14 +2754,28 @@
   }
 
   // ── Pathway toggles — global (called from onclick="togglePathway(...)") ──────
-  // State is a plain object so button .active class always matches group.visible.
-  const __pathwayState = { papez: false, corticospinal: false };
-  const __PATHWAY_BTN = { papez: 'btn-path-papez', corticospinal: 'btn-path-motor' };
+  // __pathwayState tracks visible state so button .active always matches group.visible.
+  // 'visual' is a composite key that controls both visual_temporal + visual_nasal together,
+  // representing the bilateral visual system with its partial chiasmal decussation.
+  const __pathwayState = {
+    papez: false, corticospinal: false,
+    visual: false, language_arcuate: false, dopamine_nigrostriatal: false,
+  };
+  const __PATHWAY_BTN = {
+    papez:                  'btn-path-papez',
+    corticospinal:          'btn-path-motor',
+    visual:                 'btn-path-visual',
+    language_arcuate:       'btn-path-language',
+    dopamine_nigrostriatal: 'btn-path-dopamine',
+  };
+  // 'visual' controls both sub-pathways (uncrossed temporal + crossed nasal fibers)
+  const __PATHWAY_NAMES = { visual: ['visual_temporal', 'visual_nasal'] };
 
   function togglePathway(name) {
     __pathwayState[name] = !__pathwayState[name];
+    const names = __PATHWAY_NAMES[name] || [name];
     if (window.__brain3d && window.__brain3d.setPathway) {
-      window.__brain3d.setPathway(name, __pathwayState[name]);
+      names.forEach(n => window.__brain3d.setPathway(n, __pathwayState[name]));
     }
     const btn = document.getElementById(__PATHWAY_BTN[name]);
     if (btn) btn.classList.toggle('active', __pathwayState[name]);
