@@ -779,6 +779,11 @@ let lesionActive   = false;        // true = clicking a region applies damage
 let damagedRegions = new Set();    // Set<regionId> of currently-damaged regions
 let lesionPulseT   = 0;            // phase (radians) for pulsing red emissive
 
+// ── Pathology Overlay state (Chunk 4A) ────────────────────────────────────────
+let activePathology = null;    // string key of active pathology, or null
+let pathologyT      = 0.0;     // lerp progress: 0 = normal state, 1 = fully affected
+let pathologyDir    = 0;       // +1 = animating toward affected, -1 = returning to normal
+
 // ── Glass-brain toggle state ──────────────────────────────────────────────────
 let glassActive     = false;  // true = subcortical revealed
 let glassProgress   = 0;      // 0 = full cortex, 1 = glass
@@ -1552,6 +1557,190 @@ function toggleLesionMode() {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PATHOLOGY OVERLAY SYSTEM — Chunk 4A
+// Generic tween engine: for each affected region, lerps scale and color toward
+// a pathology target state, then back on deactivation.
+//
+// Schema per affected entry: { regionId, scaleFactor, targetColor (hex int) }
+//   scaleFactor < 1 → atrophy (Alzheimer's, Parkinson's)
+//   scaleFactor > 1 → edema / swelling (MCA stroke)
+//   targetColor     → shift mesh color toward this (darken, desaturate, or gray)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const PATHOLOGY_DEFS = {
+  alzheimers: {
+    label:       "Alzheimer's",
+    badgeColor:  '#9B6BA0',
+    description: "Hippocampal + entorhinal atrophy — earliest structural change in AD",
+    affected: [
+      // Core: hippocampus shrinks to 60% — bilateral in AD, modeled here as left
+      { regionId: 'hippocampus',   scaleFactor: 0.60, targetColor: 0x4A2818 },
+      // Amygdala atrophy (Braak stages III–IV)
+      { regionId: 'amygdala',      scaleFactor: 0.72, targetColor: 0x502A1C },
+      // Medial temporal lobe thinning (entorhinal/parahippocampal — modeled on temporal)
+      { regionId: 'temporal_lobe', scaleFactor: 0.91, targetColor: 0x6A3C28 },
+      // Thalamic atrophy (mediodorsal nucleus — late stage)
+      { regionId: 'thalamus',      scaleFactor: 0.85, targetColor: 0x5A3428 },
+    ],
+  },
+
+  parkinsons: {
+    label:       "Parkinson's",
+    badgeColor:  '#7878A0',
+    description: "Substantia nigra dopaminergic loss — depigmentation and nigrostriatal deafferentation",
+    affected: [
+      // Substantia nigra: heavily depigmented (gray), severe atrophy
+      { regionId: 'substantia_nigra', scaleFactor: 0.55, targetColor: 0x3C3838 },
+      // Striatum: downstream deafferentation — mild atrophy, color shift
+      { regionId: 'putamen',          scaleFactor: 0.86, targetColor: 0x504848 },
+      { regionId: 'caudate',          scaleFactor: 0.86, targetColor: 0x504848 },
+      { regionId: 'globus_pallidus',  scaleFactor: 0.86, targetColor: 0x4E4646 },
+    ],
+  },
+
+  mca_stroke: {
+    label:       'MCA Stroke',
+    badgeColor:  '#A05858',
+    description: "MCA territory infarct — cytotoxic edema with gyriform cortical necrosis",
+    affected: [
+      // MCA territory: lateral frontal, parietal, temporal — swollen + gray (pallor)
+      { regionId: 'frontal_lobe',          scaleFactor: 1.09, targetColor: 0x5E5454 },
+      { regionId: 'parietal_lobe',         scaleFactor: 1.09, targetColor: 0x5E5454 },
+      { regionId: 'temporal_lobe',         scaleFactor: 1.09, targetColor: 0x5E5454 },
+      { regionId: 'prefrontal_cortex',     scaleFactor: 1.08, targetColor: 0x5C5252 },
+      { regionId: 'motor_cortex',          scaleFactor: 1.10, targetColor: 0x5A5050 },
+      { regionId: 'somatosensory_cortex',  scaleFactor: 1.10, targetColor: 0x5A5050 },
+      { regionId: 'brocas_area',           scaleFactor: 1.10, targetColor: 0x585050 },
+      { regionId: 'wernickes_area',        scaleFactor: 1.10, targetColor: 0x585050 },
+      // Putamen + internal capsule in MCA deep territory
+      { regionId: 'putamen',           scaleFactor: 1.08, targetColor: 0x5A5050 },
+      { regionId: 'internal_capsule',  scaleFactor: 1.06, targetColor: 0x6A6060 },
+    ],
+  },
+};
+
+/**
+ * Activate a named pathology.  If `key` is already active, deactivates (toggles).
+ * If switching to a different pathology, snaps the previous one off and immediately
+ * starts the new one so transitions stay crisp.
+ */
+function activatePathology(key) {
+  if (activePathology === key) {
+    // Same pathology clicked — animate back to normal
+    pathologyDir = -1;
+    return;
+  }
+
+  // If another pathology is partially or fully applied, snap it back first
+  if (activePathology !== null) {
+    _snapClearPathology();
+  }
+
+  // Set up targets on each affected mesh
+  const def = PATHOLOGY_DEFS[key];
+  if (!def) return;
+
+  for (const spec of def.affected) {
+    const tColor = new THREE.Color(spec.targetColor);
+    regionMeshes
+      .filter(m => m.userData.regionId === spec.regionId && m.visible !== undefined)
+      .forEach(m => {
+        // Save original only once (guard against re-activation edge cases)
+        if (!m.userData._pathorig) {
+          m.userData._pathorig = {
+            scale: m.scale.clone(),
+            color: m.material.color.clone(),
+          };
+        }
+        m.userData._pathtarg = {
+          scaleFactor: spec.scaleFactor,
+          color:       tColor,
+        };
+      });
+  }
+
+  activePathology = key;
+  pathologyT      = 0.0;
+  pathologyDir    = 1;
+
+  window.onPathologyChange && window.onPathologyChange(key, def.label, def.description);
+}
+
+/**
+ * Request an animated return to normal state.
+ */
+function clearPathology() {
+  if (!activePathology) return;
+  pathologyDir = -1;
+}
+
+/**
+ * Instantly restore all pathology-affected meshes to their original state.
+ * Used when switching pathologies without the user having to see a double-tween.
+ */
+function _snapClearPathology() {
+  regionMeshes.forEach(m => {
+    const orig = m.userData._pathorig;
+    if (orig) {
+      m.scale.copy(orig.scale);
+      m.material.color.copy(orig.color);
+      delete m.userData._pathorig;
+      delete m.userData._pathtarg;
+    }
+  });
+  pathologyT      = 0;
+  pathologyDir    = 0;
+  activePathology = null;
+  window.onPathologyChange && window.onPathologyChange(null);
+}
+
+/**
+ * Called once per frame from animate().
+ * Smoothly lerps affected mesh scales and colors toward or away from the pathology target.
+ */
+function tickPathologyTween(delta) {
+  if (pathologyDir === 0) return;
+
+  const SPEED = 2.0;   // full transition in ~0.5 seconds
+  pathologyT += pathologyDir * SPEED * delta;
+  pathologyT  = Math.max(0, Math.min(1, pathologyT));
+
+  // Smoothstep ease-in/out: feels organic, not mechanical
+  const t = pathologyT * pathologyT * (3 - 2 * pathologyT);
+
+  regionMeshes.forEach(m => {
+    const orig = m.userData._pathorig;
+    const targ = m.userData._pathtarg;
+    if (!orig || !targ) return;
+
+    // Scale: lerp uniformly about the region center
+    const ts = 1 + (targ.scaleFactor - 1) * t;
+    m.scale.set(orig.scale.x * ts, orig.scale.y * ts, orig.scale.z * ts);
+
+    // Color: lerp from original tissue color to pathology target
+    m.material.color.lerpColors(orig.color, targ.color, t);
+  });
+
+  // Animation complete
+  if (pathologyT >= 1.0 && pathologyDir === 1) {
+    pathologyDir = 0;   // fully affected — stop
+  } else if (pathologyT <= 0.0 && pathologyDir === -1) {
+    // Fully restored — clean up userData and clear active state
+    regionMeshes.forEach(m => {
+      if (m.userData._pathorig) {
+        m.scale.copy(m.userData._pathorig.scale);
+        m.material.color.copy(m.userData._pathorig.color);
+        delete m.userData._pathorig;
+        delete m.userData._pathtarg;
+      }
+    });
+    pathologyDir    = 0;
+    activePathology = null;
+    window.onPathologyChange && window.onPathologyChange(null);
+  }
+}
+
 // Build the disc now — ASSEMBLE SCENE has already run so `scene` is populated.
 discMesh = buildCrossDisc();
 
@@ -1588,6 +1777,9 @@ function animate(ts) {
 
   // Advance pathway particle animations
   if (pathways.length) pathways.forEach(p => p.animate(delta));
+
+  // Pathology overlay tween — lerp scale + color toward/away from pathology state
+  tickPathologyTween(delta);
 
   // Lesion pulse — red emissive oscillation on all currently-damaged meshes
   if (lesionActive && damagedRegions.size > 0) {
@@ -1771,6 +1963,8 @@ window.__brain3d = {
   setPathway,
   // Chunk 3E — Lesion Simulator
   toggleLesionMode, resetLesions,
+  // Chunk 4A — Pathology Overlay System
+  activatePathology, clearPathology, PATHOLOGY_DEFS,
 };
 
 // Auto-mount if the page already has view=3d on load

@@ -565,6 +565,23 @@
     .pathway-btn.active              { border-color: rgba(255,255,255,0.22); color: var(--text); background: rgba(255,255,255,0.06); }
     .pathway-btn.active .path-dot   { box-shadow: 0 0 7px 3px; }
 
+    /* ── Pathology Overlay panel separator + disease buttons (Chunk 4A) ──── */
+    .pathway-panel-divider {
+      width: 100%; height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 7px 0 5px;
+    }
+    /* Disease buttons share pathway-btn base; active state uses badge color
+       set via inline CSS custom property --badge on each button */
+    .pathway-btn.path-disease-btn.active {
+      border-color: var(--badge, rgba(255,255,255,0.22));
+      color: var(--text);
+      background: color-mix(in srgb, var(--badge, #888) 18%, transparent);
+    }
+    .pathway-btn.path-disease-btn.active .path-dot {
+      box-shadow: 0 0 7px 3px var(--badge, rgba(255,255,255,0.3));
+    }
+
     /* ── Lesion Simulator (Chunk 3E) ──────────────────────────────────────── */
     .lesion-ctrl-row {
       position: absolute; bottom: 14px; left: 14px;
@@ -2069,6 +2086,32 @@
           <span class="path-dot" style="background:#E86010; color:#E86010;"></span>
           Dopamine
         </button>
+
+        <!-- Pathology overlays — Chunk 4A (same panel, separated by divider) -->
+        <div class="pathway-panel-divider"></div>
+        <div class="pathway-panel-label" style="margin-top:2px">Pathologies</div>
+
+        <button id="btn-path-alzheimers" class="pathway-btn path-disease-btn"
+                style="--badge:#9B6BA0"
+                onclick="togglePathology3d('alzheimers')"
+                title="Alzheimer's Disease: hippocampal + entorhinal atrophy — earliest structural change. Watch hippocampus and amygdala shrink.">
+          <span class="path-dot" style="background:#9B6BA0; color:#9B6BA0;"></span>
+          Alzheimer's
+        </button>
+        <button id="btn-path-parkinsons" class="pathway-btn path-disease-btn"
+                style="--badge:#7878A0"
+                onclick="togglePathology3d('parkinsons')"
+                title="Parkinson's Disease: substantia nigra depigmentation and striatal deafferentation. Watch substantia nigra desaturate and shrink.">
+          <span class="path-dot" style="background:#7878A0; color:#7878A0;"></span>
+          Parkinson's
+        </button>
+        <button id="btn-path-mca" class="pathway-btn path-disease-btn"
+                style="--badge:#A05858"
+                onclick="togglePathology3d('mca_stroke')"
+                title="MCA Stroke: middle cerebral artery territory infarct. Watch lateral cortex turn gray and swell.">
+          <span class="path-dot" style="background:#A05858; color:#A05858;"></span>
+          MCA Stroke
+        </button>
       </div>
 
       <!-- Lesion Simulator controls — bottom-left overlay (Chunk 3E) -->
@@ -2866,6 +2909,54 @@
     const btn = document.getElementById(__PATHWAY_BTN[name]);
     if (btn) btn.classList.toggle('active', __pathwayState[name]);
   }
+
+  // ── Pathology Overlay toggles — global (Chunk 4A) ───────────────────────────
+  // Only one pathology active at a time. Clicking an active pathology deactivates it.
+  const __pathology3dState = { alzheimers: false, parkinsons: false, mca_stroke: false };
+  const __pathology3dBtn   = {
+    alzheimers: 'btn-path-alzheimers',
+    parkinsons: 'btn-path-parkinsons',
+    mca_stroke: 'btn-path-mca',
+  };
+
+  function togglePathology3d(key) {
+    const wasActive = __pathology3dState[key];
+
+    // Clear all button states (only one pathology active at a time)
+    Object.keys(__pathology3dState).forEach(k => {
+      __pathology3dState[k] = false;
+      const b = document.getElementById(__pathology3dBtn[k]);
+      if (b) b.classList.remove('active');
+    });
+
+    if (!wasActive) {
+      __pathology3dState[key] = true;
+      const b = document.getElementById(__pathology3dBtn[key]);
+      if (b) b.classList.add('active');
+    }
+
+    if (window.__brain3d && window.__brain3d.activatePathology) {
+      if (wasActive) {
+        // Toggled off — animate back to normal
+        window.__brain3d.clearPathology();
+      } else {
+        window.__brain3d.activatePathology(key);
+      }
+    }
+  }
+
+  // Called from brain-3d.js when a pathology tween completes in either direction.
+  // key = null means fully restored to normal.
+  window.onPathologyChange = function onPathologyChange(key) {
+    if (key === null) {
+      // Tween completed back to normal — ensure all buttons are deactivated
+      Object.keys(__pathology3dState).forEach(k => {
+        __pathology3dState[k] = false;
+        const b = document.getElementById(__pathology3dBtn[k]);
+        if (b) b.classList.remove('active');
+      });
+    }
+  };
 
   // ── Lesion Panel Updater — global so brain-3d.js can call it ─────────────
   // Called by toggleDamageRegion() in brain-3d.js with the current Set of
