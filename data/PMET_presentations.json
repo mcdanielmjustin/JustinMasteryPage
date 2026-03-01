@@ -1,0 +1,299 @@
+{
+  "domain_code": "PMET",
+  "generated_at": "2026-03-01T00:00:00Z",
+  "encounters": [
+    {
+      "id": "CP-PMET-0001",
+      "domain_code": "PMET",
+      "subdomain": "Reliability",
+      "difficulty_level": 2,
+      "encounter": {
+        "setting": "Peer consultation — outpatient assessment practice",
+        "referral_context": "Doctoral-level psychologist consulting a colleague about a client whose MMPI-2 profile changed dramatically between two administrations two years apart. Seeking guidance before writing the report.",
+        "patient": {
+          "label": "Psychologist (Consultant), Adult Female, 39",
+          "appearance_tags": [
+            "professional attire",
+            "concerned expression",
+            "holding printed reports"
+          ],
+          "initial_avatar_state": "confused"
+        },
+        "phases": [
+          {
+            "phase_id": "chief_complaint",
+            "phase_label": "Consultation Question",
+            "dialogue": "I'm confused about something. My client took the MMPI-2 two years ago with her previous therapist. When I re-administered it last month, several scales shifted dramatically — her Depression scale dropped from 78T to 55T. Her previous therapist says her mood is much better. But I'm not sure if I should trust that the change is real or if it's measurement error.",
+            "avatar_emotion": "confused",
+            "behavioral_tags": [
+              "test-retest reliability concern",
+              "clinical change vs. measurement error",
+              "consultation seeking"
+            ],
+            "chart_reveals": [
+              {
+                "category": "Chief Complaint",
+                "label": "Consultation focus",
+                "value": "Interpretation of MMPI-2 scale change (T=78 → T=55 on Depression scale over 2 years)"
+              },
+              {
+                "category": "Chief Complaint",
+                "label": "Context",
+                "value": "Client reports significant mood improvement; change confirmed by collateral therapist"
+              }
+            ],
+            "clinician_prompt": null
+          },
+          {
+            "phase_id": "reliability_context",
+            "phase_label": "Reliability Analysis",
+            "dialogue": "How much would the score need to change before I could say it's a real change and not just the test being inconsistent? I know MMPI-2 is reliable, but I don't know exactly what that means for individual scores in practice.",
+            "avatar_emotion": "guarded",
+            "behavioral_tags": [
+              "standard error of measurement",
+              "reliable change index",
+              "clinical judgment"
+            ],
+            "chart_reveals": [
+              {
+                "category": "History of Present Illness",
+                "label": "Scale shift magnitude",
+                "value": "Depression (Scale 2): T=78 to T=55 — a 23-point decrease over 2 years"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "MMPI-2 reliability",
+                "value": "Test-retest reliabilities for MMPI-2 clinical scales: r = .67–.92 depending on scale and interval"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "SEM context",
+                "value": "With r=.80 (typical for Scale 2) and SD=10 (T-score), SEM ≈ 4.5 T-points; 95% CI ≈ ±9 points"
+              }
+            ],
+            "clinician_prompt": "What's your main concern — that the score dropped too much, or that it might not have dropped enough to be meaningful?"
+          },
+          {
+            "phase_id": "validity_context",
+            "phase_label": "Validity and Interpretation",
+            "dialogue": "She had the same L, F, K profile both times — no obvious validity issues. She wasn't faking or exaggerating symptoms. And clinically she really does seem different — more engaged, not crying, back at work. So is a 23-point drop meaningful?",
+            "avatar_emotion": "hopeful",
+            "behavioral_tags": [
+              "validity scale consistency",
+              "convergent validity",
+              "clinical significance"
+            ],
+            "chart_reveals": [
+              {
+                "category": "Labs / Observations",
+                "label": "Validity scales",
+                "value": "L/F/K profiles consistent across both administrations — response style stable"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "Convergent data",
+                "value": "Clinical observation and collateral report consistent with score improvement"
+              },
+              {
+                "category": "Mental Status Examination",
+                "label": "Current presentation",
+                "value": "Engaged, euthymic, employed — consistent with T=55 range (within normal limits)"
+              }
+            ],
+            "clinician_prompt": "Tell me what her validity scales looked like both times."
+          }
+        ]
+      },
+      "questions": [
+        {
+          "question_id": "q1",
+          "type": "assessment_tool",
+          "prompt": "A 23-point T-score drop on MMPI-2 Scale 2 (Depression) occurred over 2 years. The scale's test-retest reliability is r = .80. Using the Reliable Change Index (RCI) framework, how do you determine whether this change is statistically reliable?",
+          "options": {
+            "A": "Any change > 1 standard deviation (10 T-points) is automatically considered reliable",
+            "B": "The RCI compares the obtained score difference to the Standard Error of the Difference (SE_diff); changes exceeding ±1.96 × SE_diff are reliable",
+            "C": "Clinical significance is established if the new score crosses into the normative range, regardless of the magnitude of change",
+            "D": "Test-retest reliability above r = .70 guarantees that any observed change is clinically meaningful"
+          },
+          "correct_answer": "B",
+          "explanation": "The Reliable Change Index (Jacobson & Truax, 1991) determines whether score change exceeds what would be expected by measurement error alone. SE_diff = SD × √(2(1 − r)) = 10 × √(2 × 0.20) = 10 × √0.4 ≈ 6.3. RCI = 23 / 6.3 ≈ 3.65, which far exceeds 1.96 (p < .05). This 23-point change is statistically reliable — it is very unlikely to reflect measurement error. Combined with convergent clinical data (euthymic presentation, employment, collateral report), this represents genuine clinical improvement.",
+          "distractor_rationale": {
+            "A": "Using 1 SD (10 T-points) as the threshold ignores the specific reliability of the scale. A less reliable scale would require a larger change to reach the same confidence level.",
+            "C": "Clinical significance (normative criterion) and statistical reliability (RCI criterion) are separate questions. A score can cross into the normal range via measurement error, or fail to do so despite a genuinely reliable change.",
+            "D": "High reliability reduces — but does not eliminate — measurement error. Even r = .80 produces meaningful error; SEM = SD × √(1 − r) = 10 × √0.20 ≈ 4.5 T-points for individual scores."
+          }
+        },
+        {
+          "question_id": "q2",
+          "type": "differential_diagnosis",
+          "prompt": "The validity scales (L, F, K) were virtually identical across both administrations. What does this consistency tell you about interpretation of the scale change?",
+          "options": {
+            "A": "Identical validity scales confirm the client answered both times with the same response style — the substantive scale change is not an artifact of differing test-taking attitudes",
+            "B": "Identical validity scales indicate the test was re-administered too soon and the client remembered her previous answers",
+            "C": "L, F, K consistency means the clinical scales cannot have changed meaningfully — changes must reflect administration error",
+            "D": "Validity scale consistency is irrelevant to interpreting change on clinical scales across administrations"
+          },
+          "correct_answer": "A",
+          "explanation": "MMPI-2 validity scales assess the response style and test-taking attitude: L (Lie) detects naive denial; F (Infrequency) detects atypical symptom endorsement or random responding; K (Defensiveness) measures subtle defensiveness. If validity scales are stable across administrations, it confirms that the client approached both tests with the same openness and consistency. This rules out response style as an explanation for the clinical scale change — the Depression scale drop reflects genuine psychological change, not a shift from symptom exaggeration to underreporting.",
+          "distractor_rationale": {
+            "B": "Two years is far beyond the memory contamination window for MMPI-2. Memory effects for specific item responses are negligible over this interval.",
+            "C": "Validity scale stability does not constrain clinical scale variability — clinical scales and validity scales measure independent constructs. Clinical change while validity is stable is the ideal outcome.",
+            "D": "Validity scale data is directly relevant to confidence in clinical scale interpretation across time — it is not irrelevant."
+          }
+        }
+      ]
+    },
+    {
+      "id": "CP-PMET-0002",
+      "domain_code": "PMET",
+      "subdomain": "Diagnostic Accuracy and Decision Theory",
+      "difficulty_level": 3,
+      "encounter": {
+        "setting": "School psychology conference — multidisciplinary eligibility meeting",
+        "referral_context": "8-year-old referred for Specific Learning Disability evaluation. Teacher reports struggles with reading despite average classroom intelligence. Parents report the child 'reads perfectly at home.'",
+        "patient": {
+          "label": "School Psychologist (Presenting), Adult Male, 44",
+          "appearance_tags": [
+            "professional attire",
+            "presenting test protocols",
+            "confident posture"
+          ],
+          "initial_avatar_state": "speaking"
+        },
+        "phases": [
+          {
+            "phase_id": "chief_complaint",
+            "phase_label": "Assessment Findings Presentation",
+            "dialogue": "I administered the WISC-V and the WIAT-4 reading subtests. His Full-Scale IQ is 98 — solidly average. But his Basic Reading composite is at the 18th percentile. His phonological processing on the CTOPP-2 is at the 9th percentile. The team is asking whether this meets criteria for SLD in reading.",
+            "avatar_emotion": "speaking",
+            "behavioral_tags": [
+              "cognitive-achievement discrepancy",
+              "processing deficit",
+              "SLD eligibility"
+            ],
+            "chart_reveals": [
+              {
+                "category": "Chief Complaint",
+                "label": "Assessment question",
+                "value": "Does the psychometric profile support an SLD-Reading diagnosis per IDEA 2004 criteria?"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "WISC-V FSIQ",
+                "value": "98 (45th percentile) — average range"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "WIAT-4 Basic Reading",
+                "value": "82 (18th percentile) — low average; statistically below FSIQ"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "CTOPP-2 Phonological Processing",
+                "value": "75 (5th percentile) — well below average; key processing deficit"
+              }
+            ],
+            "clinician_prompt": null
+          },
+          {
+            "phase_id": "norm_reference",
+            "phase_label": "Normative Interpretation",
+            "dialogue": "A team member is asking: 'The 18th percentile is not that low — why is that a problem?' I want to explain why the combination of scores — not just the absolute reading score — is the key to this evaluation.",
+            "avatar_emotion": "speaking",
+            "behavioral_tags": [
+              "relative vs. absolute deficit",
+              "norm-referenced interpretation",
+              "processing deficit model"
+            ],
+            "chart_reveals": [
+              {
+                "category": "History of Present Illness",
+                "label": "Discrepancy analysis",
+                "value": "FSIQ 98 vs. Reading 82 — 16-point difference; statistically significant (p<.05) and uncommon (<15% of population)"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "Processing deficit",
+                "value": "Phonological processing deficit (CTOPP-2, 5th %ile) — specific underlying cognitive deficit"
+              },
+              {
+                "category": "Collateral / Context",
+                "label": "Exclusionary criteria review",
+                "value": "No sensory impairment, no limited English proficiency, no inadequate instruction — SLD criteria partially met"
+              }
+            ],
+            "clinician_prompt": "Can you walk the team through why we don't just look at the absolute reading score in isolation?"
+          },
+          {
+            "phase_id": "base_rate",
+            "phase_label": "Base Rate and Decision Analysis",
+            "dialogue": "One parent is worried that the phonological processing test might be flagging a lot of normal kids as having problems. I want to explain sensitivity and specificity — but in plain language for a multidisciplinary team.",
+            "avatar_emotion": "speaking",
+            "behavioral_tags": [
+              "diagnostic accuracy",
+              "base rate sensitivity",
+              "parent psychoeducation",
+              "test interpretation"
+            ],
+            "chart_reveals": [
+              {
+                "category": "Labs / Observations",
+                "label": "CTOPP-2 diagnostic accuracy",
+                "value": "Sensitivity ~.80, Specificity ~.85 for detecting phonological processing deficits in SLD"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "Base rate",
+                "value": "SLD-Reading prevalence ~5–15% school-age population; positive predictive value context dependent"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "Decision synthesis",
+                "value": "Convergent data across WIAT-4, CTOPP-2, and teacher/parent observation supports SLD-Reading eligibility"
+              }
+            ],
+            "clinician_prompt": "Can you explain to the team what the phonological processing score means for the probability that this child truly has a reading disability?"
+          }
+        ]
+      },
+      "questions": [
+        {
+          "question_id": "q1",
+          "type": "assessment_tool",
+          "prompt": "The CTOPP-2 phonological processing score is at the 5th percentile. With sensitivity = .80 and specificity = .85 for detecting SLD, what happens to the Positive Predictive Value (PPV) if the base rate of SLD in the general school population is 10%?",
+          "options": {
+            "A": "PPV is approximately 37% — the majority of children scoring this low do not have SLD",
+            "B": "PPV is approximately 80% — equal to the test's sensitivity",
+            "C": "PPV is approximately 95% — high specificity ensures most positives are true positives",
+            "D": "PPV cannot be calculated without knowing the student's IQ score"
+          },
+          "correct_answer": "A",
+          "explanation": "Using Bayes' theorem with sensitivity=.80, specificity=.85, base rate=.10: True Positives = .80 × .10 = .08; False Positives = .15 × .90 = .135; PPV = .08 / (.08 + .135) = .08 / .215 ≈ 37%. This means in a general school population, only ~37% of students who score at the 5th percentile on the CTOPP-2 actually have SLD — because the base rate is low. This illustrates why single tests are insufficient and why convergent data (WIAT, teacher observation, exclusionary criteria) is essential. In high-risk referred samples, the base rate is higher and PPV improves substantially.",
+          "distractor_rationale": {
+            "B": "PPV is not equal to sensitivity. PPV depends critically on base rate — the same sensitivity yields very different PPV values at different prevalence rates.",
+            "C": "High specificity reduces false positives, but with a 10% base rate, there are still many more true negatives (normal students) than true positives, so false positives remain substantial.",
+            "D": "IQ score is not required to calculate PPV. Bayes' theorem requires only sensitivity, specificity, and base rate (prior probability)."
+          }
+        },
+        {
+          "question_id": "q2",
+          "type": "differential_diagnosis",
+          "prompt": "Under IDEA 2004, which model for SLD identification is most consistent with the approach described in this evaluation?",
+          "options": {
+            "A": "Ability-Achievement Discrepancy model — the IQ-achievement gap alone qualifies the student",
+            "B": "Response to Intervention (RTI) — the student must first fail two tiers of evidence-based reading instruction",
+            "C": "Patterns of Strengths and Weaknesses (PSW) — convergent cognitive, achievement, and processing data supporting a specific deficit pattern",
+            "D": "Medical model — a psychiatrist must confirm dyslexia before the team can determine eligibility"
+          },
+          "correct_answer": "C",
+          "explanation": "The evaluation described uses the Patterns of Strengths and Weaknesses (PSW) approach: convergent data shows average general ability (FSIQ=98), below-expectation achievement (WIAT-4 Basic Reading=82), and a specific processing deficit (CTOPP-2 Phonological Processing=75, 5th %ile). PSW identifies a specific cognitive processing weakness that explains the academic deficit, supported by the IQ-achievement discrepancy but not relying on it alone. IDEA 2004 permits — but does not mandate — any specific model; states vary in approach.",
+          "distractor_rationale": {
+            "A": "The simple IQ-achievement discrepancy model has been substantially criticized and is no longer sufficient alone under IDEA 2004. It identifies statistical discrepancy but not processing deficits.",
+            "B": "RTI (now often called MTSS — Multi-Tiered System of Supports) is a valid identification pathway, but this evaluation used comprehensive psychometric testing, not a treatment response framework.",
+            "D": "SLD is an educational classification, not a medical diagnosis. Psychiatrists do not determine school eligibility under IDEA 2004; multidisciplinary educational teams make this determination."
+          }
+        }
+      ]
+    }
+  ]
+}

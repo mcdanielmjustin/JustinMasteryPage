@@ -1,0 +1,293 @@
+{
+  "domain_code": "BPSY",
+  "generated_at": "2026-03-01T00:00:00Z",
+  "encounters": [
+    {
+      "id": "CP-BPSY-0001",
+      "domain_code": "BPSY",
+      "subdomain": "Neurotransmitter Systems",
+      "difficulty_level": 2,
+      "encounter": {
+        "setting": "Neurology-psychiatry consultation clinic",
+        "referral_context": "Parkinson's disease patient referred to psychology after new-onset visual hallucinations following initiation of pramipexole (dopamine agonist).",
+        "patient": {
+          "label": "Adult Male, 64",
+          "appearance_tags": [
+            "resting tremor",
+            "masked facies",
+            "bradykinesia",
+            "shuffling gait"
+          ],
+          "initial_avatar_state": "confused"
+        },
+        "phases": [
+          {
+            "phase_id": "chief_complaint",
+            "phase_label": "Chief Complaint",
+            "dialogue": "My hands shake less with this new medicine but now I'm seeing things. Last night I saw people in my bedroom that weren't there. My wife thinks I'm losing my mind. But I feel mentally sharp. Is this the medication?",
+            "avatar_emotion": "confused",
+            "behavioral_tags": [
+              "visual hallucinations",
+              "insight preserved",
+              "medication side effect concern"
+            ],
+            "chart_reveals": [
+              {
+                "category": "Chief Complaint",
+                "label": "Primary concern",
+                "value": "New-onset visual hallucinations following pramipexole initiation"
+              },
+              {
+                "category": "Chief Complaint",
+                "label": "Motor status",
+                "value": "Tremor improved since starting dopamine agonist"
+              }
+            ],
+            "clinician_prompt": null
+          },
+          {
+            "phase_id": "history",
+            "phase_label": "Medication and Symptom History",
+            "dialogue": "The neurologist started me on pramipexole three weeks ago. The hallucinations began a week later. I know they aren't real — I can tell it's not a real person. But it's frightening at night. I haven't had confusion, memory problems, or any of that.",
+            "avatar_emotion": "anxious",
+            "behavioral_tags": [
+              "good insight into hallucinations",
+              "temporal link to medication",
+              "no cognitive decline"
+            ],
+            "chart_reveals": [
+              {
+                "category": "History of Present Illness",
+                "label": "Medication timeline",
+                "value": "Pramipexole started 3 weeks ago; hallucinations began ~1 week post-initiation"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "Hallucination character",
+                "value": "Visual — people/figures; non-threatening; patient recognizes as unreal (good insight)"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "Cognition",
+                "value": "Self-reported and collateral: no memory decline, no confusion; MoCA pending"
+              }
+            ],
+            "clinician_prompt": "Can you describe what you see and how long these episodes last?"
+          },
+          {
+            "phase_id": "neuropsych",
+            "phase_label": "Neuropsychological Context",
+            "dialogue": "I've had Parkinson's for four years. I know about the dopamine. But I don't understand why fixing my movement is causing me to see things. I thought dopamine was a good thing.",
+            "avatar_emotion": "guarded",
+            "behavioral_tags": [
+              "treatment dilemma",
+              "neurobiological confusion",
+              "good insight",
+              "teachable moment"
+            ],
+            "chart_reveals": [
+              {
+                "category": "History of Present Illness",
+                "label": "PD duration",
+                "value": "4 years; previously managed with levodopa/carbidopa"
+              },
+              {
+                "category": "Collateral / Context",
+                "label": "Pathway context",
+                "value": "Nigrostriatal pathway: dopamine deficit → motor symptoms; Mesolimbic pathway: dopamine excess → psychosis"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "MoCA",
+                "value": "Pending — to screen for Parkinson's disease dementia (PDD) vs. medication-induced psychosis"
+              }
+            ],
+            "clinician_prompt": "Can you tell me what your neurologist explained about how this medication works?"
+          }
+        ]
+      },
+      "questions": [
+        {
+          "question_id": "q1",
+          "type": "dsm_criteria",
+          "prompt": "Why do dopamine agonists like pramipexole cause psychotic symptoms in some Parkinson's patients, even while improving motor function?",
+          "options": {
+            "A": "Dopamine agonists are non-selective — they enhance dopamine in both the nigrostriatal and mesolimbic pathways, and mesolimbic excess causes psychosis",
+            "B": "Dopamine agonists cross the blood-brain barrier and cause serotonin depletion, which triggers hallucinations",
+            "C": "Motor improvement releases cognitive resources previously used for movement, paradoxically causing psychiatric symptoms",
+            "D": "Dopamine agonists activate glutamate receptors in the prefrontal cortex, producing visual hallucinations"
+          },
+          "correct_answer": "A",
+          "explanation": "Dopamine agonists are not pathway-selective. The nigrostriatal pathway (substantia nigra → striatum) is depleted in Parkinson's, causing motor symptoms; dopaminergic stimulation of this pathway improves movement. However, the same drugs also stimulate the mesolimbic pathway (VTA → nucleus accumbens/limbic system), where dopamine excess is the leading neurochemical hypothesis for psychosis. This creates a pharmacological dilemma: treating motor symptoms risks inducing psychiatric side effects via mesolimbic overdrive.",
+          "distractor_rationale": {
+            "B": "Serotonin depletion is not the mechanism — pramipexole acts primarily at D2/D3 dopamine receptors, not on serotonergic systems.",
+            "C": "No evidence supports a 'cognitive resource redistribution' mechanism. Hallucinations are a direct neurochemical effect, not an indirect consequence of motor improvement.",
+            "D": "Glutamate receptor activation is not the primary mechanism of dopamine agonist side effects. The NMDA/glutamate hypothesis is associated with ketamine/PCP-induced psychosis, not dopamine agonists."
+          }
+        },
+        {
+          "question_id": "q2",
+          "type": "treatment_planning",
+          "prompt": "Which antipsychotic is safest to use if pharmacological treatment of hallucinations becomes necessary in this Parkinson's patient?",
+          "options": {
+            "A": "Haloperidol — high-potency D2 blocker with robust antipsychotic evidence",
+            "B": "Risperidone — atypical antipsychotic with better EPS profile than typicals",
+            "C": "Quetiapine or clozapine — low D2 affinity minimizes worsening of motor symptoms",
+            "D": "Aripiprazole — partial D2 agonism makes it ideal for dopaminergic conditions"
+          },
+          "correct_answer": "C",
+          "explanation": "Most antipsychotics work by blocking D2 receptors. In Parkinson's patients, D2 blockade in the nigrostriatal pathway worsens motor symptoms (the same pathway the dopamine agonist is trying to support). Quetiapine and clozapine have very low D2 receptor affinity, making them far less likely to exacerbate parkinsonism while still reducing mesolimbic dopamine excess. Clozapine has the strongest evidence for PD psychosis; quetiapine is often used first due to easier monitoring. Typical antipsychotics are contraindicated.",
+          "distractor_rationale": {
+            "A": "Haloperidol is a high-potency D2 blocker — it would dramatically worsen Parkinson's motor symptoms by blocking the very pathway that needs dopaminergic support.",
+            "B": "Risperidone has intermediate D2 affinity and clinically worsens parkinsonism in PD patients — it is considered unsafe for this population.",
+            "D": "Aripiprazole's partial D2 agonism theoretically sounds appealing, but clinical evidence shows it can destabilize motor symptoms in PD; it is generally avoided in this population."
+          }
+        }
+      ]
+    },
+    {
+      "id": "CP-BPSY-0002",
+      "domain_code": "BPSY",
+      "subdomain": "Sleep Physiology",
+      "difficulty_level": 3,
+      "encounter": {
+        "setting": "Behavioral sleep medicine clinic — initial consultation",
+        "referral_context": "Referred by internist for chronic insomnia unresponsive to sleep hygiene education. Patient declined sleep medication. Requesting non-pharmacological approaches.",
+        "patient": {
+          "label": "Adult Female, 47",
+          "appearance_tags": [
+            "dark circles under eyes",
+            "fatigued appearance",
+            "tense posture"
+          ],
+          "initial_avatar_state": "distressed"
+        },
+        "phases": [
+          {
+            "phase_id": "chief_complaint",
+            "phase_label": "Chief Complaint",
+            "dialogue": "I fall asleep fine — that's never the problem. But I wake up at 3 AM every single night and then I just lie there for two or three hours. My mind races. By the time I fall back asleep it's almost time to get up. I'm exhausted all day.",
+            "avatar_emotion": "distressed",
+            "behavioral_tags": [
+              "sleep maintenance insomnia",
+              "early morning awakening",
+              "rumination",
+              "daytime fatigue"
+            ],
+            "chart_reveals": [
+              {
+                "category": "Chief Complaint",
+                "label": "Insomnia subtype",
+                "value": "Sleep maintenance insomnia with early morning awakening (~3 AM nightly)"
+              },
+              {
+                "category": "Chief Complaint",
+                "label": "Duration",
+                "value": "~14 months; began after job promotion and increased work stress"
+              }
+            ],
+            "clinician_prompt": null
+          },
+          {
+            "phase_id": "history",
+            "phase_label": "History of Present Illness",
+            "dialogue": "Once I'm awake at 3, my mind goes immediately to work problems. Deadlines, emails I forgot to send, what I need to do tomorrow. It's like my brain shifts into work mode. I've tried melatonin — it doesn't help because I'm not having trouble falling asleep. I watch the clock and it makes it worse.",
+            "avatar_emotion": "anxious",
+            "behavioral_tags": [
+              "rumination",
+              "clock-watching",
+              "cognitive hyperarousal",
+              "compensatory behaviors"
+            ],
+            "chart_reveals": [
+              {
+                "category": "History of Present Illness",
+                "label": "Wake content",
+                "value": "Work-related cognitive hyperarousal; anticipatory planning and problem-solving"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "Maladaptive behaviors",
+                "value": "Clock-watching; attempted melatonin (ineffective for maintenance insomnia)"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "Precipitant",
+                "value": "Promotion 14 months ago; increased responsibility and anticipatory anxiety"
+              }
+            ],
+            "clinician_prompt": "What goes through your mind when you wake up at 3 AM?"
+          },
+          {
+            "phase_id": "sleep_architecture",
+            "phase_label": "Sleep Architecture Assessment",
+            "dialogue": "I've never had a sleep study. I don't snore. My partner says I don't stop breathing. The exhaustion is the worst part — I feel like I'm moving through fog all day, but at my 4 PM slump I suddenly feel awake again. Then I'm alert at bedtime, which makes no sense.",
+            "avatar_emotion": "confused",
+            "behavioral_tags": [
+              "hyperarousal at bedtime",
+              "afternoon alertness",
+              "circadian disruption",
+              "second wind phenomenon"
+            ],
+            "chart_reveals": [
+              {
+                "category": "History of Present Illness",
+                "label": "Sleep architecture clue",
+                "value": "Wakes at ~3 AM (REM-dominant period); no snoring or apnea symptoms"
+              },
+              {
+                "category": "History of Present Illness",
+                "label": "Circadian pattern",
+                "value": "'Second wind' at 4 PM and bedtime hyperarousal suggest HPA axis/cortisol dysregulation"
+              },
+              {
+                "category": "Labs / Observations",
+                "label": "Polysomnography",
+                "value": "Not indicated (no apnea symptoms); Actigraphy + sleep diary ordered"
+              }
+            ],
+            "clinician_prompt": "Tell me about what time of day you feel most alert versus most exhausted."
+          }
+        ]
+      },
+      "questions": [
+        {
+          "question_id": "q1",
+          "type": "dsm_criteria",
+          "prompt": "This patient wakes at 3 AM with racing thoughts. Which sleep architecture principle explains why stress most commonly causes awakening in the second half of the night?",
+          "options": {
+            "A": "NREM Stage 3 (slow-wave sleep) dominates the second half, and stress hormones preferentially disrupt slow waves",
+            "B": "REM sleep predominates in the second half of the night, and cortisol/stress arousal disrupts REM disproportionately",
+            "C": "The circadian pacemaker reaches its nadir at 3 AM, creating a vulnerability window regardless of stress",
+            "D": "Adenosine clearance is complete by 3 AM, removing the homeostatic sleep drive and causing spontaneous awakening"
+          },
+          "correct_answer": "B",
+          "explanation": "Sleep architecture follows a predictable ultradian pattern across the night. Slow-wave sleep (SWS/Stage N3) dominates the first third of the night (homeostatic recovery), while REM sleep cycles extend and become more dominant in the final third (approximately 4–6 AM). Psychological stress activates the HPA axis, elevating cortisol, which is a potent REM suppressant and arousal activator. Because the 3–5 AM window is REM-dominant, stress hormones preferentially disrupt this stage, causing awakening. This also explains why the patient's 'second wind' emerges in the late afternoon — cortisol follows a diurnal pattern.",
+          "distractor_rationale": {
+            "A": "SWS dominates the first half of the night (first 2–3 cycles), not the second half. Stress-induced cortisol would be more disruptive to the REM-rich second half.",
+            "C": "The circadian temperature nadir (~4 AM) does create a sleep-promoting window, but it does not specifically cause stress-related awakening — it actually promotes sleep continuity.",
+            "D": "Adenosine (homeostatic sleep pressure) builds during waking and dissipates during sleep continuously — it does not clear by 3 AM. Describing adenosine as 'complete' is inaccurate."
+          }
+        },
+        {
+          "question_id": "q2",
+          "type": "treatment_planning",
+          "prompt": "Which CBT-I (Cognitive Behavioral Therapy for Insomnia) component is most directly targeted at this patient's pattern of clock-watching and bedtime hyperarousal?",
+          "options": {
+            "A": "Sleep restriction therapy — limiting time in bed to consolidate sleep and rebuild sleep drive",
+            "B": "Stimulus control — reassociating the bed/bedroom with sleep rather than wakefulness and arousal",
+            "C": "Sleep hygiene education — eliminating caffeine, alcohol, and irregular sleep schedules",
+            "D": "Relaxation training — progressive muscle relaxation before bed to reduce somatic tension"
+          },
+          "correct_answer": "B",
+          "explanation": "Stimulus control is the CBT-I component most directly targeting conditioned arousal — the process by which the bed and bedroom become associated with wakefulness, worry, and frustration through repeated pairing. Rules include: use the bed only for sleep and sex; get out of bed if unable to sleep within 20 minutes; return only when sleepy; maintain consistent wake times. This breaks the conditioned hyperarousal the patient experiences at bedtime. Clock-watching is directly targeted by removing clocks from view. Stimulus control has the strongest individual component evidence base in CBT-I.",
+          "distractor_rationale": {
+            "A": "Sleep restriction is effective for sleep efficiency but primarily targets homeostatic sleep drive — it reduces time in bed to consolidate sleep and is often uncomfortable initially. It does not primarily target conditioned arousal.",
+            "C": "Sleep hygiene is necessary but not sufficient — it has the weakest evidence of any CBT-I component when used alone and does not address the conditioned arousal maintaining this patient's insomnia.",
+            "D": "Relaxation training addresses somatic arousal (muscle tension, physiological activation) — relevant for some patients, but this patient describes cognitive hyperarousal (racing thoughts) as the primary maintaining factor."
+          }
+        }
+      ]
+    }
+  ]
+}
