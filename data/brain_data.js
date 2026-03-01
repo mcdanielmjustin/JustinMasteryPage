@@ -223,6 +223,266 @@ window.__BRAIN_DATA = {
         ],
         "vascular": "Midbrain: PCA · basilar perforators | Pons: basilar artery | Medulla: PICA · anterior spinal artery"
       }
+    },
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       MEDIAL VIEW REGIONS — 12 new structures visible in midsagittal section
+       ───────────────────────────────────────────────────────────────────────── */
+
+    "medial_frontal": {
+      "label": "Medial Frontal Cortex",
+      "info": {
+        "ba": "BA 6 (supplementary motor area) · BA 8 (frontal eye fields, medial) · BA 32/24 (anterior cingulate overlap) · BA 10 (frontopolar)",
+        "functions": [
+          "Supplementary motor area (SMA, BA 6): planning and initiating voluntary movements — critical for bimanual and sequenced motor acts",
+          "Mediates internally-generated (self-initiated) movements vs. externally-triggered (premotor) movements",
+          "Voluntary bladder and bowel control — medial wall contains the micturition center",
+          "Leg and foot motor/sensory representation — the homuncular leg area lies on the medial wall (ACA territory)",
+          "Attention and task-switching via adjacency to anterior cingulate cortex"
+        ],
+        "syndromes": [
+          "Anterior cerebral artery (ACA) stroke: contralateral leg > arm weakness and sensory loss (leg representation on medial surface); arm and face relatively spared (MCA territory); urinary incontinence common due to loss of micturition center",
+          "Abulia: medial frontal + anterior cingulate damage causes profound apathy, poverty of speech and movement, loss of initiation; patient appears awake but does not initiate behavior; distinct from depression — patient does not report subjective distress",
+          "Alien hand syndrome (frontal type): SMA + corpus callosum damage causes one hand to act involuntarily against the patient's will; typically the non-dominant hand reaches, grasps, or interferes with the dominant hand's actions",
+          "SMA syndrome: temporary mutism and contralateral hemiparesis after SMA resection (e.g., tumor removal); typically resolves within weeks as ipsilateral SMA compensates — important prognostic point for presurgical counseling"
+        ],
+        "vascular": "Anterior cerebral artery (ACA) — pericallosal and callosomarginal branches"
+      }
+    },
+
+    "cingulate_gyrus": {
+      "label": "Cingulate Gyrus",
+      "info": {
+        "ba": "BA 24 (anterior cingulate cortex, ACC) · BA 23 (posterior cingulate) · BA 31 · BA 32",
+        "functions": [
+          "Anterior cingulate (ACC): conflict monitoring, error detection, pain affect, emotional processing — the brain's 'alarm bell'",
+          "Posterior cingulate: spatial orientation, episodic memory retrieval, self-referential processing; highly activated at rest (default mode network hub)",
+          "Part of the Papez circuit — processes emotional valence of experience and sends emotional tone to cortex",
+          "Voluntary movement initiation and motivation (adjacency to SMA and medial PFC)",
+          "Regulates autonomic responses to emotional stimuli (heart rate, blood pressure modulation)"
+        ],
+        "syndromes": [
+          "Abulia / akinetic mutism: bilateral anterior cingulate damage produces profound reduction in spontaneous movement, speech, and emotional expression; patient appears awake but makes no self-initiated response; often confused with vegetative state — distinction: akinetic mutism can sometimes respond to external stimulation",
+          "Anterior cingulate syndrome: impaired response inhibition, poor performance on Stroop interference task, perseveration; behaviorally overlaps with frontal lobe syndrome but anatomically distinct",
+          "Pain asymbolia: cingulate + insular damage disconnects pain sensation from its affective/motivational component; patient reports pain but is not distressed by it — no withdrawal, no suffering; implies the ACC processes the 'unpleasantness' of pain, not the sensation itself",
+          "Cingulotomy (surgical): historically used for intractable depression and OCD; reduces emotional suffering without eliminating sensation; suggests ACC is necessary for the affective suffering component of both pain and mood disorders"
+        ],
+        "vascular": "Anterior cerebral artery (anterior cingulate) · Posterior cerebral artery (posterior cingulate)"
+      }
+    },
+
+    "corpus_callosum": {
+      "label": "Corpus Callosum",
+      "info": {
+        "ba": "N/A (white matter commissure — not cortex)",
+        "functions": [
+          "Interhemispheric transfer of sensory, motor, language, and cognitive information between homologous cortical areas",
+          "Coordinates bilateral motor movements — genu connects prefrontal regions; body connects motor/sensory strips; splenium connects visual and parietal areas",
+          "Enables left language areas to process visual input arriving at the right occipital cortex (critical for reading)",
+          "Synchronizes activity between hemispheres for unified conscious experience",
+          "Largest white matter structure in the brain — ~300 million axons"
+        ],
+        "syndromes": [
+          "Split-brain syndrome (callosotomy): surgical severing for intractable epilepsy creates two semi-independent hemispheres; left hand does not know what right hand is doing; left hemisphere cannot verbally identify objects held in the left hand (right hemisphere controls left hand but cannot speak); each hemisphere can learn independently",
+          "Alien hand syndrome: callosal damage (especially genu or anterior body) causes one hand to act autonomously and oppose the other hand's intentional movements; typically affects non-dominant hand; patient experiences the hand as foreign",
+          "Pure alexia without agraphia (posterior disconnection): left occipital cortex + splenium of CC damage; words seen by right occipital cortex cannot reach left angular gyrus (splenium lesion blocks transfer); patient can write normally but cannot read what they just wrote — a remarkable double dissociation",
+          "Anterior callosal disconnection: ideomotor apraxia in the left hand (cannot follow verbal commands with left hand despite intact left-hand strength); tactile anomia of left hand (cannot name objects placed in left hand); right hand performs normally"
+        ],
+        "vascular": "Anterior cerebral artery (genu + anterior body) · Posterior cerebral artery (splenium)"
+      }
+    },
+
+    "thalamus": {
+      "label": "Thalamus",
+      "info": {
+        "ba": "N/A (subcortical diencephalon — multiple nuclei)",
+        "functions": [
+          "Relay station for virtually all sensory modalities en route to cortex (olfaction is the sole exception — projects directly to pyriform cortex)",
+          "VPL nucleus (ventroposterolateral): relays somatosensory touch/proprioception/pain from body to somatosensory cortex; VPM relays face sensation",
+          "LGN (lateral geniculate nucleus): visual relay — receives optic tract, projects to V1 via optic radiations",
+          "MGN (medial geniculate nucleus): auditory relay — projects to primary auditory cortex (Heschl's gyrus)",
+          "Anterior nucleus: part of Papez circuit — receives mamillary bodies via mamillothalamic tract, projects to cingulate gyrus",
+          "Mediodorsal nucleus: connects prefrontal cortex; involved in executive function, working memory, and emotional tone; destroyed in Korsakoff syndrome",
+          "Pulvinar: largest thalamic nucleus; attentional gating of visual and multimodal information; integrates with parietal and temporal association areas"
+        ],
+        "syndromes": [
+          "Thalamic syndrome (Dejerine-Roussy syndrome): thalamic infarct causes contralateral hemibody sensory loss initially, then delayed-onset central post-stroke pain — chronic burning, aching dysesthesia that is notoriously difficult to treat; pathognomonic for thalamic vascular lesion",
+          "Thalamic (transcortical) aphasia: dominant thalamic lesion (especially left pulvinar/VPL) produces fluent aphasia with preserved repetition but impaired naming and comprehension; differs from cortical aphasia by intact repetition; fluctuating severity is characteristic",
+          "Korsakoff amnesia: destruction of mediodorsal thalamic nucleus (often with mamillary body damage from thiamine deficiency) causes severe anterograde amnesia with confabulation; patients are not distressed and fill memory gaps with plausible invented stories",
+          "Fatal familial insomnia (FFI): prion disease selectively targeting anterior and mediodorsal thalamic nuclei; progressive loss of ability to sleep, autonomic dysfunction (sweating, hyperthermia, tachycardia), ataxia, dementia; death within months to years",
+          "Thalamic neglect: right thalamic lesion can produce contralateral spatial neglect and extinction clinically indistinguishable from right parietal neglect — important to distinguish via imaging"
+        ],
+        "vascular": "Posterior cerebral artery (thalamoperforating and thalamogeniculate branches) · Posterior communicating artery (tuberothalamic artery)"
+      }
+    },
+
+    "hypothalamus": {
+      "label": "Hypothalamus",
+      "info": {
+        "ba": "N/A (subcortical diencephalon — multiple nuclei)",
+        "functions": [
+          "Autonomic nervous system master regulator — coordinates sympathetic (lateral hypothalamus) and parasympathetic (anterior/medial hypothalamus) outputs",
+          "Endocrine master: releases and inhibits pituitary releasing hormones (GnRH, CRH, TRH, GHRH, somatostatin, dopamine for prolactin inhibition)",
+          "Hunger and satiety: lateral hypothalamus drives hunger (lesion → aphagia); ventromedial nucleus signals satiety (lesion → hyperphagia)",
+          "Circadian rhythm: suprachiasmatic nucleus (SCN) is the master biological clock; receives direct retinal input (retinohypothalamic tract); regulates melatonin, cortisol, body temperature cycles",
+          "Temperature regulation: anterior hypothalamus = cooling (dissipation); posterior hypothalamus = heat conservation; lesion of anterior → hyperthermia",
+          "Fluid balance: osmoreceptors trigger ADH (vasopressin) release from posterior pituitary via supraoptic and paraventricular nuclei"
+        ],
+        "syndromes": [
+          "Lateral hypothalamic lesion: aphagia and adipsia — loss of hunger and thirst drive; without treatment patients die of starvation and dehydration; the lateral hypothalamus is the 'hunger center'",
+          "Ventromedial hypothalamic lesion: hyperphagia and obesity — patient cannot stop eating despite satiety signals; the VMH is the 'satiety center'; historically demonstrated in rat lesion studies",
+          "Diabetes insipidus: destruction of supraoptic or paraventricular nuclei disrupts ADH (vasopressin) production; massive urine output (polyuria) and extreme thirst (polydipsia); urine specific gravity very low; treat with desmopressin (synthetic ADH)",
+          "Wernicke's encephalopathy (acute Korsakoff): thiamine (B1) deficiency damages hypothalamus, mamillary bodies, and periaqueductal gray; acute triad: confusion, ataxia, ophthalmoplegia (CN VI palsy, nystagmus); if untreated → Korsakoff psychosis with permanent amnesia",
+          "Klüver-Bucy syndrome: bilateral temporal + amygdala + hypothalamic damage; hyperphagia, hypersexuality, placidity (loss of fear), hyperorality (mouthing objects), visual agnosia; most often from herpes simplex encephalitis (predilection for temporal lobes) or bilateral temporal lobectomy"
+        ],
+        "vascular": "Posterior communicating artery (perforators) · Anterior cerebral artery (preoptic and anterior hypothalamus)"
+      }
+    },
+
+    "mamillary_bodies": {
+      "label": "Mamillary Bodies",
+      "info": {
+        "ba": "N/A (subcortical — posterior hypothalamic nuclei)",
+        "functions": [
+          "Critical relay station in the Papez circuit: receive hippocampal output via the fornix (postcommissural fibers)",
+          "Project to the anterior thalamic nucleus via the mamillothalamic tract — completing the hippocampus → fornix → mamillary bodies → anterior thalamus → cingulate → hippocampus loop",
+          "Involved in spatial memory, navigation, and recollective (explicit) memory encoding",
+          "Integrate olfactory and limbic signals for contextual memory"
+        ],
+        "syndromes": [
+          "Korsakoff syndrome (Korsakoff's psychosis): bilateral mamillary body destruction from chronic thiamine (vitamin B1) deficiency, classically in alcoholism; severe anterograde amnesia (cannot form new long-term memories) + retrograde amnesia (gradient: remote memories better preserved than recent) + confabulation (patient effortlessly invents plausible but false memories to fill gaps; not intentional lying); striking feature: patients show NO distress about their amnesia — they confabulate instead of being frustrated",
+          "Wernicke-Korsakoff spectrum: Wernicke's encephalopathy (acute phase — confusion, ataxia, ophthalmoplegia from thiamine deficiency) → Korsakoff's psychosis (chronic phase — amnesia + confabulation) if thiamine replacement is delayed; give IV thiamine BEFORE glucose to avoid precipitating or worsening Wernicke's",
+          "Mamillary body atrophy on MRI: pathognomonic structural finding in chronic alcohol-related brain damage; visible as bilateral volume loss on T1-weighted MRI; absent or attenuated mamillary body enhancement on post-contrast T1 during acute Wernicke's"
+        ],
+        "vascular": "Posterior cerebral artery (mamillary branches) · Posterior communicating artery"
+      }
+    },
+
+    "hippocampus": {
+      "label": "Hippocampus",
+      "info": {
+        "ba": "N/A (archicortex — 3-layer allocortex, not 6-layer neocortex)",
+        "functions": [
+          "Encoding new declarative (explicit) memories — both episodic (personal experiences) and semantic (factual knowledge)",
+          "Memory consolidation: transfers information from short-term working memory to long-term cortical storage (systems consolidation over weeks to years)",
+          "Spatial navigation and cognitive mapping — place cells fire for specific locations; grid cells in entorhinal cortex provide metric; hippocampus computes location",
+          "Pattern separation: distinguishes similar memories from each other (CA3 and dentate gyrus); prevents interference between overlapping experiences",
+          "Part of Papez circuit: postcommissural fornix projects to mamillary bodies; precommissural fornix projects to septal nuclei and hypothalamus"
+        ],
+        "syndromes": [
+          "Bilateral hippocampal amnesia (Patient H.M.): complete anterograde amnesia for declarative memory after bilateral medial temporal resection; could not form any new long-term explicit memories; met the same people as strangers each day; intelligence, language, and procedural memory (striatum/cerebellum) fully preserved; remote memories from before surgery largely intact; spatial memory also severely impaired",
+          "Unilateral hippocampal lesion: left hippocampus — verbal memory impairment (cannot learn new word lists, stories, names); right hippocampus — nonverbal/spatial memory impairment (cannot learn new routes, faces, spatial layouts); neither alone causes severe global amnesia",
+          "Transient global amnesia (TGA): sudden-onset dense anterograde amnesia lasting 1–24 hours, then resolving completely; patient repeatedly asks the same questions (what happened? where am I?); likely vascular etiology (venous congestion); complete recovery expected",
+          "Hippocampal sclerosis / mesial temporal sclerosis (MTS): most common cause of drug-resistant temporal lobe epilepsy; characterized by hippocampal atrophy and gliosis on MRI; surgical resection (anterior temporal lobectomy) achieves seizure freedom in ~70%; must assess contralateral hippocampus function preoperatively (Wada test)",
+          "Alzheimer's disease: hippocampal atrophy is the earliest and most prominent structural change; amyloid plaques and tau neurofibrillary tangles first accumulate in entorhinal cortex then CA1 of hippocampus; anterograde memory failure for episodic memories is the cardinal early symptom"
+        ],
+        "vascular": "Posterior cerebral artery (hippocampal branches — PCA supplies most of hippocampus) · Anterior choroidal artery (anterior hippocampus)"
+      }
+    },
+
+    "amygdala": {
+      "label": "Amygdala",
+      "info": {
+        "ba": "N/A (subcortical telencephalic limbic structure — basolateral complex + centromedial complex + cortical nuclei)",
+        "functions": [
+          "Fear conditioning and threat detection — basolateral complex (BLA) learns CS→fear associations (LeDoux's 'low road': thalamus → amygdala, fast; thalamus → cortex → amygdala, slow but accurate)",
+          "Emotional memory consolidation — amygdala modulates hippocampal encoding of emotionally arousing events; epinephrine and cortisol gate this enhancement; explains why emotional events are remembered more vividly",
+          "Social cognition and face processing — reading emotional facial expressions, especially fear; right amygdala dominant for this function",
+          "Attaches emotional significance to stimuli — stimulus-affect association learning",
+          "Mediates conditioned fear responses and triggers autonomic fear reactions (central nucleus → brainstem → heart rate, freezing, cortisol)"
+        ],
+        "syndromes": [
+          "Klüver-Bucy syndrome: bilateral amygdala + anterior temporal lobe destruction; cardinal features — psychic blindness (visual agnosia; cannot identify objects by sight), hyperorality (compulsively mouths and tastes all objects), hypersexuality (indiscriminate sexual behavior), placidity (complete loss of fear and aggression; approaches predators without fear), hypermetamorphosis (compelled to attend and react to every environmental stimulus); causes: herpes simplex encephalitis (temporal lobe predilection), bilateral temporal lobectomy, severe Alzheimer's disease",
+          "Urbach-Wiethe disease (lipoid proteinosis): rare autosomal recessive condition causing bilateral amygdala calcification; patient cannot experience fear, cannot recognize fearful facial expressions in others, cannot be conditioned to fear signals; provides the definitive natural human model of selective amygdala knockout",
+          "PTSD pathophysiology: hyperactive, hypersensitive amygdala with diminished prefrontal cortical inhibition; exaggerated fear responses to trauma-related cues; inability to extinguish conditioned fear; reduced hippocampal volume also observed (possibly pre-existing vulnerability)",
+          "Anxiety disorders: amygdala hyperreactivity implicated across generalized anxiety disorder, social phobia, and specific phobias; benzodiazepines (via GABA-A receptors), SSRIs, and exposure therapy all reduce amygdala responsivity"
+        ],
+        "vascular": "Anterior choroidal artery (primary supply) · Middle cerebral artery (anterior temporal branches)"
+      }
+    },
+
+    "fornix": {
+      "label": "Fornix",
+      "info": {
+        "ba": "N/A (white matter tract — not cortex)",
+        "functions": [
+          "Primary output pathway of the hippocampus — carries hippocampal axons arching anteriorly beneath the corpus callosum",
+          "Postcommissural fornix: hippocampus → mamillary bodies (via columns of fornix), the key Papez circuit link",
+          "Precommissural fornix: hippocampus → septal nuclei and preoptic hypothalamus (above anterior commissure)",
+          "Bidirectional pathway — also carries return projections from septal nuclei back to hippocampus (septo-hippocampal cholinergic projections for memory)",
+          "Essential anatomical landmark on medial brain view: recognizing the fornix's location below the corpus callosum identifies the plane of dissection and structures nearby"
+        ],
+        "syndromes": [
+          "Fornix transection amnesia: bilateral surgical or traumatic fornix damage produces amnesia closely resembling bilateral hippocampal amnesia — severe anterograde declarative amnesia with retrograde gradient; most often caused by surgical approaches to the third ventricle or by colloid cysts compressing the fornix at the foramen of Monro",
+          "Colloid cyst of third ventricle: benign, mucin-filled cyst at foramen of Monro; compresses bilateral fornices; produces episodic memory loss, positional headaches (worse bending forward), and — rarely — sudden death from acute obstructive hydrocephalus; surgical removal is curative but carries fornix injury risk",
+          "Wernicke-Korsakoff spectrum: fornix degeneration is part of the pathological substrate alongside mamillary body necrosis and thalamic mediodorsal nucleus damage; the amnestic syndrome reflects disruption of the entire Papez circuit rather than a single locus"
+        ],
+        "vascular": "Anterior cerebral artery (body and column of fornix) · Posterior communicating artery (crus of fornix)"
+      }
+    },
+
+    "occipital_medial": {
+      "label": "Medial Occipital (Cuneus / Precuneus)",
+      "info": {
+        "ba": "BA 17 (primary visual cortex V1, along calcarine sulcus) · BA 18 (V2) · BA 7 (precuneus — superior parietal medial)",
+        "functions": [
+          "Primary visual cortex (V1) receives input from LGN along the calcarine sulcus — the calcarine sulcus is the single most reliable MRI landmark for identifying V1",
+          "Upper visual field represented in the cuneus (above calcarine sulcus)",
+          "Lower visual field represented in the lingual gyrus (below calcarine sulcus) — 'sky is above the sulcus, ground is below'",
+          "Precuneus (BA 7): visuospatial imagery and mental rotation; episodic memory retrieval; self-referential processing; one of the most metabolically active cortical areas at rest (default mode network)",
+          "Visual imagination and mental imagery — highly activated when imagining scenes even without visual input"
+        ],
+        "syndromes": [
+          "Cortical blindness: bilateral V1 destruction causes complete loss of conscious vision despite intact eyes and optic nerves; pupillary light reflex is preserved (pretectal pathway via superior colliculus is intact); Anton's syndrome — patient denies blindness and confabulates detailed visual experiences (anosognosia for cortical blindness)",
+          "Homonymous hemianopia: unilateral V1 lesion causes loss of the contralateral visual field in both eyes (e.g., right occipital damage → left homonymous hemianopia); macular sparing is common because the occipital pole (macular representation) receives dual blood supply from both MCA and PCA",
+          "Superior quadrantanopia ('pie-in-the-sky'): lesion of lower bank of calcarine sulcus (cuneus) destroys upper visual field representation; classically caused by temporal lobe lesions damaging Meyer's loop of the inferior optic radiations (which loop anteriorly in the temporal lobe carrying upper field fibers)",
+          "Posterior cortical atrophy (PCA syndrome): progressive degeneration beginning in occipital and parietal cortex; early prominent visuospatial deficits, dressing apraxia, simultanagnosia, optic ataxia; often a variant of Alzheimer's disease; memory relatively preserved until late"
+        ],
+        "vascular": "Posterior cerebral artery (calcarine artery — primary supply to V1) · MCA (occipital pole / macular representation — dual supply)"
+      }
+    },
+
+    "cerebellum_medial": {
+      "label": "Cerebellum (Medial View)",
+      "info": {
+        "ba": "N/A (cerebellar cortex — Purkinje cells, granule cells, molecular layer)",
+        "functions": [
+          "Vermis (midline, visible on medial section): axial and truncal coordination, postural stability, gait coordination, eye movements",
+          "Flocculonodular lobe (inferior vermis / nodule / flocculus): vestibulo-cerebellar coordination — integrates vestibular input for balance and eye movement stabilization (VOR)",
+          "Lateral hemispheres (not in medial view): coordination of ipsilateral limb movements; fine motor control",
+          "Timing and sequencing of movements — acts as an internal forward model predicting and correcting movement trajectories in real time",
+          "Motor learning: cerebellar long-term depression (LTD) of Purkinje cell synapses underlies adaptation of motor programs (e.g., prism adaptation)"
+        ],
+        "syndromes": [
+          "Midline / vermis lesion: truncal and gait ataxia — wide-based, lurching 'drunken' gait; truncal titubation (rhythmic swaying of the trunk); nystagmus; finger-nose-finger relatively spared; most common cause in children: medulloblastoma arising from midline cerebellum (PICA territory)",
+          "Flocculonodular lesion: vestibular ataxia — severe imbalance and inability to stand or walk (positive Romberg-like truncal instability) WITHOUT limb ataxia; finger-nose-finger normal when seated; characteristic nystagmus",
+          "ALL cerebellar deficits are IPSILATERAL to the lesion: cerebellar pathways decussate twice (double cross) — cerebellar output crosses in superior cerebellar peduncle to opposite red nucleus, then red nucleus projection crosses again; therefore lesion side = deficit side, opposite of cerebral cortex lesions",
+          "PICA occlusion (Wallenberg / lateral medullary syndrome): also affects inferior cerebellum; adds crossed brainstem signs (ipsilateral facial numbness, Horner's, dysphagia) to ipsilateral limb ataxia + contralateral body pain/temperature loss"
+        ],
+        "vascular": "Posterior inferior cerebellar artery (PICA) — vermis and inferior cerebellar hemisphere · Superior cerebellar artery (SCA) — superior vermis and dentate nucleus"
+      }
+    },
+
+    "brainstem_medial": {
+      "label": "Brainstem (Medial View)",
+      "info": {
+        "ba": "N/A — contains cranial nerve nuclei III–XII, reticular formation, ascending/descending tracts; three segments: midbrain (mesencephalon) · pons · medulla oblongata",
+        "functions": [
+          "Conduit for all ascending sensory tracts (spinothalamic, medial lemniscus) and descending motor tracts (corticospinal, corticobulbar) between cortex and spinal cord",
+          "Cranial nerve nuclei III–XII: oculomotor, trochlear, trigeminal, abducens, facial, vestibulocochlear, glossopharyngeal, vagal, accessory, hypoglossal",
+          "Reticular activating system (RAS, pontomesencephalic): maintains arousal and consciousness — damage causes coma",
+          "Autonomic control centers in medulla: cardiovascular (nucleus tractus solitarius), respiratory (pre-Bötzinger complex), and vomiting centers",
+          "Connects cerebellum to brainstem via cerebellar peduncles: superior (output via dentate), middle (largest, input from pons), inferior (input/output via medulla)"
+        ],
+        "syndromes": [
+          "Crossed (alternating) signs — pathognomonic for brainstem localization: ipsilateral cranial nerve palsy (from CN nucleus at lesion level) PLUS contralateral body hemiplegia/sensory loss (from descending/ascending tracts that cross above or below the lesion); the crossing pattern is the key to brainstem diagnosis",
+          "Wallenberg syndrome (lateral medullary / PICA): ipsilateral facial numbness (CN V spinal nucleus), Horner's syndrome (descending sympathetic fibers), dysphagia/dysphonia (CN IX/X nuclei), ipsilateral ataxia (inferior cerebellar peduncle) + contralateral body pain/temperature loss (spinothalamic tract crosses below); no motor weakness",
+          "Weber syndrome (midbrain): ipsilateral CN III palsy (ptosis, dilated pupil, 'down-and-out' eye) + contralateral hemiplegia; lesion in medial midbrain (cerebral peduncle + CN III fascicles)",
+          "Millard-Gubler syndrome (pons): ipsilateral CN VI (lateral gaze palsy) + CN VII (facial weakness) + contralateral hemiplegia; lesion in ventral pons",
+          "Locked-in syndrome (ventral pons): bilateral ventral pontine infarct destroys corticospinal and corticobulbar tracts; complete quadriplegia and anarthria; consciousness fully preserved; patient can communicate only via vertical eye movements and blinking (vertical gaze pathway spared in dorsal midbrain)"
+        ],
+        "vascular": "Midbrain: PCA and basilar perforators · Pons: basilar artery (paramedian and circumferential branches) · Medulla: PICA (lateral medulla) · anterior spinal artery (medial medulla)"
+      }
     }
   },
   "questions": [
