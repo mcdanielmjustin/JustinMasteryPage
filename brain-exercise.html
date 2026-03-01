@@ -472,6 +472,21 @@
       letter-spacing: 0.03em;
     }
 
+    /* ── VIEW TABS ───────────────────────────────────────────────────────── */
+    .view-tabs {
+      display: flex; gap: 8px; width: 100%; max-width: 700px; margin-bottom: 12px;
+    }
+    .view-tab {
+      flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 9px; font-size: 12px; font-weight: 600;
+      color: var(--text3); cursor: pointer; transition: all 0.2s;
+    }
+    .view-tab.active {
+      background: rgba(244,63,94,0.1); border-color: rgba(244,63,94,0.35);
+      color: var(--rose-light);
+    }
+    .view-tab:hover:not(.active) { border-color: rgba(244,63,94,0.2); color: var(--text2); }
+
     @media (max-width: 500px) {
       .question-card { padding: 18px; }
       .q-text { font-size: 14px; }
@@ -521,8 +536,14 @@
       &#9733; This region is damaged
     </div>
 
-    <!-- SVG Brain Diagram -->
-    <div class="brain-container">
+    <!-- View switcher tabs -->
+    <div class="view-tabs" id="view-tabs">
+      <button class="view-tab active" id="tab-lateral" onclick="switchView('lateral')">&#129504; Lateral View</button>
+      <button class="view-tab" id="tab-medial" onclick="switchView('medial')">&#10022; Medial View</button>
+    </div>
+
+    <!-- SVG Brain Diagram — Lateral -->
+    <div class="brain-container" id="brain-container-lateral">
       <svg id="brain-svg" viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <!-- Drop shadow around whole brain -->
@@ -1887,6 +1908,28 @@
     const REGIONS   = DATA.regions || {};
     const ALL_QS    = DATA.questions || [];
 
+    // ── View ──────────────────────────────────────────────────────────────
+    let CURRENT_VIEW = params.get('view') || 'lateral';
+    const MEDIAL_REGION_IDS = new Set([
+      'medial_frontal','cingulate_gyrus','corpus_callosum','thalamus','hypothalamus',
+      'mamillary_bodies','hippocampus','amygdala','fornix',
+      'occipital_medial','cerebellum_medial','brainstem_medial'
+    ]);
+    function questionView(q) {
+      const primary = q.target_region || q.highlighted_region || '';
+      return MEDIAL_REGION_IDS.has(primary) ? 'medial' : 'lateral';
+    }
+    function updateViewTabs() {
+      document.getElementById('tab-lateral').classList.toggle('active', CURRENT_VIEW === 'lateral');
+      document.getElementById('tab-medial').classList.toggle('active', CURRENT_VIEW === 'medial');
+    }
+    function showCurrentContainer() {
+      document.getElementById('brain-container-lateral').style.display =
+        CURRENT_VIEW === 'lateral' ? '' : 'none';
+      document.getElementById('brain-container-medial').style.display =
+        CURRENT_VIEW === 'medial' ? '' : 'none';
+    }
+
     // ── State ─────────────────────────────────────────────────────────────
     let pool         = [];
     let current      = 0;
@@ -1926,6 +1969,48 @@
       return qs;
     }
 
+    // ── View switching ────────────────────────────────────────────────────
+    function switchView(view) {
+      CURRENT_VIEW = view;
+      updateViewTabs();
+      showCurrentContainer();
+      // Re-apply SVG state to the newly visible SVG
+      if (!IS_STUDY && pool.length && current < pool.length) {
+        reapplySVGState(pool[current]);
+      }
+    }
+
+    function reapplySVGState(q) {
+      resetSVG();
+      if (q.type === 'deficit_to_location' || q.type === 'case_to_location') {
+        const activeIds = [q.target_region, ...(q.distractor_regions || [])];
+        setAllDimmed();
+        activateRegions(activeIds);
+        if (!submitted) {
+          activeIds.forEach(id => {
+            const el = regionEl(id);
+            if (!el) return;
+            el.onclick = () => handleRegionClick(id, q);
+          });
+          if (selectedRegion) {
+            const sel = regionEl(selectedRegion);
+            if (sel) sel.classList.add('region-selected');
+          }
+        } else {
+          const corrEl = regionEl(q.target_region);
+          if (corrEl) { corrEl.classList.remove('region-active'); corrEl.classList.add('region-correct'); }
+          if (selectedRegion && selectedRegion !== q.target_region) {
+            const selEl = regionEl(selectedRegion);
+            if (selEl) { selEl.classList.remove('region-active'); selEl.classList.add('region-wrong'); }
+          }
+        }
+      } else if (q.type === 'location_to_deficit') {
+        setAllDimmed();
+        const hEl = regionEl(q.highlighted_region);
+        if (hEl) { hEl.classList.remove('region-dimmed'); hEl.classList.add('region-highlighted'); }
+      }
+    }
+
     // ── Study mode ────────────────────────────────────────────────────────
     function initStudy() {
       showScreen('screen-quiz');
@@ -1938,9 +2023,11 @@
       document.getElementById('nav-score').style.display = 'none';
       // Show study prompt
       document.getElementById('study-prompt').style.display = 'block';
-      // All regions active + wired
-      const svg = document.getElementById('brain-svg');
-      svg.classList.add('svg-study-mode');
+      // Activate study mode on both SVGs; show tabs so user can explore both views
+      document.getElementById('brain-svg').classList.add('svg-study-mode');
+      document.getElementById('brain-svg-medial').classList.add('svg-study-mode');
+      showCurrentContainer();
+      updateViewTabs();
       document.querySelectorAll('.brain-region').forEach(g => {
         g.classList.add('region-active');
         g.onclick = () => handleStudyRegionClick(g);
@@ -2072,6 +2159,14 @@
       selectedRegion  = null;
       selectedChipIdx = null;
       submitted       = false;
+
+      // Auto-switch to the view that contains this question's primary region
+      const qv = questionView(q);
+      if (CURRENT_VIEW !== qv) {
+        CURRENT_VIEW = qv;
+        updateViewTabs();
+        showCurrentContainer();
+      }
 
       updateProgress();
       resetSVG();
@@ -2300,15 +2395,14 @@
         // Mini SVG clone showing correct region in green
         const svgWrap = document.createElement('div');
         svgWrap.className = 'review-brain-wrap';
-        const svgEl = document.getElementById('brain-svg').cloneNode(true);
+        const targetId   = q.target_region || q.highlighted_region;
+        const srcSvgId   = MEDIAL_REGION_IDS.has(targetId) ? 'brain-svg-medial' : 'brain-svg';
+        const svgEl = document.getElementById(srcSvgId).cloneNode(true);
         svgEl.removeAttribute('id');
         svgEl.style.maxWidth = '380px';
         svgEl.style.height = 'auto';
 
         // Highlight correct region in the clone
-        const targetId = q.target_region || q.highlighted_region;
-        const cloneG = svgEl.getElementById ? null : svgEl.querySelector('#' + targetId);
-        // querySelector on clone
         const cEl = svgEl.querySelector('#' + targetId);
         if (cEl) {
           cEl.querySelectorAll('path, ellipse').forEach(p => {
@@ -2317,7 +2411,7 @@
             p.setAttribute('stroke-width', '2.5');
           });
         }
-        // Dim everything else
+        // Dim everything else in the cloned SVG
         Object.keys(REGIONS).forEach(rid => {
           if (rid === targetId) return;
           const rEl = svgEl.querySelector('#' + rid);
@@ -2336,46 +2430,43 @@
       });
     }
 
-    // ── Tooltip wiring ────────────────────────────────────────────────────
+    // ── Tooltip + touch wiring (both SVGs) ────────────────────────────────
     const tooltip = document.getElementById('tooltip');
-    let tooltipVisible = false;
-
-    document.getElementById('brain-svg').addEventListener('mousemove', e => {
-      const g = e.target.closest('.brain-region');
-      if (!g) {
-        tooltip.classList.remove('visible');
-        return;
-      }
-      const label = g.dataset.label || regionLabel(g.dataset.region);
-      tooltip.textContent = label;
-      tooltip.classList.add('visible');
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top  = (e.clientY - 28) + 'px';
-    });
-
-    document.getElementById('brain-svg').addEventListener('mouseleave', () => {
-      tooltip.classList.remove('visible');
-    });
-
-    // ── Touch support: convert touch tap to click ─────────────────────────
     let touchStartTarget = null;
-    document.getElementById('brain-svg').addEventListener('touchstart', e => {
-      touchStartTarget = e.target;
-    }, { passive: true });
-    document.getElementById('brain-svg').addEventListener('touchend', e => {
-      if (e.target === touchStartTarget) {
+
+    ['brain-svg', 'brain-svg-medial'].forEach(svgId => {
+      const svg = document.getElementById(svgId);
+      svg.addEventListener('mousemove', e => {
         const g = e.target.closest('.brain-region');
-        if (g) g.click();
-      }
-    }, { passive: true });
+        if (!g) { tooltip.classList.remove('visible'); return; }
+        const label = g.dataset.label || regionLabel(g.dataset.region);
+        tooltip.textContent = label;
+        tooltip.classList.add('visible');
+        tooltip.style.left = (e.clientX + 14) + 'px';
+        tooltip.style.top  = (e.clientY - 28) + 'px';
+      });
+      svg.addEventListener('mouseleave', () => { tooltip.classList.remove('visible'); });
+      svg.addEventListener('touchstart', e => {
+        touchStartTarget = e.target;
+      }, { passive: true });
+      svg.addEventListener('touchend', e => {
+        if (e.target === touchStartTarget) {
+          const g = e.target.closest('.brain-region');
+          if (g) g.click();
+        }
+      }, { passive: true });
+    });
 
     // Expose for inline buttons
     window.handleSubmit  = handleSubmit;
     window.nextQuestion  = nextQuestion;
     window.showReview    = showReview;
     window.showResults   = showResults;
+    window.switchView    = switchView;
 
     // ── Run ───────────────────────────────────────────────────────────────
+    showCurrentContainer();
+    updateViewTabs();
     init();
   })();
 

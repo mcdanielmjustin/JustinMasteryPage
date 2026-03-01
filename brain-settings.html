@@ -278,6 +278,17 @@
         </div>
       </div>
 
+      <!-- View -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Brain View</div>
+        </div>
+        <div class="count-row">
+          <button class="count-btn view-sel-btn active" data-view="lateral" onclick="selectView('lateral')">&#129504; Lateral</button>
+          <button class="count-btn view-sel-btn" data-view="medial" onclick="selectView('medial')">&#10022; Medial</button>
+        </div>
+      </div>
+
       <!-- Summary + Start -->
       <div class="summary-bar">
         <div class="sum-item">
@@ -298,8 +309,12 @@
         Start Session &rarr;
       </button>
 
-      <button class="explore-btn" onclick="location.href='brain-exercise.html?mode=study'">
-        <span class="explore-icon">&#129504;</span> Explore Brain Map
+      <button class="explore-btn" onclick="location.href='brain-exercise.html?mode=study&view=lateral'">
+        <span class="explore-icon">&#129504;</span> Explore Lateral Map
+      </button>
+
+      <button class="explore-btn" onclick="location.href='brain-exercise.html?mode=study&view=medial'">
+        <span class="explore-icon">&#10022;</span> Explore Medial Map
       </button>
 
     </div>
@@ -310,6 +325,7 @@
     const state = {
       cats: new Set(),
       count: 20,
+      view: 'lateral',
     };
 
     const CAT_LABELS = {
@@ -357,10 +373,17 @@
 
     function selectCount(n) {
       state.count = n;
-      document.querySelectorAll('.count-btn').forEach(b => {
+      document.querySelectorAll('.count-btn:not(.view-sel-btn)').forEach(b => {
         b.classList.toggle('active', parseInt(b.dataset.n) === n);
       });
       updateSummary();
+    }
+
+    function selectView(v) {
+      state.view = v;
+      document.querySelectorAll('.view-sel-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === v);
+      });
     }
 
     function updateSummary() {
@@ -402,6 +425,7 @@
       const p = new URLSearchParams({
         categories: [...state.cats].join(','),
         count: state.count,
+        view: state.view,
       });
       location.href = 'brain-exercise.html?' + p.toString();
     }
