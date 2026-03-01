@@ -627,7 +627,9 @@
       border-radius: 12px; padding: 12px 16px;
       display: flex; align-items: center; gap: 14px;
     }
-    .db-domain { font-size: 11px; font-weight: 700; color: var(--accent-light); width: 44px; flex-shrink: 0; }
+    .db-domain-wrap { display: flex; flex-direction: column; gap: 1px; width: 96px; flex-shrink: 0; }
+    .db-domain { font-size: 11px; font-weight: 700; color: var(--accent-light); }
+    .db-name   { font-size: 9px; color: var(--text3); letter-spacing: .02em; }
     .db-track  { flex: 1; height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
     .db-fill   { height: 100%; border-radius: 3px; background: var(--accent); transition: width .8s .2s ease; width: 0%; }
     .db-fill.high { background: var(--green); }
@@ -645,8 +647,10 @@
     }
     .replay-outcome { font-size: 15px; font-weight: 700; flex-shrink: 0; width: 20px; }
     .replay-outcome.correct { color: var(--green); }
+    .replay-outcome.partial { color: #fbbf24; }
     .replay-outcome.wrong   { color: var(--red); }
     .replay-label  { flex: 1; font-size: 13px; color: var(--text2); }
+    .replay-frac   { font-size: 11px; font-weight: 600; color: var(--text3); flex-shrink: 0; }
     .replay-domain { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .06em; flex-shrink: 0; }
     .btn-replay {
       padding: 6px 14px; font-size: 12px; font-weight: 600;
@@ -1125,6 +1129,18 @@
     dsm_criteria:          { label: 'DSM-5-TR',     color: '#a78bfa' },
     cultural_consideration:{ label: 'Cultural',     color: '#2dd4bf' },
     assessment_tool:       { label: 'Assessment',   color: '#d4a054' },
+  };
+
+  const DOMAIN_NAMES = {
+    PMET: 'Measurement',
+    LDEV: 'Lifespan Dev',
+    CPAT: 'Psychopathology',
+    PTHE: 'Treatment',
+    SOCU: 'Social/Cultural',
+    WDEV: 'Organizations',
+    BPSY: 'Biological',
+    CASS: 'Assessment',
+    PETH: 'Ethics',
   };
 
   /* ════════════════════════════════════════════════════════════════
@@ -1939,15 +1955,17 @@
     else if (pct >= 60) heading.innerHTML = 'Session <em>Complete</em>';
     else                heading.innerHTML = 'Keep <em>Practicing</em>';
 
-    // Score ring animation
+    // Score ring animation — reset to empty first, then animate to pct
     const ring  = document.getElementById('ring-fill');
-    const circ  = 2 * Math.PI * 52;
+    const circ  = 2 * Math.PI * 52;  // ≈ 326.7
     const offset = circ * (1 - pct / 100);
     ring.style.stroke = pct >= 70 ? 'var(--accent)' : pct >= 50 ? 'var(--orange)' : 'var(--red)';
+    ring.style.transition = 'none';
+    ring.style.strokeDashoffset = circ;  // ensure starts empty
     setTimeout(() => {
       ring.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
       ring.style.strokeDashoffset = offset;
-    }, 100);
+    }, 80);
 
     // Animate pct counter
     const pctEl = document.getElementById('ring-pct');
@@ -1998,7 +2016,10 @@
       const row = document.createElement('div');
       row.className = 'db-row';
       row.innerHTML = `
-        <span class="db-domain">${d}</span>
+        <div class="db-domain-wrap">
+          <span class="db-domain">${d}</span>
+          <span class="db-name">${DOMAIN_NAMES[d] || ''}</span>
+        </div>
         <div class="db-track"><div class="db-fill ${cls}" data-pct="${dp}"></div></div>
         <span class="db-score">${s.correct}/${s.total}</span>`;
       domRows.appendChild(row);
@@ -2022,12 +2043,16 @@
     const replayList = document.getElementById('replay-list');
     replayList.innerHTML = '';
     Object.entries(encMap).forEach(([encId, info]) => {
-      const allCorrect = info.correct === info.total;
+      const allCorrect  = info.correct === info.total;
+      const noneCorrect = info.correct === 0;
+      const outcomeClass = allCorrect ? 'correct' : noneCorrect ? 'wrong' : 'partial';
+      const outcomeChar  = allCorrect ? '✓' : '✗';
       const row = document.createElement('div');
       row.className = 'replay-row';
       row.innerHTML = `
-        <span class="replay-outcome ${allCorrect ? 'correct' : 'wrong'}">${allCorrect ? '✓' : '✗'}</span>
+        <span class="replay-outcome ${outcomeClass}">${outcomeChar}</span>
         <span class="replay-label">${escapeHtml(info.label || '—')} — ${escapeHtml(info.subdomain || '—')}</span>
+        <span class="replay-frac">${info.correct}/${info.total}</span>
         <span class="replay-domain">${escapeHtml(info.domain)}</span>
         <button class="btn-replay" onclick="replayEncounter(${info.encIdx})">Review</button>`;
       replayList.appendChild(row);
@@ -2039,6 +2064,15 @@
     state.encIdx = idx;
     state.qIdx   = 0;
     reviewEncounter();
+    // reviewEncounter() sets "← Return to Question" — override for results context
+    const advBtn = document.getElementById('btn-advance');
+    advBtn.textContent = '← Back to Results';
+    advBtn.onclick = () => {
+      advBtn.textContent = 'Next →';
+      advBtn.onclick = advancePhase;
+      state.reviewMode = false;
+      showScreen('results');
+    };
   }
 
   function newSession()   { location.href = 'clinical-presentation-settings.html'; }
