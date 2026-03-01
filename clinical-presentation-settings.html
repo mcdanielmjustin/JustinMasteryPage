@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Encounter Settings — Mastery Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #09090b;
+      --bg2:           #0c0c0e;
+      --bg3:           #121214;
+      --accent:        #6366f1;
+      --accent-light:  #818cf8;
+      --accent-dark:   #4f46e5;
+      --accent-glow:   rgba(99,102,241,0.18);
+      --accent-border: rgba(99,102,241,0.25);
+      --green:         #34d399;
+      --orange:        #fb923c;
+      --red:           #f87171;
+      --gold:          #d4a054;
+      --text:          #fafafa;
+      --text2:         #a8a8b3;
+      --text3:         #6b6b76;
+      --border:        rgba(255,255,255,0.07);
+    }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.08; }
+      50%       { opacity: 0.14; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes ping {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.5); }
+      50%       { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+    }
+
+    .blob {
+      position: fixed; border-radius: 50%;
+      filter: blur(120px); pointer-events: none;
+      animation: pulseGlow 7s ease-in-out infinite; z-index: 0;
+    }
+    .blob-indigo  { width: 560px; height: 560px; background: #6366f1; top: -220px; right: -180px; }
+    .blob-violet  { width: 440px; height: 440px; background: #4f46e5; bottom: -140px; left: -120px; animation-delay: 3.5s; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      height: 60px;
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 16px;
+    }
+    .back-btn {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text3); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--accent-light); }
+    .back-arrow { font-size: 18px; line-height: 1; }
+    .nav-sep { width: 1px; height: 20px; background: var(--border); }
+    .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .logo-icon {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; color: #fff;
+    }
+    .logo-title { font-weight: 700; font-size: 14px; color: var(--text); }
+
+    /* ── Page ── */
+    .page {
+      position: relative; z-index: 1;
+      max-width: 780px; margin: 0 auto;
+      padding: 52px 24px 0;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid var(--accent-border);
+      border-radius: 40px; padding: 5px 13px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--accent-light); text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .pulse-dot {
+      width: 6px; height: 6px; background: var(--accent);
+      border-radius: 50%; animation: ping 2s ease-in-out infinite;
+    }
+    .page-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.1; margin-bottom: 6px;
+    }
+    .page-title em { font-style: italic; color: var(--accent-light); }
+    .page-sub { font-size: 14px; color: var(--text3); margin-bottom: 44px; }
+
+    .settings-section { margin-bottom: 36px; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text3);
+      display: flex; align-items: center; gap: 10px; flex: 1;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .select-all-btn {
+      font-size: 12px; font-weight: 500; color: var(--text3);
+      background: none; border: none; cursor: pointer; padding: 0 0 0 14px;
+      transition: color 0.2s; white-space: nowrap; flex-shrink: 0;
+    }
+    .select-all-btn:hover { color: var(--accent-light); }
+
+    /* ── LEVEL CARDS ── */
+    .levels-grid { display: flex; flex-direction: column; gap: 10px; }
+    .level-card {
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 20px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      user-select: none;
+    }
+    .level-card:hover { background: rgba(255,255,255,0.04); transform: translateX(2px); }
+    .level-card.selected { border-color: var(--accent); background: rgba(99,102,241,0.07); }
+    .level-check {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 2px solid var(--border); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 11px; color: transparent;
+    }
+    .level-card.selected .level-check { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .level-badge {
+      width: 36px; height: 36px; flex-shrink: 0; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .badge-l1 { background: rgba(52,211,153,0.12);  color: #34d399; }
+    .badge-l2 { background: rgba(212,160,84,0.12);  color: #d4a054; }
+    .badge-l3 { background: rgba(251,146,60,0.12);  color: #fb923c; }
+    .badge-l4 { background: rgba(248,113,113,0.12); color: #f87171; }
+    .level-info { flex: 1; }
+    .level-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .level-desc { font-size: 12px; color: var(--text3); line-height: 1.45; }
+    .level-pill {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+      padding: 3px 9px; border-radius: 20px; flex-shrink: 0;
+    }
+    .pill-l1 { background: rgba(52,211,153,0.1);  color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+    .pill-l2 { background: rgba(212,160,84,0.1);  color: #d4a054; border: 1px solid rgba(212,160,84,0.25); }
+    .pill-l3 { background: rgba(251,146,60,0.1);  color: #fb923c; border: 1px solid rgba(251,146,60,0.25); }
+    .pill-l4 { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+
+    /* ── DOMAIN CARDS ── */
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .domain-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 14px 16px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .domain-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+    .domain-card.selected { border-color: var(--accent); background: rgba(99,102,241,0.07); }
+    .domain-card-top { display: flex; align-items: center; gap: 10px; }
+    .domain-code-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text3); flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .domain-card.selected .domain-code-badge {
+      background: rgba(99,102,241,0.2); color: var(--accent-light);
+    }
+    .domain-check-small {
+      width: 16px; height: 16px; margin-left: auto; flex-shrink: 0;
+      border: 2px solid var(--border); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .domain-card.selected .domain-check-small {
+      border-color: var(--accent); background: var(--accent); color: #fff;
+    }
+    .domain-full-name { font-size: 12px; font-weight: 500; color: var(--text2); line-height: 1.3; }
+    .domain-card.selected .domain-full-name { color: var(--text); }
+    .domain-q-count { font-size: 11px; color: var(--text3); }
+    .domain-card.selected .domain-q-count { color: var(--accent-dark); }
+
+    /* ── MIXED TAB ── */
+    .mixed-tab {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; margin-top: 10px;
+      background: rgba(255,255,255,0.025);
+      border: 1px dashed rgba(99,102,241,0.25);
+      border-radius: 12px;
+      padding: 11px 20px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .mixed-tab:hover { background: rgba(255,255,255,0.04); border-color: rgba(99,102,241,0.45); }
+    .mixed-tab.selected {
+      border-style: solid;
+      border-color: var(--accent);
+      background: rgba(99,102,241,0.07);
+    }
+    .mixed-tab-icon { font-size: 14px; line-height: 1; }
+    .mixed-tab-label { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .mixed-tab.selected .mixed-tab-label { color: var(--accent-light); }
+    .mixed-tab-desc { font-size: 11px; color: var(--text3); }
+    .mixed-tab.selected .mixed-tab-desc { color: var(--accent-dark); }
+    .mixed-tab-sep { width: 1px; height: 16px; background: var(--border); }
+    .mixed-tab-check {
+      width: 16px; height: 16px; flex-shrink: 0; margin-left: auto;
+      border: 2px solid var(--border); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; color: transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .mixed-tab.selected .mixed-tab-check { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+    /* ── ENCOUNTER COUNT ── */
+    .count-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .count-options { display: flex; gap: 8px; flex-wrap: wrap; }
+    .count-btn {
+      width: 52px; height: 44px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600; color: var(--text2);
+      cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .count-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(99,102,241,0.3); }
+    .count-btn.selected { border-color: var(--accent); background: rgba(99,102,241,0.1); color: var(--accent-light); }
+    .count-custom { display: flex; align-items: center; gap: 8px; }
+    .count-custom input {
+      width: 64px; height: 44px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      text-align: center; outline: none; transition: border-color 0.2s;
+    }
+    .count-custom input:focus { border-color: var(--accent); }
+    .count-custom label { font-size: 12px; color: var(--text3); }
+
+    /* ── SPEED CARDS ── */
+    .speed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .speed-card {
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .speed-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+    .speed-card.selected { border-color: var(--accent); background: rgba(99,102,241,0.07); }
+    .speed-card.manual-card.selected { border-color: var(--text3); background: rgba(255,255,255,0.04); }
+    .speed-icon { font-size: 22px; line-height: 1; margin-bottom: 2px; }
+    .speed-name {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.25rem; line-height: 1; color: var(--accent-light);
+    }
+    .speed-card.manual-card .speed-name { color: var(--text3); font-size: 1.1rem; }
+    .speed-card.selected .speed-name { color: var(--accent-light); }
+    .speed-card.manual-card.selected .speed-name { color: var(--text2); }
+    .speed-label { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.04em; }
+    .speed-sublabel { font-size: 10px; color: var(--text3); opacity: 0.7; text-align: center; line-height: 1.3; }
+
+    /* ── DISPLAY OPTION ROWS ── */
+    .display-rows { display: flex; flex-direction: column; gap: 10px; }
+    .display-row {
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 20px;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    .display-row.on {
+      border-color: rgba(99,102,241,0.35);
+      background: rgba(99,102,241,0.06);
+    }
+    .display-icon {
+      width: 38px; height: 38px; flex-shrink: 0; border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; transition: background 0.2s;
+    }
+    .display-row.on .display-icon { background: rgba(99,102,241,0.12); }
+    .display-text { flex: 1; }
+    .display-label { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .display-desc { font-size: 12px; color: var(--text3); line-height: 1.4; }
+    .display-row.on .display-desc { color: rgba(99,102,241,0.7); }
+
+    /* ── TOGGLE RADIO (Question Order) ── */
+    .toggle-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .toggle-option {
+      flex: 1; min-width: 140px;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 16px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s; user-select: none;
+    }
+    .toggle-option:hover { background: rgba(255,255,255,0.04); }
+    .toggle-option.selected { border-color: var(--accent); background: rgba(99,102,241,0.07); }
+    .toggle-radio {
+      width: 16px; height: 16px; flex-shrink: 0; border: 2px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .toggle-option.selected .toggle-radio { border-color: var(--accent); }
+    .toggle-radio-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: none; }
+    .toggle-option.selected .toggle-radio-dot { display: block; }
+    .toggle-label { font-size: 13px; font-weight: 500; }
+    .toggle-sublabel { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+    /* ── PILL SWITCH ── */
+    .pill-switch-wrap {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pill-switch-state {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      color: var(--text3); width: 22px; text-align: right;
+      transition: color 0.25s; user-select: none;
+    }
+    .pill-switch-wrap.on .pill-switch-state { color: var(--accent-light); }
+    .pill-switch {
+      flex-shrink: 0;
+      width: 48px; height: 26px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .pill-switch-wrap.on .pill-switch { background: var(--accent); border-color: var(--accent); }
+    .pill-switch-thumb {
+      position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .pill-switch-wrap.on .pill-switch-thumb { transform: translateX(22px); background: #fff; }
+
+    /* ── SUMMARY BAR ── */
+    .summary-bar {
+      background: rgba(255,255,255,0.025); border: 1px solid var(--accent-border);
+      border-radius: 14px; padding: 16px 22px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .summary-item { display: flex; flex-direction: column; gap: 2px; }
+    .summary-item .s-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+    .summary-item .s-val { font-family: 'Instrument Serif', serif; font-size: 1.15rem; color: var(--accent-light); }
+    .summary-sep { width: 1px; height: 32px; background: var(--border); }
+
+    /* ── START BUTTON ── */
+    .start-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      color: #fff; font-family: inherit;
+      font-size: 16px; font-weight: 700;
+      border: none; border-radius: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 6px 24px rgba(99,102,241,0.35);
+      transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.01em;
+    }
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 10px 32px rgba(99,102,241,0.45);
+    }
+    .start-btn:active { transform: translateY(0); }
+    .start-arrow { font-size: 20px; }
+
+    .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+
+    @media (max-width: 600px) {
+      .domains-grid { grid-template-columns: repeat(2, 1fr); }
+      .speed-grid   { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-indigo"></div>
+  <div class="blob blob-violet"></div>
+
+  <nav>
+    <a href="index.html" class="back-btn">
+      <span class="back-arrow">←</span> Modules
+    </a>
+    <div class="nav-sep"></div>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">M</div>
+      <span class="logo-title">MasteryPage</span>
+    </a>
+  </nav>
+
+  <div class="page">
+
+    <div class="page-eyebrow">
+      <span class="pulse-dot"></span>
+      Patient Encounter · EPPP
+    </div>
+    <h1 class="page-title">Session <em>Settings</em></h1>
+    <p class="page-sub">Configure your clinical encounter session.</p>
+
+    <!-- ── 1. DIFFICULTY LEVEL ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Difficulty Level</div>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card" data-level="1" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l1">L1</div>
+          <div class="level-info">
+            <div class="level-name">Foundational</div>
+            <div class="level-desc">Clear, textbook presentation · diagnosis strongly implied by symptoms · straightforward clinical decision</div>
+          </div>
+          <span class="level-pill pill-l1">Foundational</span>
+        </div>
+
+        <div class="level-card" data-level="2" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l2">L2</div>
+          <div class="level-info">
+            <div class="level-name">Intermediate</div>
+            <div class="level-desc">Mild complicating factors · one or two competing diagnoses · requires careful integration of phases</div>
+          </div>
+          <span class="level-pill pill-l2">Intermediate</span>
+        </div>
+
+        <div class="level-card" data-level="3" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l3">L3</div>
+          <div class="level-info">
+            <div class="level-name">Advanced</div>
+            <div class="level-desc">Atypical presentation · intentional red herrings · requires ruling out multiple plausible differentials</div>
+          </div>
+          <span class="level-pill pill-l3">Advanced</span>
+        </div>
+
+        <div class="level-card" data-level="4" onclick="toggleLevel(this)">
+          <div class="level-check">✓</div>
+          <div class="level-badge badge-l4">L4</div>
+          <div class="level-info">
+            <div class="level-name">Expert</div>
+            <div class="level-desc">Complex comorbidity · subtle diagnostic distinctions · case initially favors the wrong clinical choice</div>
+          </div>
+          <span class="level-pill pill-l4">Expert</span>
+        </div>
+
+      </div>
+      <p class="warn" id="level-warn">Select at least one difficulty level to continue.</p>
+    </div>
+
+    <!-- ── 2. DOMAIN SELECTION ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Domain</div>
+        <button class="select-all-btn" id="domain-all-btn" onclick="toggleAllDomains()">Select all</button>
+      </div>
+
+      <div class="domains-grid" id="domains-grid">
+
+        <div class="domain-card" data-domain="PMET" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">PMET</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Psychometrics &amp; Research Methods</div>
+          <div class="domain-q-count">Assessment intake encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="LDEV" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">LDEV</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Lifespan &amp; Developmental Stages</div>
+          <div class="domain-q-count">Lifespan patient encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="CPAT" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">CPAT</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Clinical Psychopathology (DSM-5-TR)</div>
+          <div class="domain-q-count">Diagnostic clinical encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="PTHE" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">PTHE</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Psychotherapy Models &amp; Interventions</div>
+          <div class="domain-q-count">Therapy approach encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="SOCU" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">SOCU</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Social &amp; Cultural Psychology</div>
+          <div class="domain-q-count">Multicultural clinical encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="WDEV" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">WDEV</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Workforce Development &amp; Leadership</div>
+          <div class="domain-q-count">Supervision &amp; consultation cases</div>
+        </div>
+
+        <div class="domain-card" data-domain="BPSY" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">BPSY</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Biopsychology</div>
+          <div class="domain-q-count">Neurobiological case encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="CASS" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">CASS</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Clinical Assessment &amp; Interpretation</div>
+          <div class="domain-q-count">Assessment session encounters</div>
+        </div>
+
+        <div class="domain-card" data-domain="PETH" onclick="toggleDomain(this)">
+          <div class="domain-card-top">
+            <span class="domain-code-badge">PETH</span>
+            <div class="domain-check-small">✓</div>
+          </div>
+          <div class="domain-full-name">Psychopharmacology &amp; Ethics</div>
+          <div class="domain-q-count">Ethics dilemma encounters</div>
+        </div>
+
+      </div>
+
+      <div class="mixed-tab" id="mixed-card" onclick="toggleMixed()">
+        <span class="mixed-tab-icon">🔀</span>
+        <span class="mixed-tab-label">Mixed Domains</span>
+        <div class="mixed-tab-sep"></div>
+        <span class="mixed-tab-desc">Draw from all 9 domains each session</span>
+        <div class="mixed-tab-check">✓</div>
+      </div>
+
+      <p class="warn" id="domain-warn">Select at least one domain to continue.</p>
+    </div>
+
+    <!-- ── 3. ENCOUNTER COUNT ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Number of Encounters</div>
+      </div>
+      <div class="count-row">
+        <div class="count-options">
+          <div class="count-btn" data-count="5" onclick="selectCount(this)">5</div>
+          <div class="count-btn selected" data-count="10" onclick="selectCount(this)">10</div>
+          <div class="count-btn" data-count="15" onclick="selectCount(this)">15</div>
+          <div class="count-btn" data-count="20" onclick="selectCount(this)">20</div>
+        </div>
+        <div class="count-custom">
+          <input type="number" id="custom-count" min="1" max="100" placeholder="—" oninput="onCustomCount(this)" />
+          <label for="custom-count">custom</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. PRESENTATION SPEED ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Presentation Speed</div>
+      </div>
+      <div class="speed-grid">
+
+        <div class="speed-card" data-speed="slow" onclick="selectSpeed(this)">
+          <div class="speed-icon">🐢</div>
+          <div class="speed-name">Slow</div>
+          <div class="speed-label">Deliberate</div>
+          <div class="speed-sublabel">More time to read and absorb each phase</div>
+        </div>
+
+        <div class="speed-card selected" data-speed="normal" onclick="selectSpeed(this)">
+          <div class="speed-icon">⚕</div>
+          <div class="speed-name">Normal</div>
+          <div class="speed-label">Recommended</div>
+          <div class="speed-sublabel">Balanced pace for most learners</div>
+        </div>
+
+        <div class="speed-card" data-speed="fast" onclick="selectSpeed(this)">
+          <div class="speed-icon">⚡</div>
+          <div class="speed-name">Fast</div>
+          <div class="speed-label">Rapid</div>
+          <div class="speed-sublabel">Quick read, tests rapid clinical pattern recognition</div>
+        </div>
+
+        <div class="speed-card manual-card" data-speed="manual" onclick="selectSpeed(this)">
+          <div class="speed-icon">👆</div>
+          <div class="speed-name">Manual</div>
+          <div class="speed-label">Self-Paced</div>
+          <div class="speed-sublabel">Click to advance each phase yourself</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 5. DISPLAY OPTIONS ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Display Options</div>
+      </div>
+      <div class="display-rows">
+
+        <div class="display-row on" id="tags-row" onclick="toggleDisplay('tags')">
+          <div class="display-icon">🏷</div>
+          <div class="display-text">
+            <div class="display-label">Behavioral Tags</div>
+            <div class="display-desc">Shows observable clinical signs as animated badges alongside the patient — flat affect, psychomotor retardation, eye contact quality, and other MSE observations.</div>
+          </div>
+          <div class="pill-switch-wrap on" id="tags-switch">
+            <span class="pill-switch-state" id="tags-label">ON</span>
+            <div class="pill-switch">
+              <div class="pill-switch-thumb"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="display-row on" id="chart-row" onclick="toggleDisplay('chart')">
+          <div class="display-icon">📋</div>
+          <div class="display-text">
+            <div class="display-label">Clinical Chart</div>
+            <div class="display-desc">Reveals a live clinical chart that fills in as the encounter progresses — chief complaint, HPI, mental status, history, and observations appear phase by phase.</div>
+          </div>
+          <div class="pill-switch-wrap on" id="chart-switch">
+            <span class="pill-switch-state" id="chart-label">ON</span>
+            <div class="pill-switch">
+              <div class="pill-switch-thumb"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 6. ENCOUNTER ORDER ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Encounter Order</div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-option selected" data-order="shuffled" onclick="selectToggle(this, 'order')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Shuffled</div>
+            <div class="toggle-sublabel">Random order within your selection</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-order="sequential" onclick="selectToggle(this, 'order')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Sequential by Subdomain</div>
+            <div class="toggle-sublabel">Topic by topic, at your selected levels</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-order="weakest" onclick="selectToggle(this, 'order')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Weakest First</div>
+            <div class="toggle-sublabel">Prioritize your lowest-scoring domains</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUMMARY + START ── -->
+    <div class="summary-bar">
+      <div class="summary-item">
+        <span class="s-label">Levels</span>
+        <span class="s-val" id="sum-levels">None</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Domains</span>
+        <span class="s-val" id="sum-domains">None</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Encounters</span>
+        <span class="s-val" id="sum-count">10</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Speed</span>
+        <span class="s-val" id="sum-speed">Normal</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Order</span>
+        <span class="s-val" id="sum-order">Shuffled</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Options</span>
+        <span class="s-val" id="sum-options">Tags + Chart</span>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startSession()">
+      Begin Encounter Session <span class="start-arrow">→</span>
+    </button>
+
+  </div>
+
+  <script>
+    const state = {
+      levels:  new Set(),
+      domains: new Set(),
+      mixed:   false,
+      count:   10,
+      order:   'shuffled',
+      speed:   'normal',
+      showTags:  true,
+      showChart: true,
+    };
+
+    // ── Level ──
+    function toggleLevel(card) {
+      const lvl = card.dataset.level;
+      state.levels.has(lvl) ? state.levels.delete(lvl) : state.levels.add(lvl);
+      card.classList.toggle('selected');
+      updateSummary();
+    }
+
+    // ── Mixed Domains ──
+    function toggleMixed() {
+      state.mixed = !state.mixed;
+      document.getElementById('mixed-card').classList.toggle('selected', state.mixed);
+      if (state.mixed) {
+        document.querySelectorAll('.domain-card').forEach(c => {
+          c.classList.remove('selected');
+          state.domains.delete(c.dataset.domain);
+        });
+        document.getElementById('domain-all-btn').textContent = 'Select all';
+      }
+      updateSummary();
+    }
+
+    // ── Individual Domain ──
+    function toggleDomain(card) {
+      if (state.mixed) {
+        state.mixed = false;
+        document.getElementById('mixed-card').classList.remove('selected');
+      }
+      const d = card.dataset.domain;
+      state.domains.has(d) ? state.domains.delete(d) : state.domains.add(d);
+      card.classList.toggle('selected');
+      updateDomainAllBtn();
+      updateSummary();
+    }
+
+    function toggleAllDomains() {
+      if (state.mixed) {
+        state.mixed = false;
+        document.getElementById('mixed-card').classList.remove('selected');
+      }
+      const cards = document.querySelectorAll('.domain-card');
+      const allSelected = [...cards].every(c => c.classList.contains('selected'));
+      cards.forEach(card => {
+        const d = card.dataset.domain;
+        if (allSelected) { card.classList.remove('selected'); state.domains.delete(d); }
+        else             { card.classList.add('selected');    state.domains.add(d); }
+      });
+      updateDomainAllBtn();
+      updateSummary();
+    }
+
+    function updateDomainAllBtn() {
+      const cards = document.querySelectorAll('.domain-card');
+      const allSelected = [...cards].every(c => c.classList.contains('selected'));
+      document.getElementById('domain-all-btn').textContent = allSelected ? 'Deselect all' : 'Select all';
+    }
+
+    // ── Count ──
+    function selectCount(btn) {
+      document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('custom-count').value = '';
+      state.count = parseInt(btn.dataset.count);
+      updateSummary();
+    }
+
+    function onCustomCount(input) {
+      document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+      state.count = parseInt(input.value) || 10;
+      updateSummary();
+    }
+
+    // ── Speed ──
+    function selectSpeed(card) {
+      document.querySelectorAll('.speed-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.speed = card.dataset.speed;
+      updateSummary();
+    }
+
+    // ── Display Options ──
+    function toggleDisplay(which) {
+      if (which === 'tags') {
+        state.showTags = !state.showTags;
+        document.getElementById('tags-row').classList.toggle('on', state.showTags);
+        document.getElementById('tags-switch').classList.toggle('on', state.showTags);
+        document.getElementById('tags-label').textContent = state.showTags ? 'ON' : 'OFF';
+      } else {
+        state.showChart = !state.showChart;
+        document.getElementById('chart-row').classList.toggle('on', state.showChart);
+        document.getElementById('chart-switch').classList.toggle('on', state.showChart);
+        document.getElementById('chart-label').textContent = state.showChart ? 'ON' : 'OFF';
+      }
+      updateSummary();
+    }
+
+    // ── Order ──
+    function selectToggle(el, group) {
+      document.querySelectorAll(`[data-${group}]`).forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state[group] = el.dataset[group];
+      updateSummary();
+    }
+
+    // ── Summary ──
+    const speedLabels = { slow: 'Slow', normal: 'Normal', fast: 'Fast', manual: 'Manual' };
+    const orderLabels = { shuffled: 'Shuffled', sequential: 'Sequential', weakest: 'Weakest First' };
+
+    function updateSummary() {
+      document.getElementById('sum-levels').textContent =
+        state.levels.size ? [...state.levels].sort().map(l => 'L' + l).join(', ') : 'None';
+
+      document.getElementById('sum-domains').textContent =
+        state.mixed ? 'Mixed' :
+        state.domains.size ? state.domains.size + (state.domains.size === 1 ? ' domain' : ' domains') : 'None';
+
+      document.getElementById('sum-count').textContent = state.count;
+      document.getElementById('sum-speed').textContent  = speedLabels[state.speed] || 'Normal';
+      document.getElementById('sum-order').textContent  = orderLabels[state.order];
+
+      const opts = [];
+      if (state.showTags)  opts.push('Tags');
+      if (state.showChart) opts.push('Chart');
+      document.getElementById('sum-options').textContent = opts.length ? opts.join(' + ') : 'None';
+    }
+
+    // ── Validate + Start ──
+    function startSession() {
+      document.getElementById('level-warn').style.display  = 'none';
+      document.getElementById('domain-warn').style.display = 'none';
+      let valid = true;
+      if (state.levels.size === 0) {
+        document.getElementById('level-warn').style.display = 'block'; valid = false;
+      }
+      if (!state.mixed && state.domains.size === 0) {
+        document.getElementById('domain-warn').style.display = 'block'; valid = false;
+      }
+      if (!valid) return;
+
+      const params = new URLSearchParams({
+        levels:  [...state.levels].sort().join(','),
+        domains: state.mixed ? 'mixed' : [...state.domains].join(','),
+        count:   state.count,
+        order:   state.order,
+        speed:   state.speed,
+        tags:    state.showTags  ? '1' : '0',
+        chart:   state.showChart ? '1' : '0',
+      });
+      location.href = 'clinical-presentation-exercise.html?' + params.toString();
+    }
+
+    updateSummary();
+  </script>
+
+</body>
+</html>
