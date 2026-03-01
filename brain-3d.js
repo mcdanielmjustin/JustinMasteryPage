@@ -929,6 +929,98 @@ function setCsSlider(value) {
   if (csMode) updateCrossSection();
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// VASCULAR TERRITORY OVERLAY (Chunk 3A)
+// ══════════════════════════════════════════════════════════════════════════════
+//
+// Territory assignments follow standard clinical neuroanatomy (EPPP-level):
+//   MCA — lateral frontal, motor/sensory strip (arm/face), Broca, parietal, temporal, Wernicke
+//   ACA — medial frontal / orbitofrontal (prefrontal_cortex in our model)
+//   PCA — occipital (primary visual cortex and association areas)
+//
+// Overlays are clones of each cortical mesh's geometry rendered with a transparent
+// MeshBasicMaterial using polygonOffset to avoid z-fighting with the underlying mesh.
+// Overlay groups are lazily built on first call to setVascTerritory().
+// ─────────────────────────────────────────────────────────────────────────────
+
+const VASC_MAP = {
+  frontal_lobe:         'mca',
+  motor_cortex:         'mca',
+  somatosensory_cortex: 'mca',
+  brocas_area:          'mca',
+  parietal_lobe:        'mca',
+  temporal_lobe:        'mca',
+  wernickes_area:       'mca',
+  prefrontal_cortex:    'aca',
+  occipital_lobe:       'pca',
+  // cerebellum + brainstem = vertebrobasilar (not shown in MCA/ACA/PCA toggle)
+};
+
+const VASC_3D_COLORS = {
+  mca: new THREE.Color(0xEF4444),   // rose-red
+  aca: new THREE.Color(0x4ADE80),   // green
+  pca: new THREE.Color(0xA78BFA),   // violet
+};
+
+let vasc3dGroups = null;   // { mca: Group, aca: Group, pca: Group } — built lazily
+
+/** Build one transparent overlay mesh per cortical region and group by territory. */
+function buildVasc3dGroups() {
+  const groups = {};
+  for (const id of Object.keys(VASC_3D_COLORS)) {
+    const grp    = new THREE.Group();
+    grp.name     = 'vasc_' + id;
+    grp.visible  = false;
+    brainGroup.add(grp);
+    groups[id]   = grp;
+  }
+
+  corticalMeshes.forEach(m => {
+    const terr = VASC_MAP[m.userData.regionId];
+    if (!terr) return;   // cerebellum / brainstem — skip
+
+    const mat = new THREE.MeshBasicMaterial({
+      color:               VASC_3D_COLORS[terr],
+      transparent:         true,
+      opacity:             0.36,
+      depthWrite:          false,
+      side:                THREE.FrontSide,
+      polygonOffset:       true,       // prevent z-fighting with underlying region mesh
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits:  -2,
+    });
+
+    // Share the source geometry (no copy) — transforms duplicated from original mesh.
+    const clone = new THREE.Mesh(m.geometry, mat);
+    clone.position.copy(m.position);
+    clone.rotation.copy(m.rotation);
+    clone.scale.copy(m.scale);
+    clone.renderOrder = 2;   // after region meshes (0) and cross-section disc (1)
+    groups[terr].add(clone);
+  });
+
+  return groups;
+}
+
+/**
+ * Show/hide vascular territory overlay groups.
+ * mode: 'off' | 'mca' | 'aca' | 'pca' | 'all'
+ * Called via window.__brain3d.setVascTerritory() from applyVascOverlay() in brain-exercise.html.
+ */
+function setVascTerritory(mode) {
+  if (!vasc3dGroups) vasc3dGroups = buildVasc3dGroups();   // lazy first build
+  const { mca, aca, pca } = vasc3dGroups;
+  if (mode === 'off') {
+    mca.visible = aca.visible = pca.visible = false;
+  } else if (mode === 'all') {
+    mca.visible = aca.visible = pca.visible = true;
+  } else {
+    mca.visible = mode === 'mca';
+    aca.visible = mode === 'aca';
+    pca.visible = mode === 'pca';
+  }
+}
+
 // Build the disc now — ASSEMBLE SCENE has already run so `scene` is populated.
 discMesh = buildCrossDisc();
 
@@ -1092,6 +1184,11 @@ function unmount() {
   hoveredMesh  = null;
   selectedMesh = null;
   outlinePass.selectedObjects = [];
+  // Reset vascular territory overlay
+  if (vasc3dGroups) {
+    vasc3dGroups.mca.visible = vasc3dGroups.aca.visible = vasc3dGroups.pca.visible = false;
+  }
+
   // Reset cross-section state — remove clip planes and hide disc
   if (csMode) {
     csMode = null;
@@ -1114,7 +1211,7 @@ function unmount() {
 
 // ── Expose API ────────────────────────────────────────────────────────────────
 // corticalMeshes + subcorticalMeshes exposed for reference; toggleGlass for the UI button.
-window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes, toggleGlass, setCsMode, setCsSlider };
+window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes, toggleGlass, setCsMode, setCsSlider, setVascTerritory };
 
 // Auto-mount if the page already has view=3d on load
 (function autoMountOnLoad() {

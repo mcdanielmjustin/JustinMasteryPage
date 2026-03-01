@@ -526,6 +526,21 @@
     .cs-axis-btn.active { background: rgba(212,160,84,0.15); border-color: var(--gold); color: var(--gold-light); }
     .cs-slider { width: 100px; accent-color: var(--gold); cursor: pointer; vertical-align: middle; }
 
+    /* Vasculature territory toggle */
+    .vasc-controls {
+      width: 100%; max-width: 700px; margin-bottom: 10px;
+      display: flex; justify-content: flex-end;
+    }
+    .vasc-btn {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 7px 16px; font-size: 12px; font-weight: 600;
+      color: var(--text3); cursor: pointer; transition: all 0.2s;
+    }
+    .vasc-btn.vasc-mca { border-color: rgba(239,68,68,0.50);  color: #f87171; background: rgba(239,68,68,0.08); }
+    .vasc-btn.vasc-aca { border-color: rgba(74,222,128,0.50); color: #4ade80; background: rgba(74,222,128,0.08); }
+    .vasc-btn.vasc-pca { border-color: rgba(167,139,250,0.50);color: #a78bfa; background: rgba(167,139,250,0.08); }
+    .vasc-btn.vasc-all { border-color: var(--gold);           color: var(--gold-light); background: rgba(212,160,84,0.08); }
+
     @media (max-width: 500px) {
       .question-card { padding: 18px; }
       .q-text { font-size: 14px; }
@@ -589,6 +604,12 @@
       <button class="view-tab active" id="tab-lateral" onclick="switchView('lateral')">&#129504; Lateral View</button>
       <button class="view-tab" id="tab-medial" onclick="switchView('medial')">&#10022; Medial View</button>
       <button class="view-tab" id="tab-3d" onclick="switchView('3d')">&#9650; 3D Explorer</button>
+    </div>
+
+    <!-- Vasculature territory toggle — affects whichever brain view is active -->
+    <div class="vasc-controls">
+      <button id="btn-vasc" class="vasc-btn" onclick="cycleVasculature()"
+              title="Cycle through vascular territory overlays (MCA / ACA / PCA)">⊙ Vasculature: Off</button>
     </div>
 
     <!-- SVG Brain Diagram — Lateral -->
@@ -1269,6 +1290,70 @@
                    C 222,318 224,298 238,283 Z"
                 fill="rgba(110,46,26,0.26)" stroke="none"/>
         </g>
+
+        <!-- ══ VASCULAR TERRITORY OVERLAYS (hidden by default; cycleVasculature() shows them) ══
+             Drawn last so they sit on top of brain tissue.  pointer-events:none throughout.
+             Territory boundaries follow standard neuroanatomy:
+               MCA — entire lateral convexity (frontal/parietal/temporal), below ACA strip
+               ACA — superior parasagittal strip (~40px from brain crown)
+               PCA — occipital pole + posterior temporal, right of parieto-occipital sulcus
+        -->
+        <g id="vasc-overlay-group" pointer-events="none">
+
+          <!-- MCA — Middle Cerebral Artery territory (rose-red) -->
+          <g id="vasc-mca" style="display:none">
+            <path d="M 92,70
+                     C 110,84 146,90 178,90
+                     C 210,92 240,90 270,88
+                     C 314,88 350,80 362,96
+                     C 368,124 370,158 368,196
+                     C 366,232 360,262 358,272
+                     C 356,280 358,284 344,292
+                     C 316,296 282,298 254,300
+                     C 226,302 196,301 164,300
+                     C 130,293 104,278 80,260
+                     C 58,238 44,214 34,196
+                     C 30,176 29,152 29,126
+                     C 30,100 34,80 44,70
+                     C 58,62 74,58 92,70 Z"
+                  fill="rgba(239,68,68,0.34)" stroke="rgba(239,68,68,0.18)" stroke-width="0.8"/>
+            <text x="160" y="138" font-size="13" font-weight="800" font-family="system-ui,sans-serif"
+                  text-anchor="middle" fill="rgba(255,255,255,0.90)"
+                  paint-order="stroke" stroke="rgba(180,20,20,0.70)" stroke-width="3" stroke-linejoin="round">MCA</text>
+          </g>
+
+          <!-- ACA — Anterior Cerebral Artery territory (green) — superior parasagittal strip -->
+          <g id="vasc-aca" style="display:none">
+            <path d="M 78,50
+                     C 132,22 190,12 218,12
+                     C 262,10 322,26 370,56
+                     C 350,80 314,88 270,88
+                     C 240,90 210,92 178,90
+                     C 146,90 110,84 90,70
+                     C 86,62 80,56 78,50 Z"
+                  fill="rgba(74,222,128,0.34)" stroke="rgba(74,222,128,0.18)" stroke-width="0.8"/>
+            <text x="222" y="48" font-size="13" font-weight="800" font-family="system-ui,sans-serif"
+                  text-anchor="middle" fill="rgba(255,255,255,0.90)"
+                  paint-order="stroke" stroke="rgba(20,100,40,0.70)" stroke-width="3" stroke-linejoin="round">ACA</text>
+          </g>
+
+          <!-- PCA — Posterior Cerebral Artery territory (violet) — occipital + posterior temporal -->
+          <g id="vasc-pca" style="display:none">
+            <path d="M 370,56
+                     C 406,28 446,30 464,84
+                     C 478,134 476,188 460,230
+                     C 444,270 420,300 396,310
+                     C 376,316 364,300 360,284
+                     C 352,264 354,236 358,208
+                     C 362,176 372,144 374,118
+                     C 378,96 376,76 370,56 Z"
+                  fill="rgba(167,139,250,0.34)" stroke="rgba(167,139,250,0.18)" stroke-width="0.8"/>
+            <text x="432" y="188" font-size="13" font-weight="800" font-family="system-ui,sans-serif"
+                  text-anchor="middle" fill="rgba(255,255,255,0.90)"
+                  paint-order="stroke" stroke="rgba(80,40,160,0.70)" stroke-width="3" stroke-linejoin="round">PCA</text>
+          </g>
+
+        </g><!-- /vasc-overlay-group -->
 
         <!-- ══ LIGHTING OVERLAYS (pointer-events: none) ══ -->
         <!-- Full-brain fill overlays removed — regions are now separated;
@@ -2574,6 +2659,38 @@
   function closeInfoPanel() {
     document.getElementById('info-panel').classList.remove('open');
     document.querySelectorAll('.brain-region').forEach(el => el.classList.remove('study-selected'));
+  }
+
+  // ── Vasculature territory overlay — global (called from onclick="cycleVasculature()") ──
+  let __vascIdx = 0;
+  const __VASC_STATES  = ['off', 'mca', 'aca', 'pca', 'all'];
+  const __VASC_LABELS  = {
+    off: '⊙ Vasculature: Off',
+    mca: '⊙ MCA Territory',
+    aca: '⊙ ACA Territory',
+    pca: '⊙ PCA Territory',
+    all: '⊙ All Territories',
+  };
+
+  function cycleVasculature() {
+    __vascIdx = (__vascIdx + 1) % __VASC_STATES.length;
+    applyVascOverlay(__VASC_STATES[__vascIdx]);
+  }
+
+  function applyVascOverlay(mode) {
+    const btn = document.getElementById('btn-vasc');
+    if (!btn) return;
+    btn.textContent = __VASC_LABELS[mode];
+    btn.className   = 'vasc-btn' + (mode !== 'off' ? ' vasc-' + mode : '');
+    // SVG lateral overlays
+    ['mca', 'aca', 'pca'].forEach(t => {
+      const el = document.getElementById('vasc-' + t);
+      if (el) el.style.display = (mode === 'all' || mode === t) ? '' : 'none';
+    });
+    // 3D overlay
+    if (window.__brain3d && window.__brain3d.setVascTerritory) {
+      window.__brain3d.setVascTerritory(mode);
+    }
   }
   </script>
 </body>
