@@ -702,7 +702,7 @@
       <!-- Left: patient stage -->
       <div class="patient-stage" id="patient-stage">
 
-        <!-- Speech bubble -->
+        <!-- Speech bubble (above avatar) -->
         <div class="speech-bubble hidden" id="speech-bubble">
           <div class="bubble-tail"></div>
           <div class="clinician-probe" id="clinician-probe"></div>
@@ -712,16 +712,258 @@
           <div class="bubble-text" id="bubble-text"></div>
         </div>
 
-        <!-- Patient info bar -->
+        <!-- Avatar container — inline SVG patient -->
+        <div class="avatar-wrap" id="avatar-wrap">
+          <svg id="avatar-root" class="state-idle"
+               viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg"
+               style="width:100%;height:100%;overflow:visible">
+            <defs>
+              <!-- Skin gradient — body -->
+              <linearGradient id="g-skin" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#f5c9a0"/>
+                <stop offset="100%" stop-color="#e8a87c"/>
+              </linearGradient>
+              <!-- Skin gradient — face (slightly lighter) -->
+              <linearGradient id="g-skin-face" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#f8d4ae"/>
+                <stop offset="100%" stop-color="#efb98a"/>
+              </linearGradient>
+              <!-- Clothing gradient -->
+              <linearGradient id="g-cloth" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#5b6fa6"/>
+                <stop offset="100%" stop-color="#3b4f7e"/>
+              </linearGradient>
+              <!-- Chair gradient -->
+              <linearGradient id="g-chair" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#4a4a5a"/>
+                <stop offset="100%" stop-color="#2e2e3a"/>
+              </linearGradient>
+              <!-- Drop shadow for body group -->
+              <filter id="f-avatar-shadow" x="-20%" y="-10%" width="140%" height="130%">
+                <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="rgba(0,0,0,0.35)"/>
+              </filter>
+              <!-- Subtle inner shadow / glow filter -->
+              <filter id="f-subtle" x="-5%" y="-5%" width="110%" height="110%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+
+            <!-- ── CHAIR ─────────────────────────────────────────── -->
+            <g id="chair">
+              <!-- Back rest -->
+              <rect x="60" y="170" width="80" height="110" rx="6"
+                    fill="url(#g-chair)" stroke="#222" stroke-width="1.2"/>
+              <!-- Seat -->
+              <rect x="52" y="255" width="96" height="18" rx="5"
+                    fill="#3a3a4a" stroke="#222" stroke-width="1"/>
+              <!-- Left armrest -->
+              <rect x="46" y="230" width="16" height="44" rx="4"
+                    fill="#3a3a4a" stroke="#222" stroke-width="1"/>
+              <!-- Right armrest -->
+              <rect x="138" y="230" width="16" height="44" rx="4"
+                    fill="#3a3a4a" stroke="#222" stroke-width="1"/>
+              <!-- Left front leg -->
+              <rect x="56" y="273" width="8" height="36" rx="3" fill="#2a2a38"/>
+              <!-- Right front leg -->
+              <rect x="136" y="273" width="8" height="36" rx="3" fill="#2a2a38"/>
+              <!-- Left rear leg -->
+              <rect x="66" y="278" width="6" height="30" rx="2" fill="#252530"/>
+              <!-- Right rear leg -->
+              <rect x="128" y="278" width="6" height="30" rx="2" fill="#252530"/>
+              <!-- Cross brace -->
+              <rect x="56" y="292" width="88" height="5" rx="2" fill="#2a2a38"/>
+              <!-- Floor shadow -->
+              <ellipse cx="100" cy="312" rx="44" ry="5"
+                       fill="rgba(0,0,0,0.25)"/>
+            </g>
+
+            <!-- ── BODY GROUP (breathing pivot: 100,185) ─────────── -->
+            <g id="avatar-body"
+               style="transform-origin:100px 185px"
+               filter="url(#f-avatar-shadow)">
+
+              <!-- Legs -->
+              <g id="avatar-legs">
+                <!-- Left thigh -->
+                <rect x="74" y="220" width="22" height="50" rx="8"
+                      fill="url(#g-cloth)"/>
+                <!-- Right thigh -->
+                <rect x="104" y="220" width="22" height="50" rx="8"
+                      fill="url(#g-cloth)"/>
+                <!-- Left lower leg -->
+                <rect x="76" y="262" width="18" height="32" rx="6"
+                      fill="#374a7a"/>
+                <!-- Right lower leg -->
+                <rect x="106" y="262" width="18" height="32" rx="6"
+                      fill="#374a7a"/>
+                <!-- Left shoe -->
+                <ellipse cx="85" cy="295" rx="13" ry="7" fill="#282828"/>
+                <ellipse cx="81" cy="293" rx="5"  ry="3" fill="rgba(255,255,255,0.08)"/>
+                <!-- Right shoe -->
+                <ellipse cx="115" cy="295" rx="13" ry="7" fill="#282828"/>
+                <ellipse cx="111" cy="293" rx="5"  ry="3" fill="rgba(255,255,255,0.08)"/>
+              </g>
+
+              <!-- Torso -->
+              <path d="M72 185 Q68 205 70 230 L130 230 Q132 205 128 185 Q114 175 100 175 Q86 175 72 185Z"
+                    fill="url(#g-cloth)"/>
+              <!-- Collar / neckline V detail -->
+              <path d="M93 183 L100 196 L107 183"
+                    fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Center crease -->
+              <line x1="100" y1="196" x2="100" y2="226"
+                    stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+
+              <!-- Arms -->
+              <g id="avatar-arms">
+                <!-- Left upper arm -->
+                <path d="M73 188 Q60 198 62 218 Q68 224 74 218 Q72 202 80 194Z"
+                      fill="url(#g-cloth)"/>
+                <!-- Right upper arm -->
+                <path d="M127 188 Q140 198 138 218 Q132 224 126 218 Q128 202 120 194Z"
+                      fill="url(#g-cloth)"/>
+                <!-- Left forearm -->
+                <path d="M62 218 Q58 234 62 248 Q68 252 72 246 Q68 232 74 218Z"
+                      fill="url(#g-skin)"/>
+                <!-- Right forearm -->
+                <path d="M138 218 Q142 234 138 248 Q132 252 128 246 Q132 232 126 218Z"
+                      fill="url(#g-skin)"/>
+
+                <!-- Hands (folded in lap, pivot: 100,214) -->
+                <g id="avatar-hand" style="transform-origin:100px 214px">
+                  <!-- Left hand -->
+                  <path d="M76 248 Q72 256 76 264 Q84 268 92 264 Q96 258 94 250 Q86 246 76 248Z"
+                        fill="url(#g-skin)"/>
+                  <!-- Right hand -->
+                  <path d="M124 248 Q128 256 124 264 Q116 268 108 264 Q104 258 106 250 Q114 246 124 248Z"
+                        fill="url(#g-skin)"/>
+                  <!-- Folded knuckle ellipse (center overlap) -->
+                  <ellipse cx="100" cy="258" rx="10" ry="6"
+                           fill="url(#g-skin)" stroke="#dba070" stroke-width="0.5"/>
+                  <!-- Finger crease lines -->
+                  <line x1="83"  y1="256" x2="82"  y2="263" stroke="#dba070" stroke-width="0.8" stroke-linecap="round"/>
+                  <line x1="88"  y1="254" x2="87"  y2="262" stroke="#dba070" stroke-width="0.8" stroke-linecap="round"/>
+                  <line x1="112" y1="256" x2="113" y2="263" stroke="#dba070" stroke-width="0.8" stroke-linecap="round"/>
+                  <line x1="117" y1="254" x2="118" y2="262" stroke="#dba070" stroke-width="0.8" stroke-linecap="round"/>
+                </g>
+              </g>
+
+              <!-- ── HEAD GROUP (tilt pivot: 100,130) ─────────────── -->
+              <g id="avatar-head" style="transform-origin:100px 130px">
+
+                <!-- Hair — back mass behind head -->
+                <g id="avatar-hair">
+                  <ellipse cx="100" cy="100" rx="34" ry="38"
+                           fill="#3a2010"/>
+                  <!-- Left side wisp -->
+                  <path d="M68 100 Q62 115 66 128" fill="none"
+                        stroke="#3a2010" stroke-width="8" stroke-linecap="round"/>
+                  <!-- Right side wisp -->
+                  <path d="M132 100 Q138 115 134 128" fill="none"
+                        stroke="#3a2010" stroke-width="8" stroke-linecap="round"/>
+                </g>
+
+                <!-- Neck -->
+                <rect x="91" y="134" width="18" height="22" rx="4"
+                      fill="url(#g-skin)"/>
+                <!-- Neck shadow -->
+                <line x1="91" y1="140" x2="109" y2="140"
+                      stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+
+                <!-- Head ellipse -->
+                <ellipse id="avatar-head-shape" cx="100" cy="107" rx="29" ry="34"
+                         fill="url(#g-skin-face)"/>
+
+                <!-- Left ear -->
+                <ellipse cx="71" cy="110" rx="5" ry="7" fill="url(#g-skin)"/>
+                <ellipse cx="71" cy="110" rx="2.5" ry="4" fill="#e8a87c"/>
+                <!-- Right ear -->
+                <ellipse cx="129" cy="110" rx="5" ry="7" fill="url(#g-skin)"/>
+                <ellipse cx="129" cy="110" rx="2.5" ry="4" fill="#e8a87c"/>
+
+                <!-- Face elements -->
+                <g id="avatar-face">
+
+                  <!-- Brows -->
+                  <g id="avatar-brow">
+                    <path d="M82 93 Q88 90 94 92" fill="none"
+                          stroke="#5a3010" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M106 92 Q112 90 118 93" fill="none"
+                          stroke="#5a3010" stroke-width="2.2" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- Eyes -->
+                  <g id="avatar-eyes">
+                    <!-- Socket shadows -->
+                    <ellipse cx="88"  cy="107" rx="8" ry="7" fill="rgba(0,0,0,0.06)"/>
+                    <ellipse cx="112" cy="107" rx="8" ry="7" fill="rgba(0,0,0,0.06)"/>
+                    <!-- Eye whites -->
+                    <ellipse cx="88"  cy="107" rx="7"   ry="5.5" fill="#fff"/>
+                    <ellipse cx="112" cy="107" rx="7"   ry="5.5" fill="#fff"/>
+                    <!-- Irises -->
+                    <circle  cx="88"  cy="107" r="3.8" fill="#5a7ab5"/>
+                    <circle  cx="112" cy="107" r="3.8" fill="#5a7ab5"/>
+                    <!-- Pupils -->
+                    <circle  cx="88"  cy="107" r="2"   fill="#1a1a28"/>
+                    <circle  cx="112" cy="107" r="2"   fill="#1a1a28"/>
+                    <!-- Highlights -->
+                    <circle  cx="89.5" cy="105.5" r="1" fill="rgba(255,255,255,0.75)"/>
+                    <circle  cx="113.5" cy="105.5" r="1" fill="rgba(255,255,255,0.75)"/>
+                    <!-- Lid lines -->
+                    <path d="M81 104 Q88 101 95 104" fill="none"
+                          stroke="#c08060" stroke-width="0.8" stroke-linecap="round"/>
+                    <path d="M105 104 Q112 101 119 104" fill="none"
+                          stroke="#c08060" stroke-width="0.8" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- Nose -->
+                  <g id="avatar-nose">
+                    <path d="M100 110 Q97 116 96 118 Q100 121 104 118 Q103 116 100 110Z"
+                          fill="none" stroke="#c08060" stroke-width="1"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                    <ellipse cx="96.5" cy="118.5" rx="2.5" ry="1.5" fill="rgba(0,0,0,0.1)"/>
+                    <ellipse cx="103.5" cy="118.5" rx="2.5" ry="1.5" fill="rgba(0,0,0,0.1)"/>
+                  </g>
+
+                  <!-- Jaw / lower face (speak pivot: 100,126) -->
+                  <g id="avatar-jaw" style="transform-origin:100px 126px">
+                    <!-- Lower jaw path -->
+                    <path d="M75 120 Q78 136 100 142 Q122 136 125 120"
+                          fill="url(#g-skin-face)" stroke="none"/>
+                    <!-- Chin highlight -->
+                    <ellipse cx="100" cy="139" rx="6" ry="2.5"
+                             fill="rgba(255,255,255,0.12)"/>
+                    <!-- Mouth -->
+                    <path id="avatar-mouth" d="M91 126 Q100 131 109 126"
+                          fill="none" stroke="#b07050" stroke-width="1.8"
+                          stroke-linecap="round"/>
+                    <!-- Philtrum -->
+                    <path d="M98 122 Q100 124 102 122"
+                          fill="none" stroke="#c08860" stroke-width="0.9"
+                          stroke-linecap="round"/>
+                  </g>
+
+                  <!-- Tears (hidden by default; tearFall animates group opacity 0→0.85→0) -->
+                  <g id="avatar-tear" opacity="0">
+                    <ellipse class="tear-left"  cx="85"  cy="114" rx="2" ry="3"
+                             fill="rgba(180,210,255,0.85)"/>
+                    <ellipse class="tear-right" cx="115" cy="114" rx="2" ry="3"
+                             fill="rgba(180,210,255,0.85)"/>
+                  </g>
+
+                </g><!-- /avatar-face -->
+              </g><!-- /avatar-head -->
+            </g><!-- /avatar-body -->
+          </svg>
+        </div>
+
+        <!-- Patient info bar (below avatar) -->
         <div class="patient-info-bar" id="patient-info-bar">
           <span class="patient-label" id="patient-label">—</span>
           <div class="patient-info-sep"></div>
           <span class="patient-setting" id="patient-setting">—</span>
-        </div>
-
-        <!-- Avatar container (SVG injected by Chunk 3) -->
-        <div class="avatar-wrap" id="avatar-wrap">
-          <!-- Chunk 3: inline SVG avatar placed here -->
         </div>
 
         <!-- Behavioral tag overlay -->
@@ -1757,7 +1999,66 @@
     showError('Error loading encounters: ' + err.message);
     console.error('[boot]', err);
   });
+  /* ════════════════════════════════════════════════════════════════
+     DEV: AVATAR STATE CYCLER (visible when ?dev=1)
+  ════════════════════════════════════════════════════════════════ */
+  (function initDevPanel() {
+    const sp = new URLSearchParams(location.search);
+    if (sp.get('dev') !== '1') return;
+
+    const STATES = [
+      'idle','speaking','flat_affect','distressed','tearful',
+      'anxious','agitated','guarded','hopeful','confused'
+    ];
+    let devIdx = 0;
+
+    const panel = document.getElementById('dev-panel');
+    if (!panel) return;
+    panel.style.display = 'flex';
+
+    document.getElementById('dev-state-label').textContent = STATES[devIdx];
+
+    document.getElementById('dev-prev').addEventListener('click', () => {
+      devIdx = (devIdx - 1 + STATES.length) % STATES.length;
+      applyDevState();
+    });
+    document.getElementById('dev-next').addEventListener('click', () => {
+      devIdx = (devIdx + 1) % STATES.length;
+      applyDevState();
+    });
+
+    function applyDevState() {
+      const s = STATES[devIdx];
+      document.getElementById('dev-state-label').textContent = s;
+      setAvatarState(s);
+      // Reset tear group opacity so CSS animation takes over when tearful
+      const tearGroup = document.getElementById('avatar-tear');
+      if (tearGroup) tearGroup.style.animation = '';
+    }
+  })();
   </script>
+
+  <!-- Dev avatar state cycler panel (shown only when ?dev=1) -->
+  <div id="dev-panel" style="
+    display:none; position:fixed; bottom:20px; left:50%;
+    transform:translateX(-50%);
+    background:rgba(20,20,35,0.95); border:1px solid #6366f1;
+    border-radius:12px; padding:10px 20px;
+    align-items:center; gap:16px;
+    font-family:inherit; color:#e2e8f0; font-size:13px;
+    z-index:9999; box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    user-select:none;">
+    <span style="color:#818cf8;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">DEV — Avatar State</span>
+    <button id="dev-prev" style="
+      background:#4f46e5; border:none; border-radius:6px;
+      color:#fff; font-size:16px; width:28px; height:28px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;">‹</button>
+    <span id="dev-state-label" style="min-width:90px;text-align:center;font-weight:600;color:#c7d2fe;"></span>
+    <button id="dev-next" style="
+      background:#4f46e5; border:none; border-radius:6px;
+      color:#fff; font-size:16px; width:28px; height:28px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;">›</button>
+  </div>
 
 </body>
 </html>
