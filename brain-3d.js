@@ -438,6 +438,209 @@ function buildGroundPlane() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+// SUBCORTICAL STRUCTURE MESHES
+// All 13 structures are built here and stored in a dedicated THREE.Group.
+// They start invisible (visible: false); Chunk 2D's glass-brain toggle
+// reveals them while fading the cortex to near-transparency.
+//
+// Structures: hippocampus, amygdala (bilateral), thalamus, hypothalamus,
+// mamillary bodies (bilateral), caudate nucleus, putamen, globus pallidus,
+// substantia nigra, corpus callosum, fornix, internal capsule.
+//
+// Coordinate system (brainGroup local space):
+//   x  — medial (≈ 0) → lateral (≈ 1.5)
+//   y  — inferior (≈ −0.95) → superior (≈ 1.4)
+//   z  — posterior (≈ −1.82) → anterior (≈ 1.82)
+// ══════════════════════════════════════════════════════════════════════════════
+
+/** Shared material factory for subcortical structures. */
+function scMat(color) {
+  return new THREE.MeshPhysicalMaterial({
+    color:              new THREE.Color(color),
+    roughness:          0.62,
+    metalness:          0.00,
+    clearcoat:          0.10,
+    clearcoatRoughness: 0.50,
+    emissive:           new THREE.Color(0x000000),
+    emissiveIntensity:  0,
+  });
+}
+
+/**
+ * Builds all 13 subcortical mesh objects.
+ * Returns { group: THREE.Group, meshes: Mesh[] }
+ * group is added to brainGroup; meshes are pushed into regionMeshes.
+ */
+function buildSubcortical() {
+  const group  = new THREE.Group();
+  group.name   = 'subcortical';
+  const meshes = [];
+
+  function reg(mesh, regionId) {
+    mesh.userData.regionId = regionId;
+    mesh.castShadow        = true;
+    mesh.name              = regionId;
+    mesh.visible           = false;   // revealed by Chunk 2D glass-brain toggle
+    group.add(mesh);
+    meshes.push(mesh);
+    return mesh;
+  }
+
+  // ── 1. Hippocampus (left) — J-shaped TubeGeometry ────────────────────────
+  // Runs anterior–posterior in medial temporal lobe; head curves anteriorly.
+  {
+    const pts = [
+      new THREE.Vector3(0.26, -0.14, -0.82),   // tail (posterior)
+      new THREE.Vector3(0.28, -0.18, -0.58),   // body
+      new THREE.Vector3(0.30, -0.20, -0.32),   // body
+      new THREE.Vector3(0.32, -0.22, -0.08),   // body
+      new THREE.Vector3(0.34, -0.22,  0.12),   // head approaching
+      new THREE.Vector3(0.34, -0.18,  0.30),   // head
+      new THREE.Vector3(0.32, -0.14,  0.38),   // head tip
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const geo   = new THREE.TubeGeometry(curve, 60, 0.075, 8, false);
+    reg(new THREE.Mesh(geo, scMat(0x8B4080)), 'hippocampus');
+  }
+
+  // ── 2. Amygdala — bilateral small spheres ────────────────────────────────
+  // Left: anterior to hippocampal head, medial temporal. Right: mirrored.
+  {
+    const geoA  = new THREE.SphereGeometry(0.18, 18, 14);
+    const left  = new THREE.Mesh(geoA, scMat(0x7A3040));
+    left.position.set(0.34, -0.06, 0.40);
+    reg(left, 'amygdala');
+
+    const geoB  = new THREE.SphereGeometry(0.18, 18, 14);
+    const right = new THREE.Mesh(geoB, scMat(0x7A3040));
+    right.position.set(-0.34, -0.06, 0.40);   // contralateral (behind medial face)
+    reg(right, 'amygdala');
+  }
+
+  // ── 3. Thalamus (left) — flattened sphere ────────────────────────────────
+  // Central relay station; egg-shaped, 0.30 × 0.24 × 0.20 half-axes.
+  {
+    const geo  = new THREE.SphereGeometry(1, 32, 24);
+    const mesh = new THREE.Mesh(geo, scMat(0x4A7098));
+    mesh.scale.set(0.30, 0.24, 0.20);
+    mesh.position.set(0.24, 0.26, -0.22);
+    reg(mesh, 'thalamus');
+  }
+
+  // ── 4. Hypothalamus — small sphere ───────────────────────────────────────
+  // Inferior to thalamus, above brainstem; autonomic + endocrine master.
+  {
+    const geo  = new THREE.SphereGeometry(0.14, 18, 14);
+    const mesh = new THREE.Mesh(geo, scMat(0x7A5080));
+    mesh.position.set(0.16, -0.10, -0.16);
+    reg(mesh, 'hypothalamus');
+  }
+
+  // ── 5. Mamillary bodies — bilateral pairs ────────────────────────────────
+  // Two small spheres at the posterior floor of the hypothalamus.
+  {
+    const geoM = new THREE.SphereGeometry(0.09, 14, 10);
+    const mLeft  = new THREE.Mesh(geoM, scMat(0xB89080));
+    const mRight = new THREE.Mesh(geoM.clone(), scMat(0xB89080));
+    mLeft.position.set( 0.12, -0.22, -0.36);
+    mRight.position.set(-0.12, -0.22, -0.36);
+    reg(mLeft,  'mamillary_bodies');
+    reg(mRight, 'mamillary_bodies');
+  }
+
+  // ── 6. Caudate nucleus (left) — C-shaped TubeGeometry ────────────────────
+  // Head (frontal) → body (follows lateral ventricle) → tail (temporal).
+  {
+    const pts = [
+      new THREE.Vector3(0.44,  0.26,  0.62),   // head (anterior-frontal)
+      new THREE.Vector3(0.42,  0.36,  0.38),   // head–body junction
+      new THREE.Vector3(0.40,  0.40,  0.12),   // body
+      new THREE.Vector3(0.38,  0.40, -0.12),   // body
+      new THREE.Vector3(0.36,  0.30, -0.36),   // body–tail
+      new THREE.Vector3(0.35,  0.12, -0.52),   // tail
+      new THREE.Vector3(0.35, -0.06, -0.54),   // tail
+      new THREE.Vector3(0.35, -0.18, -0.40),   // tail tip (temporal)
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const geo   = new THREE.TubeGeometry(curve, 80, 0.09, 8, false);
+    reg(new THREE.Mesh(geo, scMat(0xB06820)), 'caudate');
+  }
+
+  // ── 7. Putamen (left) — flattened sphere ─────────────────────────────────
+  // Lateral to globus pallidus; sensorimotor striatum.
+  {
+    const geo  = new THREE.SphereGeometry(1, 28, 22);
+    const mesh = new THREE.Mesh(geo, scMat(0x9A5A18));
+    mesh.scale.set(0.22, 0.28, 0.18);
+    mesh.position.set(0.56, 0.18, 0.08);
+    reg(mesh, 'putamen');
+  }
+
+  // ── 8. Globus pallidus (left) — small sphere ─────────────────────────────
+  // Medial to putamen; basal ganglia output.
+  {
+    const geo  = new THREE.SphereGeometry(0.14, 18, 14);
+    const mesh = new THREE.Mesh(geo, scMat(0x887024));
+    mesh.position.set(0.40, 0.18, 0.06);
+    reg(mesh, 'globus_pallidus');
+  }
+
+  // ── 9. Substantia nigra (left) — thin pigmented cylinder ─────────────────
+  // In midbrain tegmentum; pars compacta (dopaminergic) is the affected region
+  // in Parkinson's disease; modeled as a thin, very dark cylinder.
+  {
+    const geo  = new THREE.CylinderGeometry(0.05, 0.06, 0.26, 12);
+    const mesh = new THREE.Mesh(geo, scMat(0x241810));
+    mesh.position.set(0.20, -0.72, -0.44);
+    mesh.rotation.set(-0.22, 0.00, 0.04);   // slight anterior tilt matching brainstem
+    reg(mesh, 'substantia_nigra');
+  }
+
+  // ── 10. Corpus callosum — arching TorusGeometry in sagittal plane ─────────
+  // Large myelinated commissure connecting hemispheres. Ring radius 0.70,
+  // tube radius 0.07. Rotated so the ring lies in the YZ (sagittal) plane.
+  {
+    const geo  = new THREE.TorusGeometry(0.70, 0.07, 6, 60);
+    const mesh = new THREE.Mesh(geo, scMat(0xD8C8A4));
+    mesh.rotation.y = Math.PI / 2;   // ring in YZ sagittal plane
+    mesh.position.set(0.04, 0.52, -0.06);
+    reg(mesh, 'corpus_callosum');
+  }
+
+  // ── 11. Fornix — arching TubeGeometry from hippocampus to mamillary bodies ─
+  // Crus → body (arches over thalamus) → columns → mamillary bodies.
+  {
+    const pts = [
+      new THREE.Vector3(0.24, -0.08, -0.64),   // hippocampal fimbria
+      new THREE.Vector3(0.18,  0.18, -0.48),   // crus fornicis ascending
+      new THREE.Vector3(0.10,  0.65, -0.22),   // arch (superior to thalamus)
+      new THREE.Vector3(0.08,  0.70,  0.00),   // body (peak)
+      new THREE.Vector3(0.08,  0.68,  0.18),   // body anterior
+      new THREE.Vector3(0.10,  0.40,  0.08),   // column descending
+      new THREE.Vector3(0.12,  0.18, -0.06),   // column
+      new THREE.Vector3(0.12, -0.02, -0.20),   // column inferior
+      new THREE.Vector3(0.12, -0.20, -0.36),   // mamillary body target
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const geo   = new THREE.TubeGeometry(curve, 80, 0.04, 6, false);
+    reg(new THREE.Mesh(geo, scMat(0xC4B490)), 'fornix');
+  }
+
+  // ── 12. Internal capsule (left) — flattened box ───────────────────────────
+  // V-shaped white matter band between thalamus and lenticular nucleus.
+  // Spec calls for BoxGeometry "tapered"; modeled as a rotated flat box.
+  {
+    const geo  = new THREE.BoxGeometry(0.10, 0.44, 0.10);
+    const mesh = new THREE.Mesh(geo, scMat(0xCCBCA0));
+    mesh.position.set(0.32, 0.22, -0.08);
+    mesh.rotation.set(0.06, 0.00, -0.12);
+    reg(mesh, 'internal_capsule');
+  }
+
+  return { group, meshes };
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 // ASSEMBLE SCENE
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -452,7 +655,7 @@ const CORTICAL_IDS = [
 ];
 
 const brainGroup   = new THREE.Group();
-const regionMeshes = [];   // all 11 interactive meshes for raycasting
+const regionMeshes = [];   // all interactive meshes for raycasting (cortical + subcortical)
 
 for (const rid of CORTICAL_IDS) {
   const m = buildRegionMesh(hemiGeo, rid);
@@ -464,6 +667,15 @@ const cerebellumMesh = buildCerebellum();
 const brainstemMesh  = buildBrainstem();
 brainGroup.add(cerebellumMesh); regionMeshes.push(cerebellumMesh);
 brainGroup.add(brainstemMesh);  regionMeshes.push(brainstemMesh);
+
+// Capture the 11 cortical meshes for Chunk 2D glass-brain toggle
+const corticalMeshes = regionMeshes.slice();
+
+// Build and attach 13 subcortical structures (all hidden by default)
+const { group: subcorticalGroup, meshes: subcorticalMeshes } = buildSubcortical();
+brainGroup.add(subcorticalGroup);
+// Add to regionMeshes so raycasting includes them once visible
+regionMeshes.push(...subcorticalMeshes);
 
 // Medial cut-face disc (non-interactive decoration)
 brainGroup.add(buildMedialFace());
@@ -566,9 +778,11 @@ function animate(ts) {
     brainGroup.rotation.y += delta * 0.18;   // ~10°/s idle rotation
   }
 
-  // Per-frame hover raycasting — 11 meshes, negligible CPU cost
+  // Per-frame hover raycasting — filter by visibility so hidden subcortical
+  // structures aren't hit before the glass-brain toggle reveals them.
   raycaster.setFromCamera(mouseNDC, camera);
-  const hits     = raycaster.intersectObjects(regionMeshes, false);
+  const hits     = raycaster.intersectObjects(regionMeshes, false)
+                            .filter(h => h.object.visible !== false);
   const newHover = hits.length ? hits[0].object : null;
   if (newHover !== hoveredMesh) {
     setHover(newHover);
@@ -610,7 +824,8 @@ canvas.addEventListener('pointerup', e => {
       mouseNDC.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
       mouseNDC.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
       raycaster.setFromCamera(mouseNDC, camera);
-      const clickHits = raycaster.intersectObjects(regionMeshes, false);
+      const clickHits = raycaster.intersectObjects(regionMeshes, false)
+                                .filter(h => h.object.visible !== false);
       selectRegion(clickHits.length ? clickHits[0].object : null);
     }
   }
@@ -695,7 +910,8 @@ function unmount() {
 }
 
 // ── Expose API ────────────────────────────────────────────────────────────────
-window.__brain3d = { mount, unmount };
+// corticalMeshes + subcorticalMeshes exposed for Chunk 2D glass-brain toggle.
+window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes };
 
 // Auto-mount if the page already has view=3d on load
 (function autoMountOnLoad() {

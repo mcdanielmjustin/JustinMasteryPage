@@ -483,6 +483,112 @@ window.__BRAIN_DATA = {
         ],
         "vascular": "Midbrain: PCA and basilar perforators · Pons: basilar artery (paramedian and circumferential branches) · Medulla: PICA (lateral medulla) · anterior spinal artery (medial medulla)"
       }
+    },
+
+    // ── SUBCORTICAL STRUCTURES (3D glass-brain) ───────────────────────────────
+
+    "caudate": {
+      "label": "Caudate Nucleus",
+      "info": {
+        "ba": "N/A — subcortical; part of dorsal striatum with putamen; C-shaped head/body/tail following the lateral ventricle",
+        "functions": [
+          "Dorsal striatum — input nucleus of basal ganglia; receives glutamatergic projections from cortex and dopaminergic from substantia nigra (nigrostriatal pathway)",
+          "Caudate head: dorsal cognitive loops — cognitive flexibility, executive control of behavior, working memory; heavily connected to prefrontal cortex and anterior cingulate",
+          "Caudate body/tail: visual and memory processing; tail projects to amygdala and temporal cortex",
+          "Part of cortico-striato-thalamo-cortical (CSTC) loops: frontal → caudate → globus pallidus/SNr → thalamus → frontal cortex; disruption underlies OCD, ADHD, addiction",
+          "Dorsomedial caudate: connected to orbitofrontal and medial prefrontal cortex — implicated in goal-directed decision-making and stimulus-reward associations"
+        ],
+        "syndromes": [
+          "Huntington's disease: autosomal dominant CAG repeat expansion in HTT gene causes progressive degeneration of caudate nucleus (seen as caudate atrophy + dilated lateral ventricles on MRI); onset 30–50s; choreiform movements, cognitive decline, psychiatric symptoms (depression, irritability)",
+          "OCD: hyperactivity in caudate-orbitofrontal-thalamic circuit; caudate volume abnormalities; successful treatment (SSRI or CBT) normalizes caudate metabolism on PET",
+          "Caudate hemorrhage or infarct: cognitive impairment, contralateral neglect, personality change; acute caudate infarct may cause abulia (frontal lobe syndrome) without motor deficit",
+          "Striatal dopamine depletion (Parkinson's): caudate affected more in cognitive symptoms; putamen affected more in motor symptoms — explains why cognitive decline and motor deficit can diverge"
+        ],
+        "vascular": "Lenticulostriate arteries (branches of MCA M1 segment) — perforating arteries; also anterior choroidal artery (posterior caudate body)"
+      }
+    },
+
+    "putamen": {
+      "label": "Putamen",
+      "info": {
+        "ba": "N/A — subcortical; part of dorsal striatum; with caudate forms the neostriatum; together with globus pallidus forms the lenticular nucleus",
+        "functions": [
+          "Primary motor-sensorimotor loop: sensorimotor cortex → putamen → GPi/SNr → VL thalamus → motor cortex; critical for execution and automation of motor sequences",
+          "Procedural/habit learning: dorsolateral putamen encodes automatic motor sequences — repeated practice moves control from prefrontal cortex to putamen (cognitive → automatic)",
+          "Receives dopaminergic input from SNc via nigrostriatal tract; dopamine modulates corticostriatal synapse plasticity",
+          "Direct pathway (putamen → GPi → thalamus → cortex): net excitatory effect on cortex, facilitates movement",
+          "Indirect pathway (putamen → GPe → STN → GPi → thalamus): net inhibitory, suppresses unwanted movements"
+        ],
+        "syndromes": [
+          "Hypertensive putaminal hemorrhage: most common hypertensive intracerebral hemorrhage location; presents as sudden-onset contralateral hemiplegia + hemisensory loss + conjugate eye deviation toward lesion (ipsilateral frontal disconnection); often catastrophic",
+          "Parkinson's disease: dopamine depletion in putamen (motor symptoms) > caudate (cognitive symptoms); resting tremor, bradykinesia, rigidity; DaT-SPECT shows reduced putaminal dopamine transporter",
+          "Hemiballismus: subthalamic nucleus lesion disinhibits GPe → abnormal putamen/GP activity → wild, flinging contralateral hemiarm/leg movements",
+          "L-DOPA-induced dyskinesia in Parkinson's: putaminal dopamine receptor supersensitivity from long-term L-DOPA causes involuntary writhing/chorea"
+        ],
+        "vascular": "Lateral lenticulostriate arteries (MCA M1 branches) — watershed between ACA and MCA territories; most hypertensive hemorrhages occur here"
+      }
+    },
+
+    "globus_pallidus": {
+      "label": "Globus Pallidus",
+      "info": {
+        "ba": "N/A — subcortical pallidum; two segments: GPe (external) and GPi (internal); medial to putamen, lateral to internal capsule",
+        "functions": [
+          "GPi (internal): major output nucleus of basal ganglia; tonically active GABAergic neurons inhibit VL/VA thalamus; inhibition is lifted by direct pathway → movement execution",
+          "GPe (external): part of indirect pathway; inhibited by striatum → disinhibits STN → STN excites GPi → thalamus inhibited → movement suppressed",
+          "Pallidotomy (GPi lesion): dramatically relieves Parkinson's motor symptoms (dyskinesia, off-period rigidity) — confirms GPi as critical gate of motor output",
+          "Deep brain stimulation (DBS) of GPi or STN: high-frequency stimulation functionally inactivates GPi/STN → therapeutic for Parkinson's, dystonia, essential tremor"
+        ],
+        "syndromes": [
+          "Wilson's disease (hepatolenticular degeneration): copper deposition in putamen and globus pallidus → 'eye-of-the-tiger' sign on T2 MRI in pallidonigroluysian involvement; wing-beating tremor, chorea, dysarthria, Kayser-Fleischer rings (copper in Descemet membrane)",
+          "Pantothenate kinase-associated neurodegeneration (PKAN/NBIA1): 'eye-of-the-tiger' sign (GPi T2 hypointensity with central hyperintense dot) = pathognomonic; childhood-onset dystonia, spasticity, pigmentary retinopathy",
+          "CO poisoning / anoxia: symmetric bilateral globus pallidus necrosis — pathognomonic pattern; delayed post-anoxic leukoencephalopathy",
+          "Pallidal DBS side effects: speech impairment (GPi DBS more speech side effects than STN DBS), mood changes"
+        ],
+        "vascular": "Lenticulostriate arteries (MCA) — anterior choroidal artery also supplies GPi; watershed vulnerability in anoxia/CO poisoning"
+      }
+    },
+
+    "substantia_nigra": {
+      "label": "Substantia Nigra",
+      "info": {
+        "ba": "N/A — midbrain tegmentum; pars compacta (SNc) contains neuromelanin-pigmented dopaminergic A9 neurons; pars reticulata (SNr) is GABAergic output nucleus functionally like GPi",
+        "functions": [
+          "SNc dopaminergic neurons project via nigrostriatal tract to dorsal striatum (caudate and putamen); dopamine modulates cortical input to striatum — essential for motor initiation, reward learning, and reinforcement",
+          "SNr: output nucleus equivalent to GPi; tonically active, inhibits superior colliculus (controls gaze) and thalamus; receives from striatum and subthalamic nucleus",
+          "Nigrostriatal pathway dopamine: phasic bursts signal reward prediction errors (positive RPE = movement reinforcement); Schultz experiments established SNc as RPE encoder",
+          "Mesocortical pathway (VTA, adjacent to SNc): prefrontal dopamine — motivation, working memory, schizophrenia; distinct from nigrostriatal motor pathway"
+        ],
+        "syndromes": [
+          "Parkinson's disease: degeneration of ≥60–70% of SNc dopaminergic neurons before motor symptoms appear; Lewy body pathology (α-synuclein aggregates); cardinal features: resting tremor (pill-rolling, 4–6 Hz), bradykinesia, cogwheel rigidity, postural instability; MRI: loss of normal 'swallow tail' sign (dorsolateral SNc T2* hypointensity = iron-rich zone) in PD",
+          "Drug-induced parkinsonism: dopamine receptor blockers (antipsychotics, metoclopramide) mimic SNc degeneration → reversible parkinsonism; distinguish from PD by DaT-SPECT (normal in drug-induced, abnormal in PD)",
+          "MPTP toxicity: MPTP → MPP+ (by MAO-B) selectively destroys SNc neurons → irreversible parkinsonism; used to model PD; explains pesticide/herbicide (rotenone, paraquat) PD risk",
+          "Progressive supranuclear palsy (PSP): tau pathology in SNc + subthalamic nucleus + superior colliculus → parkinsonism + vertical supranuclear gaze palsy + postural instability with early falls"
+        ],
+        "vascular": "Perforating branches of PCA (P1 segment) and posterior communicating artery; midbrain infarct = PCA territory stroke"
+      }
+    },
+
+    "internal_capsule": {
+      "label": "Internal Capsule",
+      "info": {
+        "ba": "N/A — white matter; V-shaped on axial MRI; anterior limb (between caudate and putamen), genu (bend), posterior limb (between thalamus and putamen), retrolenticular, sublenticular portions",
+        "functions": [
+          "Anterior limb: frontopontine fibers (frontal to pons) and thalamocortical fibers (mediodorsal and anterior thalamic nuclei to prefrontal/cingulate cortex)",
+          "Genu: corticobulbar tract — upper motor neuron axons controlling cranial nerve motor nuclei (face, tongue, larynx); UMN facial palsy spares forehead (bilateral cortical innervation)",
+          "Posterior limb (PLIC): corticospinal tract (arm anterior to leg, homunculus order preserved); thalamocortical (ventral posterior thalamus → somatosensory cortex); optic radiation posterior portion",
+          "Retrolenticular: optic radiation from lateral geniculate nucleus to primary visual cortex (V1); posterior PLIC lesion → hemianopia",
+          "Sublenticular: Meyer's loop (temporal portion of optic radiation → inferior visual cortex); auditory radiation (medial geniculate → Heschl's gyrus); temporal pontine fibers"
+        ],
+        "syndromes": [
+          "Pure motor stroke (lacunar): PLIC posterior limb infarct (lenticulostriate artery occlusion in hypertension/small vessel disease) → contralateral face + arm + leg hemiplegia, NO sensory loss, NO aphasia, NO neglect, NO homonymous hemianopia; clinically distinguishes from cortical MCA stroke",
+          "Pure sensory stroke (lacunar): posterior thalamus or PLIC thalamocortical fibers → contralateral hemisensory loss without motor deficit",
+          "Sensorimotor stroke (lacunar): PLIC + thalamus together",
+          "Capsular warning syndrome: TIA equivalent; transient pure motor episodes preceding capsular infarct; high short-term stroke risk",
+          "Internal capsule hemorrhage: rupture of lenticulostriate perforators (Charcot-Bouchard microaneurysms) in hypertension; presentation similar to pure motor stroke but larger, with mass effect"
+        ],
+        "vascular": "Anterior limb: Heubner's artery (recurrent artery of ACA) + lateral lenticulostriate arteries (MCA); PLIC: lateral lenticulostriate arteries (MCA M1) — most common hypertensive lacunar stroke territory; posterior limb also anterior choroidal artery (territory debate)"
+      }
     }
   },
   "questions": [
