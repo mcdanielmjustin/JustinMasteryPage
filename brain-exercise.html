@@ -2494,6 +2494,16 @@
     window.showResults   = showResults;
     window.switchView    = switchView;
 
+    // Bridge for brain-3d.js (ES module) to open the info panel
+    window.__brainUI = {
+      openRegion: function(regionId) {
+        const rData = REGIONS[regionId];
+        if (!rData) return;
+        populateInfoPanel(rData.label, rData.info || {});
+        document.getElementById('info-panel').classList.add('open');
+      },
+    };
+
     // ── Run ───────────────────────────────────────────────────────────────
     showCurrentContainer();
     updateViewTabs();
