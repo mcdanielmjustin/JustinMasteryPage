@@ -135,7 +135,7 @@
       width: 100%; max-width: 700px;
       position: relative; margin-bottom: 16px;
     }
-    #brain-svg {
+    #brain-svg, #brain-svg-medial {
       width: 100%; height: auto;
       display: block;
       overflow: visible;
@@ -1203,6 +1203,598 @@
         <!-- ══ LIGHTING OVERLAYS (pointer-events: none) ══ -->
         <!-- Full-brain fill overlays removed — regions are now separated;
              per-region radial gradients + CSS drop-shadow handle all 3D depth. -->
+      </svg>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         MEDIAL (MIDSAGITTAL) BRAIN VIEW  — 12 clickable regions:
+         medial_frontal · cingulate_gyrus · corpus_callosum
+         thalamus · hypothalamus · mamillary_bodies · fornix
+         hippocampus · amygdala · occipital_medial
+         cerebellum_medial · brainstem_medial
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="brain-container" id="brain-container-medial" style="display:none">
+      <svg id="brain-svg-medial" viewBox="0 0 520 382" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+
+          <!-- ════ MEDIAL GRADIENTS (objectBoundingBox — auto-fit each region) ════ -->
+
+          <!-- Medial frontal cortex: warm salmon-orange — same tissue family as lateral frontal -->
+          <radialGradient id="g-med-frontal" cx="32%" cy="28%" r="70%" fx="18%" fy="14%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#EEC4A8"/>
+            <stop offset="20%"  stop-color="#C07555"/>
+            <stop offset="55%"  stop-color="#8B3E28"/>
+            <stop offset="100%" stop-color="#421808"/>
+          </radialGradient>
+
+          <!-- Cingulate gyrus: slightly purplish-pink — limbic cortex coloring -->
+          <radialGradient id="g-cingulate" cx="35%" cy="30%" r="65%" fx="20%" fy="15%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#D4B0C4"/>
+            <stop offset="20%"  stop-color="#A87898"/>
+            <stop offset="55%"  stop-color="#6B3A68"/>
+            <stop offset="100%" stop-color="#321428"/>
+          </radialGradient>
+
+          <!-- Corpus callosum: cream/off-white — myelinated white matter -->
+          <radialGradient id="g-cc" cx="35%" cy="30%" r="60%" fx="22%" fy="18%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#F8F0E4"/>
+            <stop offset="20%"  stop-color="#E4D0B0"/>
+            <stop offset="55%"  stop-color="#C0A070"/>
+            <stop offset="100%" stop-color="#806040"/>
+          </radialGradient>
+
+          <!-- Thalamus: steel-blue-gray — subcortical gray matter relay station -->
+          <radialGradient id="g-thalamus" cx="33%" cy="28%" r="65%" fx="18%" fy="12%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#B8D0E0"/>
+            <stop offset="20%"  stop-color="#7098B8"/>
+            <stop offset="55%"  stop-color="#406085"/>
+            <stop offset="100%" stop-color="#1A2E45"/>
+          </radialGradient>
+
+          <!-- Hypothalamus: warm olive-gray — autonomic and endocrine control center -->
+          <radialGradient id="g-hypothalamus" cx="35%" cy="28%" r="60%" fx="22%" fy="15%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#C8D0A8"/>
+            <stop offset="20%"  stop-color="#98A870"/>
+            <stop offset="55%"  stop-color="#688050"/>
+            <stop offset="100%" stop-color="#303820"/>
+          </radialGradient>
+
+          <!-- Mammillary bodies: cream-sage — posterior hypothalamus / limbic -->
+          <radialGradient id="g-mamillary" cx="38%" cy="30%" r="58%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#D8E0C0"/>
+            <stop offset="25%"  stop-color="#A8B888"/>
+            <stop offset="60%"  stop-color="#788858"/>
+            <stop offset="100%" stop-color="#384028"/>
+          </radialGradient>
+
+          <!-- Fornix: cream/ivory — arching white matter bundle -->
+          <radialGradient id="g-fornix" cx="35%" cy="25%" r="65%" fx="22%" fy="14%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#F0E8D8"/>
+            <stop offset="22%"  stop-color="#D0B888"/>
+            <stop offset="55%"  stop-color="#A88848"/>
+            <stop offset="100%" stop-color="#604820"/>
+          </radialGradient>
+
+          <!-- Hippocampus: warm coral — archicortex, same tissue family as neocortex -->
+          <radialGradient id="g-hippocampus" cx="30%" cy="28%" r="68%" fx="16%" fy="14%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#E0C0A8"/>
+            <stop offset="20%"  stop-color="#B88868"/>
+            <stop offset="55%"  stop-color="#884E3A"/>
+            <stop offset="100%" stop-color="#401A10"/>
+          </radialGradient>
+
+          <!-- Amygdala: warm brown-red — slightly deeper tone than hippocampus -->
+          <radialGradient id="g-amygdala" cx="32%" cy="30%" r="66%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#D0B098"/>
+            <stop offset="22%"  stop-color="#A07868"/>
+            <stop offset="58%"  stop-color="#704848"/>
+            <stop offset="100%" stop-color="#381818"/>
+          </radialGradient>
+
+          <!-- Occipital medial cortex: deep rose — visual cortex accent (V1, cuneus, lingual gyrus) -->
+          <radialGradient id="g-occipital-med" cx="30%" cy="25%" r="72%" fx="16%" fy="12%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#EAB8A8"/>
+            <stop offset="20%"  stop-color="#C27860"/>
+            <stop offset="55%"  stop-color="#924248"/>
+            <stop offset="100%" stop-color="#421828"/>
+          </radialGradient>
+
+          <!-- Cerebellum medial: blue-gray — same family as lateral cerebellum -->
+          <radialGradient id="g-cb-med" cx="28%" cy="26%" r="72%" fx="14%" fy="12%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#C8D2DC"/>
+            <stop offset="20%"  stop-color="#8C9EB5"/>
+            <stop offset="55%"  stop-color="#5A6888"/>
+            <stop offset="100%" stop-color="#283050"/>
+          </radialGradient>
+
+          <!-- Brainstem medial: warm gray — same family as lateral brainstem -->
+          <radialGradient id="g-bs-med" cx="32%" cy="28%" r="68%" fx="18%" fy="14%" gradientUnits="objectBoundingBox">
+            <stop offset="0%"   stop-color="#C8C0B0"/>
+            <stop offset="20%"  stop-color="#949080"/>
+            <stop offset="55%"  stop-color="#666050"/>
+            <stop offset="100%" stop-color="#2A2820"/>
+          </radialGradient>
+
+          <!-- ClipPath for cerebellum medial folia stripes -->
+          <clipPath id="clip-cb-m">
+            <path d="M 278,272 C 312,265 348,266 383,274 C 418,282 446,300 460,326
+                     C 468,346 462,368 438,376 C 414,382 382,382 352,374
+                     C 322,366 296,350 278,334 C 259,318 255,299 263,284
+                     C 268,277 273,273 278,272 Z"/>
+          </clipPath>
+
+        </defs>
+
+        <!-- Warm ambient backdrop — unifies the medial anatomy -->
+        <ellipse cx="258" cy="200" rx="234" ry="192"
+                 fill="rgba(18,4,3,0.48)" filter="url(#brain-shadow)"/>
+
+        <!-- ══════════════════════════════════════════════════
+             REGIONS — painter's algorithm (deepest first)
+             1 · cerebellum_medial  2 · brainstem_medial
+             3 · occipital_medial   4 · medial_frontal
+             5 · cingulate_gyrus    6 · corpus_callosum
+             7 · thalamus           8 · hypothalamus
+             9 · mamillary_bodies  10 · fornix
+            11 · hippocampus       12 · amygdala
+        ══════════════════════════════════════════════════ -->
+
+        <!-- 1. CEREBELLUM MEDIAL — posterior inferior, arbor vitae visible -->
+        <g id="cerebellum_medial" class="brain-region" data-region="cerebellum_medial" data-label="Cerebellum (medial)" transform="translate(4,6)">
+          <path d="M 278,272
+                   C 312,265 348,266 383,274
+                   C 418,282 446,300 460,326
+                   C 468,346 462,368 438,376
+                   C 414,382 382,382 352,374
+                   C 322,366 296,350 278,334
+                   C 259,318 255,299 263,284
+                   C 268,277 273,273 278,272 Z"
+                fill="url(#g-cb-med)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 278,272 C 312,265 348,266 383,274 C 418,282 446,300 460,326 C 468,346 462,368 438,376 C 414,382 382,382 352,374 C 322,366 296,350 278,334 C 259,318 255,299 263,284 C 268,277 273,273 278,272 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="372" y="340">Cerebellum</text>
+        </g>
+
+        <!-- 2. BRAINSTEM MEDIAL — midbrain→pons→medulla, crossed signs on damage -->
+        <g id="brainstem_medial" class="brain-region" data-region="brainstem_medial" data-label="Brainstem (medial)" transform="translate(0,5)">
+          <path d="M 215,254
+                   C 233,245 258,242 276,252
+                   C 283,262 285,284 283,314
+                   C 280,339 271,360 261,371
+                   C 253,378 244,380 235,377
+                   C 225,374 216,365 210,349
+                   C 203,331 201,305 205,279
+                   C 208,265 213,256 215,254 Z"
+                fill="url(#g-bs-med)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 215,254 C 233,245 258,242 276,252 C 283,262 285,284 283,314 C 280,339 271,360 261,371 C 253,378 244,380 235,377 C 225,374 216,365 210,349 C 203,331 201,305 205,279 C 208,265 213,256 215,254 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="244" y="322">Brainstem</text>
+        </g>
+
+        <!-- 3. OCCIPITAL MEDIAL — cuneus + lingual gyrus + primary visual cortex (V1) -->
+        <g id="occipital_medial" class="brain-region" data-region="occipital_medial" data-label="Occipital (medial)" transform="translate(8,1)">
+          <path d="M 372,38
+                   C 410,56 448,96 464,142
+                   C 478,182 472,228 448,262
+                   C 428,286 400,294 373,282
+                   C 344,270 322,244 312,210
+                   C 305,182 307,153 322,131
+                   C 338,109 356,70 372,38 Z"
+                fill="url(#g-occipital-med)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 372,38 C 410,56 448,96 464,142 C 478,182 472,228 448,262 C 428,286 400,294 373,282 C 344,270 322,244 312,210 C 305,182 307,153 322,131 C 338,109 356,70 372,38 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="418" y="165">Occipital</text>
+        </g>
+
+        <!-- 4. MEDIAL FRONTAL — large cortex: SMA, medial PFC, precuneus, paracentral lobule.
+             Drawn as the full outer hemisphere shape; other structures overlap it on top. -->
+        <g id="medial_frontal" class="brain-region" data-region="medial_frontal" data-label="Medial Frontal Cortex" transform="translate(-6,-2)">
+          <path d="M 92,238
+                   C 66,226 53,196 54,165
+                   C 53,131 62,100 72,74
+                   C 80,49 98,32 122,23
+                   C 150,14 204,12 258,16
+                   C 312,16 360,26 378,42
+                   C 362,74 347,114 337,150
+                   C 327,167 314,178 299,180
+                   C 280,180 260,177 242,172
+                   C 222,167 204,156 187,147
+                   C 167,138 148,133 132,135
+                   C 114,137 101,149 98,166
+                   C 95,184 103,204 119,218
+                   C 131,230 150,237 170,239
+                   C 140,246 112,246 92,238 Z"
+                fill="url(#g-med-frontal)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 92,238 C 66,226 53,196 54,165 C 53,131 62,100 72,74 C 80,49 98,32 122,23 C 150,14 204,12 258,16 C 312,16 360,26 378,42 C 362,74 347,114 337,150 C 327,167 314,178 299,180 C 280,180 260,177 242,172 C 222,167 204,156 187,147 C 167,138 148,133 132,135 C 114,137 101,149 98,166 C 95,184 103,204 119,218 C 131,230 150,237 170,239 C 140,246 112,246 92,238 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="152" y="58">Medial Frontal</text>
+        </g>
+
+        <!-- 5. CINGULATE GYRUS — curved band of limbic cortex just above the corpus callosum.
+             Runs from subcallosal area (anterior) to isthmus (posterior). -->
+        <g id="cingulate_gyrus" class="brain-region" data-region="cingulate_gyrus" data-label="Cingulate Gyrus" transform="translate(0,0)">
+          <path d="M 108,133
+                   C 107,116 118,99 140,89
+                   C 162,79 198,74 242,74
+                   C 287,74 326,79 360,92
+                   C 384,102 398,118 398,133
+                   C 394,142 387,150 378,154
+                   C 356,142 322,132 284,128
+                   C 248,124 210,124 174,128
+                   C 148,132 127,140 115,150
+                   C 111,145 108,139 108,133 Z"
+                fill="url(#g-cingulate)" stroke="rgba(42,12,8,0.50)" stroke-width="1.2"/>
+          <path d="M 108,133 C 107,116 118,99 140,89 C 162,79 198,74 242,74 C 287,74 326,79 360,92 C 384,102 398,118 398,133 C 394,142 387,150 378,154 C 356,142 322,132 284,128 C 248,124 210,124 174,128 C 148,132 127,140 115,150 C 111,145 108,139 108,133 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="248" y="106" text-anchor="middle">Cingulate Gyrus</text>
+        </g>
+
+        <!-- 6. CORPUS CALLOSUM — the great commissure connecting both hemispheres.
+             White matter = cream/ivory; genu (anterior) and splenium (posterior) visible. -->
+        <g id="corpus_callosum" class="brain-region" data-region="corpus_callosum" data-label="Corpus Callosum" transform="translate(0,2)">
+          <path d="M 121,163
+                   C 111,153 111,137 121,129
+                   C 140,122 186,119 248,119
+                   C 312,119 358,122 377,132
+                   C 388,140 387,156 376,164
+                   C 357,170 311,172 248,172
+                   C 185,172 139,170 121,163 Z"
+                fill="url(#g-cc)" stroke="rgba(80,55,25,0.55)" stroke-width="1.2"/>
+          <path d="M 121,163 C 111,153 111,137 121,129 C 140,122 186,119 248,119 C 312,119 358,122 377,132 C 388,140 387,156 376,164 C 357,170 311,172 248,172 C 185,172 139,170 121,163 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="248" y="150" text-anchor="middle">Corpus Callosum</text>
+        </g>
+
+        <!-- 7. THALAMUS — major sensory relay station; all modalities except olfaction pass through. -->
+        <g id="thalamus" class="brain-region" data-region="thalamus" data-label="Thalamus" transform="translate(2,2)">
+          <path d="M 258,185
+                   C 270,177 290,173 312,174
+                   C 334,175 352,181 362,195
+                   C 369,206 366,220 355,228
+                   C 342,236 322,239 302,236
+                   C 280,233 262,225 252,214
+                   C 244,204 246,194 258,185 Z"
+                fill="url(#g-thalamus)" stroke="rgba(25,40,65,0.65)" stroke-width="1.3"/>
+          <path d="M 258,185 C 270,177 290,173 312,174 C 334,175 352,181 362,195 C 369,206 366,220 355,228 C 342,236 322,239 302,236 C 280,233 262,225 252,214 C 244,204 246,194 258,185 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="307" y="210" text-anchor="middle">Thalamus</text>
+        </g>
+
+        <!-- 8. HYPOTHALAMUS — autonomic, endocrine and homeostatic control; below thalamus. -->
+        <g id="hypothalamus" class="brain-region" data-region="hypothalamus" data-label="Hypothalamus" transform="translate(1,2)">
+          <path d="M 228,237
+                   C 240,227 261,223 280,227
+                   C 299,231 311,244 307,256
+                   C 303,265 286,270 267,266
+                   C 249,262 234,252 228,242
+                   C 226,240 226,238 228,237 Z"
+                fill="url(#g-hypothalamus)" stroke="rgba(40,55,25,0.60)" stroke-width="1.2"/>
+          <path d="M 228,237 C 240,227 261,223 280,227 C 299,231 311,244 307,256 C 303,265 286,270 267,266 C 249,262 234,252 228,242 C 226,240 226,238 228,237 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="267" y="250" text-anchor="middle" font-size="8">Hypothalamus</text>
+        </g>
+
+        <!-- 9. MAMMILLARY BODIES — tiny paired nuclei; part of hypothalamus / Papez circuit.
+             Damage from thiamine deficiency (Wernicke-Korsakoff) causes anterograde amnesia. -->
+        <g id="mamillary_bodies" class="brain-region" data-region="mamillary_bodies" data-label="Mammillary Bodies" transform="translate(0,2)">
+          <path d="M 242,263
+                   C 248,257 259,256 268,259
+                   C 277,263 281,271 277,277
+                   C 272,282 260,282 251,278
+                   C 244,275 240,268 242,263 Z"
+                fill="url(#g-mamillary)" stroke="rgba(40,55,25,0.55)" stroke-width="1.1"/>
+          <path d="M 242,263 C 248,257 259,256 268,259 C 277,263 281,271 277,277 C 272,282 260,282 251,278 C 244,275 240,268 242,263 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="258" y="293" text-anchor="middle" font-size="8">Mammillary</text>
+        </g>
+
+        <!-- 10. FORNIX — arching white matter tract from hippocampus to mammillary bodies.
+              Forms the superior border of the third ventricle; part of the Papez circuit. -->
+        <g id="fornix" class="brain-region" data-region="fornix" data-label="Fornix" transform="translate(1,0)">
+          <path d="M 251,266
+                   C 242,249 238,228 244,206
+                   C 249,188 263,180 280,182
+                   C 297,184 314,196 318,216
+                   C 321,234 316,254 308,268
+                   C 300,260 296,244 294,228
+                   C 291,212 288,196 280,190
+                   C 271,186 261,189 256,199
+                   C 250,212 251,235 258,258
+                   C 259,263 257,267 251,266 Z"
+                fill="url(#g-fornix)" stroke="rgba(65,48,20,0.55)" stroke-width="1.0"/>
+          <path d="M 251,266 C 242,249 238,228 244,206 C 249,188 263,180 280,182 C 297,184 314,196 318,216 C 321,234 316,254 308,268 C 300,260 296,244 294,228 C 291,212 288,196 280,190 C 271,186 261,189 256,199 C 250,212 251,235 258,258 C 259,263 257,267 251,266 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="325" y="184" font-size="8">Fornix</text>
+        </g>
+
+        <!-- 11. HIPPOCAMPUS — archicortex within medial temporal lobe.
+              Critical for encoding new declarative memories; bilateral damage → anterograde amnesia (H.M.). -->
+        <g id="hippocampus" class="brain-region" data-region="hippocampus" data-label="Hippocampus" transform="translate(4,3)">
+          <path d="M 294,240
+                   C 308,232 330,230 353,236
+                   C 376,243 394,258 396,273
+                   C 397,283 388,290 374,289
+                   C 355,288 334,275 316,264
+                   C 302,256 294,247 294,242
+                   C 293,241 293,240 294,240 Z"
+                fill="url(#g-hippocampus)" stroke="rgba(42,12,8,0.55)" stroke-width="1.2"/>
+          <path d="M 294,240 C 308,232 330,230 353,236 C 376,243 394,258 396,273 C 397,283 388,290 374,289 C 355,288 334,275 316,264 C 302,256 294,247 294,242 C 293,241 293,240 294,240 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="348" y="267" text-anchor="middle">Hippocampus</text>
+        </g>
+
+        <!-- 12. AMYGDALA — amygdaloid nucleus complex in anterior medial temporal.
+              Processes fear conditioning and emotional salience; anterior to hippocampus. -->
+        <g id="amygdala" class="brain-region" data-region="amygdala" data-label="Amygdala" transform="translate(2,2)">
+          <path d="M 264,234
+                   C 274,228 290,229 299,237
+                   C 307,245 304,257 293,262
+                   C 282,266 267,261 261,251
+                   C 257,243 258,238 264,234 Z"
+                fill="url(#g-amygdala)" stroke="rgba(42,12,8,0.55)" stroke-width="1.1"/>
+          <path d="M 264,234 C 274,228 290,229 299,237 C 307,245 304,257 293,262 C 282,266 267,261 261,251 C 257,243 258,238 264,234 Z"
+                fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="248" y="226" font-size="8">Amygdala</text>
+        </g>
+
+        <!-- ══ PIAL VASCULATURE — medial surface (ACA, PCA, pericallosal branches) ══ -->
+        <g class="vessels-layer" pointer-events="none" fill="none">
+
+          <!-- ACA pericallosal artery — courses along superior surface of CC (callosomarginal artery) -->
+          <path d="M 108,164 C 112,140 128,118 149,106 C 170,95 198,91 228,93 C 258,93 282,97 302,103"
+                stroke="rgba(148,52,38,0.38)" stroke-width="1.0" stroke-linecap="round"/>
+
+          <!-- Pericallosal branches ascending from ACA to medial cortex vertex -->
+          <path d="M 128,121 C 124,96 120,68 118,42"
+                stroke="rgba(148,52,38,0.32)" stroke-width="0.85" stroke-linecap="round"/>
+          <path d="M 165,108 C 162,80 160,52 160,28"
+                stroke="rgba(148,52,38,0.30)" stroke-width="0.80" stroke-linecap="round"/>
+          <path d="M 210,100 C 208,74 208,48 210,26"
+                stroke="rgba(148,52,38,0.28)" stroke-width="0.78" stroke-linecap="round"/>
+          <path d="M 255,97 C 254,72 254,48 256,26"
+                stroke="rgba(148,52,38,0.25)" stroke-width="0.75" stroke-linecap="round"/>
+
+          <!-- PCA on medial occipital surface -->
+          <path d="M 320,212 C 335,200 354,188 372,177 C 386,168 400,160 412,150"
+                stroke="rgba(148,52,38,0.30)" stroke-width="0.85" stroke-linecap="round"/>
+
+          <!-- Calcarine artery (branch of PCA, supplies V1 along calcarine sulcus) -->
+          <path d="M 334,212 C 352,210 370,208 388,204"
+                stroke="rgba(148,52,38,0.26)" stroke-width="0.75" stroke-linecap="round"/>
+
+        </g>
+
+        <!-- ══ SULCI + GYRI TEXTURE (pointer-events: none) ══ -->
+        <g class="texture-layer" pointer-events="none" fill="none">
+
+          <!-- ─── TIER 1: PRIMARY SULCI — major named grooves, full shadow filter ─── -->
+          <g filter="url(#f-sulcal)">
+
+            <!-- Cingulate sulcus — major medial sulcus defining upper border of cingulate gyrus -->
+            <path d="M 108,133 C 120,118 146,105 180,102 C 216,99 256,100 294,104
+                     C 328,108 358,118 378,133"
+                  stroke="rgba(22,5,2,0.90)" stroke-width="3.0" stroke-linecap="round"/>
+
+            <!-- Callosal sulcus — groove between CC and cingulate gyrus -->
+            <path d="M 121,131 C 142,122 188,119 248,119 C 308,119 356,122 378,132"
+                  stroke="rgba(22,5,2,0.84)" stroke-width="2.6" stroke-linecap="round"/>
+
+            <!-- Parieto-occipital sulcus — diagonal groove separating precuneus from cuneus -->
+            <path d="M 330,40 C 343,66 352,102 349,136 C 347,162 337,184 323,200"
+                  stroke="rgba(22,5,2,0.80)" stroke-width="2.6" stroke-linecap="round"/>
+
+            <!-- Calcarine sulcus — horizontal groove in medial occipital cortex (primary visual V1) -->
+            <path d="M 336,174 C 357,177 380,180 405,181 C 428,181 448,179 463,173"
+                  stroke="rgba(22,5,2,0.78)" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Central sulcus medial extension (paracentral fissure) — over vertex -->
+            <path d="M 293,18 C 296,40 299,66 301,92 C 302,116 302,140 300,162"
+                  stroke="rgba(22,5,2,0.74)" stroke-width="2.3" stroke-linecap="round"/>
+
+          </g>
+
+          <!-- ─── TIER 2: SECONDARY SULCI ─── -->
+          <g filter="url(#f-sulcal)" opacity="0.84">
+
+            <!-- Superior frontal sulcus medial extension (horizontal) -->
+            <path d="M 62,90 C 83,83 110,79 140,79 C 168,79 194,81 216,86 C 233,89 245,95 253,103"
+                  stroke="rgba(32,8,4,0.62)" stroke-width="1.8" stroke-linecap="round"/>
+
+            <!-- Paracentral sulcus (transverse sulcus marking SMA boundary) -->
+            <path d="M 256,35 C 262,57 269,82 271,110 C 273,131 271,150 267,166"
+                  stroke="rgba(32,8,4,0.58)" stroke-width="1.6" stroke-linecap="round"/>
+
+            <!-- Marginal sulcus (continuation of central, hooks over medial surface) -->
+            <path d="M 295,19 C 299,46 305,72 309,100 C 313,122 314,144 309,164"
+                  stroke="rgba(32,8,4,0.54)" stroke-width="1.5" stroke-linecap="round"/>
+
+            <!-- Subparietal sulcus (superior parietal medial, above CC posteriorly) -->
+            <path d="M 312,119 C 324,122 338,127 350,136 C 358,142 362,151 356,158"
+                  stroke="rgba(32,8,4,0.52)" stroke-width="1.5" stroke-linecap="round"/>
+
+            <!-- Frontal medial transverse gyral links -->
+            <path d="M 64,52 C 80,46 96,42 114,42"
+                  stroke="rgba(32,8,4,0.48)" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M 56,112 C 74,106 92,104 112,104"
+                  stroke="rgba(32,8,4,0.44)" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 55,150 C 74,143 92,141 112,141"
+                  stroke="rgba(32,8,4,0.40)" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 56,186 C 75,180 92,178 112,180"
+                  stroke="rgba(32,8,4,0.36)" stroke-width="1.2" stroke-linecap="round"/>
+
+            <!-- Rhinal sulcus (anterior medial temporal surface) -->
+            <path d="M 133,238 C 148,242 165,246 184,249"
+                  stroke="rgba(32,8,4,0.44)" stroke-width="1.3" stroke-linecap="round"/>
+
+            <!-- Collateral sulcus (medial temporal, below hippocampus) -->
+            <path d="M 297,286 C 320,283 343,281 365,281"
+                  stroke="rgba(32,8,4,0.48)" stroke-width="1.4" stroke-linecap="round"/>
+
+            <!-- Occipital medial secondary sulci (lingual and cuneal subdivisions) -->
+            <path d="M 340,76 C 356,97 368,122 374,148"
+                  stroke="rgba(32,8,4,0.56)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M 362,57 C 378,84 390,120 394,154"
+                  stroke="rgba(32,8,4,0.50)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 340,222 C 357,230 375,236 390,237"
+                  stroke="rgba(32,8,4,0.44)" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 336,252 C 354,258 372,262 386,260"
+                  stroke="rgba(32,8,4,0.38)" stroke-width="1.2" stroke-linecap="round"/>
+
+          </g>
+
+          <!-- ─── TIER 3: GYRI RIDGE HIGHLIGHTS with warm glow filter ─── -->
+          <g filter="url(#f-gyrus)">
+
+            <!-- Superior vertex ridge — top of brain catching overhead light -->
+            <path d="M 90,25 C 126,18 182,14 242,14 C 297,14 342,21 366,33"
+                  stroke="rgba(255,238,222,0.72)" stroke-width="1.8" stroke-linecap="round"/>
+
+            <!-- Medial frontal gyral crowns (superior frontal gyrus medial surface) -->
+            <path d="M 60,55 C 83,48 110,44 140,44 C 170,44 195,47 216,52"
+                  stroke="rgba(255,230,215,0.62)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 55,91 C 79,85 107,81 138,81 C 167,81 193,83 216,87"
+                  stroke="rgba(255,226,212,0.52)" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M 54,127 C 77,121 106,117 137,117 C 164,117 187,119 212,123"
+                  stroke="rgba(255,222,208,0.44)" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M 55,165 C 78,159 107,155 138,155 C 162,155 184,157 206,163"
+                  stroke="rgba(255,218,204,0.36)" stroke-width="1.1" stroke-linecap="round"/>
+
+            <!-- Precuneus / SMA gyral crest (paracentral lobule, medial parietal) -->
+            <path d="M 254,21 C 280,25 310,34 334,46"
+                  stroke="rgba(255,228,212,0.58)" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M 252,60 C 272,66 298,75 318,88"
+                  stroke="rgba(255,222,208,0.48)" stroke-width="1.2" stroke-linecap="round"/>
+
+            <!-- Cingulate gyrus lit ridge (gyral crown facing upward light) -->
+            <path d="M 120,93 C 150,83 193,79 242,79 C 290,79 330,85 368,97"
+                  stroke="rgba(255,216,228,0.50)" stroke-width="1.3" stroke-linecap="round"/>
+
+            <!-- Occipital medial gyral crowns (cuneus lit ridges) -->
+            <path d="M 340,51 C 356,64 370,86 375,112"
+                  stroke="rgba(255,215,210,0.46)" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M 362,64 C 377,84 388,112 390,140"
+                  stroke="rgba(255,210,206,0.38)" stroke-width="1.1" stroke-linecap="round"/>
+            <path d="M 339,196 C 356,202 374,207 390,207"
+                  stroke="rgba(255,212,208,0.38)" stroke-width="1.1" stroke-linecap="round"/>
+            <path d="M 336,232 C 356,236 374,239 390,238"
+                  stroke="rgba(255,208,204,0.32)" stroke-width="1.0" stroke-linecap="round"/>
+
+          </g>
+
+          <!-- ─── CEREBELLUM MEDIAL FOLIA (dense transverse stripes — arbor vitae) ─── -->
+          <g clip-path="url(#clip-cb-m)">
+            <line x1="252" y1="280" x2="468" y2="280" stroke="rgba(255,210,190,0.22)" stroke-width="0.8"/>
+            <line x1="251" y1="288" x2="470" y2="288" stroke="rgba(32,8,4,0.58)" stroke-width="1.8"/>
+            <line x1="250" y1="296" x2="472" y2="296" stroke="rgba(255,210,190,0.26)" stroke-width="0.9"/>
+            <line x1="249" y1="305" x2="471" y2="305" stroke="rgba(32,8,4,0.56)" stroke-width="1.7"/>
+            <line x1="249" y1="314" x2="469" y2="314" stroke="rgba(255,208,188,0.24)" stroke-width="0.8"/>
+            <line x1="250" y1="323" x2="466" y2="323" stroke="rgba(32,8,4,0.54)" stroke-width="1.7"/>
+            <line x1="252" y1="332" x2="462" y2="332" stroke="rgba(255,206,186,0.22)" stroke-width="0.8"/>
+            <line x1="255" y1="341" x2="456" y2="341" stroke="rgba(32,8,4,0.52)" stroke-width="1.6"/>
+            <line x1="259" y1="350" x2="449" y2="350" stroke="rgba(255,204,184,0.20)" stroke-width="0.8"/>
+            <line x1="265" y1="359" x2="440" y2="359" stroke="rgba(32,8,4,0.50)" stroke-width="1.5"/>
+            <line x1="273" y1="368" x2="430" y2="368" stroke="rgba(255,200,180,0.16)" stroke-width="0.7"/>
+            <line x1="283" y1="376" x2="420" y2="376" stroke="rgba(32,8,4,0.46)" stroke-width="1.4"/>
+          </g>
+
+        </g>
+
+        <!-- ══ DEPTH REFINEMENTS (pointer-events: none) ══ -->
+        <g pointer-events="none" fill="none">
+
+          <!-- Cingulate sulcus echo (soft dark shadow beside primary sulcus) -->
+          <g filter="url(#f-sulcal)" opacity="0.50">
+            <path d="M 110,137 C 128,124 160,112 200,108 C 237,105 274,107 308,113
+                     C 336,119 360,131 380,146"
+                  stroke="rgba(18,4,2,0.75)" stroke-width="0.9" stroke-linecap="round"/>
+            <!-- Callosal sulcus echo -->
+            <path d="M 123,135 C 145,126 191,122 250,122 C 310,122 357,126 379,136"
+                  stroke="rgba(18,4,2,0.70)" stroke-width="0.85" stroke-linecap="round"/>
+          </g>
+
+          <!-- Lobe-boundary lit edges -->
+          <g filter="url(#f-gyrus)" opacity="0.9">
+            <!-- Cingulate lit ridge -->
+            <path d="M 112,129 C 132,117 166,107 207,104 C 246,101 286,103 320,111
+                     C 348,119 368,132 380,147"
+                  stroke="rgba(255,228,235,0.42)" stroke-width="1.1" stroke-linecap="round"/>
+            <!-- CC surface gloss (white matter catches light) -->
+            <path d="M 123,126 C 148,119 192,116 250,116 C 308,116 355,119 378,129"
+                  stroke="rgba(255,250,242,0.52)" stroke-width="1.2" stroke-linecap="round"/>
+          </g>
+
+          <!-- CC body midline reflection -->
+          <path d="M 128,146 C 158,141 200,139 250,139 C 300,139 346,141 372,147"
+                stroke="rgba(255,252,242,0.40)" stroke-width="1.0" stroke-linecap="round"/>
+
+          <!-- CC genu rounding highlight -->
+          <path d="M 119,160 C 112,151 112,139 121,132"
+                stroke="rgba(255,250,240,0.35)" stroke-width="0.9" stroke-linecap="round"/>
+          <!-- CC splenium rounding highlight -->
+          <path d="M 378,132 C 389,141 388,155 377,162"
+                stroke="rgba(255,250,240,0.35)" stroke-width="0.9" stroke-linecap="round"/>
+
+          <!-- Brainstem segmentation lines (pons-midbrain and pons-medulla boundaries) -->
+          <path d="M 210,287 C 223,284 243,283 270,286"
+                stroke="rgba(48,12,8,0.60)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M 210,286 C 223,283 243,282 270,285"
+                stroke="rgba(255,255,255,0.12)" stroke-width="0.7" stroke-linecap="round"/>
+          <path d="M 206,320 C 220,317 241,315 272,320"
+                stroke="rgba(48,12,8,0.55)" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M 206,319 C 220,316 241,314 272,319"
+                stroke="rgba(255,215,195,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+
+          <!-- Cerebellum superior rim highlight -->
+          <path d="M 278,272 C 312,265 348,266 383,274 C 418,282 446,300 460,326"
+                stroke="rgba(255,228,210,0.30)" stroke-width="1.3" stroke-linecap="round"/>
+          <!-- Cerebellar vermis midline dashed line -->
+          <path d="M 356,268 C 358,288 356,314 351,340 C 347,357 338,370 326,376"
+                stroke="rgba(48,12,8,0.52)" stroke-width="1.2" stroke-linecap="round"
+                stroke-dasharray="3 4"/>
+
+          <!-- Lower hemisphere vignette (depth shadow at inferior cortex border) -->
+          <path d="M 264,250 C 292,240 318,252 346,264
+                   C 376,278 408,276 432,260
+                   C 458,242 473,207 470,164
+                   C 449,177 424,204 402,230
+                   C 380,254 356,270 328,276
+                   C 302,281 282,275 264,250 Z"
+                fill="rgba(28,7,3,0.20)"/>
+
+        </g>
+
+        <!-- ══ CORTICAL SURFACE TEXTURE — f-cortex fractal noise overlay ══ -->
+        <!-- The feTurbulence filter clips organic noise to each brain structure, giving
+             the transition from "colored diagram" to "tissue" appearance. -->
+        <g pointer-events="none" filter="url(#f-cortex)">
+          <!-- Main medial hemisphere surface -->
+          <path d="M 92,238 C 66,226 53,196 54,165 C 53,131 62,100 72,74
+                   C 80,49 98,32 122,23 C 150,14 204,12 258,16
+                   C 312,16 360,26 378,42 C 362,74 347,114 337,150
+                   C 327,167 314,178 299,180 C 280,180 260,177 242,172
+                   C 222,167 204,156 187,147 C 167,138 148,133 132,135
+                   C 114,137 101,149 98,166 C 95,184 103,204 119,218
+                   C 131,230 150,237 170,239 C 140,246 112,246 92,238 Z"
+                fill="rgba(148,58,24,0.38)" stroke="none"/>
+          <!-- Occipital medial overlay -->
+          <path d="M 372,38 C 410,56 448,96 464,142 C 478,182 472,228 448,262
+                   C 428,286 400,294 373,282 C 344,270 322,244 312,210
+                   C 305,182 307,153 322,131 C 338,109 356,70 372,38 Z"
+                fill="rgba(145,55,28,0.35)" stroke="none"/>
+          <!-- Cerebellum medial overlay -->
+          <path d="M 278,272 C 312,265 348,266 383,274 C 418,282 446,300 460,326
+                   C 468,346 462,368 438,376 C 414,382 382,382 352,374
+                   C 322,366 296,350 278,334 C 259,318 255,299 263,284
+                   C 268,277 273,273 278,272 Z"
+                fill="rgba(130,52,22,0.30)" stroke="none"/>
+          <!-- Brainstem medial overlay -->
+          <path d="M 215,254 C 233,245 258,242 276,252 C 283,262 285,284 283,314
+                   C 280,339 271,360 261,371 C 253,378 244,380 235,377
+                   C 225,374 216,365 210,349 C 203,331 201,305 205,279
+                   C 208,265 213,256 215,254 Z"
+                fill="rgba(110,46,26,0.25)" stroke="none"/>
+        </g>
+
       </svg>
     </div>
 
