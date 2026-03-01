@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Pathology — Settings | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --bg2: #0f0f11;
+      --bg3: #18181b;
+      --card: #1c1c1f;
+      --rose: #f43f5e;
+      --rose-light: #fb7185;
+      --rose-dark: #be123c;
+      --text: #fafafa;
+      --text2: #a8a8b3;
+      --text3: #6b6b76;
+      --border: rgba(255,255,255,0.07);
+      --border-rose: rgba(244,63,94,0.28);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.08; }
+      50%       { opacity: 0.15; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(100px);
+      pointer-events: none; animation: pulseGlow 6s ease-in-out infinite; z-index: 0;
+    }
+    .blob-rose   { width:500px; height:500px; background:#be123c; top:-150px; right:-140px; }
+    .blob-purple { width:450px; height:450px; background:#9333ea; bottom:-140px; left:-120px; animation-delay:3s; }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:10; height:64px;
+      background: rgba(9,9,11,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 32px; gap: 16px;
+    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-icon {
+      width:34px; height:34px; border-radius:8px;
+      background: linear-gradient(135deg,#9333ea,#6d28d9);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:16px; color:#fff;
+    }
+    .logo-title { font-weight:700; font-size:15px; }
+    .logo-sub   { font-size:10px; color:var(--text3); letter-spacing:0.06em; display:block; }
+    .breadcrumb { font-size:13px; color:var(--text3); display:flex; align-items:center; gap:6px; }
+    .breadcrumb span { color:var(--text2); }
+
+    .page {
+      position:relative; z-index:1;
+      padding: 100px 24px 60px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(244,63,94,0.1);
+      border: 1px solid var(--border-rose);
+      border-radius: 40px; padding: 6px 16px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--rose-light); text-transform: uppercase; margin-bottom: 16px;
+    }
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+    }
+    h1 em {
+      font-style: italic;
+      background: linear-gradient(90deg, var(--rose-dark), var(--rose-light), var(--rose-dark));
+      background-size: 600px 100%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; animation: shimmer 4s linear infinite;
+    }
+    .subtitle { font-size: 14px; color: #fff; margin-top: 12px; max-width: 480px; line-height: 1.6; }
+
+    .settings-wrap {
+      width: 100%; max-width: 680px;
+      display: flex; flex-direction: column; gap: 24px;
+      animation: fadeInUp 0.7s ease-out 0.1s both;
+    }
+
+    .section-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 26px;
+    }
+    .section-label-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rose-light);
+    }
+
+    /* Category chips */
+    .chips-wrap {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .chip {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 13px; font-weight: 500; color: var(--text2);
+      white-space: nowrap;
+    }
+    .chip.active {
+      background: rgba(244,63,94,0.12);
+      border-color: rgba(244,63,94,0.5);
+      color: var(--rose-light);
+    }
+    .chip:hover:not(.active) { border-color: rgba(244,63,94,0.3); color: var(--text); }
+
+    .select-all-btn {
+      background: none; border: none;
+      font-size: 11px; font-weight: 600;
+      color: var(--rose); cursor: pointer;
+      padding: 0; text-transform: uppercase;
+      letter-spacing: 0.06em; transition: color 0.2s;
+    }
+    .select-all-btn:hover { color: var(--rose-light); }
+
+    /* Count */
+    .count-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .count-btn {
+      flex: 1; min-width: 70px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 15px; font-weight: 600; color: #fff;
+    }
+    .count-btn.active {
+      background: rgba(244,63,94,0.1);
+      border-color: rgba(244,63,94,0.5);
+      color: var(--rose-light);
+    }
+    .count-btn:hover:not(.active) { border-color: rgba(244,63,94,0.25); }
+
+    /* Summary */
+    .summary-bar {
+      background: rgba(244,63,94,0.07);
+      border: 1px solid var(--border-rose);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+    }
+    .sum-item { display: flex; flex-direction: column; gap: 2px; }
+    .sum-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
+    .sum-value { font-size: 13px; font-weight: 600; color: var(--rose-light); }
+
+    .start-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--rose-dark), #9f1239);
+      border: none; border-radius: 14px;
+      padding: 16px;
+      font-size: 15px; font-weight: 700; color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .start-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .explore-btn {
+      width: 100%;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 14px; font-weight: 600; color: var(--text2);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      letter-spacing: 0.01em;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .explore-btn:hover {
+      border-color: rgba(244,63,94,0.4);
+      color: var(--rose-light);
+      background: rgba(244,63,94,0.06);
+    }
+    .explore-btn .explore-icon { font-size: 16px; }
+
+    .warn { font-size: 12px; color: #f87171; padding: 8px 0; display: none; }
+
+    @media (max-width: 600px) {
+      .chips-wrap { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-rose"></div>
+  <div class="blob blob-purple"></div>
+
+  <nav>
+    <a class="logo" href="index.html">
+      <div class="logo-icon">M</div>
+      <div><span class="logo-title">MasteryPage</span><span class="logo-sub">MASTERY PREP PLATFORM</span></div>
+    </a>
+    <div class="breadcrumb"><span>/</span><span>Brain Pathology</span></div>
+  </nav>
+
+  <div class="page">
+
+    <div class="header">
+      <div class="eyebrow">&#129504; Neuropsychology</div>
+      <h1>Brain <em>Pathology</em></h1>
+      <p class="subtitle">Identify lesion sites from clinical deficits and map dysfunctions to brain regions using an interactive diagram.</p>
+    </div>
+
+    <div class="settings-wrap">
+
+      <!-- Category Selection -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Category</div>
+          <button class="select-all-btn" id="select-all-btn" onclick="toggleSelectAll()">Select All</button>
+        </div>
+        <div class="chips-wrap" id="chips-wrap">
+          <button class="chip" data-cat="aphasia" onclick="toggleCat('aphasia')">Aphasia</button>
+          <button class="chip" data-cat="motor" onclick="toggleCat('motor')">Motor / Movement</button>
+          <button class="chip" data-cat="memory" onclick="toggleCat('memory')">Memory</button>
+          <button class="chip" data-cat="visual" onclick="toggleCat('visual')">Visual</button>
+          <button class="chip" data-cat="sensory" onclick="toggleCat('sensory')">Sensory / Perceptual</button>
+          <button class="chip" data-cat="executive" onclick="toggleCat('executive')">Executive / Frontal</button>
+          <button class="chip" data-cat="vascular" onclick="toggleCat('vascular')">Vascular</button>
+        </div>
+        <div id="cat-warn" class="warn">Select at least one category to continue.</div>
+      </div>
+
+      <!-- Question Count -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Number of Questions</div>
+        </div>
+        <div class="count-row">
+          <button class="count-btn" data-n="10" onclick="selectCount(10)">10</button>
+          <button class="count-btn active" data-n="20" onclick="selectCount(20)">20</button>
+          <button class="count-btn" data-n="30" onclick="selectCount(30)">30</button>
+          <button class="count-btn" data-n="0" onclick="selectCount(0)">All</button>
+        </div>
+      </div>
+
+      <!-- Summary + Start -->
+      <div class="summary-bar">
+        <div class="sum-item">
+          <span class="sum-label">Categories</span>
+          <span class="sum-value" id="sum-cats">None selected</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Questions</span>
+          <span class="sum-value" id="sum-count">20</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Available</span>
+          <span class="sum-value" id="sum-available">&mdash;</span>
+        </div>
+      </div>
+
+      <button class="start-btn" id="start-btn" onclick="startSession()" disabled>
+        Start Session &rarr;
+      </button>
+
+      <button class="explore-btn" onclick="location.href='brain-exercise.html?mode=study'">
+        <span class="explore-icon">&#129504;</span> Explore Brain Map
+      </button>
+
+    </div>
+  </div>
+
+  <script src="data/brain_data.js"></script>
+  <script>
+    const state = {
+      cats: new Set(),
+      count: 20,
+    };
+
+    const CAT_LABELS = {
+      aphasia:   'Aphasia',
+      motor:     'Motor / Movement',
+      memory:    'Memory',
+      visual:    'Visual',
+      sensory:   'Sensory / Perceptual',
+      executive: 'Executive / Frontal',
+      vascular:  'Vascular',
+    };
+
+    const ALL_CATS = Object.keys(CAT_LABELS);
+
+    function getAvailableCount() {
+      const qs = (window.__BRAIN_DATA || {}).questions || [];
+      if (state.cats.size === 0) return 0;
+      return qs.filter(q => state.cats.has(q.category)).length;
+    }
+
+    function toggleCat(cat) {
+      if (state.cats.has(cat)) {
+        state.cats.delete(cat);
+      } else {
+        state.cats.add(cat);
+      }
+      document.querySelectorAll('.chip[data-cat]').forEach(c => {
+        c.classList.toggle('active', state.cats.has(c.dataset.cat));
+      });
+      updateSummary();
+    }
+
+    function toggleSelectAll() {
+      const allSelected = ALL_CATS.every(c => state.cats.has(c));
+      if (allSelected) {
+        ALL_CATS.forEach(c => state.cats.delete(c));
+      } else {
+        ALL_CATS.forEach(c => state.cats.add(c));
+      }
+      document.querySelectorAll('.chip[data-cat]').forEach(c => {
+        c.classList.toggle('active', state.cats.has(c.dataset.cat));
+      });
+      updateSummary();
+    }
+
+    function selectCount(n) {
+      state.count = n;
+      document.querySelectorAll('.count-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.n) === n);
+      });
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const cats = [...state.cats];
+      const available = getAvailableCount();
+
+      // Category label
+      document.getElementById('sum-cats').textContent =
+        cats.length === 0                 ? 'None selected' :
+        cats.length === ALL_CATS.length   ? 'All Categories' :
+        cats.length <= 2                  ? cats.map(c => CAT_LABELS[c]).join(', ') :
+        cats.length + ' Categories';
+
+      // Count label
+      document.getElementById('sum-count').textContent = state.count === 0 ? 'All' : state.count;
+
+      document.getElementById('sum-available').textContent =
+        available > 0 ? available + ' available' : '\u2014';
+
+      // Select All label
+      const allSelected = ALL_CATS.every(c => state.cats.has(c));
+      document.getElementById('select-all-btn').textContent =
+        allSelected ? 'Deselect All' : 'Select All';
+
+      // Warn + start button
+      const warn = document.getElementById('cat-warn');
+      const btn  = document.getElementById('start-btn');
+      if (cats.length === 0) {
+        warn.style.display = 'block';
+        btn.disabled = true;
+      } else {
+        warn.style.display = 'none';
+        btn.disabled = false;
+      }
+    }
+
+    function startSession() {
+      if (state.cats.size === 0) return;
+      const p = new URLSearchParams({
+        categories: [...state.cats].join(','),
+        count: state.count,
+      });
+      location.href = 'brain-exercise.html?' + p.toString();
+    }
+
+    // Init
+    updateSummary();
+  </script>
+</body>
+</html>

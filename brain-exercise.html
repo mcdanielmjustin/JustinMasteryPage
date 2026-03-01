@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Pathology | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --bg2: #0f0f11;
+      --bg3: #18181b;
+      --card: #1c1c1f;
+      --rose: #f43f5e;
+      --rose-light: #fb7185;
+      --rose-dark: #be123c;
+      --gold: #d4a054;
+      --gold-light: #e4b76a;
+      --green: #34d399;
+      --red: #ef4444;
+      --text: #fafafa;
+      --text2: #a8a8b3;
+      --text3: #6b6b76;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes pulseGlow { 0%,100%{opacity:.08} 50%{opacity:.15} }
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+    @keyframes pulseRegion { 0%,100%{opacity:.72} 50%{opacity:1;filter:drop-shadow(0 0 10px rgba(218,155,60,0.90))} }
+    @keyframes floatIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-4px)} 40%,80%{transform:translateX(4px)} }
+    @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes wrongFlash { 0%,100%{opacity:1} 30%{opacity:0.4} }
+
+    .blob {
+      position: fixed; border-radius: 50%; filter: blur(100px);
+      pointer-events: none; animation: pulseGlow 6s ease-in-out infinite; z-index: 0;
+    }
+    .blob-rose   { width:500px; height:500px; background:#be123c; top:-150px; right:-140px; }
+    .blob-purple { width:450px; height:450px; background:#9333ea; bottom:-140px; left:-120px; animation-delay:3s; }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:20; height:56px;
+      background: rgba(9,9,11,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 20px; gap: 12px;
+    }
+    .logo { display:flex; align-items:center; gap:8px; text-decoration:none; color:inherit; }
+    .logo-icon {
+      width:30px; height:30px; border-radius:7px;
+      background: linear-gradient(135deg,#9333ea,#6d28d9);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:14px; color:#fff; flex-shrink:0;
+    }
+    .logo-title { font-weight:700; font-size:14px; }
+    .nav-spacer { flex:1; }
+    .nav-score {
+      font-size:13px; color:var(--text2);
+      display:flex; align-items:center; gap:6px;
+    }
+    .nav-score strong { color: var(--green); font-weight:700; }
+    .back-btn {
+      background: none; border: 1px solid var(--border); border-radius:8px;
+      padding: 5px 12px; font-size:12px; color:var(--text2); cursor:pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .back-btn:hover { border-color: rgba(255,255,255,0.2); color:#fff; }
+
+    /* ── SCREENS ──────────────────────────────────────────────────────────── */
+    .screen { display:none; position:relative; z-index:1; }
+
+    /* Loading */
+    #screen-loading.active {
+      display:flex; align-items:center; justify-content:center;
+      min-height: 100vh;
+      font-size:14px; color:var(--text3);
+    }
+
+    /* Quiz */
+    #screen-quiz.active {
+      padding: 72px 16px 40px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .progress-wrap {
+      width: 100%; max-width: 700px; margin-bottom: 20px;
+    }
+    .progress-bar-bg {
+      height:4px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden;
+      margin-bottom:8px;
+    }
+    .progress-bar-fill {
+      height:100%; background: linear-gradient(90deg,var(--rose-dark),var(--rose-light));
+      border-radius:4px; transition: width 0.4s ease;
+    }
+    .progress-meta {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:11px; color:var(--text3); font-weight:500;
+    }
+    .progress-meta .correct-badge {
+      color:var(--green); font-weight:700;
+    }
+
+    .question-card {
+      width: 100%; max-width: 700px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .q-label {
+      font-size:10px; font-weight:600; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--rose-light); margin-bottom:10px;
+    }
+    .q-text {
+      font-size:15px; line-height:1.7; color:var(--text);
+    }
+
+    /* SVG Brain */
+    .brain-container {
+      width: 100%; max-width: 700px;
+      position: relative; margin-bottom: 16px;
+    }
+    #brain-svg {
+      width: 100%; height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    /* Region states */
+    .brain-region {
+      cursor: default;
+      filter: drop-shadow(1px 3px 9px rgba(30,8,4,0.80));
+      transition: filter 0.22s;
+    }
+    .brain-region path, .brain-region ellipse { transition: fill 0.2s, opacity 0.2s, filter 0.2s; }
+
+    .brain-region.region-active { cursor: pointer; }
+    .brain-region.region-active path:hover,
+    .brain-region.region-active ellipse:hover { filter: brightness(1.22) saturate(1.1); }
+
+    .brain-region.region-dimmed { opacity: 0.16; pointer-events: none; }
+
+    /* Study mode */
+    .svg-study-mode .brain-region { cursor: pointer; }
+    .svg-study-mode .brain-region:hover {
+      filter: drop-shadow(0 0 10px rgba(255,200,160,0.30)) brightness(1.14);
+    }
+    .brain-region.study-selected {
+      filter: drop-shadow(0 0 14px rgba(212,160,84,0.75)) brightness(1.18) !important;
+    }
+    .brain-region.study-selected path,
+    .brain-region.study-selected ellipse {
+      stroke: var(--gold) !important; stroke-width: 2.5 !important;
+    }
+
+    .brain-region.region-selected path,
+    .brain-region.region-selected ellipse {
+      stroke: var(--gold) !important; stroke-width: 3 !important;
+      stroke-dasharray: 6 3 !important;
+    }
+
+    .brain-region.region-highlighted path,
+    .brain-region.region-highlighted ellipse {
+      animation: pulseRegion 1.5s ease-in-out infinite;
+    }
+
+    .brain-region.region-correct path,
+    .brain-region.region-correct ellipse {
+      fill: rgba(52,211,153,0.75) !important;
+      stroke: #34d399 !important; stroke-width: 2.5 !important;
+      stroke-dasharray: none !important;
+      animation: none !important;
+    }
+
+    .brain-region.region-wrong path,
+    .brain-region.region-wrong ellipse {
+      fill: rgba(239,68,68,0.65) !important;
+      stroke: #ef4444 !important; stroke-width: 2.5 !important;
+      stroke-dasharray: none !important;
+      animation: wrongFlash 0.4s ease, shake 0.35s ease !important;
+    }
+
+    /* Study mode prompt */
+    .study-prompt {
+      width: 100%; max-width: 700px; text-align: center;
+      padding: 8px 0 2px;
+      font-size: 13px; color: var(--text3);
+      animation: floatIn 0.5s ease both;
+    }
+    .study-prompt strong { color: var(--rose-light); font-weight: 600; }
+
+    /* Info panel — slides up from bottom */
+    .info-panel {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      background: rgba(10,10,14,0.97);
+      backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,0.09);
+      transform: translateY(100%);
+      transition: transform 0.38s cubic-bezier(0.34,1.15,0.64,1);
+      max-height: 54vh; overflow-y: auto;
+    }
+    .info-panel.open { transform: translateY(0); }
+    .info-panel-inner {
+      padding: 22px 28px 36px; max-width: 840px; margin: 0 auto; position: relative;
+    }
+    .info-close {
+      position: absolute; top: 16px; right: 22px;
+      background: none; border: none; color: var(--text3);
+      font-size: 22px; line-height: 1; cursor: pointer;
+      transition: color 0.18s;
+    }
+    .info-close:hover { color: var(--text); }
+    .info-region-name {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.55rem; color: var(--text); margin-bottom: 3px;
+    }
+    .info-ba {
+      font-size: 11px; color: var(--rose-light); letter-spacing: 0.03em;
+      margin-bottom: 18px; display: flex; align-items: baseline; gap: 6px;
+    }
+    .info-meta-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text3);
+    }
+    .info-cols {
+      display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .info-col { flex: 1; min-width: 200px; }
+    .info-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rose-light); margin-bottom: 8px;
+    }
+    .info-list {
+      list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px;
+    }
+    .info-list li {
+      font-size: 13px; color: var(--text2); line-height: 1.5;
+      padding-left: 16px; position: relative;
+    }
+    .info-list li::before {
+      content: '·'; position: absolute; left: 2px;
+      color: var(--rose); font-weight: 700;
+    }
+    .info-vascular {
+      font-size: 12px; color: var(--text3); margin-top: 4px;
+      display: flex; align-items: baseline; gap: 6px;
+    }
+    .info-vascular span { color: var(--gold); font-weight: 500; font-size: 12px; }
+
+    /* Tooltip */
+    .region-tooltip {
+      position: fixed; pointer-events: none;
+      background: rgba(9,9,11,0.92);
+      border: 1px solid var(--gold);
+      border-radius: 7px; padding: 5px 12px;
+      font-size: 12px; color: var(--gold-light);
+      white-space: nowrap; z-index: 100;
+      opacity: 0; transition: opacity 0.15s;
+    }
+    .region-tooltip.visible { opacity: 1; }
+
+    /* Highlighted label */
+    .highlighted-label {
+      text-align: center; font-size: 12px; color: var(--gold-light);
+      margin-bottom: 8px; font-weight: 600; letter-spacing: 0.05em;
+    }
+
+    /* Chips (type 2) */
+    .chips-answer-wrap {
+      width: 100%; max-width: 700px;
+      display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .answer-chip {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-size: 14px; line-height: 1.5; color: var(--text2);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      text-align: left;
+    }
+    .answer-chip:hover:not(.chip-disabled) {
+      border-color: rgba(244,63,94,0.35); color: var(--text);
+    }
+    .answer-chip.chip-selected {
+      background: rgba(212,160,84,0.1);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+    .answer-chip.chip-correct {
+      background: rgba(52,211,153,0.12);
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .answer-chip.chip-wrong {
+      background: rgba(239,68,68,0.1);
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .answer-chip.chip-disabled { cursor: default; }
+
+    /* Action row */
+    .action-row {
+      width: 100%; max-width: 700px;
+      display: flex; gap: 10px; margin-bottom: 16px;
+    }
+    .submit-btn {
+      flex: 1;
+      background: linear-gradient(135deg, var(--rose-dark), #9f1239);
+      border: none; border-radius: 12px;
+      padding: 13px 20px;
+      font-size: 14px; font-weight: 700; color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      display: none;
+    }
+    .submit-btn.visible { display: block; }
+    .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .next-btn {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+      padding: 13px 20px;
+      font-size: 14px; font-weight: 600; color: var(--text2);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      display: none;
+    }
+    .next-btn.visible { display: block; }
+    .next-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--text); background: rgba(255,255,255,0.08); }
+
+    /* Explanation */
+    .explanation-box {
+      width: 100%; max-width: 700px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: none;
+      animation: slideDown 0.3s ease-out both;
+      margin-bottom: 16px;
+    }
+    .explanation-box.visible { display: block; }
+    .explanation-box.correct-box { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.05); }
+    .explanation-box.wrong-box  { border-color: rgba(239,68,68,0.3);  background: rgba(239,68,68,0.05); }
+    .explanation-verdict {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .correct-box .explanation-verdict { color: var(--green); }
+    .wrong-box  .explanation-verdict  { color: var(--red); }
+    .explanation-text {
+      font-size: 13px; line-height: 1.7; color: var(--text2);
+    }
+
+    /* ── RESULTS SCREEN ─────────────────────────────────────────────────── */
+    #screen-results.active {
+      padding: 80px 24px 60px;
+      display: flex; flex-direction: column; align-items: center; gap: 24px;
+    }
+    .results-card {
+      width: 100%; max-width: 520px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 36px;
+      text-align: center;
+      animation: fadeInUp 0.5s ease-out both;
+    }
+    .score-ring {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) 0% var(--pct,0%), rgba(255,255,255,0.07) 0% 100%);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .score-ring-inner {
+      width: 80px; height: 80px;
+      border-radius: 50%; background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+    }
+    .score-pct { font-size: 22px; font-weight: 800; color: var(--green); }
+    .score-sub { font-size: 10px; color: var(--text3); }
+    .results-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.6rem; margin-bottom: 8px;
+    }
+    .results-detail { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .results-actions { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+    .btn-primary {
+      flex:1; min-width:120px;
+      background: linear-gradient(135deg,var(--rose-dark),#9f1239);
+      border:none; border-radius:12px; padding:12px 20px;
+      font-size:14px; font-weight:700; color:#fff; cursor:pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity:.9; transform:translateY(-1px); }
+    .btn-secondary {
+      flex:1; min-width:120px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.15); border-radius:12px;
+      padding:12px 20px;
+      font-size:14px; font-weight:600; color:var(--text2); cursor:pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color:rgba(255,255,255,0.3); color:var(--text); }
+
+    /* ── REVIEW SCREEN ──────────────────────────────────────────────────── */
+    #screen-review.active {
+      padding: 72px 16px 60px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .review-header {
+      width: 100%; max-width: 700px;
+      font-size: 16px; font-weight: 700; color: var(--text);
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .review-item {
+      width: 100%; max-width: 700px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .review-q { font-size:14px; line-height:1.6; color:var(--text); margin-bottom:14px; }
+    .review-brain-wrap { margin-bottom:14px; }
+    .review-explanation {
+      font-size:13px; line-height:1.7; color:var(--text2);
+      border-top: 1px solid var(--border);
+      padding-top: 12px; margin-top:4px;
+    }
+    .review-back-btn {
+      width: 100%; max-width: 700px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15); border-radius:12px;
+      padding:12px 20px; font-size:14px; font-weight:600; color:var(--text2);
+      cursor:pointer; transition:border-color 0.2s,color 0.2s;
+    }
+    .review-back-btn:hover { border-color:rgba(255,255,255,0.3); color:var(--text); }
+
+    /* Sub-region strips: narrower shapes look cleaner with a thinner border */
+    #motor_cortex path, #somatosensory_cortex path,
+    #prefrontal_cortex path, #brocas_area path, #wernickes_area path {
+      stroke-width: 0.9 !important;
+    }
+
+    /* SVG Labels */
+    .region-text {
+      font-size: 10px; font-weight: 700; fill: rgba(38,12,8,0.70);
+      pointer-events: none; text-anchor: middle; dominant-baseline: middle;
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 500px) {
+      .question-card { padding: 18px; }
+      .q-text { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-rose"></div>
+  <div class="blob blob-purple"></div>
+
+  <!-- TOOLTIP -->
+  <div class="region-tooltip" id="tooltip"></div>
+
+  <nav>
+    <a class="logo" href="brain-settings.html">
+      <div class="logo-icon">M</div>
+      <span class="logo-title">MasteryPage</span>
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-score" id="nav-score" style="display:none">
+      <strong id="nav-correct">0</strong> / <span id="nav-total">0</span> correct
+    </div>
+    <button class="back-btn" onclick="location.href='brain-settings.html'">&#8592; Settings</button>
+  </nav>
+
+  <!-- LOADING -->
+  <div class="screen active" id="screen-loading">Loading&hellip;</div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screen-quiz">
+    <div class="progress-wrap">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-meta">
+        <span id="progress-label">Question 0 of 0</span>
+        <span class="correct-badge" id="progress-correct">&#10003; 0</span>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-label" id="q-label">Brain Pathology</div>
+      <div class="q-text" id="q-text"></div>
+    </div>
+
+    <div class="highlighted-label" id="highlighted-label" style="display:none">
+      &#9733; This region is damaged
+    </div>
+
+    <!-- SVG Brain Diagram -->
+    <div class="brain-container">
+      <svg id="brain-svg" viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Drop shadow around whole brain -->
+          <filter id="brain-shadow" x="-8%" y="-5%" width="120%" height="120%">
+            <feDropShadow dx="3" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.55"/>
+          </filter>
+          <!-- Glow for .region-highlighted state -->
+          <filter id="region-glow" x="-18%" y="-18%" width="136%" height="136%">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- ── Per-region radial gradients — realistic brain tissue palette ── -->
+          <!-- All regions: pinkish-tan cortex, reddish-brown mid, deep burgundy shadow -->
+          <!-- Subtle tonal shifts distinguish regions without breaking the naturalistic look -->
+
+          <!-- Frontal lobe — warm mid-pink (standard reference tone) -->
+          <radialGradient id="g-frontal" cx="35%" cy="32%" r="65%" fx="25%" fy="20%">
+            <stop offset="0%"   stop-color="#DDAA92"/>
+            <stop offset="42%"  stop-color="#A86252"/>
+            <stop offset="100%" stop-color="#612818"/>
+          </radialGradient>
+          <!-- Prefrontal cortex — slightly lighter, anterior surface catches more light -->
+          <radialGradient id="g-pfc" cx="40%" cy="36%" r="60%" fx="28%" fy="22%">
+            <stop offset="0%"   stop-color="#E6B89E"/>
+            <stop offset="42%"  stop-color="#B27060"/>
+            <stop offset="100%" stop-color="#683020"/>
+          </radialGradient>
+          <!-- Broca's area — slightly deeper/warmer, inferior frontal position -->
+          <radialGradient id="g-broca" cx="42%" cy="38%" r="58%" fx="30%" fy="25%">
+            <stop offset="0%"   stop-color="#D49E88"/>
+            <stop offset="42%"  stop-color="#A05A48"/>
+            <stop offset="100%" stop-color="#5C2618"/>
+          </radialGradient>
+          <!-- Motor cortex — bright lit strip, exposed superior surface -->
+          <radialGradient id="g-motor" cx="50%" cy="30%" r="68%" fx="40%" fy="20%">
+            <stop offset="0%"   stop-color="#E2B49C"/>
+            <stop offset="42%"  stop-color="#AC6858"/>
+            <stop offset="100%" stop-color="#643020"/>
+          </radialGradient>
+          <!-- Parietal lobe — slightly cooler, gray-pink tone -->
+          <radialGradient id="g-parietal" cx="46%" cy="30%" r="65%" fx="35%" fy="20%">
+            <stop offset="0%"   stop-color="#D8A894"/>
+            <stop offset="42%"  stop-color="#A06058"/>
+            <stop offset="100%" stop-color="#5C2A1E"/>
+          </radialGradient>
+          <!-- Somatosensory cortex — very light strip, narrow and brightly lit -->
+          <radialGradient id="g-sensory" cx="50%" cy="30%" r="68%" fx="40%" fy="20%">
+            <stop offset="0%"   stop-color="#EABEAC"/>
+            <stop offset="42%"  stop-color="#B27468"/>
+            <stop offset="100%" stop-color="#693428"/>
+          </radialGradient>
+          <!-- Temporal lobe — slightly more olive-warm, inferior placement -->
+          <radialGradient id="g-temporal" cx="40%" cy="32%" r="65%" fx="28%" fy="20%">
+            <stop offset="0%"   stop-color="#D49A80"/>
+            <stop offset="42%"  stop-color="#9C5E48"/>
+            <stop offset="100%" stop-color="#532415"/>
+          </radialGradient>
+          <!-- Wernicke's area — warm mid-tone, posterior temporal -->
+          <radialGradient id="g-wernicke" cx="42%" cy="36%" r="60%" fx="30%" fy="22%">
+            <stop offset="0%"   stop-color="#D2A082"/>
+            <stop offset="42%"  stop-color="#9E5E48"/>
+            <stop offset="100%" stop-color="#562418"/>
+          </radialGradient>
+          <!-- Occipital lobe — slightly cooler/darker, posterior pole more shadowed -->
+          <radialGradient id="g-occipital" cx="46%" cy="36%" r="62%" fx="34%" fy="22%">
+            <stop offset="0%"   stop-color="#CC9282"/>
+            <stop offset="42%"  stop-color="#985A4A"/>
+            <stop offset="100%" stop-color="#502018"/>
+          </radialGradient>
+          <!-- Cerebellum — distinctly paler/grayer; cerebellum has different tissue texture -->
+          <radialGradient id="g-cerebellum" cx="46%" cy="30%" r="65%" fx="34%" fy="18%">
+            <stop offset="0%"   stop-color="#CCA898"/>
+            <stop offset="42%"  stop-color="#907060"/>
+            <stop offset="100%" stop-color="#4E2822"/>
+          </radialGradient>
+          <!-- Brainstem — gray-pink; white-matter dominant, visually distinct -->
+          <radialGradient id="g-brainstem" cx="50%" cy="30%" r="68%" fx="38%" fy="18%">
+            <stop offset="0%"   stop-color="#BAA090"/>
+            <stop offset="42%"  stop-color="#836058"/>
+            <stop offset="100%" stop-color="#402025"/>
+          </radialGradient>
+
+          <!-- Specular highlight: warm pinkish-cream glow (biological tissue, not plastic) -->
+          <radialGradient id="g-specular" cx="28%" cy="20%" r="52%" fx="20%" fy="12%">
+            <stop offset="0%"   stop-color="rgba(255,230,210,0.22)"/>
+            <stop offset="55%"  stop-color="rgba(255,215,195,0.05)"/>
+            <stop offset="100%" stop-color="rgba(255,200,180,0)"/>
+          </radialGradient>
+          <!-- Tight specular hotspot — warm gloss point (wet pial membrane) -->
+          <radialGradient id="g-hotspot" cx="22%" cy="14%" r="22%" fx="18%" fy="10%">
+            <stop offset="0%"   stop-color="rgba(255,240,225,0.58)"/>
+            <stop offset="35%"  stop-color="rgba(255,225,205,0.14)"/>
+            <stop offset="100%" stop-color="rgba(255,210,185,0)"/>
+          </radialGradient>
+          <!-- Subsurface scatter: warm amber-orange glow simulating light through tissue -->
+          <radialGradient id="g-scatter" cx="42%" cy="48%" r="58%" fx="38%" fy="42%">
+            <stop offset="0%"   stop-color="rgba(200,100,55,0.13)"/>
+            <stop offset="50%"  stop-color="rgba(185,80,40,0.06)"/>
+            <stop offset="100%" stop-color="rgba(160,60,30,0)"/>
+          </radialGradient>
+          <!-- Ambient: warm top-lit, cool shadow -->
+          <linearGradient id="g-ambient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="rgba(255,225,205,0.12)"/>
+            <stop offset="60%"  stop-color="rgba(220,180,160,0)"/>
+            <stop offset="100%" stop-color="rgba(30,8,4,0.28)"/>
+          </linearGradient>
+          <!-- Rim gradient: warm bright top-left → deep reddish-brown bottom-right -->
+          <linearGradient id="g-rim" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stop-color="rgba(255,228,210,0.42)"/>
+            <stop offset="45%"  stop-color="rgba(220,160,130,0.16)"/>
+            <stop offset="100%" stop-color="rgba(30,8,4,0.32)"/>
+          </linearGradient>
+          <!-- ClipPath for cerebellum folia -->
+          <clipPath id="clip-cb">
+            <path d="M 285,280 C 315,275 345,275 372,281 C 400,286 428,296 445,314
+                     C 450,330 445,347 426,354 C 406,361 378,362 350,356
+                     C 324,350 298,338 280,324 C 264,312 262,298 272,286
+                     C 276,282 280,280 285,280 Z"/>
+          </clipPath>
+        </defs>
+
+        <!-- Warm ambient backdrop — subtle deep-burgundy oval unifies the separated pieces -->
+        <ellipse cx="248" cy="195" rx="228" ry="174"
+                 fill="rgba(20,5,3,0.52)" filter="url(#brain-shadow)"/>
+
+        <!-- ══ MAIN LOBES — draw deepest first (occipital→parietal→temporal→frontal) ══ -->
+
+        <!-- 1. OCCIPITAL LOBE — posterior crescent -->
+        <g id="occipital_lobe" class="brain-region" data-region="occipital_lobe" data-label="Occipital Lobe" transform="translate(11,1)">
+          <path d="M 378,52
+                   C 422,82 456,132 462,180
+                   C 465,225 450,265 425,282
+                   C 405,293 382,298 360,280
+                   C 364,272 372,264 384,252
+                   C 402,236 415,212 415,186
+                   C 412,148 400,102 378,52 Z"
+                fill="url(#g-occipital)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 378,52 C 422,82 456,132 462,180 C 465,225 450,265 425,282 C 405,293 382,298 360,280 C 364,272 372,264 384,252 C 402,236 415,212 415,186 C 412,148 400,102 378,52 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="420" y="200">Occipital</text>
+        </g>
+
+        <!-- 2. PARIETAL LOBE — top-centre, behind central sulcus -->
+        <g id="parietal_lobe" class="brain-region" data-region="parietal_lobe" data-label="Parietal Lobe" transform="translate(7,-5)">
+          <path d="M 212,18
+                   C 265,14 330,26 378,52
+                   C 395,115 415,186 408,238
+                   C 398,258 380,272 360,280
+                   C 344,270 323,254 317,238
+                   C 314,226 314,210 315,204
+                   C 285,186 252,184 215,188
+                   C 212,130 212,72 212,18 Z"
+                fill="url(#g-parietal)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 212,18 C 265,14 330,26 378,52 C 395,115 415,186 408,238 C 398,258 380,272 360,280 C 344,270 323,254 317,238 C 314,226 314,210 315,204 C 285,186 252,184 215,188 C 212,130 212,72 212,18 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="296" y="128">Parietal</text>
+        </g>
+
+        <!-- 3. TEMPORAL LOBE — below Sylvian fissure -->
+        <g id="temporal_lobe" class="brain-region" data-region="temporal_lobe" data-label="Temporal Lobe" transform="translate(-4,8)">
+          <path d="M 104,196
+                   C 148,187 196,184 215,188
+                   C 252,185 285,187 315,204
+                   C 317,218 323,236 334,250
+                   C 344,262 354,272 360,280
+                   C 345,285 328,286 310,284
+                   C 285,292 258,296 232,295
+                   C 205,296 178,292 148,278
+                   C 118,260 96,240 78,222
+                   C 72,208 76,200 104,196 Z"
+                fill="url(#g-temporal)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 104,196 C 148,187 196,184 215,188 C 252,185 285,187 315,204 C 317,218 323,236 334,250 C 344,262 354,272 360,280 C 345,285 328,286 310,284 C 285,292 258,296 232,295 C 205,296 178,292 148,278 C 118,260 96,240 78,222 C 72,208 76,200 104,196 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="210" y="252">Temporal</text>
+        </g>
+
+        <!-- 4. FRONTAL LOBE — large front region, on top -->
+        <g id="frontal_lobe" class="brain-region" data-region="frontal_lobe" data-label="Frontal Lobe" transform="translate(-10,-3)">
+          <path d="M 212,18
+                   C 168,14 118,22 85,46
+                   C 55,68 38,110 40,155
+                   C 40,178 48,198 72,204
+                   C 88,210 102,204 104,196
+                   C 148,187 196,184 215,188
+                   C 212,130 212,72 212,18 Z"
+                fill="url(#g-frontal)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 212,18 C 168,14 118,22 85,46 C 55,68 38,110 40,155 C 40,178 48,198 72,204 C 88,210 102,204 104,196 C 148,187 196,184 215,188 C 212,130 212,72 212,18 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="112" y="92">Frontal</text>
+        </g>
+
+        <!-- ══ CEREBELLUM + BRAINSTEM ══ -->
+
+        <!-- 5. CEREBELLUM -->
+        <g id="cerebellum" class="brain-region" data-region="cerebellum" data-label="Cerebellum" transform="translate(6,9)">
+          <path d="M 285,280
+                   C 315,275 345,275 372,281
+                   C 400,286 428,296 445,314
+                   C 450,330 445,347 426,354
+                   C 406,361 378,362 350,356
+                   C 324,350 298,338 280,324
+                   C 264,312 262,298 272,286
+                   C 276,282 280,280 285,280 Z"
+                fill="url(#g-cerebellum)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 285,280 C 315,275 345,275 372,281 C 400,286 428,296 445,314 C 450,330 445,347 426,354 C 406,361 378,362 350,356 C 324,350 298,338 280,324 C 264,312 262,298 272,286 C 276,282 280,280 285,280 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="358" y="324">Cerebellum</text>
+        </g>
+
+        <!-- 6. BRAINSTEM -->
+        <g id="brainstem" class="brain-region" data-region="brainstem" data-label="Brainstem" transform="translate(0,9)">
+          <path d="M 238,283
+                   C 254,278 270,278 284,284
+                   C 288,298 288,318 282,338
+                   C 276,352 265,358 252,356
+                   C 240,354 228,348 225,334
+                   C 222,318 224,298 238,283 Z"
+                fill="url(#g-brainstem)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 238,283 C 254,278 270,278 284,284 C 288,298 288,318 282,338 C 276,352 265,358 252,356 C 240,354 228,348 225,334 C 222,318 224,298 238,283 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="256" y="322">Brainstem</text>
+        </g>
+
+        <!-- ══ SUB-REGIONS — drawn on top of base lobes ══ -->
+
+        <!-- 7. MOTOR CORTEX — precentral gyrus strip (left of central sulcus) -->
+        <g id="motor_cortex" class="brain-region" data-region="motor_cortex" data-label="Motor Cortex" transform="translate(-5,-6)">
+          <path d="M 212,18
+                   C 213,72 215,130 215,188
+                   C 204,186 194,172 192,152
+                   C 190,126 192,78 200,34
+                   C 205,20 210,16 212,18 Z"
+                fill="url(#g-motor)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 212,18 C 213,72 215,130 215,188 C 204,186 194,172 192,152 C 190,126 192,78 200,34 C 205,20 210,16 212,18 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="202" y="108" font-size="8" transform="rotate(-80,202,108)">Motor</text>
+        </g>
+
+        <!-- 8. SOMATOSENSORY CORTEX — postcentral gyrus strip (right of central sulcus) -->
+        <g id="somatosensory_cortex" class="brain-region" data-region="somatosensory_cortex" data-label="Somatosensory Cortex" transform="translate(-3,-7)">
+          <path d="M 215,188
+                   C 215,130 213,72 212,18
+                   C 222,14 238,12 244,20
+                   C 240,72 238,130 238,188
+                   C 230,188 222,188 215,188 Z"
+                fill="url(#g-sensory)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 215,188 C 215,130 213,72 212,18 C 222,14 238,12 244,20 C 240,72 238,130 238,188 C 230,188 222,188 215,188 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="230" y="108" font-size="8" transform="rotate(-80,230,108)">Sens.</text>
+        </g>
+
+        <!-- 9. PREFRONTAL CORTEX — anterior frontal overlay -->
+        <g id="prefrontal_cortex" class="brain-region" data-region="prefrontal_cortex" data-label="Prefrontal Cortex" transform="translate(-12,-2)">
+          <path d="M 40,155
+                   C 38,118 52,72 85,46
+                   C 108,28 138,18 168,18
+                   C 165,70 158,130 152,188
+                   C 130,190 108,196 104,196
+                   C 80,210 58,208 44,200
+                   C 40,184 40,168 40,155 Z"
+                fill="url(#g-pfc)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 40,155 C 38,118 52,72 85,46 C 108,28 138,18 168,18 C 165,70 158,130 152,188 C 130,190 108,196 104,196 C 80,210 58,208 44,200 C 40,184 40,168 40,155 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="90" y="130">PFC</text>
+        </g>
+
+        <!-- 10. BROCA'S AREA — inferior frontal gyrus -->
+        <g id="brocas_area" class="brain-region" data-region="brocas_area" data-label="Broca's Area" transform="translate(-11,1)">
+          <path d="M 104,196
+                   C 118,192 136,189 152,188
+                   C 156,165 155,142 150,122
+                   C 140,108 124,108 112,120
+                   C 105,132 103,160 104,196 Z"
+                fill="url(#g-broca)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 104,196 C 118,192 136,189 152,188 C 156,165 155,142 150,122 C 140,108 124,108 112,120 C 105,132 103,160 104,196 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="130" y="152">Broca</text>
+        </g>
+
+        <!-- 11. WERNICKE'S AREA — posterior superior temporal -->
+        <g id="wernickes_area" class="brain-region" data-region="wernickes_area" data-label="Wernicke's Area" transform="translate(6,5)">
+          <path d="M 315,204
+                   C 322,196 338,192 354,198
+                   C 370,208 374,230 365,250
+                   C 354,266 336,270 322,260
+                   C 314,252 313,230 315,204 Z"
+                fill="url(#g-wernicke)" stroke="rgba(42,12,8,0.55)" stroke-width="1.4"/>
+          <path d="M 315,204 C 322,196 338,192 354,198 C 370,208 374,230 365,250 C 354,266 336,270 322,260 C 314,252 313,230 315,204 Z" fill="url(#g-scatter)" pointer-events="none"/>
+          <text class="region-text" x="344" y="232">Wernicke</text>
+        </g>
+
+        <!-- ══ PIAL VASCULATURE (pointer-events: none) ══ -->
+        <!-- MCA branches and PICA loops visible on lateral surface in a real brain photo -->
+        <g class="vessels-layer" pointer-events="none" fill="none">
+
+          <!-- MCA main trunk — courses along Sylvian fissure -->
+          <path d="M 92,193 C 124,184 158,180 186,183 C 212,185 238,184 258,188 C 278,186 300,190 316,201"
+                stroke="rgba(148,52,38,0.44)" stroke-width="1.1" stroke-linecap="round"/>
+
+          <!-- Superior frontal MCA branch — climbs toward vertex -->
+          <path d="M 118,186 C 115,160 112,132 116,104 C 120,78 130,56 142,36"
+                stroke="rgba(148,52,38,0.36)" stroke-width="0.9" stroke-linecap="round"/>
+
+          <!-- Pre-Rolandic branch — ascending to motor strip -->
+          <path d="M 156,182 C 154,154 152,120 154,92 C 156,66 164,44 176,26"
+                stroke="rgba(148,52,38,0.34)" stroke-width="0.85" stroke-linecap="round"/>
+
+          <!-- Rolandic (central) branch -->
+          <path d="M 198,182 C 196,152 195,118 197,90 C 199,65 205,40 211,20"
+                stroke="rgba(148,52,38,0.30)" stroke-width="0.8" stroke-linecap="round"/>
+
+          <!-- Angular artery — posterior MCA toward angular gyrus -->
+          <path d="M 298,196 C 316,186 334,178 348,174 C 360,170 372,167 380,162"
+                stroke="rgba(148,52,38,0.32)" stroke-width="0.85" stroke-linecap="round"/>
+
+          <!-- Posterior temporal MCA branch — lateral occipital direction -->
+          <path d="M 322,198 C 338,186 356,174 370,166 C 382,158 394,152 404,142"
+                stroke="rgba(148,52,38,0.28)" stroke-width="0.8" stroke-linecap="round"/>
+
+          <!-- Temporal descending branches — over superior temporal gyrus -->
+          <path d="M 168,186 C 162,198 155,212 148,226 C 140,240 135,252 134,262"
+                stroke="rgba(148,52,38,0.30)" stroke-width="0.8" stroke-linecap="round"/>
+          <path d="M 220,188 C 218,202 215,218 215,232 C 215,246 217,257 220,265"
+                stroke="rgba(148,52,38,0.26)" stroke-width="0.75" stroke-linecap="round"/>
+
+          <!-- Small anastomotic connectors across gyral crowns -->
+          <path d="M 134,152 C 148,148 160,146 174,149"
+                stroke="rgba(148,52,38,0.20)" stroke-width="0.65" stroke-linecap="round"/>
+          <path d="M 248,138 C 262,134 276,133 287,137"
+                stroke="rgba(148,52,38,0.20)" stroke-width="0.65" stroke-linecap="round"/>
+          <path d="M 330,138 C 344,132 358,130 368,134"
+                stroke="rgba(148,52,38,0.18)" stroke-width="0.65" stroke-linecap="round"/>
+
+          <!-- PICA — superior cerebellar loop (visible on dorsal cerebellum surface) -->
+          <path d="M 292,284 C 312,278 334,275 355,279 C 374,283 392,292 406,306"
+                stroke="rgba(148,52,38,0.30)" stroke-width="0.8" stroke-linecap="round"/>
+          <!-- PICA lateral loop — left cerebellar hemisphere -->
+          <path d="M 320,277 C 324,293 326,312 322,330 C 318,346 310,358 300,364"
+                stroke="rgba(148,52,38,0.24)" stroke-width="0.75" stroke-linecap="round"/>
+          <!-- PICA right loop -->
+          <path d="M 368,282 C 376,298 380,318 374,336 C 368,352 354,362 338,366"
+                stroke="rgba(148,52,38,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+
+        </g>
+
+        <!-- ══ SULCI + GYRI TEXTURE (pointer-events: none) ══ -->
+        <g class="texture-layer" pointer-events="none" fill="none">
+
+          <!-- ── Major sulci (dark, prominent) ── -->
+          <!-- Central sulcus — vertical strip between motor/somatosensory -->
+          <path d="M 212,20 C 211,70 213,130 215,188"
+                stroke="rgba(48,14,8,0.70)" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Sylvian (lateral) fissure — major horizontal boundary -->
+          <path d="M 104,196 C 148,187 196,184 215,188 C 252,185 285,187 315,204"
+                stroke="rgba(48,14,8,0.70)" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Parieto-occipital sulcus — curved posterior boundary -->
+          <path d="M 378,52 C 400,102 412,148 415,186 C 415,212 402,236 384,252 C 372,264 364,272 360,280"
+                stroke="rgba(48,14,8,0.65)" stroke-width="2.2" stroke-linecap="round"/>
+
+          <!-- ── Secondary sulci (lighter) ── -->
+          <!-- Superior frontal sulcus -->
+          <path d="M 88,48 C 102,62 116,84 118,112 C 120,140 126,168 130,190"
+                stroke="rgba(44,12,8,0.52)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Inferior frontal / Broca margin -->
+          <path d="M 96,122 C 108,118 122,116 138,118 C 148,120 154,128 152,140"
+                stroke="rgba(44,12,8,0.46)" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Superior temporal sulcus (below Sylvian fissure) -->
+          <path d="M 108,212 C 148,208 195,208 235,216 C 265,222 295,230 318,240"
+                stroke="rgba(44,12,8,0.52)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Inferior temporal sulcus -->
+          <path d="M 120,240 C 158,237 200,236 238,244 C 265,250 290,258 312,265"
+                stroke="rgba(44,12,8,0.40)" stroke-width="1.3" stroke-linecap="round"/>
+          <!-- Intraparietal sulcus -->
+          <path d="M 240,60 C 268,82 305,112 336,148 C 355,175 365,208 365,242"
+                stroke="rgba(44,12,8,0.52)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Lateral occipital sulcus -->
+          <path d="M 408,98 C 418,122 422,150 418,178 C 414,205 408,228 400,248"
+                stroke="rgba(44,12,8,0.42)" stroke-width="1.3" stroke-linecap="round"/>
+
+          <!-- ── Gyri ridge highlights (thin white, simulate raised surface) ── -->
+          <!-- Frontal ridges -->
+          <path d="M 72,90 C 94,76 118,68 142,70"
+                stroke="rgba(255,228,210,0.52)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 68,128 C 90,118 115,113 140,116"
+                stroke="rgba(255,224,205,0.42)" stroke-width="1.1" stroke-linecap="round"/>
+          <path d="M 74,164 C 93,156 113,151 132,152"
+                stroke="rgba(255,220,200,0.36)" stroke-width="1.0" stroke-linecap="round"/>
+          <!-- Parietal ridges -->
+          <path d="M 248,44 C 272,50 304,64 332,80"
+                stroke="rgba(255,228,210,0.52)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 255,90 C 278,96 310,108 338,124"
+                stroke="rgba(255,224,205,0.42)" stroke-width="1.1" stroke-linecap="round"/>
+          <path d="M 265,136 C 287,140 315,148 340,162"
+                stroke="rgba(255,218,198,0.34)" stroke-width="1.0" stroke-linecap="round"/>
+          <!-- Temporal ridges -->
+          <path d="M 118,220 C 155,215 192,214 226,220"
+                stroke="rgba(255,224,205,0.42)" stroke-width="1.1" stroke-linecap="round"/>
+          <path d="M 128,252 C 165,248 204,248 240,254"
+                stroke="rgba(255,218,198,0.34)" stroke-width="1.0" stroke-linecap="round"/>
+          <!-- Occipital ridges -->
+          <path d="M 422,102 C 436,124 444,152 444,178"
+                stroke="rgba(255,255,255,0.20)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 428,136 C 440,158 444,184 440,210"
+                stroke="rgba(255,220,200,0.36)" stroke-width="1.0" stroke-linecap="round"/>
+
+          <!-- ── Cerebellum folia (characteristic horizontal stripes) ── -->
+          <g clip-path="url(#clip-cb)">
+            <line x1="260" y1="293" x2="450" y2="293" stroke="rgba(48,14,8,0.52)" stroke-width="1.8"/>
+            <line x1="260" y1="304" x2="452" y2="304" stroke="rgba(255,218,198,0.28)" stroke-width="0.8"/>
+            <line x1="260" y1="314" x2="453" y2="314" stroke="rgba(48,14,8,0.52)" stroke-width="1.8"/>
+            <line x1="260" y1="325" x2="450" y2="325" stroke="rgba(255,218,198,0.28)" stroke-width="0.8"/>
+            <line x1="260" y1="335" x2="446" y2="335" stroke="rgba(48,14,8,0.52)" stroke-width="1.8"/>
+            <line x1="260" y1="345" x2="440" y2="345" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+          </g>
+        </g>
+
+        <!-- ══ DEPTH REFINEMENTS (pointer-events: none) ══ -->
+        <g pointer-events="none" fill="none">
+
+          <!-- ── Sulcal valley shadow twins (dark echo just beside each major sulcus) ── -->
+          <!-- Central sulcus valley shadow (offset 4px right = somatosensory shadow side) -->
+          <path d="M 217,22 C 216,72 218,132 220,190"
+                stroke="rgba(44,12,8,0.50)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Sylvian fissure valley shadow (offset 4px down = temporal shadow side) -->
+          <path d="M 104,200 C 148,191 196,188 216,192 C 252,189 285,191 315,208"
+                stroke="rgba(44,12,8,0.52)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Parieto-occipital valley shadow (offset 4px inward) -->
+          <path d="M 374,54 C 396,104 409,150 411,188 C 411,214 398,238 380,254 C 368,266 360,274 356,282"
+                stroke="rgba(44,12,8,0.44)" stroke-width="1.3" stroke-linecap="round"/>
+
+          <!-- ── Lobe-boundary lit edges (facing the upper-left light source) ── -->
+          <!-- Motor cortex left lit edge (gyrus peak catching light) -->
+          <path d="M 209,22 C 208,72 210,132 212,190"
+                stroke="rgba(255,228,212,0.55)" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- Somatosensory right lit shoulder -->
+          <path d="M 221,22 C 220,72 222,132 224,190"
+                stroke="rgba(255,255,255,0.18)" stroke-width="1.0" stroke-linecap="round"/>
+          <!-- Temporal superior lit edge (just above Sylvian fissure) -->
+          <path d="M 105,193 C 149,184 197,181 215,185 C 252,182 285,184 315,201"
+                stroke="rgba(255,255,255,0.18)" stroke-width="1.0" stroke-linecap="round"/>
+          <!-- Occipital anterior lit edge (parieto-occipital bright side) -->
+          <path d="M 378,52 C 400,102 412,148 415,186"
+                stroke="rgba(255,224,208,0.46)" stroke-width="1.1" stroke-linecap="round"/>
+
+          <!-- ── Sub-region inner rim highlights ── -->
+          <!-- PFC upper-left rim -->
+          <path d="M 43,153 C 41,117 54,72 87,47 C 109,30 137,20 165,20"
+                stroke="rgba(255,224,208,0.46)" stroke-width="1.1" stroke-linecap="round"/>
+          <!-- Broca's top edge -->
+          <path d="M 105,195 C 116,189 130,185 149,186"
+                stroke="rgba(255,255,255,0.22)" stroke-width="1.1" stroke-linecap="round"/>
+          <!-- Wernicke's top edge -->
+          <path d="M 316,204 C 323,196 340,192 355,199"
+                stroke="rgba(255,255,255,0.22)" stroke-width="1.1" stroke-linecap="round"/>
+
+          <!-- ── Brainstem segmentation lines (midbrain / pons / medulla) ── -->
+          <!-- Midbrain–pons boundary + lit highlight pair -->
+          <path d="M 233,302 C 245,300 261,299 281,302"
+                stroke="rgba(48,12,8,0.62)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M 233,301 C 245,299 261,298 281,301"
+                stroke="rgba(255,255,255,0.13)" stroke-width="0.7" stroke-linecap="round"/>
+          <!-- Pons–medulla boundary + lit highlight pair -->
+          <path d="M 230,320 C 243,317 258,316 281,320"
+                stroke="rgba(48,12,8,0.56)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M 230,319 C 243,316 258,315 281,319"
+                stroke="rgba(255,215,195,0.24)" stroke-width="0.7" stroke-linecap="round"/>
+          <!-- Brainstem left lit edge -->
+          <path d="M 239,284 C 229,301 225,322 227,341"
+                stroke="rgba(255,255,255,0.22)" stroke-width="1.1" stroke-linecap="round"/>
+
+          <!-- ── Cerebellum refinements ── -->
+          <!-- Superior rim lit highlight (top edge catching overhead light) -->
+          <path d="M 285,280 C 315,275 345,275 372,281 C 400,286 428,296 445,314"
+                stroke="rgba(255,255,255,0.28)" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Additional interleaved folia for denser foliation -->
+          <g clip-path="url(#clip-cb)">
+            <line x1="262" y1="287" x2="446" y2="287" stroke="rgba(255,215,195,0.24)" stroke-width="0.7"/>
+            <line x1="261" y1="298" x2="453" y2="298" stroke="rgba(44,12,8,0.46)" stroke-width="1.4"/>
+            <line x1="261" y1="309" x2="453" y2="309" stroke="rgba(255,215,195,0.24)" stroke-width="0.7"/>
+            <line x1="261" y1="319" x2="452" y2="319" stroke="rgba(44,12,8,0.46)" stroke-width="1.4"/>
+            <line x1="261" y1="330" x2="449" y2="330" stroke="rgba(255,255,255,0.10)" stroke-width="0.7"/>
+            <line x1="261" y1="340" x2="444" y2="340" stroke="rgba(44,12,8,0.46)" stroke-width="1.4"/>
+            <line x1="261" y1="350" x2="437" y2="350" stroke="rgba(255,255,255,0.08)" stroke-width="0.7"/>
+          </g>
+          <!-- Vermis midline (dashed, separates left/right hemispheres of cerebellum) -->
+          <path d="M 357,278 C 358,296 357,316 354,336 C 351,349 345,358 337,360"
+                stroke="rgba(48,12,8,0.58)" stroke-width="1.3" stroke-linecap="round"
+                stroke-dasharray="3 4"/>
+
+          <!-- ── Lower hemisphere vignette (darkens the away-from-light side) ── -->
+          <path d="M 270,280 C 295,268 318,278 342,286
+                   C 370,296 400,292 422,280 C 448,264 462,222 460,174
+                   C 440,188 415,210 395,234 C 375,256 355,270 332,278
+                   C 308,284 288,282 270,280 Z"
+                fill="rgba(35,10,5,0.20)"/>
+
+        </g>
+
+        <!-- ══ LIGHTING OVERLAYS (pointer-events: none) ══ -->
+        <!-- Full-brain fill overlays removed — regions are now separated;
+             per-region radial gradients + CSS drop-shadow handle all 3D depth. -->
+      </svg>
+    </div>
+
+    <!-- Study mode prompt (hidden during quiz) -->
+    <div class="study-prompt" id="study-prompt" style="display:none">
+      Click any region to explore its <strong>anatomy</strong> and <strong>clinical syndromes</strong>
+    </div>
+
+    <!-- Answer chips (type 2 only) -->
+    <div class="chips-answer-wrap" id="chips-answer-wrap" style="display:none"></div>
+
+    <!-- Actions -->
+    <div class="action-row">
+      <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">Submit Answer</button>
+      <button class="next-btn"   id="next-btn"   onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+
+    <!-- Explanation -->
+    <div class="explanation-box" id="explanation-box">
+      <div class="explanation-verdict" id="explanation-verdict"></div>
+      <div class="explanation-text" id="explanation-text"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="screen-results">
+    <div class="results-card">
+      <div class="score-ring" id="score-ring">
+        <div class="score-ring-inner">
+          <span class="score-pct" id="score-pct">0%</span>
+          <span class="score-sub">Score</span>
+        </div>
+      </div>
+      <div class="results-title">Session Complete</div>
+      <div class="results-detail" id="results-detail"></div>
+      <div class="results-actions">
+        <button class="btn-primary" onclick="location.href='brain-settings.html'">New Session</button>
+        <button class="btn-secondary" id="review-btn" onclick="showReview()" style="display:none">Review Missed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div class="screen" id="screen-review">
+    <div class="review-header">Missed Questions — Review</div>
+    <div id="review-items"></div>
+    <button class="review-back-btn" onclick="showResults()">&larr; Back to Results</button>
+  </div>
+
+  <!-- Info panel (study mode) -->
+  <div class="info-panel" id="info-panel">
+    <div class="info-panel-inner">
+      <button class="info-close" onclick="closeInfoPanel()" aria-label="Close">&#215;</button>
+      <div class="info-region-name" id="info-region-name"></div>
+      <div class="info-ba" id="info-ba-row">
+        <span class="info-meta-label">Brodmann Areas</span>
+        <span id="info-ba-val"></span>
+      </div>
+      <div class="info-cols">
+        <div class="info-col">
+          <div class="info-section-label">Key Functions</div>
+          <ul class="info-list" id="info-functions"></ul>
+        </div>
+        <div class="info-col">
+          <div class="info-section-label">Clinical Syndromes</div>
+          <ul class="info-list" id="info-syndromes"></ul>
+        </div>
+      </div>
+      <div class="info-vascular" id="info-vascular-row">
+        <span class="info-meta-label">Vascular Territory</span>
+        <span id="info-vascular-val"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="data/brain_data.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Parse URL params ──────────────────────────────────────────────────
+    const params     = new URLSearchParams(location.search);
+    const CATS_RAW   = (params.get('categories') || '').split(',').filter(Boolean);
+    const COUNT_RAW  = parseInt(params.get('count') || '20', 10);
+    const CATEGORIES = CATS_RAW.length ? CATS_RAW : null;
+    const IS_STUDY   = params.get('mode') === 'study';
+
+    // ── Data ──────────────────────────────────────────────────────────────
+    const DATA      = window.__BRAIN_DATA || {};
+    const REGIONS   = DATA.regions || {};
+    const ALL_QS    = DATA.questions || [];
+
+    // ── State ─────────────────────────────────────────────────────────────
+    let pool         = [];
+    let current      = 0;
+    let correctCount = 0;
+    let missed       = [];
+    let selectedRegion  = null;
+    let selectedChipIdx = null;
+    let submitted    = false;
+
+    // ── Session key for localStorage ─────────────────────────────────────
+    const SESSION_KEY = 'brain_session_' + JSON.stringify({
+      cats: CATEGORIES ? [...CATEGORIES].sort().join(',') : 'all',
+      n: COUNT_RAW
+    });
+
+    // ── Helpers ───────────────────────────────────────────────────────────
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function regionEl(id) { return document.getElementById(id); }
+    function regionLabel(id) { return (REGIONS[id] || {}).label || id; }
+
+    // ── Build pool ────────────────────────────────────────────────────────
+    function buildPool() {
+      let qs = ALL_QS.slice();
+      if (CATEGORIES) {
+        qs = qs.filter(q => CATEGORIES.includes(q.category));
+      }
+      qs = shuffle(qs);
+      if (COUNT_RAW > 0) qs = qs.slice(0, COUNT_RAW);
+      return qs;
+    }
+
+    // ── Study mode ────────────────────────────────────────────────────────
+    function initStudy() {
+      showScreen('screen-quiz');
+      // Hide all quiz-only elements
+      document.querySelector('.progress-wrap').style.display = 'none';
+      document.querySelector('.question-card').style.display = 'none';
+      document.getElementById('chips-answer-wrap').style.display = 'none';
+      document.querySelector('.action-row').style.display = 'none';
+      document.getElementById('explanation-box').style.display = 'none';
+      document.getElementById('nav-score').style.display = 'none';
+      // Show study prompt
+      document.getElementById('study-prompt').style.display = 'block';
+      // All regions active + wired
+      const svg = document.getElementById('brain-svg');
+      svg.classList.add('svg-study-mode');
+      document.querySelectorAll('.brain-region').forEach(g => {
+        g.classList.add('region-active');
+        g.onclick = () => handleStudyRegionClick(g);
+      });
+    }
+
+    function handleStudyRegionClick(g) {
+      const regionId = g.dataset.region;
+      const rData    = REGIONS[regionId];
+      if (!rData) return;
+      // Update selection highlight
+      document.querySelectorAll('.brain-region').forEach(el => el.classList.remove('study-selected'));
+      g.classList.add('study-selected');
+      populateInfoPanel(rData.label, rData.info || {});
+      document.getElementById('info-panel').classList.add('open');
+    }
+
+    function populateInfoPanel(label, info) {
+      document.getElementById('info-region-name').textContent = label;
+      const baRow = document.getElementById('info-ba-row');
+      if (info.ba) {
+        document.getElementById('info-ba-val').textContent = info.ba;
+        baRow.style.display = '';
+      } else {
+        baRow.style.display = 'none';
+      }
+      document.getElementById('info-functions').innerHTML =
+        (info.functions || []).map(f => `<li>${f}</li>`).join('');
+      document.getElementById('info-syndromes').innerHTML =
+        (info.syndromes || []).map(s => `<li>${s}</li>`).join('');
+      const vRow = document.getElementById('info-vascular-row');
+      if (info.vascular) {
+        document.getElementById('info-vascular-val').textContent = info.vascular;
+        vRow.style.display = '';
+      } else {
+        vRow.style.display = 'none';
+      }
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────
+    function init() {
+      if (IS_STUDY) { initStudy(); return; }
+      // Try restore session
+      try {
+        const saved = JSON.parse(localStorage.getItem(SESSION_KEY));
+        if (saved && saved.pool && saved.current < saved.pool.length) {
+          pool         = saved.pool;
+          current      = saved.current;
+          correctCount = saved.correctCount || 0;
+          missed       = saved.missed || [];
+          showScreen('screen-quiz');
+          renderQuestion();
+          return;
+        }
+      } catch (e) { /* ignore */ }
+
+      pool = buildPool();
+      if (!pool.length) {
+        showScreen('screen-quiz');
+        document.getElementById('q-text').textContent = 'No questions match your selection. Go back and try different categories.';
+        return;
+      }
+      showScreen('screen-quiz');
+      renderQuestion();
+    }
+
+    function saveSession() {
+      try {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ pool, current, correctCount, missed }));
+      } catch (e) { /* ignore */ }
+    }
+
+    function clearSession() {
+      try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+    }
+
+    // ── Screen management ─────────────────────────────────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // ── Progress bar ──────────────────────────────────────────────────────
+    function updateProgress() {
+      const pct = pool.length ? (current / pool.length) * 100 : 0;
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-label').textContent =
+        `Question ${Math.min(current + 1, pool.length)} of ${pool.length}`;
+      document.getElementById('progress-correct').textContent = '✓ ' + correctCount;
+      document.getElementById('nav-score').style.display = 'flex';
+      document.getElementById('nav-correct').textContent = correctCount;
+      document.getElementById('nav-total').textContent = current;
+    }
+
+    // ── Reset SVG state ───────────────────────────────────────────────────
+    function resetSVG() {
+      Object.keys(REGIONS).forEach(id => {
+        const el = regionEl(id);
+        if (!el) return;
+        el.classList.remove(
+          'region-active','region-dimmed','region-selected',
+          'region-highlighted','region-correct','region-wrong'
+        );
+      });
+    }
+
+    function setAllDimmed() {
+      Object.keys(REGIONS).forEach(id => {
+        const el = regionEl(id);
+        if (el) el.classList.add('region-dimmed');
+      });
+    }
+
+    function activateRegions(ids) {
+      ids.forEach(id => {
+        const el = regionEl(id);
+        if (el) {
+          el.classList.remove('region-dimmed');
+          el.classList.add('region-active');
+        }
+      });
+    }
+
+    // ── Render question ───────────────────────────────────────────────────
+    function renderQuestion() {
+      if (current >= pool.length) { showResults(); return; }
+
+      const q = pool[current];
+      selectedRegion  = null;
+      selectedChipIdx = null;
+      submitted       = false;
+
+      updateProgress();
+      resetSVG();
+
+      // Reset UI elements
+      document.getElementById('chips-answer-wrap').style.display = 'none';
+      document.getElementById('chips-answer-wrap').innerHTML = '';
+      document.getElementById('highlighted-label').style.display = 'none';
+      document.getElementById('explanation-box').className = 'explanation-box';
+      document.getElementById('explanation-text').textContent = '';
+      document.getElementById('explanation-verdict').textContent = '';
+      document.getElementById('submit-btn').classList.remove('visible');
+      document.getElementById('next-btn').classList.remove('visible');
+      document.getElementById('submit-btn').disabled = false;
+
+      // Category label
+      const catLabels = {
+        aphasia:'Aphasia', motor:'Motor / Movement', memory:'Memory',
+        visual:'Visual', sensory:'Sensory / Perceptual',
+        executive:'Executive / Frontal', vascular:'Vascular'
+      };
+      document.getElementById('q-label').textContent =
+        (catLabels[q.category] || q.category) + ' — Brain Pathology';
+
+      if (q.type === 'deficit_to_location' || q.type === 'case_to_location') {
+        renderClickRegion(q);
+      } else if (q.type === 'location_to_deficit') {
+        renderLocationToDeficit(q);
+      }
+
+      saveSession();
+    }
+
+    // ── Type 1 & 3: click a region ────────────────────────────────────────
+    function renderClickRegion(q) {
+      document.getElementById('q-text').textContent = q.question;
+
+      const activeIds = [q.target_region, ...(q.distractor_regions || [])];
+      setAllDimmed();
+      activateRegions(activeIds);
+
+      // Wire click handlers
+      activeIds.forEach(id => {
+        const el = regionEl(id);
+        if (!el) return;
+        el.onclick = () => handleRegionClick(id, q);
+      });
+    }
+
+    // ── Type 2: highlighted region + chips ────────────────────────────────
+    function renderLocationToDeficit(q) {
+      document.getElementById('q-text').textContent = q.question;
+
+      const highlighted = q.highlighted_region;
+      setAllDimmed();
+      const hEl = regionEl(highlighted);
+      if (hEl) {
+        hEl.classList.remove('region-dimmed');
+        hEl.classList.add('region-highlighted');
+      }
+      document.getElementById('highlighted-label').style.display = 'block';
+      document.getElementById('highlighted-label').textContent =
+        '★ ' + regionLabel(highlighted) + ' — highlighted';
+
+      // Render chips
+      const wrap = document.getElementById('chips-answer-wrap');
+      wrap.style.display = 'flex';
+      const shuffledOpts = q.options.map((text, i) => ({ text, origIdx: i }));
+      // Keep options in original order for location_to_deficit (they're written to match)
+      shuffledOpts.forEach(({ text, origIdx }) => {
+        const chip = document.createElement('button');
+        chip.className = 'answer-chip';
+        chip.textContent = text;
+        chip.dataset.idx = origIdx;
+        chip.onclick = () => handleChipClick(origIdx, q, chip);
+        wrap.appendChild(chip);
+      });
+    }
+
+    // ── Handlers ─────────────────────────────────────────────────────────
+    function handleRegionClick(id, q) {
+      if (submitted) return;
+      selectedRegion = id;
+
+      // Visual: deselect all, then select clicked
+      Object.keys(REGIONS).forEach(rid => {
+        const el = regionEl(rid);
+        if (el) el.classList.remove('region-selected');
+      });
+      const el = regionEl(id);
+      if (el) el.classList.add('region-selected');
+
+      document.getElementById('submit-btn').classList.add('visible');
+    }
+
+    function handleChipClick(idx, q, chipEl) {
+      if (submitted) return;
+      selectedChipIdx = idx;
+
+      // Visual: deselect all chips
+      document.querySelectorAll('.answer-chip').forEach(c => {
+        c.classList.remove('chip-selected');
+      });
+      chipEl.classList.add('chip-selected');
+
+      document.getElementById('submit-btn').classList.add('visible');
+    }
+
+    // ── Submit ────────────────────────────────────────────────────────────
+    function handleSubmit() {
+      if (submitted) return;
+      const q = pool[current];
+
+      if (q.type === 'deficit_to_location' || q.type === 'case_to_location') {
+        if (!selectedRegion) return;
+        submitClickRegion(q);
+      } else if (q.type === 'location_to_deficit') {
+        if (selectedChipIdx === null) return;
+        submitLocationToDeficit(q);
+      }
+
+      submitted = true;
+      document.getElementById('submit-btn').classList.remove('visible');
+      document.getElementById('next-btn').classList.add('visible');
+      document.getElementById('submit-btn').disabled = true;
+      saveSession();
+    }
+
+    function submitClickRegion(q) {
+      const isCorrect = selectedRegion === q.target_region;
+
+      if (isCorrect) {
+        correctCount++;
+        regionEl(selectedRegion).classList.remove('region-selected');
+        regionEl(selectedRegion).classList.add('region-correct');
+      } else {
+        const selEl = regionEl(selectedRegion);
+        if (selEl) {
+          selEl.classList.remove('region-selected');
+          selEl.classList.add('region-wrong');
+        }
+        const corrEl = regionEl(q.target_region);
+        if (corrEl) corrEl.classList.add('region-correct');
+        missed.push({ q, selectedRegion });
+      }
+
+      showExplanation(q, isCorrect);
+    }
+
+    function submitLocationToDeficit(q) {
+      const isCorrect = selectedChipIdx === q.correct_option_index;
+
+      document.querySelectorAll('.answer-chip').forEach(chip => {
+        chip.classList.add('chip-disabled');
+        const i = parseInt(chip.dataset.idx);
+        if (i === q.correct_option_index) {
+          chip.classList.remove('chip-selected');
+          chip.classList.add('chip-correct');
+        } else if (i === selectedChipIdx && !isCorrect) {
+          chip.classList.remove('chip-selected');
+          chip.classList.add('chip-wrong');
+        }
+      });
+
+      if (isCorrect) {
+        correctCount++;
+      } else {
+        missed.push({ q, selectedChipIdx });
+      }
+
+      showExplanation(q, isCorrect);
+    }
+
+    function showExplanation(q, isCorrect) {
+      const box  = document.getElementById('explanation-box');
+      box.className = 'explanation-box visible ' + (isCorrect ? 'correct-box' : 'wrong-box');
+      document.getElementById('explanation-verdict').textContent =
+        isCorrect ? '✓ Correct' : '✗ Incorrect';
+      document.getElementById('explanation-text').textContent = q.explanation;
+    }
+
+    // ── Next question ─────────────────────────────────────────────────────
+    function nextQuestion() {
+      current++;
+      renderQuestion();
+    }
+
+    // ── Results ───────────────────────────────────────────────────────────
+    function showResults() {
+      clearSession();
+      showScreen('screen-results');
+
+      const total = pool.length;
+      const pct = total ? Math.round((correctCount / total) * 100) : 0;
+
+      document.getElementById('score-pct').textContent = pct + '%';
+      document.getElementById('score-ring').style.setProperty('--pct', pct + '%');
+
+      document.getElementById('results-detail').innerHTML =
+        `You answered <strong>${correctCount}</strong> of <strong>${total}</strong> questions correctly.` +
+        (missed.length > 0
+          ? `<br><span style="color:var(--rose-light)">${missed.length} missed</span> — review below.`
+          : '<br><span style="color:var(--green)">Perfect score!</span>');
+
+      if (missed.length > 0) {
+        document.getElementById('review-btn').style.display = 'block';
+      }
+    }
+
+    // ── Review ────────────────────────────────────────────────────────────
+    function showReview() {
+      showScreen('screen-review');
+      const container = document.getElementById('review-items');
+      container.innerHTML = '';
+
+      missed.forEach(({ q }) => {
+        const item = document.createElement('div');
+        item.className = 'review-item';
+
+        // Question text
+        const qDiv = document.createElement('div');
+        qDiv.className = 'review-q';
+        qDiv.textContent = q.question;
+        item.appendChild(qDiv);
+
+        // Mini SVG clone showing correct region in green
+        const svgWrap = document.createElement('div');
+        svgWrap.className = 'review-brain-wrap';
+        const svgEl = document.getElementById('brain-svg').cloneNode(true);
+        svgEl.removeAttribute('id');
+        svgEl.style.maxWidth = '380px';
+        svgEl.style.height = 'auto';
+
+        // Highlight correct region in the clone
+        const targetId = q.target_region || q.highlighted_region;
+        const cloneG = svgEl.getElementById ? null : svgEl.querySelector('#' + targetId);
+        // querySelector on clone
+        const cEl = svgEl.querySelector('#' + targetId);
+        if (cEl) {
+          cEl.querySelectorAll('path, ellipse').forEach(p => {
+            p.setAttribute('fill', 'rgba(52,211,153,0.75)');
+            p.setAttribute('stroke', '#34d399');
+            p.setAttribute('stroke-width', '2.5');
+          });
+        }
+        // Dim everything else
+        Object.keys(REGIONS).forEach(rid => {
+          if (rid === targetId) return;
+          const rEl = svgEl.querySelector('#' + rid);
+          if (rEl) rEl.style.opacity = '0.18';
+        });
+        svgWrap.appendChild(svgEl);
+        item.appendChild(svgWrap);
+
+        // Explanation
+        const expDiv = document.createElement('div');
+        expDiv.className = 'review-explanation';
+        expDiv.textContent = q.explanation;
+        item.appendChild(expDiv);
+
+        container.appendChild(item);
+      });
+    }
+
+    // ── Tooltip wiring ────────────────────────────────────────────────────
+    const tooltip = document.getElementById('tooltip');
+    let tooltipVisible = false;
+
+    document.getElementById('brain-svg').addEventListener('mousemove', e => {
+      const g = e.target.closest('.brain-region');
+      if (!g) {
+        tooltip.classList.remove('visible');
+        return;
+      }
+      const label = g.dataset.label || regionLabel(g.dataset.region);
+      tooltip.textContent = label;
+      tooltip.classList.add('visible');
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top  = (e.clientY - 28) + 'px';
+    });
+
+    document.getElementById('brain-svg').addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+
+    // ── Touch support: convert touch tap to click ─────────────────────────
+    let touchStartTarget = null;
+    document.getElementById('brain-svg').addEventListener('touchstart', e => {
+      touchStartTarget = e.target;
+    }, { passive: true });
+    document.getElementById('brain-svg').addEventListener('touchend', e => {
+      if (e.target === touchStartTarget) {
+        const g = e.target.closest('.brain-region');
+        if (g) g.click();
+      }
+    }, { passive: true });
+
+    // Expose for inline buttons
+    window.handleSubmit  = handleSubmit;
+    window.nextQuestion  = nextQuestion;
+    window.showReview    = showReview;
+    window.showResults   = showResults;
+
+    // ── Run ───────────────────────────────────────────────────────────────
+    init();
+  })();
+
+  // closeInfoPanel is called from HTML onclick — must be global
+  function closeInfoPanel() {
+    document.getElementById('info-panel').classList.remove('open');
+    document.querySelectorAll('.brain-region').forEach(el => el.classList.remove('study-selected'));
+  }
+  </script>
+</body>
+</html>
