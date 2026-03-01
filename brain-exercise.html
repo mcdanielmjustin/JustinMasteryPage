@@ -541,6 +541,30 @@
     .vasc-btn.vasc-pca { border-color: rgba(167,139,250,0.50);color: #a78bfa; background: rgba(167,139,250,0.08); }
     .vasc-btn.vasc-all { border-color: var(--gold);           color: var(--gold-light); background: rgba(212,160,84,0.08); }
 
+    /* Pathway selector — left-side overlay inside #brain-container-3d */
+    .pathway-panel {
+      position: absolute; top: 14px; left: 14px; z-index: 10;
+      display: flex; flex-direction: column; gap: 6px;
+      background: rgba(10,10,14,0.85); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; padding: 10px 12px;
+      backdrop-filter: blur(8px); user-select: none;
+    }
+    .pathway-panel-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+      color: var(--text3); text-transform: uppercase; margin-bottom: 2px;
+    }
+    .pathway-btn {
+      display: flex; align-items: center; gap: 8px; white-space: nowrap;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 8px; padding: 7px 12px; font-size: 11px; font-weight: 600;
+      color: var(--text3); cursor: pointer; transition: all 0.2s;
+    }
+    .pathway-btn .path-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; transition: box-shadow 0.25s;
+    }
+    .pathway-btn.active              { border-color: rgba(255,255,255,0.22); color: var(--text); background: rgba(255,255,255,0.06); }
+    .pathway-btn.active .path-dot   { box-shadow: 0 0 7px 3px; }
+
     @media (max-width: 500px) {
       .question-card { padding: 18px; }
       .q-text { font-size: 14px; }
@@ -1955,6 +1979,24 @@
 
     <!-- 3D Brain Explorer (Three.js canvas mounted here on demand) -->
     <div class="brain-container" id="brain-container-3d" style="display:none; min-height:300px; border-radius:16px; overflow:hidden;">
+
+      <!-- Pathway selector panel — left overlay (Chunk 3C) -->
+      <div id="pathway-panel" class="pathway-panel">
+        <div class="pathway-panel-label">Pathways</div>
+        <button id="btn-path-papez" class="pathway-btn"
+                onclick="togglePathway('papez')"
+                title="Papez Circuit: hippocampus → fornix → mamillary bodies → anterior thalamus → cingulate → entorhinal → hippocampus">
+          <span class="path-dot" style="background:#D4A054; color:#D4A054;"></span>
+          Papez Circuit
+        </button>
+        <button id="btn-path-motor" class="pathway-btn"
+                onclick="togglePathway('corticospinal')"
+                title="Corticospinal Tract: motor cortex → corona radiata → internal capsule → cerebral peduncle → pons → medullary pyramid → pyramidal decussation">
+          <span class="path-dot" style="background:#5B9BD5; color:#5B9BD5;"></span>
+          Corticospinal
+        </button>
+      </div>
+
       <button id="btn-glass-brain" class="brain3d-overlay-btn"
               onclick="if(window.__brain3d) window.__brain3d.toggleGlass()"
               title="Reveal subcortical structures (glass brain)">⬡ Glass Brain</button>
@@ -2691,6 +2733,20 @@
     if (window.__brain3d && window.__brain3d.setVascTerritory) {
       window.__brain3d.setVascTerritory(mode);
     }
+  }
+
+  // ── Pathway toggles — global (called from onclick="togglePathway(...)") ──────
+  // State is a plain object so button .active class always matches group.visible.
+  const __pathwayState = { papez: false, corticospinal: false };
+  const __PATHWAY_BTN = { papez: 'btn-path-papez', corticospinal: 'btn-path-motor' };
+
+  function togglePathway(name) {
+    __pathwayState[name] = !__pathwayState[name];
+    if (window.__brain3d && window.__brain3d.setPathway) {
+      window.__brain3d.setPathway(name, __pathwayState[name]);
+    }
+    const btn = document.getElementById(__PATHWAY_BTN[name]);
+    if (btn) btn.classList.toggle('active', __pathwayState[name]);
   }
   </script>
 </body>

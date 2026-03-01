@@ -1160,6 +1160,80 @@ function showPathway(name) { pathways.find(p => p.name === name)?.show(); }
 function hidePathway(name) { pathways.find(p => p.name === name)?.hide(); }
 function hideAllPathways() { pathways.forEach(p => p.hide()); }
 
+// ── Chunk 3C: Papez Circuit ──────────────────────────────────────────────────
+// Limbic memory circuit: hippocampus → fimbria → fornix arch → mamillary
+// bodies → mamillothalamic tract → anterior thalamus → thalamocingulate
+// radiation → cingulate gyrus → cingulum bundle → entorhinal cortex →
+// hippocampus.  Loop, amber-gold, slow (learning / consolidation tempo).
+//
+// All waypoints are in brainGroup LOCAL space so the circuit rotates with the
+// brain.  (pathway.group is added to brainGroup, not to scene.)
+{
+  const p = new Pathway({
+    name:          'papez',
+    color:         0xD4A054,
+    speed:         0.14,       // 14 % of curve per second — unhurried
+    particleCount: 28,
+    radius:        0.020,
+    loop:          true,
+    waypoints: [
+      new THREE.Vector3( 0.30, -0.16,  0.12),   // hippocampus body (mid-shaft)
+      new THREE.Vector3( 0.26, -0.08, -0.60),   // fimbria of fornix (posterior)
+      new THREE.Vector3( 0.18,  0.22, -0.46),   // crus fornicis ascending
+      new THREE.Vector3( 0.10,  0.68, -0.08),   // fornix body — arch peak
+      new THREE.Vector3( 0.10,  0.44,  0.06),   // column of fornix descending
+      new THREE.Vector3( 0.12,  0.06, -0.12),   // column inferior
+      new THREE.Vector3( 0.12, -0.22, -0.36),   // mamillary bodies
+      new THREE.Vector3( 0.20,  0.10, -0.20),   // mamillothalamic tract
+      new THREE.Vector3( 0.22,  0.28, -0.04),   // anterior thalamic nucleus
+      new THREE.Vector3( 0.08,  0.90,  0.08),   // cingulate gyrus (medial cortex)
+      new THREE.Vector3( 0.22,  0.48,  0.52),   // cingulum bundle → posterior
+      new THREE.Vector3( 0.30, -0.08,  0.56),   // entorhinal / parahippocampal gyrus
+      new THREE.Vector3( 0.32, -0.16,  0.32),   // hippocampus head (closes loop)
+    ],
+  });
+  pathways.push(p);
+  brainGroup.add(p.group);   // add to brainGroup — rotates with brain
+}
+
+// ── Chunk 3C: Corticospinal (Pyramidal) Tract ────────────────────────────────
+// Primary motor pathway: motor cortex → corona radiata → internal capsule
+// (posterior limb) → cerebral peduncle (midbrain) → pontine corticospinal
+// fibers → medullary pyramid → pyramidal decussation → spinal cord.
+// One-way, steel blue, faster tempo (rapid motor signal).
+{
+  const p = new Pathway({
+    name:          'corticospinal',
+    color:         0x5B9BD5,
+    speed:         0.22,       // 22 % of curve per second — fast motor signal
+    particleCount: 18,
+    radius:        0.018,
+    loop:          false,
+    waypoints: [
+      new THREE.Vector3( 0.62,  0.90,  0.22),   // motor cortex (precentral gyrus)
+      new THREE.Vector3( 0.52,  0.64,  0.14),   // corona radiata (superior)
+      new THREE.Vector3( 0.40,  0.40,  0.02),   // corona radiata (inferior)
+      new THREE.Vector3( 0.32,  0.22, -0.08),   // internal capsule — posterior limb
+      new THREE.Vector3( 0.26,  0.00, -0.18),   // cerebral peduncle (midbrain)
+      new THREE.Vector3( 0.22, -0.72, -0.44),   // pontine corticospinal fibers
+      new THREE.Vector3( 0.20, -0.92, -0.54),   // medullary pyramid
+      new THREE.Vector3( 0.18, -1.12, -0.62),   // pyramidal decussation / spinal cord
+    ],
+  });
+  pathways.push(p);
+  brainGroup.add(p.group);   // add to brainGroup — rotates with brain
+}
+
+/**
+ * Set a named pathway visible or hidden.
+ * Called via window.__brain3d.setPathway(name, visible) from brain-exercise.html.
+ * Pathway state is persistent across mount/unmount cycles — not reset in unmount().
+ */
+function setPathway(name, visible) {
+  const p = pathways.find(pw => pw.name === name);
+  if (p) { if (visible) p.show(); else p.hide(); }
+}
+
 // Build the disc now — ASSEMBLE SCENE has already run so `scene` is populated.
 discMesh = buildCrossDisc();
 
@@ -1326,8 +1400,10 @@ function unmount() {
   hoveredMesh  = null;
   selectedMesh = null;
   outlinePass.selectedObjects = [];
-  // Hide all pathway animations
-  hideAllPathways();
+  // NOTE: Pathway visibility is intentionally NOT reset here — pathway state
+  // persists across mount/unmount so the 3D view restores correctly when the
+  // user switches back from SVG view.  UI button state in brain-exercise.html
+  // therefore always matches the actual group.visible state.
 
   // Reset vascular territory overlay
   if (vasc3dGroups) {
@@ -1364,6 +1440,8 @@ window.__brain3d = {
   setVascTerritory,
   // Chunk 3B — Pathway Animation Engine
   Pathway, pathways, showPathway, hidePathway,
+  // Chunk 3C — Named pathway toggle
+  setPathway,
 };
 
 // Auto-mount if the page already has view=3d on load
