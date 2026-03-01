@@ -492,6 +492,15 @@
       .q-text { font-size: 14px; }
     }
   </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="brain-3d.js"></script>
 </head>
 <body>
   <div class="blob blob-rose"></div>
@@ -540,6 +549,7 @@
     <div class="view-tabs" id="view-tabs">
       <button class="view-tab active" id="tab-lateral" onclick="switchView('lateral')">&#129504; Lateral View</button>
       <button class="view-tab" id="tab-medial" onclick="switchView('medial')">&#10022; Medial View</button>
+      <button class="view-tab" id="tab-3d" onclick="switchView('3d')">&#9650; 3D Explorer</button>
     </div>
 
     <!-- SVG Brain Diagram — Lateral -->
@@ -1819,6 +1829,9 @@
       </svg>
     </div>
 
+    <!-- 3D Brain Explorer (Three.js canvas mounted here on demand) -->
+    <div class="brain-container" id="brain-container-3d" style="display:none; min-height:300px; border-radius:16px; overflow:hidden;"></div>
+
     <!-- Study mode prompt (hidden during quiz) -->
     <div class="study-prompt" id="study-prompt" style="display:none">
       Click any region to explore its <strong>anatomy</strong> and <strong>clinical syndromes</strong>
@@ -1922,12 +1935,15 @@
     function updateViewTabs() {
       document.getElementById('tab-lateral').classList.toggle('active', CURRENT_VIEW === 'lateral');
       document.getElementById('tab-medial').classList.toggle('active', CURRENT_VIEW === 'medial');
+      document.getElementById('tab-3d').classList.toggle('active', CURRENT_VIEW === '3d');
     }
     function showCurrentContainer() {
       document.getElementById('brain-container-lateral').style.display =
         CURRENT_VIEW === 'lateral' ? '' : 'none';
       document.getElementById('brain-container-medial').style.display =
         CURRENT_VIEW === 'medial' ? '' : 'none';
+      document.getElementById('brain-container-3d').style.display =
+        CURRENT_VIEW === '3d' ? '' : 'none';
     }
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -1971,11 +1987,19 @@
 
     // ── View switching ────────────────────────────────────────────────────
     function switchView(view) {
+      const prev = CURRENT_VIEW;
       CURRENT_VIEW = view;
       updateViewTabs();
       showCurrentContainer();
-      // Re-apply SVG state to the newly visible SVG
-      if (!IS_STUDY && pool.length && current < pool.length) {
+      // Mount / unmount 3D renderer
+      if (view === '3d') {
+        const c3d = document.getElementById('brain-container-3d');
+        if (window.__brain3d) window.__brain3d.mount(c3d);
+      } else if (prev === '3d') {
+        if (window.__brain3d) window.__brain3d.unmount();
+      }
+      // Re-apply SVG state to the newly visible SVG (not applicable in 3D view)
+      if (!IS_STUDY && pool.length && current < pool.length && view !== '3d') {
         reapplySVGState(pool[current]);
       }
     }
@@ -2028,6 +2052,11 @@
       document.getElementById('brain-svg-medial').classList.add('svg-study-mode');
       showCurrentContainer();
       updateViewTabs();
+      // If user starts in 3D explore mode, mount the renderer
+      if (CURRENT_VIEW === '3d') {
+        const c3d = document.getElementById('brain-container-3d');
+        if (window.__brain3d) window.__brain3d.mount(c3d);
+      }
       document.querySelectorAll('.brain-region').forEach(g => {
         g.classList.add('region-active');
         g.onclick = () => handleStudyRegionClick(g);
@@ -2160,9 +2189,10 @@
       selectedChipIdx = null;
       submitted       = false;
 
-      // Auto-switch to the view that contains this question's primary region
+      // Auto-switch to the SVG view that contains this question's primary region
       const qv = questionView(q);
       if (CURRENT_VIEW !== qv) {
+        if (CURRENT_VIEW === '3d' && window.__brain3d) window.__brain3d.unmount();
         CURRENT_VIEW = qv;
         updateViewTabs();
         showCurrentContainer();
