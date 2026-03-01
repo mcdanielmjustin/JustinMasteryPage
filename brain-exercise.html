@@ -487,6 +487,22 @@
     }
     .view-tab:hover:not(.active) { border-color: rgba(244,63,94,0.2); color: var(--text2); }
 
+    /* 3D explorer overlay buttons */
+    #brain-container-3d { position: relative; }
+    .brain3d-overlay-btn {
+      position: absolute; bottom: 14px; right: 14px; z-index: 10;
+      background: rgba(10,10,14,0.85); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; padding: 8px 16px; font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.75); cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      backdrop-filter: blur(8px);
+      user-select: none;
+    }
+    .brain3d-overlay-btn:hover { border-color: var(--gold); color: var(--gold-light); }
+    .brain3d-overlay-btn.active {
+      background: rgba(212,160,84,0.15); border-color: var(--gold); color: var(--gold-light);
+    }
+
     @media (max-width: 500px) {
       .question-card { padding: 18px; }
       .q-text { font-size: 14px; }
@@ -1830,7 +1846,11 @@
     </div>
 
     <!-- 3D Brain Explorer (Three.js canvas mounted here on demand) -->
-    <div class="brain-container" id="brain-container-3d" style="display:none; min-height:300px; border-radius:16px; overflow:hidden;"></div>
+    <div class="brain-container" id="brain-container-3d" style="display:none; min-height:300px; border-radius:16px; overflow:hidden;">
+      <button id="btn-glass-brain" class="brain3d-overlay-btn"
+              onclick="if(window.__brain3d) window.__brain3d.toggleGlass()"
+              title="Reveal subcortical structures (glass brain)">⬡ Glass Brain</button>
+    </div>
 
     <!-- Study mode prompt (hidden during quiz) -->
     <div class="study-prompt" id="study-prompt" style="display:none">

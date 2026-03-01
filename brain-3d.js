@@ -767,6 +767,35 @@ let autoRotate  = true;
 let lastTs      = 0;
 let idleTimer   = null;
 
+// ── Glass-brain toggle state ──────────────────────────────────────────────────
+let glassActive     = false;  // true = subcortical revealed
+let glassProgress   = 0;      // 0 = full cortex, 1 = glass
+let glassTweenStart = -1;     // rAF timestamp at tween start; -1 = idle
+const GLASS_DURATION = 600;   // ms for full cortex ↔ glass transition
+
+/** Apply glass progress t (0→1) to material opacity on all region meshes. */
+function applyGlassProgress(t) {
+  const corticalOpacity    = 1.0 - 0.82 * t;   // 1.0 → 0.18
+  const subcorticalOpacity = t;                  // 0   → 1.0
+  corticalMeshes.forEach(m => {
+    m.material.opacity     = corticalOpacity;
+    m.material.transparent = t > 0;
+    m.material.depthWrite  = t < 0.5;            // avoid z-fighting once semi-transparent
+  });
+  subcorticalMeshes.forEach(m => {
+    m.visible              = t > 0;
+    m.material.opacity     = subcorticalOpacity;
+  });
+}
+
+/** Toggle between opaque-cortex and glass-brain states; drives the tween. */
+function toggleGlass() {
+  glassActive     = !glassActive;
+  glassTweenStart = performance.now();
+  const btn = document.getElementById('btn-glass-brain');
+  if (btn) btn.classList.toggle('active', glassActive);
+}
+
 function animate(ts) {
   animFrameId = requestAnimationFrame(animate);
   const delta = Math.min((ts - lastTs) / 1000, 0.05);
@@ -776,6 +805,23 @@ function animate(ts) {
 
   if (autoRotate) {
     brainGroup.rotation.y += delta * 0.18;   // ~10°/s idle rotation
+  }
+
+  // Glass-brain opacity tween (ease-in-out cubic)
+  if (glassTweenStart >= 0) {
+    const raw    = (ts - glassTweenStart) / GLASS_DURATION;
+    const target = glassActive ? 1 : 0;
+    if (raw >= 1) {
+      glassProgress   = target;
+      glassTweenStart = -1;
+      applyGlassProgress(glassProgress);
+    } else {
+      const e = raw < 0.5
+        ? 4 * raw * raw * raw
+        : 1 - Math.pow(-2 * raw + 2, 3) / 2;
+      glassProgress = glassActive ? e : 1 - e;
+      applyGlassProgress(glassProgress);
+    }
   }
 
   // Per-frame hover raycasting — filter by visibility so hidden subcortical
@@ -907,11 +953,20 @@ function unmount() {
   hoveredMesh  = null;
   selectedMesh = null;
   outlinePass.selectedObjects = [];
+  // Reset glass state — next mount always starts fully opaque
+  if (glassProgress !== 0 || glassActive) {
+    glassActive     = false;
+    glassProgress   = 0;
+    glassTweenStart = -1;
+    applyGlassProgress(0);
+  }
+  const btn = document.getElementById('btn-glass-brain');
+  if (btn) btn.classList.remove('active');
 }
 
 // ── Expose API ────────────────────────────────────────────────────────────────
-// corticalMeshes + subcorticalMeshes exposed for Chunk 2D glass-brain toggle.
-window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes };
+// corticalMeshes + subcorticalMeshes exposed for reference; toggleGlass for the UI button.
+window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes, toggleGlass };
 
 // Auto-mount if the page already has view=3d on load
 (function autoMountOnLoad() {
