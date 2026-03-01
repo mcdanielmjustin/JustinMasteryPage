@@ -351,8 +351,11 @@
       border-radius: 10px; margin-bottom: 20px;
       width: 100%; max-width: 420px;
     }
-    .patient-label { font-size: 13px; font-weight: 600; color: var(--text); }
-    .patient-setting { font-size: 11px; color: var(--text3); }
+    .patient-label { font-size: 13px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+    .patient-setting {
+      font-size: 11px; color: var(--text3);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+    }
     .patient-info-sep { width: 1px; height: 16px; background: var(--border); }
 
     /* Speech bubble */
@@ -387,7 +390,7 @@
     .bubble-dots span:nth-child(2) { animation-delay: .2s; }
     .bubble-dots span:nth-child(3) { animation-delay: .4s; }
     .bubble-dots.hidden { display: none; }
-    .bubble-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .bubble-text { font-size: 13px; color: var(--text2); line-height: 1.6; overflow-wrap: break-word; }
 
     /* Behavioral tags overlay */
     .tag-overlay {
@@ -515,7 +518,7 @@
       transition: max-height .4s ease;
       border-radius: 12px;
     }
-    .feedback-panel.visible { max-height: 700px; }
+    .feedback-panel.visible { max-height: 2000px; transition: max-height .5s ease; }
     .feedback-inner {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 12px; overflow: hidden;
@@ -649,7 +652,7 @@
     .replay-outcome.correct { color: var(--green); }
     .replay-outcome.partial { color: #fbbf24; }
     .replay-outcome.wrong   { color: var(--red); }
-    .replay-label  { flex: 1; font-size: 13px; color: var(--text2); }
+    .replay-label  { flex: 1; font-size: 13px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     .replay-frac   { font-size: 11px; font-weight: 600; color: var(--text3); flex-shrink: 0; }
     .replay-domain { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .06em; flex-shrink: 0; }
     .btn-replay {
@@ -671,12 +674,34 @@
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto;
       }
-      .patient-stage { border-right: none; border-bottom: 1px solid var(--border); }
+      .patient-stage { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px 18px; }
       .chart-panel   { border-left: none; border-top: 1px solid var(--border); max-height: 260px; }
       .phase-controls { grid-column: 1; }
       .avatar-wrap { width: 150px; height: 240px; }
+      .speech-bubble { max-width: 100%; }
+      .patient-info-bar { padding: 8px 12px; }
       #screen-question.active { padding: 20px 16px 60px; }
       #screen-results.active  { padding: 24px 16px 60px; }
+      /* Results: stack summary chips */
+      .results-summary { gap: 14px; padding: 16px 18px; }
+      /* Replay row: prevent btn from being pushed off screen */
+      .replay-row { padding: 10px 12px; gap: 8px; }
+      .replay-domain { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .case-setting-label { display: none; }
+      .case-strip-sep     { display: none; }
+      .q-prompt { font-size: 1.1rem; }
+      .option-btn { padding: 12px 14px; }
+      .feedback-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { width: 100%; }
+      .results-hero h1 { font-size: 1.8rem; }
+      .results-ring-wrap { width: 110px; height: 110px; }
+      .ring-pct { font-size: 1.6rem; }
+      .type-row-item { gap: 8px; }
+      .type-badge-sm { min-width: 60px; font-size: 9px; }
+      .db-domain-wrap { width: 72px; }
     }
   </style>
 </head>
@@ -1183,9 +1208,10 @@
      SCREEN MANAGER
   ════════════════════════════════════════════════════════════════ */
   function showScreen(name) {
-    // Clear running intervals
+    // Clear running intervals and pending tag stagger timeouts
     clearInterval(state.typewriterInt);
     clearInterval(state.autoAdvanceInt);
+    cancelTagStagger();
 
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + name).classList.add('active');
@@ -1278,6 +1304,9 @@
   function sortPool(pool) {
     if (CFG.order === 'weakest') {
       const stored = getStoredScores();
+      // No history yet — fall back to fully shuffled
+      const hasAnyHistory = Object.values(stored).some(s => s && s.total > 0);
+      if (!hasAnyHistory) return shuffle(pool.slice());
       const byDomain = {};
       pool.forEach(e => {
         if (!byDomain[e.domain_code]) byDomain[e.domain_code] = [];
