@@ -30,6 +30,7 @@ renderer.shadowMap.enabled    = true;
 renderer.shadowMap.type       = THREE.PCFSoftShadowMap;
 renderer.toneMapping          = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure  = 1.2;
+renderer.localClippingEnabled = true;   // required for per-material clippingPlanes (cross-section)
 
 const canvas = renderer.domElement;
 canvas.style.borderRadius = '16px';
@@ -796,6 +797,141 @@ function toggleGlass() {
   if (btn) btn.classList.toggle('active', glassActive);
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// CROSS-SECTION SLIDER (Chunk 2E)
+// ══════════════════════════════════════════════════════════════════════════════
+//
+// THREE.Plane(normal, constant): kept geometry satisfies  normal·p + constant ≥ 0
+//   i.e., normal·p ≥ −constant.
+//
+// Axis conventions (brainGroup local space):
+//   axial    normal=(0,−1,0): keeps y ≤ d  (everything below the horizontal cut)
+//   coronal  normal=(0,0,−1): keeps z ≤ d  (posterior to the coronal cut)
+//   sagittal normal=(−1,0,0): keeps x ≤ d  (medial portion, sweeping from lateral)
+//
+// The clip plane is stored in world space and recomputed every frame so it
+// follows the brainGroup as it auto-rotates or the user manually orbits.
+// ─────────────────────────────────────────────────────────────────────────────
+
+let csMode   = null;   // 'axial' | 'coronal' | 'sagittal' | null
+let csSlider = 50;     // 0–100
+
+const CS_AXES = {
+  //              localNormal                              far    near
+  axial:    { localNormal: new THREE.Vector3( 0, -1,  0), far:  1.6, near: -1.1 },
+  coronal:  { localNormal: new THREE.Vector3( 0,  0, -1), far:  2.0, near: -2.0 },
+  sagittal: { localNormal: new THREE.Vector3(-1,  0,  0), far:  1.7, near: -0.1 },
+};
+
+// Single shared world-space plane — updated every frame inside animate().
+const csClipPlane = new THREE.Plane();
+
+// Semi-transparent disc rendered at the cut face (world space, not in brainGroup).
+let discMesh = null;
+
+/** Build and add the cut-face indicator disc to the world scene. */
+function buildCrossDisc() {
+  const geo = new THREE.CircleGeometry(2.2, 64);
+  const mat = new THREE.MeshBasicMaterial({
+    color:       0xE8D8C4,   // warm white-matter / sulcal-interior tone
+    transparent: true,
+    opacity:     0.28,
+    side:        THREE.DoubleSide,
+    depthWrite:  false,
+    // clippingPlanes intentionally absent — disc is never clipped
+  });
+  const mesh  = new THREE.Mesh(geo, mat);
+  mesh.visible      = false;
+  mesh.renderOrder  = 1;   // render after opaque brain surfaces
+  scene.add(mesh);         // world-space; positioned each frame by updateCrossSection()
+  return mesh;
+}
+
+/** Assign csClipPlane to every region mesh material. */
+function activateClipping() {
+  regionMeshes.forEach(m => {
+    m.material.clippingPlanes = [csClipPlane];
+    m.material.needsUpdate    = true;
+  });
+  if (discMesh) discMesh.visible = true;
+}
+
+/** Remove csClipPlane from every region mesh material. */
+function deactivateClipping() {
+  regionMeshes.forEach(m => {
+    m.material.clippingPlanes = [];
+    m.material.needsUpdate    = true;
+  });
+  if (discMesh) discMesh.visible = false;
+}
+
+/**
+ * Recompute the world-space clip plane and disc transform from the current
+ * csSlider value and brainGroup's live world matrix.  Called every frame.
+ */
+function updateCrossSection() {
+  if (!csMode) return;
+
+  const ax  = CS_AXES[csMode];
+  const t   = csSlider / 100;
+
+  // Lerp from far edge (t=0 → whole brain visible) to near edge (t=1 → most clipped)
+  const d   = ax.far + (ax.near - ax.far) * t;
+
+  // A point on the local-space plane (localNormal·p₀ + d = 0 → p₀ = localNormal·(−d))
+  const localPt = ax.localNormal.clone().multiplyScalar(-d);
+  const worldPt = localPt.clone().applyMatrix4(brainGroup.matrixWorld);
+
+  // Rotate local normal to world space
+  const worldN = ax.localNormal.clone()
+    .transformDirection(brainGroup.matrixWorld)
+    .normalize();
+
+  // World-space plane: worldN·x + c = 0,  c = −worldN·worldPt
+  csClipPlane.normal.copy(worldN);
+  csClipPlane.constant = -worldN.dot(worldPt);
+
+  // Position and orient the cut-face disc
+  if (discMesh && discMesh.visible) {
+    discMesh.position.copy(worldPt);
+    discMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), worldN);
+  }
+}
+
+/**
+ * Activate a cross-section axis.  Clicking the currently-active axis toggles off.
+ * Exposed via window.__brain3d and called from the HTML axis buttons.
+ */
+function setCsMode(mode) {
+  if (csMode === mode) mode = null;   // toggle off
+
+  // Sync axis button active states + slider visibility
+  document.querySelectorAll('.cs-axis-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.axis === mode);
+  });
+  const sliderEl = document.getElementById('cs-slider');
+  if (sliderEl) sliderEl.style.display = mode ? '' : 'none';
+
+  const wasActive = !!csMode;
+  csMode = mode;
+
+  if (mode) {
+    if (!wasActive) activateClipping();   // first activation — assign planes to materials
+    updateCrossSection();                 // apply current slider value immediately
+  } else {
+    deactivateClipping();
+  }
+}
+
+/** Update the cut plane to the new slider value (0–100). */
+function setCsSlider(value) {
+  csSlider = +value;
+  if (csMode) updateCrossSection();
+}
+
+// Build the disc now — ASSEMBLE SCENE has already run so `scene` is populated.
+discMesh = buildCrossDisc();
+
 function animate(ts) {
   animFrameId = requestAnimationFrame(animate);
   const delta = Math.min((ts - lastTs) / 1000, 0.05);
@@ -823,6 +959,9 @@ function animate(ts) {
       applyGlassProgress(glassProgress);
     }
   }
+
+  // Recompute world-space clip plane to follow brainGroup rotation (auto or manual)
+  if (csMode) updateCrossSection();
 
   // Per-frame hover raycasting — filter by visibility so hidden subcortical
   // structures aren't hit before the glass-brain toggle reveals them.
@@ -953,6 +1092,15 @@ function unmount() {
   hoveredMesh  = null;
   selectedMesh = null;
   outlinePass.selectedObjects = [];
+  // Reset cross-section state — remove clip planes and hide disc
+  if (csMode) {
+    csMode = null;
+    deactivateClipping();
+  }
+  document.querySelectorAll('.cs-axis-btn').forEach(b => b.classList.remove('active'));
+  const csSliderEl = document.getElementById('cs-slider');
+  if (csSliderEl) csSliderEl.style.display = 'none';
+
   // Reset glass state — next mount always starts fully opaque
   if (glassProgress !== 0 || glassActive) {
     glassActive     = false;
@@ -966,7 +1114,7 @@ function unmount() {
 
 // ── Expose API ────────────────────────────────────────────────────────────────
 // corticalMeshes + subcorticalMeshes exposed for reference; toggleGlass for the UI button.
-window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes, toggleGlass };
+window.__brain3d = { mount, unmount, corticalMeshes, subcorticalMeshes, toggleGlass, setCsMode, setCsSlider };
 
 // Auto-mount if the page already has view=3d on load
 (function autoMountOnLoad() {

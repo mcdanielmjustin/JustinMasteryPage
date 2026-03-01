@@ -503,6 +503,29 @@
       background: rgba(212,160,84,0.15); border-color: var(--gold); color: var(--gold-light);
     }
 
+    /* Cross-section controls panel */
+    .cs-panel {
+      position: absolute; bottom: 56px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(10,10,14,0.85); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; padding: 8px 14px;
+      backdrop-filter: blur(8px); z-index: 10;
+      user-select: none; white-space: nowrap;
+    }
+    .cs-label {
+      font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .cs-axis-btns { display: flex; gap: 4px; }
+    .cs-axis-btn {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.15s;
+    }
+    .cs-axis-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); }
+    .cs-axis-btn.active { background: rgba(212,160,84,0.15); border-color: var(--gold); color: var(--gold-light); }
+    .cs-slider { width: 100px; accent-color: var(--gold); cursor: pointer; vertical-align: middle; }
+
     @media (max-width: 500px) {
       .question-card { padding: 18px; }
       .q-text { font-size: 14px; }
@@ -1850,6 +1873,23 @@
       <button id="btn-glass-brain" class="brain3d-overlay-btn"
               onclick="if(window.__brain3d) window.__brain3d.toggleGlass()"
               title="Reveal subcortical structures (glass brain)">⬡ Glass Brain</button>
+      <div id="cs-panel" class="cs-panel">
+        <span class="cs-label">Slice</span>
+        <div class="cs-axis-btns">
+          <button class="cs-axis-btn" data-axis="axial"
+                  onclick="window.__brain3d && window.__brain3d.setCsMode('axial')"
+                  title="Horizontal cut — see structures at each brain level">Axial</button>
+          <button class="cs-axis-btn" data-axis="coronal"
+                  onclick="window.__brain3d && window.__brain3d.setCsMode('coronal')"
+                  title="Front-to-back cut — see left/right symmetry">Coronal</button>
+          <button class="cs-axis-btn" data-axis="sagittal"
+                  onclick="window.__brain3d && window.__brain3d.setCsMode('sagittal')"
+                  title="Side cut — see medial structures">Sagittal</button>
+        </div>
+        <input id="cs-slider" class="cs-slider" type="range" min="0" max="100" value="50"
+               oninput="window.__brain3d && window.__brain3d.setCsSlider(this.value)"
+               style="display:none">
+      </div>
     </div>
 
     <!-- Study mode prompt (hidden during quiz) -->
