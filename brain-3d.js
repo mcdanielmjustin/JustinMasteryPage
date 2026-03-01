@@ -24,12 +24,12 @@ import { OutputPass }       from 'three/addons/postprocessing/OutputPass.js';
 // RENDERER
 // ══════════════════════════════════════════════════════════════════════════════
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled    = true;
 renderer.shadowMap.type       = THREE.PCFSoftShadowMap;
 renderer.toneMapping          = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure  = 1.2;
+renderer.toneMappingExposure  = 1.45;
 renderer.localClippingEnabled = true;   // required for per-material clippingPlanes (cross-section)
 
 const canvas = renderer.domElement;
@@ -45,6 +45,9 @@ const composer = new EffectComposer(renderer);
 // ══════════════════════════════════════════════════════════════════════════════
 
 const scene = new THREE.Scene();
+// Deep navy-black background — increases perceived depth and makes region colours
+// appear saturated and distinct (matches the BrainFacts.org dark-stage aesthetic).
+scene.background = new THREE.Color(0x0C0F16);
 
 // ── Camera ────────────────────────────────────────────────────────────────────
 const camera = new THREE.PerspectiveCamera(45, 1.54, 0.1, 100);
@@ -61,28 +64,34 @@ controls.target.set(0, 0.1, 0);
 controls.update();
 
 // ── Lighting ──────────────────────────────────────────────────────────────────
-// Warm key light from upper-left (matches SVG lateral light source direction)
-const keyLight = new THREE.DirectionalLight(0xFFE8D0, 2.8);
-keyLight.position.set(-3, 4, 3);
+// Near-white key from upper-left — clean, clinical; strong enough to pop gyral
+// ridges with specular highlights on the high-clearcoat tissue material.
+const keyLight = new THREE.DirectionalLight(0xFFF8F4, 3.4);
+keyLight.position.set(-2, 5.5, 3.5);
 keyLight.castShadow = true;
-keyLight.shadow.mapSize.width  = 1024;
-keyLight.shadow.mapSize.height = 1024;
+keyLight.shadow.mapSize.width  = 2048;
+keyLight.shadow.mapSize.height = 2048;
 keyLight.shadow.camera.near    = 0.5;
 keyLight.shadow.camera.far     = 20;
 scene.add(keyLight);
 
-// Cool fill from right (prevents total black in shadow areas)
-const fillLight = new THREE.DirectionalLight(0xD0E0FF, 0.6);
-fillLight.position.set(4, 1, -2);
+// Cool-blue fill from the right (blue-tinted shadow areas read as deep and 3D)
+const fillLight = new THREE.DirectionalLight(0xCCDDFF, 0.55);
+fillLight.position.set(4.5, 0.5, -1.5);
 scene.add(fillLight);
 
-// Rim light from behind-lower-right (depth separation from background)
-const rimLight = new THREE.DirectionalLight(0xFFD0C0, 0.9);
-rimLight.position.set(2, -1, -4);
+// Cyan-blue rim from behind-below (separates brain from dark background)
+const rimLight = new THREE.DirectionalLight(0xAAC8FF, 1.6);
+rimLight.position.set(1.5, -2.5, -5);
 scene.add(rimLight);
 
-// Warm ambient — base illumination matching SVG tissue warmth
-const ambient = new THREE.AmbientLight(0xC8906A, 0.4);
+// Hemisphere light: cool sky above, warm ground below — gives organic depth
+// without flattening colours the way a plain AmbientLight does.
+const hemiLight = new THREE.HemisphereLight(0xB4CCE0, 0x604030, 0.70);
+scene.add(hemiLight);
+
+// Very subtle neutral ambient — floor for darkest shadow areas
+const ambient = new THREE.AmbientLight(0x808898, 0.18);
 scene.add(ambient);
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -91,18 +100,21 @@ scene.add(ambient);
 // base color, giving subtle tonal differentiation under the same tissue lighting.
 // ══════════════════════════════════════════════════════════════════════════════
 
+// Clinical lobe palette — each lobe gets a distinct hue so regions read clearly
+// even before hover/click.  Colours are desaturated enough to look organic
+// (not diagram-like) while remaining differentiated at a glance.
 const REGION_COLORS = {
-  frontal_lobe:         0xC8845E,
-  prefrontal_cortex:    0xCE8C68,
-  brocas_area:          0xBA7450,
-  motor_cortex:         0xCC7E56,
-  parietal_lobe:        0xBE7860,
-  somatosensory_cortex: 0xD08870,
-  temporal_lobe:        0xB87050,
-  wernickes_area:       0xB06848,
-  occipital_lobe:       0xA86C58,
-  cerebellum:           0xA87C6A,
-  brainstem:            0x967060,
+  frontal_lobe:         0xD4826E,   // warm rose-salmon
+  prefrontal_cortex:    0xC87060,   // slightly deeper rose (anterior subregion)
+  brocas_area:          0xBF6458,   // muted terracotta (inferior frontal)
+  motor_cortex:         0xD87866,   // brighter salmon strip
+  parietal_lobe:        0x6DADA0,   // teal-sage — clearly distinct from frontal
+  somatosensory_cortex: 0x5E9E96,   // deeper teal strip
+  temporal_lobe:        0x8A80B4,   // dusty violet — distinct from all others
+  wernickes_area:       0x7C70A8,   // deeper violet (posterior temporal)
+  occipital_lobe:       0xC4A438,   // golden amber — clearly posterior
+  cerebellum:           0x6898A8,   // steel blue — clearly non-cortical
+  brainstem:            0x887870,   // warm gray-brown
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -197,16 +209,16 @@ function buildHemisphereGeo() {
     const r = Math.sqrt(x * x + y * y + z * z) || 1;
 
     const lf =
-      0.052 * Math.sin(x * 6.8 + 0.40) * Math.sin(y * 6.2 + 0.80) * Math.sin(z * 5.0 + 0.20) +
-      0.040 * Math.sin(x * 5.0 + 1.20) * Math.cos(y * 7.5 + 0.60) * Math.sin(z * 6.5 + 1.40);
+      0.065 * Math.sin(x * 6.8 + 0.40) * Math.sin(y * 6.2 + 0.80) * Math.sin(z * 5.0 + 0.20) +
+      0.050 * Math.sin(x * 5.0 + 1.20) * Math.cos(y * 7.5 + 0.60) * Math.sin(z * 6.5 + 1.40);
 
     const mf =
-      0.027 * Math.sin(x * 11.5 + 2.10) * Math.sin(y * 10.0 + 1.30) * Math.sin(z * 9.5 + 0.90) +
-      0.019 * Math.cos(x * 14.0 + 0.70) * Math.sin(y * 13.5 + 2.50) * Math.cos(z * 11.0 + 1.80);
+      0.034 * Math.sin(x * 11.5 + 2.10) * Math.sin(y * 10.0 + 1.30) * Math.sin(z * 9.5 + 0.90) +
+      0.024 * Math.cos(x * 14.0 + 0.70) * Math.sin(y * 13.5 + 2.50) * Math.cos(z * 11.0 + 1.80);
 
     const hf =
-      0.009 * Math.sin(x * 22.0 + 1.50) * Math.sin(y * 20.0 + 0.80) * Math.sin(z * 18.0 + 2.20) +
-      0.006 * Math.cos(x * 28.0 + 0.40) * Math.cos(y * 26.0 + 1.90);
+      0.011 * Math.sin(x * 22.0 + 1.50) * Math.sin(y * 20.0 + 0.80) * Math.sin(z * 18.0 + 2.20) +
+      0.008 * Math.cos(x * 28.0 + 0.40) * Math.cos(y * 26.0 + 1.90);
 
     const disp = lf + mf + hf;
 
@@ -283,10 +295,10 @@ function buildRegionMesh(hemiGeo, regionId) {
 
   const mat = new THREE.MeshPhysicalMaterial({
     color:              new THREE.Color(REGION_COLORS[regionId] || 0xC87858),
-    roughness:          0.72,
+    roughness:          0.52,           // reduced — smoother pial surface
     metalness:          0.00,
-    clearcoat:          0.12,
-    clearcoatRoughness: 0.40,
+    clearcoat:          0.55,           // high — pial membrane is noticeably glossy
+    clearcoatRoughness: 0.14,           // tight specular lobe → sharp gyral highlights
     emissive:           new THREE.Color(0x000000),
     emissiveIntensity:  0,
   });
@@ -315,10 +327,12 @@ function buildMedialFace() {
 
   const geo = new THREE.ShapeGeometry(shape, 64);
   const mat = new THREE.MeshPhysicalMaterial({
-    color:     new THREE.Color(0xA85C40),
-    roughness: 0.85,
-    metalness: 0.00,
-    side:      THREE.DoubleSide,
+    color:              new THREE.Color(0xB86858),
+    roughness:          0.68,
+    metalness:          0.00,
+    clearcoat:          0.25,
+    clearcoatRoughness: 0.35,
+    side:               THREE.DoubleSide,
   });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.rotation.y = Math.PI / 2;
@@ -352,9 +366,9 @@ function buildCerebellum() {
     // Fine folial displacement — higher frequency, smaller amplitude than cerebrum
     const r = Math.sqrt(x*x + y*y + z*z) || 1;
     const disp =
-      0.024 * Math.sin(x * 20 + 0.40) * Math.sin(y * 16 + 1.20) * Math.sin(z * 18 + 0.80) +
-      0.014 * Math.cos(x * 30 + 1.10) * Math.sin(y * 26 + 0.50) * Math.cos(z * 24 + 1.60) +
-      0.007 * Math.sin(x * 44 + 0.70) * Math.cos(y * 38 + 1.90);
+      0.032 * Math.sin(x * 20 + 0.40) * Math.sin(y * 16 + 1.20) * Math.sin(z * 18 + 0.80) +
+      0.019 * Math.cos(x * 30 + 1.10) * Math.sin(y * 26 + 0.50) * Math.cos(z * 24 + 1.60) +
+      0.010 * Math.sin(x * 44 + 0.70) * Math.cos(y * 38 + 1.90);
 
     x += (x / r) * disp;
     y += (y / r) * disp;
@@ -367,10 +381,10 @@ function buildCerebellum() {
 
   const mat = new THREE.MeshPhysicalMaterial({
     color:              new THREE.Color(REGION_COLORS.cerebellum),
-    roughness:          0.78,
+    roughness:          0.58,           // slightly rougher than cortex (no gyral polish)
     metalness:          0.00,
-    clearcoat:          0.08,
-    clearcoatRoughness: 0.50,
+    clearcoat:          0.42,
+    clearcoatRoughness: 0.20,
     emissive:           new THREE.Color(0x000000),
     emissiveIntensity:  0,
   });
@@ -407,9 +421,10 @@ function buildBrainstem() {
 
   const mat = new THREE.MeshPhysicalMaterial({
     color:              new THREE.Color(REGION_COLORS.brainstem),
-    roughness:          0.80,
+    roughness:          0.62,
     metalness:          0.00,
-    clearcoat:          0.06,
+    clearcoat:          0.35,
+    clearcoatRoughness: 0.28,
     emissive:           new THREE.Color(0x000000),
     emissiveIntensity:  0,
   });
@@ -458,10 +473,10 @@ function buildGroundPlane() {
 function scMat(color) {
   return new THREE.MeshPhysicalMaterial({
     color:              new THREE.Color(color),
-    roughness:          0.62,
+    roughness:          0.50,
     metalness:          0.00,
-    clearcoat:          0.10,
-    clearcoatRoughness: 0.50,
+    clearcoat:          0.50,
+    clearcoatRoughness: 0.18,
     emissive:           new THREE.Color(0x000000),
     emissiveIntensity:  0,
   });
@@ -803,9 +818,28 @@ function selectRegion(mesh) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 let animFrameId = null;
-let autoRotate  = true;
+let autoRotate  = false;   // start still so user can immediately interact
 let lastTs      = 0;
 let idleTimer   = null;
+
+// ── Camera preset views ────────────────────────────────────────────────────────
+// Six standard neuroanatomy viewing angles. Positions are in world-space;
+// the target stays fixed at controls.target (0, 0.1, 0).
+// brainGroup.rotation.y is reset to 0 before each snap so the view is predictable.
+const CAMERA_VIEWS = {
+  lateral:  new THREE.Vector3( 4.2,  0.6,  0.4),   // left-hemisphere lateral surface
+  medial:   new THREE.Vector3(-4.2,  0.6,  0.4),   // medial/interhemispheric face
+  superior: new THREE.Vector3( 0.4,  5.2,  0.8),   // top-down (dorsal)
+  inferior: new THREE.Vector3( 0.4, -5.2,  0.8),   // bottom-up (ventral)
+  anterior: new THREE.Vector3( 0.4,  0.6,  5.0),   // frontal
+  posterior:new THREE.Vector3( 0.4,  0.6, -5.0),   // occipital
+};
+
+// Smooth camera tween state
+let camTweenFrom = null;          // THREE.Vector3 start
+let camTweenTo   = null;          // THREE.Vector3 target (null = inactive)
+let camTweenT    = 0;             // 0→1 progress
+const CAM_TWEEN_DUR = 0.75;       // seconds
 
 // ── Lesion Simulator state ────────────────────────────────────────────────────
 let lesionActive   = false;        // true = clicking a region applies damage
@@ -822,6 +856,36 @@ let glassActive     = false;  // true = subcortical revealed
 let glassProgress   = 0;      // 0 = full cortex, 1 = glass
 let glassTweenStart = -1;     // rAF timestamp at tween start; -1 = idle
 const GLASS_DURATION = 600;   // ms for full cortex ↔ glass transition
+
+/**
+ * Snap camera to a named anatomical view with a smooth tween.
+ * Resets brainGroup.rotation.y = 0 first so the view angle is predictable.
+ * @param {string} viewName — key of CAMERA_VIEWS
+ */
+function setCameraView(viewName) {
+  const tgt = CAMERA_VIEWS[viewName];
+  if (!tgt) return;
+  autoRotate           = false;
+  clearTimeout(idleTimer);
+  brainGroup.rotation.y = 0;          // normalise brain so view angles are consistent
+  camTweenFrom = camera.position.clone();
+  camTweenTo   = tgt.clone();
+  camTweenT    = 0;
+  // Highlight the active preset button in the overlay
+  document.querySelectorAll('.view-preset-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === viewName);
+  });
+}
+
+/** Advance camera-preset tween in the animate loop. */
+function tickCameraTween(delta) {
+  if (!camTweenTo) return;
+  camTweenT = Math.min(camTweenT + delta / CAM_TWEEN_DUR, 1);
+  const e = 1 - Math.pow(1 - camTweenT, 3);    // ease-out cubic
+  camera.position.lerpVectors(camTweenFrom, camTweenTo, e);
+  controls.update();
+  if (camTweenT >= 1) camTweenTo = null;
+}
 
 /** Apply glass progress t (0→1) to material opacity on all region meshes. */
 function applyGlassProgress(t) {
@@ -1878,6 +1942,9 @@ function animate(ts) {
   const delta = Math.min((ts - lastTs) / 1000, 0.05);
   lastTs = ts;
 
+  // Camera preset tween (must run before controls.update so damping picks it up)
+  tickCameraTween(delta);
+
   controls.update();
 
   if (autoRotate) {
@@ -2029,6 +2096,10 @@ function mount(containerOrSelector) {
   resizeObserver.observe(container);
 
   if (animFrameId === null) animate(0);
+
+  // Snap to lateral view on each mount so the user always starts at the standard
+  // anatomical position (regardless of where the camera was left last session).
+  setCameraView('lateral');
 }
 
 /** Stop the render loop and detach from the DOM. Clears hover/selection state. */
@@ -2094,6 +2165,8 @@ window.__brain3d = {
   toggleLesionMode, resetLesions,
   // Chunk 4A — Pathology Overlay System
   activatePathology, clearPathology, PATHOLOGY_DEFS,
+  // View presets
+  setCameraView, CAMERA_VIEWS,
 };
 
 // Auto-mount if the page already has view=3d on load

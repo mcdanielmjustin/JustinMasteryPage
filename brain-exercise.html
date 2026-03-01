@@ -489,6 +489,38 @@
 
     /* 3D explorer overlay buttons */
     #brain-container-3d { position: relative; }
+
+    /* ── View preset bar — bottom-left overlay ─────────────────────────────── */
+    .view-preset-bar {
+      position: absolute; bottom: 14px; left: 14px; z-index: 10;
+      display: flex; gap: 5px; flex-wrap: wrap; max-width: 320px;
+    }
+    .view-preset-btn {
+      background: rgba(10,10,14,0.82); border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 8px; padding: 6px 11px; font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.65); cursor: pointer; white-space: nowrap;
+      transition: border-color 0.18s, color 0.18s, background 0.18s;
+      backdrop-filter: blur(8px); user-select: none;
+    }
+    .view-preset-btn:hover {
+      border-color: rgba(255,255,255,0.32); color: rgba(255,255,255,0.95);
+    }
+    .view-preset-btn.active {
+      background: rgba(212,160,84,0.16); border-color: var(--gold); color: var(--gold-light);
+    }
+
+    /* ── Drag-to-rotate hint ────────────────────────────────────────────────── */
+    .rotate-hint {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10,10,14,0.72); border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 20px; padding: 8px 20px; font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.48); pointer-events: none;
+      transition: opacity 0.7s; backdrop-filter: blur(6px); z-index: 11;
+      white-space: nowrap; letter-spacing: 0.02em;
+    }
+    .rotate-hint.hidden { opacity: 0; }
+
     .brain3d-overlay-btn {
       position: absolute; bottom: 14px; right: 14px; z-index: 10;
       background: rgba(10,10,14,0.85); border: 1px solid rgba(255,255,255,0.15);
@@ -2192,6 +2224,31 @@
                oninput="window.__brain3d && window.__brain3d.setCsSlider(this.value)"
                style="display:none">
       </div>
+
+      <!-- View preset buttons — snap camera to standard anatomical angles -->
+      <div class="view-preset-bar" id="view-preset-bar">
+        <button class="view-preset-btn active" data-view="lateral"
+                onclick="snapView('lateral')"
+                title="Lateral surface — see gyri and sulci of the left hemisphere">Lateral</button>
+        <button class="view-preset-btn" data-view="medial"
+                onclick="snapView('medial')"
+                title="Medial/interhemispheric surface">Medial</button>
+        <button class="view-preset-btn" data-view="superior"
+                onclick="snapView('superior')"
+                title="Superior (dorsal) view — looking down from above">Superior</button>
+        <button class="view-preset-btn" data-view="inferior"
+                onclick="snapView('inferior')"
+                title="Inferior (ventral) view — looking up from below">Inferior</button>
+        <button class="view-preset-btn" data-view="anterior"
+                onclick="snapView('anterior')"
+                title="Anterior (frontal) view">Anterior</button>
+        <button class="view-preset-btn" data-view="posterior"
+                onclick="snapView('posterior')"
+                title="Posterior (occipital) view">Posterior</button>
+      </div>
+
+      <!-- Drag hint — fades out on first interaction, then removed -->
+      <div class="rotate-hint" id="rotate-hint">⟳ Drag to rotate &nbsp;·&nbsp; Scroll to zoom</div>
     </div>
 
     <!-- Study mode prompt (hidden during quiz) -->
@@ -2888,6 +2945,30 @@
     pca: '⊙ PCA Territory',
     all: '⊙ All Territories',
   };
+
+  // ── View preset snap ──────────────────────────────────────────────────────
+  function snapView(viewName) {
+    if (window.__brain3d && window.__brain3d.setCameraView) {
+      window.__brain3d.setCameraView(viewName);
+    }
+    // Update active state on buttons (brain-3d.js also does this, but sync here
+    // in case the 3D module isn't loaded yet)
+    document.querySelectorAll('.view-preset-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === viewName);
+    });
+  }
+
+  // Dismiss the rotate hint on first pointer interaction with the 3D container
+  (function wireRotateHint() {
+    const container = document.getElementById('brain-container-3d');
+    if (!container) return;
+    container.addEventListener('pointerdown', () => {
+      const hint = document.getElementById('rotate-hint');
+      if (!hint) return;
+      hint.classList.add('hidden');
+      setTimeout(() => hint.remove(), 750);
+    }, { once: true });
+  })();
 
   function cycleVasculature() {
     __vascIdx = (__vascIdx + 1) % __VASC_STATES.length;
