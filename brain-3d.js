@@ -249,7 +249,7 @@ function loadGLTFRegion(regionId, entry) {
 
             // Add blood-colored edges at geometric ridges (threshold 28°)
             if (edgeMat) {
-              var edges = new THREE.EdgesGeometry(child.geometry, 28);
+              var edges = new THREE.EdgesGeometry(child.geometry, 52);
               var lines = new THREE.LineSegments(edges, edgeMat);
               lines.renderOrder = 1;
               child.add(lines);
