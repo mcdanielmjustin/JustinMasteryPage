@@ -1785,7 +1785,9 @@
   function setAvatarState(emotion) {
     const root = document.getElementById('avatar-root');
     if (!root) return;
-    root.className = root.className.replace(/\bstate-\S+/g, '').trim();
+    // SVG elements use SVGAnimatedString for className — use getAttribute/setAttribute
+    const current = root.getAttribute('class') || '';
+    root.setAttribute('class', current.replace(/\bstate-\S+/g, '').trim());
     root.classList.add('state-' + emotion);
     state.avatarState = emotion;
 
