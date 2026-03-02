@@ -47,11 +47,11 @@ COORD_SCALE   = 1.0 / 75.0
 # is centred at CAM_TARGET.  Set to zero here; overwritten in main().
 COORD_OFFSET  = np.array([0.0, 0.0, 0.0], dtype=np.float64)
 
-# Max faces per mesh type (controls file size and render cost)
-MAX_FACES_CORTICAL    = 4_000
-MAX_FACES_SUBCORTICAL = 4_000
-MAX_FACES_GLASS       = 8_000
-MAX_FACES_CEREBELLUM  = 4_000
+# Max faces per mesh type — set high to preserve all available detail
+MAX_FACES_CORTICAL    = 999_999
+MAX_FACES_SUBCORTICAL = 999_999
+MAX_FACES_GLASS       = 999_999
+MAX_FACES_CEREBELLUM  = 999_999
 
 # ─── Region mappings ────────────────────────────────────────────────────────────
 
