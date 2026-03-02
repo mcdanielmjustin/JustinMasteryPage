@@ -1539,12 +1539,12 @@
     // Cancel any pending tag stagger from previous phase
     cancelTagStagger();
 
-    // Hide advance button during typewriter; shown after typewriter completes
+    // Show advance button immediately with correct label
     const enc = state.pool[state.encIdx];
     const isLastPhase = state.phaseIdx >= enc.encounter.phases.length - 1;
     const advBtn = document.getElementById('btn-advance');
     advBtn.innerHTML = isLastPhase ? 'Answer Questions <span>→</span>' : 'Next <span>→</span>';
-    advBtn.classList.add('hidden');
+    advBtn.classList.remove('hidden');
 
     // Stop any existing auto-advance bar
     stopAutoAdvance();
@@ -1606,6 +1606,10 @@
     clearInterval(state.typewriterInt);
     const el = document.getElementById('bubble-text');
     el.textContent = '';
+    if (!text) {
+      if (onComplete) onComplete();
+      return;
+    }
     let i = 0;
 
     // Click anywhere on the speech bubble to skip to full text instantly
@@ -1735,7 +1739,11 @@
   }
 
   function advancePhase() {
-    if (state.phaseRunning) return;
+    // Cancel any in-progress typewriter/stagger — clicking Next always works immediately
+    clearInterval(state.typewriterInt);
+    state.typewriterInt = null;
+    cancelTagStagger();
+    state.phaseRunning = false;
     stopAutoAdvance();
     document.getElementById('btn-advance').classList.add('hidden');
 
