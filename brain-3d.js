@@ -198,7 +198,7 @@ function loadGLTFRegion(regionId, entry) {
         }) : null;
 
         gltf.scene.traverse(function(child) {
-          if (child.isMesh) {
+          if (child.isMesh && !child.userData.isOutline) {
             child.geometry.computeVertexNormals();
             child.material      = mat;
             child.name          = regionId;
