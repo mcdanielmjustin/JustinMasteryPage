@@ -223,10 +223,28 @@ function loadGLTFRegion(regionId, entry) {
                 depthWrite:  true,
               });
               var outlineMesh = new THREE.Mesh(child.geometry, outlineMat);
-              outlineMesh.scale.setScalar(1.020);  // 2% scale-up for clearly visible borders
+              outlineMesh.scale.setScalar(1.018);  // 1.8% scale-up for region borders
               outlineMesh.renderOrder = -1;
               outlineMesh.userData = { isOutline: true };
               child.add(outlineMesh);
+            }
+
+            // Selection highlight outline (bright gold BackSide, hidden until clicked)
+            if (entry.type !== 'glass') {
+              var selMat = new THREE.MeshBasicMaterial({
+                color:       0xFFD060,
+                side:        THREE.BackSide,
+                transparent: true,
+                opacity:     0.95,
+                depthWrite:  false,
+              });
+              var selMesh = new THREE.Mesh(child.geometry, selMat);
+              selMesh.scale.setScalar(1.040);
+              selMesh.renderOrder = 3;
+              selMesh.visible = false;
+              selMesh.userData = { isOutline: true };
+              child.userData.selOutline = selMesh;
+              child.add(selMesh);
             }
 
             // Add blood-colored edges at geometric ridges (threshold 28°)
@@ -254,7 +272,7 @@ function loadGLTFRegion(regionId, entry) {
             regionMeshes.push(m);
             if (entry.type === 'subcortical') {
               subcorticalMeshes.push(m);
-              m.visible = false;  // hidden until glass toggle reveals them
+              m.visible = true;  // subcortical visible by default
             } else {
               corticalMeshes.push(m);
             }
@@ -352,9 +370,10 @@ var hoveredMesh  = null;
 var selectedMesh = null;
 
 function _restoreColor(mesh) {
-  if (mesh && mesh.material._origColor) {
-    mesh.material.color.copy(mesh.material._origColor);
-  }
+  if (!mesh) return;
+  if (mesh.material._origColor) mesh.material.color.copy(mesh.material._origColor);
+  if (mesh.material.emissive)   mesh.material.emissiveIntensity = 0.03;
+  if (mesh.userData.selOutline) mesh.userData.selOutline.visible = false;
 }
 
 function _setEmissive(mesh, hexColor, intensity) {
@@ -369,13 +388,10 @@ function _setEmissive(mesh, hexColor, intensity) {
 
 function setHover(mesh) {
   if (hoveredMesh === mesh) return;
-  if (hoveredMesh && hoveredMesh !== selectedMesh) {
-    _restoreColor(hoveredMesh);
-    if (hoveredMesh.material.emissive) hoveredMesh.material.emissiveIntensity = 0.12;
-  }
+  if (hoveredMesh && hoveredMesh !== selectedMesh) _restoreColor(hoveredMesh);
   hoveredMesh = mesh;
   if (hoveredMesh && hoveredMesh !== selectedMesh) {
-    _setEmissive(hoveredMesh, 0xE8A090, 0.25);
+    _setEmissive(hoveredMesh, 0xFFD8B0, 0.30);  // warm apricot hover glow
   }
   if (window.__brainUI && window.__brainUI.hoverRegion) {
     window.__brainUI.hoverRegion(mesh ? mesh.userData.regionId : null);
@@ -384,13 +400,12 @@ function setHover(mesh) {
 
 function selectRegion(mesh) {
   if (selectedMesh === mesh) return;
-  if (selectedMesh) {
-    _restoreColor(selectedMesh);
-    if (selectedMesh.material.emissive) selectedMesh.material.emissiveIntensity = 0.12;
-  }
+  if (selectedMesh) _restoreColor(selectedMesh);
   selectedMesh = mesh;
   if (!mesh) return;
-  _setEmissive(mesh, 0xE05840, 0.55);   // bright coral-red like brainfacts.org selection
+  // Gold emissive glow + bright gold back-face outline = unmistakable selection
+  _setEmissive(mesh, 0xFFD060, 0.55);
+  if (mesh.userData.selOutline) mesh.userData.selOutline.visible = true;
   if (window.__brainUI) window.__brainUI.openRegion(mesh.userData.regionId);
 }
 
