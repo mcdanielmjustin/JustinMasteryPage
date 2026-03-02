@@ -82,25 +82,42 @@ scene.add(new THREE.AmbientLight(0xFFEEE8, 0.15));
 
 // ── Camera presets ────────────────────────────────────────────────────────────
 // RAS: x=right, y=anterior, z=superior
+//
+// Each view also needs the correct camera.up vector — without this,
+// superior/inferior views hit gimbal lock (camera forward || camera up).
 
 const CAMERA_VIEWS = {
-  lateral:   new THREE.Vector3( 3.5,  0,    0  ),  // right lateral
-  medial:    new THREE.Vector3(-3.5,  0,    0  ),  // left lateral
-  superior:  new THREE.Vector3( 0,    0,    4.5),  // top (superior)
-  inferior:  new THREE.Vector3( 0,    0,   -4.5),  // bottom (inferior)
-  anterior:  new THREE.Vector3( 0,    4.5,  0  ),  // front (anterior)
-  posterior: new THREE.Vector3( 0,   -4.5,  0  ),  // back (posterior)
+  lateral:   new THREE.Vector3( 3.5,  0,    0  ),
+  medial:    new THREE.Vector3(-3.5,  0,    0  ),
+  superior:  new THREE.Vector3( 0,    0,    4.5),
+  inferior:  new THREE.Vector3( 0,    0,   -4.5),
+  anterior:  new THREE.Vector3( 0,    4.5,  0  ),
+  posterior: new THREE.Vector3( 0,   -4.5,  0  ),
 };
 
-var camFrom = null, camTo = null, camT = 0;
+// camera.up per view — lateral/anterior/posterior use z-up (superior = top of screen);
+// superior/inferior use y-up (anterior = top of screen).
+const VIEW_UP = {
+  lateral:   new THREE.Vector3(0, 0,  1),
+  medial:    new THREE.Vector3(0, 0,  1),
+  superior:  new THREE.Vector3(0, 1,  0),
+  inferior:  new THREE.Vector3(0, 1,  0),
+  anterior:  new THREE.Vector3(0, 0,  1),
+  posterior: new THREE.Vector3(0, 0,  1),
+};
+
+var camFrom   = null, camTo   = null, camT = 0;
+var camUpFrom = null, camUpTo = null;
 const CAM_DUR = 0.72;
 
 function setCameraView(name) {
   var tgt = CAMERA_VIEWS[name];
   if (!tgt) return;
-  camFrom = camera.position.clone();
-  camTo   = tgt.clone();
-  camT    = 0;
+  camFrom   = camera.position.clone();
+  camTo     = tgt.clone();
+  camUpFrom = camera.up.clone();
+  camUpTo   = VIEW_UP[name].clone();
+  camT      = 0;
   controls.target.set(0, 0, 0);
 }
 
@@ -167,8 +184,13 @@ function animate(ts) {
     camT = Math.min(camT + dt / CAM_DUR, 1);
     var e = 1 - Math.pow(1 - camT, 3);   // ease-out cubic
     camera.position.lerpVectors(camFrom, camTo, e);
+    if (camUpTo) camera.up.lerpVectors(camUpFrom, camUpTo, e).normalize();
     camera.lookAt(controls.target);
-    if (camT >= 1) { camTo = null; controls.update(); }
+    if (camT >= 1) {
+      camTo = null;
+      if (camUpTo) { camera.up.copy(camUpTo); camUpTo = null; }
+      controls.update();
+    }
   } else {
     controls.update();
   }
