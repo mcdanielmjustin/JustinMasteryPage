@@ -18,13 +18,11 @@
  *   brain3dReady     { detail: { regionCount } }
  */
 
-import * as THREE         from 'three';
-import { OrbitControls }  from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader }     from 'three/addons/loaders/GLTFLoader.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass }     from 'three/addons/postprocessing/RenderPass.js';
-import { OutlinePass }    from 'three/addons/postprocessing/OutlinePass.js';
-import { OutputPass }     from 'three/addons/postprocessing/OutputPass.js';
+import * as THREE        from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+
+console.log('[brain-3d] Module loaded, Three.js r' + THREE.REVISION);
 
 // ══════════════════════════════════════════════════════════════════════════════
 // REGION COLOR MAP
@@ -68,9 +66,6 @@ renderer.toneMappingExposure = 1.5;
 
 const canvas = renderer.domElement;
 canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
-
-// ── Post-processing ─────────────────────────────────────────────────────────
-const composer = new EffectComposer(renderer);
 
 // ══════════════════════════════════════════════════════════════════════════════
 // SCENE + CAMERA + CONTROLS
@@ -187,24 +182,8 @@ groundMesh.rotation.x    = -Math.PI / 2;
 groundMesh.position.y    = -1.5;
 scene.add(groundMesh);
 
-// ══════════════════════════════════════════════════════════════════════════════
-// POST-PROCESSING  (OutlinePass for gold region selection)
-// ══════════════════════════════════════════════════════════════════════════════
-
-var renderPass  = new RenderPass(scene, camera);
-var outlinePass = new OutlinePass(new THREE.Vector2(700, 455), scene, camera);
-outlinePass.edgeStrength            = 4.2;
-outlinePass.edgeGlow                = 0.5;
-outlinePass.edgeThickness           = 2.0;
-outlinePass.pulsePeriod             = 0;
-outlinePass.visibleEdgeColor.set('#d4a054');
-outlinePass.hiddenEdgeColor.set('#7a5820');
-outlinePass.selectedObjects         = [];
-var outputPass = new OutputPass();
-
-composer.addPass(renderPass);
-composer.addPass(outlinePass);
-composer.addPass(outputPass);
+// Selection state — gold emissive instead of OutlinePass (faster, no extra CDN deps)
+var _selectedMeshes = [];
 
 // ══════════════════════════════════════════════════════════════════════════════
 // MATERIAL FACTORY
@@ -300,57 +279,69 @@ var _readyResolve = null;
 var _readyPromise = new Promise(function(res) { _readyResolve = res; });
 
 async function loadBrain() {
-  var manifest;
-  try {
-    var resp = await fetch('data/brain_regions_manifest.json');
-    manifest = await resp.json();
-  } catch (e) {
-    console.error('[brain-3d] Could not load manifest:', e);
-    window.dispatchEvent(new CustomEvent('brain3dReady', { detail: { regionCount: 0 } }));
-    _readyResolve();
-    return;
-  }
-
-  var regionIds = Object.keys(manifest);
-  var glassId   = regionIds.find(function(id) { return manifest[id].type === 'glass'; });
-  var otherIds  = regionIds.filter(function(id) { return manifest[id].type !== 'glass'; });
-  var total     = regionIds.length;
-  var loaded    = 0;
-
-  function onOne() {
-    loaded++;
-    window.dispatchEvent(new CustomEvent('brain3dProgress', {
-      detail: { loaded: loaded, total: total }
+  console.log('[brain-3d] loadBrain() starting');
+  var _fired = false;
+  function _finish() {
+    if (_fired) return;
+    _fired = true;
+    console.log('[brain-3d] brain3dReady dispatched, regionCount=' + regionMeshes.length);
+    window.dispatchEvent(new CustomEvent('brain3dReady', {
+      detail: { regionCount: regionMeshes.length }
     }));
+    _readyResolve();
   }
 
-  // Glass brain first — renders as transparent shell immediately
-  if (glassId) {
+  try {
+    var manifest;
     try {
-      await loadGLTFRegion(glassId, manifest[glassId]);
-      onOne();
+      var resp = await fetch('data/brain_regions_manifest.json');
+      manifest = await resp.json();
+      console.log('[brain-3d] Manifest loaded:', Object.keys(manifest).length, 'regions');
     } catch (e) {
-      console.warn('[brain-3d] Glass brain load failed:', e);
-      loaded++;
+      console.error('[brain-3d] Could not load manifest:', e);
+      return;
     }
+
+    var regionIds = Object.keys(manifest);
+    var glassId   = regionIds.find(function(id) { return manifest[id].type === 'glass'; });
+    var otherIds  = regionIds.filter(function(id) { return manifest[id].type !== 'glass'; });
+    var total     = regionIds.length;
+    var loaded    = 0;
+
+    function onOne() {
+      loaded++;
+      window.dispatchEvent(new CustomEvent('brain3dProgress', {
+        detail: { loaded: loaded, total: total }
+      }));
+    }
+
+    // Glass brain first — renders as transparent shell immediately
+    if (glassId) {
+      try {
+        await loadGLTFRegion(glassId, manifest[glassId]);
+        onOne();
+      } catch (e) {
+        console.warn('[brain-3d] Glass brain load failed:', e);
+        loaded++;
+      }
+    }
+
+    // All other regions in parallel
+    await Promise.allSettled(
+      otherIds.map(function(id) {
+        return loadGLTFRegion(id, manifest[id])
+          .then(onOne)
+          .catch(function(e) {
+            console.warn('[brain-3d] Region load failed (' + id + '):', e);
+            onOne();
+          });
+      })
+    );
+  } catch (e) {
+    console.error('[brain-3d] Unexpected error in loadBrain:', e);
+  } finally {
+    _finish();
   }
-
-  // All other regions in parallel
-  await Promise.allSettled(
-    otherIds.map(function(id) {
-      return loadGLTFRegion(id, manifest[id])
-        .then(onOne)
-        .catch(function(e) {
-          console.warn('[brain-3d] Region load failed (' + id + '):', e);
-          onOne();
-        });
-    })
-  );
-
-  window.dispatchEvent(new CustomEvent('brain3dReady', {
-    detail: { regionCount: regionMeshes.length }
-  }));
-  _readyResolve();
 }
 
 loadBrain();
@@ -374,6 +365,9 @@ function setHover(mesh) {
     hoveredMesh.material.emissive.set(0xffffff);
     hoveredMesh.material.emissiveIntensity = 0.20;
   }
+  if (window.__brainUI && window.__brainUI.hoverRegion) {
+    window.__brainUI.hoverRegion(mesh ? mesh.userData.regionId : null);
+  }
 }
 
 function selectRegion(mesh) {
@@ -381,13 +375,11 @@ function selectRegion(mesh) {
   if (selectedMesh) {
     selectedMesh.material.emissive.set(0x000000);
     selectedMesh.material.emissiveIntensity = 0;
-    outlinePass.selectedObjects = [];
   }
   selectedMesh = mesh;
   if (!mesh) return;
-  outlinePass.selectedObjects = [mesh];
   mesh.material.emissive.set(0xd4a054);
-  mesh.material.emissiveIntensity = 0.14;
+  mesh.material.emissiveIntensity = 0.20;
   if (window.__brainUI) window.__brainUI.openRegion(mesh.userData.regionId);
 }
 
@@ -433,8 +425,6 @@ function highlightRegion(regionId) {
     m.material.opacity     = 1;
     m.material.transparent = false;
   });
-  var mesh = regionMeshes.find(function(m) { return m.userData.regionId === regionId; });
-  outlinePass.selectedObjects = mesh ? [mesh] : [];
 }
 
 function dimAllRegions(exceptIds) {
@@ -456,7 +446,6 @@ function resetRegions() {
       m.material.emissiveIntensity = 0;
     }
   });
-  outlinePass.selectedObjects = [];
   selectedMesh = null;
   hoveredMesh  = null;
 }
@@ -505,7 +494,7 @@ function animate(ts) {
     canvas.style.cursor = newHover ? 'pointer' : 'grab';
   }
 
-  composer.render();
+  renderer.render(scene, camera);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -558,8 +547,6 @@ var resizeObserver = new ResizeObserver(function() {
   var w = mountedContainer.clientWidth;
   var h = mountedContainer.clientHeight || Math.round(w / 1.54);
   renderer.setSize(w, h);
-  composer.setSize(w, h);
-  outlinePass.resolution.set(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 });
@@ -589,7 +576,6 @@ function unmount() {
   }
   hoveredMesh  = null;
   selectedMesh = null;
-  outlinePass.selectedObjects = [];
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -617,8 +603,6 @@ window.__brain3d = {
   setPathway:        function() {},
 };
 
-// Auto-mount to #brain-container-3d.
-// brain-exercise.html now defaults to 3D view, so this container is visible
-// when the module runs (modules execute after the inline scripts that set the view).
-var _c = document.getElementById('brain-container-3d');
+// Auto-mount: try #brain-stage (new explorer layout) then #brain-container-3d (legacy).
+var _c = document.getElementById('brain-stage') || document.getElementById('brain-container-3d');
 if (_c) mount(_c);
