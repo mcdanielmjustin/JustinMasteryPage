@@ -64,7 +64,7 @@ try {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.shadowMap.enabled   = false;
   renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
+  renderer.toneMappingExposure = 1.5;
   canvas = renderer.domElement;
   canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
 } catch (e) {
@@ -109,20 +109,20 @@ controls.update();
 // LIGHTING
 // ══════════════════════════════════════════════════════════════════════════════
 
-const keyLight = new THREE.DirectionalLight(0xFFF5EE, 4.0);
-keyLight.position.set(-3, 6, 4);
+const keyLight = new THREE.DirectionalLight(0xFFF5EE, 6.5);
+keyLight.position.set(-3, 7, 4);
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0xC8D8FF, 1.2);
+const fillLight = new THREE.DirectionalLight(0xC8D8FF, 0.5);
 fillLight.position.set(5, 1, -2);
 scene.add(fillLight);
 
-const rimLight = new THREE.DirectionalLight(0xFFE8C0, 1.8);
+const rimLight = new THREE.DirectionalLight(0xFFE8C0, 1.2);
 rimLight.position.set(0, -4, -5);
 scene.add(rimLight);
 
-scene.add(new THREE.HemisphereLight(0xC8D8F0, 0x604030, 1.2));
-scene.add(new THREE.AmbientLight(0xFFEEE8, 0.5));
+scene.add(new THREE.HemisphereLight(0xC8D8F0, 0x401808, 0.55));
+scene.add(new THREE.AmbientLight(0xFFEEE8, 0.12));
 
 // ══════════════════════════════════════════════════════════════════════════════
 // BRAIN GROUP + MESH REGISTRIES
@@ -163,10 +163,10 @@ function makeMaterial(regionId, type) {
   var col = new THREE.Color(color);
   var mat = new THREE.MeshStandardMaterial({
     color:             col,
-    roughness:         0.70,
+    roughness:         0.82,
     metalness:         0.00,
     emissive:          col,
-    emissiveIntensity: 0.08,
+    emissiveIntensity: 0.03,
     side:              THREE.DoubleSide,
   });
   mat._origColor = col.clone();
@@ -187,6 +187,14 @@ function loadGLTFRegion(regionId, entry) {
         var mat      = makeMaterial(regionId, entry.type);
         var meshList = [];
 
+        // Shared edge material — blood-maroon sulcal lines
+        var edgeMat = entry.type !== 'glass' ? new THREE.LineBasicMaterial({
+          color:       0x5A0E1E,
+          transparent: true,
+          opacity:     0.72,
+          depthWrite:  false,
+        }) : null;
+
         gltf.scene.traverse(function(child) {
           if (child.isMesh) {
             child.geometry.computeVertexNormals();
@@ -196,6 +204,14 @@ function loadGLTFRegion(regionId, entry) {
             child.receiveShadow = false;
             child.userData      = { regionId: regionId, label: regionId, type: entry.type };
             meshList.push(child);
+
+            // Add blood-colored edges at geometric ridges (threshold 28°)
+            if (edgeMat) {
+              var edges = new THREE.EdgesGeometry(child.geometry, 28);
+              var lines = new THREE.LineSegments(edges, edgeMat);
+              lines.renderOrder = 1;
+              child.add(lines);
+            }
           }
         });
 
