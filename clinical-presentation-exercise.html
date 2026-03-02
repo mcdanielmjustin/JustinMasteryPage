@@ -1537,8 +1537,12 @@
     // Cancel any pending tag stagger from previous phase
     cancelTagStagger();
 
-    // Hide advance button during typewriter (shown after in manual mode)
-    document.getElementById('btn-advance').classList.add('hidden');
+    // Hide advance button during typewriter; shown after typewriter completes
+    const enc = state.pool[state.encIdx];
+    const isLastPhase = state.phaseIdx >= enc.encounter.phases.length - 1;
+    const advBtn = document.getElementById('btn-advance');
+    advBtn.innerHTML = isLastPhase ? 'Answer Questions <span>→</span>' : 'Next <span>→</span>';
+    advBtn.classList.add('hidden');
 
     // Stop any existing auto-advance bar
     stopAutoAdvance();
@@ -1574,9 +1578,10 @@
 
         setTimeout(() => {
           state.phaseRunning = false;
-          if (CFG.speed === 'manual') {
-            document.getElementById('btn-advance').classList.remove('hidden');
-          } else {
+          // Always show Next button so user has a visible control.
+          // In auto modes, also start the auto-advance timer (button acts as skip).
+          document.getElementById('btn-advance').classList.remove('hidden');
+          if (CFG.speed !== 'manual') {
             startAutoAdvance(spd.holdMs);
           }
         }, revealMs);
