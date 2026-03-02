@@ -1337,8 +1337,7 @@
     const detailEl = document.getElementById('loader-detail');
 
     let pool = [];
-    let fetchFailed = 0;
-    let totalLoaded = 0;
+    const loadLog = [];   // per-domain diagnostic records
 
     for (let i = 0; i < CFG.domains.length; i++) {
       const d = CFG.domains[i];
@@ -1346,37 +1345,65 @@
       detailEl.textContent = `${i + 1} of ${CFG.domains.length} domains`;
       fillEl.style.width = ((i / CFG.domains.length) * 85) + '%';
 
+      const rec = { domain: d, status: null, total: 0, matched: 0, error: null };
+
       try {
         const r = await fetch(`data/${d}_presentations.json`);
         if (!r.ok) {
-          console.warn(`[loader] ${d}: HTTP ${r.status} — skipping`);
-          fetchFailed++;
-          continue;
+          rec.status = `HTTP ${r.status}`;
+          rec.error  = `HTTP ${r.status} ${r.statusText}`;
+        } else {
+          const data  = await r.json();
+          const allEnc = data.encounters || [];
+          const filtered = allEnc.filter(e => CFG.levels.includes(e.difficulty_level));
+          pool.push(...filtered);
+          rec.status  = 'ok';
+          rec.total   = allEnc.length;
+          rec.matched = filtered.length;
         }
-        const data = await r.json();
-        const allEnc = data.encounters || [];
-        totalLoaded += allEnc.length;
-        const filtered = allEnc.filter(e => CFG.levels.includes(e.difficulty_level));
-        pool.push(...filtered);
-        console.log(`[loader] ${d}: ${filtered.length}/${allEnc.length} encounters matched`);
       } catch (err) {
-        console.warn(`[loader] ${d}: fetch failed —`, err.message);
-        fetchFailed++;
+        rec.status = 'fetch-error';
+        rec.error  = err.message;
       }
+
+      loadLog.push(rec);
+      console.log(
+        `[loader] ${d}: ${rec.status}` +
+        (rec.total   ? ` | ${rec.matched}/${rec.total} matched` : '') +
+        (rec.error   ? ` | ${rec.error}` : '')
+      );
     }
+
+    // Always print a full summary table to console
+    console.table(loadLog);
+    console.log('[loader] CFG:', { domains: CFG.domains, levels: CFG.levels, count: CFG.count, order: CFG.order });
 
     fillEl.style.width = '90%';
     statusEl.textContent = 'Building session…';
     detailEl.textContent = `${pool.length} encounter${pool.length !== 1 ? 's' : ''} available`;
 
     if (pool.length === 0) {
-      if (fetchFailed === CFG.domains.length) {
-        showError('Could not load encounter data. Open this page via a local server (e.g. Live Server), not directly from the file system.');
+      const failedDomains  = loadLog.filter(r => r.status !== 'ok').map(r => r.domain);
+      const allFetchFailed = failedDomains.length === CFG.domains.length;
+      const totalLoaded    = loadLog.reduce((n, r) => n + r.total, 0);
+      const firstErr       = loadLog.find(r => r.error)?.error || '';
+
+      let msg;
+      if (allFetchFailed) {
+        msg = `Could not load encounter data (${firstErr || 'fetch blocked'}).` +
+              ` Open this page via a local server (e.g. Live Server), not directly from the file system.` +
+              ` Failed domains: ${failedDomains.join(', ')}`;
       } else if (totalLoaded > 0) {
-        showError('No encounters match the selected difficulty levels. Go back and select additional levels.');
+        const failNote = failedDomains.length ? ` (${failedDomains.length} domain(s) failed to load)` : '';
+        msg = `No encounters match the selected difficulty levels${failNote}.` +
+              ` Loaded ${totalLoaded} total but none matched levels [${CFG.levels.join(',')}].` +
+              ` Go back and select additional levels.`;
       } else {
-        showError('No encounters match your settings. Go back and adjust your filters.');
+        msg = `No encounters found after loading ${CFG.domains.length} domain(s).` +
+              (failedDomains.length ? ` Failed: ${failedDomains.join(', ')}.` : '') +
+              ` Go back and adjust your filters.`;
       }
+      showError(msg);
       return;
     }
 
