@@ -222,17 +222,13 @@ function makeMaterial(regionId, type) {
 
   // Cortical and subcortical regions
   var col = new THREE.Color(color);
-  return new THREE.MeshPhysicalMaterial({
-    color:              col,
-    roughness:          0.55,
-    metalness:          0.00,
-    clearcoat:          0.30,
-    clearcoatRoughness: 0.20,
-    normalMap:          GYRAL_NORMAL,
-    normalScale:        new THREE.Vector2(0.25, 0.25),
-    emissive:           col,
-    emissiveIntensity:  0.20,
-    side:               THREE.DoubleSide,
+  return new THREE.MeshStandardMaterial({
+    color:             col,
+    roughness:         0.6,
+    metalness:         0.0,
+    emissive:          col,
+    emissiveIntensity: 0.5,
+    side:              THREE.DoubleSide,
   });
 }
 
