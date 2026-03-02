@@ -88,7 +88,7 @@ try {
 // ══════════════════════════════════════════════════════════════════════════════
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xE4E0DA);
+scene.background = new THREE.Color(0x0A0D14);
 
 const camera = new THREE.PerspectiveCamera(40, 1.54, 0.1, 100);
 camera.position.set(4.8, 0.5, 0.4);
