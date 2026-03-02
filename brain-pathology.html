@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Pathology 2.0 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #09090b;
+      --surface: #13131a;
+      --s2:      #1a1a24;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.04);
+      --text:    #fafafa;
+      --text2:   #a8a8b3;
+      --text3:   #6b6b76;
+      --accent:  #e05c6e;   /* rose, matches brain-settings palette */
+      --accent2: #f08090;
+      --gold:    #d4a054;
+      --gold2:   #e4b76a;
+      --green:   #34d399;
+    }
+
+    html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 52px;
+      background: rgba(9,9,11,0.9); backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 18px; gap: 10px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
+    .logo-chip {
+      width: 28px; height: 28px; border-radius: 7px;
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; flex-shrink: 0;
+    }
+    .logo-title { font-weight: 700; font-size: 13px; }
+    .nav-sep { width: 1px; height: 18px; background: var(--border); }
+    .nav-title { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .nav-btn {
+      height: 30px; padding: 0 12px; border-radius: 7px;
+      border: 1px solid var(--border); background: transparent;
+      font-size: 12px; font-weight: 500; color: var(--text2); cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .nav-btn:hover  { border-color: rgba(255,255,255,0.18); color: var(--text); }
+    .nav-btn.active { background: rgba(224,92,110,0.12); border-color: rgba(224,92,110,0.4); color: var(--accent2); }
+
+    /* ── LAYOUT ── */
+    .explorer {
+      position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+      display: grid;
+      grid-template-columns: 256px 1fr;
+      grid-template-rows: 1fr;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      grid-column: 1; grid-row: 1;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border2);
+      flex-shrink: 0;
+    }
+    .sidebar-title {
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text3);
+    }
+    .sidebar-search {
+      margin-top: 8px;
+      display: flex; align-items: center; gap: 6px;
+      background: var(--s2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 10px;
+    }
+    .sidebar-search input {
+      background: none; border: none; outline: none;
+      font-size: 12px; color: var(--text); width: 100%;
+    }
+    .sidebar-search input::placeholder { color: var(--text3); }
+    .search-icon { color: var(--text3); font-size: 12px; flex-shrink: 0; }
+
+    .region-tree {
+      flex: 1; overflow-y: auto; padding: 8px 0;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+    .region-tree::-webkit-scrollbar { width: 4px; }
+    .region-tree::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+    /* Tree nodes */
+    .tree-group { }
+    .tree-group-header {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 16px 7px 12px; cursor: pointer;
+      font-size: 11px; font-weight: 700; color: var(--text3);
+      letter-spacing: .06em; text-transform: uppercase;
+      user-select: none;
+      transition: color .15s;
+    }
+    .tree-group-header:hover { color: var(--text2); }
+    .tree-chevron {
+      font-size: 9px; transition: transform .2s;
+      display: inline-block; flex-shrink: 0;
+    }
+    .tree-group.open > .tree-group-header .tree-chevron { transform: rotate(90deg); }
+    .tree-group-children { display: none; }
+    .tree-group.open > .tree-group-children { display: block; }
+
+    .tree-subgroup { }
+    .tree-subgroup-header {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 16px 6px 20px; cursor: pointer;
+      font-size: 12px; font-weight: 600; color: var(--text2);
+      user-select: none; transition: color .15s;
+    }
+    .tree-subgroup-header:hover { color: var(--text); }
+    .tree-subgroup.open > .tree-subgroup-header .tree-chevron { transform: rotate(90deg); }
+    .tree-subgroup-children { display: none; }
+    .tree-subgroup.open > .tree-subgroup-children { display: block; }
+
+    .tree-region {
+      display: flex; align-items: center; gap: 7px;
+      padding: 5px 16px 5px 28px; cursor: pointer;
+      font-size: 12px; color: var(--text3);
+      transition: color .15s, background .15s;
+      border-radius: 0;
+    }
+    .tree-region:hover { color: var(--text2); background: rgba(255,255,255,0.025); }
+    .tree-region.selected { color: var(--gold2); background: rgba(212,160,84,0.08); }
+    .tree-region-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: currentColor; opacity: .5; flex-shrink: 0;
+      transition: opacity .15s;
+    }
+    .tree-region:hover .tree-region-dot,
+    .tree-region.selected .tree-region-dot { opacity: 1; }
+
+    /* ── BRAIN STAGE ── */
+    .brain-stage {
+      grid-column: 2; grid-row: 1;
+      position: relative; overflow: hidden;
+      background: #0a0d14;
+      height: 100%;         /* explicit height for grid child */
+    }
+    /* Force Three.js canvas to fill the stage */
+    .brain-stage canvas {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Camera controls — bottom-left overlay */
+    .cam-controls {
+      position: absolute; bottom: 20px; left: 20px; z-index: 10;
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .cam-btn {
+      height: 28px; padding: 0 10px; border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(9,9,11,0.75); backdrop-filter: blur(12px);
+      font-size: 11px; font-weight: 600; color: var(--text3); cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .cam-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text2); }
+    .cam-btn.active { border-color: var(--gold); color: var(--gold); }
+
+    /* Glass / subcortical toggle — top-right overlay */
+    .stage-controls {
+      position: absolute; top: 16px; right: 16px; z-index: 10;
+      display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+    }
+    .stage-btn {
+      height: 28px; padding: 0 10px; border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(9,9,11,0.75); backdrop-filter: blur(12px);
+      font-size: 11px; font-weight: 500; color: var(--text3); cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .stage-btn:hover  { border-color: rgba(255,255,255,0.22); color: var(--text2); }
+    .stage-btn.active { border-color: rgba(224,92,110,0.5); color: var(--accent2); }
+
+    /* Region hover tooltip */
+    .hover-tip {
+      position: absolute; bottom: 20px; right: 16px; z-index: 10;
+      background: rgba(9,9,11,0.88); backdrop-filter: blur(12px);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 8px 13px; font-size: 12px; font-weight: 500; color: var(--text2);
+      pointer-events: none; opacity: 0; transition: opacity .2s;
+      max-width: 200px;
+    }
+    .hover-tip.visible { opacity: 1; }
+    .hover-tip-name { color: var(--text); font-weight: 600; margin-bottom: 2px; }
+    .hover-tip-hint { color: var(--text3); font-size: 11px; }
+
+    /* Loading overlay */
+    .brain-loading {
+      position: absolute; inset: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: center;
+      background: #0a0d14; transition: opacity .5s;
+    }
+    .brain-loading.hidden { opacity: 0; pointer-events: none; }
+    .brain-loading-card {
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      padding: 36px 44px; text-align: center;
+    }
+    .brain-loading-icon { font-size: 36px; opacity: .7; }
+    .brain-loading-title { font-size: 14px; font-weight: 600; color: var(--text2); }
+    .brain-loading-bar-bg {
+      width: 180px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden;
+    }
+    .brain-loading-bar { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width .3s; }
+    .brain-loading-sub { font-size: 11px; color: var(--text3); }
+
+    /* ── INFO PANEL ── */
+    .info-panel {
+      position: fixed; top: 52px; right: 0; bottom: 0; z-index: 40;
+      width: 320px;
+      background: var(--surface); border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+      overflow: hidden;
+    }
+    .info-panel.open { transform: translateX(0); }
+
+    .info-panel-header {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border2);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+      flex-shrink: 0;
+    }
+    .info-close {
+      background: none; border: none; color: var(--text3); cursor: pointer;
+      font-size: 18px; line-height: 1; padding: 2px; flex-shrink: 0;
+      transition: color .15s;
+    }
+    .info-close:hover { color: var(--text); }
+    .info-region-name {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.4rem; line-height: 1.2; color: var(--text);
+    }
+    .info-region-id { font-size: 10px; color: var(--text3); margin-top: 3px; letter-spacing: .05em; }
+
+    .info-body { flex: 1; overflow-y: auto; padding: 16px 18px 24px; display: flex; flex-direction: column; gap: 16px; }
+    .info-section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--text3); margin-bottom: 8px;
+    }
+    .info-badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .info-badge {
+      padding: 3px 9px; border-radius: 6px;
+      background: rgba(212,160,84,0.1); border: 1px solid rgba(212,160,84,0.2);
+      font-size: 11px; color: var(--gold2); font-weight: 500;
+    }
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .info-list li {
+      display: flex; gap: 8px; font-size: 12.5px; line-height: 1.5; color: var(--text2);
+    }
+    .info-list li::before {
+      content: '·'; color: var(--accent); flex-shrink: 0; font-size: 14px; margin-top: -1px;
+    }
+    .info-vascular-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 11px; border-radius: 8px;
+      background: rgba(96,165,250,0.07); border: 1px solid rgba(96,165,250,0.15);
+      font-size: 12px; color: #93c5fd;
+    }
+
+    /* ── QUIZ OVERLAY ── */
+    .quiz-bar {
+      position: fixed; left: 256px; right: 0; bottom: 0; z-index: 30;
+      background: rgba(9,9,11,0.96); backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      transform: translateY(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+      max-height: 50vh; overflow-y: auto;
+    }
+    .quiz-bar.open { transform: translateY(0); }
+    .quiz-bar-inner { padding: 16px 20px 20px; }
+    .quiz-cat-label { font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+    .quiz-question { font-family: 'Instrument Serif', Georgia, serif; font-size: 1.1rem; line-height: 1.45; color: var(--text); margin-bottom: 14px; }
+    .quiz-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .quiz-chip {
+      padding: 7px 14px; border-radius: 10px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.03);
+      font-size: 12.5px; color: var(--text2); cursor: pointer;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .quiz-chip:hover { border-color: rgba(255,255,255,0.18); color: var(--text); }
+    .quiz-chip.selected { border-color: var(--accent); background: rgba(224,92,110,0.08); color: var(--text); }
+    .quiz-chip.correct  { border-color: var(--green); background: rgba(52,211,153,0.08); color: var(--green); }
+    .quiz-chip.wrong    { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #f87171; }
+    .quiz-chip.disabled { cursor: default; opacity: .6; }
+
+    .quiz-action-row { display: flex; gap: 8px; align-items: center; }
+    .quiz-submit-btn, .quiz-next-btn {
+      height: 34px; padding: 0 18px; border-radius: 9px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: opacity .15s, background .15s;
+    }
+    .quiz-submit-btn { background: var(--accent); border: none; color: #fff; }
+    .quiz-submit-btn:disabled { opacity: .4; cursor: default; }
+    .quiz-next-btn   { background: none; border: 1px solid var(--border); color: var(--text2); }
+    .quiz-next-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+    .quiz-progress { font-size: 11px; color: var(--text3); margin-left: auto; }
+
+    .quiz-explanation {
+      margin-top: 10px; padding: 10px 12px; border-radius: 9px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border2);
+      font-size: 12.5px; line-height: 1.55; color: var(--text2);
+      display: none;
+    }
+    .quiz-explanation.visible { display: block; }
+    .quiz-verdict {
+      font-size: 12px; font-weight: 700; margin-bottom: 5px;
+    }
+    .quiz-verdict.correct { color: var(--green); }
+    .quiz-verdict.wrong   { color: #f87171; }
+
+    /* Highlighted region label (quiz) */
+    .highlighted-label {
+      position: absolute; top: 16px; left: 16px; z-index: 10;
+      background: rgba(212,160,84,0.12); border: 1px solid rgba(212,160,84,0.3);
+      border-radius: 8px; padding: 6px 12px;
+      font-size: 12px; font-weight: 600; color: var(--gold2);
+      display: none;
+    }
+
+    /* ── RESULTS ── */
+    .results-panel {
+      position: fixed; inset: 52px 0 0; z-index: 45;
+      background: var(--bg); display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 32px;
+    }
+    .results-panel.visible { display: flex; }
+    .results-score { font-family: 'Instrument Serif', Georgia, serif; font-size: 4rem; color: var(--gold); }
+    .results-label { color: var(--text2); font-size: 14px; margin-top: 4px; margin-bottom: 24px; }
+    .results-restart {
+      height: 40px; padding: 0 24px; border-radius: 10px;
+      background: var(--accent); border: none; color: #fff;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .results-restart:hover { opacity: .85; }
+
+    /* Scrollbar */
+    .info-body::-webkit-scrollbar { width: 4px; }
+    .info-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .explorer { grid-template-columns: 200px 1fr; }
+      .quiz-bar { left: 200px; }
+    }
+    @media (max-width: 560px) {
+      .explorer { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .quiz-bar { left: 0; }
+    }
+  </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="brain-3d.js?v=17"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="brain-settings.html">
+      <div class="logo-chip">M</div>
+      <span class="logo-title">MasteryPage</span>
+    </a>
+    <div class="nav-sep"></div>
+    <span class="nav-title">Brain Pathology 2.0</span>
+    <div class="nav-right">
+      <span id="nav-score" style="font-size:12px;color:var(--text2);display:none">
+        <strong id="nav-correct" style="color:var(--green)">0</strong>
+        / <span id="nav-total">0</span>
+      </span>
+      <button class="nav-btn" id="quiz-toggle-btn" onclick="toggleQuizMode()">Quiz Mode</button>
+      <button class="nav-btn" onclick="location.href='brain-settings.html'">&#8592; Back</button>
+    </div>
+  </nav>
+
+  <!-- EXPLORER LAYOUT -->
+  <div class="explorer">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Brain Regions</div>
+        <div class="sidebar-search">
+          <span class="search-icon">&#9906;</span>
+          <input type="text" id="region-search" placeholder="Search regions…" oninput="filterTree(this.value)" />
+        </div>
+      </div>
+      <div class="region-tree" id="region-tree"></div>
+    </aside>
+
+    <!-- 3D BRAIN STAGE -->
+    <main class="brain-stage" id="brain-stage">
+
+      <!-- Camera preset controls -->
+      <div class="cam-controls">
+        <button class="cam-btn active" id="cam-lateral"   onclick="snapCam('lateral')">Lateral</button>
+        <button class="cam-btn"        id="cam-medial"    onclick="snapCam('medial')">Medial</button>
+        <button class="cam-btn"        id="cam-superior"  onclick="snapCam('superior')">Superior</button>
+        <button class="cam-btn"        id="cam-anterior"  onclick="snapCam('anterior')">Anterior</button>
+        <button class="cam-btn"        id="cam-posterior" onclick="snapCam('posterior')">Posterior</button>
+      </div>
+
+      <!-- Stage controls top-right -->
+      <div class="stage-controls">
+        <button class="stage-btn" id="btn-glass" onclick="toggleGlassBrain()" title="Toggle transparent brain shell">Glass Brain</button>
+        <button class="stage-btn" id="btn-subcortical" onclick="toggleSubcortical()" title="Show/hide subcortical structures">Subcortical</button>
+      </div>
+
+      <!-- Quiz highlighted-label -->
+      <div class="highlighted-label" id="highlighted-label">&#9733; Highlighted region</div>
+
+      <!-- Hover tooltip -->
+      <div class="hover-tip" id="hover-tip">
+        <div class="hover-tip-name" id="hover-tip-name"></div>
+        <div class="hover-tip-hint">Click to explore</div>
+      </div>
+
+      <!-- GLTF loading overlay -->
+      <div class="brain-loading" id="brain-loading">
+        <div class="brain-loading-card">
+          <div class="brain-loading-icon">🧠</div>
+          <div class="brain-loading-title">Loading 3D Brain&hellip;</div>
+          <div class="brain-loading-bar-bg">
+            <div class="brain-loading-bar" id="brain-loading-bar"></div>
+          </div>
+          <div class="brain-loading-sub" id="brain-loading-sub">Fetching mesh data</div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- INFO PANEL (slides in from right) -->
+  <div class="info-panel" id="info-panel">
+    <div class="info-panel-header">
+      <div>
+        <div class="info-region-name" id="info-region-name">Select a region</div>
+        <div class="info-region-id"  id="info-region-id"></div>
+      </div>
+      <button class="info-close" onclick="closeInfoPanel()">&#215;</button>
+    </div>
+    <div class="info-body" id="info-body">
+      <div style="color:var(--text3);font-size:12px;">Click a region in the sidebar or on the 3D brain to see details here.</div>
+    </div>
+  </div>
+
+  <!-- QUIZ OVERLAY BAR -->
+  <div class="quiz-bar" id="quiz-bar">
+    <div class="quiz-bar-inner">
+      <div class="quiz-cat-label" id="quiz-cat-label">Brain Pathology</div>
+      <div class="quiz-question"  id="quiz-question"></div>
+      <div class="quiz-chips"     id="quiz-chips"></div>
+      <div class="quiz-explanation" id="quiz-explanation">
+        <div class="quiz-verdict" id="quiz-verdict"></div>
+        <span id="quiz-explanation-text"></span>
+      </div>
+      <div class="quiz-action-row">
+        <button class="quiz-submit-btn" id="quiz-submit" onclick="handleSubmit()" disabled>Submit</button>
+        <button class="quiz-next-btn"   id="quiz-next"   onclick="nextQuestion()" style="display:none">Next →</button>
+        <span class="quiz-progress"     id="quiz-progress"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-panel" id="results-panel">
+    <div class="results-score" id="results-score">—</div>
+    <div class="results-label">correct</div>
+    <button class="results-restart" onclick="restartQuiz()">Try Again</button>
+  </div>
+
+  <!-- DATA + LOGIC -->
+  <script src="data/brain_data.js"></script>
+  <script>
+  (function() {
+    'use strict';
+
+    // ── Data ─────────────────────────────────────────────────────────────
+    const DATA    = window.__BRAIN_DATA || {};
+    const REGIONS = DATA.regions || {};
+    const ALL_QS  = DATA.questions || [];
+
+    // ── URL params ────────────────────────────────────────────────────────
+    const params     = new URLSearchParams(location.search);
+    const IS_QUIZ    = params.get('mode') === 'quiz';
+    const CATS_RAW   = (params.get('categories') || '').split(',').filter(Boolean);
+    const COUNT_RAW  = parseInt(params.get('count') || '20', 10);
+    const CATEGORIES = CATS_RAW.length ? CATS_RAW : null;
+
+    // ── Region hierarchy tree definition ─────────────────────────────────
+    const REGION_TREE_DEF = [
+      {
+        id: 'cortical', label: 'Cerebral Cortex',
+        children: [
+          {
+            id: 'frontal_group', label: 'Frontal Lobe',
+            children: [
+              { id: 'frontal_lobe',       label: 'Frontal Lobe' },
+              { id: 'prefrontal_cortex',  label: 'Prefrontal Cortex' },
+              { id: 'brocas_area',        label: "Broca's Area" },
+              { id: 'motor_cortex',       label: 'Motor Cortex' },
+              { id: 'medial_frontal',     label: 'Medial Frontal' },
+              { id: 'cingulate_gyrus',    label: 'Cingulate Gyrus' },
+            ]
+          },
+          {
+            id: 'parietal_group', label: 'Parietal Lobe',
+            children: [
+              { id: 'parietal_lobe',         label: 'Parietal Lobe' },
+              { id: 'somatosensory_cortex',  label: 'Somatosensory Cortex' },
+            ]
+          },
+          {
+            id: 'temporal_group', label: 'Temporal Lobe',
+            children: [
+              { id: 'temporal_lobe',   label: 'Temporal Lobe' },
+              { id: 'wernickes_area',  label: "Wernicke's Area" },
+            ]
+          },
+          { id: 'occipital_lobe', label: 'Occipital Lobe', leaf: true },
+        ]
+      },
+      {
+        id: 'subcortical_group', label: 'Subcortical',
+        children: [
+          { id: 'thalamus',        label: 'Thalamus',        leaf: true },
+          { id: 'hippocampus',     label: 'Hippocampus',     leaf: true },
+          { id: 'amygdala',        label: 'Amygdala',        leaf: true },
+          { id: 'caudate',         label: 'Caudate Nucleus', leaf: true },
+          { id: 'putamen',         label: 'Putamen',         leaf: true },
+          { id: 'globus_pallidus', label: 'Globus Pallidus', leaf: true },
+          { id: 'brainstem',       label: 'Brainstem',       leaf: true },
+        ]
+      },
+    ];
+
+    // ── Build sidebar tree ────────────────────────────────────────────────
+    let _selectedRegionId = null;
+
+    function buildTree() {
+      const container = document.getElementById('region-tree');
+      container.innerHTML = '';
+      REGION_TREE_DEF.forEach(group => container.appendChild(renderGroup(group)));
+    }
+
+    function renderGroup(node) {
+      const div = document.createElement('div');
+      div.className = 'tree-group open';
+      div.dataset.groupId = node.id;
+
+      const header = document.createElement('div');
+      header.className = 'tree-group-header';
+      header.innerHTML = `<span class="tree-chevron">&#9654;</span>${escHtml(node.label)}`;
+      header.onclick = () => div.classList.toggle('open');
+      div.appendChild(header);
+
+      const children = document.createElement('div');
+      children.className = 'tree-group-children';
+      (node.children || []).forEach(child => {
+        if (child.leaf || !child.children) {
+          children.appendChild(renderLeaf(child));
+        } else {
+          children.appendChild(renderSubgroup(child));
+        }
+      });
+      div.appendChild(children);
+      return div;
+    }
+
+    function renderSubgroup(node) {
+      const div = document.createElement('div');
+      div.className = 'tree-subgroup open';
+      div.dataset.groupId = node.id;
+
+      const header = document.createElement('div');
+      header.className = 'tree-subgroup-header';
+      header.innerHTML = `<span class="tree-chevron">&#9654;</span>${escHtml(node.label)}`;
+      header.onclick = () => div.classList.toggle('open');
+      div.appendChild(header);
+
+      const children = document.createElement('div');
+      children.className = 'tree-subgroup-children';
+      (node.children || []).forEach(child => children.appendChild(renderLeaf(child)));
+      div.appendChild(children);
+      return div;
+    }
+
+    function renderLeaf(node) {
+      const div = document.createElement('div');
+      div.className = 'tree-region';
+      div.dataset.regionId = node.id;
+      div.innerHTML = `<span class="tree-region-dot"></span>${escHtml(node.label)}`;
+      div.onclick = () => selectRegion(node.id);
+      div.onmouseenter = () => {
+        if (window.__brain3d) {
+          const m = window.__brain3d.regionMeshes.find(m => m.userData.regionId === node.id);
+          if (m) {
+            m.material.emissive && m.material.emissive.set(0xffffff);
+            if (m.material.emissiveIntensity !== undefined) m.material.emissiveIntensity = 0.18;
+          }
+        }
+      };
+      div.onmouseleave = () => {
+        if (window.__brain3d && node.id !== _selectedRegionId) {
+          const m = window.__brain3d.regionMeshes.find(m => m.userData.regionId === node.id);
+          if (m && m.material.emissiveIntensity !== undefined) m.material.emissiveIntensity = 0;
+        }
+      };
+      return div;
+    }
+
+    function filterTree(query) {
+      query = query.toLowerCase().trim();
+      document.querySelectorAll('.tree-region').forEach(el => {
+        const name = (el.textContent || '').toLowerCase();
+        el.style.display = (!query || name.includes(query)) ? '' : 'none';
+      });
+    }
+
+    // ── Region selection ──────────────────────────────────────────────────
+    function selectRegion(regionId) {
+      _selectedRegionId = regionId;
+
+      // Sidebar highlight
+      document.querySelectorAll('.tree-region').forEach(el => {
+        el.classList.toggle('selected', el.dataset.regionId === regionId);
+      });
+
+      // 3D highlight
+      if (window.__brain3d) {
+        window.__brain3d.highlightRegion(regionId);
+      }
+
+      // Info panel
+      openInfoPanel(regionId);
+
+      // Quiz: handle click if in quiz mode
+      if (_quizClick) _quizClick(regionId);
+    }
+
+    // ── Info panel ────────────────────────────────────────────────────────
+    function openInfoPanel(regionId) {
+      const rData = REGIONS[regionId];
+      const label = rData ? rData.label : regionId.replace(/_/g, ' ');
+      const info  = (rData || {}).info || {};
+
+      document.getElementById('info-region-name').textContent = label;
+      document.getElementById('info-region-id').textContent   = regionId.replace(/_/g, ' ');
+
+      const body = document.getElementById('info-body');
+      body.innerHTML = '';
+
+      // BA
+      if (info.ba) {
+        const sec = document.createElement('div');
+        sec.innerHTML = `<div class="info-section-label">Brodmann Areas</div>
+          <div class="info-badge-row"><span class="info-badge">${escHtml(info.ba)}</span></div>`;
+        body.appendChild(sec);
+      }
+
+      // Functions
+      if (info.functions && info.functions.length) {
+        const sec = document.createElement('div');
+        const ul  = info.functions.map(f => `<li>${escHtml(f)}</li>`).join('');
+        sec.innerHTML = `<div class="info-section-label">Key Functions</div><ul class="info-list">${ul}</ul>`;
+        body.appendChild(sec);
+      }
+
+      // Syndromes
+      if (info.syndromes && info.syndromes.length) {
+        const sec = document.createElement('div');
+        const ul  = info.syndromes.map(s => `<li>${escHtml(s)}</li>`).join('');
+        sec.innerHTML = `<div class="info-section-label">Clinical Syndromes</div><ul class="info-list">${ul}</ul>`;
+        body.appendChild(sec);
+      }
+
+      // Vascular
+      if (info.vascular) {
+        const sec = document.createElement('div');
+        sec.innerHTML = `<div class="info-section-label">Vascular Territory</div>
+          <span class="info-vascular-tag">&#9830; ${escHtml(info.vascular)}</span>`;
+        body.appendChild(sec);
+      }
+
+      if (!body.children.length) {
+        body.innerHTML = '<div style="color:var(--text3);font-size:12px;">No detailed information available for this region.</div>';
+      }
+
+      document.getElementById('info-panel').classList.add('open');
+    }
+
+    function closeInfoPanel() {
+      document.getElementById('info-panel').classList.remove('open');
+      if (_selectedRegionId && window.__brain3d) {
+        window.__brain3d.resetRegions();
+      }
+      _selectedRegionId = null;
+      document.querySelectorAll('.tree-region').forEach(el => el.classList.remove('selected'));
+    }
+    window.closeInfoPanel = closeInfoPanel;
+
+    // ── Camera controls ───────────────────────────────────────────────────
+    function snapCam(view) {
+      if (window.__brain3d) window.__brain3d.setCameraView(view);
+      document.querySelectorAll('.cam-btn').forEach(b => {
+        b.classList.toggle('active', b.id === 'cam-' + view);
+      });
+    }
+    window.snapCam = snapCam;
+
+    // ── Glass brain toggle ────────────────────────────────────────────────
+    let _glassOn = true;
+    function toggleGlassBrain() {
+      _glassOn = !_glassOn;
+      if (window.__brain3d) window.__brain3d.toggleGlass(_glassOn);
+      document.getElementById('btn-glass').classList.toggle('active', _glassOn);
+    }
+    window.toggleGlassBrain = toggleGlassBrain;
+
+    let _subcorticalOn = false;
+    function toggleSubcortical() {
+      _subcorticalOn = !_subcorticalOn;
+      if (window.__brain3d) window.__brain3d.setSubcorticalVisible(_subcorticalOn);
+      document.getElementById('btn-subcortical').classList.toggle('active', _subcorticalOn);
+    }
+    window.toggleSubcortical = toggleSubcortical;
+
+    // ── Hover tooltip (wired from brain3d region hover) ───────────────────
+    window.__brainUI = {
+      openRegion: function(regionId) {
+        // In quiz mode with active click handler, route there
+        if (_quizClick) { _quizClick(regionId); return; }
+        selectRegion(regionId);
+      },
+      hoverRegion: function(regionId) {
+        const tip = document.getElementById('hover-tip');
+        if (!regionId) { tip.classList.remove('visible'); return; }
+        const rData = REGIONS[regionId];
+        document.getElementById('hover-tip-name').textContent =
+          rData ? rData.label : regionId.replace(/_/g, ' ');
+        tip.classList.add('visible');
+      },
+    };
+
+    // ── GLTF loading progress ─────────────────────────────────────────────
+    function dismissLoadingOverlay() {
+      const overlay = document.getElementById('brain-loading');
+      if (!overlay) return;
+      overlay.classList.add('hidden');
+      setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 600);
+    }
+
+    window.addEventListener('brain3dProgress', function(e) {
+      const bar = document.getElementById('brain-loading-bar');
+      const sub = document.getElementById('brain-loading-sub');
+      if (bar) bar.style.width = Math.round((e.detail.loaded / e.detail.total) * 100) + '%';
+      if (sub) sub.textContent = 'Loading meshes… ' + e.detail.loaded + ' / ' + e.detail.total;
+    });
+
+    window.addEventListener('brain3dReady', function() {
+      dismissLoadingOverlay();
+      if (_quizPool.length && _quizCurrent < _quizPool.length) renderQuizQuestion();
+    });
+
+    // ── Mount 3D when ready ───────────────────────────────────────────────
+    window.addEventListener('brain3dReady', function() {
+      const stage = document.getElementById('brain-stage');
+      if (window.__brain3d && stage && !stage.querySelector('canvas')) {
+        window.__brain3d.mount(stage);
+      }
+    });
+
+    // ── WebGL not available ───────────────────────────────────────────────
+    window.addEventListener('brain3dNoWebGL', function() {
+      const overlay = document.getElementById('brain-loading');
+      const icon    = overlay && overlay.querySelector('.brain-loading-icon');
+      const title   = overlay && overlay.querySelector('.brain-loading-title');
+      const sub     = document.getElementById('brain-loading-sub');
+      const bar     = document.getElementById('brain-loading-bar');
+      if (icon)  icon.textContent  = '⚠️';
+      if (title) title.textContent = 'WebGL Not Available';
+      if (bar)   bar.style.background = '#f87171';
+      if (sub) {
+        sub.style.color = '#f87171';
+        sub.innerHTML = 'Enable hardware acceleration in your browser:<br>' +
+          '<strong>Chrome:</strong> Settings → System → Use hardware acceleration → Relaunch';
+      }
+    });
+
+    // ── Fallback: if brain3dReady hasn't fired after 15s, show error ──────
+    var _brain3dLoaded = false;
+    window.addEventListener('brain3dReady', function() { _brain3dLoaded = true; });
+    setTimeout(function() {
+      if (_brain3dLoaded) return;
+      const sub = document.getElementById('brain-loading-sub');
+      const bar = document.getElementById('brain-loading-bar');
+      if (sub) { sub.textContent = '3D module failed to load. Check your internet connection.'; sub.style.color = '#f87171'; }
+      if (bar) bar.style.background = '#f87171';
+    }, 15000);
+
+    // ── QUIZ ENGINE ───────────────────────────────────────────────────────
+    let _quizActive   = IS_QUIZ;
+    let _quizPool     = [];
+    let _quizCurrent  = 0;
+    let _quizCorrect  = 0;
+    let _quizSubmitted = false;
+    let _quizSelected = null;   // chip index for location_to_deficit
+    let _quizClick    = null;   // function(regionId) for click-region questions
+
+    function toggleQuizMode() {
+      _quizActive = !_quizActive;
+      document.getElementById('quiz-toggle-btn').classList.toggle('active', _quizActive);
+      if (_quizActive) startQuiz();
+      else             stopQuiz();
+    }
+    window.toggleQuizMode = toggleQuizMode;
+
+    function startQuiz() {
+      let qs = ALL_QS.slice();
+      if (CATEGORIES) qs = qs.filter(q => CATEGORIES.includes(q.category));
+      qs = shuffle(qs);
+      if (COUNT_RAW > 0) qs = qs.slice(0, COUNT_RAW);
+      _quizPool    = qs;
+      _quizCurrent = 0;
+      _quizCorrect = 0;
+      if (!_quizPool.length) return;
+      document.getElementById('nav-score').style.display = '';
+      document.getElementById('results-panel').classList.remove('visible');
+      renderQuizQuestion();
+    }
+
+    function stopQuiz() {
+      document.getElementById('quiz-bar').classList.remove('open');
+      document.getElementById('nav-score').style.display = 'none';
+      document.getElementById('highlighted-label').style.display = 'none';
+      if (window.__brain3d) window.__brain3d.resetRegions();
+      _quizClick = null;
+    }
+
+    function renderQuizQuestion() {
+      if (_quizCurrent >= _quizPool.length) { showResults(); return; }
+      const q = _quizPool[_quizCurrent];
+      _quizSubmitted = false;
+      _quizSelected  = null;
+      _quizClick     = null;
+
+      // Reset UI
+      document.getElementById('quiz-question').textContent   = q.question;
+      document.getElementById('quiz-chips').innerHTML        = '';
+      document.getElementById('quiz-explanation').className  = 'quiz-explanation';
+      document.getElementById('quiz-submit').disabled        = true;
+      document.getElementById('quiz-next').style.display     = 'none';
+      document.getElementById('highlighted-label').style.display = 'none';
+      document.getElementById('quiz-progress').textContent   =
+        'Q ' + (_quizCurrent + 1) + ' of ' + _quizPool.length;
+
+      // Category label
+      const catLabels = { aphasia:'Aphasia', motor:'Motor', memory:'Memory', visual:'Visual', sensory:'Sensory', executive:'Executive / Frontal', vascular:'Vascular' };
+      document.getElementById('quiz-cat-label').textContent =
+        (catLabels[q.category] || q.category || '') + ' — Brain Pathology';
+
+      // Update nav score
+      document.getElementById('nav-correct').textContent = _quizCorrect;
+      document.getElementById('nav-total').textContent   = _quizPool.length;
+
+      // Reset 3D
+      if (window.__brain3d) window.__brain3d.resetRegions();
+
+      if (q.type === 'deficit_to_location' || q.type === 'case_to_location') {
+        setupClickRegion(q);
+      } else if (q.type === 'location_to_deficit') {
+        setupLocationToDeficit(q);
+      }
+
+      document.getElementById('quiz-bar').classList.add('open');
+    }
+
+    function setupClickRegion(q) {
+      const activeIds = [q.target_region, ...(q.distractor_regions || [])];
+      if (window.__brain3d) window.__brain3d.dimAllRegions(activeIds);
+      _quizClick = (regionId) => {
+        if (_quizSubmitted) return;
+        _quizSelected = regionId;
+        document.getElementById('quiz-submit').disabled = false;
+      };
+    }
+
+    function setupLocationToDeficit(q) {
+      const hl = q.highlighted_region;
+      if (window.__brain3d) window.__brain3d.highlightRegion(hl);
+      const rData = REGIONS[hl];
+      document.getElementById('highlighted-label').textContent =
+        '★ ' + (rData ? rData.label : hl.replace(/_/g, ' ')) + ' — highlighted';
+      document.getElementById('highlighted-label').style.display = 'block';
+
+      const wrap = document.getElementById('quiz-chips');
+      q.options.forEach((text, i) => {
+        const btn = document.createElement('button');
+        btn.className  = 'quiz-chip';
+        btn.textContent = text;
+        btn.onclick    = () => {
+          if (_quizSubmitted) return;
+          _quizSelected = i;
+          document.querySelectorAll('.quiz-chip').forEach(c => c.classList.remove('selected'));
+          btn.classList.add('selected');
+          document.getElementById('quiz-submit').disabled = false;
+        };
+        wrap.appendChild(btn);
+      });
+    }
+
+    function handleSubmit() {
+      if (_quizSubmitted) return;
+      const q = _quizPool[_quizCurrent];
+      _quizSubmitted = true;
+      document.getElementById('quiz-submit').disabled = true;
+      document.getElementById('quiz-next').style.display = '';
+      _quizClick = null;
+
+      let isCorrect = false;
+
+      if (q.type === 'deficit_to_location' || q.type === 'case_to_location') {
+        if (!_quizSelected) { _quizSubmitted = false; document.getElementById('quiz-submit').disabled = false; return; }
+        isCorrect = _quizSelected === q.target_region;
+        if (window.__brain3d) window.__brain3d.highlightRegion(q.target_region);
+      } else if (q.type === 'location_to_deficit') {
+        if (_quizSelected === null) { _quizSubmitted = false; document.getElementById('quiz-submit').disabled = false; return; }
+        isCorrect = _quizSelected === q.correct_option_index;
+        document.querySelectorAll('.quiz-chip').forEach((c, i) => {
+          c.classList.add('disabled');
+          if (i === q.correct_option_index) c.classList.add('correct');
+          else if (i === _quizSelected && !isCorrect) c.classList.add('wrong');
+        });
+      }
+
+      if (isCorrect) _quizCorrect++;
+      document.getElementById('nav-correct').textContent = _quizCorrect;
+
+      const expEl  = document.getElementById('quiz-explanation');
+      const verdict = document.getElementById('quiz-verdict');
+      verdict.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+      verdict.className   = 'quiz-verdict ' + (isCorrect ? 'correct' : 'wrong');
+      document.getElementById('quiz-explanation-text').textContent = q.explanation || '';
+      expEl.classList.add('visible');
+    }
+    window.handleSubmit = handleSubmit;
+
+    function nextQuestion() {
+      _quizCurrent++;
+      renderQuizQuestion();
+    }
+    window.nextQuestion = nextQuestion;
+
+    function showResults() {
+      document.getElementById('quiz-bar').classList.remove('open');
+      const pct = _quizPool.length ? Math.round((_quizCorrect / _quizPool.length) * 100) : 0;
+      document.getElementById('results-score').textContent = pct + '%';
+      document.getElementById('results-panel').classList.add('visible');
+    }
+
+    function restartQuiz() {
+      document.getElementById('results-panel').classList.remove('visible');
+      startQuiz();
+    }
+    window.restartQuiz = restartQuiz;
+
+    // ── Utility ───────────────────────────────────────────────────────────
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────
+    buildTree();
+
+    if (IS_QUIZ) {
+      document.getElementById('quiz-toggle-btn').classList.add('active');
+      startQuiz();
+    }
+
+    // Mount 3D brain to the stage (brain-3d.js auto-mounts to #brain-container-3d,
+    // but that element no longer exists — redirect to #brain-stage instead)
+    document.addEventListener('DOMContentLoaded', function() {
+      const stage = document.getElementById('brain-stage');
+      if (window.__brain3d) window.__brain3d.mount(stage);
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
