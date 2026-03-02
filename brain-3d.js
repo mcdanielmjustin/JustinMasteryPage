@@ -220,12 +220,17 @@ function makeMaterial(regionId, type) {
     });
   }
 
-  // Cortical and subcortical regions — MeshBasicMaterial needs no lighting
-  var mat = new THREE.MeshBasicMaterial({
-    color: new THREE.Color(color),
-    side:  THREE.DoubleSide,
+  // Cortical and subcortical regions
+  var col = new THREE.Color(color);
+  var mat = new THREE.MeshStandardMaterial({
+    color:             col,
+    roughness:         0.55,
+    metalness:         0.05,
+    emissive:          col,
+    emissiveIntensity: 0.12,
+    side:              THREE.DoubleSide,
   });
-  mat._origColor = new THREE.Color(color);
+  mat._origColor = col.clone();
   return mat;
 }
 
@@ -372,12 +377,25 @@ function _restoreColor(mesh) {
   }
 }
 
+function _setEmissive(mesh, hexColor, intensity) {
+  var m = mesh.material;
+  if (m.emissive) {
+    m.emissive.set(hexColor);
+    m.emissiveIntensity = intensity;
+  } else {
+    m.color.set(hexColor);
+  }
+}
+
 function setHover(mesh) {
   if (hoveredMesh === mesh) return;
-  if (hoveredMesh && hoveredMesh !== selectedMesh) _restoreColor(hoveredMesh);
+  if (hoveredMesh && hoveredMesh !== selectedMesh) {
+    _restoreColor(hoveredMesh);
+    if (hoveredMesh.material.emissive) hoveredMesh.material.emissiveIntensity = 0.12;
+  }
   hoveredMesh = mesh;
   if (hoveredMesh && hoveredMesh !== selectedMesh) {
-    hoveredMesh.material.color.set(0xffffff);
+    _setEmissive(hoveredMesh, 0xffffff, 0.30);
   }
   if (window.__brainUI && window.__brainUI.hoverRegion) {
     window.__brainUI.hoverRegion(mesh ? mesh.userData.regionId : null);
@@ -386,10 +404,13 @@ function setHover(mesh) {
 
 function selectRegion(mesh) {
   if (selectedMesh === mesh) return;
-  if (selectedMesh) _restoreColor(selectedMesh);
+  if (selectedMesh) {
+    _restoreColor(selectedMesh);
+    if (selectedMesh.material.emissive) selectedMesh.material.emissiveIntensity = 0.12;
+  }
   selectedMesh = mesh;
   if (!mesh) return;
-  mesh.material.color.set(0xffd080);
+  _setEmissive(mesh, 0xffd080, 0.45);
   if (window.__brainUI) window.__brainUI.openRegion(mesh.userData.regionId);
 }
 
