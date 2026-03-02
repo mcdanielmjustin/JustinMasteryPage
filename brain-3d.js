@@ -220,16 +220,13 @@ function makeMaterial(regionId, type) {
     });
   }
 
-  // Cortical and subcortical regions
-  var col = new THREE.Color(color);
-  return new THREE.MeshStandardMaterial({
-    color:             col,
-    roughness:         0.6,
-    metalness:         0.0,
-    emissive:          col,
-    emissiveIntensity: 0.5,
-    side:              THREE.DoubleSide,
+  // Cortical and subcortical regions — MeshBasicMaterial needs no lighting
+  var mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(color),
+    side:  THREE.DoubleSide,
   });
+  mat._origColor = new THREE.Color(color);
+  return mat;
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -369,15 +366,18 @@ var mouse        = new THREE.Vector2(-10, -10);
 var hoveredMesh  = null;
 var selectedMesh = null;
 
+function _restoreColor(mesh) {
+  if (mesh && mesh.material._origColor) {
+    mesh.material.color.copy(mesh.material._origColor);
+  }
+}
+
 function setHover(mesh) {
   if (hoveredMesh === mesh) return;
-  if (hoveredMesh && hoveredMesh !== selectedMesh) {
-    hoveredMesh.material.emissiveIntensity = 0;
-  }
+  if (hoveredMesh && hoveredMesh !== selectedMesh) _restoreColor(hoveredMesh);
   hoveredMesh = mesh;
   if (hoveredMesh && hoveredMesh !== selectedMesh) {
-    hoveredMesh.material.emissive.set(0xffffff);
-    hoveredMesh.material.emissiveIntensity = 0.20;
+    hoveredMesh.material.color.set(0xffffff);
   }
   if (window.__brainUI && window.__brainUI.hoverRegion) {
     window.__brainUI.hoverRegion(mesh ? mesh.userData.regionId : null);
@@ -386,14 +386,10 @@ function setHover(mesh) {
 
 function selectRegion(mesh) {
   if (selectedMesh === mesh) return;
-  if (selectedMesh) {
-    selectedMesh.material.emissive.set(0x000000);
-    selectedMesh.material.emissiveIntensity = 0;
-  }
+  if (selectedMesh) _restoreColor(selectedMesh);
   selectedMesh = mesh;
   if (!mesh) return;
-  mesh.material.emissive.set(0xd4a054);
-  mesh.material.emissiveIntensity = 0.20;
+  mesh.material.color.set(0xffd080);
   if (window.__brainUI) window.__brainUI.openRegion(mesh.userData.regionId);
 }
 
@@ -456,9 +452,7 @@ function resetRegions() {
     m.material.opacity     = 1;
     m.material.transparent = false;
     m.material.depthWrite  = true;
-    if (m.material.emissiveIntensity !== undefined) {
-      m.material.emissiveIntensity = 0;
-    }
+    _restoreColor(m);
   });
   selectedMesh = null;
   hoveredMesh  = null;
