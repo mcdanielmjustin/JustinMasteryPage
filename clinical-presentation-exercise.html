@@ -1337,6 +1337,8 @@
     const detailEl = document.getElementById('loader-detail');
 
     let pool = [];
+    let fetchFailed = 0;
+    let totalLoaded = 0;
 
     for (let i = 0; i < CFG.domains.length; i++) {
       const d = CFG.domains[i];
@@ -1348,15 +1350,18 @@
         const r = await fetch(`data/${d}_presentations.json`);
         if (!r.ok) {
           console.warn(`[loader] ${d}: HTTP ${r.status} — skipping`);
+          fetchFailed++;
           continue;
         }
         const data = await r.json();
         const allEnc = data.encounters || [];
+        totalLoaded += allEnc.length;
         const filtered = allEnc.filter(e => CFG.levels.includes(e.difficulty_level));
         pool.push(...filtered);
         console.log(`[loader] ${d}: ${filtered.length}/${allEnc.length} encounters matched`);
       } catch (err) {
         console.warn(`[loader] ${d}: fetch failed —`, err.message);
+        fetchFailed++;
       }
     }
 
@@ -1365,7 +1370,13 @@
     detailEl.textContent = `${pool.length} encounter${pool.length !== 1 ? 's' : ''} available`;
 
     if (pool.length === 0) {
-      showError('No encounters match your settings. Go back and adjust your filters.');
+      if (fetchFailed === CFG.domains.length) {
+        showError('Could not load encounter data. Open this page via a local server (e.g. Live Server), not directly from the file system.');
+      } else if (totalLoaded > 0) {
+        showError('No encounters match the selected difficulty levels. Go back and select additional levels.');
+      } else {
+        showError('No encounters match your settings. Go back and adjust your filters.');
+      }
       return;
     }
 
