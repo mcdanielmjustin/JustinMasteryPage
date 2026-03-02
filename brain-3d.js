@@ -61,10 +61,8 @@ var renderer, canvas;
 try {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.shadowMap.enabled   = true;
-  renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
-  renderer.toneMapping         = THREE.ReinhardToneMapping;
-  renderer.toneMappingExposure = 2.8;
+  renderer.shadowMap.enabled   = false;
+  renderer.toneMapping         = THREE.NoToneMapping;
   canvas = renderer.domElement;
   canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
 } catch (e) {
@@ -222,13 +220,10 @@ function makeMaterial(regionId, type) {
 
   // Cortical and subcortical regions
   var col = new THREE.Color(color);
-  var mat = new THREE.MeshStandardMaterial({
-    color:             col,
-    roughness:         0.55,
-    metalness:         0.05,
-    emissive:          col,
-    emissiveIntensity: 0.12,
-    side:              THREE.DoubleSide,
+  var mat = new THREE.MeshLambertMaterial({
+    color:   col,
+    emissive: new THREE.Color(color).multiplyScalar(0.35),
+    side:    THREE.DoubleSide,
   });
   mat._origColor = col.clone();
   return mat;
