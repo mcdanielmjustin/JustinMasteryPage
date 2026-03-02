@@ -29,29 +29,29 @@ console.log('[brain-3d] Module loaded, Three.js r' + THREE.REVISION);
 // ══════════════════════════════════════════════════════════════════════════════
 
 const REGION_COLORS = {
-  // Cortical — warm flesh/pink tones, subtly differentiated
-  frontal_lobe:         0xCE9080,
-  prefrontal_cortex:    0xC48878,
-  brocas_area:          0xBD8070,
-  motor_cortex:         0xD09888,
-  parietal_lobe:        0xC4907A,
-  somatosensory_cortex: 0xBC8870,
-  temporal_lobe:        0xC08878,
-  wernickes_area:       0xB88070,
-  occipital_lobe:       0xBA9880,
-  cingulate_gyrus:      0xB89078,
-  medial_frontal:       0xC88878,
-  // Subcortical — slightly cooler/grayer to contrast with cortex
-  thalamus:             0xA09098,
-  hippocampus:          0xB09878,
-  amygdala:             0xAA8868,
-  caudate:              0x9898A0,
-  putamen:              0x909098,
-  globus_pallidus:      0x989898,
-  brainstem:            0xA89080,
-  cerebellum:           0xA09088,
-  // Glass shell — very light warm skin
-  full_hemisphere:      0xE8D8D0,
+  // Cortical — distinct muted tones, professional neuroanatomy palette
+  frontal_lobe:         0xC26A58,   // muted brick red
+  prefrontal_cortex:    0xB86050,   // deeper brick
+  brocas_area:          0xAA5848,   // dark rust
+  motor_cortex:         0xCC7060,   // salmon-red
+  parietal_lobe:        0x7A9E78,   // muted sage green
+  somatosensory_cortex: 0x6E9068,   // deeper sage
+  temporal_lobe:        0xC08840,   // warm amber-brown
+  wernickes_area:       0xB07C38,   // deeper amber
+  occipital_lobe:       0x5890A0,   // muted teal-blue
+  cingulate_gyrus:      0xA8945C,   // golden tan
+  medial_frontal:       0xBC6258,   // warm rose-red
+  // Subcortical — cooler, more desaturated to contrast with cortex
+  thalamus:             0x8090B4,   // slate blue
+  hippocampus:          0x9A8848,   // olive-gold
+  amygdala:             0xB07848,   // warm brown
+  caudate:              0x7888A8,   // cool blue-gray
+  putamen:              0x6C80A4,   // steel blue
+  globus_pallidus:      0x8898B0,   // light slate
+  brainstem:            0x887060,   // warm gray-brown
+  cerebellum:           0x6898A0,   // muted teal
+  // Glass shell
+  full_hemisphere:      0xE0D0C8,
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -63,7 +63,8 @@ try {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.shadowMap.enabled   = false;
-  renderer.toneMapping         = THREE.NoToneMapping;
+  renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
   canvas = renderer.domElement;
   canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
 } catch (e) {
@@ -105,45 +106,23 @@ controls.target.copy(CAM_TARGET);
 controls.update();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// MATCAP TEXTURE  (canvas-generated — no scene lights needed)
+// LIGHTING
 // ══════════════════════════════════════════════════════════════════════════════
 
-function makeMatcap(size) {
-  size = size || 256;
-  var c   = document.createElement('canvas');
-  c.width = c.height = size;
-  var ctx = c.getContext('2d');
-  var cx = size * 0.5, cy = size * 0.5, r = size * 0.5;
+const keyLight = new THREE.DirectionalLight(0xFFF5EE, 4.0);
+keyLight.position.set(-3, 6, 4);
+scene.add(keyLight);
 
-  // Base: warm dark brown (organic shadow)
-  var base = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-  base.addColorStop(0,   'rgb(170,145,130)');
-  base.addColorStop(0.55,'rgb(100,75,65)');
-  base.addColorStop(1,   'rgb(30,18,14)');
-  ctx.fillStyle = base;
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+const fillLight = new THREE.DirectionalLight(0xC8D8FF, 1.2);
+fillLight.position.set(5, 1, -2);
+scene.add(fillLight);
 
-  // Key highlight — warm cream/ivory upper-left
-  var key = ctx.createRadialGradient(cx * 0.52, cy * 0.42, 0, cx * 0.52, cy * 0.42, r * 0.58);
-  key.addColorStop(0,    'rgba(255,245,235,0.95)');
-  key.addColorStop(0.30, 'rgba(240,215,195,0.50)');
-  key.addColorStop(1,    'rgba(255,235,215,0)');
-  ctx.fillStyle = key;
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+const rimLight = new THREE.DirectionalLight(0xFFE8C0, 1.8);
+rimLight.position.set(0, -4, -5);
+scene.add(rimLight);
 
-  // Warm amber rim — lower-right edge
-  var rim = ctx.createRadialGradient(cx * 1.52, cy * 1.58, r * 0.05, cx * 1.52, cy * 1.58, r * 0.88);
-  rim.addColorStop(0,   'rgba(220,160,100,0.50)');
-  rim.addColorStop(1,   'rgba(220,160,100,0)');
-  ctx.fillStyle = rim;
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-
-  var tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
-
-const MATCAP = makeMatcap(256);
+scene.add(new THREE.HemisphereLight(0xC8D8F0, 0x604030, 1.2));
+scene.add(new THREE.AmbientLight(0xFFEEE8, 0.5));
 
 // ══════════════════════════════════════════════════════════════════════════════
 // BRAIN GROUP + MESH REGISTRIES
@@ -180,12 +159,15 @@ function makeMaterial(regionId, type) {
     });
   }
 
-  // Cortical and subcortical regions — matcap gives 3D shading without lights
+  // Cortical and subcortical regions — PBR with computed normals
   var col = new THREE.Color(color);
-  var mat = new THREE.MeshMatcapMaterial({
-    color:   col,
-    matcap:  MATCAP,
-    side:    THREE.DoubleSide,
+  var mat = new THREE.MeshStandardMaterial({
+    color:             col,
+    roughness:         0.70,
+    metalness:         0.00,
+    emissive:          col,
+    emissiveIntensity: 0.08,
+    side:              THREE.DoubleSide,
   });
   mat._origColor = col.clone();
   return mat;
