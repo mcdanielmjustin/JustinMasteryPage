@@ -29,28 +29,28 @@ console.log('[brain-3d] Module loaded, Three.js r' + THREE.REVISION);
 // ══════════════════════════════════════════════════════════════════════════════
 
 const REGION_COLORS = {
-  frontal_lobe:         0xCC7260,
-  prefrontal_cortex:    0xBA6054,
-  brocas_area:          0xAE5A50,
-  motor_cortex:         0xD06858,
-  parietal_lobe:        0x5A9E94,
-  somatosensory_cortex: 0x4E9088,
-  temporal_lobe:        0x7A72A8,
-  wernickes_area:       0x6A62A0,
-  occipital_lobe:       0xB89830,
-  cingulate_gyrus:      0x84A870,
-  medial_frontal:       0xC05048,
+  frontal_lobe:         0xE8826E,
+  prefrontal_cortex:    0xD4705E,
+  brocas_area:          0xC86860,
+  motor_cortex:         0xEC7A68,
+  parietal_lobe:        0x6EC0B4,
+  somatosensory_cortex: 0x60B0A8,
+  temporal_lobe:        0x9A90D0,
+  wernickes_area:       0x8880C4,
+  occipital_lobe:       0xD4B040,
+  cingulate_gyrus:      0x9CC488,
+  medial_frontal:       0xDC6060,
   // subcortical
-  thalamus:             0x8090B8,
-  hippocampus:          0x90A040,
-  amygdala:             0xB87848,
-  caudate:              0x7088A0,
-  putamen:              0x6878A0,
-  globus_pallidus:      0x8090B0,
-  brainstem:            0x786858,
-  cerebellum:           0x5888A0,
+  thalamus:             0x98AADE,
+  hippocampus:          0xAAC050,
+  amygdala:             0xD49060,
+  caudate:              0x88A8C4,
+  putamen:              0x8090C4,
+  globus_pallidus:      0x98AACE,
+  brainstem:            0x908070,
+  cerebellum:           0x70A8C4,
   // glass shell
-  full_hemisphere:      0xD4BCA8,
+  full_hemisphere:      0xE0CCC0,
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -63,8 +63,8 @@ try {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.shadowMap.enabled   = true;
   renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
-  renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.5;
+  renderer.toneMapping         = THREE.ReinhardToneMapping;
+  renderer.toneMappingExposure = 2.8;
   canvas = renderer.domElement;
   canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
 } catch (e) {
@@ -109,22 +109,22 @@ controls.update();
 // LIGHTING  (clinical: cool-white key + blue fill/rim + hemisphere ambient)
 // ══════════════════════════════════════════════════════════════════════════════
 
-const keyLight = new THREE.DirectionalLight(0xFFF8F4, 3.6);
+const keyLight = new THREE.DirectionalLight(0xFFF8F4, 5.0);
 keyLight.position.set(-2, 6, 3.5);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.setScalar(2048);
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0xC4D8FF, 0.65);
+const fillLight = new THREE.DirectionalLight(0xC4D8FF, 1.5);
 fillLight.position.set(5, 0.5, -1.5);
 scene.add(fillLight);
 
-const rimLight = new THREE.DirectionalLight(0x90BCFF, 2.0);
+const rimLight = new THREE.DirectionalLight(0x90BCFF, 2.5);
 rimLight.position.set(1.5, -3, -5);
 scene.add(rimLight);
 
-scene.add(new THREE.HemisphereLight(0xB0C8E0, 0x583020, 0.70));
-scene.add(new THREE.AmbientLight(0x808898, 0.15));
+scene.add(new THREE.HemisphereLight(0xB0C8E0, 0x583020, 1.4));
+scene.add(new THREE.AmbientLight(0x909898, 0.6));
 
 // ══════════════════════════════════════════════════════════════════════════════
 // GYRAL NORMAL MAP  (canvas-generated, tiled over anatomy)
