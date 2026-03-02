@@ -206,10 +206,11 @@ function loadGLTFRegion(regionId, entry) {
 
         gltf.scene.traverse(function(child) {
           if (child.isMesh) {
+            child.geometry.computeVertexNormals();
             child.material      = mat;
             child.name          = regionId;
-            child.castShadow    = (entry.type !== 'glass');
-            child.receiveShadow = (entry.type !== 'glass');
+            child.castShadow    = false;
+            child.receiveShadow = false;
             child.userData      = { regionId: regionId, label: regionId, type: entry.type };
             meshList.push(child);
           }
