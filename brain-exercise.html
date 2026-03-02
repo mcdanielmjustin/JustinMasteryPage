@@ -797,6 +797,23 @@
       }
     });
 
+    // ── WebGL not available ───────────────────────────────────────────────
+    window.addEventListener('brain3dNoWebGL', function() {
+      const overlay = document.getElementById('brain-loading');
+      const icon    = overlay && overlay.querySelector('.brain-loading-icon');
+      const title   = overlay && overlay.querySelector('.brain-loading-title');
+      const sub     = document.getElementById('brain-loading-sub');
+      const bar     = document.getElementById('brain-loading-bar');
+      if (icon)  icon.textContent  = '⚠️';
+      if (title) title.textContent = 'WebGL Not Available';
+      if (bar)   bar.style.background = '#f87171';
+      if (sub) {
+        sub.style.color = '#f87171';
+        sub.innerHTML = 'Enable hardware acceleration in your browser:<br>' +
+          '<strong>Chrome:</strong> Settings → System → Use hardware acceleration → Relaunch';
+      }
+    });
+
     // ── Fallback: if brain3dReady hasn't fired after 15s, show error ──────
     var _brain3dLoaded = false;
     window.addEventListener('brain3dReady', function() { _brain3dLoaded = true; });
@@ -804,8 +821,7 @@
       if (_brain3dLoaded) return;
       const sub = document.getElementById('brain-loading-sub');
       const bar = document.getElementById('brain-loading-bar');
-      if (sub) sub.textContent = '3D module failed to load. Check your internet connection.';
-      if (sub) sub.style.color = '#f87171';
+      if (sub) { sub.textContent = '3D module failed to load. Check your internet connection.'; sub.style.color = '#f87171'; }
       if (bar) bar.style.background = '#f87171';
     }, 15000);
 

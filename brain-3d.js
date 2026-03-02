@@ -57,15 +57,31 @@ const REGION_COLORS = {
 // RENDERER
 // ══════════════════════════════════════════════════════════════════════════════
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.shadowMap.enabled   = true;
-renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
-renderer.toneMapping         = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.5;
-
-const canvas = renderer.domElement;
-canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
+var renderer, canvas;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled   = true;
+  renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
+  renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.5;
+  canvas = renderer.domElement;
+  canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
+} catch (e) {
+  console.error('[brain-3d] WebGL not available:', e.message);
+  window.dispatchEvent(new CustomEvent('brain3dNoWebGL'));
+  // Stub out window.__brain3d so callers don't crash
+  window.__brain3d = { mount:function(){}, unmount:function(){}, setCameraView:function(){},
+    highlightRegion:function(){}, dimAllRegions:function(){}, resetRegions:function(){},
+    toggleGlass:function(){}, setSubcorticalVisible:function(){},
+    regionMeshes:[], corticalMeshes:[], subcorticalMeshes:[],
+    ready: Promise.resolve(), CAMERA_VIEWS:{},
+    setCsMode:function(){}, setCsSlider:function(){}, setVascTerritory:function(){},
+    toggleLesionMode:function(){}, resetLesions:function(){}, activatePathology:function(){},
+    clearPathology:function(){}, showPathway:function(){}, hidePathway:function(){}, setPathway:function(){},
+    PATHOLOGY_DEFS:{} };
+  throw e; // stop module execution — everything below needs renderer
+}
 
 // ══════════════════════════════════════════════════════════════════════════════
 // SCENE + CAMERA + CONTROLS
