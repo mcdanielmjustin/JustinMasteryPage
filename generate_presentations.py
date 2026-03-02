@@ -181,9 +181,9 @@ content author. You generate clinical patient encounter scenarios for an interac
 licensure exam preparation tool called "Patient Encounter."
 
 ## Your Task
-Generate exactly 5 clinical patient encounter objects as a valid JSON array. Each encounter \
-must be a realistic, clinically coherent patient presentation that tests a licensed \
-psychologist-level clinical judgment skill.
+Generate clinical patient encounter objects as a valid JSON array. The exact count will be \
+specified in each user message. Each encounter must be a realistic, clinically coherent \
+patient presentation that tests a licensed psychologist-level clinical judgment skill.
 
 ## Core Principles
 - Encounters must simulate a real clinical session, not a textbook case vignette.
@@ -197,7 +197,7 @@ psychologist-level clinical judgment skill.
 
 ## Required JSON Schema
 
-Output a JSON array of exactly 5 objects. Each object MUST follow this exact schema:
+Output a JSON array of exactly the number of objects specified in the user message. Each object MUST follow this exact schema:
 
 {
   "id": "CP-{DOMAIN}-{NNNN}",
@@ -559,7 +559,7 @@ def generate_batch(
         try:
             msg = client.messages.create(
                 model="claude-opus-4-6",
-                max_tokens=8192,
+                max_tokens=16000,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": prompt}],
             )
@@ -673,7 +673,7 @@ def process_domain(
     emotion_cycle_idx = 0
     qtype_cycle_idx = 0
 
-    batch_size = 5
+    batch_size = 3
     total_generated = 0
     total_failed = 0
     batches_needed = (need + batch_size - 1) // batch_size
