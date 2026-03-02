@@ -152,6 +152,13 @@
       grid-column: 2; grid-row: 1;
       position: relative; overflow: hidden;
       background: #0a0d14;
+      height: 100%;         /* explicit height for grid child */
+    }
+    /* Force Three.js canvas to fill the stage */
+    .brain-stage canvas {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
     }
 
     /* Camera controls — bottom-left overlay */
@@ -763,29 +770,44 @@
     };
 
     // ── GLTF loading progress ─────────────────────────────────────────────
-    window.addEventListener('brain3dProgress', function(e) {
-      const pct = Math.round((e.detail.loaded / e.detail.total) * 100);
-      document.getElementById('brain-loading-bar').style.width = pct + '%';
-      document.getElementById('brain-loading-sub').textContent =
-        'Loading meshes… ' + e.detail.loaded + ' / ' + e.detail.total;
-    });
-    window.addEventListener('brain3dReady', function() {
+    function dismissLoadingOverlay() {
       const overlay = document.getElementById('brain-loading');
+      if (!overlay) return;
       overlay.classList.add('hidden');
-      setTimeout(() => overlay.remove(), 600);
-      // Re-render current quiz question to wire 3D handlers
+      setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 600);
+    }
+
+    window.addEventListener('brain3dProgress', function(e) {
+      const bar = document.getElementById('brain-loading-bar');
+      const sub = document.getElementById('brain-loading-sub');
+      if (bar) bar.style.width = Math.round((e.detail.loaded / e.detail.total) * 100) + '%';
+      if (sub) sub.textContent = 'Loading meshes… ' + e.detail.loaded + ' / ' + e.detail.total;
+    });
+
+    window.addEventListener('brain3dReady', function() {
+      dismissLoadingOverlay();
       if (_quizPool.length && _quizCurrent < _quizPool.length) renderQuizQuestion();
     });
 
     // ── Mount 3D when ready ───────────────────────────────────────────────
-    // brain-3d.js auto-mounts to #brain-stage (see last line of that file);
-    // we also wire it here in case the module loads late.
     window.addEventListener('brain3dReady', function() {
       const stage = document.getElementById('brain-stage');
       if (window.__brain3d && stage && !stage.querySelector('canvas')) {
         window.__brain3d.mount(stage);
       }
     });
+
+    // ── Fallback: if brain3dReady hasn't fired after 15s, show error ──────
+    var _brain3dLoaded = false;
+    window.addEventListener('brain3dReady', function() { _brain3dLoaded = true; });
+    setTimeout(function() {
+      if (_brain3dLoaded) return;
+      const sub = document.getElementById('brain-loading-sub');
+      const bar = document.getElementById('brain-loading-bar');
+      if (sub) sub.textContent = '3D module failed to load. Check your internet connection.';
+      if (sub) sub.style.color = '#f87171';
+      if (bar) bar.style.background = '#f87171';
+    }, 15000);
 
     // ── QUIZ ENGINE ───────────────────────────────────────────────────────
     let _quizActive   = IS_QUIZ;

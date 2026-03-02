@@ -563,6 +563,12 @@ function mount(container) {
   mountedContainer = container;
   container.appendChild(canvas);
   resizeObserver.observe(container);
+  // Immediately size the renderer so the first frame is correct
+  var w = container.clientWidth  || window.innerWidth  - 256;
+  var h = container.clientHeight || window.innerHeight - 52;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
   if (!animId) animate(0);
   setCameraView('lateral');
 }
