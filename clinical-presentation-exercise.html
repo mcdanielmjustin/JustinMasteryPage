@@ -369,6 +369,8 @@
       margin-bottom: 16px;
       min-height: 60px;
       animation: bubbleIn .3s ease-out;
+      cursor: pointer;
+      user-select: none;
     }
     .speech-bubble.hidden { display: none; }
     .bubble-tail {
@@ -1605,11 +1607,25 @@
     const el = document.getElementById('bubble-text');
     el.textContent = '';
     let i = 0;
+
+    // Click anywhere on the speech bubble to skip to full text instantly
+    const bubble = document.getElementById('speech-bubble');
+    const skipHandler = () => {
+      if (state.typewriterInt === null) return; // already done
+      clearInterval(state.typewriterInt);
+      state.typewriterInt = null;
+      el.textContent = text;
+      bubble.removeEventListener('click', skipHandler);
+      if (onComplete) onComplete();
+    };
+    bubble.addEventListener('click', skipHandler);
+
     state.typewriterInt = setInterval(() => {
       el.textContent += text[i++];
       if (i >= text.length) {
         clearInterval(state.typewriterInt);
         state.typewriterInt = null;
+        bubble.removeEventListener('click', skipHandler);
         if (onComplete) onComplete();
       }
     }, charMs);
