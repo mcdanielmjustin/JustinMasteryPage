@@ -1200,6 +1200,8 @@
     encIdx:         0,    // current encounter index
     phaseIdx:       0,    // current phase index within encounter
     qIdx:           0,    // current question index within encounter
+    steps:          [],   // [{type:'phase',phaseIdx} | {type:'question',qIdx}] for current enc
+    stepIdx:        0,    // current position in steps[]
     answered:       false,
     phaseRunning:   false,
     typewriterInt:  null,
@@ -1472,13 +1474,87 @@
     state.phaseRunning = false;
     state.reviewMode = false;
 
+    // Build the step sequence: interleave phases and questions
+    state.steps   = buildSteps(enc);
+    state.stepIdx = 0;
+
     // Update nav progress
     document.getElementById('nav-progress').textContent =
       `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
     document.getElementById('nav-progress').classList.add('visible');
 
-    // Start first phase
+    // Start first phase (always a phase step)
     startPhase(enc.encounter.phases[0]);
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     STEP SEQUENCE  — interleaves phases + questions progressively
+  ════════════════════════════════════════════════════════════════ */
+
+  // Questions are distributed to the LAST (questions.length) phases so early
+  // phases are pure observation. E.g. 4 phases + 2 questions → Q0 after phase 2,
+  // Q1 after phase 3 (the final phase).
+  function buildSteps(enc) {
+    const phases    = enc.encounter.phases;
+    const questions = enc.questions;
+    const qOffset   = Math.max(0, phases.length - questions.length);
+    const steps     = [];
+    phases.forEach((phase, phaseIdx) => {
+      steps.push({ type: 'phase', phaseIdx });
+      const qIdx = phaseIdx - qOffset;
+      if (qIdx >= 0 && qIdx < questions.length) {
+        steps.push({ type: 'question', qIdx });
+      }
+    });
+    return steps;
+  }
+
+  // Advance to the next step in the sequence (called by advancePhase and nextQuestion).
+  function advanceStep() {
+    state.stepIdx++;
+    const enc = state.pool[state.encIdx];
+
+    if (state.stepIdx >= state.steps.length) {
+      // All steps done — move to next encounter or results
+      nextEncounterOrResults();
+      return;
+    }
+
+    const step = state.steps[state.stepIdx];
+
+    if (step.type === 'phase') {
+      state.phaseIdx = step.phaseIdx;
+      // If we're currently on the question screen, fade back to encounter first
+      if (document.getElementById('screen-question').classList.contains('active')) {
+        const qScreen = document.getElementById('screen-question');
+        qScreen.classList.add('fading-out');
+        setTimeout(() => {
+          qScreen.classList.remove('fading-out');
+          showScreen('encounter');
+          startPhase(enc.encounter.phases[step.phaseIdx]);
+        }, 380);
+      } else {
+        startPhase(enc.encounter.phases[step.phaseIdx]);
+      }
+    } else {
+      // Question step — transition to question screen
+      state.qIdx = step.qIdx;
+      transitionToQuestion();
+    }
+  }
+
+  function nextEncounterOrResults() {
+    state.encIdx++;
+    state.qIdx   = 0;
+    _tagSlotIdx  = 0;
+    if (state.encIdx >= state.pool.length) {
+      persistScores();
+      showScreen('results');
+      buildResults();
+    } else {
+      showScreen('encounter');
+      startEncounter(state.pool[state.encIdx]);
+    }
   }
 
   function buildChartSections(enc) {
@@ -1545,10 +1621,13 @@
     cancelTagStagger();
 
     // Show advance button immediately with correct label
-    const enc = state.pool[state.encIdx];
-    const isLastPhase = state.phaseIdx >= enc.encounter.phases.length - 1;
+    const nextStep = state.steps[state.stepIdx + 1];
     const advBtn = document.getElementById('btn-advance');
-    advBtn.innerHTML = isLastPhase ? 'Answer Questions <span>→</span>' : 'Next <span>→</span>';
+    advBtn.innerHTML = nextStep && nextStep.type === 'question'
+      ? 'Answer Question <span>→</span>'
+      : nextStep
+        ? 'Next <span>→</span>'
+        : 'Finish Encounter <span>→</span>';
     advBtn.classList.remove('hidden');
 
     // Stop any existing auto-advance bar
@@ -1752,17 +1831,12 @@
     stopAutoAdvance();
     document.getElementById('btn-advance').classList.add('hidden');
 
-    state.phaseIdx++;
-    const enc = state.pool[state.encIdx];
-    if (state.phaseIdx >= enc.encounter.phases.length) {
-      transitionToQuestion();
-    } else {
-      startPhase(enc.encounter.phases[state.phaseIdx]);
-    }
+    advanceStep();
   }
 
   function transitionToQuestion() {
     const enc = state.pool[state.encIdx];
+    const q   = enc.questions[state.qIdx];
 
     // Populate case strip before screen transition
     document.getElementById('case-domain-badge').textContent  = enc.domain_code;
@@ -1774,8 +1848,7 @@
     setTimeout(() => {
       encScreen.classList.remove('fading-out');
       showScreen('question');
-      state.qIdx = 0;
-      renderQuestion(enc.questions[0]);
+      renderQuestion(q);
     }, 380);
   }
 
@@ -1820,10 +1893,17 @@
     document.getElementById('q-counter').textContent =
       `Encounter ${state.encIdx + 1} / ${state.pool.length}`;
 
-    // Multi-question indicator
+    // Multi-question indicator — show which question of the encounter this is
     const multiEl = document.getElementById('q-multi');
-    if (enc.questions.length > 1) {
-      multiEl.textContent = `Q ${state.qIdx + 1} of ${enc.questions.length}`;
+    const totalQs = enc.questions.length;
+    const qNum    = state.qIdx + 1;
+    if (totalQs > 1) {
+      // Show which scene this question follows
+      const phaseStep = state.steps.slice(0, state.stepIdx).reverse().find(s => s.type === 'phase');
+      const sceneLabel = phaseStep ? enc.encounter.phases[phaseStep.phaseIdx].phase_label : '';
+      multiEl.textContent = sceneLabel
+        ? `After "${sceneLabel}" — Q ${qNum} of ${totalQs}`
+        : `Q ${qNum} of ${totalQs}`;
       multiEl.classList.add('visible');
     } else {
       multiEl.classList.remove('visible');
@@ -1857,13 +1937,14 @@
     document.getElementById('feedback-explanation').textContent = '';
     document.getElementById('feedback-distractors').innerHTML = '';
 
-    // Next button label
-    const isLastQ = state.qIdx >= enc.questions.length - 1;
+    // Next button label — based on what the next step in the sequence is
+    const nextStep  = state.steps[state.stepIdx + 1];
     const isLastEnc = state.encIdx >= state.pool.length - 1;
     document.getElementById('btn-next-q').textContent =
-      isLastQ && isLastEnc ? 'See Results →' :
-      isLastQ              ? 'Next Encounter →' :
-                             'Next Question →';
+      !nextStep && isLastEnc ? 'See Results →' :
+      !nextStep              ? 'Next Encounter →' :
+      nextStep.type === 'phase' ? 'Continue Encounter →' :
+                                  'Next Question →';
 
     state.answered = false;
 
@@ -1945,27 +2026,11 @@
   }
 
   function nextQuestion() {
-    const enc = state.pool[state.encIdx];
-    state.qIdx++;
-    if (state.qIdx < enc.questions.length) {
-      renderQuestion(enc.questions[state.qIdx]);
-    } else {
-      nextEncounter();
-    }
+    advanceStep();
   }
 
   function nextEncounter() {
-    state.encIdx++;
-    state.qIdx = 0;
-    _tagSlotIdx = 0;  // reset tag positioning
-    if (state.encIdx >= state.pool.length) {
-      persistScores();
-      showScreen('results');
-      buildResults();
-    } else {
-      showScreen('encounter');
-      startEncounter(state.pool[state.encIdx]);
-    }
+    nextEncounterOrResults();
   }
 
   function reviewEncounter() {
