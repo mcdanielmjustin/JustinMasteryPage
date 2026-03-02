@@ -18,11 +18,11 @@ Usage:
   pip install nilearn nibabel trimesh pygltflib numpy scipy scikit-image
   python generate_brain_meshes.py
 
-Coordinate transform (FreeSurfer/MNI → Three.js):
+Coordinate transform (FreeSurfer/MNI -> Three.js):
   FreeSurfer RAS: x=right, y=anterior, z=superior
   Three.js:       x=right, y=up(superior), z=toward-viewer(anterior)
   Left hemisphere: negate x so lateral surface is at +x (matches camera convention)
-  → out = [-x_fs, z_fs, y_fs] * COORD_SCALE + COORD_OFFSET
+  -> out = [-x_fs, z_fs, y_fs] * COORD_SCALE + COORD_OFFSET
 
 COORD_SCALE  = 1/75  (places brain in ~2-unit bounding box, matching existing ellipsoid brain)
 COORD_OFFSET = computed from surface centroid to align with current CAM_TARGET (0.55, 0.05, 0.10)
@@ -55,7 +55,7 @@ MAX_FACES_CEREBELLUM  = 4_000
 
 # ─── Region mappings ────────────────────────────────────────────────────────────
 
-# Destrieux 2009 atlas labels → brain region IDs.
+# Destrieux 2009 atlas labels -> brain region IDs.
 # Reference: Destrieux et al. (2010) NeuroImage 53(1):1-15
 # Label names match those stored in the nilearn-fetched GIFTI / .annot files.
 # Overlapping label sets are intentional: Broca's area overlaps frontal_lobe, etc.
@@ -90,7 +90,7 @@ DESTRIEUX_REGIONS = {
     ],
 
     "parietal_lobe": [
-        "G_parietal_sup", "G_parietal_inf-Angul", "G_parietal_inf-Supramar",
+        "G_parietal_sup", "G_pariet_inf-Angular", "G_pariet_inf-Supramar",
         "G_precuneus",
         "S_intrapariet_and_P_trans", "S_parieto_occipital",
         "S_subparietal", "S_postcentral",
@@ -173,20 +173,21 @@ def to_threejs(coords_fs):
     COORD_OFFSET centres the brain at the camera target.
     """
     c = np.asarray(coords_fs, dtype=np.float64)
-    x_out =  -c[:, 0]   # negate: lateral(−x_fs) → +x_3js
-    y_out =   c[:, 2]   # superior (z_fs) → up (y_3js)
-    z_out =   c[:, 1]   # anterior (y_fs) → depth (z_3js)
+    x_out =  -c[:, 0]   # negate: lateral(-x_fs) -> +x_3js
+    y_out =   c[:, 2]   # superior (z_fs) -> up (y_3js)
+    z_out =   c[:, 1]   # anterior (y_fs) -> depth (z_3js)
     return (np.column_stack([x_out, y_out, z_out]) * COORD_SCALE + COORD_OFFSET).astype(np.float32)
 
 # ─── Parcellation loader ────────────────────────────────────────────────────────
 
 def load_parcellation(filepath):
     """
-    Load a surface parcellation, handling both FreeSurfer .annot and GIFTI formats.
+    Load a surface parcellation from a file path.
+    Handles FreeSurfer .annot and GIFTI formats.
 
     Returns:
         label_data  : (N_verts,) int32 array — one label key per vertex
-        key_to_name : dict mapping int key → str region name
+        key_to_name : dict mapping int key -> str region name
     """
     import nibabel as nib
     fp = str(filepath)
@@ -221,6 +222,36 @@ def load_parcellation(filepath):
 
     return label_data, key_to_name
 
+
+def load_destrieux_parcellation(destrieux):
+    """
+    Load Destrieux atlas parcellation, handling nilearn API differences.
+
+    nilearn < 0.10 : destrieux.map_left is a file path (str)
+    nilearn >= 0.10 : destrieux.map_left is already a numpy array
+
+    In the numpy-array case the integer values are direct indices into
+    destrieux.labels (i.e., map_left[v] == i means labels[i] is the region).
+
+    Returns:
+        label_data  : (N_verts,) int32 array
+        key_to_name : dict mapping int key -> str region name
+    """
+    map_left = destrieux.map_left
+
+    # Detect numpy array (nilearn >= 0.10 returns the data directly)
+    if isinstance(map_left, np.ndarray) or (
+        hasattr(map_left, "__array__") and not isinstance(map_left, (str, bytes, Path))
+    ):
+        label_data = np.asarray(map_left, dtype=np.int32)
+        key_to_name = {}
+        for i, nm in enumerate(destrieux.labels):
+            key_to_name[i] = nm.decode() if isinstance(nm, bytes) else str(nm)
+        return label_data, key_to_name
+
+    # File path case (older nilearn)
+    return load_parcellation(str(map_left))
+
 # ─── Mesh helpers ───────────────────────────────────────────────────────────────
 
 def make_submesh(verts, faces, vertex_mask):
@@ -244,13 +275,13 @@ def make_submesh(verts, faces, vertex_mask):
     remap       = np.zeros(len(verts), dtype=np.int64)
     remap[used] = np.arange(len(used))
 
+    # process=False: avoid trimesh 4.x fill_holes() which hangs on open meshes.
+    # The atlas surface is already clean; no extra processing needed.
     mesh = trimesh.Trimesh(
         vertices = verts[used],
         faces    = remap[sub_faces],
         process  = False,
     )
-    mesh.remove_degenerate_faces()
-    mesh.remove_unreferenced_vertices()
     return mesh if len(mesh.faces) > 0 else None
 
 
@@ -261,21 +292,16 @@ def simplify(mesh, target_faces):
     """
     if len(mesh.faces) <= target_faces:
         return mesh
-    try:
-        s = mesh.simplify_quadratic_decimation(target_faces)
-        if s is not None and len(s.faces) > 0:
-            return s
-    except AttributeError:
-        # Older trimesh versions expose the function through the remesh module
+    # trimesh 4.x simplify_quadric_decimation takes target_reduction (0-1 fraction to REMOVE)
+    target_reduction = max(0.0, 1.0 - (target_faces / len(mesh.faces)))
+    m = getattr(mesh, 'simplify_quadric_decimation', None)
+    if m is not None:
         try:
-            import trimesh.remesh as rm
-            s = rm.simplify_quadric_decimation(mesh, target_faces)
+            s = m(target_reduction)
             if s is not None and len(s.faces) > 0:
                 return s
         except Exception as e:
-            print(f"      [warn] simplify failed: {e}")
-    except Exception as e:
-        print(f"      [warn] simplify failed: {e}")
+            print(f"      [warn] simplify_quadric_decimation failed: {e}")
     return mesh
 
 
@@ -286,13 +312,28 @@ def save_glb(mesh, path):
         Path(path).write_bytes(data)
         return True
     except Exception as e:
-        print(f"      [error] export failed → {path}: {e}")
+        print(f"      [error] export failed -> {path}: {e}")
         return False
 
 
 def mesh_bounds(mesh):
     b = mesh.bounds
     return {"min": b[0].tolist(), "max": b[1].tolist()}
+
+
+def load_nifti(obj):
+    """
+    Load a NIfTI image from either a file path or an already-loaded image object.
+
+    nilearn >= 0.13 returns atlas .maps as a Nifti1Image directly.
+    Older nilearn returns a file path string.
+    This helper handles both cases transparently.
+    """
+    import nibabel as nib
+    if isinstance(obj, (str, bytes)) or hasattr(obj, '__fspath__'):
+        return nib.load(obj)
+    # Already a nibabel image object
+    return obj
 
 
 # ─── Harvard-Oxford label search ────────────────────────────────────────────────
@@ -343,21 +384,25 @@ def main():
     print("STAGE 1/4  Cortical surfaces (fsaverage5 + Destrieux)")
     print("=" * 60)
 
-    print("  Fetching fsaverage5 surface …")
+    print("  Fetching fsaverage5 surface ...")
     fsavg = datasets.fetch_surf_fsaverage(mesh="fsaverage5")
-    print("  Loading left pial surface …")
+    print("  Loading left pial surface ...")
     coords_fs, faces = load_surf_mesh(fsavg.pial_left)
     coords_fs = np.asarray(coords_fs, dtype=np.float64)
     faces     = np.asarray(faces,     dtype=np.int64)
     print(f"  Pial surface: {len(coords_fs):,} verts, {len(faces):,} faces")
 
-    print("  Fetching Destrieux atlas …")
+    print("  Fetching Destrieux atlas ...")
     destrieux = datasets.fetch_atlas_surf_destrieux()
-    print("  Loading parcellation …")
-    label_data, key_to_name = load_parcellation(destrieux.map_left)
-    print(f"  Parcellation: {len(key_to_name)} labels")
+    print("  Loading parcellation ...")
+    label_data, key_to_name = load_destrieux_parcellation(destrieux)
+    uniq_vals = np.unique(label_data)
+    print(f"  Parcellation: {len(key_to_name)} labels, "
+          f"vertex value range [{uniq_vals.min()}..{uniq_vals.max()}]")
+    print(f"  Sample labels: {list(key_to_name.items())[:5]}")
+    sys.stdout.flush()
 
-    # Build reverse lookup: name → list of integer keys
+    # Build reverse lookup: name -> list of integer keys
     name_to_keys = {}
     for k, nm in key_to_name.items():
         name_to_keys.setdefault(nm, []).append(k)
@@ -371,7 +416,7 @@ def main():
         for m in sorted(missing)[:10]:
             print(f"         '{m}'")
         if len(missing) > 10:
-            print(f"         … and {len(missing)-10} more")
+            print(f"         ... and {len(missing)-10} more")
 
     # ── Compute coordinate offset so the brain centroid aligns with CAM_TARGET ──
     # Use the full surface (medial wall excluded via Destrieux labels) to find
@@ -389,27 +434,30 @@ def main():
     centroid = np.median(raw_3d[lateral_mask], axis=0)
     CAM_TARGET   = np.array([0.55, 0.05, 0.10])
     COORD_OFFSET  = CAM_TARGET - centroid
-    print(f"  Coordinate offset (centroid → CAM_TARGET): {COORD_OFFSET.round(3)}")
+    print(f"  Coordinate offset (centroid -> CAM_TARGET): {COORD_OFFSET.round(3)}")
 
     # Now re-compute with final offset
     coords_3d = to_threejs(coords_fs)
 
     # ── Export cortical region meshes ─────────────────────────────────────────
     for region_id, target_labels in DESTRIEUX_REGIONS.items():
+        print(f"  Processing {region_id} ..."); sys.stdout.flush()
         vertex_mask = np.zeros(len(coords_fs), dtype=bool)
         for lbl in target_labels:
             for k in name_to_keys.get(lbl, []):
                 vertex_mask |= (label_data == k)
         if not vertex_mask.any():
-            print(f"  [skip] {region_id}: no matching vertices")
+            print(f"  [skip] {region_id}: no matching vertices"); sys.stdout.flush()
             continue
 
         mesh = make_submesh(coords_3d, faces, vertex_mask)
         if mesh is None:
-            print(f"  [skip] {region_id}: empty mesh after extraction")
+            print(f"  [skip] {region_id}: empty mesh after extraction"); sys.stdout.flush()
             continue
 
+        print(f"    mesh: {len(mesh.vertices):,} verts, {len(mesh.faces):,} faces"); sys.stdout.flush()
         mesh = simplify(mesh, MAX_FACES_CORTICAL)
+        print(f"    simplified: {len(mesh.faces):,} faces"); sys.stdout.flush()
         out  = OUT_DIR / f"{region_id}.glb"
         if save_glb(mesh, out):
             manifest[region_id] = {
@@ -419,7 +467,8 @@ def main():
                 "faceCount":   len(mesh.faces),
                 "bounds":      mesh_bounds(mesh),
             }
-            print(f"  ✓ {region_id}: {len(mesh.vertices):,} verts, {len(mesh.faces):,} faces")
+            print(f"  OK {region_id}: {len(mesh.vertices):,} verts, {len(mesh.faces):,} faces")
+            sys.stdout.flush()
 
     # ═══════════════════════════════════════════════════════════════════════════
     # STAGE 2 — Glass brain (full hemisphere shell)
@@ -441,7 +490,7 @@ def main():
                 "faceCount":   len(glass_mesh.faces),
                 "bounds":      mesh_bounds(glass_mesh),
             }
-            print(f"  ✓ full_hemisphere: {len(glass_mesh.vertices):,} verts, "
+            print(f"  OK full_hemisphere: {len(glass_mesh.vertices):,} verts, "
                   f"{len(glass_mesh.faces):,} faces")
     else:
         print("  [warn] Glass brain mesh is empty")
@@ -454,12 +503,12 @@ def main():
     print("=" * 60)
 
     try:
-        print("  Fetching atlas …")
+        print("  Fetching atlas ...")
         ho = datasets.fetch_atlas_harvard_oxford("sub-maxprob-thr25-1mm")
-        ho_img    = nib.load(ho.maps)
+        ho_img    = load_nifti(ho.maps)
         ho_data   = ho_img.get_fdata()
         ho_affine = ho_img.affine
-        # ho.labels is 0-indexed; NIfTI value i → ho.labels[i-1], value 0 = background
+        # ho.labels is 0-indexed; NIfTI value i -> ho.labels[i-1], value 0 = background
         ho_labels_with_bg = ["background"] + list(ho.labels)
         print(f"  Atlas loaded: {len(ho.labels)} regions")
 
@@ -481,13 +530,12 @@ def main():
 
             # Marching cubes in voxel space, then transform to Three.js
             verts_v, mc_faces, _, _ = marching_cubes(vol, level=0.5)
-            # Apply full affine: voxel index → MNI mm
+            # Apply full affine: voxel index -> MNI mm
             ones      = np.ones((len(verts_v), 1))
             verts_mni = (ho_affine @ np.hstack([verts_v, ones]).T).T[:, :3]
             verts_3d  = to_threejs(verts_mni)
 
-            mesh = trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=True)
-            mesh.remove_degenerate_faces()
+            mesh = trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=False)
             mesh = simplify(mesh, MAX_FACES_SUBCORTICAL)
 
             out = OUT_DIR / f"{region_id}.glb"
@@ -499,13 +547,13 @@ def main():
                     "faceCount":   len(mesh.faces),
                     "bounds":      mesh_bounds(mesh),
                 }
-                print(f"  ✓ {region_id} ('{matched_name}'): "
+                print(f"  OK {region_id} ('{matched_name}'): "
                       f"{len(mesh.vertices):,} verts, {len(mesh.faces):,} faces")
 
     except Exception as e:
         print(f"  [ERROR] Subcortical pipeline failed: {e}")
         traceback.print_exc()
-        print("  → Subcortical structures will be absent from manifest.")
+        print("  -> Subcortical structures will be absent from manifest.")
 
     # ═══════════════════════════════════════════════════════════════════════════
     # STAGE 4 — Cerebellum (AAL atlas, all cerebellar parcels merged)
@@ -515,9 +563,23 @@ def main():
     print("=" * 60)
 
     try:
-        print("  Fetching AAL atlas …")
-        aal = datasets.fetch_atlas_aal()
-        aal_img    = nib.load(aal.maps)
+        # Windows Python 3.12+ may fail SSL certificate verification for some
+        # atlas download hosts.  Disable verification for this one-time script.
+        import ssl
+        _orig_ctx = ssl._create_default_https_context
+        ssl._create_default_https_context = ssl._create_unverified_context
+
+        print("  Fetching AAL atlas ...")
+        try:
+            aal = datasets.fetch_atlas_aal()
+        except Exception as e_aal:
+            print(f"  [warn] Default AAL fetch failed ({e_aal}), trying version='SPM5' ...")
+            aal = datasets.fetch_atlas_aal(version='SPM5')
+
+        # Restore SSL context
+        ssl._create_default_https_context = _orig_ctx
+
+        aal_img    = load_nifti(aal.maps)
         aal_data   = aal_img.get_fdata()
         aal_affine = aal_img.affine
 
@@ -539,8 +601,7 @@ def main():
             verts_mni = (aal_affine @ np.hstack([verts_v, ones]).T).T[:, :3]
             verts_3d  = to_threejs(verts_mni)
 
-            mesh = trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=True)
-            mesh.remove_degenerate_faces()
+            mesh = trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=False)
             mesh = simplify(mesh, MAX_FACES_CEREBELLUM)
 
             out = OUT_DIR / "cerebellum.glb"
@@ -552,7 +613,7 @@ def main():
                     "faceCount":   len(mesh.faces),
                     "bounds":      mesh_bounds(mesh),
                 }
-                print(f"  ✓ cerebellum: {len(mesh.vertices):,} verts, "
+                print(f"  OK cerebellum: {len(mesh.vertices):,} verts, "
                       f"{len(mesh.faces):,} faces")
 
     except Exception as e:

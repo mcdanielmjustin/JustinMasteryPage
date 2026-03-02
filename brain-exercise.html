@@ -521,6 +521,31 @@
     }
     .rotate-hint.hidden { opacity: 0; }
 
+    /* GLTF mesh loading overlay */
+    .brain3d-loading-overlay {
+      position: absolute; inset: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(10,10,14,0.80); backdrop-filter: blur(6px);
+      border-radius: 16px; transition: opacity 0.5s;
+    }
+    .brain3d-loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .brain3d-loading-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      min-width: 200px;
+    }
+    .brain3d-loading-bar-bg {
+      width: 100%; height: 3px; background: rgba(255,255,255,0.10); border-radius: 3px;
+    }
+    .brain3d-loading-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--rose-dark), var(--gold));
+      border-radius: 3px; transition: width 0.3s ease;
+    }
+    .brain3d-loading-text {
+      font-size: 12px; color: rgba(255,255,255,0.42); font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
     .brain3d-overlay-btn {
       position: absolute; bottom: 14px; right: 14px; z-index: 10;
       background: rgba(10,10,14,0.85); border: 1px solid rgba(255,255,255,0.15);
@@ -730,9 +755,9 @@
 
     <!-- View switcher tabs -->
     <div class="view-tabs" id="view-tabs">
-      <button class="view-tab active" id="tab-lateral" onclick="switchView('lateral')">&#129504; Lateral View</button>
+      <button class="view-tab" id="tab-lateral" onclick="switchView('lateral')">&#129504; Lateral View</button>
       <button class="view-tab" id="tab-medial" onclick="switchView('medial')">&#10022; Medial View</button>
-      <button class="view-tab" id="tab-3d" onclick="switchView('3d')">&#9650; 3D Explorer</button>
+      <button class="view-tab active" id="tab-3d" onclick="switchView('3d')">&#9650; 3D Explorer</button>
     </div>
 
     <!-- Vasculature territory toggle — affects whichever brain view is active -->
@@ -2247,8 +2272,18 @@
                 title="Posterior (occipital) view">Posterior</button>
       </div>
 
+      <!-- GLTF loading overlay — shown while meshes download, removed on brain3dReady -->
+      <div id="brain3d-loading" class="brain3d-loading-overlay">
+        <div class="brain3d-loading-inner">
+          <div class="brain3d-loading-bar-bg">
+            <div class="brain3d-loading-bar" id="brain3d-loading-bar"></div>
+          </div>
+          <div class="brain3d-loading-text" id="brain3d-loading-text">Loading brain model&hellip;</div>
+        </div>
+      </div>
+
       <!-- Drag hint — fades out on first interaction, then removed -->
-      <div class="rotate-hint" id="rotate-hint">⟳ Drag to rotate &nbsp;·&nbsp; Scroll to zoom</div>
+      <div class="rotate-hint" id="rotate-hint">&#10227; Drag to rotate &nbsp;&middot;&nbsp; Scroll to zoom</div>
     </div>
 
     <!-- Study mode prompt (hidden during quiz) -->
@@ -2341,7 +2376,7 @@
     const ALL_QS    = DATA.questions || [];
 
     // ── View ──────────────────────────────────────────────────────────────
-    let CURRENT_VIEW = params.get('view') || 'lateral';
+    let CURRENT_VIEW = params.get('view') || '3d';
     const MEDIAL_REGION_IDS = new Set([
       'medial_frontal','cingulate_gyrus','corpus_callosum','thalamus','hypothalamus',
       'mamillary_bodies','hippocampus','amygdala','fornix',
@@ -2608,14 +2643,18 @@
       selectedChipIdx = null;
       submitted       = false;
 
-      // Auto-switch to the SVG view that contains this question's primary region
-      const qv = questionView(q);
-      if (CURRENT_VIEW !== qv) {
-        if (CURRENT_VIEW === '3d' && window.__brain3d) window.__brain3d.unmount();
-        CURRENT_VIEW = qv;
-        updateViewTabs();
-        showCurrentContainer();
+      // Auto-switch to the SVG view that contains this question's primary region,
+      // but only if the user is NOT in 3D mode (3D handles all regions).
+      if (CURRENT_VIEW !== '3d') {
+        const qv = questionView(q);
+        if (CURRENT_VIEW !== qv) {
+          CURRENT_VIEW = qv;
+          updateViewTabs();
+          showCurrentContainer();
+        }
       }
+      // Reset 3D state for the new question
+      if (CURRENT_VIEW === '3d' && window.__brain3d) window.__brain3d.resetRegions();
 
       updateProgress();
       resetSVG();
@@ -2654,6 +2693,14 @@
       document.getElementById('q-text').textContent = q.question;
 
       const activeIds = [q.target_region, ...(q.distractor_regions || [])];
+
+      // 3D mode: dim all except active regions, wire click via __brainUI
+      if (CURRENT_VIEW === '3d' && window.__brain3d) {
+        window.__brain3d.dimAllRegions(activeIds);
+        window.__brainUI._quizClick = (regionId) => handleRegionClick(regionId, q);
+        return;
+      }
+
       setAllDimmed();
       activateRegions(activeIds);
 
@@ -2670,12 +2717,19 @@
       document.getElementById('q-text').textContent = q.question;
 
       const highlighted = q.highlighted_region;
-      setAllDimmed();
-      const hEl = regionEl(highlighted);
-      if (hEl) {
-        hEl.classList.remove('region-dimmed');
-        hEl.classList.add('region-highlighted');
+
+      // 3D mode: highlight the region on the brain model
+      if (CURRENT_VIEW === '3d' && window.__brain3d) {
+        window.__brain3d.highlightRegion(highlighted);
+      } else {
+        setAllDimmed();
+        const hEl = regionEl(highlighted);
+        if (hEl) {
+          hEl.classList.remove('region-dimmed');
+          hEl.classList.add('region-highlighted');
+        }
       }
+
       document.getElementById('highlighted-label').style.display = 'block';
       document.getElementById('highlighted-label').textContent =
         '★ ' + regionLabel(highlighted) + ' — highlighted';
@@ -2700,7 +2754,14 @@
       if (submitted) return;
       selectedRegion = id;
 
-      // Visual: deselect all, then select clicked
+      // 3D mode: show selected region with gold highlight
+      if (CURRENT_VIEW === '3d' && window.__brain3d) {
+        const activeIds = [q.target_region, ...(q.distractor_regions || [])];
+        window.__brain3d.dimAllRegions(activeIds);
+        window.__brain3d.highlightRegion(id);
+      }
+
+      // SVG mode: deselect all, then mark clicked
       Object.keys(REGIONS).forEach(rid => {
         const el = regionEl(rid);
         if (el) el.classList.remove('region-selected');
@@ -2747,16 +2808,19 @@
     function submitClickRegion(q) {
       const isCorrect = selectedRegion === q.target_region;
 
+      // 3D feedback: always show correct region in gold; wrong selection is
+      // already highlighted gold — replace with just correct region
+      if (CURRENT_VIEW === '3d' && window.__brain3d) {
+        window.__brain3d.highlightRegion(q.target_region);
+      }
+
       if (isCorrect) {
         correctCount++;
-        regionEl(selectedRegion).classList.remove('region-selected');
-        regionEl(selectedRegion).classList.add('region-correct');
+        const selEl = regionEl(selectedRegion);
+        if (selEl) { selEl.classList.remove('region-selected'); selEl.classList.add('region-correct'); }
       } else {
         const selEl = regionEl(selectedRegion);
-        if (selEl) {
-          selEl.classList.remove('region-selected');
-          selEl.classList.add('region-wrong');
-        }
+        if (selEl) { selEl.classList.remove('region-selected'); selEl.classList.add('region-wrong'); }
         const corrEl = regionEl(q.target_region);
         if (corrEl) corrEl.classList.add('region-correct');
         missed.push({ q, selectedRegion });
@@ -2799,6 +2863,7 @@
 
     // ── Next question ─────────────────────────────────────────────────────
     function nextQuestion() {
+      if (window.__brainUI) window.__brainUI._quizClick = null;
       current++;
       renderQuestion();
     }
@@ -2913,20 +2978,50 @@
     window.showResults   = showResults;
     window.switchView    = switchView;
 
-    // Bridge for brain-3d.js (ES module) to open the info panel
+    // Bridge for brain-3d.js (ES module) to open the info panel or handle quiz clicks
     window.__brainUI = {
       openRegion: function(regionId) {
+        // In quiz mode, route click to quiz handler (allow re-selection until submit)
+        if (!IS_STUDY && window.__brainUI._quizClick) {
+          window.__brainUI._quizClick(regionId);
+          return;
+        }
+        // Study mode: open info panel
         const rData = REGIONS[regionId];
         if (!rData) return;
         populateInfoPanel(rData.label, rData.info || {});
         document.getElementById('info-panel').classList.add('open');
       },
+      _quizClick: null,  // set in renderClickRegion, cleared in resetRegions/nextQuestion
     };
 
     // ── Run ───────────────────────────────────────────────────────────────
     showCurrentContainer();
     updateViewTabs();
     init();
+
+    // Wire GLTF loading progress bar
+    window.addEventListener('brain3dProgress', function(e) {
+      const bar = document.getElementById('brain3d-loading-bar');
+      const txt = document.getElementById('brain3d-loading-text');
+      if (!bar || !txt) return;
+      const pct = Math.round((e.detail.loaded / e.detail.total) * 100);
+      bar.style.width = pct + '%';
+      txt.textContent = 'Loading brain\u2026 ' + e.detail.loaded + ' / ' + e.detail.total;
+    });
+    window.addEventListener('brain3dReady', function() {
+      const overlay = document.getElementById('brain3d-loading');
+      if (overlay) {
+        overlay.classList.add('hidden');
+        setTimeout(function() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 600);
+      }
+      // Re-render the current question to wire up 3D click handlers.
+      // (The inline script runs before the ES module, so on the very first render
+      // window.__brain3d is not yet defined. This re-render fixes the wiring.)
+      if (!IS_STUDY && CURRENT_VIEW === '3d' && pool.length && current < pool.length && !submitted) {
+        renderQuestion();
+      }
+    });
   })();
 
   // closeInfoPanel is called from HTML onclick — must be global
