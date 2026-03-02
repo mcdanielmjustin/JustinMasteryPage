@@ -377,7 +377,7 @@
     }
   }
   </script>
-  <script type="module" src="brain-3d.js?v=17"></script>
+  <script type="module" src="brain-3d-hires.js?v=1"></script>
 </head>
 <body>
 
@@ -428,8 +428,7 @@
 
       <!-- Stage controls top-right -->
       <div class="stage-controls">
-        <button class="stage-btn" id="btn-glass" onclick="toggleGlassBrain()" title="Toggle transparent brain shell">Glass Brain</button>
-        <button class="stage-btn" id="btn-subcortical" onclick="toggleSubcortical()" title="Show/hide subcortical structures">Subcortical</button>
+        <span class="stage-btn" style="cursor:default;opacity:0.5;" title="fsaverage7 — 655,360 faces">655k faces</span>
       </div>
 
       <!-- Quiz highlighted-label -->
@@ -445,7 +444,7 @@
       <div class="brain-loading" id="brain-loading">
         <div class="brain-loading-card">
           <div class="brain-loading-icon">🧠</div>
-          <div class="brain-loading-title">Loading 3D Brain&hellip;</div>
+          <div class="brain-loading-title">Loading High-Res Brain&hellip;</div>
           <div class="brain-loading-bar-bg">
             <div class="brain-loading-bar" id="brain-loading-bar"></div>
           </div>
@@ -781,7 +780,11 @@
       const bar = document.getElementById('brain-loading-bar');
       const sub = document.getElementById('brain-loading-sub');
       if (bar) bar.style.width = Math.round((e.detail.loaded / e.detail.total) * 100) + '%';
-      if (sub) sub.textContent = 'Loading meshes… ' + e.detail.loaded + ' / ' + e.detail.total;
+      if (sub) {
+        var mb = (e.detail.loaded / 1e6).toFixed(1);
+        var tot = (e.detail.total  / 1e6).toFixed(1);
+        sub.textContent = 'Downloading mesh\u2026 ' + mb + ' / ' + tot + ' MB';
+      }
     });
 
     window.addEventListener('brain3dReady', function() {
