@@ -104,74 +104,45 @@ controls.target.copy(CAM_TARGET);
 controls.update();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// LIGHTING  (clinical: cool-white key + blue fill/rim + hemisphere ambient)
+// MATCAP TEXTURE  (canvas-generated — no scene lights needed)
 // ══════════════════════════════════════════════════════════════════════════════
 
-const keyLight = new THREE.DirectionalLight(0xFFF8F4, 5.0);
-keyLight.position.set(-2, 6, 3.5);
-keyLight.castShadow = true;
-keyLight.shadow.mapSize.setScalar(2048);
-scene.add(keyLight);
-
-const fillLight = new THREE.DirectionalLight(0xC4D8FF, 1.5);
-fillLight.position.set(5, 0.5, -1.5);
-scene.add(fillLight);
-
-const rimLight = new THREE.DirectionalLight(0x90BCFF, 2.5);
-rimLight.position.set(1.5, -3, -5);
-scene.add(rimLight);
-
-scene.add(new THREE.HemisphereLight(0xB0C8E0, 0x583020, 1.4));
-scene.add(new THREE.AmbientLight(0x909898, 0.6));
-
-// ══════════════════════════════════════════════════════════════════════════════
-// GYRAL NORMAL MAP  (canvas-generated, tiled over anatomy)
-// ══════════════════════════════════════════════════════════════════════════════
-
-function makeGyralNormal(size) {
-  size = size || 512;
+function makeMatcap(size) {
+  size = size || 256;
   var c   = document.createElement('canvas');
   c.width = c.height = size;
   var ctx = c.getContext('2d');
-  var img = ctx.createImageData(size, size);
+  var cx = size * 0.5, cy = size * 0.5, r = size * 0.5;
 
-  function h(x, y) {
-    return (
-      0.55 * Math.sin(x * 0.042 + 0.40) * Math.sin(y * 0.038 + 0.80) +
-      0.35 * Math.sin(x * 0.030 + 1.20) * Math.cos(y * 0.044 + 0.30) +
-      0.28 * Math.sin(x * 0.092 + 2.10) * Math.sin(y * 0.085 + 1.50) +
-      0.15 * Math.sin(x * 0.180 + 0.70) * Math.sin(y * 0.155 + 2.00) +
-      0.08 * Math.cos(x * 0.260 + 1.80) * Math.cos(y * 0.220 + 0.60)
-    );
-  }
+  // Base: dark grey sphere
+  var base = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+  base.addColorStop(0,   'rgb(160,160,160)');
+  base.addColorStop(0.6, 'rgb(90,90,90)');
+  base.addColorStop(1,   'rgb(20,20,20)');
+  ctx.fillStyle = base;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
 
-  var strength = 1.2;
-  var eps      = 1.0;
+  // Key highlight — upper-left
+  var key = ctx.createRadialGradient(cx * 0.55, cy * 0.45, 0, cx * 0.55, cy * 0.45, r * 0.55);
+  key.addColorStop(0,    'rgba(255,255,255,0.90)');
+  key.addColorStop(0.35, 'rgba(220,228,255,0.45)');
+  key.addColorStop(1,    'rgba(255,255,255,0)');
+  ctx.fillStyle = key;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
 
-  for (var y = 0; y < size; y++) {
-    for (var x = 0; x < size; x++) {
-      var dhdx = (h(x + eps, y) - h(x - eps, y)) / (2 * eps);
-      var dhdy = (h(x, y + eps) - h(x, y - eps)) / (2 * eps);
-      var nx   = -dhdx * strength;
-      var ny   = -dhdy * strength;
-      var nz   = 1.0;
-      var len  = Math.sqrt(nx * nx + ny * ny + nz * nz);
-      var i    = (y * size + x) * 4;
-      img.data[i]     = Math.round((nx / len * 0.5 + 0.5) * 255);
-      img.data[i + 1] = Math.round((ny / len * 0.5 + 0.5) * 255);
-      img.data[i + 2] = Math.round((nz / len * 0.5 + 0.5) * 255);
-      img.data[i + 3] = 255;
-    }
-  }
-  ctx.putImageData(img, 0, 0);
+  // Rim light — lower-right edge
+  var rim = ctx.createRadialGradient(cx * 1.55, cy * 1.60, r * 0.1, cx * 1.55, cy * 1.60, r * 0.9);
+  rim.addColorStop(0,   'rgba(160,200,255,0.55)');
+  rim.addColorStop(1,   'rgba(160,200,255,0)');
+  ctx.fillStyle = rim;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
 
   var tex = new THREE.CanvasTexture(c);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(2.5, 2.5);
+  tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
 }
 
-const GYRAL_NORMAL = makeGyralNormal(512);
+const MATCAP = makeMatcap(256);
 
 // ══════════════════════════════════════════════════════════════════════════════
 // BRAIN GROUP + MESH REGISTRIES
@@ -186,17 +157,7 @@ const subcorticalMeshes = [];
 var   glassMesh         = null;
 var   glassVisible      = true;
 
-// Ground shadow plane
-var groundMesh = new THREE.Mesh(
-  new THREE.PlaneGeometry(10, 10),
-  new THREE.ShadowMaterial({ opacity: 0.18 })
-);
-groundMesh.receiveShadow = true;
-groundMesh.rotation.x    = -Math.PI / 2;
-groundMesh.position.y    = -1.5;
-scene.add(groundMesh);
-
-// Selection state — gold emissive instead of OutlinePass (faster, no extra CDN deps)
+// Selection state
 var _selectedMeshes = [];
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -218,11 +179,11 @@ function makeMaterial(regionId, type) {
     });
   }
 
-  // Cortical and subcortical regions
+  // Cortical and subcortical regions — matcap gives 3D shading without lights
   var col = new THREE.Color(color);
-  var mat = new THREE.MeshLambertMaterial({
+  var mat = new THREE.MeshMatcapMaterial({
     color:   col,
-    emissive: new THREE.Color(color).multiplyScalar(0.35),
+    matcap:  MATCAP,
     side:    THREE.DoubleSide,
   });
   mat._origColor = col.clone();
