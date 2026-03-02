@@ -28,31 +28,36 @@ console.log('[brain-3d] Module loaded, Three.js r' + THREE.REVISION);
 // REGION COLOR MAP
 // ══════════════════════════════════════════════════════════════════════════════
 
-// Unified flesh/peach tone — all regions share the same skin colour.
-// Borders between regions come from back-face outline meshes, not colour differences.
-const FLESH      = 0xDDB898;  // warm peach-flesh
-const SUBCORTEX  = 0xC8A888;  // slightly darker for depth contrast
-
+// Subtle flesh-tone palette — all regions look like brain tissue (pink/peach/salmon)
+// but each has a slightly different hue so regions are distinguishable at a glance.
+// Back-face outline meshes add hard borders on top of these soft colour differences.
 const REGION_COLORS = {
-  frontal_lobe:         FLESH,
-  prefrontal_cortex:    FLESH,
-  brocas_area:          FLESH,
-  motor_cortex:         FLESH,
-  medial_frontal:       FLESH,
-  parietal_lobe:        FLESH,
-  somatosensory_cortex: FLESH,
-  temporal_lobe:        FLESH,
-  wernickes_area:       FLESH,
-  occipital_lobe:       FLESH,
-  cingulate_gyrus:      FLESH,
-  thalamus:             SUBCORTEX,
-  hippocampus:          SUBCORTEX,
-  amygdala:             SUBCORTEX,
-  caudate:              SUBCORTEX,
-  putamen:              SUBCORTEX,
-  globus_pallidus:      SUBCORTEX,
-  brainstem:            SUBCORTEX,
-  cerebellum:           FLESH,
+  // Frontal — warm salmon / orange-peach tones
+  frontal_lobe:         0xE8A882,  // warm salmon
+  prefrontal_cortex:    0xDFA07A,  // slightly deeper peach
+  brocas_area:          0xE89888,  // coral-pink
+  motor_cortex:         0xD99070,  // ochre-flesh
+  medial_frontal:       0xEBAA88,  // light apricot
+  // Parietal — rosy / dusty-pink tones
+  parietal_lobe:        0xDDA8A0,  // dusty rose-flesh
+  somatosensory_cortex: 0xD4A098,  // muted rose
+  // Temporal — mid salmon / warm rose
+  temporal_lobe:        0xE0A898,  // warm salmon-rose
+  wernickes_area:       0xD89090,  // soft deep rose
+  // Occipital — pale peachy-pink
+  occipital_lobe:       0xE8B8A8,  // lightest tone — back of brain
+  // Limbic
+  cingulate_gyrus:      0xCC9888,  // mauve-flesh
+  // Subcortical — interior, slightly cooler/darker pinks
+  thalamus:             0xC49898,  // rosy-grey
+  hippocampus:          0xC49080,  // tan-rose
+  amygdala:             0xC49888,  // muted rose
+  caudate:              0xC09080,  // warm tan
+  putamen:              0xBC8878,  // deeper tan
+  globus_pallidus:      0xBE9090,  // grey-rose
+  brainstem:            0xB88880,  // dark warm flesh
+  cerebellum:           0xDDB0A0,  // peach-pink
+  // Glass shell
   full_hemisphere:      0xE0D0C8,
 };
 
@@ -218,7 +223,7 @@ function loadGLTFRegion(regionId, entry) {
                 depthWrite:  true,
               });
               var outlineMesh = new THREE.Mesh(child.geometry, outlineMat);
-              outlineMesh.scale.setScalar(1.012);  // 1.2% scale-up for border width
+              outlineMesh.scale.setScalar(1.020);  // 2% scale-up for clearly visible borders
               outlineMesh.renderOrder = -1;
               outlineMesh.userData = { isOutline: true };
               child.add(outlineMesh);
