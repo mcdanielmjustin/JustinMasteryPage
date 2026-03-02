@@ -1,39 +1,43 @@
 /**
- * brain-3d.js — Hybrid Brain Engine (v4)
+ * brain-3d.js — Hybrid Brain Engine (v5)
  *
- * Visual layer  : full_brain_hires.glb  (FreeSurfer fsaverage7, sulcal texture,
- *                 regenerated in region coordinate space by fix_hires_coords.py)
- * Interaction   : per-region GLBs loaded INVISIBLY as raycasting + highlight overlays
+ * Visual layer:
+ *   • full_brain_hires.glb   — cerebral cortex (pial surface, 655k faces, sulcal texture)
+ *   • brainstem.glb          — always visible, tissue-coloured permanent mesh
+ *   • cerebellum.glb         — always visible, tissue-coloured permanent mesh
  *
- * Coordinate system (matches generate_subcortical.py / fix_hires_coords.py):
- *   x = −x_FreeSurfer  (left-hemi lateral surface at +x, medial at MIDLINE_X ≈ 0.118)
- *   y = z_FreeSurfer   (superior = up)
- *   z = y_FreeSurfer   (anterior = depth)
- *   scale = 1/75,  COORD_OFFSET = [0.118, −0.204, 0.438]
- *   CAM_TARGET = (0.55, 0.05, 0.10)
- *   Brain midline x (interhemispheric fissure) = COORD_OFFSET.x = 0.118
+ * Interaction overlays (cortical + subcortical region GLBs):
+ *   • Loaded with mesh.visible = false by default — ZERO draw-call overhead
+ *   • Made visible only when highlighted / selected / dimmed
  *
- * Glass-brain isolation mode:
- *   When a region is selected while glass is ON, the hires brain goes to 10% opacity
- *   and the selected region overlay is fully opaque — "dissection" / isolation look.
+ * Glass-brain isolation:
+ *   Glass ON + region selected → hires brain + subcortical permanents → glass (10% opacity),
+ *   selected region overlay → fully opaque coloured mesh (isolation / dissection view)
  *
- * Exposed as window.__brain3d (same interface as previous versions).
+ * Performance:
+ *   • visible=false (not just opacity=0) eliminates phantom draw calls from 19 overlays
+ *   • No post-processing passes, no shadow maps, no edge geometry
+ *
+ * Coordinate system (matches generate_brain_meshes.py / fix_hires_coords.py):
+ *   x = −x_FS  (left-hemi lateral at +x)
+ *   y = z_FS   (superior = up)
+ *   z = y_FS   (anterior = depth)
+ *   scale 1/75, COORD_OFFSET [0.118, −0.204, 0.438], midline x = 0.118
  */
 
 import * as THREE        from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 
-console.log('[brain-3d] v4 loaded, Three.js r' + THREE.REVISION);
+console.log('[brain-3d] v5 loaded, Three.js r' + THREE.REVISION);
 
-// Interhemispheric midline in our coordinate space (= COORD_OFFSET.x from Python scripts)
 const MIDLINE_X = 0.118;
 
 // ══════════════════════════════════════════════════════════════════════════════
-// REGION OVERLAY COLORS — vivid, distinct palette for highlighted overlays
+// OVERLAY COLORS — vivid, used only when a region is highlighted
 // ══════════════════════════════════════════════════════════════════════════════
 
-const REGION_COLORS = {
+const OVERLAY_COLORS = {
   frontal_lobe:         0xE8805A,
   prefrontal_cortex:    0xD4724E,
   brocas_area:          0xE86060,
@@ -55,6 +59,12 @@ const REGION_COLORS = {
   cerebellum:           0x80C0A0,
 };
 
+// Tissue colour for permanent subcortical meshes — similar to hires brain flesh tone
+const TISSUE_COLOR = 0xD4AA90;
+
+// Regions that are always displayed as permanent meshes (not in pial surface)
+const PERMANENT_SUBCORTICAL = new Set(['brainstem', 'cerebellum']);
+
 // ══════════════════════════════════════════════════════════════════════════════
 // RENDERER
 // ══════════════════════════════════════════════════════════════════════════════
@@ -75,7 +85,7 @@ try {
     highlightRegion:function(){}, dimAllRegions:function(){}, resetRegions:function(){},
     toggleGlass:function(){}, toggleSplit:function(){}, setSubcorticalVisible:function(){},
     regionMeshes:[], corticalMeshes:[], subcorticalMeshes:[],
-    ready: Promise.resolve(), CAMERA_VIEWS:{},
+    ready:Promise.resolve(), CAMERA_VIEWS:{},
     setCsMode:function(){}, setCsSlider:function(){}, setVascTerritory:function(){},
     toggleLesionMode:function(){}, resetLesions:function(){}, activatePathology:function(){},
     clearPathology:function(){}, showPathway:function(){}, hidePathway:function(){}, setPathway:function(){},
@@ -130,28 +140,29 @@ scene.add(new THREE.AmbientLight(0xFFEEE8, 0.12));
 const brainGroup        = new THREE.Group();
 scene.add(brainGroup);
 
-const hiresMeshes       = [];   // all sub-meshes of full_brain_hires.glb
+const hiresMeshes       = [];   // full_brain_hires.glb sub-meshes
+const permanentMeshes   = [];   // brainstem, cerebellum — always visible
 var   hiresGlassOn      = false;
 var   splitOn           = false;
 
-const regionMeshes      = [];   // overlay meshes (invisible until highlighted)
+// Overlay meshes: visible = false by default (zero GPU cost when not shown)
+const regionMeshes      = [];   // all overlay meshes (flat list)
 const corticalMeshes    = [];
 const subcorticalMeshes = [];
 
-var selectedRegionId    = null; // currently selected / isolated region
-var hoveredRegionId     = null;
-var quizMode            = false; // true while dimAllRegions is active
+var   selectedRegionId  = null;
+var   hoveredRegionId   = null;
+var   quizMode          = false;
 
 const loader = new GLTFLoader();
 
 // ══════════════════════════════════════════════════════════════════════════════
-// HIRES BRAIN LOADER — visual beauty layer
+// HIRES BRAIN LOADER
 // ══════════════════════════════════════════════════════════════════════════════
 
 function loadHiresBrain() {
   return new Promise(function(resolve) {
-    loader.load(
-      'data/brain_meshes/full_brain_hires.glb',
+    loader.load('data/brain_meshes/full_brain_hires.glb',
       function(gltf) {
         gltf.scene.traverse(function(child) {
           if (!child.isMesh) return;
@@ -161,51 +172,45 @@ function loadHiresBrain() {
             child.material.metalness   = 0.00;
             child.material.needsUpdate = true;
           }
-          child.castShadow    = false;
-          child.receiveShadow = false;
+          child.castShadow = child.receiveShadow = false;
           hiresMeshes.push(child);
         });
         brainGroup.add(gltf.scene);
-        console.log('[brain-3d] Hires brain loaded — ' + hiresMeshes.length + ' mesh(es)');
+        console.log('[brain-3d] Hires brain loaded (' + hiresMeshes.length + ' mesh)');
         resolve();
       },
       undefined,
-      function(err) {
-        console.warn('[brain-3d] Hires brain load failed (region overlays still work):', err);
-        resolve(); // non-fatal
-      }
+      function(err) { console.warn('[brain-3d] Hires load failed:', err); resolve(); }
     );
   });
 }
 
-// Apply / restore glass appearance on all hires sub-meshes
-function _applyHiresState() {
-  hiresMeshes.forEach(function(m) {
+function _applyHiresGlass(on) {
+  var allVisual = hiresMeshes.concat(permanentMeshes);
+  allVisual.forEach(function(m) {
     if (!m.material) return;
-    if (hiresGlassOn) {
+    if (on) {
       m.material.transparent = true;
       m.material.opacity     = 0.10;
       m.material.depthWrite  = false;
       m.material.roughness   = 0.08;
-      m.material.color.setHex(0xC8D8E8);
     } else {
       m.material.transparent = false;
       m.material.opacity     = 1.0;
       m.material.depthWrite  = true;
-      m.material.roughness   = 0.82;
-      m.material.color.setHex(0xFFFFFF); // white = texture shows through fully
+      m.material.roughness   = (hiresMeshes.indexOf(m) >= 0) ? 0.82 : 0.75;
     }
     m.material.needsUpdate = true;
   });
 }
 
-// Dim hires brain for quiz mode (overlays become visible cues)
-function _applyHiresDim(dim) {
-  hiresMeshes.forEach(function(m) {
+function _dimHires(on) {
+  var allVisual = hiresMeshes.concat(permanentMeshes);
+  allVisual.forEach(function(m) {
     if (!m.material) return;
-    if (dim) {
+    if (on) {
       m.material.transparent = true;
-      m.material.opacity     = 0.50;
+      m.material.opacity     = 0.45;
       m.material.depthWrite  = false;
     } else if (!hiresGlassOn) {
       m.material.transparent = false;
@@ -217,44 +222,42 @@ function _applyHiresDim(dim) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// REGION OVERLAY LOADER — invisible meshes for raycasting + highlighting
+// REGION OVERLAY LOADER
+// permanent=true → always visible flesh-tone mesh (brainstem, cerebellum)
+// permanent=false → invisible overlay, shown only when highlighted
 // ══════════════════════════════════════════════════════════════════════════════
 
-function makeOverlayMaterial(regionId) {
-  var col = new THREE.Color(REGION_COLORS[regionId] || 0x8888AA);
-  var mat = new THREE.MeshStandardMaterial({
-    color:             col,
-    roughness:         0.55,
-    metalness:         0.00,
-    emissive:          col,
-    emissiveIntensity: 0.20,
-    transparent:       true,
-    opacity:           0.0,   // hidden by default
-    depthWrite:        false,
-    side:              THREE.DoubleSide,
-  });
-  mat._origColor = col.clone();
-  return mat;
-}
-
-function loadRegionOverlay(regionId, entry) {
+function loadRegion(regionId, entry, permanent) {
   return new Promise(function(resolve) {
-    loader.load(
-      entry.file,
+    loader.load(entry.file,
       function(gltf) {
-        var mat = makeOverlayMaterial(regionId);
+        var col   = permanent
+              ? new THREE.Color(TISSUE_COLOR)
+              : new THREE.Color(OVERLAY_COLORS[regionId] || 0x8888AA);
+        var mat   = new THREE.MeshStandardMaterial({
+          color:             col,
+          roughness:         permanent ? 0.78 : 0.55,
+          metalness:         0.00,
+          emissive:          col,
+          emissiveIntensity: permanent ? 0.04 : 0.20,
+          transparent:       !permanent,
+          opacity:           permanent ? 1.0 : 1.0,  // visibility controlled by .visible
+          side:              THREE.FrontSide,
+        });
+        mat._origColor = col.clone();
 
         gltf.scene.traverse(function(child) {
           if (!child.isMesh) return;
           child.geometry.computeVertexNormals();
           child.material      = mat;
           child.name          = regionId;
-          child.castShadow    = false;
-          child.receiveShadow = false;
-          child.userData = {
+          child.castShadow    = child.receiveShadow = false;
+          child.visible       = permanent;   // ← key: false until needed
+          child.userData      = {
             regionId:   regionId,
             label:      regionId,
             type:       entry.type,
+            permanent:  permanent,
             overlayMat: mat,
           };
 
@@ -269,10 +272,14 @@ function loadRegionOverlay(regionId, entry) {
           var selOutline = new THREE.Mesh(child.geometry, selMat);
           selOutline.scale.setScalar(1.045);
           selOutline.renderOrder = 3;
+          selOutline.visible     = false;
           selOutline.userData    = { isOutline: true };
           child.userData.selOutline = selOutline;
           child.add(selOutline);
 
+          if (permanent) {
+            permanentMeshes.push(child);
+          }
           regionMeshes.push(child);
           if (entry.type === 'subcortical') {
             subcorticalMeshes.push(child);
@@ -280,15 +287,11 @@ function loadRegionOverlay(regionId, entry) {
             corticalMeshes.push(child);
           }
         });
-
         brainGroup.add(gltf.scene);
         resolve();
       },
       undefined,
-      function(err) {
-        console.warn('[brain-3d] Region overlay failed (' + regionId + '):', err);
-        resolve(); // non-fatal
-      }
+      function(err) { console.warn('[brain-3d] Region load failed (' + regionId + '):', err); resolve(); }
     );
   });
 }
@@ -303,49 +306,41 @@ var _readyPromise = new Promise(function(res) { _readyResolve = res; });
 async function loadBrain() {
   console.log('[brain-3d] loadBrain() starting');
 
-  // Load manifest + hires brain concurrently
   window.dispatchEvent(new CustomEvent('brain3dProgress', { detail: { loaded: 0, total: 20 } }));
 
-  var manifestResult = null;
+  var manifest = null;
   try {
-    var [res] = await Promise.allSettled([
+    var [mRes] = await Promise.allSettled([
       fetch('data/brain_regions_manifest.json').then(function(r) { return r.json(); }),
       loadHiresBrain(),
     ]);
-    if (res.status === 'fulfilled') manifestResult = res.value;
-  } catch (e) {
-    console.warn('[brain-3d] Init load issue:', e);
-  }
+    if (mRes.status === 'fulfilled') manifest = mRes.value;
+  } catch (e) { console.warn('[brain-3d] Init error:', e); }
 
-  // Fire brain3dReady so the loading overlay clears and the hires brain becomes visible.
-  // Region overlays continue loading silently in the background.
+  // Fire brain3dReady so loading overlay clears — overlays continue in background
   window.dispatchEvent(new CustomEvent('brain3dProgress', { detail: { loaded: 10, total: 20 } }));
-  window.dispatchEvent(new CustomEvent('brain3dReady', { detail: { regionCount: 0 } }));
+  window.dispatchEvent(new CustomEvent('brain3dReady',    { detail: { regionCount: 0 } }));
 
-  if (!manifestResult) {
-    _readyResolve();
-    return;
-  }
+  if (!manifest) { _readyResolve(); return; }
 
-  // Load region overlays in background
-  var regionIds = Object.keys(manifestResult).filter(function(id) {
-    return manifestResult[id].type !== 'glass';
+  var regionIds = Object.keys(manifest).filter(function(id) {
+    return manifest[id].type !== 'glass';
   });
-  var loaded = 10;
-  var total  = 10 + regionIds.length;
+  var loaded = 10, total = 10 + regionIds.length;
 
   await Promise.allSettled(
     regionIds.map(function(id) {
-      return loadRegionOverlay(id, manifestResult[id]).then(function() {
+      var permanent = PERMANENT_SUBCORTICAL.has(id);
+      return loadRegion(id, manifest[id], permanent).then(function() {
         loaded++;
-        window.dispatchEvent(new CustomEvent('brain3dProgress', {
-          detail: { loaded: loaded, total: total }
-        }));
+        window.dispatchEvent(new CustomEvent('brain3dProgress',
+          { detail: { loaded: loaded, total: total } }));
       });
     })
   );
 
-  console.log('[brain-3d] All region overlays loaded — count: ' + regionMeshes.length);
+  console.log('[brain-3d] All loaded — ' + regionMeshes.length + ' regions, '
+              + permanentMeshes.length + ' permanent');
   _readyResolve();
 }
 
@@ -379,128 +374,138 @@ function setCameraView(name) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// OVERLAY HELPERS
+// OVERLAY VISIBILITY HELPERS
 // ══════════════════════════════════════════════════════════════════════════════
 
-function _setOverlay(mesh, opacity, selOpacity) {
-  var m = mesh.userData.overlayMat;
-  if (!m) return;
-  m.opacity     = opacity;
-  m.depthWrite  = opacity > 0.5;
-  m.needsUpdate = true;
+function _showOverlay(mesh, showSel) {
+  mesh.visible = true;
   var sel = mesh.userData.selOutline;
-  if (sel && sel.material) {
-    sel.material.opacity    = selOpacity;
-    sel.material.needsUpdate = true;
-  }
+  if (sel) sel.visible = !!showSel;
 }
 
-function _clearAllOverlays() {
-  regionMeshes.forEach(function(m) { _setOverlay(m, 0, 0); });
+// Hide overlay — but leave permanent meshes (brainstem, cerebellum) visible
+function _hideOverlay(mesh) {
+  if (mesh.userData.permanent) return;
+  mesh.visible = false;
+  var sel = mesh.userData.selOutline;
+  if (sel) sel.visible = false;
+}
+
+function _hideAllOverlays() {
+  regionMeshes.forEach(_hideOverlay);
+}
+
+// Restore permanent meshes to their normal tissue-coloured state
+function _restorePermanent() {
+  permanentMeshes.forEach(function(m) {
+    var mat = m.userData.overlayMat;
+    if (!mat) return;
+    mat.color.copy(mat._origColor);
+    mat.emissive.copy(mat._origColor);
+    mat.emissiveIntensity = 0.04;
+    mat.transparent       = false;
+    mat.opacity           = 1.0;
+    mat.needsUpdate       = true;
+    m.visible = true;
+  });
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PUBLIC REGION API
 // ══════════════════════════════════════════════════════════════════════════════
 
-/**
- * highlightRegion
- *   Explore mode (glass ON)  : hires→glass, selected region→fully opaque (isolation)
- *   Explore mode (glass OFF) : selected region→coloured 75% overlay on hires brain
- *   Quiz mode               : same as explore but called after dimAllRegions
- */
 function highlightRegion(regionId) {
   selectedRegionId = regionId;
-  _clearAllOverlays();
+  _hideAllOverlays();
+
+  regionMeshes.forEach(function(m) {
+    if (m.userData.regionId !== regionId) return;
+    // Make the overlay visible with vivid colour
+    var mat = m.userData.overlayMat;
+    if (mat) {
+      var col = new THREE.Color(OVERLAY_COLORS[regionId] || 0x8888AA);
+      mat.color.copy(col);
+      mat.emissive.copy(col);
+      mat.emissiveIntensity = hiresGlassOn ? 0.35 : 0.22;
+      mat.transparent       = hiresGlassOn ? false : true;
+      mat.opacity           = hiresGlassOn ? 1.0 : 0.82;
+      mat.needsUpdate       = true;
+    }
+    _showOverlay(m, false);
+  });
 
   if (hiresGlassOn) {
-    // Isolation view: everything glass except the target region
-    _applyHiresState();  // confirms glass state
-    regionMeshes.forEach(function(m) {
-      if (m.userData.regionId === regionId) {
-        _setOverlay(m, 0.95, 0.80);
-      }
-    });
-  } else {
-    // Normal: dimmed hires + coloured overlay only on target
-    _applyHiresDim(false);
-    regionMeshes.forEach(function(m) {
-      if (m.userData.regionId === regionId) {
-        _setOverlay(m, 0.78, 0.0);
-      }
-    });
+    _applyHiresGlass(true);
   }
 }
 
-/**
- * dimAllRegions — quiz click mode
- * Dims hires brain + shows semi-transparent coloured halos on active regions only
- */
 function dimAllRegions(exceptIds) {
   quizMode = true;
   exceptIds = exceptIds || [];
   selectedRegionId = null;
-  _clearAllOverlays();
-  _applyHiresDim(true);
+  _hideAllOverlays();
+  _dimHires(true);
 
   regionMeshes.forEach(function(m) {
-    if (exceptIds.indexOf(m.userData.regionId) !== -1) {
-      _setOverlay(m, 0.50, 0.0);
+    if (exceptIds.indexOf(m.userData.regionId) === -1) return;
+    var mat = m.userData.overlayMat;
+    if (mat) {
+      var col = new THREE.Color(OVERLAY_COLORS[m.userData.regionId] || 0x8888AA);
+      mat.color.copy(col);
+      mat.emissive.copy(col);
+      mat.emissiveIntensity = 0.18;
+      mat.transparent       = true;
+      mat.opacity           = 0.55;
+      mat.needsUpdate       = true;
     }
+    _showOverlay(m, false);
   });
 }
 
-/**
- * resetRegions — called between questions and when info panel closes
- */
 function resetRegions() {
   quizMode = false;
   selectedRegionId = null;
-  _clearAllOverlays();
-  _applyHiresState();   // restore to current glass state (opaque if glass off)
-  if (!hiresGlassOn) {
-    _applyHiresDim(false);
-  }
+  _hideAllOverlays();
+  _restorePermanent();
+  _applyHiresGlass(hiresGlassOn);
+  if (!hiresGlassOn) _dimHires(false);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// GLASS BRAIN + SPLIT
+// GLASS + SPLIT
 // ══════════════════════════════════════════════════════════════════════════════
 
 function toggleGlass() {
   hiresGlassOn = !hiresGlassOn;
-  _applyHiresState();
-
+  _applyHiresGlass(hiresGlassOn);
   if (!hiresGlassOn) {
-    // Glass turned OFF: clear any isolation overlay
-    _clearAllOverlays();
+    _hideAllOverlays();
+    _restorePermanent();
     selectedRegionId = null;
   } else if (selectedRegionId) {
-    // Glass turned ON while a region is selected: show isolation immediately
     highlightRegion(selectedRegionId);
   }
 }
 
 function setSubcorticalVisible(show) {
   subcorticalMeshes.forEach(function(m) {
-    _setOverlay(m, show ? 0.75 : 0.0, 0.0);
+    if (m.userData.permanent) {
+      m.visible = show;
+    } else {
+      if (!show) _hideOverlay(m);
+    }
   });
 }
 
 function toggleSplit() {
   splitOn = !splitOn;
-  if (splitOn) {
-    // Keep left hemisphere (x >= MIDLINE_X) by clipping away right hemisphere (x < MIDLINE_X)
-    // THREE.Plane clips fragments where dot(n, p) + d < 0
-    // dot((1,0,0), p) - MIDLINE_X < 0  →  x < MIDLINE_X  → clips right hemisphere
-    renderer.clippingPlanes = [ new THREE.Plane(new THREE.Vector3(1, 0, 0), -MIDLINE_X) ];
-  } else {
-    renderer.clippingPlanes = [];
-  }
+  renderer.clippingPlanes = splitOn
+    ? [ new THREE.Plane(new THREE.Vector3(1, 0, 0), -MIDLINE_X) ]
+    : [];
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// POINTER + RAYCASTING
+// RAYCASTING + POINTER
 // ══════════════════════════════════════════════════════════════════════════════
 
 var raycaster   = new THREE.Raycaster();
@@ -519,9 +524,30 @@ function _showTooltip(regionId) {
   }
 }
 
+// Raycast against all region meshes (permanent visible ones are always hittable;
+// invisible overlays require a small trick: temporarily make them raycaster-only).
 function _rayHit() {
   raycaster.setFromCamera(mouse, camera);
+  // For invisible overlays, temporarily allow raycast by checking all meshes
+  // (Three.js raycaster skips visible=false meshes by default, so we must
+  // include all and filter out permanent+invisible combos manually).
+  var candidates = regionMeshes.filter(function(m) {
+    return m.visible || true;  // include all — invisible ones won't intersect hires brain
+  });
   var hits = raycaster.intersectObjects(regionMeshes, false);
+  return hits.length ? hits[0].object : null;
+}
+
+// Actually Three.js DOES skip visible=false in intersectObjects. For hover on
+// invisible overlays we need another approach. We'll raycast against the hires
+// brain bounding boxes per region instead — but for simplicity, we just use
+// the always-visible permanent meshes for direct hover, and disable cortical hover
+// unless glass mode shows overlays.
+function _rayHitSafe() {
+  raycaster.setFromCamera(mouse, camera);
+  // Only hit meshes that are actually rendered (visible=true)
+  var visible = regionMeshes.filter(function(m) { return m.visible; });
+  var hits    = raycaster.intersectObjects(visible, false);
   return hits.length ? hits[0].object : null;
 }
 
@@ -530,31 +556,53 @@ canvas.addEventListener('pointermove', function(e) {
   mouse.x =  ((e.clientX - r.left) / r.width)  * 2 - 1;
   mouse.y = -((e.clientY - r.top)  / r.height) * 2 + 1;
 
-  var hit = _rayHit();
+  var hit = _rayHitSafe();
   var id  = hit ? hit.userData.regionId : null;
 
   if (id !== hoveredRegionId) {
-    // Restore previous hover overlay (unless it's the selected region)
-    if (hoveredRegionId && hoveredRegionId !== selectedRegionId && !quizMode) {
+    // Restore previous hover (unless it's the selected region or permanent)
+    if (hoveredRegionId && hoveredRegionId !== selectedRegionId) {
       regionMeshes.forEach(function(m) {
-        if (m.userData.regionId === hoveredRegionId) _setOverlay(m, 0, 0);
+        if (m.userData.regionId !== hoveredRegionId) return;
+        if (m.userData.permanent) {
+          // Restore permanent to tissue color
+          var mat = m.userData.overlayMat;
+          if (mat) { mat.emissiveIntensity = 0.04; mat.needsUpdate = true; }
+        } else if (!quizMode) {
+          _hideOverlay(m);
+        }
       });
     }
+
     hoveredRegionId = id;
     canvas.style.cursor = id ? 'pointer' : 'grab';
     _showTooltip(id);
 
-    // Show hover overlay (unless already in quiz or isolation mode)
-    if (id && id !== selectedRegionId && !quizMode) {
+    // Show hover highlight
+    if (id && id !== selectedRegionId) {
       regionMeshes.forEach(function(m) {
-        if (m.userData.regionId === id) _setOverlay(m, 0.30, 0);
+        if (m.userData.regionId !== id) return;
+        var mat = m.userData.overlayMat;
+        if (!mat) return;
+        if (m.userData.permanent) {
+          mat.emissiveIntensity = 0.30;
+          mat.needsUpdate = true;
+        } else if (!quizMode) {
+          var col = new THREE.Color(OVERLAY_COLORS[id] || 0x8888AA);
+          mat.color.copy(col); mat.emissive.copy(col);
+          mat.emissiveIntensity = 0.22;
+          mat.transparent = true; mat.opacity = 0.35;
+          mat.needsUpdate = true;
+          _showOverlay(m, false);
+        }
       });
     }
 
-    // Drive brain-pathology.html's direct emissive access
+    // Let brain-pathology.html's direct emissive access also work
     regionMeshes.forEach(function(m) {
       if (m.userData.overlayMat) {
-        m.userData.overlayMat.emissiveIntensity = (m.userData.regionId === id) ? 0.40 : 0.20;
+        m.userData.overlayMat.emissiveIntensity =
+          (m.userData.regionId === id) ? 0.35 : (m.userData.permanent ? 0.04 : 0.20);
       }
     });
   }
@@ -568,21 +616,16 @@ canvas.addEventListener('pointerdown', function(e) {
 canvas.addEventListener('pointerup', function(e) {
   canvas.style.cursor = hoveredRegionId ? 'pointer' : 'grab';
   if (!downPos) return;
-  var dx = e.clientX - downPos.x;
-  var dy = e.clientY - downPos.y;
+  var dx = e.clientX - downPos.x, dy = e.clientY - downPos.y;
   if (Math.sqrt(dx * dx + dy * dy) < 5) {
     var r = canvas.getBoundingClientRect();
     mouse.x =  ((e.clientX - r.left) / r.width)  * 2 - 1;
     mouse.y = -((e.clientY - r.top)  / r.height) * 2 + 1;
-    var hit = _rayHit();
+    var hit = _rayHitSafe();
     if (hit) {
-      var regionId = hit.userData.regionId;
-      if (window.__brainUI && window.__brainUI.openRegion) {
-        window.__brainUI.openRegion(regionId);
-      }
-      if (!quizMode) {
-        highlightRegion(regionId);
-      }
+      var rid = hit.userData.regionId;
+      if (window.__brainUI && window.__brainUI.openRegion) window.__brainUI.openRegion(rid);
+      if (!quizMode) highlightRegion(rid);
     }
   }
   downPos = null;
@@ -590,9 +633,14 @@ canvas.addEventListener('pointerup', function(e) {
 
 canvas.addEventListener('pointerleave', function() {
   mouse.set(-10, -10);
-  if (hoveredRegionId && hoveredRegionId !== selectedRegionId && !quizMode) {
+  if (hoveredRegionId && hoveredRegionId !== selectedRegionId) {
     regionMeshes.forEach(function(m) {
-      if (m.userData.regionId === hoveredRegionId) _setOverlay(m, 0, 0);
+      if (m.userData.regionId !== hoveredRegionId) return;
+      if (m.userData.permanent) {
+        if (m.userData.overlayMat) { m.userData.overlayMat.emissiveIntensity = 0.04; m.userData.overlayMat.needsUpdate = true; }
+      } else if (!quizMode) {
+        _hideOverlay(m);
+      }
     });
   }
   hoveredRegionId = null;
@@ -610,17 +658,15 @@ function animate(ts) {
   animId = requestAnimationFrame(animate);
   var dt = Math.min((ts - lastTs) / 1000, 0.05);
   lastTs = ts;
-
   if (camTo) {
     camT = Math.min(camT + dt / CAM_DUR, 1);
-    var e = 1 - Math.pow(1 - camT, 3);  // ease-out cubic
+    var e = 1 - Math.pow(1 - camT, 3);
     camera.position.lerpVectors(camFrom, camTo, e);
     camera.lookAt(controls.target);
     if (camT >= 1) { camTo = null; controls.update(); }
   } else {
     controls.update();
   }
-
   renderer.render(scene, camera);
 }
 
@@ -676,20 +722,11 @@ window.__brain3d = {
   regionMeshes, corticalMeshes, subcorticalMeshes,
   toggleGlass, toggleSplit, setSubcorticalVisible,
   ready: _readyPromise,
-  // Compat stubs
-  setCsMode:         function() {},
-  setCsSlider:       function() {},
-  setVascTerritory:  function() {},
-  toggleLesionMode:  function() {},
-  resetLesions:      function() {},
-  activatePathology: function() {},
-  clearPathology:    function() {},
-  showPathway:       function() {},
-  hidePathway:       function() {},
-  setPathway:        function() {},
-  PATHOLOGY_DEFS:    {},
+  setCsMode:function(){}, setCsSlider:function(){}, setVascTerritory:function(){},
+  toggleLesionMode:function(){}, resetLesions:function(){}, activatePathology:function(){},
+  clearPathology:function(){}, showPathway:function(){}, hidePathway:function(){}, setPathway:function(){},
+  PATHOLOGY_DEFS:{},
 };
 
-// Auto-mount to well-known container IDs
 var _c = document.getElementById('brain-stage') || document.getElementById('brain-container-3d');
 if (_c) mount(_c);
