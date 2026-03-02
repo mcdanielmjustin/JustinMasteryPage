@@ -28,30 +28,32 @@ console.log('[brain-3d] Module loaded, Three.js r' + THREE.REVISION);
 // REGION COLOR MAP
 // ══════════════════════════════════════════════════════════════════════════════
 
-// All regions share the same flesh/peach tissue tone — like brainfacts.org
-// Subtle variations only; highlighted region becomes coral when selected
-const FLESH = 0xDDB898;   // warm peach — base brain tissue color
+// Unified flesh/peach tone — all regions share the same skin colour.
+// Borders between regions come from back-face outline meshes, not colour differences.
+const FLESH      = 0xDDB898;  // warm peach-flesh
+const SUBCORTEX  = 0xC8A888;  // slightly darker for depth contrast
+
 const REGION_COLORS = {
   frontal_lobe:         FLESH,
   prefrontal_cortex:    FLESH,
   brocas_area:          FLESH,
   motor_cortex:         FLESH,
+  medial_frontal:       FLESH,
   parietal_lobe:        FLESH,
   somatosensory_cortex: FLESH,
   temporal_lobe:        FLESH,
   wernickes_area:       FLESH,
   occipital_lobe:       FLESH,
   cingulate_gyrus:      FLESH,
-  medial_frontal:       FLESH,
-  thalamus:             0xC8A888,   // slightly darker for subcortical
-  hippocampus:          0xC8A888,
-  amygdala:             0xC8A888,
-  caudate:              0xC8A888,
-  putamen:              0xC8A888,
-  globus_pallidus:      0xC8A888,
-  brainstem:            0xC0A080,
-  cerebellum:           0xC8A888,
-  full_hemisphere:      0xE8D4C4,   // glass shell — very light peach
+  thalamus:             SUBCORTEX,
+  hippocampus:          SUBCORTEX,
+  amygdala:             SUBCORTEX,
+  caudate:              SUBCORTEX,
+  putamen:              SUBCORTEX,
+  globus_pallidus:      SUBCORTEX,
+  brainstem:            SUBCORTEX,
+  cerebellum:           FLESH,
+  full_hemisphere:      0xE0D0C8,
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -204,6 +206,23 @@ function loadGLTFRegion(regionId, entry) {
             child.receiveShadow = false;
             child.userData      = { regionId: regionId, label: regionId, type: entry.type };
             meshList.push(child);
+
+            // Back-face outline: slightly-scaled BackSide mesh creates a visible
+            // dark border around each region's silhouette without changing the
+            // surface colour — the only way to see region boundaries on a
+            // uniform-flesh-tone brain.
+            if (entry.type !== 'glass') {
+              var outlineMat = new THREE.MeshBasicMaterial({
+                color:       0x2A0606,   // deep blood-maroon border
+                side:        THREE.BackSide,
+                depthWrite:  true,
+              });
+              var outlineMesh = new THREE.Mesh(child.geometry, outlineMat);
+              outlineMesh.scale.setScalar(1.012);  // 1.2% scale-up for border width
+              outlineMesh.renderOrder = -1;
+              outlineMesh.userData = { isOutline: true };
+              child.add(outlineMesh);
+            }
 
             // Add blood-colored edges at geometric ridges (threshold 28°)
             if (edgeMat) {
