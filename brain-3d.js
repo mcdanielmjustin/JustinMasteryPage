@@ -80,7 +80,7 @@ try {
   // Stub out window.__brain3d so callers don't crash
   window.__brain3d = { mount:function(){}, unmount:function(){}, setCameraView:function(){},
     highlightRegion:function(){}, dimAllRegions:function(){}, resetRegions:function(){},
-    toggleGlass:function(){}, setSubcorticalVisible:function(){},
+    toggleGlass:function(){}, setSubcorticalVisible:function(){}, toggleSplit:function(){},
     regionMeshes:[], corticalMeshes:[], subcorticalMeshes:[],
     ready: Promise.resolve(), CAMERA_VIEWS:{},
     setCsMode:function(){}, setCsSlider:function(){}, setVascTerritory:function(){},
@@ -414,12 +414,14 @@ function selectRegion(mesh) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 var CAMERA_VIEWS = {
-  lateral:   new THREE.Vector3( 4.8,  0.5,  0.4),
-  medial:    new THREE.Vector3(-3.8,  0.5,  0.4),
-  superior:  new THREE.Vector3( 0.6,  5.5,  0.8),
-  inferior:  new THREE.Vector3( 0.6, -5.5,  0.8),
-  anterior:  new THREE.Vector3( 0.5,  0.5,  5.2),
-  posterior: new THREE.Vector3( 0.5,  0.5, -5.6),
+  lateral:    new THREE.Vector3( 4.8,  0.5,  0.4),
+  medial:     new THREE.Vector3(-3.8,  0.5,  0.4),
+  superior:   new THREE.Vector3( 0.6,  5.5,  0.8),
+  inferior:   new THREE.Vector3( 0.6, -5.5,  0.8),
+  anterior:   new THREE.Vector3( 0.5,  0.5,  5.2),
+  posterior:  new THREE.Vector3( 0.5,  0.5, -5.6),
+  brainstem:  new THREE.Vector3( 1.8, -3.2, -3.5),  // inferior-posterior oblique
+  cerebellum: new THREE.Vector3( 0.6, -4.2, -3.0),  // posterior-inferior
 };
 
 var camFrom = null, camTo = null, camT = 0;
@@ -618,6 +620,7 @@ window.__brain3d = {
   highlightRegion, dimAllRegions, resetRegions,
   regionMeshes, corticalMeshes, subcorticalMeshes,
   toggleGlass, setSubcorticalVisible,
+  toggleSplit:       function() {},
   ready: _readyPromise,
   // Compat stubs (from earlier version)
   setCsMode:         function() {},
