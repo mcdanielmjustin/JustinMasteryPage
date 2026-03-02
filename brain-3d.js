@@ -28,30 +28,30 @@ console.log('[brain-3d] Module loaded, Three.js r' + THREE.REVISION);
 // REGION COLOR MAP
 // ══════════════════════════════════════════════════════════════════════════════
 
+// All regions share the same flesh/peach tissue tone — like brainfacts.org
+// Subtle variations only; highlighted region becomes coral when selected
+const FLESH = 0xDDB898;   // warm peach — base brain tissue color
 const REGION_COLORS = {
-  // Cortical — distinct muted tones, professional neuroanatomy palette
-  frontal_lobe:         0xC26A58,   // muted brick red
-  prefrontal_cortex:    0xB86050,   // deeper brick
-  brocas_area:          0xAA5848,   // dark rust
-  motor_cortex:         0xCC7060,   // salmon-red
-  parietal_lobe:        0x7A9E78,   // muted sage green
-  somatosensory_cortex: 0x6E9068,   // deeper sage
-  temporal_lobe:        0xC08840,   // warm amber-brown
-  wernickes_area:       0xB07C38,   // deeper amber
-  occipital_lobe:       0x5890A0,   // muted teal-blue
-  cingulate_gyrus:      0xA8945C,   // golden tan
-  medial_frontal:       0xBC6258,   // warm rose-red
-  // Subcortical — cooler, more desaturated to contrast with cortex
-  thalamus:             0x8090B4,   // slate blue
-  hippocampus:          0x9A8848,   // olive-gold
-  amygdala:             0xB07848,   // warm brown
-  caudate:              0x7888A8,   // cool blue-gray
-  putamen:              0x6C80A4,   // steel blue
-  globus_pallidus:      0x8898B0,   // light slate
-  brainstem:            0x887060,   // warm gray-brown
-  cerebellum:           0x6898A0,   // muted teal
-  // Glass shell
-  full_hemisphere:      0xE0D0C8,
+  frontal_lobe:         FLESH,
+  prefrontal_cortex:    FLESH,
+  brocas_area:          FLESH,
+  motor_cortex:         FLESH,
+  parietal_lobe:        FLESH,
+  somatosensory_cortex: FLESH,
+  temporal_lobe:        FLESH,
+  wernickes_area:       FLESH,
+  occipital_lobe:       FLESH,
+  cingulate_gyrus:      FLESH,
+  medial_frontal:       FLESH,
+  thalamus:             0xC8A888,   // slightly darker for subcortical
+  hippocampus:          0xC8A888,
+  amygdala:             0xC8A888,
+  caudate:              0xC8A888,
+  putamen:              0xC8A888,
+  globus_pallidus:      0xC8A888,
+  brainstem:            0xC0A080,
+  cerebellum:           0xC8A888,
+  full_hemisphere:      0xE8D4C4,   // glass shell — very light peach
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -88,7 +88,7 @@ try {
 // ══════════════════════════════════════════════════════════════════════════════
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0A0D14);
+scene.background = new THREE.Color(0xE4E0DA);
 
 const camera = new THREE.PerspectiveCamera(40, 1.54, 0.1, 100);
 camera.position.set(4.8, 0.5, 0.4);
@@ -335,7 +335,7 @@ function setHover(mesh) {
   }
   hoveredMesh = mesh;
   if (hoveredMesh && hoveredMesh !== selectedMesh) {
-    _setEmissive(hoveredMesh, 0xffffff, 0.30);
+    _setEmissive(hoveredMesh, 0xE8A090, 0.25);
   }
   if (window.__brainUI && window.__brainUI.hoverRegion) {
     window.__brainUI.hoverRegion(mesh ? mesh.userData.regionId : null);
@@ -350,7 +350,7 @@ function selectRegion(mesh) {
   }
   selectedMesh = mesh;
   if (!mesh) return;
-  _setEmissive(mesh, 0xffd080, 0.45);
+  _setEmissive(mesh, 0xE05840, 0.55);   // bright coral-red like brainfacts.org selection
   if (window.__brainUI) window.__brainUI.openRegion(mesh.userData.regionId);
 }
 
