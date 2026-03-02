@@ -377,7 +377,7 @@
     }
   }
   </script>
-  <script type="module" src="brain-3d-hires.js?v=1"></script>
+  <script type="module" src="brain-3d-hires.js?v=2"></script>
 </head>
 <body>
 
@@ -419,16 +419,20 @@
 
       <!-- Camera preset controls -->
       <div class="cam-controls">
-        <button class="cam-btn active" id="cam-lateral"   onclick="snapCam('lateral')">Lateral</button>
-        <button class="cam-btn"        id="cam-medial"    onclick="snapCam('medial')">Medial</button>
-        <button class="cam-btn"        id="cam-superior"  onclick="snapCam('superior')">Superior</button>
-        <button class="cam-btn"        id="cam-inferior"  onclick="snapCam('inferior')">Inferior</button>
-        <button class="cam-btn"        id="cam-anterior"  onclick="snapCam('anterior')">Anterior</button>
-        <button class="cam-btn"        id="cam-posterior" onclick="snapCam('posterior')">Posterior</button>
+        <button class="cam-btn active" id="cam-lateral"    onclick="snapCam('lateral')">Lateral</button>
+        <button class="cam-btn"        id="cam-medial"     onclick="snapCam('medial')">Medial</button>
+        <button class="cam-btn"        id="cam-superior"   onclick="snapCam('superior')">Superior</button>
+        <button class="cam-btn"        id="cam-inferior"   onclick="snapCam('inferior')">Inferior</button>
+        <button class="cam-btn"        id="cam-anterior"   onclick="snapCam('anterior')">Anterior</button>
+        <button class="cam-btn"        id="cam-posterior"  onclick="snapCam('posterior')">Posterior</button>
+        <button class="cam-btn"        id="cam-brainstem"  onclick="snapCam('brainstem')">Brainstem</button>
+        <button class="cam-btn"        id="cam-cerebellum" onclick="snapCam('cerebellum')">Cerebellum</button>
       </div>
 
       <!-- Stage controls top-right -->
       <div class="stage-controls">
+        <button class="stage-btn" id="btn-glass" onclick="toggleGlassBrain()">Glass Brain</button>
+        <button class="stage-btn" id="btn-split" onclick="toggleSplitBrain()">Split Brain</button>
         <span class="stage-btn" style="cursor:default;opacity:0.5;" title="fsaverage7 — 655,360 faces">655k faces</span>
       </div>
 
@@ -736,21 +740,25 @@
     window.snapCam = snapCam;
 
     // ── Glass brain toggle ────────────────────────────────────────────────
-    let _glassOn = true;
+    let _glassOn = false;
     function toggleGlassBrain() {
       _glassOn = !_glassOn;
-      if (window.__brain3d) window.__brain3d.toggleGlass(_glassOn);
+      if (window.__brain3d) window.__brain3d.toggleGlass();
       document.getElementById('btn-glass').classList.toggle('active', _glassOn);
     }
     window.toggleGlassBrain = toggleGlassBrain;
 
-    let _subcorticalOn = false;
-    function toggleSubcortical() {
-      _subcorticalOn = !_subcorticalOn;
-      if (window.__brain3d) window.__brain3d.setSubcorticalVisible(_subcorticalOn);
-      document.getElementById('btn-subcortical').classList.toggle('active', _subcorticalOn);
+    // ── Split brain toggle ────────────────────────────────────────────────
+    let _splitOn = false;
+    function toggleSplitBrain() {
+      _splitOn = !_splitOn;
+      if (window.__brain3d) window.__brain3d.toggleSplit();
+      document.getElementById('btn-split').classList.toggle('active', _splitOn);
+      // Move camera to show medial face when split; back to lateral when off
+      if (_splitOn) snapCam('medial');
+      else          snapCam('lateral');
     }
-    window.toggleSubcortical = toggleSubcortical;
+    window.toggleSplitBrain = toggleSplitBrain;
 
     // ── Hover tooltip (wired from brain3d region hover) ───────────────────
     window.__brainUI = {

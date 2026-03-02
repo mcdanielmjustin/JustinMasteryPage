@@ -87,23 +87,27 @@ scene.add(new THREE.AmbientLight(0xFFEEE8, 0.15));
 // superior/inferior views hit gimbal lock (camera forward || camera up).
 
 const CAMERA_VIEWS = {
-  lateral:   new THREE.Vector3( 3.5,  0,    0  ),
-  medial:    new THREE.Vector3(-3.5,  0,    0  ),
-  superior:  new THREE.Vector3( 0,    0,    4.5),
-  inferior:  new THREE.Vector3( 0,    0,   -4.5),
-  anterior:  new THREE.Vector3( 0,    4.5,  0  ),
-  posterior: new THREE.Vector3( 0,   -4.5,  0  ),
+  lateral:    new THREE.Vector3( 3.5,   0,    0   ),
+  medial:     new THREE.Vector3(-3.5,   0,    0   ),
+  superior:   new THREE.Vector3( 0,     0,    4.5 ),
+  inferior:   new THREE.Vector3( 0,     0,   -4.5 ),
+  anterior:   new THREE.Vector3( 0,     4.5,  0   ),
+  posterior:  new THREE.Vector3( 0,    -4.5,  0   ),
+  brainstem:  new THREE.Vector3( 0.3,  -3.2, -3.2 ),  // inferior-posterior oblique
+  cerebellum: new THREE.Vector3( 0,    -4.2, -1.5 ),  // posterior-inferior
 };
 
 // camera.up per view — lateral/anterior/posterior use z-up (superior = top of screen);
 // superior/inferior use y-up (anterior = top of screen).
 const VIEW_UP = {
-  lateral:   new THREE.Vector3(0, 0,  1),
-  medial:    new THREE.Vector3(0, 0,  1),
-  superior:  new THREE.Vector3(0, 1,  0),
-  inferior:  new THREE.Vector3(0, 1,  0),
-  anterior:  new THREE.Vector3(0, 0,  1),
-  posterior: new THREE.Vector3(0, 0,  1),
+  lateral:    new THREE.Vector3(0, 0, 1),
+  medial:     new THREE.Vector3(0, 0, 1),
+  superior:   new THREE.Vector3(0, 1, 0),
+  inferior:   new THREE.Vector3(0, 1, 0),
+  anterior:   new THREE.Vector3(0, 0, 1),
+  posterior:  new THREE.Vector3(0, 0, 1),
+  brainstem:  new THREE.Vector3(0, 0, 1),
+  cerebellum: new THREE.Vector3(0, 0, 1),
 };
 
 var camFrom   = null, camTo   = null, camT = 0;
@@ -126,12 +130,15 @@ function setCameraView(name) {
 var _readyResolve;
 var _readyPromise = new Promise(function(res) { _readyResolve = res; });
 
+var brainGroup = null;
+
 var KNOWN_SIZE = 18700000;  // ~18.7 MB — used when xhr.total is 0
 
 new GLTFLoader().load(
   'data/brain_meshes/full_brain_hires.glb',
 
   function onLoad(gltf) {
+    brainGroup = gltf.scene;
     gltf.scene.traverse(function(child) {
       if (!child.isMesh) return;
       // Normals not stored by trimesh (process=False); compute them now
@@ -166,6 +173,42 @@ new GLTFLoader().load(
     _readyResolve();
   }
 );
+
+// ── Glass / Split toggles ─────────────────────────────────────────────────────
+
+var _glassOn = false;
+
+function toggleGlass() {
+  _glassOn = !_glassOn;
+  if (!brainGroup) return;
+  brainGroup.traverse(function(child) {
+    if (!child.isMesh || !child.material) return;
+    if (_glassOn) {
+      child.material.transparent = true;
+      child.material.opacity     = 0.18;
+      child.material.depthWrite  = false;
+      child.material.side        = THREE.DoubleSide;
+    } else {
+      child.material.transparent = false;
+      child.material.opacity     = 1.0;
+      child.material.depthWrite  = true;
+      child.material.side        = THREE.FrontSide;
+    }
+    child.material.needsUpdate = true;
+  });
+}
+
+var _splitOn = false;
+
+function toggleSplit() {
+  _splitOn = !_splitOn;
+  if (_splitOn) {
+    // Clip x > 0 (right hemisphere), revealing the left hemisphere's medial face
+    renderer.clippingPlanes = [new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0)];
+  } else {
+    renderer.clippingPlanes = [];
+  }
+}
 
 // ── Animation loop ────────────────────────────────────────────────────────────
 
@@ -248,7 +291,8 @@ window.__brain3d = {
   highlightRegion:      function() {},
   dimAllRegions:        function() {},
   resetRegions:         function() {},
-  toggleGlass:          function() {},
+  toggleGlass,
+  toggleSplit,
   setSubcorticalVisible:function() {},
   regionMeshes:[], corticalMeshes:[], subcorticalMeshes:[],
   ready: _readyPromise,
