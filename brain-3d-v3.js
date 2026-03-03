@@ -252,13 +252,15 @@ function loadHiresBrain() {
 
           // Upgrade to MeshPhysicalMaterial with normal map + AO-baked texture
           var oldMap = child.material ? child.material.map : null;
-          if (oldMap && oldMap.image) {
-            console.log('[brain-3d-v3] Cortex base texture:', oldMap.image.width + 'x' + oldMap.image.height);
+          if (oldMap) {
+            oldMap.colorSpace = THREE.SRGBColorSpace;
+            if (oldMap.image) console.log('[brain-3d-v3] Cortex base texture:', oldMap.image.width + 'x' + oldMap.image.height);
           } else {
             console.warn('[brain-3d-v3] Cortex has NO embedded texture (oldMap is null)');
           }
           console.log('[brain-3d-v3] Normal map at material creation:', normalMapTex ? 'ready' : 'not yet loaded');
           var physMat = new THREE.MeshPhysicalMaterial({
+            color:              new THREE.Color(TISSUE_COLOR),
             map:                oldMap,     // AO-baked sulcal texture (embedded in GLB)
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(0.8, 0.8),
@@ -686,19 +688,21 @@ async function loadBrain() {
   var loaded = 10;
   var total = 10 + regionIds.length + 2;  // +2 for atlas meshes
 
-  // Load all regions + atlas meshes in parallel
-  await Promise.allSettled(
-    atlasMeshPromises.concat(
-      regionIds.map(function(id) {
-        return loadRegion(id, manifest[id], false).then(function() {
-          loaded++;
-          window.dispatchEvent(new CustomEvent('brain3dProgress', {
-            detail: { loaded: loaded, total: total }
-          }));
-        });
-      })
-    )
-  );
+  // Load atlas meshes first, then regions in batches to avoid GPU context loss
+  await Promise.allSettled(atlasMeshPromises);
+
+  var BATCH = 8;
+  for (var bi = 0; bi < regionIds.length; bi += BATCH) {
+    var batch = regionIds.slice(bi, bi + BATCH);
+    await Promise.allSettled(batch.map(function(id) {
+      return loadRegion(id, manifest[id], false).then(function() {
+        loaded++;
+        window.dispatchEvent(new CustomEvent('brain3dProgress', {
+          detail: { loaded: loaded, total: total }
+        }));
+      });
+    }));
+  }
 
   console.log('[brain-3d-v3] All loaded — ' + regionMeshes.length + ' regions, '
     + permanentMeshes.length + ' permanent (atlas)');

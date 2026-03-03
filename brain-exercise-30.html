@@ -81,6 +81,9 @@
       grid-template-columns: 256px 1fr;
       grid-template-rows: 1fr;
     }
+    .explorer.mode-2d { grid-template-columns: 1fr; }
+    .explorer.mode-2d .brain-stage { display: none; }
+    .explorer.mode-2d .sidebar { border-right: none; max-width: 560px; margin: 0 auto; width: 100%; }
 
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -422,12 +425,19 @@
   <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+      "three": "./node_modules/three/build/three.module.js",
+      "three/addons/": "./node_modules/three/examples/jsm/"
     }
   }
   </script>
-  <script type="module" src="brain-3d-v3.js"></script>
+  <script type="module">
+    if (new URLSearchParams(location.search).get('renderer') !== '2d') {
+      import('./brain-3d-v3.js');
+    } else {
+      window.__brain3d = null;
+      setTimeout(function() { window.dispatchEvent(new CustomEvent('brain3dReady')); }, 50);
+    }
+  </script>
 </head>
 <body>
 
@@ -579,9 +589,14 @@
 
     var params     = new URLSearchParams(location.search);
     var IS_QUIZ    = params.get('mode') === 'quiz';
+    var IS_2D      = params.get('renderer') === '2d';
     var CATS_RAW   = (params.get('categories') || '').split(',').filter(Boolean);
     var COUNT_RAW  = parseInt(params.get('count') || '20', 10);
     var CATEGORIES = CATS_RAW.length ? CATS_RAW : null;
+
+    if (IS_2D) {
+      document.querySelector('.explorer').classList.add('mode-2d');
+    }
 
 
     // ────────────────────────────────────────────────────────────────────
@@ -1031,24 +1046,46 @@
 
     function setupClickRegion(q) {
       var activeIds = [q.target_region].concat(q.distractor_regions || []);
-      if (window.__brain3d) window.__brain3d.dimAllRegions(activeIds);
-      _quizClick = function(regionId) {
-        if (_quizSubmitted) return;
-        _quizSelected = regionId;
-        document.getElementById('quiz-submit').disabled = false;
-      };
+      if (IS_2D) {
+        // 2D mode: show shuffled region chips instead of requiring a 3D click
+        var wrap = document.getElementById('quiz-chips');
+        var opts = activeIds.slice().sort(function() { return Math.random() - 0.5; });
+        opts.forEach(function(rId) {
+          var rData = REGIONS[rId];
+          var btn = document.createElement('button');
+          btn.className = 'quiz-chip';
+          btn.textContent = rData ? rData.label : rId.replace(/_/g, ' ');
+          btn.onclick = function() {
+            if (_quizSubmitted) return;
+            _quizSelected = rId;
+            document.querySelectorAll('.quiz-chip').forEach(function(c) { c.classList.remove('selected'); });
+            btn.classList.add('selected');
+            document.getElementById('quiz-submit').disabled = false;
+          };
+          wrap.appendChild(btn);
+        });
+      } else {
+        if (window.__brain3d) window.__brain3d.dimAllRegions(activeIds);
+        _quizClick = function(regionId) {
+          if (_quizSubmitted) return;
+          _quizSelected = regionId;
+          document.getElementById('quiz-submit').disabled = false;
+        };
+      }
     }
 
     function setupLocationToDeficit(q) {
       var hl = q.highlighted_region;
-      if (window.__brain3d) {
+      if (!IS_2D && window.__brain3d) {
         window.__brain3d.highlightRegion(hl);
         window.__brain3d.focusRegion(hl);
       }
       var rData = REGIONS[hl];
-      document.getElementById('highlighted-label').textContent =
-        '\u2605 ' + (rData ? rData.label : hl.replace(/_/g, ' ')) + ' \u2014 highlighted';
-      document.getElementById('highlighted-label').style.display = 'block';
+      var label = document.getElementById('highlighted-label');
+      label.textContent = IS_2D
+        ? '\u2605 Region: ' + (rData ? rData.label : hl.replace(/_/g, ' '))
+        : '\u2605 ' + (rData ? rData.label : hl.replace(/_/g, ' ')) + ' \u2014 highlighted';
+      label.style.display = 'block';
 
       var wrap = document.getElementById('quiz-chips');
       q.options.forEach(function(text, i) {

@@ -243,6 +243,49 @@
 
     .warn { font-size: 12px; color: #f87171; padding: 8px 0; display: none; }
 
+    /* Hardware acceleration banner */
+    .hw-banner {
+      display: none;
+      width: 100%; max-width: 680px;
+      margin: 14px 0 0;
+      position: relative; z-index: 1;
+      background: rgba(251,146,60,0.10);
+      border: 1px solid rgba(251,146,60,0.45);
+      border-radius: 16px;
+      padding: 16px 20px;
+      gap: 14px;
+      align-items: flex-start;
+      animation: fadeInUp 0.5s ease-out both;
+    }
+    .hw-banner.visible { display: flex; }
+    .hw-banner-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .hw-banner-body { flex: 1; }
+    .hw-banner-title { font-size: 14px; font-weight: 700; color: #fb923c; margin-bottom: 6px; }
+    .hw-banner-text { font-size: 12px; color: var(--text2); line-height: 1.7; }
+    .hw-banner-text code {
+      background: rgba(255,255,255,0.07);
+      border-radius: 4px; padding: 1px 5px;
+      font-size: 11px; color: #fde68a;
+      font-family: monospace;
+    }
+    .hw-copy-btn {
+      display: flex; align-items: center; gap: 7px;
+      margin-top: 12px;
+      background: rgba(251,146,60,0.18);
+      border: 1px solid rgba(251,146,60,0.5);
+      border-radius: 9px;
+      padding: 8px 14px;
+      font-size: 12px; font-weight: 700; color: #fb923c;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.03em;
+    }
+    .hw-copy-btn:hover { background: rgba(251,146,60,0.30); border-color: rgba(251,146,60,0.7); }
+    .hw-copy-btn.copied { color: #34d399; border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.12); }
+    .hw-copy-hint {
+      font-size: 11px; color: var(--text3); font-weight: 400;
+      margin-top: 4px; letter-spacing: 0;
+    }
+
     @media (max-width: 600px) {
       .chips-wrap { gap: 8px; }
     }
@@ -313,6 +356,32 @@
         </div>
       </div>
 
+      <!-- Renderer -->
+      <div class="section-card" id="renderer-card">
+        <div class="section-label-row">
+          <div class="section-label">Brain Renderer</div>
+        </div>
+        <div class="count-row">
+          <button class="count-btn rend-btn active" data-rend="3d" onclick="selectRenderer('3d')">&#9650; 3D Model</button>
+          <button class="count-btn rend-btn" data-rend="2d" onclick="selectRenderer('2d')">&#9633; 2D Lightweight</button>
+        </div>
+
+        <div id="hw-banner" class="hw-banner">
+          <div class="hw-banner-icon">⚠️</div>
+          <div class="hw-banner-body">
+            <div class="hw-banner-title" id="hw-banner-title">Hardware Acceleration Disabled</div>
+            <div class="hw-banner-text" id="hw-banner-text">
+              The 3D brain module requires GPU acceleration.<br>
+              In Chrome: <code>Settings → System → Use hardware acceleration when available → Relaunch</code>
+            </div>
+            <button class="hw-copy-btn" id="hw-copy-btn" onclick="copySettingsUrl()">
+              <span>📋</span> Copy chrome://settings/system
+            </button>
+            <div class="hw-copy-hint">Paste the copied URL into your Chrome address bar</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Summary + Start -->
       <div class="summary-bar">
         <div class="sum-item">
@@ -354,6 +423,7 @@
       cats: new Set(),
       count: 20,
       view: 'lateral',
+      renderer: '3d',
     };
 
     const CAT_LABELS = {
@@ -414,6 +484,17 @@
       });
     }
 
+    function selectRenderer(r) {
+      state.renderer = r;
+      document.querySelectorAll('.rend-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.rend === r);
+      });
+      // Hide brain view option in 2D mode (view handled differently)
+      document.getElementById('renderer-hint').textContent = r === '2d'
+        ? '2D mode uses no GPU — ideal if hardware acceleration is unavailable.'
+        : '3D model requires GPU acceleration for smooth performance.';
+    }
+
     function updateSummary() {
       const cats = [...state.cats];
       const available = getAvailableCount();
@@ -454,12 +535,51 @@
         categories: [...state.cats].join(','),
         count: state.count,
         view: state.view,
+        renderer: state.renderer,
       });
       location.href = 'brain-exercise-30.html?' + p.toString();
     }
 
     // Init
     updateSummary();
+
+    // WebGL / hardware acceleration check
+    (function() {
+      var banner = document.getElementById('hw-banner');
+      var title  = document.getElementById('hw-banner-title');
+      var text   = document.getElementById('hw-banner-text');
+      try {
+        var c = document.createElement('canvas');
+        var gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+        if (!gl) throw new Error('no webgl');
+        var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        var renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
+        var isSoftware = /swiftshader|software|llvmpipe|mesa/i.test(renderer);
+        if (isSoftware) {
+          title.textContent = 'Hardware Acceleration Disabled';
+          text.innerHTML = 'The 3D brain is running in <strong style="color:#fb923c">software mode</strong> — expect low FPS.<br>' +
+            'In Chrome: <code>Settings → System → Use hardware acceleration when available → Relaunch</code>';
+          banner.classList.add('visible');
+        }
+      } catch(e) {
+        title.textContent = 'WebGL Not Available';
+        text.innerHTML = 'Your browser cannot run the 3D brain module without hardware acceleration.<br>' +
+          'In Chrome: <code>Settings → System → Use hardware acceleration when available → Relaunch</code>';
+        banner.classList.add('visible');
+      }
+    })();
+
+    function copySettingsUrl() {
+      navigator.clipboard.writeText('chrome://settings/system').then(function() {
+        var btn = document.getElementById('hw-copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = 'Copy chrome://settings/system';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
   </script>
 </body>
 </html>
