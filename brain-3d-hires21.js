@@ -114,6 +114,13 @@ var camFrom   = null, camTo   = null, camT = 0;
 var camUpFrom = null, camUpTo = null;
 const CAM_DUR = 0.72;
 
+// Orbit target per view — brainstem/cerebellum orbit their own centroid,
+// all other views orbit the brain centre.
+const CAMERA_TARGETS = {
+  brainstem:  new THREE.Vector3(0,    -0.16, -0.58),
+  cerebellum: new THREE.Vector3(0,    -0.46, -0.57),
+};
+
 function setCameraView(name) {
   var tgt = CAMERA_VIEWS[name];
   if (!tgt) return;
@@ -122,7 +129,8 @@ function setCameraView(name) {
   camUpFrom = camera.up.clone();
   camUpTo   = VIEW_UP[name].clone();
   camT      = 0;
-  controls.target.set(0, 0, 0);
+  var orbitTarget = CAMERA_TARGETS[name] || new THREE.Vector3(0, 0, 0);
+  controls.target.copy(orbitTarget);
 }
 
 // ── Load GLB ──────────────────────────────────────────────────────────────────
@@ -130,8 +138,9 @@ function setCameraView(name) {
 var _readyResolve;
 var _readyPromise = new Promise(function(res) { _readyResolve = res; });
 
-var brainGroups = [];   // all loaded mesh groups (cortex + brainstem + cerebellum)
-var brainGroup  = null; // alias for cortex group (used by toggleGlass)
+var brainGroups       = [];   // all loaded mesh groups (cortex + brainstem + cerebellum)
+var subcorticalGroups = [];   // brainstem + cerebellum — hidden during split view
+var brainGroup        = null; // alias for cortex group
 
 // Track how many GLBs we expect so we fire brain3dReady exactly once
 var _glbTotal  = 3;
@@ -165,7 +174,11 @@ function loadBrainGlb(url, onDone, onProgress) {
       scene.add(gltf.scene);
       brainGroups.push(gltf.scene);
       if (onDone) onDone(gltf.scene);
-      console.log('[brain-3d-hires21] Loaded:', url);
+      var _box = new THREE.Box3().setFromObject(gltf.scene);
+      console.log('[brain-3d-hires21] Loaded:', url,
+        'BBox x[' + _box.min.x.toFixed(3) + ',' + _box.max.x.toFixed(3) + ']',
+        'y[' + _box.min.y.toFixed(3) + ',' + _box.max.y.toFixed(3) + ']',
+        'z[' + _box.min.z.toFixed(3) + ',' + _box.max.z.toFixed(3) + ']');
       _onGlbDone();
     },
     onProgress || null,
@@ -190,8 +203,10 @@ loadBrainGlb(
 );
 
 // ── Brainstem + Cerebellum ────────────────────────────────────────────────────
-loadBrainGlb('data/brain_meshes/hires_brainstem.glb');
-loadBrainGlb('data/brain_meshes/hires_cerebellum.glb');
+loadBrainGlb('data/brain_meshes/hires_brainstem.glb',
+  function(group) { subcorticalGroups.push(group); });
+loadBrainGlb('data/brain_meshes/hires_cerebellum.glb',
+  function(group) { subcorticalGroups.push(group); });
 
 // ── Glass / Split toggles ─────────────────────────────────────────────────────
 
@@ -220,15 +235,41 @@ function toggleGlass() {
 
 var _splitOn = false;
 
+// Clip plane: normal (1,0,0), constant -0.03 → clips x < 0.03.
+// Removes the left hemisphere plus the thin midline strip where
+// left-hemisphere medial-wall vertices cross x = 0.
+var _splitPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -0.03);
+
 function toggleSplit() {
   _splitOn = !_splitOn;
   if (_splitOn) {
-    // Clip x < 0 (left hemisphere), revealing the right hemisphere's medial face.
-    // Camera moves to medial preset at (-3.5, 0, 0), looking toward +x —
-    // this correctly faces the right hemisphere's medial surface (normals toward -x).
-    renderer.clippingPlanes = [new THREE.Plane(new THREE.Vector3(1, 0, 0), 0)];
+    // Per-material clipping so we can clip the cortex only.
+    renderer.localClippingEnabled = true;
+
+    // Cortex: clip at x = 0.03, DoubleSide to fill the hollow cut-edge.
+    if (brainGroup) {
+      brainGroup.traverse(function(child) {
+        if (!child.isMesh || !child.material) return;
+        child.material.clippingPlanes = [_splitPlane];
+        child.material.side = THREE.DoubleSide;
+        child.material.needsUpdate = true;
+      });
+    }
+
+    // Brainstem + cerebellum straddle the midline — hide them completely
+    // so only the clean cortical medial face is shown.
+    subcorticalGroups.forEach(function(g) { g.visible = false; });
   } else {
-    renderer.clippingPlanes = [];
+    subcorticalGroups.forEach(function(g) { g.visible = true; });
+    renderer.localClippingEnabled = false;
+    brainGroups.forEach(function(group) {
+      group.traverse(function(child) {
+        if (!child.isMesh || !child.material) return;
+        child.material.clippingPlanes = [];
+        child.material.side = _glassOn ? THREE.DoubleSide : THREE.FrontSide;
+        child.material.needsUpdate = true;
+      });
+    });
   }
 }
 
