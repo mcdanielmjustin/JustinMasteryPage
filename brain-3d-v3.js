@@ -223,13 +223,25 @@ function loadHiresBrain() {
     // Load the optimized cortex (100k faces, ~4MB) instead of full hires (655k, 17MB)
     var cortexPath = 'data/brain_meshes/full_brain_optimized.glb';
 
-    // Pre-load normal map and AO texture in parallel
+    // Pre-load normal map texture in parallel with GLB
     var texLoader = new THREE.TextureLoader();
     var normalMapTex = null;
 
     texLoader.load('data/brain_meshes/cortex_normal_map.png', function(tex) {
       tex.colorSpace = THREE.LinearSRGBColorSpace;  // normal maps use linear
       normalMapTex = tex;
+      console.log('[brain-3d-v3] Normal map loaded:', tex.image.width + 'x' + tex.image.height);
+      // If GLB already loaded (race condition), apply normal map retroactively
+      hiresMeshes.forEach(function(m) {
+        if (m.material && m.material._isHiresMat && !m.material.normalMap) {
+          m.material.normalMap = normalMapTex;
+          m.material.normalScale = new THREE.Vector2(0.8, 0.8);
+          m.material.needsUpdate = true;
+          console.log('[brain-3d-v3] Normal map applied retroactively');
+        }
+      });
+    }, undefined, function(err) {
+      console.warn('[brain-3d-v3] Normal map failed to load:', err);
     });
 
     loader.load(cortexPath,
@@ -240,6 +252,12 @@ function loadHiresBrain() {
 
           // Upgrade to MeshPhysicalMaterial with normal map + AO-baked texture
           var oldMap = child.material ? child.material.map : null;
+          if (oldMap && oldMap.image) {
+            console.log('[brain-3d-v3] Cortex base texture:', oldMap.image.width + 'x' + oldMap.image.height);
+          } else {
+            console.warn('[brain-3d-v3] Cortex has NO embedded texture (oldMap is null)');
+          }
+          console.log('[brain-3d-v3] Normal map at material creation:', normalMapTex ? 'ready' : 'not yet loaded');
           var physMat = new THREE.MeshPhysicalMaterial({
             map:                oldMap,     // AO-baked sulcal texture (embedded in GLB)
             normalMap:          normalMapTex,
