@@ -569,6 +569,50 @@ window.__BRAIN_DATA = {
       }
     },
 
+    "insula": {
+      "label": "Insula",
+      "info": {
+        "ba": "BA 13, 14, 15, 16 — deep cortex hidden beneath lateral sulcus (Sylvian fissure); anterior insula (agranular) and posterior insula (granular)",
+        "functions": [
+          "Interoception — conscious awareness of body states: heartbeat, hunger, thirst, pain, temperature, visceral sensations",
+          "Disgust recognition and experience — both facial expressions and gustatory/olfactory stimuli; damage → failure to recognize disgust in self and others",
+          "Pain processing — integrates sensory pain (from S1/S2) with its affective/motivational component; works with anterior cingulate",
+          "Taste/gustatory cortex — primary gustatory area in anterior insula; receives from thalamic VPMpc",
+          "Autonomic regulation — sympathetic outflow modulation; right insula dominance for sympathetic, left for parasympathetic",
+          "Salience network hub — anterior insula + dACC detect relevant stimuli and switch between default mode and central executive networks"
+        ],
+        "syndromes": [
+          "Asymbolia for pain: insula + cingulate damage → patient perceives pain stimuli but shows no distress, withdrawal, or autonomic response; sensation preserved, suffering abolished",
+          "Gustatory agnosia: anterior insula lesion → inability to identify tastes despite intact olfaction and basic taste sensation",
+          "Loss of disgust recognition: bilateral insula damage (e.g., Huntington's disease) → failure to recognize facial expressions of disgust; other emotions preserved",
+          "Autonomic dysregulation: right insular stroke → cardiac arrhythmia, blood pressure instability; mechanism for sudden death in stroke patients",
+          "Craving and addiction: anterior insula activation correlates with craving; insula damage in smokers → spontaneous cessation of smoking addiction without relapse"
+        ],
+        "vascular": "MCA — insular (M2) segment; insular ribbon sign (early CT loss of insular cortex gray-white differentiation) = earliest sign of MCA infarct"
+      }
+    },
+
+    "nucleus_accumbens": {
+      "label": "Nucleus Accumbens",
+      "info": {
+        "ba": "N/A — ventral striatum; located where caudate head and anterior putamen meet; core and shell subdivisions",
+        "functions": [
+          "Central hub of the brain's reward circuit — receives dopaminergic input from ventral tegmental area (VTA) via mesolimbic pathway",
+          "Mediates reward prediction, motivation, and reinforcement learning — dopamine release signals 'better than expected' outcomes",
+          "Shell: mediates motivational salience, hedonic impact ('liking'); connected to limbic structures (amygdala, hippocampus)",
+          "Core: mediates learned reward associations and goal-directed behavior; connected to prefrontal cortex; resembles dorsal striatum functionally",
+          "Natural rewards (food, social, sexual) and all drugs of abuse converge on NAcc dopamine release — final common pathway for reinforcement"
+        ],
+        "syndromes": [
+          "Substance use disorders: all addictive drugs increase NAcc dopamine — cocaine (blocks DAT reuptake), amphetamine (reverses DAT), opioids (disinhibit VTA → NAcc dopamine), alcohol (multiple mechanisms); chronic use → dopamine receptor downregulation → tolerance and anhedonia",
+          "Anhedonia: reduced NAcc dopamine signaling → inability to experience pleasure; core symptom of major depression and negative symptoms of schizophrenia",
+          "Behavioral addictions: gambling, gaming show same NAcc activation pattern as substance addiction; supports incentive salience model (Berridge & Robinson: 'wanting' vs 'liking' dissociation)",
+          "Deep brain stimulation: NAcc DBS being investigated for treatment-resistant depression, OCD, and addiction; modulates reward circuit directly"
+        ],
+        "vascular": "Heubner's artery (recurrent artery of ACA) and medial lenticulostriate arteries"
+      }
+    },
+
     "internal_capsule": {
       "label": "Internal Capsule",
       "info": {
