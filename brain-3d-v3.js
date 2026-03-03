@@ -84,7 +84,7 @@ try {
   window.__brain3d = {
     mount: function(){}, unmount: function(){}, setCameraView: function(){},
     highlightRegion: function(){}, dimAllRegions: function(){}, resetRegions: function(){},
-    toggleGlass: function(){}, toggleSplit: function(){}, toggleCerebellum: function(){},
+    toggleGlass: function(){}, toggleSplit: function(){}, toggleCerebellum: function(){}, toggleBrainstem: function(){},
     setSubcorticalVisible: function(){}, focusRegion: function(){},
     regionMeshes: [], corticalMeshes: [], subcorticalMeshes: [],
     ready: Promise.resolve(), CAMERA_VIEWS: {},
@@ -208,6 +208,7 @@ var hoveredRegionId   = null;
 var glassOn           = false;
 var splitOn           = true;
 var cerebellumVisible = true;
+var brainstemVisible  = true;
 var quizMode          = false;
 
 var loader = new GLTFLoader();
@@ -724,8 +725,11 @@ function _restorePermanent() {
     mat.depthWrite = true;
     mat.needsUpdate = true;
     m.visible = true;
-    // Respect cerebellum toggle
+    // Respect cerebellum and brainstem toggles
     if (m.userData.regionId === 'cerebellum' && !cerebellumVisible) {
+      m.visible = false;
+    }
+    if (m.userData.regionId === 'brainstem' && !brainstemVisible) {
       m.visible = false;
     }
   });
@@ -740,8 +744,9 @@ function _applyHiresGlass(on, excludeRegionId) {
   var allVisual = hiresMeshes.concat(permanentMeshes);
   allVisual.forEach(function(m) {
     if (!m.material) return;
-    // Skip hidden cerebellum
+    // Skip hidden cerebellum/brainstem
     if (m.userData && m.userData.regionId === 'cerebellum' && !cerebellumVisible) return;
+    if (m.userData && m.userData.regionId === 'brainstem' && !brainstemVisible) return;
     // Skip the selected region's permanent mesh (it stays opaque in isolation)
     if (excludeRegionId && m.userData && m.userData.regionId === excludeRegionId) return;
     if (on) {
@@ -936,30 +941,22 @@ function toggleSplit(forceState) {
 
     // Hide subcortical overlays (they straddle midline) but keep brainstem + cerebellum
     permanentMeshes.forEach(function(m) {
-      // Brainstem and cerebellum stay visible in split view
       if (m.userData.regionId === 'cerebellum') {
         m.visible = cerebellumVisible;
+      } else if (m.userData.regionId === 'brainstem') {
+        m.visible = brainstemVisible;
       }
-      // brainstem stays visible (no toggle)
     });
+    // Show subcortical structures in split view (they sit at the interior)
     subcorticalMeshes.forEach(function(m) {
       if (m.userData.permanent) return;
-      m.visible = false;
-    });
-
-    // Deselect if a subcortical region was selected
-    if (selectedRegionId) {
-      var wasSubcortical = subcorticalMeshes.some(function(m) {
-        return m.userData.regionId === selectedRegionId;
-      }) || PERMANENT_IDS.has(selectedRegionId);
-      if (wasSubcortical) {
-        _hideAllOverlays();
-        selectedRegionId = null;
-        if (window.__brainUI && window.__brainUI.closeRegion) {
-          window.__brainUI.closeRegion();
-        }
+      m.visible = true;
+      var mat = m.userData.overlayMat;
+      if (mat) {
+        mat.clippingPlanes = [];  // no clipping — fully visible
+        mat.needsUpdate = true;
       }
-    }
+    });
   } else {
     // Restore clipping on hires
     renderer.localClippingEnabled = false;
@@ -1039,15 +1036,65 @@ function toggleCerebellum(forceState) {
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// BRAINSTEM TOGGLE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function toggleBrainstem(forceState) {
+  if (typeof forceState === 'boolean') {
+    brainstemVisible = forceState;
+  } else {
+    brainstemVisible = !brainstemVisible;
+  }
+
+  brainstemMeshes.forEach(function(m) {
+    m.visible = brainstemVisible;
+    if (brainstemVisible) {
+      var mat = m.userData.overlayMat;
+      if (!mat) return;
+      if (glassOn) {
+        mat.transparent        = true;
+        mat.opacity            = 0.08;
+        mat.depthWrite         = false;
+        mat.side               = THREE.DoubleSide;
+      } else {
+        mat.color.copy(mat._origColor);
+        mat.emissive.copy(mat._origEmissive);
+        mat.emissiveIntensity  = 0.04;
+        mat.transparent        = false;
+        mat.opacity            = 1.0;
+        mat.depthWrite         = true;
+        mat.side               = THREE.FrontSide;
+        mat.roughness          = mat._origRoughness || 0.68;
+        mat.clearcoat          = 0.10;
+        mat.clearcoatRoughness = 0.38;
+      }
+      mat.needsUpdate = true;
+    }
+  });
+
+  // Also toggle the brainstem overlay if it exists
+  regionMeshes.forEach(function(m) {
+    if (m.userData.regionId === 'brainstem' && !m.userData.permanent) {
+      if (!brainstemVisible) m.visible = false;
+    }
+  });
+
+  return brainstemVisible;
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // SUBCORTICAL VISIBILITY
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function setSubcorticalVisible(show) {
   subcorticalMeshes.forEach(function(m) {
     if (m.userData.permanent) {
-      // Respect cerebellum toggle
+      // Respect cerebellum and brainstem toggles
       if (m.userData.regionId === 'cerebellum') {
         m.visible = show && cerebellumVisible;
+      } else if (m.userData.regionId === 'brainstem') {
+        m.visible = show && brainstemVisible;
       } else {
         m.visible = show;
       }
@@ -1329,6 +1376,7 @@ window.__brain3d = {
   toggleGlass:         toggleGlass,
   toggleSplit:         toggleSplit,
   toggleCerebellum:    toggleCerebellum,
+  toggleBrainstem:     toggleBrainstem,
   setSubcorticalVisible: setSubcorticalVisible,
   regionMeshes:        regionMeshes,
   corticalMeshes:      corticalMeshes,
@@ -1341,6 +1389,7 @@ window.__brain3d = {
   isGlassOn:           function() { return glassOn; },
   isSplitOn:           function() { return splitOn; },
   isCerebellumVisible: function() { return cerebellumVisible; },
+  isBrainstemVisible:  function() { return brainstemVisible; },
   getSelectedRegion:   function() { return selectedRegionId; },
 };
 
