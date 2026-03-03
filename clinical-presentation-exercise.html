@@ -99,27 +99,38 @@
     /* ── Avatar: tearful ── */
     @keyframes tearFall     { 0%{opacity:0;transform:translateY(0);} 20%{opacity:.85;} 100%{opacity:0;transform:translateY(28px);} }
 
+    /* ── Avatar: flat affect — slow blink ── */
+    @keyframes blinkSlow    { 0%,88%,100%{transform:scaleY(1);} 90%,97%{transform:scaleY(0.05);} }
+
+    /* ── Avatar: hopeful — very subtle upward posture drift ── */
+    @keyframes postureUpright { from{transform:translateY(0);} to{transform:translateY(-3px);} }
+
     /* ── Auto-advance bar ── */
     @keyframes autoAdvance  { from{width:0%;} to{width:100%;} }
 
     /* ══════════════════════════════════════════════════════════════
        AVATAR STATE CLASSES  (applied to #avatar-root)
     ══════════════════════════════════════════════════════════════ */
-    .state-idle       #avatar-body  { animation: breathe 4s ease-in-out infinite; }
-    .state-speaking   #avatar-jaw   { animation: jawSpeak .32s ease-in-out infinite; }
-    .state-speaking   #avatar-body  { animation: breathe 3s ease-in-out infinite; }
-    .state-distressed #avatar-body  { animation: postureBow .8s ease forwards, breathe 5s ease-in-out infinite .8s; }
-    .state-tearful    #avatar-tear  { animation: tearFall 2.4s ease-in-out infinite; }
-    .state-tearful    #avatar-body  { animation: breathe 6s ease-in-out infinite; }
-    .state-anxious    #avatar-body  { animation: breatheFast 1.8s ease-in-out infinite; }
-    .state-anxious    #avatar-hand  { animation: fidgetHand .65s ease-in-out infinite alternate; }
-    .state-agitated   #avatar-head  { animation: microShake .42s ease-in-out infinite; }
-    .state-agitated   #avatar-body  { animation: breatheFast 1.2s ease-in-out infinite; }
-    .state-guarded    #avatar-eyes  { animation: gazeAvert 3.2s ease-in-out infinite; }
-    .state-guarded    #avatar-body  { animation: breathe 5s ease-in-out infinite; }
-    .state-flat_affect #avatar-body { animation: breathe 8s ease-in-out infinite; }
-    .state-confused   #avatar-head  { animation: headTilt 2.2s ease-in-out infinite; }
-    .state-hopeful    #avatar-body  { animation: breathe 3.5s ease-in-out infinite; }
+    .state-idle        #avatar-body  { animation: breathe 4s ease-in-out infinite; }
+    .state-speaking    #avatar-jaw   { animation: jawSpeak .32s ease-in-out infinite; }
+    .state-speaking    #avatar-body  { animation: breathe 3s ease-in-out infinite; }
+    .state-distressed  #avatar-body  { animation: postureBow .8s ease forwards, breathe 5s ease-in-out infinite .8s; }
+    .state-tearful     #avatar-tear  { animation: tearFall 2.4s ease-in-out infinite; }
+    .state-tearful     #avatar-body  { animation: breathe 6s ease-in-out infinite; }
+    .state-anxious     #avatar-body  { animation: breatheFast 1.8s ease-in-out infinite; }
+    .state-anxious     #avatar-hand  { animation: fidgetHand .65s ease-in-out infinite alternate; }
+    .state-agitated    #avatar-head  { animation: microShake .42s ease-in-out infinite; }
+    .state-agitated    #avatar-body  { animation: breatheFast 1.2s ease-in-out infinite; }
+    .state-guarded     #avatar-eyes  { animation: gazeAvert 3.2s ease-in-out infinite; }
+    .state-guarded     #avatar-body  { animation: breathe 5s ease-in-out infinite; }
+    /* flat_affect: near-motionless body + slow blink + desaturated face */
+    .state-flat_affect #avatar-body  { animation: breathe 9s ease-in-out infinite; }
+    .state-flat_affect #avatar-eyes  { animation: blinkSlow 5s ease-in-out infinite; }
+    .state-flat_affect #avatar-face  { filter: saturate(0.55) brightness(0.92); }
+    /* hopeful: upright drift + warmer face filter */
+    .state-hopeful     #avatar-body  { animation: postureUpright .6s ease forwards, breathe 3.5s ease-in-out infinite .6s; }
+    .state-hopeful     #avatar-face  { filter: saturate(1.15) brightness(1.04); }
+    .state-confused    #avatar-head  { animation: headTilt 2.2s ease-in-out infinite; }
 
     /* ══════════════════════════════════════════════════════════════
        AMBIENT BLOBS
@@ -290,11 +301,22 @@
       animation: chartReveal .35s ease forwards;
       opacity: 0;
     }
+    /* Intake rows are visible immediately — no animation */
+    .chart-row-intake {
+      opacity: 1;
+      animation: none;
+      color: var(--text3);
+    }
+    .chart-section-intake .chart-section-label {
+      border-bottom-color: rgba(99,102,241,.15);
+      color: rgba(99,102,241,.7);
+    }
     .chart-key {
       color: var(--text3); flex-shrink: 0;
       min-width: 80px; font-weight: 500;
     }
     .chart-val { color: var(--text2); }
+    .chart-row-intake .chart-val { color: var(--text3); font-style: italic; }
 
     /* Phase controls — full-width bottom row, always visible */
     .phase-controls {
@@ -376,14 +398,18 @@
     }
     .speech-bubble.hidden { display: none; }
     .bubble-tail {
-      position: absolute; bottom: -8px; left: 18px;
+      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
       width: 14px; height: 8px;
       background: rgba(255,255,255,.05);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
     }
     .clinician-probe {
-      font-size: 11px; font-style: italic; color: var(--text3);
-      margin-bottom: 8px; display: none;
+      font-size: 11px; font-style: italic; color: var(--accent-light);
+      margin-bottom: 10px; padding: 6px 10px;
+      border-left: 2px solid rgba(99,102,241,.45);
+      background: rgba(99,102,241,.06);
+      border-radius: 0 6px 6px 0;
+      display: none;
     }
     .clinician-probe.visible { display: block; }
     .bubble-dots { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
@@ -410,10 +436,12 @@
       opacity: 0;
       white-space: nowrap;
     }
-    .tag-red    { background: rgba(248,113,113,.15); color: var(--red);    border: 1px solid rgba(248,113,113,.3); }
-    .tag-orange { background: rgba(251,146,60,.15);  color: var(--orange); border: 1px solid rgba(251,146,60,.3); }
-    .tag-blue   { background: rgba(96,165,250,.15);  color: var(--blue);   border: 1px solid rgba(96,165,250,.3); }
-    .tag-purple { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
+    .tag-red        { background: rgba(248,113,113,.15); color: var(--red);    border: 1px solid rgba(248,113,113,.3); }
+    .tag-orange     { background: rgba(251,146,60,.15);  color: var(--orange); border: 1px solid rgba(251,146,60,.3); }
+    .tag-blue       { background: rgba(96,165,250,.15);  color: var(--blue);   border: 1px solid rgba(96,165,250,.3); }
+    .tag-purple     { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
+    /* Appearance tags — shown before encounter begins; subtler grey style */
+    .tag-appearance { background: rgba(255,255,255,.06); color: var(--text3);  border: 1px solid rgba(255,255,255,.12); font-style: italic; }
 
     /* Avatar container */
     .avatar-wrap {
@@ -544,6 +572,15 @@
     .distractor-row { display: flex; gap: 10px; font-size: 12px; }
     .distractor-letter { color: var(--text3); font-weight: 700; flex-shrink: 0; min-width: 56px; }
     .distractor-text   { color: var(--text3); line-height: 1.5; }
+    /* Correct-answer rationale row — highlighted */
+    .distractor-correct {
+      padding: 7px 10px; margin: 0 -10px 4px;
+      background: rgba(52,211,153,.07);
+      border-radius: 8px;
+      border: 1px solid rgba(52,211,153,.15);
+    }
+    .distractor-letter-correct { color: var(--green) !important; }
+    .distractor-text-correct   { color: var(--text2) !important; }
     .feedback-actions {
       display: flex; gap: 10px; padding: 14px 20px;
       border-top: 1px solid var(--border);
@@ -1452,9 +1489,9 @@
     // Clear chart, build section containers
     buildChartSections(enc);
 
-    // Clear behavioral tags and reset slot index
+    // Clear behavioral tags and reset stacking columns
     document.getElementById('tag-overlay').innerHTML = '';
-    _tagSlotIdx = 0;
+    resetTagColumns();
     cancelTagStagger();
 
     // Build phase dots
@@ -1482,6 +1519,12 @@
     document.getElementById('nav-progress').textContent =
       `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
     document.getElementById('nav-progress').classList.add('visible');
+
+    // Pre-seed appearance tags (shown before first phase dialogue)
+    const appearanceTags = enc.encounter.patient.appearance_tags || [];
+    if (appearanceTags.length) {
+      revealBehavioralTags(appearanceTags, /* isAppearance */ true);
+    }
 
     // Start first phase (always a phase step)
     startPhase(enc.encounter.phases[0]);
@@ -1560,6 +1603,29 @@
   function buildChartSections(enc) {
     const body = document.getElementById('chart-body');
     body.innerHTML = '';
+
+    // ── Intake section — always present, immediately visible ──
+    const intakeSec = document.createElement('div');
+    intakeSec.className = 'chart-section chart-section-intake';
+    intakeSec.id = 'chart-sec-Intake';
+    intakeSec.innerHTML = `<div class="chart-section-label">Intake</div>`;
+
+    const setting = enc.encounter.setting || '';
+    const referral = enc.encounter.referral_context || '';
+
+    if (setting) {
+      const row = document.createElement('div');
+      row.className = 'chart-row chart-row-intake';
+      row.innerHTML = `<span class="chart-key">Setting</span><span class="chart-val">${escapeHtml(setting)}</span>`;
+      intakeSec.appendChild(row);
+    }
+    if (referral) {
+      const row = document.createElement('div');
+      row.className = 'chart-row chart-row-intake';
+      row.innerHTML = `<span class="chart-key">Referral</span><span class="chart-val">${escapeHtml(referral)}</span>`;
+      intakeSec.appendChild(row);
+    }
+    body.appendChild(intakeSec);
 
     // Collect all categories that appear in this encounter
     const cats = new Set();
@@ -1688,13 +1754,24 @@
 
   function runTypewriter(text, charMs, onComplete) {
     clearInterval(state.typewriterInt);
-    const el = document.getElementById('bubble-text');
+    const el     = document.getElementById('bubble-text');
+    const jaw    = document.getElementById('avatar-jaw');
     el.textContent = '';
+
+    const startJaw = () => {
+      if (jaw) jaw.style.animation = 'jawSpeak .32s ease-in-out infinite';
+    };
+    const stopJaw = () => {
+      if (jaw) jaw.style.animation = '';
+    };
+
     if (!text) {
       if (onComplete) onComplete();
       return;
     }
     let i = 0;
+
+    startJaw();
 
     // Click anywhere on the speech bubble to skip to full text instantly
     const bubble = document.getElementById('speech-bubble');
@@ -1703,6 +1780,7 @@
       clearInterval(state.typewriterInt);
       state.typewriterInt = null;
       el.textContent = text;
+      stopJaw();
       bubble.removeEventListener('click', skipHandler);
       if (onComplete) onComplete();
     };
@@ -1713,6 +1791,7 @@
       if (i >= text.length) {
         clearInterval(state.typewriterInt);
         state.typewriterInt = null;
+        stopJaw();
         bubble.removeEventListener('click', skipHandler);
         if (onComplete) onComplete();
       }
@@ -1738,18 +1817,16 @@
     });
   }
 
-  // Tag positioning — 8 preset positions distributed around the stage
-  const TAG_POSITIONS = [
-    { top: '12%',  left: '4%'  },
-    { top: '12%',  right: '4%' },
-    { top: '30%',  left: '2%'  },
-    { top: '30%',  right: '2%' },
-    { top: '52%',  left: '4%'  },
-    { top: '52%',  right: '4%' },
-    { top: '68%',  left: '6%'  },
-    { top: '68%',  right: '6%' },
-  ];
-  let _tagSlotIdx   = 0;
+  // Tag positioning — two independent stacking columns (left / right).
+  // Each column tracks a y-offset that grows downward. Tags never overlap.
+  // Max column height ~80% of stage; beyond that we fade+hide the oldest in that column.
+  const TAG_COL_X    = { left: '3%', right: '3%' };   // horizontal anchor per column
+  const TAG_ROW_PX   = 30;   // vertical step between tags (px)
+  const TAG_START_Y  = 10;   // percent from top where first tag appears
+  const TAG_MAX_ROWS = 7;    // maximum tags per column before recycling oldest
+
+  // Per-column state: { count, yPct, elements[] }
+  let _tagCols = { left: { count: 0, els: [] }, right: { count: 0, els: [] } };
   let _tagTimeouts  = [];
 
   function cancelTagStagger() {
@@ -1757,29 +1834,47 @@
     _tagTimeouts = [];
   }
 
-  function revealBehavioralTags(tags) {
+  function resetTagColumns() {
+    _tagCols = { left: { count: 0, els: [] }, right: { count: 0, els: [] } };
+  }
+
+  function revealBehavioralTags(tags, isAppearance) {
     if (!CFG.showTags || !tags.length) return;
     const overlay = document.getElementById('tag-overlay');
 
-    // Fade existing tags to 50% if stage is already full
-    const existing = overlay.querySelectorAll('.behavior-tag');
-    if (existing.length >= 8) {
-      existing.forEach(t => { t.style.opacity = '0.45'; });
-    }
-
     tags.forEach((tag, idx) => {
       const tid = setTimeout(() => {
+        // Alternate columns: even index → left, odd → right
+        const side = ((_tagCols.left.count + _tagCols.right.count) % 2 === 0) ? 'left' : 'right';
+        const col  = _tagCols[side];
+
+        // If this column is full, fade out the oldest tag in it
+        if (col.count >= TAG_MAX_ROWS && col.els.length > 0) {
+          const oldest = col.els.shift();
+          oldest.style.transition = 'opacity .4s ease';
+          oldest.style.opacity    = '0';
+          setTimeout(() => oldest.remove(), 420);
+          col.count--;
+        }
+
         const el = document.createElement('span');
-        el.className = 'behavior-tag ' + getTagColor(tag);
+        el.className = 'behavior-tag ' + (isAppearance ? 'tag-appearance' : getTagColor(tag));
         el.textContent = tag;
         el.style.animationDelay = '0ms';
 
-        const pos = TAG_POSITIONS[_tagSlotIdx % TAG_POSITIONS.length];
-        _tagSlotIdx++;
-        Object.assign(el.style, pos);
+        // Position: fixed left or right, stacked top-down
+        const topPct = TAG_START_Y + col.count * (TAG_ROW_PX / window.innerHeight * 100 * 3.2);
+        if (side === 'left') {
+          el.style.left = TAG_COL_X.left;
+        } else {
+          el.style.right = TAG_COL_X.right;
+        }
+        el.style.top = topPct + '%';
 
         overlay.appendChild(el);
-      }, idx * 150);
+        col.els.push(el);
+        col.count++;
+      }, idx * 160);
       _tagTimeouts.push(tid);
     });
   }
@@ -1855,6 +1950,21 @@
   /* ════════════════════════════════════════════════════════════════
      AVATAR STATE  (SVG wired in Chunk 3)
   ════════════════════════════════════════════════════════════════ */
+
+  // Mouth path shapes by emotional state
+  const MOUTH_PATHS = {
+    idle:         'M91 126 Q100 131 109 126',  // neutral slight downward
+    speaking:     'M91 126 Q100 131 109 126',
+    distressed:   'M91 128 Q100 134 109 128',  // more pronounced frown
+    tearful:      'M92 129 Q100 134 108 129',  // trembling-frown shape
+    anxious:      'M91 127 Q100 131 109 127',  // near-neutral, tight
+    agitated:     'M91 127 Q100 130 109 127',
+    guarded:      'M92 127 Q100 131 108 127',
+    flat_affect:  'M91 128 Q100 128 109 128',  // dead flat line
+    hopeful:      'M91 127 Q100 123 109 127',  // gentle smile — Qy raised
+    confused:     'M92 127 Q100 131 108 128',  // slight asymmetric frown
+  };
+
   function setAvatarState(emotion) {
     const root = document.getElementById('avatar-root');
     if (!root) return;
@@ -1863,6 +1973,12 @@
     root.setAttribute('class', current.replace(/\bstate-\S+/g, '').trim());
     root.classList.add('state-' + emotion);
     state.avatarState = emotion;
+
+    // Morph mouth path for expressiveness
+    const mouth = document.getElementById('avatar-mouth');
+    if (mouth && MOUTH_PATHS[emotion]) {
+      mouth.setAttribute('d', MOUTH_PATHS[emotion]);
+    }
 
     // Restart tearFall animation on group when switching to tearful
     if (emotion === 'tearful') {
@@ -1993,6 +2109,9 @@
       subdomain: enc.subdomain,
     });
 
+    // Persist after every question so partial-session data survives browser close
+    persistScores();
+
     showFeedback(q, isCorrect);
   }
 
@@ -2005,10 +2124,19 @@
 
     document.getElementById('feedback-explanation').textContent = q.explanation || '';
 
-    // Distractor rationale
+    // Distractor rationale — correct answer first (why it's right), then wrong options
     const dr = q.distractor_rationale || {};
     const distEl = document.getElementById('feedback-distractors');
     distEl.innerHTML = '';
+
+    // Show correct-answer rationale if available
+    if (dr[q.correct_answer]) {
+      const correctRow = document.createElement('div');
+      correctRow.className = 'distractor-row distractor-correct';
+      correctRow.innerHTML = `<span class="distractor-letter distractor-letter-correct">Why ${q.correct_answer}?</span><span class="distractor-text distractor-text-correct">${escapeHtml(dr[q.correct_answer])}</span>`;
+      distEl.appendChild(correctRow);
+    }
+
     ['A','B','C','D'].forEach(letter => {
       if (letter === q.correct_answer || !dr[letter]) return;
       const row = document.createElement('div');
@@ -2247,28 +2375,48 @@
   function retrySession() { location.reload(); }
 
   /* ════════════════════════════════════════════════════════════════
-     KEYBOARD SHORTCUTS  (question screen only)
+     KEYBOARD SHORTCUTS
   ════════════════════════════════════════════════════════════════ */
   document.addEventListener('keydown', (e) => {
-    // Only active on the question screen
     const active = document.querySelector('.screen.active');
-    if (!active || active.id !== 'screen-question') return;
+    if (!active) return;
 
-    // A/B/C/D — select answer (only before answering)
-    if (!state.answered) {
-      const key = e.key.toUpperCase();
-      if (['A','B','C','D'].includes(key)) {
+    // ── Encounter screen ──────────────────────────────────────────
+    if (active.id === 'screen-encounter' && !state.reviewMode) {
+      // Escape or Backspace — skip typewriter (same as clicking bubble)
+      if (e.key === 'Escape' || e.key === 'Backspace') {
+        if (state.typewriterInt !== null) {
+          e.preventDefault();
+          document.getElementById('speech-bubble').click();
+          return;
+        }
+      }
+      // Space or Enter — advance phase (only when not mid-typewriter)
+      if ((e.key === ' ' || e.key === 'Enter') && state.typewriterInt === null && !state.phaseRunning) {
         e.preventDefault();
-        const btn = document.querySelector(`.option-btn[data-letter="${key}"]`);
-        if (btn && !btn.disabled) selectAnswer(key);
+        const btn = document.getElementById('btn-advance');
+        if (btn && !btn.classList.contains('hidden')) advancePhase();
         return;
       }
     }
 
-    // Enter — advance to next question once feedback is visible
-    if (state.answered && e.key === 'Enter') {
-      e.preventDefault();
-      nextQuestion();
+    // ── Question screen ───────────────────────────────────────────
+    if (active.id === 'screen-question') {
+      // A/B/C/D — select answer (only before answering)
+      if (!state.answered) {
+        const key = e.key.toUpperCase();
+        if (['A','B','C','D'].includes(key)) {
+          e.preventDefault();
+          const btn = document.querySelector(`.option-btn[data-letter="${key}"]`);
+          if (btn && !btn.disabled) selectAnswer(key);
+          return;
+        }
+      }
+      // Enter / Space — advance once feedback is visible
+      if (state.answered && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        nextQuestion();
+      }
     }
   });
 
