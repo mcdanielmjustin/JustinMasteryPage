@@ -223,8 +223,10 @@ var _splitOn = false;
 function toggleSplit() {
   _splitOn = !_splitOn;
   if (_splitOn) {
-    // Clip x > 0 (right hemisphere), revealing the left hemisphere's medial face
-    renderer.clippingPlanes = [new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0)];
+    // Clip x < 0 (left hemisphere), revealing the right hemisphere's medial face.
+    // Camera moves to medial preset at (-3.5, 0, 0), looking toward +x —
+    // this correctly faces the right hemisphere's medial surface (normals toward -x).
+    renderer.clippingPlanes = [new THREE.Plane(new THREE.Vector3(1, 0, 0), 0)];
   } else {
     renderer.clippingPlanes = [];
   }
