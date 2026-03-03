@@ -75,6 +75,143 @@ consequential architectural decision unilaterally.
 
 ---
 
+### 7. Do not take the lazy route — scrutinize this document
+
+This plan contains several lazy compromises that were written under time pressure. Before
+implementing any phase, identify whether it is the *right* solution or just the *easy* one.
+The goal is a production-quality 3D brain engine, not a patched-together demo. The following
+sections of this document have been identified as lazy and must be treated with skepticism:
+
+#### ⚠️ Lazy: Phase 3B — "Throttle raycasting to 30Hz"
+This is an explicit cop-out. It says so in the document: "As an interim fix before 3A."
+A 30Hz raycast throttle is a band-aid that halves responsiveness while leaving the
+fundamental problem (raycasting a 100k-face mesh) completely unsolved. Do not implement 3B.
+Go directly to 3A, and use `three-mesh-bvh` (a proven library) instead of a proxy mesh:
+
+```js
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+THREE.Mesh.prototype.raycast = acceleratedRaycast;
+// After loading cortex:
+cortexMesh.geometry.computeBoundsTree();
+```
+
+`three-mesh-bvh` makes raycasting the 100k-face cortex as fast as raycasting a 1k-face mesh
+with no proxy needed, no extra assets, and no loss of intersection precision. It is the
+industry standard for this problem.
+
+---
+
+#### ⚠️ Lazy: Phase 2B — Material pooling (80 pre-compiled instances)
+The plan labels material pooling as "Approach A (simpler)" and calls the right solution
+"Approach B" without actually specifying it. Creating 80 pre-compiled material instances
+(4 variants × 20 regions) is wasteful in both memory and load time. It also still requires
+material swaps which, while not recompiling shaders, still cause draw state changes.
+
+The correct solution is a single **custom `ShaderMaterial`** for all region overlays with
+uniform arrays driving per-region state. One shader, one set of uniforms, zero recompilation
+ever, and state changes that are a single `uniform1fv` call:
+
+```glsl
+// Fragment shader concept:
+uniform vec3  uRegionColors[20];
+uniform float uRegionEmissive[20];   // 0.0 = dim, 0.18 = default, 0.55 = hover, 0.70 = selected
+uniform float uRegionOpacity[20];
+attribute float aRegionIndex;         // per-vertex region ID baked at merge time
+
+void main() {
+  int idx = int(aRegionIndex);
+  vec3  col = uRegionColors[idx];
+  float em  = uRegionEmissive[idx];
+  float op  = uRegionOpacity[idx];
+  // ... PBR lighting with col and em
+  gl_FragColor = vec4(col * (1.0 + em), op);
+}
+```
+
+On hover, update one float in the uniform array — no material swap, no shader recompile,
+no draw call change. This is how professional real-time 3D applications handle per-instance
+state. It requires Phase 1B (merged geometry) to be done first, which is correct ordering.
+
+---
+
+#### ⚠️ Lazy: Phase 1B — InstancedMesh dismissed without full exploration
+The plan says "InstancedMesh — impossible since shapes differ — skip." This dismissal is
+premature. While true that InstancedMesh requires identical geometry per instance, the
+plan skips over the far more powerful solution that Phase 1B should actually implement:
+
+**The correct approach is merged geometry + vertex attribute region index + custom shader.**
+Not `mergeGeometries()` with a shared generic material (as the plan sketches), but a
+purpose-built architecture where:
+1. All 20 region geometries are merged at load time into one `BufferGeometry`
+2. A custom `aRegionIndex` vertex attribute (float) is written during merge, encoding
+   which region each vertex belongs to (0–19)
+3. A single `ShaderMaterial` reads `aRegionIndex` to look up that region's current
+   color/state from uniform arrays (see Phase 2B above)
+4. Result: 1 draw call for all 20 regions, zero per-region materials, zero per-region
+   draw state, state changes are `gl.uniform1fv()` calls (microseconds)
+
+This is the *same pattern* that Unity, Unreal, and production WebGL engines use for
+rendering many objects with per-instance state. It is the ambitious solution.
+
+---
+
+#### ⚠️ Lazy: Priority table front-loads easy work
+The priority table puts demand rendering (Easy) and 30Hz throttle (Easy, and now
+eliminated) first because they are quick wins. The ambitious priority order is different:
+the architectural changes (merged geometry + custom shader) should be done first because
+they unlock all downstream optimizations. Easy cosmetic fixes done before the architecture
+is right will require rework. Correct priority:
+
+1. `three-mesh-bvh` for raycasting (unlocks accurate 60Hz hover with no cost)
+2. Merged geometry + vertex attribute region index (architectural foundation)
+3. Custom ShaderMaterial with uniform arrays (eliminates all recompilation)
+4. Demand rendering with proper OrbitControls damping support (idle GPU = 0%)
+5. JSON → GLB for brainstem/cerebellum + Draco/meshopt compression for all GLBs
+6. KTX2/Basis Universal for all textures
+7. Stencil buffer or EffectComposer OutlinePass for selection outlines
+
+---
+
+#### ⚠️ Lazy: Phase 4B uses Draco when meshopt is superior for Three.js
+Draco requires a WASM decoder that must fully load before any mesh decompresses.
+`meshoptimizer` (meshopt) is natively supported in Three.js via `MeshoptDecoder`,
+compresses geometry similarly to Draco, and often achieves better compression for
+non-indexed geometry. Use meshopt unless Draco is demonstrably better for a specific file.
+
+```js
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+loader.setMeshoptDecoder(MeshoptDecoder);
+```
+
+Compress with:
+```bash
+npx gltf-transform optimize input.glb output.glb --compress meshopt
+```
+
+---
+
+#### ⚠️ Lazy: Phase 5B — Texture disposal is solving the wrong problem
+Region overlays use solid-color materials — they do not have unique texture maps.
+Disposing textures on region hide addresses a problem that barely exists for overlays.
+The real memory issue is the shared envMap and the cortex normal map being held in GPU
+VRAM permanently. The right solution is not disposal but proper GPU memory budgeting:
+measure actual VRAM usage with `renderer.info.memory` before and after load, and only
+optimize if measurements show a real problem. Do not prematurely fix things that are not
+measured bottlenecks.
+
+---
+
+#### The standard to hold yourself to
+Before writing any implementation, ask: "Is this how a professional 3D graphics engineer
+would build this, or is this how someone gets it working and moves on?" The goal is the
+former. When the plan offers a simpler alternative alongside the correct one, always
+implement the correct one. When the plan acknowledges a limitation or compromise, treat
+that as a signal to find a better approach rather than accepting the limitation.
+
+---
+
 ## 1. Current Architecture Overview
 
 ### What the engine does
