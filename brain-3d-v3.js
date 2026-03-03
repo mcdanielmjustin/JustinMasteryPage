@@ -523,8 +523,20 @@ function loadRegion(regionId, entry, permanent) {
         mat._origEmissive  = baseColor.clone();
         mat._origRoughness = mat.roughness;
 
-        gltf.scene.traverse(function(child) {
-          if (!child.isMesh) return;
+        // Collect meshes iteratively to avoid stack overflow on deeply nested GLBs
+        var meshList = [];
+        var stack = [gltf.scene];
+        while (stack.length > 0) {
+          var node = stack.pop();
+          if (node.isMesh) meshList.push(node);
+          if (node.children) {
+            for (var si = 0; si < node.children.length; si++) {
+              stack.push(node.children[si]);
+            }
+          }
+        }
+
+        meshList.forEach(function(child) {
           child.geometry.computeVertexNormals();
           child.material      = mat;
           child.name          = regionId;

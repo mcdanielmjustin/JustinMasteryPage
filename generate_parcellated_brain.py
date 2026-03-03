@@ -202,12 +202,10 @@ def decimate_if_needed(verts, faces, max_faces):
 
 
 def export_region_glb(verts, faces, out_path, color=None):
-    """Export a solid-color region mesh as GLB."""
-    if color is None:
-        color = [212, 170, 144, 255]
-    vertex_colors = np.tile(color, (len(verts), 1)).astype(np.uint8)
-    vis = trimesh.visual.ColorVisuals(vertex_colors=vertex_colors)
-    mesh = trimesh.Trimesh(vertices=verts, faces=faces, visual=vis, process=False)
+    """Export a region mesh as GLB (geometry only, no vertex colors).
+    JS replaces materials anyway, so ColorVisuals is unnecessary and
+    causes deeply nested GLTF scene graphs that overflow the stack."""
+    mesh = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
     mesh.export(str(out_path))
     return out_path.stat().st_size
 
