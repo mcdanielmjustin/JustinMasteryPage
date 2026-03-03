@@ -11,6 +11,70 @@
 
 ---
 
+## Instructions for Claude — Read This First
+
+This document is a living plan, not a rigid script. Before starting any work, read the
+entire document to understand where the project stands. Then do the following:
+
+### 1. Assess current state before touching anything
+Run through this checklist at the start of every session:
+- Pull latest from `origin/master` and check `git log --oneline -10` to see what has
+  already been done since this document was written.
+- Open `brain-3d-v3.js` and read the top comment block — it reflects the actual
+  current architecture. If it contradicts this document, trust the code.
+- Check if the priority table in Section 4 still reflects reality. If earlier phases
+  have already been completed, cross them off mentally and start from the next uncompleted item.
+- Note the `Last updated` date above. If significant time has passed, re-read the key
+  source files before assuming the plan is still accurate.
+
+### 2. Adapt and pivot freely
+This plan was written at a specific moment in time. The codebase will evolve. You are
+expected to deviate from this plan whenever the situation calls for it:
+- If a planned approach turns out to be incompatible with how the code has evolved,
+  **abandon it and find a better path**. Do not force a plan that no longer fits.
+- If you discover a performance issue not listed here that is clearly more impactful
+  than the next planned phase, **address it first** and note it in this document.
+- If a phase turns out to be unnecessary because a different fix already solved the
+  underlying problem, **skip it** and move on.
+- If the Three.js version has been upgraded or a new library introduced, re-evaluate
+  whether the implementation sketches in this plan still apply.
+
+### 3. Validate as you go, not just at the end
+After each sub-phase:
+- Open `http://localhost:8080/brain-exercise-30.html` and confirm the brain still
+  renders correctly with all features intact (split, glass, hover, quiz).
+- Check the browser console for errors or new warnings.
+- Verify draw call count using the Chrome DevTools Performance tab or Three.js stats.
+- If something broke that you cannot quickly fix, **revert that change** and document
+  what happened in this file before moving to the next item.
+
+### 4. Update this document as work progresses
+After completing any phase or sub-phase:
+- Mark it complete by adding `✅ Done — [date]` next to the phase heading.
+- If you pivoted from the plan, add a brief `> Note:` block under the phase explaining
+  what was actually done and why it differed.
+- Update the `Last updated` date at the top of this file.
+- Commit this document alongside the code changes so the plan stays in sync with reality.
+
+### 5. Non-negotiables — never compromise these
+No matter how the plan evolves, these constraints are fixed:
+- The cortex must retain `MeshPhysicalMaterial` with normal map + sulcal AO texture.
+  This is the core quality differentiator. Do not downgrade the cortex material.
+- The atlas-derived brainstem and cerebellum geometry must remain anatomically accurate.
+  Format changes (JSON → GLB) are fine. Mesh simplification beyond what already exists is not.
+- The quiz engine in `brain-exercise-30.html` must remain fully functional after every change.
+- All toggles (split, glass, cerebellum, brainstem) must continue to work correctly.
+- Visual quality must be equal to or better than the current state after every commit.
+  Performance improvements that degrade appearance are not acceptable.
+
+### 6. When in doubt, ask
+If you encounter an ambiguous situation — a design decision with real tradeoffs, a change
+that might affect quiz behavior, or a phase that seems to conflict with a non-negotiable —
+stop and ask the user before proceeding. It is better to pause and align than to make a
+consequential architectural decision unilaterally.
+
+---
+
 ## 1. Current Architecture Overview
 
 ### What the engine does
