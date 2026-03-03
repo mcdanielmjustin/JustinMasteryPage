@@ -1,312 +1,192 @@
 #!/usr/bin/env python3
 """
-generate_parcellated_brain.py — Brain Pathology 3.0 Region Generator
+generate_parcellated_brain.py — Brain Pathology 3.0 Region Generator (v2)
 
-Splits the fsaverage7 pial cortex into per-region meshes using the
-Desikan-Killiany atlas (aparc.annot) and extracts subcortical structures
-from FreeSurfer's aseg volumetric segmentation via marching cubes.
+Uses the Harvard-Oxford CORTICAL atlas (volumetric, MNI space) to project
+parcellation labels onto fsaverage7 pial surface vertices. This avoids
+the need for FreeSurfer annotation files (aparc.annot).
+
+For subcortical structures, uses the Harvard-Oxford SUBCORTICAL atlas
+(same approach as generate_hires_subcortical.py) via marching cubes.
 
 OUTPUTS (all in data/brain_meshes/):
-  Cortical:
-    frontal_lobe.glb        — merged DK parcels for frontal lobe
-    prefrontal_cortex.glb   — superiorfrontal region (PFC proxy)
-    brocas_area.glb         — parsopercularis + parstriangularis (LH only)
-    motor_cortex.glb        — precentral gyrus
-    somatosensory_cortex.glb — postcentral gyrus
-    parietal_lobe.glb       — merged DK parcels for parietal lobe
-    temporal_lobe.glb       — merged DK parcels for temporal lobe
-    wernickes_area.glb      — superiortemporal posterior (LH only)
-    occipital_lobe.glb      — merged DK parcels for occipital lobe
-    cingulate_gyrus.glb     — rostral + caudal anterior + posterior cingulate
-    medial_frontal.glb      — medialorbitofrontal + frontalpole
-    full_hemisphere.glb     — entire right hemisphere (for glass mode)
+  Cortical (surface projection from HO cortical atlas):
+    frontal_lobe.glb, prefrontal_cortex.glb, brocas_area.glb,
+    motor_cortex.glb, somatosensory_cortex.glb, parietal_lobe.glb,
+    temporal_lobe.glb, wernickes_area.glb, occipital_lobe.glb,
+    cingulate_gyrus.glb, medial_frontal.glb, insula.glb,
+    full_hemisphere.glb (glass mode)
 
-  Subcortical (from aseg via marching cubes):
-    thalamus.glb            — L+R thalamus
-    hippocampus.glb         — L+R hippocampus
-    amygdala.glb            — L+R amygdala
-    caudate.glb             — L+R caudate nucleus
-    putamen.glb             — L+R putamen
-    globus_pallidus.glb     — L+R globus pallidus
+  Subcortical (marching cubes from HO subcortical atlas):
+    thalamus.glb, hippocampus.glb, amygdala.glb,
+    caudate.glb, putamen.glb, globus_pallidus.glb,
+    nucleus_accumbens.glb
 
-  Already generated separately:
-    brainstem.glb           — from generate_hires_subcortical.py
-    cerebellum.glb          — from generate_hires_subcortical.py
+  brainstem + cerebellum: generated separately (JSON meshes)
 
-  Manifest:
-    brain_regions_manifest.json — file paths + metadata for brain-3d-v3.js
-
-PREREQUISITES:
-  pip install nibabel nilearn trimesh numpy scipy scikit-image pillow
+  brain_regions_manifest.json — metadata for brain-3d-v3.js
 
 USAGE:
+  pip install nibabel nilearn trimesh numpy scipy scikit-image fast_simplification
   python generate_parcellated_brain.py
 """
 
-import sys
-import gc
-import json
-import time
+import sys, gc, json, os, ssl, time
+import warnings
 import numpy as np
 from pathlib import Path
 
 print("=" * 60)
-print("generate_parcellated_brain.py — Brain Pathology 3.0")
+print("generate_parcellated_brain.py — Brain Pathology 3.0 (v2)")
 print("=" * 60)
 
-print("\n[0/8] Importing libraries...")
+print("\n[0] Importing libraries...")
 import nibabel as nib
-from nilearn import datasets
+from scipy import ndimage
+from skimage import measure
 import trimesh
-import trimesh.visual
 
-# Optional: for subcortical marching cubes
-try:
-    from scipy import ndimage
-    from skimage import measure
-    HAS_SCIPY = True
-except ImportError:
-    HAS_SCIPY = False
-    print("  WARNING: scipy/skimage not available — subcortical extraction skipped")
+# SSL workaround for Windows
+ssl._create_default_https_context = ssl._create_unverified_context
+import requests as _req
+_orig_send = _req.Session.send
+def _patched_send(self, *a, **kw):
+    kw['verify'] = False
+    return _orig_send(self, *a, **kw)
+_req.Session.send = _patched_send
+warnings.filterwarnings('ignore', message='.*Unverified.*')
+
+from nilearn import datasets
 
 OUTPUT_DIR = Path("data/brain_meshes")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# CONFIGURATION — which DK parcels map to which EPPP-relevant regions
+# COORDINATE TRANSFORM
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Desikan-Killiany parcel names → our region IDs
-# Each value is a list of DK parcel names (as they appear in aparc.annot)
-DK_TO_REGION = {
+# The existing full_brain_hires.glb uses Transform B: (verts - centre) * scale
+# This is loaded by brain-3d-v3.js via GLTFLoader.
+# Region overlays must use the SAME transform so they align with the cortex.
+
+TRANSFORM_JSON = OUTPUT_DIR / "cortex_transform.json"
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HO CORTICAL ATLAS → EPPP REGION MAPPING
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Harvard-Oxford cortical label indices → our EPPP region IDs
+# Each key is our region ID; each value is a list of HO cortical label indices
+HO_TO_REGION = {
     "frontal_lobe": [
-        "superiorfrontal", "rostralmiddlefrontal", "caudalmiddlefrontal",
-        "lateralorbitofrontal", "frontalpole",
-        "parsopercularis", "parstriangularis", "parsorbitalis",
-        "medialorbitofrontal", "paracentral",
+        1,   # Frontal Pole
+        3,   # Superior Frontal Gyrus
+        4,   # Middle Frontal Gyrus
+        5,   # IFG pars triangularis
+        6,   # IFG pars opercularis
+        7,   # Precentral Gyrus
+        25,  # Frontal Medial Cortex
+        26,  # Juxtapositional Lobule (SMA)
+        33,  # Frontal Orbital Cortex
+        41,  # Frontal Opercular Cortex
     ],
     "prefrontal_cortex": [
-        "superiorfrontal", "rostralmiddlefrontal", "frontalpole",
+        1,   # Frontal Pole
+        3,   # Superior Frontal Gyrus
+        4,   # Middle Frontal Gyrus
+        33,  # Frontal Orbital Cortex
     ],
     "brocas_area": [
-        "parsopercularis", "parstriangularis",
+        5,   # IFG pars triangularis
+        6,   # IFG pars opercularis
     ],
     "motor_cortex": [
-        "precentral",
+        7,   # Precentral Gyrus
+        26,  # Juxtapositional Lobule (SMA)
     ],
     "somatosensory_cortex": [
-        "postcentral",
+        17,  # Postcentral Gyrus
     ],
     "parietal_lobe": [
-        "superiorparietal", "inferiorparietal",
-        "supramarginal", "precuneus",
+        17,  # Postcentral Gyrus
+        18,  # Superior Parietal Lobule
+        19,  # Supramarginal Gyrus ant
+        20,  # Supramarginal Gyrus post
+        21,  # Angular Gyrus
+        31,  # Precuneous Cortex
     ],
     "temporal_lobe": [
-        "superiortemporal", "middletemporal", "inferiortemporal",
-        "bankssts", "transversetemporal", "fusiform",
-        "entorhinal", "temporalpole", "parahippocampal",
+        8,   # Temporal Pole
+        9,   # STG anterior
+        10,  # STG posterior
+        11,  # MTG anterior
+        12,  # MTG posterior
+        13,  # MTG temporooccipital
+        14,  # ITG anterior
+        15,  # ITG posterior
+        16,  # ITG temporooccipital
+        34,  # Parahippocampal ant
+        35,  # Parahippocampal post
+        37,  # Temporal Fusiform ant
+        38,  # Temporal Fusiform post
+        44,  # Planum Polare
+        45,  # Heschl's Gyrus
+        46,  # Planum Temporale
     ],
     "wernickes_area": [
-        "superiortemporal",  # posterior portion — we'll use the full parcel
+        10,  # STG posterior
+        46,  # Planum Temporale
     ],
     "occipital_lobe": [
-        "lateraloccipital", "cuneus", "pericalcarine", "lingual",
+        22,  # Lateral Occipital sup
+        23,  # Lateral Occipital inf
+        24,  # Intracalcarine Cortex
+        32,  # Cuneal Cortex
+        36,  # Lingual Gyrus
+        39,  # Temporal Occipital Fusiform
+        40,  # Occipital Fusiform
+        47,  # Supracalcarine Cortex
+        48,  # Occipital Pole
     ],
     "cingulate_gyrus": [
-        "rostralanteriorcingulate", "caudalanteriorcingulate",
-        "posteriorcingulate", "isthmuscingulate",
+        28,  # Paracingulate Gyrus
+        29,  # Cingulate ant
+        30,  # Cingulate post
+        27,  # Subcallosal Cortex
     ],
     "medial_frontal": [
-        "medialorbitofrontal", "frontalpole",
+        25,  # Frontal Medial Cortex
+        1,   # Frontal Pole
     ],
     "insula": [
-        "insula",
+        2,   # Insular Cortex
+        42,  # Central Opercular Cortex
     ],
 }
 
-# Broca's and Wernicke's are left-hemisphere only
+# Broca's and Wernicke's: left-hemisphere only
 LH_ONLY_REGIONS = {"brocas_area", "wernickes_area"}
 
-# FreeSurfer aseg label IDs for subcortical structures
-ASEG_LABELS = {
-    "thalamus":        [10, 49],     # Left=10, Right=49
-    "hippocampus":     [17, 53],
-    "amygdala":        [18, 54],
-    "caudate":         [11, 50],
-    "putamen":         [12, 51],
-    "globus_pallidus": [13, 52],
-    "nucleus_accumbens": [26, 58],
+# Harvard-Oxford subcortical atlas label values for marching cubes
+HO_SUBCORTICAL = {
+    "thalamus":          [4, 15],   # L Thal=4, R Thal=15
+    "hippocampus":       [6, 17],   # L Hipp=6, R Hipp=17
+    "amygdala":          [5, 16],   # L Amyg=5, R Amyg=16
+    "caudate":           [3, 14],   # L Caud=3, R Caud=14
+    "putamen":           [7, 18],   # L Put=7, R Put=18
+    "globus_pallidus":   [8, 19],   # L GP=8, R GP=19
+    "nucleus_accumbens": [9, 20],   # L NAcc=9, R NAcc=20
 }
 
-# Max faces per region mesh (decimate if exceeded)
+# Max faces per region mesh
 MAX_FACES = 4000
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 1: Load fsaverage7 surfaces + annotations
+# HELPERS
 # ═══════════════════════════════════════════════════════════════════════════════
-
-print("\n[1/8] Fetching fsaverage7 surfaces...")
-surf = datasets.fetch_surf_fsaverage('fsaverage7')
-
-print("[2/8] Loading pial surfaces + aparc annotations...")
-
-# Left hemisphere
-lh_pial   = nib.load(surf.pial_left)
-lh_verts  = lh_pial.darrays[0].data.astype(np.float32)
-lh_faces  = lh_pial.darrays[1].data.astype(np.int32)
-print(f"  LH pial: {len(lh_verts):,} verts, {len(lh_faces):,} faces")
-
-# Right hemisphere
-rh_pial   = nib.load(surf.pial_right)
-rh_verts  = rh_pial.darrays[0].data.astype(np.float32)
-rh_faces  = rh_pial.darrays[1].data.astype(np.int32)
-print(f"  RH pial: {len(rh_verts):,} verts, {len(rh_faces):,} faces")
-
-# Load aparc annotation (Desikan-Killiany)
-# Try to find the annotation files from FreeSurfer subjects directory
-# They should be alongside the nilearn-downloaded data
-import os
-
-# nilearn stores fsaverage7 annotation files
-fsavg_dir = Path(surf.pial_left).parent
-lh_annot_path = fsavg_dir / "lh.aparc.annot"
-rh_annot_path = fsavg_dir / "rh.aparc.annot"
-
-# Alternative: check FreeSurfer subjects directory
-FS_SUBJECTS = os.environ.get("SUBJECTS_DIR", "")
-if not lh_annot_path.exists() and FS_SUBJECTS:
-    lh_annot_path = Path(FS_SUBJECTS) / "fsaverage7" / "label" / "lh.aparc.annot"
-    rh_annot_path = Path(FS_SUBJECTS) / "fsaverage7" / "label" / "rh.aparc.annot"
-
-# Another fallback: nilearn data directory
-if not lh_annot_path.exists():
-    # Try nilearn's own downloaded copy
-    nilearn_dir = Path(surf.pial_left).parent.parent
-    for candidate in [
-        nilearn_dir / "label" / "lh.aparc.annot",
-        nilearn_dir / "lh.aparc.annot",
-        Path.home() / "nilearn_data" / "freesurfer" / "fsaverage7" / "label" / "lh.aparc.annot",
-    ]:
-        if candidate.exists():
-            lh_annot_path = candidate
-            rh_annot_path = candidate.parent / "rh.aparc.annot"
-            break
-
-has_annot = lh_annot_path.exists() and rh_annot_path.exists()
-
-if has_annot:
-    print(f"  Loading annotations: {lh_annot_path}")
-    lh_labels, lh_ctab, lh_names = nib.freesurfer.read_annot(str(lh_annot_path))
-    rh_labels, rh_ctab, rh_names = nib.freesurfer.read_annot(str(rh_annot_path))
-    # Decode label names
-    lh_names = [n.decode('utf-8') if isinstance(n, bytes) else n for n in lh_names]
-    rh_names = [n.decode('utf-8') if isinstance(n, bytes) else n for n in rh_names]
-    print(f"  LH parcels: {len(lh_names)} ({', '.join(lh_names[:6])}...)")
-    print(f"  RH parcels: {len(rh_names)} ({', '.join(rh_names[:6])}...)")
-else:
-    print("  WARNING: aparc.annot not found — will use bounding-box region extraction")
-    print(f"  Looked in: {lh_annot_path}")
-    lh_labels = lh_names = rh_labels = rh_names = None
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 2: Compute coordinate transform (match hires brain GLB)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-print("\n[3/8] Computing coordinate transform...")
-
-TRANSFORM_JSON = OUTPUT_DIR / "cortex_transform.json"
-
-if TRANSFORM_JSON.exists():
-    _t     = json.loads(TRANSFORM_JSON.read_text())
-    centre = np.array(_t["centre"], dtype=np.float32)
-    scale  = float(_t["scale"])
-    print(f"  Loaded from {TRANSFORM_JSON.name}")
-else:
-    all_v  = np.vstack([lh_verts, rh_verts])
-    centre = (all_v.max(axis=0) + all_v.min(axis=0)) * 0.5
-    verts_c = all_v - centre
-    scale  = float(2.0 / (verts_c.max(axis=0) - verts_c.min(axis=0)).max())
-    del all_v, verts_c
-    gc.collect()
-    TRANSFORM_JSON.write_text(json.dumps(
-        {"centre": [float(c) for c in centre], "scale": scale}, indent=2))
-    print(f"  Computed and saved to {TRANSFORM_JSON.name}")
-
-print(f"  centre={np.round(centre, 3)}, scale={scale:.8f}")
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 3: Transform vertices to mesh coordinate space
-# ═══════════════════════════════════════════════════════════════════════════════
-
-# The existing brain-3d.js uses a different coordinate system:
-# x = -x_FS (flip), y = z_FS (superior=up), z = y_FS (anterior=depth)
-# Plus an offset. But the hires brain GLB uses FreeSurfer RAS directly,
-# just centred and scaled. Let's match the hires brain's coordinate system.
-
-lh_verts_mesh = ((lh_verts - centre) * scale).astype(np.float32)
-rh_verts_mesh = ((rh_verts - centre) * scale).astype(np.float32)
-
-# For the "full hemisphere" glass mesh, we combine both hemispheres
-# but only keep the right hemisphere for the overlay
-nv_lh = len(lh_verts_mesh)
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 4: Extract cortical regions
-# ═══════════════════════════════════════════════════════════════════════════════
-
-print("\n[4/8] Extracting cortical regions from DK parcellation...")
-
-manifest = {}
-
-
-def extract_region_from_annot(region_id, dk_parcels, verts, faces, labels, names,
-                              hemi_label="LH"):
-    """
-    Given a list of DK parcel names, find matching label indices,
-    collect faces whose ALL 3 vertices are in those labels,
-    and build a trimesh from the result.
-    """
-    # Find label indices for the requested parcels
-    target_indices = set()
-    for pname in dk_parcels:
-        for i, n in enumerate(names):
-            if n.lower() == pname.lower():
-                target_indices.add(i)
-                break
-
-    if not target_indices:
-        print(f"    {hemi_label} {region_id}: no matching parcels found for {dk_parcels}")
-        return None, None
-
-    # Find vertices belonging to these parcels
-    vert_mask = np.zeros(len(verts), dtype=bool)
-    for idx in target_indices:
-        vert_mask |= (labels == idx)
-
-    # Collect faces where ALL 3 vertices are in the target parcels
-    face_mask = (vert_mask[faces[:, 0]] &
-                 vert_mask[faces[:, 1]] &
-                 vert_mask[faces[:, 2]])
-    region_faces = faces[face_mask]
-
-    if len(region_faces) == 0:
-        print(f"    {hemi_label} {region_id}: 0 faces matched")
-        return None, None
-
-    # Re-index to use only needed vertices
-    used_verts = np.unique(region_faces)
-    new_index  = np.full(len(verts), -1, dtype=np.int32)
-    new_index[used_verts] = np.arange(len(used_verts), dtype=np.int32)
-    new_faces = new_index[region_faces]
-    new_verts = verts[used_verts]
-
-    return new_verts, new_faces
-
 
 def decimate_if_needed(verts, faces, max_faces):
     """Decimate mesh if it exceeds max_faces."""
@@ -314,7 +194,7 @@ def decimate_if_needed(verts, faces, max_faces):
         return verts, faces
     try:
         mesh = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
-        decimated = mesh.simplify_quadric_decimation(max_faces)
+        decimated = mesh.simplify_quadric_decimation(face_count=max_faces)
         return decimated.vertices.astype(np.float32), decimated.faces.astype(np.int32)
     except Exception as e:
         print(f"    Decimation failed ({e}), keeping original {len(faces)} faces")
@@ -324,232 +204,312 @@ def decimate_if_needed(verts, faces, max_faces):
 def export_region_glb(verts, faces, out_path, color=None):
     """Export a solid-color region mesh as GLB."""
     if color is None:
-        color = [212, 170, 144, 255]  # default tissue color
+        color = [212, 170, 144, 255]
     vertex_colors = np.tile(color, (len(verts), 1)).astype(np.uint8)
     vis = trimesh.visual.ColorVisuals(vertex_colors=vertex_colors)
     mesh = trimesh.Trimesh(vertices=verts, faces=faces, visual=vis, process=False)
     mesh.export(str(out_path))
-    sz = out_path.stat().st_size
-    return sz
+    return out_path.stat().st_size
 
 
-# Process each cortical region
-for region_id, dk_parcels in DK_TO_REGION.items():
-    print(f"\n  Region: {region_id}")
+def voxel_label_for_vertices(verts_mni, atlas_data, atlas_affine):
+    """
+    For each surface vertex (in MNI mm), find the atlas voxel label.
+    Uses nearest-neighbor lookup in the volumetric atlas.
+    """
+    # MNI mm → voxel indices via inverse affine
+    inv_affine = np.linalg.inv(atlas_affine)
+    ones = np.ones((len(verts_mni), 1), dtype=np.float64)
+    coords_h = np.hstack([verts_mni.astype(np.float64), ones])
+    vox_coords = (inv_affine @ coords_h.T).T[:, :3]
 
-    if not has_annot:
-        print(f"    Skipped (no annotation data)")
-        continue
+    # Round to nearest voxel
+    vox_ijk = np.round(vox_coords).astype(np.int32)
 
-    all_verts_list = []
-    all_faces_list = []
-    vert_offset = 0
+    # Clamp to volume bounds
+    for dim in range(3):
+        vox_ijk[:, dim] = np.clip(vox_ijk[:, dim], 0, atlas_data.shape[dim] - 1)
 
-    # Left hemisphere — always included for all regions
-    v, f = extract_region_from_annot(
-        region_id, dk_parcels,
-        lh_verts_mesh, lh_faces, lh_labels, lh_names, "LH"
-    )
+    # Look up labels
+    labels = atlas_data[vox_ijk[:, 0], vox_ijk[:, 1], vox_ijk[:, 2]]
+    return labels.astype(np.int32)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 1: Load fsaverage7 surfaces
+# ═══════════════════════════════════════════════════════════════════════════════
+
+print("\n[1/7] Fetching fsaverage7 pial surfaces...")
+surf = datasets.fetch_surf_fsaverage('fsaverage7')
+
+lh_pial = nib.load(surf.pial_left)
+lh_verts_mni = lh_pial.darrays[0].data.astype(np.float32)
+lh_faces = lh_pial.darrays[1].data.astype(np.int32)
+print(f"  LH pial: {len(lh_verts_mni):,} verts, {len(lh_faces):,} faces")
+
+rh_pial = nib.load(surf.pial_right)
+rh_verts_mni = rh_pial.darrays[0].data.astype(np.float32)
+rh_faces = rh_pial.darrays[1].data.astype(np.int32)
+print(f"  RH pial: {len(rh_verts_mni):,} verts, {len(rh_faces):,} faces")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 2: Load/compute coordinate transform
+# ═══════════════════════════════════════════════════════════════════════════════
+
+print("\n[2/7] Loading coordinate transform...")
+if TRANSFORM_JSON.exists():
+    _t = json.loads(TRANSFORM_JSON.read_text())
+    centre = np.array(_t["centre"], dtype=np.float32)
+    scale = float(_t["scale"])
+    print(f"  Loaded: centre={np.round(centre,3)}, scale={scale:.8f}")
+else:
+    all_v = np.vstack([lh_verts_mni, rh_verts_mni])
+    centre = (all_v.max(axis=0) + all_v.min(axis=0)) * 0.5
+    verts_c = all_v - centre
+    scale = float(2.0 / (verts_c.max(axis=0) - verts_c.min(axis=0)).max())
+    TRANSFORM_JSON.write_text(json.dumps(
+        {"centre": [float(c) for c in centre], "scale": scale}, indent=2))
+    print(f"  Computed: centre={np.round(centre,3)}, scale={scale:.8f}")
+
+# Transform to mesh space (same as full_brain_hires.glb)
+lh_verts_mesh = ((lh_verts_mni - centre) * scale).astype(np.float32)
+rh_verts_mesh = ((rh_verts_mni - centre) * scale).astype(np.float32)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 3: Label surface vertices from HO cortical atlas
+# ═══════════════════════════════════════════════════════════════════════════════
+
+print("\n[3/7] Loading Harvard-Oxford cortical atlas and labeling vertices...")
+ho_cort = datasets.fetch_atlas_harvard_oxford("cort-maxprob-thr25-1mm")
+ho_cort_img = nib.load(ho_cort.maps) if isinstance(ho_cort.maps, (str, bytes)) else ho_cort.maps
+if not hasattr(ho_cort_img, 'get_fdata'):
+    ho_cort_img = nib.load(str(ho_cort.maps))
+ho_cort_data = ho_cort_img.get_fdata(dtype=np.float32)
+
+print(f"  Atlas shape: {ho_cort_data.shape}, {len(ho_cort.labels)} labels")
+print(f"  Projecting labels onto {len(lh_verts_mni) + len(rh_verts_mni):,} surface vertices...")
+
+lh_labels = voxel_label_for_vertices(lh_verts_mni, ho_cort_data, ho_cort_img.affine)
+rh_labels = voxel_label_for_vertices(rh_verts_mni, ho_cort_data, ho_cort_img.affine)
+
+# Count labeled vertices
+lh_labeled = np.sum(lh_labels > 0)
+rh_labeled = np.sum(rh_labels > 0)
+print(f"  LH: {lh_labeled:,}/{len(lh_labels):,} vertices labeled ({100*lh_labeled/len(lh_labels):.1f}%)")
+print(f"  RH: {rh_labeled:,}/{len(rh_labels):,} vertices labeled ({100*rh_labeled/len(rh_labels):.1f}%)")
+
+del ho_cort_data, ho_cort_img
+gc.collect()
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STEP 4: Extract cortical regions
+# ═══════════════════════════════════════════════════════════════════════════════
+
+print("\n[4/7] Extracting cortical regions...")
+
+manifest = {}
+
+
+def extract_region(region_id, ho_indices, verts, faces, labels, hemi):
+    """Extract faces where all 3 vertices have labels in ho_indices."""
+    vert_mask = np.zeros(len(verts), dtype=bool)
+    for idx in ho_indices:
+        vert_mask |= (labels == idx)
+
+    face_mask = (vert_mask[faces[:, 0]] &
+                 vert_mask[faces[:, 1]] &
+                 vert_mask[faces[:, 2]])
+    region_faces = faces[face_mask]
+
+    if len(region_faces) == 0:
+        return None, None
+
+    # Re-index vertices
+    used = np.unique(region_faces)
+    new_idx = np.full(len(verts), -1, dtype=np.int32)
+    new_idx[used] = np.arange(len(used), dtype=np.int32)
+    return verts[used], new_idx[region_faces]
+
+
+for region_id, ho_indices in HO_TO_REGION.items():
+    all_verts = []
+    all_faces = []
+    offset = 0
+
+    # Left hemisphere
+    v, f = extract_region(region_id, ho_indices, lh_verts_mesh, lh_faces, lh_labels, "LH")
     if v is not None:
-        all_verts_list.append(v)
-        all_faces_list.append(f + vert_offset)
-        vert_offset += len(v)
-        print(f"    LH: {len(v):,} verts, {len(f):,} faces")
+        all_verts.append(v)
+        all_faces.append(f + offset)
+        offset += len(v)
 
     # Right hemisphere (skip for LH-only regions)
     if region_id not in LH_ONLY_REGIONS:
-        v, f = extract_region_from_annot(
-            region_id, dk_parcels,
-            rh_verts_mesh, rh_faces, rh_labels, rh_names, "RH"
-        )
+        v, f = extract_region(region_id, ho_indices, rh_verts_mesh, rh_faces, rh_labels, "RH")
         if v is not None:
-            all_verts_list.append(v)
-            all_faces_list.append(f + vert_offset)
-            vert_offset += len(v)
-            print(f"    RH: {len(v):,} verts, {len(f):,} faces")
+            all_verts.append(v)
+            all_faces.append(f + offset)
+            offset += len(v)
 
-    if not all_verts_list:
-        print(f"    EMPTY — skipping")
+    if not all_verts:
+        print(f"  {region_id}: EMPTY — skipping")
         continue
 
-    merged_verts = np.vstack(all_verts_list).astype(np.float32)
-    merged_faces = np.vstack(all_faces_list).astype(np.int32)
+    merged_v = np.vstack(all_verts).astype(np.float32)
+    merged_f = np.vstack(all_faces).astype(np.int32)
 
-    # Decimate if too large
-    merged_verts, merged_faces = decimate_if_needed(merged_verts, merged_faces, MAX_FACES)
+    # Decimate if needed
+    merged_v, merged_f = decimate_if_needed(merged_v, merged_f, MAX_FACES)
 
     out_path = OUTPUT_DIR / f"{region_id}.glb"
-    sz = export_region_glb(merged_verts, merged_faces, out_path)
+    sz = export_region_glb(merged_v, merged_f, out_path)
+
+    # Compute bounds
+    bmin = merged_v.min(axis=0).tolist()
+    bmax = merged_v.max(axis=0).tolist()
 
     manifest[region_id] = {
         "file": f"data/brain_meshes/{region_id}.glb",
         "type": "cortical",
-        "vertexCount": len(merged_verts),
-        "faceCount": len(merged_faces),
+        "vertexCount": len(merged_v),
+        "faceCount": len(merged_f),
+        "bounds": {"min": bmin, "max": bmax},
     }
-    print(f"    Saved: {out_path.name} ({sz/1e3:.0f} KB, "
-          f"{len(merged_verts):,} verts, {len(merged_faces):,} faces)")
+    print(f"  {region_id}: {len(merged_v):,} verts, {len(merged_f):,} faces ({sz/1e3:.0f} KB)")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 5: Full hemisphere for glass mode
 # ═══════════════════════════════════════════════════════════════════════════════
 
-print("\n[5/8] Generating full hemisphere (glass overlay)...")
+print("\n[5/7] Generating full hemisphere (glass overlay)...")
 
-# Right hemisphere only — decimate aggressively for glass mode
+# Use right hemisphere, decimate for performance
 rh_v, rh_f = decimate_if_needed(rh_verts_mesh, rh_faces, 18000)
-
 out_path = OUTPUT_DIR / "full_hemisphere.glb"
 sz = export_region_glb(rh_v, rh_f, out_path, color=[180, 160, 145, 80])
+
+bmin = rh_v.min(axis=0).tolist()
+bmax = rh_v.max(axis=0).tolist()
 manifest["full_hemisphere"] = {
     "file": "data/brain_meshes/full_hemisphere.glb",
     "type": "glass",
     "vertexCount": len(rh_v),
     "faceCount": len(rh_f),
+    "bounds": {"min": bmin, "max": bmax},
 }
-print(f"  Saved: {out_path.name} ({sz/1e3:.0f} KB, "
-      f"{len(rh_v):,} verts, {len(rh_f):,} faces)")
+print(f"  full_hemisphere: {len(rh_v):,} verts, {len(rh_f):,} faces ({sz/1e3:.0f} KB)")
+
+del rh_v, rh_f
+gc.collect()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 6: Extract subcortical structures from aseg
+# STEP 6: Subcortical structures via marching cubes
 # ═══════════════════════════════════════════════════════════════════════════════
 
-print("\n[6/8] Extracting subcortical structures from aseg...")
+print("\n[6/7] Extracting subcortical structures (HO subcortical atlas)...")
 
-if HAS_SCIPY:
-    # Try to find the aseg volume
-    aseg_path = None
+ho_sub = datasets.fetch_atlas_harvard_oxford("sub-maxprob-thr0-1mm")
+ho_sub_img = nib.load(ho_sub.maps) if isinstance(ho_sub.maps, (str, bytes)) else ho_sub.maps
+if not hasattr(ho_sub_img, 'get_fdata'):
+    ho_sub_img = nib.load(str(ho_sub.maps))
+ho_sub_data = ho_sub_img.get_fdata(dtype=np.float32)
 
-    # Check nilearn data directory for FreeSurfer aseg
-    search_paths = [
-        Path.home() / "nilearn_data" / "freesurfer" / "fsaverage7" / "mri" / "aseg.mgz",
-        Path.home() / "nilearn_data" / "freesurfer" / "fsaverage" / "mri" / "aseg.mgz",
-    ]
-    if FS_SUBJECTS:
-        search_paths.insert(0, Path(FS_SUBJECTS) / "fsaverage7" / "mri" / "aseg.mgz")
-        search_paths.insert(1, Path(FS_SUBJECTS) / "fsaverage" / "mri" / "aseg.mgz")
+print(f"  Subcortical atlas: {ho_sub_data.shape}")
+print(f"  Labels: {ho_sub.labels[:10]}...")
 
-    for p in search_paths:
-        if p.exists():
-            aseg_path = p
-            break
+for region_id, label_vals in HO_SUBCORTICAL.items():
+    mask = np.zeros_like(ho_sub_data, dtype=bool)
+    for lv in label_vals:
+        mask |= (ho_sub_data == lv)
+    nvox = mask.sum()
 
-    if aseg_path:
-        print(f"  Loading: {aseg_path}")
-        aseg_img = nib.load(str(aseg_path))
-        aseg_data = aseg_img.get_fdata(dtype=np.float32)
+    if nvox < 50:
+        print(f"  {region_id}: {nvox} voxels — too few, skipping")
+        continue
 
-        for region_id, label_vals in ASEG_LABELS.items():
-            print(f"\n  Region: {region_id}")
-            mask = np.zeros_like(aseg_data, dtype=bool)
-            for lv in label_vals:
-                mask |= (aseg_data == lv)
-            nvox = mask.sum()
-            print(f"    Voxels: {nvox:,} (labels {label_vals})")
+    try:
+        smoothed = ndimage.gaussian_filter(mask.astype(np.float32), sigma=0.5)
+        verts_v, faces_mc, _, _ = measure.marching_cubes(smoothed, level=0.5, step_size=1)
+        ones = np.ones((len(verts_v), 1), dtype=np.float32)
+        verts_mm = (ho_sub_img.affine @ np.hstack([verts_v.astype(np.float32), ones]).T).T[:, :3]
+        # Transform B: same as cortex
+        verts_ms = ((verts_mm - centre) * scale).astype(np.float32)
+        faces_mc = faces_mc.astype(np.int32)
 
-            if nvox < 50:
-                print(f"    Too few voxels — skipping")
-                continue
+        # Fix face winding
+        centroid = verts_ms.mean(axis=0)
+        v0, v1, v2 = verts_ms[faces_mc[:, 0]], verts_ms[faces_mc[:, 1]], verts_ms[faces_mc[:, 2]]
+        fn = np.cross(v1 - v0, v2 - v0)
+        fc = (v0 + v1 + v2) / 3.0
+        dots = np.sum(fn * (fc - centroid), axis=1)
+        inward = dots < 0
+        if inward.sum() > len(faces_mc) // 2:
+            faces_mc = faces_mc[:, ::-1]
+        elif inward.sum() > 0:
+            faces_mc[inward] = faces_mc[inward][:, ::-1]
 
-            try:
-                # Smooth slightly and march
-                smoothed = ndimage.gaussian_filter(mask.astype(np.float32), sigma=0.5)
-                verts_v, faces_mc, _, _ = measure.marching_cubes(
-                    smoothed, level=0.5, step_size=1)
-                ones = np.ones((len(verts_v), 1), dtype=np.float32)
-                verts_mm = (aseg_img.affine @ np.hstack(
-                    [verts_v.astype(np.float32), ones]).T).T[:, :3]
-                verts_ms = ((verts_mm - centre) * scale).astype(np.float32)
-                faces_mc = faces_mc.astype(np.int32)
+        # Decimate
+        verts_ms, faces_mc = decimate_if_needed(verts_ms, faces_mc, MAX_FACES)
 
-                # Decimate
-                verts_ms, faces_mc = decimate_if_needed(verts_ms, faces_mc, MAX_FACES)
+        out_path = OUTPUT_DIR / f"{region_id}.glb"
+        sz = export_region_glb(verts_ms, faces_mc, out_path)
 
-                out_path = OUTPUT_DIR / f"{region_id}.glb"
-                sz = export_region_glb(verts_ms, faces_mc, out_path)
+        manifest[region_id] = {
+            "file": f"data/brain_meshes/{region_id}.glb",
+            "type": "subcortical",
+            "vertexCount": len(verts_ms),
+            "faceCount": len(faces_mc),
+        }
+        print(f"  {region_id}: {len(verts_ms):,} verts, {len(faces_mc):,} faces "
+              f"({nvox:,} vox, {sz/1e3:.0f} KB)")
 
-                manifest[region_id] = {
-                    "file": f"data/brain_meshes/{region_id}.glb",
-                    "type": "subcortical",
-                    "vertexCount": len(verts_ms),
-                    "faceCount": len(faces_mc),
-                }
-                print(f"    Saved: {out_path.name} ({sz/1e3:.0f} KB, "
-                      f"{len(verts_ms):,} verts, {len(faces_mc):,} faces)")
-
-            except Exception as e:
-                print(f"    Marching cubes failed: {e}")
-
-        del aseg_data, aseg_img
-        gc.collect()
-    else:
-        print("  WARNING: aseg.mgz not found — subcortical GLBs not regenerated")
-        print("  Existing subcortical GLBs (if any) will be preserved in manifest")
-        # Preserve existing subcortical entries
-        for region_id in ASEG_LABELS:
-            glb_path = OUTPUT_DIR / f"{region_id}.glb"
-            if glb_path.exists():
-                manifest[region_id] = {
-                    "file": f"data/brain_meshes/{region_id}.glb",
-                    "type": "subcortical",
-                }
-                print(f"  Preserved existing: {region_id}.glb")
-else:
-    print("  Skipped (scipy/skimage not available)")
-    for region_id in ASEG_LABELS:
+    except Exception as e:
+        print(f"  {region_id}: marching cubes failed — {e}")
+        # Preserve existing GLB if available
         glb_path = OUTPUT_DIR / f"{region_id}.glb"
         if glb_path.exists():
             manifest[region_id] = {
                 "file": f"data/brain_meshes/{region_id}.glb",
                 "type": "subcortical",
             }
-            print(f"  Preserved existing: {region_id}.glb")
+            print(f"    Preserved existing: {region_id}.glb")
+
+del ho_sub_data, ho_sub_img
+gc.collect()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 7: Preserve brainstem + cerebellum (generated separately)
+# STEP 7: Brainstem + cerebellum + manifest
 # ═══════════════════════════════════════════════════════════════════════════════
 
-print("\n[7/8] Checking brainstem + cerebellum...")
+print("\n[7/7] Finalizing manifest...")
 
+# Brainstem + cerebellum are generated by generate_subcortical_json.py (JSON meshes)
+# They are loaded separately in brain-3d-v3.js, not via the manifest.
+# But include them in manifest for reference.
 for rid, fname in [("brainstem", "hires_brainstem.glb"), ("cerebellum", "hires_cerebellum.glb")]:
     p = OUTPUT_DIR / fname
     if p.exists():
-        manifest[rid] = {
-            "file": f"data/brain_meshes/{fname}",
-            "type": "subcortical",
-        }
-        print(f"  Found: {fname} ({p.stat().st_size/1e3:.0f} KB)")
-    else:
-        # Fall back to non-hires version
-        p2 = OUTPUT_DIR / f"{rid}.glb"
-        if p2.exists():
-            manifest[rid] = {
-                "file": f"data/brain_meshes/{rid}.glb",
-                "type": "subcortical",
-            }
-            print(f"  Found fallback: {rid}.glb ({p2.stat().st_size/1e3:.0f} KB)")
-        else:
-            print(f"  WARNING: {rid} not found — run generate_hires_subcortical.py first")
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# STEP 8: Write manifest
-# ═══════════════════════════════════════════════════════════════════════════════
-
-print("\n[8/8] Writing manifest...")
+        manifest[rid] = {"file": f"data/brain_meshes/{fname}", "type": "subcortical"}
+        print(f"  {rid}: {p.stat().st_size/1e3:.0f} KB")
 
 manifest_path = OUTPUT_DIR.parent / "brain_regions_manifest.json"
 manifest_path.write_text(json.dumps(manifest, indent=2))
-print(f"  Saved: {manifest_path}")
-print(f"  Regions: {len(manifest)}")
+print(f"\n  Manifest: {manifest_path} ({len(manifest)} regions)")
+
+# Restore SSL
+ssl._create_default_https_context = ssl._create_default_https_context
+_req.Session.send = _orig_send
 
 print("\n" + "=" * 60)
 print("Done! Generated region meshes:")
 for rid, entry in sorted(manifest.items()):
-    verts = entry.get("vertexCount", "?")
-    faces = entry.get("faceCount", "?")
-    print(f"  {rid:30s} {entry['type']:12s} {verts:>6} verts  {faces:>6} faces")
+    v = entry.get("vertexCount", "?")
+    f = entry.get("faceCount", "?")
+    print(f"  {rid:30s} {entry['type']:12s} {str(v):>6} verts  {str(f):>6} faces")
 print("=" * 60)

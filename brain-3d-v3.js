@@ -220,16 +220,30 @@ var loader = new GLTFLoader();
 
 function loadHiresBrain() {
   return new Promise(function(resolve) {
-    loader.load('data/brain_meshes/full_brain_hires.glb',
+    // Load the optimized cortex (100k faces, ~4MB) instead of full hires (655k, 17MB)
+    var cortexPath = 'data/brain_meshes/full_brain_optimized.glb';
+
+    // Pre-load normal map and AO texture in parallel
+    var texLoader = new THREE.TextureLoader();
+    var normalMapTex = null;
+
+    texLoader.load('data/brain_meshes/cortex_normal_map.png', function(tex) {
+      tex.colorSpace = THREE.LinearSRGBColorSpace;  // normal maps use linear
+      normalMapTex = tex;
+    });
+
+    loader.load(cortexPath,
       function(gltf) {
         gltf.scene.traverse(function(child) {
           if (!child.isMesh) return;
           child.geometry.computeVertexNormals();
 
-          // Upgrade to MeshPhysicalMaterial for wet-tissue realism
+          // Upgrade to MeshPhysicalMaterial with normal map + AO-baked texture
           var oldMap = child.material ? child.material.map : null;
           var physMat = new THREE.MeshPhysicalMaterial({
-            map:                oldMap,
+            map:                oldMap,     // AO-baked sulcal texture (embedded in GLB)
+            normalMap:          normalMapTex,
+            normalScale:        new THREE.Vector2(0.8, 0.8),
             envMap:             _envMap,
             envMapIntensity:    0.10,
             roughness:          0.72,
@@ -249,13 +263,41 @@ function loadHiresBrain() {
           hiresMeshes.push(child);
         });
         brainGroup.add(gltf.scene);
-        console.log('[brain-3d-v3] Hires cortex loaded (' + hiresMeshes.length + ' mesh)');
+        console.log('[brain-3d-v3] Optimized cortex loaded (' + hiresMeshes.length + ' mesh, 100k faces)');
         resolve();
       },
       undefined,
       function(err) {
-        console.warn('[brain-3d-v3] Hires load failed:', err);
-        resolve();
+        // Fall back to full hires if optimized not found
+        console.warn('[brain-3d-v3] Optimized cortex not found, trying full hires...');
+        loader.load('data/brain_meshes/full_brain_hires.glb',
+          function(gltf) {
+            gltf.scene.traverse(function(child) {
+              if (!child.isMesh) return;
+              child.geometry.computeVertexNormals();
+              var oldMap = child.material ? child.material.map : null;
+              var physMat = new THREE.MeshPhysicalMaterial({
+                map: oldMap, envMap: _envMap, envMapIntensity: 0.10,
+                roughness: 0.72, metalness: 0.0, clearcoat: 0.17,
+                clearcoatRoughness: 0.33, sheen: 0.18, sheenRoughness: 0.52,
+                sheenColor: new THREE.Color(0xFFBBAA), side: THREE.FrontSide,
+              });
+              physMat._isHiresMat = true;
+              child.material = physMat;
+              child.castShadow = false;
+              child.receiveShadow = false;
+              hiresMeshes.push(child);
+            });
+            brainGroup.add(gltf.scene);
+            console.log('[brain-3d-v3] Hires cortex loaded (fallback)');
+            resolve();
+          },
+          undefined,
+          function(err2) {
+            console.warn('[brain-3d-v3] Cortex load failed:', err2);
+            resolve();
+          }
+        );
       }
     );
   });
