@@ -261,10 +261,11 @@
     /* Patient stage — left column */
     .patient-stage {
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 32px 28px 24px;
+      align-items: center; justify-content: flex-start;
+      padding: 28px 28px 24px;
       position: relative;
       border-right: 1px solid var(--border);
+      overflow-y: auto;
     }
 
     /* Chart panel — right column */
@@ -372,8 +373,8 @@
       padding: 10px 16px;
       background: rgba(255,255,255,.025);
       border: 1px solid var(--border);
-      border-radius: 10px; margin-bottom: 20px;
-      width: 100%; max-width: 420px;
+      border-radius: 10px; margin-bottom: 16px;
+      width: 100%; max-width: 380px;
     }
     .patient-label { font-size: 13px; font-weight: 600; color: var(--text); flex-shrink: 0; }
     .patient-setting {
@@ -385,8 +386,8 @@
     /* Speech bubble */
     .speech-bubble {
       position: relative;
-      background: rgba(255,255,255,.05);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: 16px 16px 16px 4px;
       padding: 14px 18px;
       max-width: 380px; width: 100%;
@@ -395,23 +396,34 @@
       animation: bubbleIn .3s ease-out;
       cursor: pointer;
       user-select: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
     }
     .speech-bubble.hidden { display: none; }
     .bubble-tail {
       position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
       width: 14px; height: 8px;
-      background: rgba(255,255,255,.05);
+      background: rgba(255,255,255,.09);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
     }
     .clinician-probe {
-      font-size: 11px; font-style: italic; color: var(--accent-light);
-      margin-bottom: 10px; padding: 6px 10px;
-      border-left: 2px solid rgba(99,102,241,.45);
-      background: rgba(99,102,241,.06);
+      font-size: 11px; font-style: italic; color: var(--text2);
+      margin-bottom: 6px; padding: 5px 12px;
+      max-width: 380px; width: 100%;
+      border-left: 2px solid rgba(99,102,241,.35);
+      background: rgba(99,102,241,.04);
       border-radius: 0 6px 6px 0;
       display: none;
+      animation: fadeIn .25s ease;
     }
     .clinician-probe.visible { display: block; }
+    /* Skip hint — shown during first typewriter, then hidden permanently */
+    .skip-hint {
+      position: absolute; bottom: 5px; right: 10px;
+      font-size: 9px; color: var(--text3); opacity: 0.45;
+      pointer-events: none; font-style: italic;
+      transition: opacity .3s ease;
+    }
+    .skip-hint.hidden { display: none; }
     .bubble-dots { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
     .bubble-dots span {
       width: 6px; height: 6px; background: var(--text3); border-radius: 50%;
@@ -420,7 +432,7 @@
     .bubble-dots span:nth-child(2) { animation-delay: .2s; }
     .bubble-dots span:nth-child(3) { animation-delay: .4s; }
     .bubble-dots.hidden { display: none; }
-    .bubble-text { font-size: 13px; color: var(--text2); line-height: 1.6; overflow-wrap: break-word; }
+    .bubble-text { font-size: 14px; color: var(--text); line-height: 1.7; overflow-wrap: break-word; }
 
     /* Behavioral tags overlay */
     .tag-overlay {
@@ -442,10 +454,16 @@
     .tag-purple     { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
     /* Appearance tags — shown before encounter begins; subtler grey style */
     .tag-appearance { background: rgba(255,255,255,.06); color: var(--text3);  border: 1px solid rgba(255,255,255,.12); font-style: italic; }
+    /* Tag column header */
+    .tag-header {
+      position: absolute; top: 2%; left: 50%; transform: translateX(-50%);
+      font-size: 9px; font-weight: 700; letter-spacing: .12em;
+      color: rgba(255,255,255,.18); pointer-events: none;
+    }
 
-    /* Avatar container */
+    /* Avatar container — larger on desktop for clinical presence */
     .avatar-wrap {
-      width: 200px; height: 320px;
+      width: 260px; height: 416px;
       position: relative; flex-shrink: 0;
     }
     #avatar-root {
@@ -790,14 +808,17 @@
       <!-- Left: patient stage -->
       <div class="patient-stage" id="patient-stage">
 
+        <!-- Clinician probe (above bubble — separate speaker) -->
+        <div class="clinician-probe" id="clinician-probe"></div>
+
         <!-- Speech bubble (above avatar) -->
         <div class="speech-bubble hidden" id="speech-bubble">
           <div class="bubble-tail"></div>
-          <div class="clinician-probe" id="clinician-probe"></div>
           <div class="bubble-dots" id="bubble-dots">
             <span></span><span></span><span></span>
           </div>
           <div class="bubble-text" id="bubble-text"></div>
+          <span class="skip-hint" id="skip-hint">click or Esc to skip</span>
         </div>
 
         <!-- Avatar container — inline SVG patient -->
@@ -1741,7 +1762,7 @@
     };
 
     if (phase.clinician_prompt) {
-      probe.textContent = `Clinician: "${phase.clinician_prompt}"`;
+      probe.textContent = `You ask: "${phase.clinician_prompt}"`;
       probe.classList.add('visible');
       setTimeout(() => {
         dots.classList.remove('hidden');
@@ -1752,10 +1773,13 @@
     }
   }
 
+  let _skipHintDismissed = false;
+
   function runTypewriter(text, charMs, onComplete) {
     clearInterval(state.typewriterInt);
     const el     = document.getElementById('bubble-text');
     const jaw    = document.getElementById('avatar-jaw');
+    const hint   = document.getElementById('skip-hint');
     el.textContent = '';
 
     const startJaw = () => {
@@ -1763,6 +1787,17 @@
     };
     const stopJaw = () => {
       if (jaw) jaw.style.animation = '';
+    };
+
+    // Show skip hint during the first few typewriters, then hide permanently
+    if (hint && !_skipHintDismissed) {
+      hint.classList.remove('hidden');
+    }
+    const dismissHint = () => {
+      if (hint && !_skipHintDismissed) {
+        _skipHintDismissed = true;
+        hint.classList.add('hidden');
+      }
     };
 
     if (!text) {
@@ -1781,6 +1816,7 @@
       state.typewriterInt = null;
       el.textContent = text;
       stopJaw();
+      dismissHint();
       bubble.removeEventListener('click', skipHandler);
       if (onComplete) onComplete();
     };
@@ -1792,6 +1828,7 @@
         clearInterval(state.typewriterInt);
         state.typewriterInt = null;
         stopJaw();
+        dismissHint();
         bubble.removeEventListener('click', skipHandler);
         if (onComplete) onComplete();
       }
@@ -1825,9 +1862,11 @@
   const TAG_START_Y  = 10;   // percent from top where first tag appears
   const TAG_MAX_ROWS = 7;    // maximum tags per column before recycling oldest
 
-  // Per-column state: { count, yPct, elements[] }
+  // Per-column state: { count, els[] }
   let _tagCols = { left: { count: 0, els: [] }, right: { count: 0, els: [] } };
   let _tagTimeouts  = [];
+  let _phaseColumn  = 'left';   // alternates per phase call
+  let _tagHeaderAdded = false;
 
   function cancelTagStagger() {
     _tagTimeouts.forEach(t => clearTimeout(t));
@@ -1836,17 +1875,36 @@
 
   function resetTagColumns() {
     _tagCols = { left: { count: 0, els: [] }, right: { count: 0, els: [] } };
+    _phaseColumn = 'left';
+    _tagHeaderAdded = false;
+  }
+
+  function _ensureTagHeader() {
+    if (_tagHeaderAdded) return;
+    const overlay = document.getElementById('tag-overlay');
+    const hdr = document.createElement('span');
+    hdr.className = 'tag-header';
+    hdr.textContent = 'OBSERVED';
+    overlay.appendChild(hdr);
+    _tagHeaderAdded = true;
   }
 
   function revealBehavioralTags(tags, isAppearance) {
     if (!CFG.showTags || !tags.length) return;
     const overlay = document.getElementById('tag-overlay');
 
+    _ensureTagHeader();
+
+    // Appearance tags always go to left column.
+    // Phase tags: all tags from one call share the same column, then flip for next call.
+    const side = isAppearance ? 'left' : _phaseColumn;
+    if (!isAppearance) {
+      _phaseColumn = (_phaseColumn === 'left') ? 'right' : 'left';
+    }
+
     tags.forEach((tag, idx) => {
       const tid = setTimeout(() => {
-        // Alternate columns: even index → left, odd → right
-        const side = ((_tagCols.left.count + _tagCols.right.count) % 2 === 0) ? 'left' : 'right';
-        const col  = _tagCols[side];
+        const col = _tagCols[side];
 
         // If this column is full, fade out the oldest tag in it
         if (col.count >= TAG_MAX_ROWS && col.els.length > 0) {
