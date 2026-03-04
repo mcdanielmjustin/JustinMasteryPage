@@ -62,6 +62,12 @@ MAX_FACES_CEREBELLUM  = 999_999
 DESTRIEUX_REGIONS = {
 
     "frontal_lobe": [
+        # Precentral gyrus (primary motor cortex, BA4) IS part of the frontal
+        # lobe — it is the posterior-most frontal gyrus, bounded by the central
+        # sulcus posteriorly. Added G_precentral + related paracentral/precentral
+        # sulcal labels for correct anatomical extent.
+        "G_precentral", "G_and_S_paracentral",
+        "S_precentral-inf-part", "S_precentral-sup-part",
         "G_front_sup", "G_front_middle",
         "G_front_inf-Opercular", "G_front_inf-Orbital", "G_front_inf-Triangul",
         "G_and_S_transv_frontopol", "G_and_S_frontomargin",
@@ -73,12 +79,18 @@ DESTRIEUX_REGIONS = {
     ],
 
     "prefrontal_cortex": [
-        # DLPFC: superior and middle frontal gyri only (BA 9/10/46).
-        # Orbitofrontal labels removed — they drag the centroid inferiorly
-        # and are already covered by medial_frontal.
+        # Full anatomical PFC — everything anterior to premotor cortex (BA6).
+        # DLPFC (BA 9/46): dorsolateral prefrontal cortex
         "G_front_sup", "G_front_middle",
-        "G_and_S_transv_frontopol",
         "S_front_sup", "S_front_middle",
+        # VLPFC (BA 45/47): ventrolateral prefrontal cortex
+        "G_front_inf-Triangul", "G_front_inf-Orbital",
+        # OFC (BA 11/13): orbitofrontal cortex
+        "G_orbital", "G_rectus", "G_subcallosal",
+        "S_suborbital", "S_orbital-H_Shaped", "S_orbital_lateral",
+        "S_orbital_med-olfact",
+        # Frontopolar (BA 10): anterior-most PFC
+        "G_and_S_transv_frontopol", "G_and_S_frontomargin",
     ],
 
     "brocas_area": [

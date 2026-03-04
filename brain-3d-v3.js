@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304c';
+var ASSET_VERSION = '20260304d';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -79,6 +79,15 @@ var OVERLAY_COLORS = {
 var TISSUE_COLOR = 0xD4AA90;
 
 var PERMANENT_IDS = new Set(['brainstem', 'cerebellum']);
+
+// Regions that exist on both hemispheres and should show a mirrored right-side overlay.
+// Language-dominant regions (Broca's, Wernicke's) and midline structures (cingulate, corpus
+// callosum, medial_frontal) are intentionally excluded.
+var BILATERAL_REGIONS = new Set([
+  'frontal_lobe', 'prefrontal_cortex', 'motor_cortex',
+  'parietal_lobe', 'somatosensory_cortex', 'temporal_lobe', 'occipital_lobe',
+  'thalamus', 'hippocampus', 'amygdala', 'caudate', 'putamen', 'globus_pallidus',
+]);
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -718,6 +727,52 @@ function loadAtlasCerebellum() {
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// BILATERAL MIRROR UTILITY
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Creates a right-hemisphere mirror of a left-hemisphere overlay mesh by reflecting
+// vertex positions across x = MIDLINE_X, flipping x-normals, and reversing winding.
+// The mirror shares the same material so colour/opacity stay in sync automatically.
+// In split view the hardware clip plane (x > MIDLINE_X) removes it entirely — no
+// special-case code needed.
+function _createMirrorMesh(sourceMesh) {
+  var origGeom   = sourceMesh.geometry;
+  var mirrorGeom = origGeom.clone();
+
+  var pos = mirrorGeom.attributes.position;
+  for (var i = 0; i < pos.count; i++) {
+    pos.setX(i, 2.0 * MIDLINE_X - pos.getX(i));
+  }
+  pos.needsUpdate = true;
+
+  if (mirrorGeom.attributes.normal) {
+    var nrm = mirrorGeom.attributes.normal;
+    for (var i = 0; i < nrm.count; i++) {
+      nrm.setX(i, -nrm.getX(i));
+    }
+    nrm.needsUpdate = true;
+  }
+
+  if (mirrorGeom.index) {
+    var idx = mirrorGeom.index.array;
+    for (var i = 0; i < idx.length; i += 3) {
+      var tmp    = idx[i + 1];
+      idx[i + 1] = idx[i + 2];
+      idx[i + 2] = tmp;
+    }
+    mirrorGeom.index.needsUpdate = true;
+  }
+
+  var mirror         = new THREE.Mesh(mirrorGeom, sourceMesh.material);
+  mirror.castShadow    = false;
+  mirror.receiveShadow = false;
+  mirror.visible       = false;
+  mirror.userData      = { isMirror: true, regionId: sourceMesh.userData.regionId };
+  return mirror;
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // REGION OVERLAY LOADER
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -809,6 +864,17 @@ function loadRegion(regionId, entry, permanent) {
             corticalMeshes.push(child);
           }
         });
+
+        // Bilateral mirror: for symmetric regions, reflect each mesh across
+        // x = MIDLINE_X so BOTH hemispheres light up when the region is selected.
+        if (!permanent && BILATERAL_REGIONS.has(regionId)) {
+          meshList.forEach(function(child) {
+            var mirror = _createMirrorMesh(child);
+            child.userData.mirrorMesh = mirror;
+            brainGroup.add(mirror);
+          });
+        }
+
         brainGroup.add(gltf.scene);
 
         // Compute centroid for camera auto-focus
@@ -1010,10 +1076,10 @@ function _showOverlay(mesh, showOutline) {
   var sel = mesh.userData.selOutline;
   if (sel) {
     sel.visible = !!showOutline;
-    if (showOutline) {
-      sel.material.opacity = 0.5;
-    }
+    if (showOutline) { sel.material.opacity = 0.5; }
   }
+  // Show right-hemisphere mirror when the left-side overlay is shown
+  if (mesh.userData.mirrorMesh) mesh.userData.mirrorMesh.visible = true;
 }
 
 function _hideOverlay(mesh) {
@@ -1021,6 +1087,8 @@ function _hideOverlay(mesh) {
   mesh.visible = false;
   var sel = mesh.userData.selOutline;
   if (sel) sel.visible = false;
+  // Keep mirror in sync
+  if (mesh.userData.mirrorMesh) mesh.userData.mirrorMesh.visible = false;
 }
 
 function _hideAllOverlays() {
@@ -1117,6 +1185,13 @@ function _dimHires(on) {
 
 function highlightRegion(regionId) {
   selectedRegionId = regionId;
+
+  // Cingulate gyrus lives on the medial wall — auto-enable split view so it is
+  // visible, and notify the UI so the split button reflects the new state.
+  if (regionId === 'cingulate_gyrus' && !splitOn) {
+    toggleSplit(true);
+  }
+
   _hideAllOverlays();
 
   // In glass mode, apply glass FIRST (before region material override)
@@ -1298,6 +1373,9 @@ function toggleSplit(forceState) {
 
     _restorePermanent();
   }
+
+  // Notify the UI (e.g. the split button) so it can sync its visual state
+  window.dispatchEvent(new CustomEvent('brain3dSplitChanged', { detail: { splitOn: splitOn } }));
 
   return splitOn;
 }
