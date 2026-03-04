@@ -89,8 +89,8 @@ var renderer, canvas;
 try {
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 0.95;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -137,7 +137,7 @@ var _envMap = null;
   // Key area — warm overhead (large, dominant)
   var keyArea = new THREE.Mesh(
     new THREE.PlaneGeometry(6, 6),
-    new THREE.MeshBasicMaterial({ color: 0x907060 })
+    new THREE.MeshBasicMaterial({ color: 0x806858 })
   );
   keyArea.position.set(0, 8, 0);
   keyArea.rotation.x = Math.PI / 2;
@@ -155,7 +155,7 @@ var _envMap = null;
   // Rim area — warm backlight from below-behind
   var rimArea = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 3),
-    new THREE.MeshBasicMaterial({ color: 0x705040 })
+    new THREE.MeshBasicMaterial({ color: 0x604838 })
   );
   rimArea.position.set(0, -4, -6);
   rimArea.lookAt(0, 0, 0);
@@ -209,7 +209,7 @@ controls.update();
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // Key light — warm directional from upper-right-front (with shadow map)
-var keyLight = new THREE.DirectionalLight(0xFFF5EE, 2.6);
+var keyLight = new THREE.DirectionalLight(0xFFF8F4, 1.4);
 keyLight.position.set(5, 7, 4);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.width  = 1024;
@@ -229,15 +229,15 @@ fillLight.position.set(-4, 2, -2);
 scene.add(fillLight);
 
 // Rim light — warm backlight for edge separation
-var rimLight = new THREE.DirectionalLight(0xFFE8C0, 0.9);
+var rimLight = new THREE.DirectionalLight(0xFFEEDD, 0.5);
 rimLight.position.set(0, -5, -4);
 scene.add(rimLight);
 
 // Hemisphere light — subtle sky/ground ambient
-scene.add(new THREE.HemisphereLight(0xC8D8F0, 0x401808, 0.4));
+scene.add(new THREE.HemisphereLight(0xD0D8E8, 0x2A1008, 0.4));
 
 // Ambient — very subtle base fill
-scene.add(new THREE.AmbientLight(0xFFEEE8, 0.12));
+scene.add(new THREE.AmbientLight(0xFFEFEF, 0.12));
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -361,10 +361,10 @@ function loadHiresBrain() {
             oldMap.colorSpace = THREE.SRGBColorSpace;
           }
           var physMat = new THREE.MeshPhysicalMaterial({
-            color:              new THREE.Color(0xFFEEE4),  // light warm tint
+            color:              new THREE.Color(0xF5D0C0),  // warm pink base (not white)
             map:                oldMap,
-            emissive:           new THREE.Color(0x6B3A2A),  // warm fill lifts brown texture to flesh
-            emissiveIntensity:  0.35,
+            emissive:           new THREE.Color(0x8B4A3A),  // rosier, less brown
+            emissiveIntensity:  0.15,
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(1.2, 1.2),
             aoMap:              aoMapTex,
@@ -383,7 +383,7 @@ function loadHiresBrain() {
             transmission:       0.08,
             thickness:          0.5,
             ior:                1.4,
-            attenuationColor:   new THREE.Color(0xE09070),
+            attenuationColor:   new THREE.Color(0xD07060),  // deeper pink SSS
             attenuationDistance: 0.5,
             side:               THREE.FrontSide,
           });
@@ -418,14 +418,14 @@ function loadHiresBrain() {
               child.geometry.computeVertexNormals();
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
-                color: new THREE.Color(0xFFEEE4),
-                map: oldMap, emissive: new THREE.Color(0x6B3A2A),
-                emissiveIntensity: 0.35, envMap: _envMap, envMapIntensity: 0.12,
+                color: new THREE.Color(0xF5D0C0),
+                map: oldMap, emissive: new THREE.Color(0x8B4A3A),
+                emissiveIntensity: 0.15, envMap: _envMap, envMapIntensity: 0.12,
                 roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
                 clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
                 sheenColor: new THREE.Color(0xDDBBAA), iridescence: 0.04,
                 transmission: 0.08, thickness: 0.5, ior: 1.4,
-                attenuationColor: new THREE.Color(0xE09070), attenuationDistance: 0.5,
+                attenuationColor: new THREE.Color(0xD07060), attenuationDistance: 0.5,
                 side: THREE.FrontSide,
               });
               physMat._isHiresMat = true;
@@ -612,44 +612,67 @@ function loadAtlasBrainstem() {
 
 function loadAtlasCerebellum() {
   // Load high-detail JSON geometry (10K verts) with solid material (no texture to avoid UV stripe artifacts)
+  console.log('[brain-3d-v3] loadAtlasCerebellum() called');
   return new Promise(function(resolve) {
     fetch('data/brain_meshes/cerebellum_mesh.json')
-      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        console.log('[brain-3d-v3] cerebellum JSON fetch status:', r.status);
+        return r.json();
+      })
       .then(function(data) {
-        var geo = new THREE.BufferGeometry();
-        geo.setAttribute('position',
-          new THREE.Float32BufferAttribute(new Float32Array(data.positions), 3));
-        geo.setAttribute('normal',
-          new THREE.Float32BufferAttribute(new Float32Array(data.normals), 3));
-        geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
+        console.log('[brain-3d-v3] cerebellum JSON parsed, verts:', data.positions.length / 3);
+        var positions = new Float32Array(data.positions);
+        var normals   = new Float32Array(data.normals);
+        var nVerts    = positions.length / 3;
 
-        var baseColor = new THREE.Color(TISSUE_COLOR);  // same as cortex
+        // Compute centroid
+        var cx = 0, cy = 0, cz = 0;
+        for (var vi = 0; vi < nVerts; vi++) {
+          cx += positions[vi * 3];
+          cy += positions[vi * 3 + 1];
+          cz += positions[vi * 3 + 2];
+        }
+        cx /= nVerts; cy /= nVerts; cz /= nVerts;
+
+        // Displace vertices along normals to create folia ridges
+        var FOLIA_FREQ = 55.0;   // number of folia bands
+        var FOLIA_AMP  = 0.018;  // ridge depth (visible at mesh scale)
+        for (var vi = 0; vi < nVerts; vi++) {
+          var py = positions[vi * 3 + 1];  // Y = elevation in scene space
+          var localY = py - cy;
+          var ridge = Math.sin(localY * FOLIA_FREQ * 2.0 * Math.PI) * FOLIA_AMP;
+          positions[vi * 3]     += normals[vi * 3]     * ridge;
+          positions[vi * 3 + 1] += normals[vi * 3 + 1] * ridge;
+          positions[vi * 3 + 2] += normals[vi * 3 + 2] * ridge;
+        }
+
+        var geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geo.setAttribute('normal',   new THREE.Float32BufferAttribute(normals, 3));
+        geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
+        geo.computeVertexNormals();  // recompute after displacement — ridges catch light naturally
+
+        var baseColor = new THREE.Color(0xC08878);  // medium pink-flesh under NeutralToneMapping
         var mat = new THREE.MeshPhysicalMaterial({
           color:              baseColor,
+          emissive:           new THREE.Color(0x5A2A2A),
+          emissiveIntensity:  0.08,
           envMap:             _envMap,
-          envMapIntensity:    0.12,
-          roughness:          0.75,
-          metalness:          0.0,
-          emissive:           new THREE.Color(0x6B3A2A),
-          emissiveIntensity:  0.15,
-          clearcoat:          0.08,
-          clearcoatRoughness: 0.60,
-          sheen:              0.05,
-          sheenRoughness:     0.70,
+          envMapIntensity:    0.06,
+          clearcoat:          0.04,
+          clearcoatRoughness: 0.7,
+          sheen:              0.03,
+          sheenRoughness:     0.75,
           sheenColor:         new THREE.Color(0xDDBBAA),
-          transmission:       0.08,
-          thickness:          0.5,
-          ior:                1.4,
-          attenuationColor:   new THREE.Color(0xE09070),
-          attenuationDistance: 0.5,
-          transparent:        false,
-          opacity:            1.0,
+          roughness:          0.78,
+          metalness:          0.0,
           side:               THREE.DoubleSide,
           depthWrite:         true,
         });
         mat._origColor     = baseColor.clone();
-        mat._origEmissive  = new THREE.Color(0x6B3A2A);
+        mat._origEmissive  = new THREE.Color(0x5A2A2A);
         mat._origRoughness = mat.roughness;
+        console.log('[brain-3d-v3] Cerebellum: color=#C08878, ridgeAmp=0.018, ridgeFreq=55');
 
         var mesh = new THREE.Mesh(geo, mat);
         mesh.name = 'cerebellum';
