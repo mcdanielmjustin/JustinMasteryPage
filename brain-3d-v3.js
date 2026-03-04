@@ -361,10 +361,10 @@ function loadHiresBrain() {
             oldMap.colorSpace = THREE.SRGBColorSpace;
           }
           var physMat = new THREE.MeshPhysicalMaterial({
-            color:              new THREE.Color(0xFFD8D8),  // pink tint — counteracts brown texture
+            color:              new THREE.Color(0xFFDDE0),  // slight cool-pink tint
             map:                oldMap,
-            emissive:           new THREE.Color(0x000000),
-            emissiveIntensity:  0.0,
+            emissive:           new THREE.Color(0x302040),  // cool purple — adds missing blue to brown texture
+            emissiveIntensity:  0.25,
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(1.2, 1.2),
             aoMap:              aoMapTex,
@@ -418,9 +418,9 @@ function loadHiresBrain() {
               child.geometry.computeVertexNormals();
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
-                color: new THREE.Color(0xFFD8D8),
-                map: oldMap, emissive: new THREE.Color(0x000000),
-                emissiveIntensity: 0.0, envMap: _envMap, envMapIntensity: 0.12,
+                color: new THREE.Color(0xFFDDE0),
+                map: oldMap, emissive: new THREE.Color(0x302040),
+                emissiveIntensity: 0.25, envMap: _envMap, envMapIntensity: 0.12,
                 roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
                 clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
                 sheenColor: new THREE.Color(0xDDCCCC), iridescence: 0.04,
