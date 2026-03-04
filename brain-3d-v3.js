@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304p';
+var ASSET_VERSION = '20260304q';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -82,7 +82,12 @@ var PERMANENT_IDS = new Set(['brainstem', 'cerebellum']);
 
 // Regions where the cerebellum partially occludes the selected structure in
 // the default lateral camera view — auto-glass the cerebellum while selected.
-var CEREBELLUM_GLASS_REGIONS = new Set(['temporal_lobe', 'occipital_lobe']);
+// Brainstem segments viewed from anterior-lateral still benefit from a transparent
+// cerebellum since it wraps the posterior brainstem.
+var CEREBELLUM_GLASS_REGIONS = new Set([
+  'temporal_lobe', 'occipital_lobe',
+  'brainstem', 'midbrain', 'pons', 'medulla',
+]);
 
 // Regions that exist on both hemispheres and should show a mirrored right-side overlay.
 // Language-dominant regions (Broca's, Wernicke's) and midline structures (cingulate, corpus
@@ -1103,11 +1108,17 @@ function computeRegionCameraPos(center, regionId, type) {
     return new THREE.Vector3(3.5, -1.0, 0.2);
   }
 
-  // ── Brainstem / cerebellum (permanent, always visible) ───────────────────
+  // ── Brainstem / cerebellum ────────────────────────────────────────────────
+  // Camera must come from the ANTERIOR-LATERAL side (positive z) because the
+  // cerebellum sits POSTERIOR to the brainstem (z_scene ≈ -0.3 to -0.56) and
+  // would block the view from behind.  Lateral + inferior + anterior = clear
+  // unobstructed window onto the brainstem.
   if (regionId === 'brainstem') {
-    return new THREE.Vector3(center.x + 1.5, center.y - 2.5, center.z - 2.5);
+    // Full brainstem: midbrain through medulla. Elevated lateral-anterior.
+    return new THREE.Vector3(2.5, -2.0, 1.5);
   }
   if (regionId === 'cerebellum') {
+    // Cerebellum: posterior-inferior. Camera from below-behind.
     return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z - 2.0);
   }
 
@@ -1132,18 +1143,25 @@ function computeRegionCameraPos(center, regionId, type) {
   if (regionId === 'corpus_callosum') {
     return new THREE.Vector3(-3.0, 0.8, 0.3);
   }
-  // ── Hindbrain segments ────────────────────────────────────────────────────
-  // Midbrain (mesencephalon): z_MNI > -22 mm; superior brainstem
+  // ── Hindbrain segments (all use auto-glass + cerebellum-glass) ───────────
+  // Camera from anterior-lateral-inferior so the cerebellum (z_scene ≈ -0.35,
+  // posterior) stays BEHIND the brainstem and does not block the view.
+  //
+  // Scene coords of brainstem segments (MNI → scene):
+  //   Midbrain ctr  ≈ (0.12, -0.42, 0.22)   z_MNI -14 to -22
+  //   Pons ctr      ≈ (0.12, -0.60, 0.12)   z_MNI -22 to -37
+  //   Medulla ctr   ≈ (0.12, -0.80, 0.02)   z_MNI -37 to -57
   if (regionId === 'midbrain') {
-    return new THREE.Vector3(2.5, -1.5, -0.5);
+    // Lateral + slightly above center + well anterior
+    return new THREE.Vector3(2.5, -1.2, 1.8);
   }
-  // Pons: z_MNI -22 to -37 mm; middle brainstem segment
   if (regionId === 'pons') {
-    return new THREE.Vector3(2.5, -2.5, -1.5);
+    // Lateral + inferior + anterior — pons is the widest brainstem segment
+    return new THREE.Vector3(2.5, -2.0, 1.2);
   }
-  // Medulla oblongata: z_MNI < -37 mm; inferior brainstem
   if (regionId === 'medulla') {
-    return new THREE.Vector3(2.5, -3.5, -2.5);
+    // Lateral + most inferior + anterior
+    return new THREE.Vector3(2.5, -3.0, 0.8);
   }
 
   // General: place camera along the direction from brain center through region
@@ -1414,6 +1432,9 @@ function highlightRegion(regionId) {
     'caudate', 'putamen', 'globus_pallidus',
     'nucleus_accumbens', 'hypothalamus', 'substantia_nigra',
     'vta', 'pituitary', 'olfactory_bulb', 'corpus_callosum',
+    // Brainstem segments: overlay meshes are hidden behind the permanent
+    // brainstem mesh unless glass mode is active (makes brainstem 8% opacity).
+    'midbrain', 'pons', 'medulla',
   ]);
   if (_AUTO_GLASS_REGIONS.has(regionId) && !glassOn) {
     glassOn = true;
