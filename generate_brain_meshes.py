@@ -73,15 +73,21 @@ DESTRIEUX_REGIONS = {
     ],
 
     "prefrontal_cortex": [
+        # DLPFC: superior and middle frontal gyri only (BA 9/10/46).
+        # Orbitofrontal labels removed — they drag the centroid inferiorly
+        # and are already covered by medial_frontal.
         "G_front_sup", "G_front_middle",
-        "G_and_S_transv_frontopol", "G_and_S_frontomargin",
-        "G_orbital", "G_rectus", "G_subcallosal",
-        "S_orbital-H_Shaped", "S_suborbital", "S_orbital_med-olfact",
+        "G_and_S_transv_frontopol",
+        "S_front_sup", "S_front_middle",
     ],
 
     "brocas_area": [
-        "G_front_inf-Opercular", "G_front_inf-Triangul", "G_front_inf-Orbital",
-        "Lat_Fis-ant-Horizont", "Lat_Fis-ant-Vertical",
+        # Strictly BA 44 (pars opercularis) + BA 45 (pars triangularis).
+        # G_front_inf-Orbital (BA 47, pars orbitalis) removed — it is
+        # adjacent but not part of classic Broca's language area.
+        # Fissure labels removed — they are sulcal boundaries, not cortex.
+        "G_front_inf-Opercular",
+        "G_front_inf-Triangul",
     ],
 
     "motor_cortex": [
@@ -114,7 +120,11 @@ DESTRIEUX_REGIONS = {
     ],
 
     "wernickes_area": [
-        "G_temp_sup-Plan_tempo", "G_temp_sup-Lateral",
+        # Planum temporale (BA 22 posterior) is the anatomical core of
+        # Wernicke's area. G_temp_sup-Lateral was removed — it spans the
+        # ENTIRE lateral STG (anterior pole to posterior), causing the mesh
+        # to extend far too anteriorly (z-error > 0.40 in scene units).
+        "G_temp_sup-Plan_tempo",
         "Lat_Fis-post",
     ],
 
@@ -521,6 +531,22 @@ def main():
 
             matched_name = ho_labels_with_bg[idx]
             vol = (ho_data == idx).astype(np.float32)
+
+            # For all structures except the brainstem (which is midline),
+            # mask out right-hemisphere voxels before marching cubes.
+            # Some HO atlas versions use bilateral labels (e.g. "Pallidum")
+            # that contaminate the left-hemisphere mesh with right-side voxels.
+            if region_id != "brainstem":
+                xi, yi, zi = np.meshgrid(
+                    np.arange(vol.shape[0]), np.arange(vol.shape[1]),
+                    np.arange(vol.shape[2]), indexing="ij")
+                vox_coords = np.column_stack([xi.ravel(), yi.ravel(),
+                                              zi.ravel(), np.ones(xi.size)])
+                mni_x = (ho_affine @ vox_coords.T)[0].reshape(vol.shape)
+                # MNI x > 5 mm is right hemisphere; zero those voxels out
+                vol[mni_x > 5] = 0
+                print(f"    left-hemi filter: {int(vol.sum())} voxels remaining")
+
             if vol.sum() < 20:
                 print(f"  [skip] {region_id}: <20 voxels (atlas value {idx}, "
                       f"'{matched_name}')")
