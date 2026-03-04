@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304o';
+var ASSET_VERSION = '20260304p';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -93,6 +93,7 @@ var BILATERAL_REGIONS = new Set([
   'insula',
   'thalamus', 'hippocampus', 'amygdala', 'caudate', 'putamen', 'globus_pallidus',
   'nucleus_accumbens', 'hypothalamus', 'substantia_nigra',
+  'vta', 'olfactory_bulb',
 ]);
 
 
@@ -1068,10 +1069,10 @@ function computeRegionCameraPos(center, regionId, type) {
   if (regionId === 'amygdala') {
     return new THREE.Vector3(3.5, -2.2, 1.5);
   }
-  // Caudate  cen≈(0.271,-0.077,0.451): near midline, anterior (head)
-  // Lateral + elevated + anterior to frame the caudate head prominently
+  // Caudate  cen≈(0.271,-0.077,0.451): C-shaped, head anterior, tail curves posterior-inferior
+  // Elevated + anterior — shows the full C-curve from above-lateral
   if (regionId === 'caudate') {
-    return new THREE.Vector3(3.5, 1.0, 2.0);
+    return new THREE.Vector3(3.0, 2.8, 1.5);
   }
   // Putamen  cen≈(0.418,-0.197,0.418): most lateral basal ganglia structure
   // Direct lateral, slightly elevated — putamen is at a good lateral depth
@@ -1110,21 +1111,39 @@ function computeRegionCameraPos(center, regionId, type) {
     return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z - 2.0);
   }
 
-  // ── Legacy / unused structures (kept for forward compatibility) ───────────
-  if (regionId === 'hypothalamus_legacy' || regionId === 'pituitary') {
-    return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z + 2.0);
-  }
-  if (regionId === 'olfactory_bulb') {
-    return new THREE.Vector3(center.x + 0.5, center.y - 2.5, center.z + 3.0);
-  }
+  // ── New subcortical / deep structures ────────────────────────────────────
+  // VTA: ventral tegmental area, medial midbrain (dopaminergic reward center)
+  // MNI (-4,-16,-12) → scene ≈ (0.17,-0.36,0.22); lateral-inferior like SN
   if (regionId === 'vta') {
-    return new THREE.Vector3(center.x + 2.0, center.y - 2.0, center.z - 2.0);
+    return new THREE.Vector3(3.5, -1.2, 0.0);
   }
-  if (regionId === 'pons' || regionId === 'medulla' || regionId === 'midbrain') {
-    return new THREE.Vector3(center.x + 1.5, center.y - 2.5, center.z - 2.5);
+  // Pituitary: sella turcica, below hypothalamus, very inferior midline
+  // MNI (0,+5,-24) → scene ≈ (0.12,-0.52,0.51); from below-anterior
+  if (regionId === 'pituitary') {
+    return new THREE.Vector3(2.5, -3.0, 2.0);
   }
+  // Olfactory bulb: anterior-inferior frontal, very anterior
+  // MNI (-9,+24,-22) → scene ≈ (0.24,-0.49,0.76); from below-anterior
+  if (regionId === 'olfactory_bulb') {
+    return new THREE.Vector3(2.5, -3.0, 4.0);
+  }
+  // Corpus callosum: midline arch; auto-split shows medial cut face
+  // Camera on medial/right side (x<0) looking toward the exposed medial surface
   if (regionId === 'corpus_callosum') {
-    return new THREE.Vector3(center.x - 3.0, center.y + 1.0, center.z + 0.5);
+    return new THREE.Vector3(-3.0, 0.8, 0.3);
+  }
+  // ── Hindbrain segments ────────────────────────────────────────────────────
+  // Midbrain (mesencephalon): z_MNI > -22 mm; superior brainstem
+  if (regionId === 'midbrain') {
+    return new THREE.Vector3(2.5, -1.5, -0.5);
+  }
+  // Pons: z_MNI -22 to -37 mm; middle brainstem segment
+  if (regionId === 'pons') {
+    return new THREE.Vector3(2.5, -2.5, -1.5);
+  }
+  // Medulla oblongata: z_MNI < -37 mm; inferior brainstem
+  if (regionId === 'medulla') {
+    return new THREE.Vector3(2.5, -3.5, -2.5);
   }
 
   // General: place camera along the direction from brain center through region
@@ -1394,6 +1413,7 @@ function highlightRegion(regionId) {
     'thalamus', 'hippocampus', 'amygdala',
     'caudate', 'putamen', 'globus_pallidus',
     'nucleus_accumbens', 'hypothalamus', 'substantia_nigra',
+    'vta', 'pituitary', 'olfactory_bulb', 'corpus_callosum',
   ]);
   if (_AUTO_GLASS_REGIONS.has(regionId) && !glassOn) {
     glassOn = true;
@@ -1412,7 +1432,7 @@ function highlightRegion(regionId) {
 
   // Medial-wall structures — auto-enable split view so the medial surface is
   // visible. The UI split button stays in sync via the brain3dSplitChanged event.
-  var _MEDIAL_AUTO_SPLIT = { cingulate_gyrus: true, medial_frontal: true };
+  var _MEDIAL_AUTO_SPLIT = { cingulate_gyrus: true, medial_frontal: true, corpus_callosum: true };
   if (_MEDIAL_AUTO_SPLIT[regionId] && !splitOn) {
     toggleSplit(true);
   }

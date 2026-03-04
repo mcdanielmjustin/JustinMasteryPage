@@ -272,6 +272,28 @@ SYNTHETIC_SUBCORTICAL = {
         "radii_mm":   [7, 5, 3],
         "clip_x":     0.0,
     },
+    # Ventral tegmental area (VTA): medial midbrain, dopaminergic reward center.
+    # Paired structure, medial to substantia nigra.
+    # Left VTA center: x ≈ -4, y ≈ -16, z ≈ -12 (MNI).
+    "vta": {
+        "center_mni": [-4, -16, -12],
+        "radii_mm":   [3, 4, 2],
+        "clip_x":     5.0,
+    },
+    # Pituitary gland: midline, in sella turcica, below hypothalamus.
+    # MNI: y ≈ +5 (just anterior to AC-PC midpoint), z ≈ -24 (inferior).
+    "pituitary": {
+        "center_mni": [0, 5, -24],
+        "radii_mm":   [5, 5, 4],
+        "clip_x":     5.0,
+    },
+    # Olfactory bulb: anterior-inferior frontal, paired bilateral.
+    # Left OB: x ≈ -9, y ≈ 24, z ≈ -22 (MNI).
+    "olfactory_bulb": {
+        "center_mni": [-9, 24, -22],
+        "radii_mm":   [4, 4, 3],
+        "clip_x":     0.0,
+    },
 }
 
 # ─── Coordinate helpers ─────────────────────────────────────────────────────────
@@ -696,6 +718,54 @@ def main():
                 print(f"  OK {region_id} ('{matched_name}'): "
                       f"{len(mesh.vertices):,} verts, {len(mesh.faces):,} faces")
 
+        # ── Brainstem segmentation: midbrain / pons / medulla ─────────────────
+        print("\n  Processing brainstem segments (midbrain / pons / medulla) ...")
+        bs_idx = find_ho_idx(ho_labels_with_bg, ["Brain-Stem", "Brain Stem", "Brainstem"])
+        if bs_idx is None:
+            print("  [skip] brainstem label not found — skipping segments")
+        else:
+            bs_full = (ho_data == bs_idx).astype(np.float32)
+
+            # Compute MNI z for every voxel (needed for z-level segmentation)
+            xi2, yi2, zi2 = np.meshgrid(
+                np.arange(bs_full.shape[0]), np.arange(bs_full.shape[1]),
+                np.arange(bs_full.shape[2]), indexing="ij")
+            vox_coords2 = np.column_stack([xi2.ravel(), yi2.ravel(),
+                                           zi2.ravel(), np.ones(xi2.size)])
+            mni_z_vol = (ho_affine @ vox_coords2.T)[2].reshape(bs_full.shape)
+
+            # z_MNI thresholds (Duvernoy 1995 / Paxinos & Mai 2004):
+            # Midbrain (mesencephalon):  z_MNI > -22 mm  (superior)
+            # Pons:                -22 >= z_MNI > -37 mm
+            # Medulla oblongata:         z_MNI <= -37 mm
+            brainstem_segs = {
+                "midbrain": bs_full * (mni_z_vol >  -22).astype(np.float32),
+                "pons":     bs_full * ((mni_z_vol <= -22) & (mni_z_vol > -37)).astype(np.float32),
+                "medulla":  bs_full * (mni_z_vol <= -37).astype(np.float32),
+            }
+
+            for seg_id, seg_vol in brainstem_segs.items():
+                if seg_vol.sum() < 20:
+                    print(f"  [skip] {seg_id}: <20 voxels")
+                    continue
+                verts_v, mc_faces, _, _ = marching_cubes(seg_vol, level=0.5)
+                ones = np.ones((len(verts_v), 1))
+                verts_mni = (ho_affine @ np.hstack([verts_v, ones]).T).T[:, :3]
+                verts_3d = to_threejs(verts_mni)
+                mesh = trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=False)
+                mesh = simplify(mesh, MAX_FACES_SUBCORTICAL)
+                out = OUT_DIR / f"{seg_id}.glb"
+                if save_glb(mesh, out):
+                    manifest[seg_id] = {
+                        "file":        f"data/brain_meshes/{seg_id}.glb",
+                        "type":        "subcortical",
+                        "vertexCount": len(mesh.vertices),
+                        "faceCount":   len(mesh.faces),
+                        "bounds":      mesh_bounds(mesh),
+                    }
+                    print(f"  OK {seg_id}: {len(mesh.vertices):,} verts, "
+                          f"{len(mesh.faces):,} faces")
+
     except Exception as e:
         print(f"  [ERROR] Subcortical pipeline failed: {e}")
         traceback.print_exc()
@@ -763,6 +833,68 @@ def main():
         except Exception as e:
             print(f"  [ERROR] {region_id}: {e}")
             traceback.print_exc()
+
+    # ── Corpus callosum: arch-shaped volumetric mesh ───────────────────────────
+    print("  Processing corpus_callosum ..."); sys.stdout.flush()
+    try:
+        def make_cc_arch_mesh(vox_mm=1.0):
+            """
+            Corpus callosum arch mesh from a parametric volumetric slab.
+
+            MNI reference (Witelson 1989, Hofer & Frahm 2006):
+              - Splenium (y ≈ -30 mm): z_center ≈ 15 mm
+              - Body     (y ≈   0 mm): z_center ≈ 21 mm
+              - Genu     (y ≈ +20 mm): z_center ≈ 16 mm (curves ventrally)
+              - Width (x): ±14 mm (bilateral commissure)
+              - Thickness (z): ~8 mm (half = 4 mm)
+            Quadratic fit through the three points:
+              z_center(y) = 21 - 0.07*y - 0.009*y²
+            """
+            xs = np.arange(-15.0, 16.0, vox_mm)
+            ys = np.arange(-32.0, 24.0, vox_mm)
+            zs = np.arange(6.0,  32.0, vox_mm)
+            X, Y, Z = np.meshgrid(xs, ys, zs, indexing="ij")
+
+            z_center = 21.0 - 0.07 * Y - 0.009 * Y * Y
+            half_thick = 4.0
+
+            vol = (
+                (np.abs(Z - z_center) < half_thick) &
+                (Y >= -30.0) & (Y <= 22.0) &
+                (np.abs(X) <= 14.0)
+            ).astype(np.float32)
+
+            if vol.sum() < 20:
+                return None
+
+            verts_idx, mc_faces, _, _ = marching_cubes(vol, level=0.5)
+            verts_mni = np.column_stack([
+                xs[0] + verts_idx[:, 0] * vox_mm,
+                ys[0] + verts_idx[:, 1] * vox_mm,
+                zs[0] + verts_idx[:, 2] * vox_mm,
+            ])
+            verts_3d = to_threejs(verts_mni)
+            return trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=False)
+
+        cc_mesh = make_cc_arch_mesh()
+        if cc_mesh is None:
+            print("  [skip] corpus_callosum: empty volume")
+        else:
+            cc_mesh = simplify(cc_mesh, MAX_FACES_SUBCORTICAL)
+            out = OUT_DIR / "corpus_callosum.glb"
+            if save_glb(cc_mesh, out):
+                manifest["corpus_callosum"] = {
+                    "file":        "data/brain_meshes/corpus_callosum.glb",
+                    "type":        "subcortical",
+                    "vertexCount": len(cc_mesh.vertices),
+                    "faceCount":   len(cc_mesh.faces),
+                    "bounds":      mesh_bounds(cc_mesh),
+                }
+                print(f"  OK corpus_callosum: {len(cc_mesh.vertices):,} verts, "
+                      f"{len(cc_mesh.faces):,} faces")
+    except Exception as e:
+        print(f"  [ERROR] corpus_callosum: {e}")
+        traceback.print_exc()
 
     # ═══════════════════════════════════════════════════════════════════════════
     # STAGE 4 — Cerebellum (AAL atlas, all cerebellar parcels merged)
@@ -849,7 +981,9 @@ def main():
 
     # Warn if expected regions are missing
     expected = (set(DESTRIEUX_REGIONS) | set(HO_SUBCORTICAL)
-                | set(SYNTHETIC_SUBCORTICAL) | {"cerebellum", "full_hemisphere"})
+                | set(SYNTHETIC_SUBCORTICAL)
+                | {"cerebellum", "full_hemisphere", "corpus_callosum",
+                   "midbrain", "pons", "medulla"})
     missing_from_manifest = expected - set(manifest)
     if missing_from_manifest:
         print(f"\n  [warn] {len(missing_from_manifest)} expected region(s) not in manifest:")
