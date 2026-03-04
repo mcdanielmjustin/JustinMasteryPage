@@ -108,12 +108,16 @@ DESTRIEUX_REGIONS = {
     ],
 
     "parietal_lobe": [
-        # Anterior wall: G_postcentral (BA 1/2/3, primary somatosensory cortex)
-        # is the FIRST gyrus of the parietal lobe, immediately posterior to the
-        # central sulcus. Previously absent — its omission made the mesh begin
-        # at mid-parietal, causing the selector to look truncated.
-        # G_and_S_subcentral = parietal operculum (secondary somatosensory, BA 43).
-        "G_postcentral", "G_and_S_subcentral",
+        # Anterior wall (lateral surface): G_postcentral (BA 1/2/3) is the first
+        # gyrus of the parietal lobe immediately posterior to the central sulcus.
+        "G_postcentral",
+        # G_and_S_subcentral (rolandic/parietal operculum) was removed — it sits
+        # at the very bottom of the central sulcus and dives into the Sylvian
+        # fissure (y_scene ≈ −0.07), pulling the mesh too far inferiorly.
+        # Anterior wall (medial surface): posterior half of G_and_S_paracentral
+        # is BA 1/2/3 (sensory leg/foot area), the medial continuation of the
+        # postcentral gyrus wrapping over the hemisphere.
+        "G_and_S_paracentral",
         # Superior parietal lobule (BA 5/7)
         "G_parietal_sup",
         # Inferior parietal lobule (BA 39/40)
@@ -127,7 +131,12 @@ DESTRIEUX_REGIONS = {
     ],
 
     "somatosensory_cortex": [
+        # Primary somatosensory cortex (BA 1/2/3).
+        # G_postcentral = the lateral surface strip (face, hand, trunk).
+        # G_and_S_paracentral = medial surface continuation (leg/foot area);
+        # its posterior half is BA 1/2/3, completing the full sensory homunculus.
         "G_postcentral",
+        "G_and_S_paracentral",
         "S_postcentral", "S_central",
     ],
 
