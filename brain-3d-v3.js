@@ -209,7 +209,7 @@ controls.update();
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // Key light — warm directional from upper-right-front (with shadow map)
-var keyLight = new THREE.DirectionalLight(0xFFF8F4, 1.4);
+var keyLight = new THREE.DirectionalLight(0xFFF8F4, 1.8);
 keyLight.position.set(5, 7, 4);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.width  = 1024;
@@ -363,8 +363,8 @@ function loadHiresBrain() {
           var physMat = new THREE.MeshPhysicalMaterial({
             color:              new THREE.Color(0xFFEEE4),  // near-white — texture map drives color
             map:                oldMap,
-            emissive:           new THREE.Color(0x8B4A3A),  // rosier, less brown
-            emissiveIntensity:  0.18,
+            emissive:           new THREE.Color(0x704050),  // muted pink, not brown
+            emissiveIntensity:  0.08,
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(1.2, 1.2),
             aoMap:              aoMapTex,
@@ -419,8 +419,8 @@ function loadHiresBrain() {
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
                 color: new THREE.Color(0xFFEEE4),
-                map: oldMap, emissive: new THREE.Color(0x8B4A3A),
-                emissiveIntensity: 0.18, envMap: _envMap, envMapIntensity: 0.12,
+                map: oldMap, emissive: new THREE.Color(0x704050),
+                emissiveIntensity: 0.08, envMap: _envMap, envMapIntensity: 0.12,
                 roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
                 clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
                 sheenColor: new THREE.Color(0xDDBBAA), iridescence: 0.04,
