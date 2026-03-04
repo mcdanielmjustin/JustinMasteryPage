@@ -89,8 +89,8 @@ var renderer, canvas;
 try {
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.NeutralToneMapping;
-  renderer.toneMappingExposure = 0.95;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -209,7 +209,7 @@ controls.update();
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // Key light — warm directional from upper-right-front (with shadow map)
-var keyLight = new THREE.DirectionalLight(0xFFF8F4, 1.8);
+var keyLight = new THREE.DirectionalLight(0xFFF8F4, 2.0);
 keyLight.position.set(5, 7, 4);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.width  = 1024;
@@ -361,10 +361,10 @@ function loadHiresBrain() {
             oldMap.colorSpace = THREE.SRGBColorSpace;
           }
           var physMat = new THREE.MeshPhysicalMaterial({
-            color:              new THREE.Color(0xFFDDE0),  // slight cool-pink tint
+            color:              new THREE.Color(0xFFEEE4),  // original near-white
             map:                oldMap,
-            emissive:           new THREE.Color(0x302040),  // cool purple — adds missing blue to brown texture
-            emissiveIntensity:  0.25,
+            emissive:           new THREE.Color(0x6B3A2A),  // original warm fill
+            emissiveIntensity:  0.20,
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(1.2, 1.2),
             aoMap:              aoMapTex,
@@ -377,7 +377,7 @@ function loadHiresBrain() {
             clearcoatRoughness: 0.60,
             sheen:              0.05,
             sheenRoughness:     0.70,
-            sheenColor:         new THREE.Color(0xDDCCCC),
+            sheenColor:         new THREE.Color(0xDDBBAA),
             iridescence:        0.04,
             // Subsurface scattering (translucency)
             transmission:       0.08,
@@ -418,12 +418,12 @@ function loadHiresBrain() {
               child.geometry.computeVertexNormals();
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
-                color: new THREE.Color(0xFFDDE0),
-                map: oldMap, emissive: new THREE.Color(0x302040),
-                emissiveIntensity: 0.25, envMap: _envMap, envMapIntensity: 0.12,
+                color: new THREE.Color(0xFFEEE4),
+                map: oldMap, emissive: new THREE.Color(0x6B3A2A),
+                emissiveIntensity: 0.20, envMap: _envMap, envMapIntensity: 0.12,
                 roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
                 clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
-                sheenColor: new THREE.Color(0xDDCCCC), iridescence: 0.04,
+                sheenColor: new THREE.Color(0xDDBBAA), iridescence: 0.04,
                 transmission: 0.08, thickness: 0.5, ior: 1.4,
                 attenuationColor: new THREE.Color(0xE09070), attenuationDistance: 0.5,
                 side: THREE.FrontSide,
@@ -652,7 +652,7 @@ function loadAtlasCerebellum() {
         geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
         geo.computeVertexNormals();  // recompute after displacement — ridges catch light naturally
 
-        var baseColor = new THREE.Color(0xC08878);  // medium pink-flesh under NeutralToneMapping
+        var baseColor = new THREE.Color(0xD88878);  // saturated pink-flesh — survives ACES desaturation
         var mat = new THREE.MeshPhysicalMaterial({
           color:              baseColor,
           emissive:           new THREE.Color(0x5A2A2A),
