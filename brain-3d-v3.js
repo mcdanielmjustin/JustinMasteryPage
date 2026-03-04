@@ -611,9 +611,10 @@ function loadAtlasBrainstem() {
 }
 
 function loadAtlasCerebellum() {
-  return _loadAtlasMesh('cerebellum',
-    'data/brain_meshes/cerebellum_mesh.json',
-    'data/brain_meshes/cerebellum_texture.png');
+  return loadRegion('cerebellum', {
+    file: 'data/brain_meshes/hires_cerebellum.glb',
+    type: 'subcortical'
+  }, true);
 }
 
 
