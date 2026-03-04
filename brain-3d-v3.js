@@ -361,10 +361,10 @@ function loadHiresBrain() {
             oldMap.colorSpace = THREE.SRGBColorSpace;
           }
           var physMat = new THREE.MeshPhysicalMaterial({
-            color:              new THREE.Color(0xFFEEE4),  // near-white — texture map drives color
+            color:              new THREE.Color(0xFFD8D8),  // pink tint — counteracts brown texture
             map:                oldMap,
-            emissive:           new THREE.Color(0x704050),  // muted pink, not brown
-            emissiveIntensity:  0.08,
+            emissive:           new THREE.Color(0x000000),
+            emissiveIntensity:  0.0,
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(1.2, 1.2),
             aoMap:              aoMapTex,
@@ -377,7 +377,7 @@ function loadHiresBrain() {
             clearcoatRoughness: 0.60,
             sheen:              0.05,
             sheenRoughness:     0.70,
-            sheenColor:         new THREE.Color(0xDDBBAA),
+            sheenColor:         new THREE.Color(0xDDCCCC),
             iridescence:        0.04,
             // Subsurface scattering (translucency)
             transmission:       0.08,
@@ -418,12 +418,12 @@ function loadHiresBrain() {
               child.geometry.computeVertexNormals();
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
-                color: new THREE.Color(0xFFEEE4),
-                map: oldMap, emissive: new THREE.Color(0x704050),
-                emissiveIntensity: 0.08, envMap: _envMap, envMapIntensity: 0.12,
+                color: new THREE.Color(0xFFD8D8),
+                map: oldMap, emissive: new THREE.Color(0x000000),
+                emissiveIntensity: 0.0, envMap: _envMap, envMapIntensity: 0.12,
                 roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
                 clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
-                sheenColor: new THREE.Color(0xDDBBAA), iridescence: 0.04,
+                sheenColor: new THREE.Color(0xDDCCCC), iridescence: 0.04,
                 transmission: 0.08, thickness: 0.5, ior: 1.4,
                 attenuationColor: new THREE.Color(0xE09070), attenuationDistance: 0.5,
                 side: THREE.FrontSide,
