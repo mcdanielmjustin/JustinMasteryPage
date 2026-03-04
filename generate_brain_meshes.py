@@ -108,8 +108,20 @@ DESTRIEUX_REGIONS = {
     ],
 
     "parietal_lobe": [
-        "G_parietal_sup", "G_pariet_inf-Angular", "G_pariet_inf-Supramar",
+        # Anterior wall: G_postcentral (BA 1/2/3, primary somatosensory cortex)
+        # is the FIRST gyrus of the parietal lobe, immediately posterior to the
+        # central sulcus. Previously absent — its omission made the mesh begin
+        # at mid-parietal, causing the selector to look truncated.
+        # G_and_S_subcentral = parietal operculum (secondary somatosensory, BA 43).
+        "G_postcentral", "G_and_S_subcentral",
+        # Superior parietal lobule (BA 5/7)
+        "G_parietal_sup",
+        # Inferior parietal lobule (BA 39/40)
+        "G_pariet_inf-Angular", "G_pariet_inf-Supramar",
+        # Medial parietal surface (BA 7/31)
         "G_precuneus",
+        # Sulci: intraparietal, parieto-occipital (posterior medial boundary),
+        # subparietal (inferior precuneus), postcentral
         "S_intrapariet_and_P_trans", "S_parieto_occipital",
         "S_subparietal", "S_postcentral",
     ],
