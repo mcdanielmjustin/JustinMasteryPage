@@ -623,7 +623,7 @@ function loadAtlasCerebellum() {
           new THREE.Float32BufferAttribute(new Float32Array(data.normals), 3));
         geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
 
-        var baseColor = new THREE.Color(0xC49480);  // deeper warm flesh tone to match cortex visually
+        var baseColor = new THREE.Color(TISSUE_COLOR);  // same as cortex
         var mat = new THREE.MeshPhysicalMaterial({
           color:              baseColor,
           envMap:             _envMap,
@@ -631,17 +631,17 @@ function loadAtlasCerebellum() {
           roughness:          0.75,
           metalness:          0.0,
           emissive:           new THREE.Color(0x6B3A2A),
-          emissiveIntensity:  0.20,
+          emissiveIntensity:  0.15,
           clearcoat:          0.08,
           clearcoatRoughness: 0.60,
           sheen:              0.05,
           sheenRoughness:     0.70,
           sheenColor:         new THREE.Color(0xDDBBAA),
-          transmission:       0.06,
-          thickness:          0.4,
+          transmission:       0.08,
+          thickness:          0.5,
           ior:                1.4,
           attenuationColor:   new THREE.Color(0xE09070),
-          attenuationDistance: 0.6,
+          attenuationDistance: 0.5,
           transparent:        false,
           opacity:            1.0,
           side:               THREE.DoubleSide,
