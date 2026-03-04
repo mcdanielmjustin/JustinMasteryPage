@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304l';
+var ASSET_VERSION = '20260304m';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -998,6 +998,44 @@ function computeRegionCameraPos(center, regionId, type) {
 
   // Camera distance: closer for small subcortical, further for large cortical
   var camDist = (type === 'subcortical') ? 3.0 : 4.2;
+
+  // ── Frontal lobe regions ──────────────────────────────────────────────────
+  // Lateral + pushed anterior so the frontal convexity is centred in frame
+  if (regionId === 'frontal_lobe') {
+    return new THREE.Vector3(4.2, 0.8, 2.2);
+  }
+  // Lateral-anterior, elevated — shows dorsal PFC and orbital surface
+  if (regionId === 'prefrontal_cortex') {
+    return new THREE.Vector3(3.8, 1.0, 2.8);
+  }
+  // Direct lateral, eye level, anterior — inferior frontal (z_MNI ≈ +20)
+  if (regionId === 'brocas_area') {
+    return new THREE.Vector3(5.0, 0.2, 1.5);
+  }
+  // Lateral, elevated — precentral strip runs superior-to-inferior
+  if (regionId === 'motor_cortex') {
+    return new THREE.Vector3(4.5, 2.2, 0.4);
+  }
+
+  // ── Parietal lobe regions ─────────────────────────────────────────────────
+  // Lateral + elevated + slightly posterior (y_MNI ≈ −30 to −75, z_MNI ≈ 30–75)
+  if (regionId === 'parietal_lobe') {
+    return new THREE.Vector3(4.0, 2.5, -0.8);
+  }
+  // Lateral, elevated — postcentral strip (similar to motor, slightly posterior)
+  if (regionId === 'somatosensory_cortex') {
+    return new THREE.Vector3(4.5, 2.0, 0.0);
+  }
+
+  // ── Temporal lobe regions ─────────────────────────────────────────────────
+  // Direct lateral, slightly inferior — STG/MTG/ITG at z_MNI ≈ 0–15
+  if (regionId === 'temporal_lobe') {
+    return new THREE.Vector3(4.8, -0.6, 0.5);
+  }
+  // Lateral, eye level, pulled posterior — posterior STG (y_MNI < −25)
+  if (regionId === 'wernickes_area') {
+    return new THREE.Vector3(5.0, 0.1, -1.0);
+  }
 
   // Special cases for medial / inferior structures
   if (regionId === 'cingulate_gyrus' || regionId === 'medial_frontal') {
