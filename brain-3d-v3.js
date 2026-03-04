@@ -39,6 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
+var ASSET_VERSION = '20260304a';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -304,7 +305,7 @@ loader.setDRACOLoader(dracoLoader);
 function loadHiresBrain() {
   return new Promise(function(resolve) {
     // Draco-compressed hires cortex (655k faces, ~2.6MB) — best quality, smallest download
-    var cortexPath = 'data/brain_meshes/full_brain_draco.glb';
+    var cortexPath = 'data/brain_meshes/full_brain_draco.glb?v=' + ASSET_VERSION;
 
     // Pre-load normal map + AO map textures in parallel with GLB
     var texLoader = new THREE.TextureLoader();
@@ -411,7 +412,7 @@ function loadHiresBrain() {
       function(err) {
         // Fall back to uncompressed optimized, then raw hires
         console.warn('[brain-3d-v3] Draco cortex not found, trying optimized fallback...');
-        loader.load('data/brain_meshes/full_brain_optimized.glb',
+        loader.load('data/brain_meshes/full_brain_optimized.glb?v=' + ASSET_VERSION,
           function(gltf) {
             gltf.scene.traverse(function(child) {
               if (!child.isMesh) return;
@@ -606,15 +607,15 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
 
 function loadAtlasBrainstem() {
   return _loadAtlasMesh('brainstem',
-    'data/brain_meshes/brainstem_mesh.json',
-    'data/brain_meshes/brainstem_texture.png');
+    'data/brain_meshes/brainstem_mesh.json?v=' + ASSET_VERSION,
+    'data/brain_meshes/brainstem_texture.png?v=' + ASSET_VERSION);
 }
 
 function loadAtlasCerebellum() {
   // Load high-detail JSON geometry (10K verts) with solid material (no texture to avoid UV stripe artifacts)
   console.log('[brain-3d-v3] loadAtlasCerebellum() called');
   return new Promise(function(resolve) {
-    fetch('data/brain_meshes/cerebellum_mesh.json')
+    fetch('data/brain_meshes/cerebellum_mesh.json?v=' + ASSET_VERSION)
       .then(function(r) {
         console.log('[brain-3d-v3] cerebellum JSON fetch status:', r.status);
         return r.json();
@@ -722,7 +723,7 @@ function loadAtlasCerebellum() {
 
 function loadRegion(regionId, entry, permanent) {
   return new Promise(function(resolve) {
-    loader.load(entry.file,
+    loader.load(entry.file + '?v=' + ASSET_VERSION,
       function(gltf) {
         var baseColor = permanent
           ? new THREE.Color(TISSUE_COLOR)
@@ -900,7 +901,7 @@ async function loadBrain() {
   var manifest = null;
   try {
     var results = await Promise.allSettled([
-      fetch('data/brain_regions_manifest.json').then(function(r) { return r.json(); }),
+      fetch('data/brain_regions_manifest.json?v=' + ASSET_VERSION).then(function(r) { return r.json(); }),
       loadHiresBrain(),   // emits pct 5–72 internally via onProgress
     ]);
     if (results[0].status === 'fulfilled') manifest = results[0].value;
