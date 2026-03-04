@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304e';
+var ASSET_VERSION = '20260304f';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -727,6 +727,32 @@ function loadAtlasCerebellum() {
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// OUTLINE GEOMETRY UTILITY
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Displaces every vertex outward by `amount` scene units along its vertex normal.
+// This gives a UNIFORM border thickness regardless of where the mesh sits in the
+// scene — unlike scale.setScalar() which inflates away from the world origin and
+// produces nearly-invisible borders for structures near the scene centre (e.g.
+// cingulate gyrus, medial frontal).
+var OUTLINE_INFLATE = 0.022;  // ~1.65 mm at scene scale (1 unit = 75 mm)
+
+function _inflateGeomByNormal(geom) {
+  var out = geom.clone();
+  var pos = out.attributes.position;
+  var nrm = out.attributes.normal;
+  if (!nrm) return out;
+  for (var i = 0; i < pos.count; i++) {
+    pos.setX(i, pos.getX(i) + nrm.getX(i) * OUTLINE_INFLATE);
+    pos.setY(i, pos.getY(i) + nrm.getY(i) * OUTLINE_INFLATE);
+    pos.setZ(i, pos.getZ(i) + nrm.getZ(i) * OUTLINE_INFLATE);
+  }
+  pos.needsUpdate = true;
+  return out;
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // BILATERAL MIRROR UTILITY
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -769,8 +795,8 @@ function _createMirrorMesh(sourceMesh) {
   mirror.visible       = false;
   mirror.userData      = { isMirror: true, regionId: sourceMesh.userData.regionId };
 
-  // Give the mirror its own gold selection outline so the border appears on
-  // both hemispheres when a region is selected.
+  // Give the mirror its own gold selection outline using the same normal-inflation
+  // approach as the source mesh so border width is consistent on both hemispheres.
   var mirrorSelMat = new THREE.MeshBasicMaterial({
     color:       0xFFD060,
     side:        THREE.BackSide,
@@ -778,8 +804,7 @@ function _createMirrorMesh(sourceMesh) {
     opacity:     0.0,
     depthWrite:  false,
   });
-  var mirrorSelOutline = new THREE.Mesh(mirrorGeom, mirrorSelMat);
-  mirrorSelOutline.scale.setScalar(1.06);
+  var mirrorSelOutline = new THREE.Mesh(_inflateGeomByNormal(mirrorGeom), mirrorSelMat);
   mirrorSelOutline.renderOrder = 3;
   mirrorSelOutline.visible = false;
   mirrorSelOutline.userData = { isOutline: true };
@@ -859,7 +884,9 @@ function loadRegion(regionId, entry, permanent) {
             overlayMat: mat,
           };
 
-          // Gold selection outline (BackSide, hidden until selected)
+          // Gold selection outline — vertices displaced outward along normals by a
+          // fixed distance (OUTLINE_INFLATE) so the border width is uniform for
+          // all regions including thin medial structures like cingulate gyrus.
           var selMat = new THREE.MeshBasicMaterial({
             color:       0xFFD060,
             side:        THREE.BackSide,
@@ -867,8 +894,7 @@ function loadRegion(regionId, entry, permanent) {
             opacity:     0.0,
             depthWrite:  false,
           });
-          var selOutline = new THREE.Mesh(child.geometry, selMat);
-          selOutline.scale.setScalar(1.06);
+          var selOutline = new THREE.Mesh(_inflateGeomByNormal(child.geometry), selMat);
           selOutline.renderOrder = 3;
           selOutline.visible = false;
           selOutline.userData = { isOutline: true };
@@ -1222,9 +1248,10 @@ function _dimHires(on) {
 function highlightRegion(regionId) {
   selectedRegionId = regionId;
 
-  // Cingulate gyrus lives on the medial wall — auto-enable split view so it is
-  // visible, and notify the UI so the split button reflects the new state.
-  if (regionId === 'cingulate_gyrus' && !splitOn) {
+  // Medial-wall structures — auto-enable split view so the medial surface is
+  // visible. The UI split button stays in sync via the brain3dSplitChanged event.
+  var _MEDIAL_AUTO_SPLIT = { cingulate_gyrus: true, medial_frontal: true };
+  if (_MEDIAL_AUTO_SPLIT[regionId] && !splitOn) {
     toggleSplit(true);
   }
 
