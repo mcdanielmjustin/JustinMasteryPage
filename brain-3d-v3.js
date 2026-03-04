@@ -611,10 +611,80 @@ function loadAtlasBrainstem() {
 }
 
 function loadAtlasCerebellum() {
-  return loadRegion('cerebellum', {
-    file: 'data/brain_meshes/hires_cerebellum.glb',
-    type: 'subcortical'
-  }, true);
+  // Load high-detail JSON geometry (10K verts) with solid material (no texture to avoid UV stripe artifacts)
+  return new Promise(function(resolve) {
+    fetch('data/brain_meshes/cerebellum_mesh.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var geo = new THREE.BufferGeometry();
+        geo.setAttribute('position',
+          new THREE.Float32BufferAttribute(new Float32Array(data.positions), 3));
+        geo.setAttribute('normal',
+          new THREE.Float32BufferAttribute(new Float32Array(data.normals), 3));
+        geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
+
+        var baseColor = new THREE.Color(TISSUE_COLOR);
+        var mat = new THREE.MeshPhysicalMaterial({
+          color:              baseColor,
+          envMap:             _envMap,
+          envMapIntensity:    0.08,
+          roughness:          0.68,
+          metalness:          0.0,
+          emissive:           baseColor,
+          emissiveIntensity:  0.04,
+          clearcoat:          0.10,
+          clearcoatRoughness: 0.38,
+          sheen:              0.09,
+          sheenRoughness:     0.52,
+          sheenColor:         new THREE.Color(0xFFBBAA),
+          transparent:        false,
+          opacity:            1.0,
+          side:               THREE.DoubleSide,
+          depthWrite:         true,
+        });
+        mat._origColor     = baseColor.clone();
+        mat._origEmissive  = baseColor.clone();
+        mat._origRoughness = mat.roughness;
+
+        var mesh = new THREE.Mesh(geo, mat);
+        mesh.name = 'cerebellum';
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.visible = true;
+
+        var selMat = new THREE.MeshBasicMaterial({
+          color: 0xFFD060, side: THREE.BackSide,
+          transparent: true, opacity: 0.0, depthWrite: false,
+        });
+        var selOutline = new THREE.Mesh(geo, selMat);
+        selOutline.scale.setScalar(1.04);
+        selOutline.renderOrder = 3;
+        selOutline.visible = false;
+        selOutline.userData = { isOutline: true };
+        mesh.userData = {
+          regionId: 'cerebellum', label: 'cerebellum', type: 'subcortical',
+          permanent: true, overlayMat: mat, selOutline: selOutline,
+        };
+        mesh.add(selOutline);
+
+        permanentMeshes.push(mesh);
+        regionMeshes.push(mesh);
+        subcorticalMeshes.push(mesh);
+        cerebellumMeshes.push(mesh);
+        brainGroup.add(mesh);
+
+        var box = new THREE.Box3().setFromObject(mesh);
+        var center = new THREE.Vector3();
+        box.getCenter(center);
+        regionCentroids['cerebellum'] = center;
+        regionCameraPos['cerebellum'] = computeRegionCameraPos(center, 'cerebellum', 'subcortical');
+        resolve(mesh);
+      })
+      .catch(function(err) {
+        console.error('[brain-3d-v3] Failed to load cerebellum mesh:', err);
+        resolve(null);
+      });
+  });
 }
 
 
