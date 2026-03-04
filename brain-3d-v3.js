@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304m';
+var ASSET_VERSION = '20260304n';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -300,6 +300,7 @@ var regionCameraPos   = {};  // regionId → Vector3 camera position
 var selectedRegionId  = null;
 var hoveredRegionId   = null;
 var glassOn           = false;
+var _autoGlassActive  = false;  // true when glass was auto-enabled for a buried region
 var splitOn           = false;
 var cerebellumVisible = true;
 var brainstemVisible  = true;
@@ -1008,9 +1009,14 @@ function computeRegionCameraPos(center, regionId, type) {
   if (regionId === 'prefrontal_cortex') {
     return new THREE.Vector3(3.8, 1.0, 2.8);
   }
-  // Direct lateral, eye level, anterior — inferior frontal (z_MNI ≈ +20)
+  // Tighter lateral-anterior — zooms in on the small inferior frontal patch
   if (regionId === 'brocas_area') {
-    return new THREE.Vector3(5.0, 0.2, 1.5);
+    return new THREE.Vector3(3.2, 0.1, 1.3);
+  }
+  // Lateral, slightly inferior — insula is auto-glassed so opercular cortex is
+  // transparent; camera looks into the Sylvian fissure from the lateral side
+  if (regionId === 'insula') {
+    return new THREE.Vector3(4.5, -0.2, 0.4);
   }
   // Lateral, elevated — precentral strip runs superior-to-inferior
   if (regionId === 'motor_cortex') {
@@ -1329,6 +1335,21 @@ function highlightRegion(regionId) {
   // the new region's state (avoids permanently glassed cerebellum on switch).
   _setCerebellumGlass(false);
 
+  // Auto-glass for deeply buried regions (insula sits inside the Sylvian fissure,
+  // completely hidden by opercular cortex in normal opaque view).
+  if (regionId === 'insula' && !glassOn) {
+    glassOn = true;
+    _applyHiresGlass(true);
+    _autoGlassActive = true;
+    window.dispatchEvent(new CustomEvent('brain3dGlassChanged', { detail: { glassOn: true } }));
+  } else if (_autoGlassActive && regionId !== 'insula') {
+    // Leaving an auto-glass region — restore opaque brain.
+    glassOn = false;
+    _applyHiresGlass(false);
+    _autoGlassActive = false;
+    window.dispatchEvent(new CustomEvent('brain3dGlassChanged', { detail: { glassOn: false } }));
+  }
+
   selectedRegionId = regionId;
 
   // Medial-wall structures — auto-enable split view so the medial surface is
@@ -1408,6 +1429,15 @@ function dimAllRegions(exceptIds) {
 
 function resetRegions() {
   _setCerebellumGlass(false);  // restore before state is cleared
+  // Clear auto-glass state if active
+  if (_autoGlassActive) {
+    _autoGlassActive = false;
+    if (glassOn) {
+      glassOn = false;
+      _applyHiresGlass(false);
+      window.dispatchEvent(new CustomEvent('brain3dGlassChanged', { detail: { glassOn: false } }));
+    }
+  }
   quizMode = false;
   selectedRegionId = null;
   hoveredRegionId = null;
@@ -1428,6 +1458,7 @@ function resetRegions() {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function toggleGlass(forceState) {
+  _autoGlassActive = false;  // manual toggle overrides auto-glass tracking
   if (typeof forceState === 'boolean') {
     glassOn = forceState;
   } else {

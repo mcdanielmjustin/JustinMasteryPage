@@ -437,7 +437,7 @@
   </script>
   <script type="module">
     if (new URLSearchParams(location.search).get('renderer') !== '2d') {
-      import('./brain-3d-v3.js?v=20260304m');
+      import('./brain-3d-v3.js?v=20260304n');
     } else {
       window.__brain3d = null;
       setTimeout(function() { window.dispatchEvent(new CustomEvent('brain3dReady')); }, 50);
@@ -880,6 +880,12 @@
     // (e.g. when cingulate gyrus is selected from the menu)
     window.addEventListener('brain3dSplitChanged', function(e) {
       document.getElementById('btn-split').classList.toggle('active', e.detail.splitOn);
+    });
+
+    // Keep glass button in sync when the 3D engine auto-enables glass
+    // (e.g. when insula is selected — opercular cortex must become transparent)
+    window.addEventListener('brain3dGlassChanged', function(e) {
+      document.getElementById('btn-glass').classList.toggle('active', e.detail.glassOn);
     });
 
     window.doToggleCerebellum = function() {

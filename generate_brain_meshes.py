@@ -94,12 +94,14 @@ DESTRIEUX_REGIONS = {
     ],
 
     "brocas_area": [
-        # Strictly BA 44 (pars opercularis) + BA 45 (pars triangularis).
-        # G_front_inf-Orbital (BA 47, pars orbitalis) removed — it is
-        # adjacent but not part of classic Broca's language area.
-        # Fissure labels removed — they are sulcal boundaries, not cortex.
+        # BA 44 (pars opercularis): phonological/articulatory processing
         "G_front_inf-Opercular",
+        # BA 45 (pars triangularis): syntactic/semantic processing
         "G_front_inf-Triangul",
+        # BA 47 (pars orbitalis): included — most inferior and visually prominent
+        # part of the inferior frontal gyrus; widely included in Broca's territory
+        # in modern neuroimaging literature (e.g. Friederici 2017, Hagoort 2019).
+        "G_front_inf-Orbital",
     ],
 
     "motor_cortex": [
@@ -192,6 +194,19 @@ DESTRIEUX_REGIONS = {
         "S_calcarine", "S_oc_middle_and_Lunatus",
         "S_oc_sup_and_transversal", "S_oc-temp_med_and_Lingual",
         "S_occipital_ant", "S_parieto_occipital",
+    ],
+
+    "insula": [
+        # Insular cortex (Destrieux 2010 labels).
+        # Short gyri = anterior insula (BA 13/14 rostral): interoception, salience
+        "G_insular_short",
+        # Long gyrus + central insular sulcus = posterior insula (BA 13 caudal):
+        # pain, visceral, auditory
+        "G_Ins_lg_and_S_cent_ins",
+        # Peri-insular (circular) sulcus — separates insula from opercular cortex
+        "S_circular_insula_ant",
+        "S_circular_insula_inf",
+        "S_circular_insula_sup",
     ],
 
     "cingulate_gyrus": [
