@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304n';
+var ASSET_VERSION = '20260304o';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -90,7 +90,9 @@ var CEREBELLUM_GLASS_REGIONS = new Set(['temporal_lobe', 'occipital_lobe']);
 var BILATERAL_REGIONS = new Set([
   'frontal_lobe', 'prefrontal_cortex', 'motor_cortex',
   'parietal_lobe', 'somatosensory_cortex', 'temporal_lobe', 'occipital_lobe',
+  'insula',
   'thalamus', 'hippocampus', 'amygdala', 'caudate', 'putamen', 'globus_pallidus',
+  'nucleus_accumbens', 'hypothalamus', 'substantia_nigra',
 ]);
 
 
@@ -1043,29 +1045,79 @@ function computeRegionCameraPos(center, regionId, type) {
     return new THREE.Vector3(5.0, 0.1, -1.0);
   }
 
-  // Special cases for medial / inferior structures
+  // ── Medial-wall cortical structures ──────────────────────────────────────
   if (regionId === 'cingulate_gyrus' || regionId === 'medial_frontal') {
-    // Medial view
-    return new THREE.Vector3(
-      center.x - 3.5,
-      center.y + 0.3,
-      center.z
-    );
+    return new THREE.Vector3(center.x - 3.5, center.y + 0.3, center.z);
   }
+
+  // ── Subcortical — glass mode auto-activates for these; camera angles are ──
+  // ── chosen to centre the structure in frame through the glass cortex.   ──
+
+  // Thalamus  cen≈(0.271,-0.111,0.185): deep central, slightly inferior
+  // Camera elevated-lateral to separate thalamus from brainstem below it
+  if (regionId === 'thalamus') {
+    return new THREE.Vector3(3.5, 1.0, 0.2);
+  }
+  // Hippocampus  cen≈(0.411,-0.364,0.125): medial temporal, inferior
+  // Lateral + well below eye level to frame the inferior temporal region
+  if (regionId === 'hippocampus') {
+    return new THREE.Vector3(3.5, -2.2, 0.0);
+  }
+  // Amygdala  cen≈(0.411,-0.464,0.345): anterior to hippocampus, same depth
+  // Lateral-inferior, pushed anteriorly to separate from hippocampus
+  if (regionId === 'amygdala') {
+    return new THREE.Vector3(3.5, -2.2, 1.5);
+  }
+  // Caudate  cen≈(0.271,-0.077,0.451): near midline, anterior (head)
+  // Lateral + elevated + anterior to frame the caudate head prominently
+  if (regionId === 'caudate') {
+    return new THREE.Vector3(3.5, 1.0, 2.0);
+  }
+  // Putamen  cen≈(0.418,-0.197,0.418): most lateral basal ganglia structure
+  // Direct lateral, slightly elevated — putamen is at a good lateral depth
+  if (regionId === 'putamen') {
+    return new THREE.Vector3(3.5, 0.5, 0.8);
+  }
+  // Globus pallidus  cen≈(0.371,-0.211,0.358): medial to putamen, deep
+  // Same lateral angle as putamen but slightly more anteriorly centred
+  if (regionId === 'globus_pallidus') {
+    return new THREE.Vector3(3.5, 0.5, 0.5);
+  }
+  // Nucleus accumbens: ventral striatum, anterior to caudate/putamen
+  // MNI ≈ (-10, 12, -6) → scene ≈ (0.25, -0.28, 0.60)
+  // Lateral, slightly inferior, strongly anterior
+  if (regionId === 'nucleus_accumbens') {
+    return new THREE.Vector3(3.5, 0.2, 2.2);
+  }
+  // Hypothalamus: midline, below thalamus, above brainstem
+  // MNI center (-4,-5,-9) → scene ≈ (0.17, -0.32, 0.37)
+  // Lateral, slightly below — distinctly inferior to thalamus view
+  if (regionId === 'hypothalamus') {
+    return new THREE.Vector3(3.5, -0.8, 0.4);
+  }
+  // Substantia nigra: paired midbrain crescent, dorsal to cerebral peduncles
+  // MNI center (-12,-19,-14) → scene ≈ (0.28, -0.39, 0.18)
+  // Lateral-inferior, matches the inferior midbrain position
+  if (regionId === 'substantia_nigra') {
+    return new THREE.Vector3(3.5, -1.0, 0.2);
+  }
+
+  // ── Brainstem / cerebellum (permanent, always visible) ───────────────────
   if (regionId === 'brainstem') {
     return new THREE.Vector3(center.x + 1.5, center.y - 2.5, center.z - 2.5);
   }
   if (regionId === 'cerebellum') {
     return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z - 2.0);
   }
-  // Deep structures: inferior/anterior view for visibility
-  if (regionId === 'hypothalamus' || regionId === 'pituitary') {
+
+  // ── Legacy / unused structures (kept for forward compatibility) ───────────
+  if (regionId === 'hypothalamus_legacy' || regionId === 'pituitary') {
     return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z + 2.0);
   }
   if (regionId === 'olfactory_bulb') {
     return new THREE.Vector3(center.x + 0.5, center.y - 2.5, center.z + 3.0);
   }
-  if (regionId === 'substantia_nigra' || regionId === 'vta') {
+  if (regionId === 'vta') {
     return new THREE.Vector3(center.x + 2.0, center.y - 2.0, center.z - 2.0);
   }
   if (regionId === 'pons' || regionId === 'medulla' || regionId === 'midbrain') {
@@ -1335,14 +1387,20 @@ function highlightRegion(regionId) {
   // the new region's state (avoids permanently glassed cerebellum on switch).
   _setCerebellumGlass(false);
 
-  // Auto-glass for deeply buried regions (insula sits inside the Sylvian fissure,
-  // completely hidden by opercular cortex in normal opaque view).
-  if (regionId === 'insula' && !glassOn) {
+  // Auto-glass for deeply buried structures — hidden behind opaque cortex
+  // without glass mode. Includes all deep subcortical + buried cortical (insula).
+  var _AUTO_GLASS_REGIONS = new Set([
+    'insula',
+    'thalamus', 'hippocampus', 'amygdala',
+    'caudate', 'putamen', 'globus_pallidus',
+    'nucleus_accumbens', 'hypothalamus', 'substantia_nigra',
+  ]);
+  if (_AUTO_GLASS_REGIONS.has(regionId) && !glassOn) {
     glassOn = true;
     _applyHiresGlass(true);
     _autoGlassActive = true;
     window.dispatchEvent(new CustomEvent('brain3dGlassChanged', { detail: { glassOn: true } }));
-  } else if (_autoGlassActive && regionId !== 'insula') {
+  } else if (_autoGlassActive && !_AUTO_GLASS_REGIONS.has(regionId)) {
     // Leaving an auto-glass region — restore opaque brain.
     glassOn = false;
     _applyHiresGlass(false);

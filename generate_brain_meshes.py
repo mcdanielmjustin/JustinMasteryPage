@@ -238,13 +238,40 @@ REGION_POSTERIOR_FILTER = {
 # Each list is tried in order; both exact and case-insensitive partial matching
 # are attempted, to handle label wording differences between atlas versions.
 HO_SUBCORTICAL = {
-    "thalamus":         ["Left Thalamus", "Left Thalamus Proper", "Thalamus"],
-    "hippocampus":      ["Left Hippocampus", "Hippocampus"],
-    "amygdala":         ["Left Amygdala", "Amygdala"],
-    "caudate":          ["Left Caudate", "Caudate"],
-    "putamen":          ["Left Putamen", "Putamen"],
-    "globus_pallidus":  ["Left Pallidum", "Pallidum", "Left Globus Pallidus"],
-    "brainstem":        ["Brain-Stem", "Brain Stem", "Brainstem"],
+    "thalamus":           ["Left Thalamus", "Left Thalamus Proper", "Thalamus"],
+    "hippocampus":        ["Left Hippocampus", "Hippocampus"],
+    "amygdala":           ["Left Amygdala", "Amygdala"],
+    "caudate":            ["Left Caudate", "Caudate"],
+    "putamen":            ["Left Putamen", "Putamen"],
+    "globus_pallidus":    ["Left Pallidum", "Pallidum", "Left Globus Pallidus"],
+    "nucleus_accumbens":  ["Left Accumbens", "Left Accumbens Area", "Accumbens"],
+    "brainstem":          ["Brain-Stem", "Brain Stem", "Brainstem"],
+}
+
+# Synthetic subcortical structures: not available in HO or AAL atlas, generated
+# as anatomically-placed ellipsoidal meshes in MNI RAS space.
+# center_mni = [x, y, z] in mm (RAS: x-right, y-anterior, z-superior)
+# radii_mm   = [rx, ry, rz] — half-axes of ellipsoid
+# clip_x     = right-hemisphere clip in MNI x (voxels with x_MNI > clip_x removed;
+#              left hemisphere has x_MNI < 0, so clip_x=5 includes full left side)
+SYNTHETIC_SUBCORTICAL = {
+    # Hypothalamus: bilateral midline structure, below thalamus.
+    # Spans y_MNI ≈ +5 (optic chiasm) to -15 (mammillary bodies),
+    # z_MNI ≈ -2 (floor of third ventricle) to -16 (inferior surface),
+    # x_MNI ≈ ±10 (bilateral). Generate left half (x ≤ 5 mm).
+    "hypothalamus": {
+        "center_mni": [-4, -5, -9],
+        "radii_mm":   [6, 9, 6],
+        "clip_x":     5.0,
+    },
+    # Substantia nigra: paired midbrain structure, dorsal to cerebral peduncles.
+    # Crescent-shaped; approximated as a flat ellipsoid.
+    # Left SN center: x ≈ -12, y ≈ -19, z ≈ -14 (MNI).
+    "substantia_nigra": {
+        "center_mni": [-12, -19, -14],
+        "radii_mm":   [7, 5, 3],
+        "clip_x":     0.0,
+    },
 }
 
 # ─── Coordinate helpers ─────────────────────────────────────────────────────────
@@ -675,6 +702,69 @@ def main():
         print("  -> Subcortical structures will be absent from manifest.")
 
     # ═══════════════════════════════════════════════════════════════════════════
+    # STAGE 3.5 — Synthetic subcortical meshes (atlas-less structures)
+    # Structures not available in HO or AAL atlases are generated as
+    # anatomically-placed ellipsoidal meshes in MNI RAS space.
+    # ═══════════════════════════════════════════════════════════════════════════
+    print("\n" + "=" * 60)
+    print("STAGE 3.5  Synthetic subcortical (ellipsoidal atlas-less)")
+    print("=" * 60)
+
+    def make_ellipsoid_mesh(center_mni, radii_mm, clip_x=5.0, vox_mm=1.0):
+        """
+        Build a trimesh Trimesh from an ellipsoidal volumetric mask in MNI space.
+        center_mni : [cx, cy, cz] in mm (RAS: x-right, y-anterior, z-superior)
+        radii_mm   : [rx, ry, rz] half-axes in mm
+        clip_x     : remove voxels with x_MNI > clip_x (left-hemisphere crop)
+        vox_mm     : voxel resolution for marching-cubes volume
+        """
+        cx, cy, cz = center_mni
+        rx, ry, rz = radii_mm
+        margin = 1.3
+        xs = np.arange(cx - rx * margin, cx + rx * margin + vox_mm, vox_mm)
+        ys = np.arange(cy - ry * margin, cy + ry * margin + vox_mm, vox_mm)
+        zs = np.arange(cz - rz * margin, cz + rz * margin + vox_mm, vox_mm)
+        X, Y, Z = np.meshgrid(xs, ys, zs, indexing="ij")
+        dist = ((X - cx) / rx) ** 2 + ((Y - cy) / ry) ** 2 + ((Z - cz) / rz) ** 2
+        vol = (dist <= 1.0).astype(np.float32)
+        vol[X > clip_x] = 0                      # left-hemisphere crop
+        if vol.sum() < 15:
+            return None
+        verts_idx, mc_faces, _, _ = marching_cubes(vol, level=0.5)
+        # Convert grid index → MNI mm
+        verts_mni = np.column_stack([
+            xs[0] + verts_idx[:, 0] * vox_mm,
+            ys[0] + verts_idx[:, 1] * vox_mm,
+            zs[0] + verts_idx[:, 2] * vox_mm,
+        ])
+        verts_3d = to_threejs(verts_mni)
+        return trimesh.Trimesh(vertices=verts_3d, faces=mc_faces, process=False)
+
+    for region_id, spec in SYNTHETIC_SUBCORTICAL.items():
+        print(f"  Processing {region_id} ..."); sys.stdout.flush()
+        try:
+            mesh = make_ellipsoid_mesh(
+                spec["center_mni"], spec["radii_mm"], clip_x=spec["clip_x"]
+            )
+            if mesh is None:
+                print(f"  [skip] {region_id}: empty ellipsoid volume"); continue
+            mesh = simplify(mesh, MAX_FACES_SUBCORTICAL)
+            out = OUT_DIR / f"{region_id}.glb"
+            if save_glb(mesh, out):
+                manifest[region_id] = {
+                    "file":        f"data/brain_meshes/{region_id}.glb",
+                    "type":        "subcortical",
+                    "vertexCount": len(mesh.vertices),
+                    "faceCount":   len(mesh.faces),
+                    "bounds":      mesh_bounds(mesh),
+                }
+                print(f"  OK {region_id}: {len(mesh.vertices):,} verts, "
+                      f"{len(mesh.faces):,} faces")
+        except Exception as e:
+            print(f"  [ERROR] {region_id}: {e}")
+            traceback.print_exc()
+
+    # ═══════════════════════════════════════════════════════════════════════════
     # STAGE 4 — Cerebellum (AAL atlas, all cerebellar parcels merged)
     # ═══════════════════════════════════════════════════════════════════════════
     print("\n" + "=" * 60)
@@ -758,7 +848,8 @@ def main():
         print(f"  {t:12s}: {', '.join(sorted(by_type[t]))}")
 
     # Warn if expected regions are missing
-    expected = set(DESTRIEUX_REGIONS) | set(HO_SUBCORTICAL) | {"cerebellum", "full_hemisphere"}
+    expected = (set(DESTRIEUX_REGIONS) | set(HO_SUBCORTICAL)
+                | set(SYNTHETIC_SUBCORTICAL) | {"cerebellum", "full_hemisphere"})
     missing_from_manifest = expected - set(manifest)
     if missing_from_manifest:
         print(f"\n  [warn] {len(missing_from_manifest)} expected region(s) not in manifest:")
