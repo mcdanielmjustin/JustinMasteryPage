@@ -429,12 +429,10 @@ def main():
                      if nm in MEDIAL_NAMES for k in ks}
     lateral_mask  = ~np.isin(label_data, list(medial_keys))
 
-    # Raw transform (offset = 0) to measure centroid
-    raw_3d = to_threejs(coords_fs)   # COORD_OFFSET is still [0,0,0] here
-    centroid = np.median(raw_3d[lateral_mask], axis=0)
-    CAM_TARGET   = np.array([0.55, 0.05, 0.10])
-    COORD_OFFSET  = CAM_TARGET - centroid
-    print(f"  Coordinate offset (centroid -> CAM_TARGET): {COORD_OFFSET.round(3)}")
+    # Use the same hardcoded offset as fix_hires_coords.py so region
+    # overlays align exactly with the hires cortex GLB.
+    COORD_OFFSET = np.array([0.118, -0.204, 0.438], dtype=np.float64)
+    print(f"  Coordinate offset (hardcoded, matches cortex GLB): {COORD_OFFSET}")
 
     # Now re-compute with final offset
     coords_3d = to_threejs(coords_fs)
