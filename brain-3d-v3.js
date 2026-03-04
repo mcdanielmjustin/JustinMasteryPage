@@ -451,39 +451,33 @@ function loadHiresBrain() {
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ANATOMICAL BRAINSTEM + CEREBELLUM  (JSON mesh data from atlas marching cubes)
+// ANATOMICAL BRAINSTEM + CEREBELLUM  (textured GLB with embedded procedural texture)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
+function _loadAtlasGLB(regionId, glbUrl) {
   /**
-   * Load an atlas-derived mesh from JSON (positions, indices, normals, uvs)
-   * and apply a procedural texture PNG. Returns a Promise that resolves
-   * when the mesh is added to the scene.
+   * Load a textured GLB for permanent structures (brainstem, cerebellum).
+   * Preserves the embedded texture map while upgrading to MeshPhysicalMaterial.
    */
   return new Promise(function(resolve) {
-    fetch(jsonUrl)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        var geo = new THREE.BufferGeometry();
-        geo.setAttribute('position',
-          new THREE.Float32BufferAttribute(new Float32Array(data.positions), 3));
-        geo.setAttribute('normal',
-          new THREE.Float32BufferAttribute(new Float32Array(data.normals), 3));
-        geo.setAttribute('uv',
-          new THREE.Float32BufferAttribute(new Float32Array(data.uvs), 2));
-        geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
+    loader.load(glbUrl,
+      function(gltf) {
+        gltf.scene.traverse(function(child) {
+          if (!child.isMesh) return;
+          child.geometry.computeVertexNormals();
 
-        // Load the procedural texture
-        var texLoader = new THREE.TextureLoader();
-        texLoader.load(textureUrl, function(tex) {
-          tex.colorSpace = THREE.SRGBColorSpace;
-          tex.wrapS = THREE.RepeatWrapping;
-          tex.wrapT = THREE.RepeatWrapping;
-          tex.minFilter = THREE.LinearMipmapLinearFilter;
-          tex.magFilter = THREE.LinearFilter;
+          // Preserve the embedded texture from the GLB
+          var embeddedMap = child.material ? child.material.map : null;
+          if (embeddedMap) {
+            embeddedMap.colorSpace = THREE.SRGBColorSpace;
+            embeddedMap.wrapS = THREE.RepeatWrapping;
+            embeddedMap.wrapT = THREE.RepeatWrapping;
+            embeddedMap.minFilter = THREE.LinearMipmapLinearFilter;
+            embeddedMap.magFilter = THREE.LinearFilter;
+          }
 
           var mat = new THREE.MeshPhysicalMaterial({
-            map:                tex,
+            map:                embeddedMap,
             envMap:             _envMap,
             envMapIntensity:    0.08,
             roughness:          0.68,
@@ -503,117 +497,64 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
           mat._origEmissive  = new THREE.Color(0x000000);
           mat._origRoughness = mat.roughness;
 
-          var mesh = new THREE.Mesh(geo, mat);
-          mesh.name = regionId;
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-          mesh.visible = true;
+          child.material = mat;
+          child.name = regionId;
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.visible = true;
 
           // Gold selection outline
           var selMat = new THREE.MeshBasicMaterial({
             color: 0xFFD060, side: THREE.BackSide,
             transparent: true, opacity: 0.0, depthWrite: false,
           });
-          var selOutline = new THREE.Mesh(geo, selMat);
+          var selOutline = new THREE.Mesh(child.geometry, selMat);
           selOutline.scale.setScalar(1.04);
           selOutline.renderOrder = 3;
           selOutline.visible = false;
           selOutline.userData = { isOutline: true };
-          mesh.userData = {
+          child.userData = {
             regionId: regionId, label: regionId, type: 'subcortical',
             permanent: true, overlayMat: mat, selOutline: selOutline,
           };
-          mesh.add(selOutline);
+          child.add(selOutline);
 
           // Register in all arrays
-          permanentMeshes.push(mesh);
-          regionMeshes.push(mesh);
-          subcorticalMeshes.push(mesh);
-          if (regionId === 'cerebellum') cerebellumMeshes.push(mesh);
-          if (regionId === 'brainstem')  brainstemMeshes.push(mesh);
-
-          brainGroup.add(mesh);
-
-          // Compute centroid for camera focus
-          var box = new THREE.Box3().setFromObject(mesh);
-          var center = new THREE.Vector3();
-          box.getCenter(center);
-          regionCentroids[regionId] = center;
-          regionCameraPos[regionId] = computeRegionCameraPos(center, regionId, 'subcortical');
-
-          console.log('[brain-3d-v3] Atlas ' + regionId + ': '
-            + data.vertexCount + ' verts, ' + data.faceCount + ' faces at',
-            center.x.toFixed(3), center.y.toFixed(3), center.z.toFixed(3));
-
-          resolve(mesh);
-        }, undefined, function(err) {
-          // Texture load failed — fall back to solid color
-          console.warn('[brain-3d-v3] Texture load failed for ' + regionId + ', using solid color');
-          var baseColor = new THREE.Color(TISSUE_COLOR);
-          var mat = new THREE.MeshPhysicalMaterial({
-            color: baseColor, envMap: _envMap, envMapIntensity: 0.08,
-            roughness: 0.68, metalness: 0.0, emissive: baseColor,
-            emissiveIntensity: 0.04, clearcoat: 0.10, clearcoatRoughness: 0.38,
-            sheen: 0.09, sheenRoughness: 0.52, sheenColor: new THREE.Color(0xFFBBAA),
-            transparent: false, opacity: 1.0, side: THREE.DoubleSide, depthWrite: true,
-          });
-          mat._origColor     = baseColor.clone();
-          mat._origEmissive  = baseColor.clone();
-          mat._origRoughness = mat.roughness;
-
-          var mesh = new THREE.Mesh(geo, mat);
-          mesh.name = regionId;
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-          mesh.visible = true;
-
-          var selMat = new THREE.MeshBasicMaterial({
-            color: 0xFFD060, side: THREE.BackSide,
-            transparent: true, opacity: 0.0, depthWrite: false,
-          });
-          var selOutline = new THREE.Mesh(geo, selMat);
-          selOutline.scale.setScalar(1.04);
-          selOutline.renderOrder = 3;
-          selOutline.visible = false;
-          selOutline.userData = { isOutline: true };
-          mesh.userData = {
-            regionId: regionId, label: regionId, type: 'subcortical',
-            permanent: true, overlayMat: mat, selOutline: selOutline,
-          };
-          mesh.add(selOutline);
-
-          permanentMeshes.push(mesh);
-          regionMeshes.push(mesh);
-          subcorticalMeshes.push(mesh);
-          if (regionId === 'cerebellum') cerebellumMeshes.push(mesh);
-          if (regionId === 'brainstem')  brainstemMeshes.push(mesh);
-          brainGroup.add(mesh);
-
-          var box = new THREE.Box3().setFromObject(mesh);
-          var center = new THREE.Vector3();
-          box.getCenter(center);
-          regionCentroids[regionId] = center;
-          regionCameraPos[regionId] = computeRegionCameraPos(center, regionId, 'subcortical');
-          resolve(mesh);
+          permanentMeshes.push(child);
+          regionMeshes.push(child);
+          subcorticalMeshes.push(child);
+          if (regionId === 'cerebellum') cerebellumMeshes.push(child);
+          if (regionId === 'brainstem')  brainstemMeshes.push(child);
         });
-      })
-      .catch(function(err) {
-        console.error('[brain-3d-v3] Failed to load ' + regionId + ' mesh JSON:', err);
+
+        brainGroup.add(gltf.scene);
+
+        // Compute centroid for camera focus
+        var box = new THREE.Box3().setFromObject(gltf.scene);
+        var center = new THREE.Vector3();
+        box.getCenter(center);
+        regionCentroids[regionId] = center;
+        regionCameraPos[regionId] = computeRegionCameraPos(center, regionId, 'subcortical');
+
+        console.log('[brain-3d-v3] Atlas ' + regionId + ' GLB loaded at',
+          center.x.toFixed(3), center.y.toFixed(3), center.z.toFixed(3));
+        resolve();
+      },
+      undefined,
+      function(err) {
+        console.warn('[brain-3d-v3] Atlas GLB load failed (' + regionId + '):', err);
         resolve(null);
-      });
+      }
+    );
   });
 }
 
 function loadAtlasBrainstem() {
-  return _loadAtlasMesh('brainstem',
-    'data/brain_meshes/brainstem_mesh.json',
-    'data/brain_meshes/brainstem_texture.png');
+  return _loadAtlasGLB('brainstem', 'data/brain_meshes/hires_brainstem.glb');
 }
 
 function loadAtlasCerebellum() {
-  return _loadAtlasMesh('cerebellum',
-    'data/brain_meshes/cerebellum_mesh.json',
-    'data/brain_meshes/cerebellum_texture.png');
+  return _loadAtlasGLB('cerebellum', 'data/brain_meshes/hires_cerebellum.glb');
 }
 
 
