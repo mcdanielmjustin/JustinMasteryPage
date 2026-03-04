@@ -477,8 +477,8 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
         var texLoader = new THREE.TextureLoader();
         texLoader.load(textureUrl, function(tex) {
           tex.colorSpace = THREE.SRGBColorSpace;
-          tex.wrapS = THREE.RepeatWrapping;
-          tex.wrapT = THREE.RepeatWrapping;
+          tex.wrapS = THREE.ClampToEdgeWrapping;
+          tex.wrapT = THREE.ClampToEdgeWrapping;
           tex.minFilter = THREE.LinearMipmapLinearFilter;
           tex.magFilter = THREE.LinearFilter;
 
