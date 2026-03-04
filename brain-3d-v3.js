@@ -361,10 +361,10 @@ function loadHiresBrain() {
             oldMap.colorSpace = THREE.SRGBColorSpace;
           }
           var physMat = new THREE.MeshPhysicalMaterial({
-            color:              new THREE.Color(0xF5D0C0),  // warm pink base (not white)
+            color:              new THREE.Color(0xFFEEE4),  // near-white — texture map drives color
             map:                oldMap,
             emissive:           new THREE.Color(0x8B4A3A),  // rosier, less brown
-            emissiveIntensity:  0.15,
+            emissiveIntensity:  0.18,
             normalMap:          normalMapTex,
             normalScale:        new THREE.Vector2(1.2, 1.2),
             aoMap:              aoMapTex,
@@ -383,7 +383,7 @@ function loadHiresBrain() {
             transmission:       0.08,
             thickness:          0.5,
             ior:                1.4,
-            attenuationColor:   new THREE.Color(0xD07060),  // deeper pink SSS
+            attenuationColor:   new THREE.Color(0xE09070),
             attenuationDistance: 0.5,
             side:               THREE.FrontSide,
           });
@@ -418,14 +418,14 @@ function loadHiresBrain() {
               child.geometry.computeVertexNormals();
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
-                color: new THREE.Color(0xF5D0C0),
+                color: new THREE.Color(0xFFEEE4),
                 map: oldMap, emissive: new THREE.Color(0x8B4A3A),
-                emissiveIntensity: 0.15, envMap: _envMap, envMapIntensity: 0.12,
+                emissiveIntensity: 0.18, envMap: _envMap, envMapIntensity: 0.12,
                 roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
                 clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
                 sheenColor: new THREE.Color(0xDDBBAA), iridescence: 0.04,
                 transmission: 0.08, thickness: 0.5, ior: 1.4,
-                attenuationColor: new THREE.Color(0xD07060), attenuationDistance: 0.5,
+                attenuationColor: new THREE.Color(0xE09070), attenuationDistance: 0.5,
                 side: THREE.FrontSide,
               });
               physMat._isHiresMat = true;
