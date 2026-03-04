@@ -1236,12 +1236,18 @@ function toggleSplit(forceState) {
   }
 
   if (splitOn) {
+    // Use hardware clip plane (gl_ClipDistance) via renderer.clippingPlanes.
+    // Unlike material.clippingPlanes (which discards in the fragment shader),
+    // hardware clipping runs before rasterization — so the invisible hemisphere
+    // never writes to the depth buffer, shadow map, or transmission pre-pass.
+    // This lets GTAO, shadows, AO map, and transmission all stay on at full
+    // quality without seeing the ghost hemisphere.
+    renderer.clippingPlanes = [_splitPlane];
     renderer.localClippingEnabled = true;
 
-    // Clip cortex at midline, show cut face
+    // Show cut face interior on cortex
     hiresMeshes.forEach(function(m) {
       if (!m.material) return;
-      m.material.clippingPlanes = [_splitPlane];
       m.material.side = THREE.DoubleSide;
       m.material.needsUpdate = true;
     });
@@ -1250,7 +1256,6 @@ function toggleSplit(forceState) {
     corticalMeshes.forEach(function(m) {
       var mat = m.userData.overlayMat;
       if (!mat) return;
-      mat.clippingPlanes = [_splitPlane];
       mat.side = THREE.DoubleSide;
       mat.needsUpdate = true;
     });
@@ -1274,20 +1279,19 @@ function toggleSplit(forceState) {
       }
     });
   } else {
-    // Restore clipping on hires
+    // Remove global hardware clip and restore cortex materials
+    renderer.clippingPlanes = [];
     renderer.localClippingEnabled = false;
     hiresMeshes.forEach(function(m) {
       if (!m.material) return;
-      m.material.clippingPlanes = [];
       m.material.side = glassOn ? THREE.DoubleSide : THREE.FrontSide;
       m.material.needsUpdate = true;
     });
 
-    // Remove clipping from cortical overlays
+    // Restore cortical overlay sides
     corticalMeshes.forEach(function(m) {
       var mat = m.userData.overlayMat;
       if (!mat) return;
-      mat.clippingPlanes = [];
       mat.side = THREE.FrontSide;
       mat.needsUpdate = true;
     });
