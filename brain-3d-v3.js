@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304k';
+var ASSET_VERSION = '20260304l';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -82,7 +82,7 @@ var PERMANENT_IDS = new Set(['brainstem', 'cerebellum']);
 
 // Regions where the cerebellum partially occludes the selected structure in
 // the default lateral camera view — auto-glass the cerebellum while selected.
-var CEREBELLUM_GLASS_REGIONS = new Set(['temporal_lobe']);
+var CEREBELLUM_GLASS_REGIONS = new Set(['temporal_lobe', 'occipital_lobe']);
 
 // Regions that exist on both hemispheres and should show a mirrored right-side overlay.
 // Language-dominant regions (Broca's, Wernicke's) and midline structures (cingulate, corpus
