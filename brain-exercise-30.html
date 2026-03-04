@@ -259,9 +259,11 @@
     }
     .brain-loading-bar {
       height: 100%; background: var(--accent); border-radius: 2px;
-      width: 0%; transition: width .3s;
+      width: 0%; transition: width .25s ease-out, background .4s;
     }
-    .brain-loading-sub { font-size: 11px; color: var(--text3); }
+    .brain-loading-bar.ready { background: var(--green); }
+    .brain-loading-sub { font-size: 11px; color: var(--text3); transition: color .3s; }
+    .brain-loading-sub.ready { color: var(--green); }
 
 
     /* ═══════════════════════════════════════════════════════════════════════
@@ -639,20 +641,34 @@
       {
         id: 'subcortical_group', label: 'Subcortical',
         children: [
-          { id: 'thalamus',        label: 'Thalamus',        leaf: true },
-          { id: 'hippocampus',     label: 'Hippocampus',     leaf: true },
-          { id: 'amygdala',        label: 'Amygdala',        leaf: true },
-          { id: 'caudate',         label: 'Caudate Nucleus', leaf: true },
-          { id: 'putamen',         label: 'Putamen',         leaf: true },
-          { id: 'globus_pallidus', label: 'Globus Pallidus', leaf: true },
-          { id: 'nucleus_accumbens', label: 'Nucleus Accumbens', leaf: true },
+          { id: 'thalamus',         label: 'Thalamus',          leaf: true },
+          { id: 'hypothalamus',     label: 'Hypothalamus',      leaf: true },
+          { id: 'hippocampus',      label: 'Hippocampus',       leaf: true },
+          { id: 'amygdala',         label: 'Amygdala',          leaf: true },
+          { id: 'caudate',          label: 'Caudate Nucleus',   leaf: true },
+          { id: 'putamen',          label: 'Putamen',           leaf: true },
+          { id: 'globus_pallidus',  label: 'Globus Pallidus',   leaf: true },
+          { id: 'nucleus_accumbens',label: 'Nucleus Accumbens', leaf: true },
+          { id: 'substantia_nigra', label: 'Substantia Nigra',  leaf: true },
+          { id: 'vta',              label: 'Ventral Tegmental Area', leaf: true },
+          { id: 'pituitary',        label: 'Pituitary Gland',   leaf: true },
+          { id: 'olfactory_bulb',   label: 'Olfactory Bulb',    leaf: true },
+        ]
+      },
+      {
+        id: 'white_matter_group', label: 'White Matter',
+        children: [
+          { id: 'corpus_callosum', label: 'Corpus Callosum', leaf: true },
         ]
       },
       {
         id: 'hindbrain_group', label: 'Hindbrain',
         children: [
           { id: 'brainstem',  label: 'Brainstem',  leaf: true },
-          { id: 'cerebellum', label: 'Cerebellum', leaf: true },
+          { id: 'pons',       label: 'Pons',       leaf: true },
+          { id: 'medulla',    label: 'Medulla',     leaf: true },
+          { id: 'midbrain',   label: 'Midbrain',    leaf: true },
+          { id: 'cerebellum', label: 'Cerebellum',  leaf: true },
         ]
       },
     ];
@@ -907,29 +923,35 @@
       var overlay = document.getElementById('brain-loading');
       if (!overlay) return;
       overlay.classList.add('hidden');
-      setTimeout(function() {
-        if (overlay.parentNode) overlay.remove();
-      }, 600);
+      setTimeout(function() { if (overlay.parentNode) overlay.remove(); }, 600);
     }
 
     window.addEventListener('brain3dProgress', function(e) {
       var bar = document.getElementById('brain-loading-bar');
       var sub = document.getElementById('brain-loading-sub');
-      if (bar) bar.style.width = Math.round((e.detail.loaded / e.detail.total) * 100) + '%';
-      if (sub) sub.textContent = 'Loading meshes\u2026 ' + e.detail.loaded + ' / ' + e.detail.total;
+      // Accept new pct+label format; fall back to old loaded/total format
+      var pct = e.detail.pct !== undefined
+        ? e.detail.pct
+        : Math.round((e.detail.loaded / e.detail.total) * 100);
+      var label = e.detail.label || ('Loading\u2026 ' + pct + '%');
+      if (bar) bar.style.width = pct + '%';
+      if (sub) sub.textContent = label;
     });
 
     window.addEventListener('brain3dReady', function() {
-      dismissLoading();
-      if (_quizPool.length && _quizCurrent < _quizPool.length) renderQuizQuestion();
-    });
-
-    // Mount 3D when ready
-    window.addEventListener('brain3dReady', function() {
+      // Mount canvas first so brain appears behind the fading overlay
       var stage = document.getElementById('brain-stage');
       if (window.__brain3d && stage && !stage.querySelector('canvas')) {
         window.__brain3d.mount(stage);
       }
+      // Flash 100% "Ready" briefly, then fade the overlay out
+      var bar = document.getElementById('brain-loading-bar');
+      var sub = document.getElementById('brain-loading-sub');
+      if (bar) { bar.style.width = '100%'; bar.classList.add('ready'); }
+      if (sub) { sub.textContent = 'Ready'; sub.classList.add('ready'); }
+      setTimeout(dismissLoading, 420);
+
+      if (_quizPool.length && _quizCurrent < _quizPool.length) renderQuizQuestion();
     });
 
     // WebGL unavailable

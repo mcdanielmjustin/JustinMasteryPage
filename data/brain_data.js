@@ -633,6 +633,132 @@ window.__BRAIN_DATA = {
         ],
         "vascular": "Anterior limb: Heubner's artery (recurrent artery of ACA) + lateral lenticulostriate arteries (MCA); PLIC: lateral lenticulostriate arteries (MCA M1) — most common hypertensive lacunar stroke territory; posterior limb also anterior choroidal artery (territory debate)"
       }
+    },
+
+    "pons": {
+      "label": "Pons",
+      "info": {
+        "ba": "N/A — brainstem metencephalon; bridges cerebellum to cerebrum; contains pontine nuclei, reticular formation, and cranial nerve nuclei V–VIII",
+        "functions": [
+          "Relay station between cerebral cortex and cerebellum — corticopontocerebellar pathway (massive tract through middle cerebellar peduncle)",
+          "Contains cranial nerve nuclei: trigeminal (V) motor and chief sensory, abducens (VI), facial (VII) motor and sensory, vestibular and cochlear (VIII)",
+          "Pontine reticular formation: contributes to REM sleep regulation (especially dorsolateral pons — sublaterodorsal nucleus/subcoeruleus area); pontine lesions cause REM sleep behavior disorder",
+          "Locus coeruleus (dorsal pons): primary norepinephrine source for the entire brain; regulates arousal, attention, and stress response; degenerates early in Alzheimer's and Parkinson's",
+          "Respiratory center: pneumotaxic center (upper pons) fine-tunes breathing rhythm from medullary respiratory centers"
+        ],
+        "syndromes": [
+          "Locked-in syndrome: bilateral ventral pontine infarct (basilar artery occlusion) destroys corticospinal and corticobulbar tracts; patient is fully conscious but can only communicate via vertical eye movements and blinking (CN III nucleus is spared because it is in the midbrain); reticular activating system is spared (dorsal), so consciousness is preserved",
+          "Central pontine myelinolysis (osmotic demyelination syndrome): rapid correction of hyponatremia causes symmetrical demyelination of central pons; presents with quadriparesis, pseudobulbar palsy, locked-in syndrome; MRI: T2 hyperintensity in central pons ('trident sign')",
+          "Lateral pontine syndrome (Marie-Foix): AICA territory; ipsilateral facial paralysis (CN VII), hearing loss (CN VIII), Horner's, cerebellar ataxia; contralateral pain/temp loss (lateral spinothalamic)",
+          "Millard-Gubler syndrome: ventral caudal pontine lesion; ipsilateral CN VI (lateral rectus palsy → esotropia) + CN VII (peripheral facial palsy) + contralateral hemiplegia (corticospinal tract)"
+        ],
+        "vascular": "Basilar artery (paramedian perforators for medial pons) · AICA (anteroinferior cerebellar artery for lateral pons) · SCA superior surface"
+      }
+    },
+
+    "medulla": {
+      "label": "Medulla Oblongata",
+      "info": {
+        "ba": "N/A — brainstem myelencephalon; continuous with spinal cord at foramen magnum; contains vital autonomic centers and decussation of major tracts",
+        "functions": [
+          "Cardiovascular center: regulates heart rate and blood pressure via vagus nerve (CN X) parasympathetic output and sympathetic excitatory projections; baroreceptor reflex arc integrates here",
+          "Respiratory center: dorsal respiratory group (nucleus tractus solitarius — inspiration) and ventral respiratory group (nucleus ambiguus — forced expiration); sets basic breathing rhythm",
+          "Pyramidal decussation: 85–90% of corticospinal tract fibers cross at caudal medulla; explains contralateral motor control",
+          "Contains cranial nerve nuclei IX (glossopharyngeal), X (vagus), XI (spinal accessory), XII (hypoglossal)",
+          "Nucleus tractus solitarius: visceral sensory relay for taste (anterior 2/3 tongue via VII, posterior 1/3 via IX), baroreceptor, and chemoreceptor afferents",
+          "Area postrema (chemoreceptor trigger zone): lacks blood-brain barrier; detects circulating toxins and triggers vomiting reflex"
+        ],
+        "syndromes": [
+          "Lateral medullary syndrome (Wallenberg syndrome): PICA territory infarct; ipsilateral Horner's, ipsilateral facial pain/temp loss (descending trigeminal tract), ipsilateral cerebellar ataxia (inferior cerebellar peduncle), ipsilateral palatal/vocal cord paralysis (nucleus ambiguus — CN IX/X), contralateral body pain/temp loss (lateral spinothalamic); NO motor weakness (corticospinal tract is ventral, spared)",
+          "Medial medullary syndrome (Dejerine syndrome): ASA territory; contralateral hemiplegia (pyramid), contralateral proprioception/vibration loss (medial lemniscus), ipsilateral tongue deviation (CN XII hypoglossal nucleus); rare because collateral supply is usually sufficient",
+          "Ondine's curse (central hypoventilation): damage to medullary respiratory centers causes loss of automatic breathing during sleep; patient must consciously breathe while awake; can result from medullary infarct, tumor, or surgical damage"
+        ],
+        "vascular": "PICA (posterior inferior cerebellar artery — lateral medulla) · ASA (anterior spinal artery — medial medulla) · Vertebral artery direct perforators"
+      }
+    },
+
+    "midbrain": {
+      "label": "Midbrain",
+      "info": {
+        "ba": "N/A — mesencephalon; smallest brainstem segment; contains cerebral peduncles (ventral), tegmentum (central), and tectum (dorsal — superior and inferior colliculi)",
+        "functions": [
+          "Superior colliculus: visual orienting reflexes and saccadic eye movement coordination; receives direct retinal input; mediates 'blindsight' in V1-lesioned patients",
+          "Inferior colliculus: obligatory auditory relay; all ascending auditory pathways synapse here before reaching medial geniculate → auditory cortex",
+          "Cerebral peduncles: massive corticospinal, corticobulbar, and corticopontine fiber bundles descending through ventral midbrain",
+          "Contains CN III (oculomotor) and CN IV (trochlear) nuclei; Edinger-Westphal nucleus provides parasympathetic pupillary constriction",
+          "Periaqueductal gray (PAG): endogenous pain modulation center; opioid receptors dense here; stimulation produces profound analgesia; descending inhibition via raphe nuclei and locus coeruleus",
+          "Red nucleus: receives cerebellar output (superior cerebellar peduncle decussation); rubrospinal tract — contributes to flexor motor control; midbrain tremor (Holmes tremor) involves rubral/cerebellar circuits"
+        ],
+        "syndromes": [
+          "Weber syndrome: ventral midbrain lesion (cerebral peduncle + CN III fascicle); ipsilateral CN III palsy (ptosis, 'down and out' eye, dilated pupil) + contralateral hemiplegia (corticospinal); classic 'crossed' brainstem syndrome",
+          "Benedikt syndrome: tegmental midbrain lesion (red nucleus + CN III fascicle + medial lemniscus); ipsilateral CN III palsy + contralateral cerebellar tremor/ataxia (rubral tremor) + contralateral sensory loss",
+          "Parinaud syndrome (dorsal midbrain syndrome): pineal region tumor or hydrocephalus compressing superior colliculus/pretectal area; upward gaze paralysis, convergence-retraction nystagmus, light-near dissociation of pupils, eyelid retraction (Collier sign)",
+          "Peduncular hallucinosis (Lhermitte): midbrain tegmental lesion; vivid, formed visual hallucinations (people, animals, scenes) with preserved insight; patient knows hallucinations are not real; related to disruption of ascending reticular-thalamic circuits"
+        ],
+        "vascular": "PCA perforating branches (P1 segment — posterior thalamoperforating and peduncular perforators) · SCA (superior cerebellar artery for lateral tegmentum) · Basilar tip"
+      }
+    },
+
+    "pituitary": {
+      "label": "Pituitary Gland",
+      "info": {
+        "ba": "N/A — endocrine gland in sella turcica; anterior lobe (adenohypophysis) derived from Rathke's pouch; posterior lobe (neurohypophysis) derived from neural ectoderm",
+        "functions": [
+          "Anterior pituitary: produces ACTH (→ adrenal cortisol), TSH (→ thyroid hormones), GH (growth), PRL (lactation), FSH and LH (gonadal function); regulated by hypothalamic releasing/inhibiting hormones via portal system",
+          "Posterior pituitary: stores and releases ADH/vasopressin (water retention) and oxytocin (uterine contraction, milk letdown) — synthesized in hypothalamic supraoptic and paraventricular nuclei, transported via axons",
+          "Master endocrine gland — orchestrates thyroid, adrenal, gonadal, growth, and lactation axes",
+          "Negative feedback loops: cortisol suppresses CRH/ACTH; thyroid hormones suppress TRH/TSH; sex steroids modulate GnRH/FSH/LH"
+        ],
+        "syndromes": [
+          "Pituitary adenoma: most common sellar mass; microadenoma (<10mm) or macroadenoma (>10mm); prolactinoma most common type → galactorrhea + amenorrhea; GH-secreting → acromegaly (adults) or gigantism (children); ACTH-secreting → Cushing's disease",
+          "Bitemporal hemianopia: pituitary macroadenoma compresses optic chiasm from below; classic visual field defect; superior quadrants affected first (inferior chiasmatic fibers compressed first)",
+          "Sheehan syndrome: postpartum pituitary necrosis from hypovolemic shock during delivery; enlarged pituitary during pregnancy is vulnerable to ischemia; presents with failure to lactate, fatigue, secondary amenorrhea; can cause life-threatening adrenal crisis",
+          "Pituitary apoplexy: sudden hemorrhage into pituitary adenoma; emergency — severe headache, visual loss, ophthalmoplegia (CN III/IV/VI from cavernous sinus), altered consciousness; requires emergent surgery + corticosteroid replacement"
+        ],
+        "vascular": "Superior hypophyseal artery (internal carotid branch — anterior lobe via portal system) · Inferior hypophyseal artery (internal carotid branch — posterior lobe direct supply)"
+      }
+    },
+
+    "olfactory_bulb": {
+      "label": "Olfactory Bulb",
+      "info": {
+        "ba": "N/A — telencephalic structure resting on cribriform plate; receives axons from olfactory receptor neurons in nasal epithelium; only cranial nerve with direct cortical projection (no thalamic relay)",
+        "functions": [
+          "First relay station for olfactory processing — receives input from ~10 million olfactory receptor neurons via CN I (olfactory nerve) filaments through cribriform plate",
+          "Glomerular layer: convergence of receptor neurons expressing same odorant receptor onto single glomeruli — creates spatial odor map",
+          "Mitral and tufted cell output: project via lateral olfactory tract to primary olfactory cortex (piriform cortex), amygdala, and entorhinal cortex — bypassing thalamus (unique among sensory systems)",
+          "Olfactory processing connects directly to limbic system — explains why smells powerfully evoke emotional memories (Proust effect)",
+          "Adult neurogenesis: olfactory bulb is one of few brain regions with continuous neuronal replacement from subventricular zone neural stem cells"
+        ],
+        "syndromes": [
+          "Anosmia: loss of smell from CN I damage; most commonly from head trauma (shearing of olfactory filaments at cribriform plate), upper respiratory infection, or neurodegenerative disease; bilateral anosmia is early sign in Parkinson's and Alzheimer's disease",
+          "Foster Kennedy syndrome: olfactory groove meningioma → ipsilateral anosmia + ipsilateral optic atrophy (direct compression) + contralateral papilledema (raised ICP); classic triad but rare",
+          "Olfactory hallucinations (phantosmia): uncinate fits — temporal lobe seizures with unpleasant olfactory hallucinations (burning rubber, feces); suggest mesial temporal/uncus focus; also occurs in temporal lobe tumors",
+          "Olfactory reference syndrome: psychiatric condition — persistent belief that one emits a foul body odor; associated with OCD spectrum; distinct from anosmia"
+        ],
+        "vascular": "Anterior cerebral artery (A1 segment) · Anterior communicating artery perforators"
+      }
+    },
+
+    "vta": {
+      "label": "Ventral Tegmental Area",
+      "info": {
+        "ba": "N/A — midbrain tegmentum; medial to substantia nigra; contains A10 dopaminergic neurons; origin of mesolimbic and mesocortical dopamine pathways",
+        "functions": [
+          "Mesolimbic pathway: VTA → nucleus accumbens; mediates reward, motivation, and reinforcement learning; dopamine release signals reward prediction errors",
+          "Mesocortical pathway: VTA → prefrontal cortex; supports working memory, executive function, and goal-directed behavior; hypofunction linked to negative symptoms of schizophrenia",
+          "Reward prediction error signaling: VTA dopaminergic neurons fire for unexpected rewards and pause for unexpected absence of reward — fundamental to learning theory (Rescorla-Wagner model mapped to neural substrate)",
+          "Motivational salience: VTA dopamine assigns motivational value to stimuli — determines what is worth pursuing; dysfunction leads to amotivation (apathy) or excessive motivation (addiction)",
+          "Interacts with lateral habenula (anti-reward signal) — habenula inhibits VTA when outcomes are worse than expected"
+        ],
+        "syndromes": [
+          "Addiction: drugs of abuse (cocaine, amphetamines, opioids, nicotine, alcohol) all increase dopamine in VTA → nucleus accumbens circuit; chronic use causes neuroplastic changes (receptor downregulation, sensitization); tolerance and withdrawal result from allostatic shifts in reward set point",
+          "Schizophrenia (dopamine hypothesis): mesolimbic VTA hyperactivity → positive symptoms (hallucinations, delusions — excess dopamine in limbic circuit); mesocortical VTA hypoactivity → negative symptoms (flat affect, amotivation, cognitive deficits — insufficient PFC dopamine); explains why D2 blockers treat positive but not negative symptoms",
+          "Anhedonia in depression: reduced VTA dopaminergic signaling to nucleus accumbens → inability to experience pleasure; overlaps with motivational deficits; emerging treatments target reward circuitry",
+          "Behavioral variant frontotemporal dementia (bvFTD): loss of VTA-to-frontal dopaminergic projections contributes to apathy, social disinhibition, and compulsive behaviors seen in bvFTD"
+        ],
+        "vascular": "PCA perforating branches (P1 segment) · Posterior communicating artery perforators · Basilar tip"
+      }
     }
   },
   "questions": [

@@ -25,6 +25,12 @@
 import * as THREE        from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader }   from 'three/addons/loaders/DRACOLoader.js';
+import { EffectComposer }   from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }        from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass }          from 'three/addons/postprocessing/GTAOPass.js';
+import { UnrealBloomPass }   from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass }        from 'three/addons/postprocessing/OutputPass.js';
 
 console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 
@@ -57,6 +63,16 @@ var OVERLAY_COLORS = {
   nucleus_accumbens:    0xC0A070,
   brainstem:            0x9090C0,
   cerebellum:           0x80C0A0,
+  // New structures
+  pons:                 0x8888B8,
+  medulla:              0x7878A8,
+  midbrain:             0x9898C8,
+  hypothalamus:         0xD8A060,
+  corpus_callosum:      0xE0D0B0,
+  pituitary:            0xC8A880,
+  olfactory_bulb:       0xA0D090,
+  substantia_nigra:     0x808080,
+  vta:                  0x90A0B0,
 };
 
 var TISSUE_COLOR = 0xD4AA90;
@@ -76,6 +92,8 @@ try {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   canvas = renderer.domElement;
   canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
 } catch (e) {
@@ -104,36 +122,61 @@ var brainGroup = new THREE.Group();
 scene.add(brainGroup);
 
 // ── Procedural studio environment map for MeshPhysicalMaterial reflections ──
-// Without an envMap, clearcoat/sheen have nothing to reflect and look flat.
+// 5-element setup: sky dome, key area, fill area, rim area, ground plane, accent sphere
 var _envMap = null;
 (function() {
   var pmrem = new THREE.PMREMGenerator(renderer);
   pmrem.compileCubemapShader();
-  // Create a simple gradient environment (warm top, cool bottom, neutral sides)
   var envScene = new THREE.Scene();
+
   // Sky dome — warm neutral upper hemisphere
   var skyGeo = new THREE.SphereGeometry(10, 32, 16);
-  var skyMat = new THREE.MeshBasicMaterial({
-    color: 0x404550,
-    side: THREE.BackSide,
-  });
+  var skyMat = new THREE.MeshBasicMaterial({ color: 0x404550, side: THREE.BackSide });
   envScene.add(new THREE.Mesh(skyGeo, skyMat));
-  // Warm overhead area light simulation
-  var topLight = new THREE.Mesh(
+
+  // Key area — warm overhead (large, dominant)
+  var keyArea = new THREE.Mesh(
     new THREE.PlaneGeometry(6, 6),
     new THREE.MeshBasicMaterial({ color: 0x907060 })
   );
-  topLight.position.set(0, 8, 0);
-  topLight.rotation.x = Math.PI / 2;
-  envScene.add(topLight);
-  // Side fill
-  var sideLight = new THREE.Mesh(
+  keyArea.position.set(0, 8, 0);
+  keyArea.rotation.x = Math.PI / 2;
+  envScene.add(keyArea);
+
+  // Fill area — cool blue from left
+  var fillArea = new THREE.Mesh(
     new THREE.PlaneGeometry(4, 4),
     new THREE.MeshBasicMaterial({ color: 0x506070 })
   );
-  sideLight.position.set(6, 2, 3);
-  sideLight.lookAt(0, 0, 0);
-  envScene.add(sideLight);
+  fillArea.position.set(-6, 2, 3);
+  fillArea.lookAt(0, 0, 0);
+  envScene.add(fillArea);
+
+  // Rim area — warm backlight from below-behind
+  var rimArea = new THREE.Mesh(
+    new THREE.PlaneGeometry(5, 3),
+    new THREE.MeshBasicMaterial({ color: 0x705040 })
+  );
+  rimArea.position.set(0, -4, -6);
+  rimArea.lookAt(0, 0, 0);
+  envScene.add(rimArea);
+
+  // Ground plane — dark warm floor for grounded reflections
+  var groundPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(20, 20),
+    new THREE.MeshBasicMaterial({ color: 0x201510 })
+  );
+  groundPlane.position.set(0, -9, 0);
+  groundPlane.rotation.x = -Math.PI / 2;
+  envScene.add(groundPlane);
+
+  // Accent sphere — small bright specular catch (simulates point highlight)
+  var accentSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.5, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xFFEEDD })
+  );
+  accentSphere.position.set(5, 6, 4);
+  envScene.add(accentSphere);
 
   _envMap = pmrem.fromScene(envScene, 0.04).texture;
   _envMap.colorSpace = THREE.SRGBColorSpace;
@@ -165,9 +208,19 @@ controls.update();
 // LIGHTING — 5-point professional setup
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// Key light — warm directional from upper-right-front
+// Key light — warm directional from upper-right-front (with shadow map)
 var keyLight = new THREE.DirectionalLight(0xFFF5EE, 2.6);
 keyLight.position.set(5, 7, 4);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.width  = 1024;
+keyLight.shadow.mapSize.height = 1024;
+keyLight.shadow.bias = -0.0003;
+keyLight.shadow.camera.near = 0.5;
+keyLight.shadow.camera.far  = 25;
+keyLight.shadow.camera.left   = -3;
+keyLight.shadow.camera.right  =  3;
+keyLight.shadow.camera.top    =  3;
+keyLight.shadow.camera.bottom = -3;
 scene.add(keyLight);
 
 // Fill light — cool blue from left to soften shadows
@@ -185,6 +238,33 @@ scene.add(new THREE.HemisphereLight(0xC8D8F0, 0x401808, 0.4));
 
 // Ambient — very subtle base fill
 scene.add(new THREE.AmbientLight(0xFFEEE8, 0.12));
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// POST-PROCESSING PIPELINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+var composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+
+// Screen-space ambient occlusion — darkens sulci naturally
+var gtaoPass = new GTAOPass(scene, camera, window.innerWidth, window.innerHeight);
+gtaoPass.output = GTAOPass.OUTPUT.Default;
+gtaoPass.updateGtaoMaterial({ radius: 0.3, distanceExponent: 2, thickness: 2, samples: 16 });
+gtaoPass.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3 });
+composer.addPass(gtaoPass);
+
+// Subtle bloom — wet-highlight glow on specular catches
+var bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.15,   // strength
+  0.4,    // radius
+  0.85    // threshold
+);
+composer.addPass(bloomPass);
+
+// Output pass — applies tone mapping + color space conversion
+composer.addPass(new OutputPass());
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -211,7 +291,10 @@ var cerebellumVisible = true;
 var brainstemVisible  = true;
 var quizMode          = false;
 
+var dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('./node_modules/three/examples/jsm/libs/draco/gltf/');
 var loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -220,12 +303,13 @@ var loader = new GLTFLoader();
 
 function loadHiresBrain() {
   return new Promise(function(resolve) {
-    // Load the optimized cortex (100k faces, ~4MB) instead of full hires (655k, 17MB)
-    var cortexPath = 'data/brain_meshes/full_brain_optimized.glb';
+    // Draco-compressed hires cortex (655k faces, ~2.6MB) — best quality, smallest download
+    var cortexPath = 'data/brain_meshes/full_brain_draco.glb';
 
-    // Pre-load normal map texture in parallel with GLB
+    // Pre-load normal map + AO map textures in parallel with GLB
     var texLoader = new THREE.TextureLoader();
     var normalMapTex = null;
+    var aoMapTex = null;
 
     texLoader.load('data/brain_meshes/cortex_normal_map.png', function(tex) {
       tex.colorSpace = THREE.LinearSRGBColorSpace;  // normal maps use linear
@@ -235,7 +319,7 @@ function loadHiresBrain() {
       hiresMeshes.forEach(function(m) {
         if (m.material && m.material._isHiresMat && !m.material.normalMap) {
           m.material.normalMap = normalMapTex;
-          m.material.normalScale = new THREE.Vector2(0.8, 0.8);
+          m.material.normalScale = new THREE.Vector2(1.2, 1.2);
           m.material.needsUpdate = true;
           console.log('[brain-3d-v3] Normal map applied retroactively');
         }
@@ -244,8 +328,29 @@ function loadHiresBrain() {
       console.warn('[brain-3d-v3] Normal map failed to load:', err);
     });
 
+    texLoader.load('data/brain_meshes/cortex_ao_map.png', function(tex) {
+      tex.colorSpace = THREE.LinearSRGBColorSpace;  // AO is linear data
+      tex.channel = 0;  // reuse UV0 (avoids needing UV2)
+      aoMapTex = tex;
+      console.log('[brain-3d-v3] AO map loaded:', tex.image.width + 'x' + tex.image.height);
+      // If GLB already loaded, apply AO retroactively
+      hiresMeshes.forEach(function(m) {
+        if (m.material && m.material._isHiresMat && !m.material.aoMap) {
+          m.material.aoMap = aoMapTex;
+          m.material.aoMapIntensity = 0.7;
+          m.material.needsUpdate = true;
+          console.log('[brain-3d-v3] AO map applied retroactively');
+        }
+      });
+    }, undefined, function(err) {
+      console.warn('[brain-3d-v3] AO map failed to load:', err);
+    });
+
+    _progress(5, 'Loading cortex\u2026');
+
     loader.load(cortexPath,
       function(gltf) {
+        _progress(68, 'Parsing cortex\u2026');
         gltf.scene.traverse(function(child) {
           if (!child.isMesh) return;
           child.geometry.computeVertexNormals();
@@ -254,58 +359,79 @@ function loadHiresBrain() {
           var oldMap = child.material ? child.material.map : null;
           if (oldMap) {
             oldMap.colorSpace = THREE.SRGBColorSpace;
-            if (oldMap.image) console.log('[brain-3d-v3] Cortex base texture:', oldMap.image.width + 'x' + oldMap.image.height);
-          } else {
-            console.warn('[brain-3d-v3] Cortex has NO embedded texture (oldMap is null)');
           }
-          console.log('[brain-3d-v3] Normal map at material creation:', normalMapTex ? 'ready' : 'not yet loaded');
           var physMat = new THREE.MeshPhysicalMaterial({
-            color:              new THREE.Color(TISSUE_COLOR),
-            map:                oldMap,     // AO-baked sulcal texture (embedded in GLB)
+            color:              new THREE.Color(0xFFEEE4),  // light warm tint
+            map:                oldMap,
+            emissive:           new THREE.Color(0x6B3A2A),  // warm fill lifts brown texture to flesh
+            emissiveIntensity:  0.35,
             normalMap:          normalMapTex,
-            normalScale:        new THREE.Vector2(0.8, 0.8),
+            normalScale:        new THREE.Vector2(1.2, 1.2),
+            aoMap:              aoMapTex,
+            aoMapIntensity:     0.7,
             envMap:             _envMap,
-            envMapIntensity:    0.10,
-            roughness:          0.72,
+            envMapIntensity:    0.12,
+            roughness:          0.75,
             metalness:          0.0,
-            clearcoat:          0.17,
-            clearcoatRoughness: 0.33,
-            sheen:              0.18,
-            sheenRoughness:     0.52,
-            sheenColor:         new THREE.Color(0xFFBBAA),
+            clearcoat:          0.08,
+            clearcoatRoughness: 0.60,
+            sheen:              0.05,
+            sheenRoughness:     0.70,
+            sheenColor:         new THREE.Color(0xDDBBAA),
+            iridescence:        0.04,
+            // Subsurface scattering (translucency)
+            transmission:       0.08,
+            thickness:          0.5,
+            ior:                1.4,
+            attenuationColor:   new THREE.Color(0xE09070),
+            attenuationDistance: 0.5,
             side:               THREE.FrontSide,
           });
           physMat._isHiresMat = true;
           child.material = physMat;
 
-          child.castShadow = false;
-          child.receiveShadow = false;
+          child.castShadow = true;
+          child.receiveShadow = true;
           hiresMeshes.push(child);
         });
         brainGroup.add(gltf.scene);
-        console.log('[brain-3d-v3] Optimized cortex loaded (' + hiresMeshes.length + ' mesh, 100k faces)');
+        _progress(72, 'Applying textures\u2026');
+        console.log('[brain-3d-v3] Draco hires cortex loaded (' + hiresMeshes.length + ' mesh, 655k faces)');
         resolve();
       },
-      undefined,
+      function(event) {
+        // Real byte-level download progress (5–65%)
+        if (event.total > 0) {
+          var mb = (event.loaded / 1048576).toFixed(1);
+          var tot = (event.total / 1048576).toFixed(1);
+          var pct = 5 + Math.round((event.loaded / event.total) * 60);
+          _progress(pct, 'Loading cortex\u2026 ' + mb + '\u202fMB\u202f/\u202f' + tot + '\u202fMB');
+        }
+      },
       function(err) {
-        // Fall back to full hires if optimized not found
-        console.warn('[brain-3d-v3] Optimized cortex not found, trying full hires...');
-        loader.load('data/brain_meshes/full_brain_hires.glb',
+        // Fall back to uncompressed optimized, then raw hires
+        console.warn('[brain-3d-v3] Draco cortex not found, trying optimized fallback...');
+        loader.load('data/brain_meshes/full_brain_optimized.glb',
           function(gltf) {
             gltf.scene.traverse(function(child) {
               if (!child.isMesh) return;
               child.geometry.computeVertexNormals();
               var oldMap = child.material ? child.material.map : null;
               var physMat = new THREE.MeshPhysicalMaterial({
-                map: oldMap, envMap: _envMap, envMapIntensity: 0.10,
-                roughness: 0.72, metalness: 0.0, clearcoat: 0.17,
-                clearcoatRoughness: 0.33, sheen: 0.18, sheenRoughness: 0.52,
-                sheenColor: new THREE.Color(0xFFBBAA), side: THREE.FrontSide,
+                color: new THREE.Color(0xFFEEE4),
+                map: oldMap, emissive: new THREE.Color(0x6B3A2A),
+                emissiveIntensity: 0.35, envMap: _envMap, envMapIntensity: 0.12,
+                roughness: 0.75, metalness: 0.0, clearcoat: 0.08,
+                clearcoatRoughness: 0.60, sheen: 0.05, sheenRoughness: 0.70,
+                sheenColor: new THREE.Color(0xDDBBAA), iridescence: 0.04,
+                transmission: 0.08, thickness: 0.5, ior: 1.4,
+                attenuationColor: new THREE.Color(0xE09070), attenuationDistance: 0.5,
+                side: THREE.FrontSide,
               });
               physMat._isHiresMat = true;
               child.material = physMat;
-              child.castShadow = false;
-              child.receiveShadow = false;
+              child.castShadow = true;
+              child.receiveShadow = true;
               hiresMeshes.push(child);
             });
             brainGroup.add(gltf.scene);
@@ -379,8 +505,8 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
 
           var mesh = new THREE.Mesh(geo, mat);
           mesh.name = regionId;
-          mesh.castShadow = false;
-          mesh.receiveShadow = false;
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
           mesh.visible = true;
 
           // Gold selection outline
@@ -437,8 +563,8 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
 
           var mesh = new THREE.Mesh(geo, mat);
           mesh.name = regionId;
-          mesh.castShadow = false;
-          mesh.receiveShadow = false;
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
           mesh.visible = true;
 
           var selMat = new THREE.MeshBasicMaterial({
@@ -631,6 +757,22 @@ function computeRegionCameraPos(center, regionId, type) {
   if (regionId === 'cerebellum') {
     return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z - 2.0);
   }
+  // Deep structures: inferior/anterior view for visibility
+  if (regionId === 'hypothalamus' || regionId === 'pituitary') {
+    return new THREE.Vector3(center.x + 0.5, center.y - 3.5, center.z + 2.0);
+  }
+  if (regionId === 'olfactory_bulb') {
+    return new THREE.Vector3(center.x + 0.5, center.y - 2.5, center.z + 3.0);
+  }
+  if (regionId === 'substantia_nigra' || regionId === 'vta') {
+    return new THREE.Vector3(center.x + 2.0, center.y - 2.0, center.z - 2.0);
+  }
+  if (regionId === 'pons' || regionId === 'medulla' || regionId === 'midbrain') {
+    return new THREE.Vector3(center.x + 1.5, center.y - 2.5, center.z - 2.5);
+  }
+  if (regionId === 'corpus_callosum') {
+    return new THREE.Vector3(center.x - 3.0, center.y + 1.0, center.z + 0.5);
+  }
 
   // General: place camera along the direction from brain center through region
   return center.clone().add(dir.multiplyScalar(camDist));
@@ -644,74 +786,70 @@ function computeRegionCameraPos(center, regionId, type) {
 var _readyResolve = null;
 var _readyPromise = new Promise(function(res) { _readyResolve = res; });
 
-async function loadBrain() {
-  console.log('[brain-3d-v3] loadBrain() starting');
+// ── Progress helper ───────────────────────────────────────────────────────────
+// pct: 0-100  |  label: human-readable stage description
+function _progress(pct, label) {
   window.dispatchEvent(new CustomEvent('brain3dProgress', {
-    detail: { loaded: 0, total: 20 }
+    detail: { pct: pct, label: label }
   }));
+}
 
-  // Load manifest + hires brain in parallel
+async function loadBrain() {
+  _progress(0, 'Initializing\u2026');
+
+  // Load manifest + hires cortex in parallel
   var manifest = null;
   try {
     var results = await Promise.allSettled([
       fetch('data/brain_regions_manifest.json').then(function(r) { return r.json(); }),
-      loadHiresBrain(),
+      loadHiresBrain(),   // emits pct 5–72 internally via onProgress
     ]);
     if (results[0].status === 'fulfilled') manifest = results[0].value;
   } catch (e) {
     console.warn('[brain-3d-v3] Init error:', e);
   }
 
-  // Fire brain3dReady so loading overlay begins clearing
-  window.dispatchEvent(new CustomEvent('brain3dProgress', {
-    detail: { loaded: 10, total: 20 }
-  }));
-  window.dispatchEvent(new CustomEvent('brain3dReady', {
-    detail: { regionCount: 0 }
-  }));
+  // Cortex is ready — mount canvas and start fading the overlay.
+  // Regions load silently in the background after this point.
+  _progress(75, 'Building structures\u2026');
+  window.dispatchEvent(new CustomEvent('brain3dReady', { detail: { regionCount: 0 } }));
 
   // Load anatomical brainstem + cerebellum from atlas-derived JSON meshes
   var atlasMeshPromises = [loadAtlasBrainstem(), loadAtlasCerebellum()];
 
   if (!manifest) {
-    console.log('[brain-3d-v3] No manifest — loading atlas brainstem/cerebellum only');
     await Promise.allSettled(atlasMeshPromises);
+    _progress(100, 'Ready');
     _readyResolve();
     return;
   }
 
-  // Filter to actual region entries (skip 'glass' type AND permanent IDs since
-  // brainstem/cerebellum are loaded from atlas JSON above)
   var regionIds = Object.keys(manifest).filter(function(id) {
     return manifest[id].type !== 'glass' && !PERMANENT_IDS.has(id);
   });
-  var loaded = 10;
-  var total = 10 + regionIds.length + 2;  // +2 for atlas meshes
+  var loadedCount = 0;
+  var totalRegions = regionIds.length;
 
-  // Load atlas meshes first, then regions in batches to avoid GPU context loss
   await Promise.allSettled(atlasMeshPromises);
+  _progress(80, 'Loading regions\u2026');
 
   var BATCH = 8;
   for (var bi = 0; bi < regionIds.length; bi += BATCH) {
     var batch = regionIds.slice(bi, bi + BATCH);
     await Promise.allSettled(batch.map(function(id) {
       return loadRegion(id, manifest[id], false).then(function() {
-        loaded++;
-        window.dispatchEvent(new CustomEvent('brain3dProgress', {
-          detail: { loaded: loaded, total: total }
-        }));
+        loadedCount++;
+        var pct = 80 + Math.round((loadedCount / totalRegions) * 14);  // 80–94%
+        _progress(pct, 'Loading regions\u2026 ' + loadedCount + '\u202f/\u202f' + totalRegions);
       });
     }));
   }
 
-  console.log('[brain-3d-v3] All loaded — ' + regionMeshes.length + ' regions, '
-    + permanentMeshes.length + ' permanent (atlas)');
+  _progress(95, 'Finalizing scene\u2026');
 
-  // Apply default split-brain state now that meshes are loaded
-  if (splitOn) {
-    toggleSplit(true);
-  }
+  if (splitOn) toggleSplit(true);
 
+  _progress(100, 'Ready');
   _readyResolve();
 }
 
@@ -834,6 +972,7 @@ function _applyHiresGlass(on, excludeRegionId) {
         m.material.roughness          = 0.10;
         m.material.clearcoat          = 0.35;
         m.material.clearcoatRoughness = 0.15;
+        m.material.transmission       = 0;  // disable SSS in glass mode
       }
     } else {
       m.material.transparent = false;
@@ -841,9 +980,10 @@ function _applyHiresGlass(on, excludeRegionId) {
       m.material.depthWrite  = true;
       m.material.side        = THREE.FrontSide;
       if (m.material._isHiresMat) {
-        m.material.roughness          = 0.72;
-        m.material.clearcoat          = 0.17;
-        m.material.clearcoatRoughness = 0.33;
+        m.material.roughness          = 0.75;
+        m.material.clearcoat          = 0.08;
+        m.material.clearcoatRoughness = 0.60;
+        m.material.transmission       = 0.08;  // restore SSS
       } else if (m.userData && m.userData.overlayMat) {
         m.material.roughness = m.material._origRoughness || 0.68;
       }
@@ -1382,7 +1522,7 @@ function animate(ts) {
     controls.update();
   }
 
-  renderer.render(scene, camera);
+  composer.render();
 }
 
 
@@ -1397,6 +1537,7 @@ var resizeObserver = new ResizeObserver(function() {
   var w = mountedContainer.clientWidth;
   var h = mountedContainer.clientHeight || Math.round(w / 1.54);
   renderer.setSize(w, h);
+  composer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 });
@@ -1415,6 +1556,7 @@ function mount(container) {
   var w = container.clientWidth  || window.innerWidth - 256;
   var h = container.clientHeight || window.innerHeight - 52;
   renderer.setSize(w, h);
+  composer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
   if (!animId) animate(0);

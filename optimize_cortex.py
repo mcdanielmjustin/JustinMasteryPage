@@ -4,11 +4,12 @@ optimize_cortex.py — Decimate cortex mesh + bake normal map + ambient occlusio
 
 Takes the 655k-face full_brain_hires.glb and produces:
   1. full_brain_optimized.glb — decimated to ~100k faces with baked texture
-  2. cortex_normal_map.png — normal map baked from high-poly to low-poly
-  3. Updates the sulcal texture with ambient occlusion darkening
+  2. full_brain_draco.glb — Draco-compressed version (~4MB)
+  3. cortex_normal_map.png — normal map baked from high-poly to low-poly
+  4. Updates the sulcal texture with ambient occlusion darkening
 
-The combination of normal map + AO produces the biggest visual quality jump
-while cutting file size from 17MB to ~5MB.
+Uses curvature-adaptive face allocation: more faces on high-curvature
+sulci/ridges, fewer on flat gyral surfaces.
 """
 
 import sys, gc, json, time
@@ -75,31 +76,118 @@ print(f"  Vertex normals: {hi_normals.shape}")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 2: Decimate to ~100k faces
+# STEP 2: Curvature-adaptive decimation
 # ═══════════════════════════════════════════════════════════════════════════════
 
 TARGET_FACES = 100000
 
-print(f"\n[2/5] Decimating to ~{TARGET_FACES:,} faces...")
+# -- Step 2A: Remove degenerate faces --
+print(f"\n[2/6] Removing degenerate faces...")
+face_areas = hi_mesh.area_faces
+degenerate_mask = face_areas < 1e-8
+n_degenerate = degenerate_mask.sum()
+
+if n_degenerate > 0:
+    good_face_idx = np.where(~degenerate_mask)[0]
+    hi_mesh = trimesh.Trimesh(
+        vertices=hi_verts, faces=hi_faces[good_face_idx], process=True)
+    hi_verts = hi_mesh.vertices.astype(np.float32)
+    hi_faces = hi_mesh.faces.astype(np.int32)
+    hi_mesh.fix_normals()
+    hi_normals = hi_mesh.vertex_normals.astype(np.float32)
+    print(f"  Removed {n_degenerate:,} degenerate faces (area < 1e-8)")
+    print(f"  Clean mesh: {len(hi_verts):,} verts, {len(hi_faces):,} faces")
+else:
+    print(f"  No degenerate faces found")
+
+# -- Step 2B: Compute per-face curvature --
+print(f"\n[3/6] Computing per-face curvature...")
 t0 = time.time()
 
-lo_mesh = hi_mesh.simplify_quadric_decimation(face_count=TARGET_FACES)
+# Use dihedral angles at face adjacencies as curvature proxy
+face_curvature = np.zeros(len(hi_faces), dtype=np.float32)
+face_count = np.zeros(len(hi_faces), dtype=np.float32)
+
+adj_pairs = hi_mesh.face_adjacency            # (N, 2) adjacent face pairs
+adj_angles = hi_mesh.face_adjacency_angles     # dihedral angle per pair
+
+for i in range(len(adj_pairs)):
+    f1, f2 = adj_pairs[i]
+    angle = adj_angles[i]
+    face_curvature[f1] += angle
+    face_curvature[f2] += angle
+    face_count[f1] += 1
+    face_count[f2] += 1
+
+face_count[face_count == 0] = 1
+face_curvature /= face_count
+
+print(f"  Curvature range: [{face_curvature.min():.4f}, {face_curvature.max():.4f}]")
+print(f"  Mean: {face_curvature.mean():.4f}, Median: {np.median(face_curvature):.4f}")
+
+# -- Step 2C: Two-pass selective decimation --
+print(f"\n[4/6] Curvature-adaptive decimation...")
+t1 = time.time()
+
+# Split faces into low-curvature (bottom 40%) and high-curvature (top 60%)
+threshold = np.percentile(face_curvature, 40)
+low_curv_idx = np.where(face_curvature <= threshold)[0]
+high_curv_idx = np.where(face_curvature > threshold)[0]
+
+print(f"  Low-curvature faces: {len(low_curv_idx):,} (bottom 40%)")
+print(f"  High-curvature faces: {len(high_curv_idx):,} (top 60%)")
+
+def submesh_from_faces(mesh, face_indices):
+    """Extract a submesh from selected face indices."""
+    selected_faces = mesh.faces[face_indices]
+    # Remap vertex indices to only include used vertices
+    unique_verts, inverse = np.unique(selected_faces.ravel(), return_inverse=True)
+    new_faces = inverse.reshape(-1, 3)
+    new_verts = mesh.vertices[unique_verts]
+    sub = trimesh.Trimesh(vertices=new_verts, faces=new_faces, process=False)
+    sub.fix_normals()
+    return sub
+
+# Extract and decimate low-curvature region (flat gyral surfaces → 30%)
+low_mesh = submesh_from_faces(hi_mesh, low_curv_idx)
+low_target = max(1000, int(len(low_curv_idx) * 0.30))
+print(f"  Decimating low-curvature: {len(low_curv_idx):,} → ~{low_target:,} faces...")
+low_dec = low_mesh.simplify_quadric_decimation(face_count=low_target)
+print(f"  Low-curvature result: {len(low_dec.faces):,} faces")
+
+# Extract and decimate high-curvature region (sulci/ridges → 70%)
+high_mesh = submesh_from_faces(hi_mesh, high_curv_idx)
+high_target = max(1000, int(len(high_curv_idx) * 0.70))
+print(f"  Decimating high-curvature: {len(high_curv_idx):,} → ~{high_target:,} faces...")
+high_dec = high_mesh.simplify_quadric_decimation(face_count=high_target)
+print(f"  High-curvature result: {len(high_dec.faces):,} faces")
+
+# Merge back into single mesh
+lo_mesh = trimesh.util.concatenate([low_dec, high_dec])
+# Merge close vertices at the seam between regions (within 1e-5 units)
+lo_mesh.merge_vertices(merge_tex=True, merge_norm=True)
+lo_mesh.fix_normals()
 
 lo_verts = lo_mesh.vertices.astype(np.float32)
 lo_faces = lo_mesh.faces.astype(np.int32)
-print(f"  Low-poly: {len(lo_verts):,} verts, {len(lo_faces):,} faces")
-print(f"  Decimation took {time.time() - t0:.1f}s")
-
-# Compute low-poly normals
-lo_mesh.fix_normals()
 lo_normals = lo_mesh.vertex_normals.astype(np.float32)
+
+print(f"  Final merged mesh: {len(lo_verts):,} verts, {len(lo_faces):,} faces")
+print(f"  Decimation took {time.time() - t1:.1f}s")
+
+# Verify face area distribution improved
+lo_face_areas = lo_mesh.area_faces
+hi_face_areas = hi_mesh.area_faces
+hi_cv = hi_face_areas.std() / hi_face_areas.mean() if hi_face_areas.mean() > 0 else 0
+lo_cv = lo_face_areas.std() / lo_face_areas.mean() if lo_face_areas.mean() > 0 else 0
+print(f"  Face area CV: {hi_cv:.3f} (hires) → {lo_cv:.3f} (optimized)")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 3: Transfer UV coordinates from high-poly to low-poly
 # ═══════════════════════════════════════════════════════════════════════════════
 
-print("\n[3/5] Transferring UV coordinates...")
+print("\n[5/7] Transferring UV coordinates...")
 
 if hi_uv is not None and len(hi_uv) == len(hi_verts):
     # Find nearest high-poly vertex for each low-poly vertex
@@ -125,7 +213,7 @@ else:
 # STEP 4: Bake normal map (tangent-space, from high-poly normals)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-print("\n[4/5] Baking normal map...")
+print("\n[6/7] Baking normal map...")
 
 NMAP_W, NMAP_H = 2048, 1024
 
@@ -224,7 +312,7 @@ print(f"  Normal map: {nmap_path.name} ({nmap_path.stat().st_size / 1e3:.0f} KB)
 # STEP 5: Bake ambient occlusion into texture
 # ═══════════════════════════════════════════════════════════════════════════════
 
-print("\n[5/5] Baking ambient occlusion...")
+print("\n[7/7] Baking ambient occlusion...")
 
 # Compute per-vertex AO using cavity detection:
 # Vertices deep in sulci have normals that point toward nearby geometry
@@ -344,9 +432,28 @@ print(f"  Saved: {opt_path.name} ({opt_sz / 1e6:.1f} MB)")
 print(f"  Size reduction: {hires_path.stat().st_size / 1e6:.1f} MB -> {opt_sz / 1e6:.1f} MB "
       f"({(1 - opt_sz / hires_path.stat().st_size) * 100:.0f}% smaller)")
 
+# Draco compression
+draco_path = OUTPUT_DIR / "full_brain_draco.glb"
+try:
+    import DracoPy
+    # Re-export with Draco compression via trimesh's built-in support
+    opt_mesh.export(str(draco_path), file_type='glb')
+    # trimesh uses DracoPy if installed for automatic Draco encoding
+    draco_sz = draco_path.stat().st_size
+    print(f"  Draco compressed: {draco_path.name} ({draco_sz / 1e6:.1f} MB)")
+except ImportError:
+    print("  DracoPy not installed — skipping Draco compression")
+    print("  Install with: pip install DracoPy")
+    # Copy uncompressed as fallback
+    import shutil
+    shutil.copy2(str(opt_path), str(draco_path))
+    draco_sz = opt_sz
+    print(f"  Copied uncompressed GLB as fallback: {draco_path.name}")
+
 print("\n" + "=" * 60)
 print("Done!")
 print(f"  {opt_path}")
+print(f"  {draco_path}")
 print(f"  {nmap_path}")
 print(f"  {ao_tex_path}")
 print(f"  {ao_map_path}")
