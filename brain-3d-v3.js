@@ -623,27 +623,32 @@ function loadAtlasCerebellum() {
           new THREE.Float32BufferAttribute(new Float32Array(data.normals), 3));
         geo.setIndex(new THREE.Uint32BufferAttribute(new Uint32Array(data.indices), 1));
 
-        var baseColor = new THREE.Color(TISSUE_COLOR);
+        var baseColor = new THREE.Color(0xC49480);  // deeper warm flesh tone to match cortex visually
         var mat = new THREE.MeshPhysicalMaterial({
           color:              baseColor,
           envMap:             _envMap,
-          envMapIntensity:    0.08,
-          roughness:          0.68,
+          envMapIntensity:    0.12,
+          roughness:          0.75,
           metalness:          0.0,
-          emissive:           baseColor,
-          emissiveIntensity:  0.04,
-          clearcoat:          0.10,
-          clearcoatRoughness: 0.38,
-          sheen:              0.09,
-          sheenRoughness:     0.52,
-          sheenColor:         new THREE.Color(0xFFBBAA),
+          emissive:           new THREE.Color(0x6B3A2A),
+          emissiveIntensity:  0.20,
+          clearcoat:          0.08,
+          clearcoatRoughness: 0.60,
+          sheen:              0.05,
+          sheenRoughness:     0.70,
+          sheenColor:         new THREE.Color(0xDDBBAA),
+          transmission:       0.06,
+          thickness:          0.4,
+          ior:                1.4,
+          attenuationColor:   new THREE.Color(0xE09070),
+          attenuationDistance: 0.6,
           transparent:        false,
           opacity:            1.0,
           side:               THREE.DoubleSide,
           depthWrite:         true,
         });
         mat._origColor     = baseColor.clone();
-        mat._origEmissive  = baseColor.clone();
+        mat._origEmissive  = new THREE.Color(0x6B3A2A);
         mat._origRoughness = mat.roughness;
 
         var mesh = new THREE.Mesh(geo, mat);
