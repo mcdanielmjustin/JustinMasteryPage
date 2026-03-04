@@ -3,7 +3,7 @@
 > **Purpose**: This document is the single source of truth for all identified deficiencies, prescribed fixes, and architectural guidance for elevating the Patient Encounter module (`clinical-presentation-exercise.html` + `clinical-presentation-settings.html`) to world-class quality. It is designed to survive context compaction and serve as a reference across multiple Claude sessions.
 >
 > **Last updated**: 2026-03-03
-> **Current commit**: `4921421` (master)
+> **Current commit**: `17abd25` (master)
 > **Files in scope**: `clinical-presentation-exercise.html`, `clinical-presentation-settings.html`, `generate_presentations.py`, `data/*_presentations.json`
 
 ---
@@ -22,7 +22,7 @@
 | Wave | Items | Done | Remaining |
 |------|-------|------|-----------|
 | 0 — Already Shipped | 8 items | 8/8 | 0 |
-| 1 — Critical Bugs & UX | 6 items | 0/6 | 6 |
+| 1 — Critical Bugs & UX | 6 items | 6/6 | 0 |
 | 2 — Question Screen Polish | 7 items | 0/7 | 7 |
 | 3 — Results & Coaching | 5 items | 0/5 | 5 |
 | 4 — Settings & Session Intelligence | 5 items | 0/5 | 5 |
@@ -37,7 +37,7 @@ These items were implemented in the initial elevation pass. Documented here for 
 ### 0.1 Jaw animation during dialogue — `DONE`
 - **What was wrong**: The jaw (`#avatar-jaw`) never moved during typewriter sequences. `avatar_emotion` controlled the root state class, but `state-speaking` was never applied during dialogue because the emotion was always clinical (e.g., `distressed`, `tearful`).
 - **Fix applied**: In `runTypewriter()`, jaw animation is now applied directly via inline `style.animation` on the `#avatar-jaw` element, independent of the root emotion state. `startJaw()` fires when typewriter begins, `stopJaw()` fires on completion or skip.
-- **Location**: `runTypewriter()` function (~line 1689).
+- **Location**: `runTypewriter()` function (~line 1776).
 
 ### 0.2 flat_affect and hopeful visual states — `DONE`
 - **What was wrong**: `flat_affect` was just slower breathing (indistinguishable from idle). `hopeful` was barely different breathing rate.
@@ -45,157 +45,65 @@ These items were implemented in the initial elevation pass. Documented here for 
   - `flat_affect`: Added `blinkSlow` keyframe animation (5s cycle), `filter: saturate(0.55) brightness(0.92)` on `#avatar-face`, flat mouth path `M91 128 Q100 128 109 128`.
   - `hopeful`: Added `postureUpright` keyframe (0.6s forward, then breathe), `filter: saturate(1.15) brightness(1.04)` on face, smile mouth path `M91 127 Q100 123 109 127`.
   - Added `MOUTH_PATHS` constant object mapping all emotion states to SVG `d` attributes. `setAvatarState()` now morphs `#avatar-mouth` on every state change.
-- **Location**: CSS state classes (~line 114), `MOUTH_PATHS` object (~line 1882), `setAvatarState()` (~line 1897).
+- **Location**: CSS state classes (~line 114), `MOUTH_PATHS` object (~line 1940), `setAvatarState()` (~line 1960).
 
 ### 0.3 Tag positioning overlap — `DONE`
 - **What was wrong**: 8 fixed positions with modulo wrap caused tags to stack directly on top of each other after the 8th tag.
 - **Fix applied**: Replaced with two-column stacking system (`_tagCols`). Tags alternate left/right columns, each capped at `TAG_MAX_ROWS = 7`. When a column fills, the oldest tag fades out. `resetTagColumns()` clears state per encounter.
-- **Location**: Tag system (~line 1769).
+- **Location**: Tag system (~line 1835).
 
 ### 0.4 appearance_tags rendered — `DONE`
 - **What was wrong**: `enc.encounter.patient.appearance_tags` was never displayed.
 - **Fix applied**: Pre-seeded in the tag overlay before phase 1 via `revealBehavioralTags(appearanceTags, true)`. Grey italic style (`tag-appearance` CSS class) distinguishes them from phase-triggered tags.
-- **Location**: `startEncounter()` (~line 1503), CSS `.tag-appearance` (~line 432).
+- **Location**: `startEncounter()` (~line 1510), CSS `.tag-appearance` (~line 444).
 
 ### 0.5 referral_context rendered — `DONE`
 - **What was wrong**: `enc.encounter.referral_context` was never shown.
 - **Fix applied**: Added a pre-populated "Intake" section at the top of the chart panel in `buildChartSections()`. Shows setting and referral context immediately (no animation). Styled with indigo label border.
-- **Location**: `buildChartSections()` (~line 1581), CSS `.chart-row-intake` (~line 304).
+- **Location**: `buildChartSections()` (~line 1640), CSS `.chart-row-intake` (~line 304).
 
 ### 0.6 Keyboard shortcuts on encounter screen — `DONE`
 - **What was wrong**: `keydown` handler only activated on `#screen-question`. Space/Enter/Escape did nothing on the encounter screen.
 - **Fix applied**: Extended handler: Space/Enter advances phase (when typewriter not running), Escape/Backspace skips typewriter (clicks bubble). Question screen also now accepts Space for advance.
-- **Location**: Keyboard handler (~line 2357).
+- **Location**: Keyboard handler (~line 2425).
 
 ### 0.7 Correct answer rationale in feedback — `DONE`
 - **What was wrong**: `distractor_rationale[correct_answer]` was filtered out — the feedback only showed "Why not A/C/D?" but never "Why B is correct."
 - **Fix applied**: Correct answer rationale rendered first in a green-highlighted row (`.distractor-correct` CSS class) before the wrong-answer rows.
-- **Location**: `showFeedback()` (~line 2115), CSS `.distractor-correct` (~line 575).
+- **Location**: `showFeedback()` (~line 2180), CSS `.distractor-correct` (~line 575).
 
 ### 0.8 Mid-session persistence — `DONE`
 - **What was wrong**: `persistScores()` only called at session end. Browser close mid-session lost all progress.
 - **Fix applied**: `persistScores()` now called after every question answer in `selectAnswer()`.
-- **Location**: `selectAnswer()` (~line 2112).
+- **Location**: `selectAnswer()` (~line 2170).
 
 ---
 
-## Wave 1 — Critical Encounter Screen Fixes — `TODO`
+## Wave 1 — Critical Encounter Screen Fixes (commit `17abd25`) — `DONE`
 
-These directly affect whether the encounter *feels* like a patient sitting across from you.
+### 1.1 Avatar too small and passive — `DONE`
+- **Fix applied**: Avatar enlarged to 260×416px on desktop. Patient stage changed from `justify-content: center` to `flex-start` with `overflow-y: auto` for top-aligned layout. Patient info bar max-width aligned to 380px (matching bubble).
+- **Location**: CSS `.avatar-wrap` (~line 447), `.patient-stage` (~line 262), `.patient-info-bar` (~line 370).
 
-### 1.1 Avatar too small and passive — `TODO`
+### 1.2 Speech bubble too transparent — `DONE`
+- **Fix applied**: Background raised to `rgba(255,255,255,.09)`, border to `rgba(255,255,255,.12)`, added `box-shadow: 0 4px 20px rgba(0,0,0,.3)`. Bubble tail background matched.
+- **Location**: CSS `.speech-bubble` (~line 386), `.bubble-tail` (~line 400).
 
-**Priority**: Very High
-**What's wrong**: The avatar is 200×320px — about the size of a business card — centered in a ~780px column. Most of the patient stage is empty dark space. The patient dominates neither visually nor emotionally. In a real encounter the patient fills your field of vision.
+### 1.3 Bubble text too small/wrong color — `DONE`
+- **Fix applied**: Changed to `font-size: 14px; color: var(--text); line-height: 1.7`.
+- **Location**: CSS `.bubble-text` (~line 430).
 
-**Where in code**:
-- CSS: `.avatar-wrap` sets the avatar container dimensions.
-- CSS: `.patient-stage` layout controls the vertical composition.
+### 1.4 Clinician probe inside patient bubble — `DONE`
+- **Fix applied**: Moved `#clinician-probe` out of `#speech-bubble` in HTML, placed above it in `.patient-stage` flow. Restyled as standalone "You ask:" label with subtle indigo left-border, `color: var(--text2)`. JS updated to use "You ask:" prefix.
+- **Location**: HTML (~line 793), CSS `.clinician-probe` (~line 406), JS `startPhase()` (~line 1750).
 
-**Corrective procedure**:
-1. Increase avatar dimensions to 260×416px on desktop (>768px). Keep 200×320 on mobile.
-2. Remove `justify-content: center` from `.patient-stage` and replace with a flex layout that places avatar+bubble from the top third of the stage.
-3. Remove `max-width: 420px` on the patient info bar — it should match the bubble width and be visually aligned.
-4. Verify the SVG `viewBox` still renders correctly at the larger size (it should — SVG is vector).
+### 1.5 Behavioral tags spatial logic — `DONE`
+- **Fix applied**: Added `_phaseColumn` tracker — same-phase tags share the same column, column alternates per `revealBehavioralTags()` call. Appearance tags always go to left column. Added "OBSERVED" header via `_ensureTagHeader()`.
+- **Location**: Tag system (~line 1835), CSS `.tag-header` (~line 446).
 
-**Verification**: Open an encounter on a 1920×1080 monitor. The avatar should feel like it fills the left third of the viewport. The patient should feel present, not floating in void.
-
-**Adaptive notes for Claude**: If the SVG paths render with visible aliasing at the larger size, add `shape-rendering: geometricPrecision` to the SVG root. If the layout breaks on tablets (768-1024px), add an intermediate breakpoint.
-
----
-
-### 1.2 Speech bubble too transparent — `TODO`
-
-**Priority**: High
-**What's wrong**: `background: rgba(255,255,255,.05)` — nearly invisible. The bubble looks like a ghost rectangle, not a spoken thought.
-
-**Where in code**: CSS `.speech-bubble` rule.
-
-**Corrective procedure**:
-1. Change fill to `rgba(255,255,255,.09)`.
-2. Add `box-shadow: 0 4px 20px rgba(0,0,0,.3)` to lift it off the background.
-3. Increase border opacity to `rgba(255,255,255,.12)`.
-
-**Verification**: The bubble should register as a distinct floating card when squinting at the screen. It should feel like a dialogue box, not a transparent overlay.
-
----
-
-### 1.3 Bubble text too small and wrong color — `TODO`
-
-**Priority**: High
-**What's wrong**: `font-size: 13px; color: var(--text2)` (#a8a8b3). This is the most important text during an encounter — the patient's words — rendered in secondary text color at 13px.
-
-**Where in code**: CSS `#bubble-text` or `.bubble-text` styles.
-
-**Corrective procedure**:
-1. Change to `font-size: 14px`.
-2. Change to `color: var(--text)` (full white / primary text color).
-3. Set `line-height: 1.7` for comfortable reading.
-
-**Verification**: The patient's dialogue should be the most visually prominent text on the encounter screen. It should feel like the primary reading target, not ambient content.
-
----
-
-### 1.4 Clinician probe inside patient bubble — `TODO`
-
-**Priority**: High
-**What's wrong**: The clinician-probe element sits inside the speech bubble. With the new indigo-border styling, it looks like both speakers share the same bubble — as if the patient is quoting the clinician. These are two different speakers.
-
-**Where in code**:
-- HTML: `#clinician-probe` is a child of `#speech-bubble`.
-- CSS: `.clinician-probe` styling.
-- JS: `startPhase()` sets probe text and visibility.
-
-**Corrective procedure** (two valid approaches — pick one):
-
-**Option A — Move probe above the bubble** (recommended):
-1. In the HTML, move `#clinician-probe` out of `#speech-bubble` and place it directly above it in the `.patient-stage` layout flow.
-2. Style it as a small standalone label: `font-size: 11px; font-style: italic; color: var(--text2);` with prefix "You ask:" or "Clinician:".
-3. Remove the indigo border-left styling (it's no longer needed once it's spatially separated).
-4. The patient's response appears in the bubble below it — visually distinct.
-
-**Option B — Keep inside but add separator**:
-1. Keep the probe inside the bubble.
-2. Add a "Clinician:" prefix label on its own line in bold.
-3. Add a thin horizontal rule (`<hr>` styled as `border-top: 1px solid rgba(255,255,255,.08); margin: 8px 0;`) between the probe and patient text.
-4. Keep the indigo left-border to mark the clinician's portion.
-
-**Verification**: During a phase with a clinician prompt followed by patient dialogue, it should be immediately obvious that two different people are speaking. The visual separation should be clear enough that a first-time user never confuses who is speaking.
-
-**Adaptive notes for Claude**: If Option A causes layout shifts (the probe appearing before the bubble pushes the bubble down), consider using absolute positioning for the probe above the bubble with a fixed height allocation.
-
----
-
-### 1.5 Behavioral tags need spatial logic — `TODO`
-
-**Priority**: Medium
-**What's wrong**: Tags float in absolute position without spatial anchoring. They alternate left/right columns even when behaviorally related (e.g., "anhedonia" and "flat affect" from the same phase end up in opposite columns). No legend/header orients the test-taker.
-
-**Where in code**: `revealBehavioralTags()` function, tag alternation logic.
-
-**Corrective procedure**:
-1. Add a faint label above the tag area: "OBSERVED" in `var(--text3)`, `font-size: 9px`, `letter-spacing: .1em`, positioned at top of the tag overlay.
-2. Change the alternation logic so tags from the **same phase** go to the **same column**. Track a `_currentPhaseColumn` variable that alternates per phase (not per tag). All tags from phase 1 go left, phase 2 right, phase 3 left, etc.
-3. Appearance tags (pre-encounter) always go to the left column.
-
-**Verification**: Run an encounter with 4+ phases. Tags from the same phase should cluster in the same column. The "OBSERVED" label should be visible but non-intrusive.
-
----
-
-### 1.6 "Click to skip" affordance on speech bubble — `TODO`
-
-**Priority**: Medium
-**What's wrong**: The bubble is clickable to skip the typewriter, but there's no visual hint. First-time users sit through the entire typewriter animation unaware they can skip it. The cursor is `pointer` and `user-select: none` (correct) but no tooltip or text hint exists.
-
-**Where in code**: `#speech-bubble` styling and `runTypewriter()` click handler.
-
-**Corrective procedure**:
-1. Add a small hint element inside the bubble: `<span id="skip-hint" class="skip-hint">click to skip</span>`.
-2. Style: `font-size: 9px; color: var(--text3); opacity: 0.5; position: absolute; bottom: 4px; right: 10px; pointer-events: none;`.
-3. Show the hint during the first typewriter sequence of the session only. After the first skip (or after the first encounter completes), set a flag and hide it permanently via `display: none`.
-4. Also show the keyboard shortcut: "click or press Esc to skip".
-
-**Verification**: New user opens their first encounter. A faint "click or press Esc to skip" appears in the bottom-right of the bubble during typewriter. After they skip once (or after the first encounter), it never appears again.
+### 1.6 "Click to skip" affordance — `DONE`
+- **Fix applied**: Added `<span id="skip-hint">click or Esc to skip</span>` inside bubble. Shown during first typewriter sequences, permanently dismissed after first skip or first typewriter completion via `_skipHintDismissed` flag.
+- **Location**: HTML (~line 805), CSS `.skip-hint` (~line 415), JS `runTypewriter()` (~line 1776).
 
 ---
 
@@ -638,11 +546,12 @@ Change sublabels to:
 ## Architectural Notes for Future Claude Sessions
 
 ### File structure
-- **Exercise page**: `clinical-presentation-exercise.html` — single-file app, ~2500 lines, CSS + SVG + JS all inline.
+- **Exercise page**: `clinical-presentation-exercise.html` — single-file app, ~2550 lines, CSS + SVG + JS all inline.
 - **Settings page**: `clinical-presentation-settings.html` — separate file, ~270 lines.
 - **Data files**: `data/{DOMAIN}_presentations.json` — 9 domain files.
 - **Generator**: `generate_presentations.py` — creates the JSON data files.
 - **Existing roadmap**: `CLINICAL_PRESENTATION_ROADMAP.md` — original build specification (architecture, data schema, chunk plan). Still valid as reference for data schema and module identity.
+- **Elevation plan**: `CLINICAL_PRESENTATION_ELEVATION.md` — this file. Single source of truth for improvements.
 
 ### CSS custom properties (design tokens)
 ```
@@ -681,10 +590,12 @@ State object (`state`) tracks: `pool`, `encIdx`, `steps`, `stepIdx`, `phaseIdx`,
 - `showFeedback(q, isCorrect)` — renders explanation + distractor rationale
 - `buildResults()` — renders score ring, type breakdown, replay list
 - `setAvatarState(emotion)` — applies CSS class + mouth morph
-- `runTypewriter(text, charMs, onComplete)` — character-by-character typing with jaw animation
-- `revealBehavioralTags(tags, isAppearance)` — staggered tag reveal in two columns
+- `runTypewriter(text, charMs, onComplete)` — character-by-character typing with jaw animation + skip hint
+- `revealBehavioralTags(tags, isAppearance)` — staggered tag reveal in two columns with phase-based grouping
 - `buildChartSections(enc)` — builds chart panel with intake + category sections
 - `persistScores()` — saves to localStorage
+- `_ensureTagHeader()` — adds "OBSERVED" header to tag overlay on first tag reveal
+- `resetTagColumns()` — clears tag column state and phase column tracker per encounter
 
 ### Data schema quick reference
 ```
