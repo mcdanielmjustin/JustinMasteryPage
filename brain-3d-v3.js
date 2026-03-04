@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304f';
+var ASSET_VERSION = '20260304g';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -296,7 +296,7 @@ var regionCameraPos   = {};  // regionId → Vector3 camera position
 var selectedRegionId  = null;
 var hoveredRegionId   = null;
 var glassOn           = false;
-var splitOn           = true;
+var splitOn           = false;
 var cerebellumVisible = true;
 var brainstemVisible  = true;
 var quizMode          = false;
@@ -1805,7 +1805,7 @@ function mount(container) {
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
   if (!animId) animate(0);
-  setCameraView('medial');
+  setCameraView('lateral');
 }
 
 function unmount() {
