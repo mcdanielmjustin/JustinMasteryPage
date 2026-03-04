@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304d';
+var ASSET_VERSION = '20260304e';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -768,6 +768,24 @@ function _createMirrorMesh(sourceMesh) {
   mirror.receiveShadow = false;
   mirror.visible       = false;
   mirror.userData      = { isMirror: true, regionId: sourceMesh.userData.regionId };
+
+  // Give the mirror its own gold selection outline so the border appears on
+  // both hemispheres when a region is selected.
+  var mirrorSelMat = new THREE.MeshBasicMaterial({
+    color:       0xFFD060,
+    side:        THREE.BackSide,
+    transparent: true,
+    opacity:     0.0,
+    depthWrite:  false,
+  });
+  var mirrorSelOutline = new THREE.Mesh(mirrorGeom, mirrorSelMat);
+  mirrorSelOutline.scale.setScalar(1.06);
+  mirrorSelOutline.renderOrder = 3;
+  mirrorSelOutline.visible = false;
+  mirrorSelOutline.userData = { isOutline: true };
+  mirror.userData.selOutline = mirrorSelOutline;
+  mirror.add(mirrorSelOutline);
+
   return mirror;
 }
 
@@ -801,6 +819,12 @@ function loadRegion(regionId, entry, permanent) {
           opacity:            1.0,
           side:               THREE.FrontSide,
           depthWrite:         true,
+          // Pull non-permanent overlays slightly forward so they don't z-fight
+          // with the cortex surface they sit flush against (important for medial
+          // structures like cingulate gyrus viewed in split mode).
+          polygonOffset:      !permanent,
+          polygonOffsetFactor: -2,
+          polygonOffsetUnits: -4,
         });
         mat._origColor     = baseColor.clone();
         mat._origEmissive  = baseColor.clone();
@@ -844,7 +868,7 @@ function loadRegion(regionId, entry, permanent) {
             depthWrite:  false,
           });
           var selOutline = new THREE.Mesh(child.geometry, selMat);
-          selOutline.scale.setScalar(1.04);
+          selOutline.scale.setScalar(1.06);
           selOutline.renderOrder = 3;
           selOutline.visible = false;
           selOutline.userData = { isOutline: true };
@@ -1076,19 +1100,31 @@ function _showOverlay(mesh, showOutline) {
   var sel = mesh.userData.selOutline;
   if (sel) {
     sel.visible = !!showOutline;
-    if (showOutline) { sel.material.opacity = 0.5; }
+    if (showOutline) { sel.material.opacity = 0.65; }
   }
-  // Show right-hemisphere mirror when the left-side overlay is shown
-  if (mesh.userData.mirrorMesh) mesh.userData.mirrorMesh.visible = true;
+  // Show right-hemisphere mirror (and its own selOutline) in sync
+  var mirror = mesh.userData.mirrorMesh;
+  if (mirror) {
+    mirror.visible = true;
+    var mirrorSel = mirror.userData.selOutline;
+    if (mirrorSel) {
+      mirrorSel.visible = !!showOutline;
+      if (showOutline) { mirrorSel.material.opacity = 0.65; }
+    }
+  }
 }
 
 function _hideOverlay(mesh) {
   if (mesh.userData.permanent) return;
   mesh.visible = false;
   var sel = mesh.userData.selOutline;
-  if (sel) sel.visible = false;
-  // Keep mirror in sync
-  if (mesh.userData.mirrorMesh) mesh.userData.mirrorMesh.visible = false;
+  if (sel) { sel.visible = false; sel.material.opacity = 0.0; }
+  var mirror = mesh.userData.mirrorMesh;
+  if (mirror) {
+    mirror.visible = false;
+    var mirrorSel = mirror.userData.selOutline;
+    if (mirrorSel) { mirrorSel.visible = false; mirrorSel.material.opacity = 0.0; }
+  }
 }
 
 function _hideAllOverlays() {
@@ -1221,9 +1257,9 @@ function highlightRegion(regionId) {
       mat.clearcoatRoughness = 0.30;
     } else {
       // Normal highlight: semi-transparent overlay on opaque cortex
-      mat.emissiveIntensity = 0.22;
+      mat.emissiveIntensity = 0.32;
       mat.transparent       = true;
-      mat.opacity           = 0.82;
+      mat.opacity           = 0.92;
       mat.depthWrite        = true;
       mat.side              = THREE.FrontSide;
     }
