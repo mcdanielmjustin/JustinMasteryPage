@@ -176,9 +176,19 @@ DESTRIEUX_REGIONS = {
     ],
 
     "occipital_lobe": [
+        # Lateral surface
         "G_cuneus", "G_occipital_sup", "G_occipital_middle",
-        "G_oc-temp_lat-fusifor", "G_oc-temp_med-Lingual",
-        "G_and_S_occipital_inf", "Pole_occipital",
+        # Inferior surface
+        # G_oc-temp_lat-fusifor (fusiform gyrus) REMOVED — it is also in
+        # temporal_lobe, causing vast overlap.  The fusiform is classified as
+        # temporal (BA 37; FFA and VWFA both at y_MNI ≈ -50 to -55 mm).
+        # The occipital lobe's inferior surface is covered by G_and_S_occipital_inf
+        # and G_oc-temp_med-Lingual (lingual gyrus, BA 18/19).
+        "G_oc-temp_med-Lingual",
+        "G_and_S_occipital_inf",
+        # Pole
+        "Pole_occipital",
+        # Sulci
         "S_calcarine", "S_oc_middle_and_Lunatus",
         "S_oc_sup_and_transversal", "S_oc-temp_med_and_Lingual",
         "S_occipital_ant", "S_parieto_occipital",
