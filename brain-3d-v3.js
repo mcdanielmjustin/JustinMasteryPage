@@ -672,7 +672,7 @@ function loadAtlasCerebellum() {
         mat._origColor     = baseColor.clone();
         mat._origEmissive  = new THREE.Color(0x5A2A2A);
         mat._origRoughness = mat.roughness;
-        console.log('[brain-3d-v3] Cerebellum: color=#C08878, ridgeAmp=0.018, ridgeFreq=55');
+        console.log('[brain-3d-v3] Cerebellum: color=#D88878, ridgeAmp=0.018, ridgeFreq=55, faces=~129K');
 
         var mesh = new THREE.Mesh(geo, mat);
         mesh.name = 'cerebellum';
