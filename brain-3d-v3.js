@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304i';
+var ASSET_VERSION = '20260304j';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {
@@ -79,6 +79,10 @@ var OVERLAY_COLORS = {
 var TISSUE_COLOR = 0xD4AA90;
 
 var PERMANENT_IDS = new Set(['brainstem', 'cerebellum']);
+
+// Regions where the cerebellum partially occludes the selected structure in
+// the default lateral camera view — auto-glass the cerebellum while selected.
+var CEREBELLUM_GLASS_REGIONS = new Set(['temporal_lobe']);
 
 // Regions that exist on both hemispheres and should show a mirrored right-side overlay.
 // Language-dominant regions (Broca's, Wernicke's) and midline structures (cingulate, corpus
@@ -727,6 +731,43 @@ function loadAtlasCerebellum() {
 
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// CEREBELLUM GLASS HELPER
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Makes the cerebellum semi-transparent (glass) or restores it to its current
+// natural state (opaque normally, glass if global glass mode is on).
+// Called automatically when certain regions are highlighted/deselected.
+function _setCerebellumGlass(on) {
+  if (!cerebellumVisible) return;
+  cerebellumMeshes.forEach(function(m) {
+    var mat = m.userData.overlayMat;
+    if (!mat) return;
+    if (on) {
+      mat.transparent = true;
+      mat.opacity     = 0.08;
+      mat.depthWrite  = false;
+      mat.side        = THREE.DoubleSide;
+    } else if (glassOn) {
+      // Global glass mode already controls opacity — don't fight it
+      mat.transparent = true;
+      mat.opacity     = 0.08;
+      mat.depthWrite  = false;
+      mat.side        = THREE.DoubleSide;
+    } else {
+      mat.color.copy(mat._origColor);
+      mat.emissive.copy(mat._origEmissive);
+      mat.emissiveIntensity = 0.04;
+      mat.transparent = false;
+      mat.opacity     = 1.0;
+      mat.depthWrite  = true;
+      mat.side        = THREE.FrontSide;
+    }
+    mat.needsUpdate = true;
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // OUTLINE GEOMETRY UTILITY
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -1246,6 +1287,10 @@ function _dimHires(on) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function highlightRegion(regionId) {
+  // Restore cerebellum from any previous region's auto-glass before applying
+  // the new region's state (avoids permanently glassed cerebellum on switch).
+  _setCerebellumGlass(false);
+
   selectedRegionId = regionId;
 
   // Medial-wall structures — auto-enable split view so the medial surface is
@@ -1293,6 +1338,11 @@ function highlightRegion(regionId) {
     mat.needsUpdate = true;
     _showOverlay(m, true);
   });
+
+  // Auto-glass the cerebellum for regions it occludes in the lateral view
+  if (CEREBELLUM_GLASS_REGIONS.has(regionId)) {
+    _setCerebellumGlass(true);
+  }
 }
 
 function dimAllRegions(exceptIds) {
@@ -1319,6 +1369,7 @@ function dimAllRegions(exceptIds) {
 }
 
 function resetRegions() {
+  _setCerebellumGlass(false);  // restore before state is cleared
   quizMode = false;
   selectedRegionId = null;
   hoveredRegionId = null;

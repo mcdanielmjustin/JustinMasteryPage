@@ -148,17 +148,31 @@ DESTRIEUX_REGIONS = {
         "Pole_temporal",
         "S_temporal_sup", "S_temporal_inf", "S_temporal_transverse",
         "Lat_Fis-post",
-        "S_oc-temp_lat", "S_oc-temp_med_and_Lingual",
-        "S_collat_transv_ant", "S_collat_transv_post",
+        # Removed: S_oc-temp_lat (lateral occipito-temporal sulcus extends to
+        # y_MNI ≈ -70 mm, z_scene ≈ -0.50 — well past the parieto-occipital
+        # boundary into occipital territory).
+        # Removed: S_oc-temp_med_and_Lingual (label includes lingual gyrus =
+        # primary occipital cortex BA17/18; wrong lobe).
+        # Removed: S_collat_transv_post (posterior transverse collateral sulcus
+        # extends into inferior occipital region).
+        "S_collat_transv_ant",
     ],
 
     "wernickes_area": [
-        # Planum temporale (BA 22 posterior) is the anatomical core of
-        # Wernicke's area. G_temp_sup-Lateral was removed — it spans the
-        # ENTIRE lateral STG (anterior pole to posterior), causing the mesh
-        # to extend far too anteriorly (z-error > 0.40 in scene units).
-        "G_temp_sup-Plan_tempo",
-        "Lat_Fis-post",
+        # Wernicke's area = posterior superior temporal gyrus (BA 22p).
+        #
+        # G_temp_sup-Lateral is the ONLY Destrieux label covering the VISIBLE
+        # lateral surface of the STG. Previously removed because it spans the
+        # entire STG (temporal pole → posterior), but re-added here together
+        # with a POSTERIOR_FILTER (y_MNI < -25 mm) that clips it to just the
+        # posterior third — the canonical BA 22p extent.
+        #
+        # G_temp_sup-Plan_tempo (planum temporale) and Lat_Fis-post alone are
+        # buried inside the Sylvian fissure and produce nearly invisible mesh.
+        "G_temp_sup-Lateral",       # visible lateral STG — posterior filtered
+        "G_temp_sup-Plan_tempo",    # planum temporale: anatomical core (BA 22p)
+        "S_temporal_sup",           # superior temporal sulcus (posterior STS)
+        "Lat_Fis-post",             # posterior Sylvian fissure
     ],
 
     "occipital_lobe": [
@@ -182,6 +196,17 @@ DESTRIEUX_REGIONS = {
         "G_rectus", "G_subcallosal",
         "S_suborbital", "S_orbital_med-olfact",
     ],
+}
+
+# Per-region posterior (y_MNI) filter: after building the label vertex mask,
+# zero out any vertex with FreeSurfer y-coordinate (≈ MNI y, anterior-positive)
+# greater than this threshold.  Used to include broad labels (e.g. G_temp_sup-Lateral
+# which spans the full STG) but clip them to only their posterior portion.
+REGION_POSTERIOR_FILTER = {
+    # Wernicke's area = posterior STG only (BA 22p).
+    # G_temp_sup-Lateral spans temporal pole → posterior; keep only y_MNI < -25 mm.
+    # Planum temporale and STS labels are already posterior so the filter is benign.
+    "wernickes_area": -25.0,
 }
 
 # Harvard-Oxford subcortical atlas label alternatives.
@@ -487,6 +512,15 @@ def main():
         for lbl in target_labels:
             for k in name_to_keys.get(lbl, []):
                 vertex_mask |= (label_data == k)
+
+        # Optional per-region posterior clip: zero out vertices anterior to
+        # y_thresh (FreeSurfer RAS y ≈ MNI y, anterior-positive convention).
+        if region_id in REGION_POSTERIOR_FILTER:
+            y_thresh = REGION_POSTERIOR_FILTER[region_id]
+            vertex_mask &= (coords_fs[:, 1] < y_thresh)
+            print(f"    [posterior filter y < {y_thresh} mm]: "
+                  f"{vertex_mask.sum()} verts kept")
+
         if not vertex_mask.any():
             print(f"  [skip] {region_id}: no matching vertices"); sys.stdout.flush()
             continue
