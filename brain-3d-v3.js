@@ -39,7 +39,7 @@ console.log('[brain-3d-v3] Engine loaded, Three.js r' + THREE.REVISION);
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-var ASSET_VERSION = '20260304b';
+var ASSET_VERSION = '20260304c';
 var MIDLINE_X = 0.118;
 
 var OVERLAY_COLORS = {

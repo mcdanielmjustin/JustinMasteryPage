@@ -353,7 +353,7 @@ def find_ho_idx(ho_labels_list, options):
     Find the NIfTI integer value for a subcortical region in the Harvard-Oxford atlas.
 
     ho_labels_list : list where index i corresponds to NIfTI value i.
-                     (Constructed as ['background'] + list(ho.labels))
+                     (In nilearn 0.13.1+, simply list(ho.labels) — Background is ho.labels[0])
     options        : list of candidate label strings to try, in priority order.
 
     Tries exact case-insensitive match first, then substring match.
@@ -516,8 +516,11 @@ def main():
         ho_img    = load_nifti(ho.maps)
         ho_data   = ho_img.get_fdata()
         ho_affine = ho_img.affine
-        # ho.labels is 0-indexed; NIfTI value i -> ho.labels[i-1], value 0 = background
-        ho_labels_with_bg = ["background"] + list(ho.labels)
+        # nilearn 0.13.1+ includes 'Background' as ho.labels[0], so NIfTI value i
+        # maps directly to ho.labels[i] — no manual prepend needed.
+        # Older code prepended "background" which caused a 1-position shift,
+        # making every structure fetch the NEXT label's voxels (GP→brainstem, etc.).
+        ho_labels_with_bg = list(ho.labels)
         print(f"  Atlas loaded: {len(ho.labels)} regions")
 
         for region_id, label_opts in HO_SUBCORTICAL.items():
