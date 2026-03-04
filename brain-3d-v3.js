@@ -636,7 +636,7 @@ function loadAtlasCerebellum() {
 
         // Displace vertices along normals to create folia ridges
         var FOLIA_FREQ = 55.0;   // number of folia bands
-        var FOLIA_AMP  = 0.018;  // ridge depth (visible at mesh scale)
+        var FOLIA_AMP  = 0.008;  // ridge depth (subtle)
         for (var vi = 0; vi < nVerts; vi++) {
           var py = positions[vi * 3 + 1];  // Y = elevation in scene space
           var localY = py - cy;
@@ -672,7 +672,7 @@ function loadAtlasCerebellum() {
         mat._origColor     = baseColor.clone();
         mat._origEmissive  = new THREE.Color(0x5A2A2A);
         mat._origRoughness = mat.roughness;
-        console.log('[brain-3d-v3] Cerebellum: color=#D88878, ridgeAmp=0.018, ridgeFreq=55, faces=~129K');
+        console.log('[brain-3d-v3] Cerebellum: color=#D88878, ridgeAmp=0.008, ridgeFreq=55, faces=~124K');
 
         var mesh = new THREE.Mesh(geo, mat);
         mesh.name = 'cerebellum';
