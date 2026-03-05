@@ -1077,8 +1077,9 @@
     var _quizCurrent   = 0;
     var _quizCorrect   = 0;
     var _quizSubmitted = false;
-    var _quizSelected  = null;
-    var _quizClick     = null;
+    var _quizSelected        = null;
+    var _correctOptionIndex  = null;  // shuffled index of correct answer for location_to_deficit
+    var _quizClick           = null;
 
     window.toggleQuizMode = function() {
       _quizActive = !_quizActive;
@@ -1201,8 +1202,12 @@
         : '\u2605 ' + (rData ? rData.label : hl.replace(/_/g, ' ')) + ' \u2014 highlighted';
       label.style.display = 'block';
 
+      var correctText = q.options[q.correct_option_index];
+      var shuffledOpts = shuffle(q.options.slice());
+      _correctOptionIndex = shuffledOpts.indexOf(correctText);
+
       var wrap = document.getElementById('quiz-chips');
-      q.options.forEach(function(text, i) {
+      shuffledOpts.forEach(function(text, i) {
         var btn = document.createElement('button');
         btn.className   = 'quiz-chip';
         btn.textContent = text;
@@ -1293,10 +1298,10 @@
           document.getElementById('quiz-submit').disabled = false;
           return;
         }
-        isCorrect = _quizSelected === q.correct_option_index;
+        isCorrect = _quizSelected === _correctOptionIndex;
         document.querySelectorAll('.quiz-chip').forEach(function(c, i) {
           c.classList.add('disabled');
-          if (i === q.correct_option_index) c.classList.add('correct');
+          if (i === _correctOptionIndex) c.classList.add('correct');
           else if (i === _quizSelected && !isCorrect) c.classList.add('wrong');
         });
       }
