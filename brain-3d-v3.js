@@ -1514,12 +1514,25 @@ function highlightRegion(regionId) {
   }
 }
 
+var _quizCamSavedPos = null;
+
 function enterQuizMode() {
   // Set quiz mode flag (suppresses hover overlays) without dimming the brain.
   // Brain stays at 100% opacity; only the selected chip's region is highlighted.
   quizMode = true;
   selectedRegionId = null;
   _hideAllOverlays();
+
+  // Zoom out slightly so the brain fits comfortably above the quiz bar.
+  // Pull the camera 15% further from the orbit target with a smooth transition.
+  if (!_quizCamSavedPos) {
+    _quizCamSavedPos = camera.position.clone();
+    var tgt  = controls.target.clone();
+    var dir  = camera.position.clone().sub(tgt).normalize();
+    var dist = camera.position.distanceTo(tgt);
+    var newPos = tgt.clone().add(dir.multiplyScalar(dist * 1.15));
+    _startCamTransition(newPos, tgt);
+  }
 }
 
 function dimAllRegions(exceptIds) {
@@ -1560,6 +1573,12 @@ function resetRegions() {
   selectedRegionId = null;
   hoveredRegionId = null;
   _hideAllOverlays();
+
+  // Restore pre-quiz camera distance if we zoomed out for quiz mode.
+  if (_quizCamSavedPos) {
+    _startCamTransition(_quizCamSavedPos, controls.target.clone());
+    _quizCamSavedPos = null;
+  }
   if (glassOn) {
     // Glass stays on — just remove the isolation (no selected region)
     _applyHiresGlass(true);

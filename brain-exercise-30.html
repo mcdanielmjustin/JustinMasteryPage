@@ -244,6 +244,14 @@
     }
 
     /* Loading overlay */
+    /* Quiz mode: slide canvas up so brain sits between controls and quiz bar */
+    .brain-stage canvas {
+      transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+    }
+    .brain-stage.quiz-shifted canvas {
+      transform: translateY(-7%);
+    }
+
     .brain-loading {
       position: absolute; inset: 0; z-index: 20;
       display: flex; align-items: center; justify-content: center;
@@ -1087,6 +1095,7 @@
     }
 
     function stopQuiz() {
+      document.getElementById('brain-stage').classList.remove('quiz-shifted');
       document.getElementById('quiz-bar').classList.remove('open');
       document.getElementById('nav-score').style.display = 'none';
       document.getElementById('highlighted-label').style.display = 'none';
@@ -1136,6 +1145,7 @@
       }
 
       document.getElementById('quiz-bar').classList.add('open');
+      document.getElementById('brain-stage').classList.add('quiz-shifted');
     }
 
     function setupClickRegion(q) {
