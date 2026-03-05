@@ -123,7 +123,7 @@ try {
   window.dispatchEvent(new CustomEvent('brain3dNoWebGL'));
   window.__brain3d = {
     mount: function(){}, unmount: function(){}, setCameraView: function(){},
-    highlightRegion: function(){}, dimAllRegions: function(){}, resetRegions: function(){},
+    highlightRegion: function(){}, enterQuizMode: function(){}, dimAllRegions: function(){}, resetRegions: function(){},
     toggleGlass: function(){}, toggleSplit: function(){}, toggleCerebellum: function(){}, toggleBrainstem: function(){},
     setSubcorticalVisible: function(){}, focusRegion: function(){},
     regionMeshes: [], corticalMeshes: [], subcorticalMeshes: [],
@@ -1454,6 +1454,12 @@ function highlightRegion(regionId) {
     window.dispatchEvent(new CustomEvent('brain3dGlassChanged', { detail: { glassOn: false } }));
   }
 
+  // For cortical regions (no glass), always restore brain to 100% opacity.
+  // Undoes any dimming from dimAllRegions() or prior quiz question state.
+  if (!glassOn) {
+    _dimHires(false);
+  }
+
   selectedRegionId = regionId;
 
   // Medial-wall structures — auto-enable split view so the medial surface is
@@ -1506,6 +1512,14 @@ function highlightRegion(regionId) {
   if (CEREBELLUM_GLASS_REGIONS.has(regionId)) {
     _setCerebellumGlass(true);
   }
+}
+
+function enterQuizMode() {
+  // Set quiz mode flag (suppresses hover overlays) without dimming the brain.
+  // Brain stays at 100% opacity; only the selected chip's region is highlighted.
+  quizMode = true;
+  selectedRegionId = null;
+  _hideAllOverlays();
 }
 
 function dimAllRegions(exceptIds) {
@@ -2074,6 +2088,7 @@ window.__brain3d = {
   focusRegion:         focusRegion,
   CAMERA_VIEWS:        CAMERA_VIEWS,
   highlightRegion:     highlightRegion,
+  enterQuizMode:       enterQuizMode,
   dimAllRegions:       dimAllRegions,
   resetRegions:        resetRegions,
   toggleGlass:         toggleGlass,

@@ -1157,7 +1157,7 @@
           wrap.appendChild(btn);
         });
       } else {
-        if (window.__brain3d) window.__brain3d.dimAllRegions(activeIds);
+        if (window.__brain3d) window.__brain3d.enterQuizMode();
         setupFloatingChips(shuffle(activeIds.slice()));
         _quizClick = function(regionId) {
           if (_quizSubmitted) return;
@@ -1231,7 +1231,10 @@
       document.querySelectorAll('.float-chip').forEach(function(c) {
         c.classList.toggle('selected', c.dataset.regionId === rId);
       });
-      if (window.__brain3d) window.__brain3d.highlightRegion(rId);
+      if (window.__brain3d) {
+        window.__brain3d.highlightRegion(rId);
+        window.__brain3d.focusRegion(rId);
+      }
       document.getElementById('quiz-submit').disabled = false;
     }
 
@@ -1253,7 +1256,10 @@
           return;
         }
         isCorrect = _quizSelected === q.target_region;
-        if (window.__brain3d) window.__brain3d.highlightRegion(q.target_region);
+        if (window.__brain3d) {
+          window.__brain3d.highlightRegion(q.target_region);
+          window.__brain3d.focusRegion(q.target_region);
+        }
         // Reveal correct/wrong on floating chips
         document.querySelectorAll('.float-chip').forEach(function(c) {
           c.classList.add('disabled');
