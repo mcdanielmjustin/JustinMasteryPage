@@ -1481,6 +1481,9 @@ function highlightRegion(regionId) {
       mat.emissive.copy(mat._origEmissive);
       mat.emissiveIntensity = 0.04;
       mat.needsUpdate = true;
+      // Also hide the selection outline — _hideAllOverlays() skips permanents
+      var sel = m.userData.selOutline;
+      if (sel) { sel.visible = false; sel.material.opacity = 0.0; }
     });
   }
 
