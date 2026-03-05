@@ -1290,7 +1290,11 @@ function focusRegion(regionId) {
   var camPos = regionCameraPos[regionId];
   var center = regionCentroids[regionId];
   if (!camPos || !center) return;
-  _startCamTransition(camPos, center);
+  // In quiz mode the quiz bar covers the bottom ~15-20% of the viewport.
+  // Shifting the orbit target 0.15 world units downward makes the camera tilt
+  // slightly upward, pushing brain content up in the frame and clearing the bar.
+  var target = quizMode ? center.clone().setY(center.y - 0.15) : center;
+  _startCamTransition(camPos, target);
 }
 
 
