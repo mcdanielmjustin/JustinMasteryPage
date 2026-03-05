@@ -1574,7 +1574,7 @@ window.__BRAIN_DATA = {
       "category": "visual",
       "question": "A 58-year-old woman suffers bilateral posterior cerebral artery strokes affecting both occipital lobes. She reports complete loss of vision, yet insists to nursing staff that her eyesight is \u2018perfectly fine.\u2019 She collides with furniture while walking and confabulates visual experiences when questioned, denying any blindness. Bilateral damage to which region best explains both the visual loss and the denial of blindness?",
       "target_region": "occipital_lobe",
-      "distractor_regions": ["occipital_lobe", "parietal_lobe", "temporal_lobe"],
+      "distractor_regions": ["frontal_lobe", "parietal_lobe", "temporal_lobe"],
       "explanation": "Bilateral destruction of the primary visual cortex (occipital lobes) causes cortical blindness \u2014 complete loss of conscious vision despite structurally intact eyes and optic nerves. Anton\u2019s syndrome is the striking variant in which the patient denies being blind and confabulates visual experiences, because the cortical regions responsible for both visual processing and metacognitive awareness of deficit are simultaneously destroyed. Unilateral occipital damage produces a contralateral homonymous hemianopia without total blindness. The parietal lobe mediates spatial attention and neglect; the temporal lobe mediates object recognition \u2014 bilateral damage to either does not produce blindness with denial."
     },
     {
