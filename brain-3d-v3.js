@@ -1471,10 +1471,34 @@ function highlightRegion(regionId) {
 
   _hideAllOverlays();
 
+  // _hideAllOverlays() skips permanent meshes, so prior highlight colors on the
+  // brainstem persist. Explicitly restore brainstem when it's not the target region.
+  if (regionId !== 'brainstem') {
+    brainstemMeshes.forEach(function(m) {
+      var mat = m.userData.overlayMat;
+      if (!mat) return;
+      mat.color.copy(mat._origColor);
+      mat.emissive.copy(mat._origEmissive);
+      mat.emissiveIntensity = 0.04;
+      mat.needsUpdate = true;
+    });
+  }
+
   // In glass mode, apply glass FIRST (before region material override)
   // and exclude the selected region from dimming
   if (glassOn) {
     _applyHiresGlass(true, regionId);
+    // Brainstem sub-segments: show brainstem shell at 65% opacity (visible
+    // anatomical context) rather than full 8% glass — it is the parent structure.
+    if (regionId === 'midbrain' || regionId === 'pons' || regionId === 'medulla') {
+      brainstemMeshes.forEach(function(m) {
+        if (!m.material || !brainstemVisible) return;
+        m.material.transparent = true;
+        m.material.opacity = 0.65;
+        m.material.depthWrite = false;
+        m.material.needsUpdate = true;
+      });
+    }
   }
 
   regionMeshes.forEach(function(m) {
