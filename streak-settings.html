@@ -500,6 +500,94 @@
       </div>
     </div>
 
+    <!-- ── 5. DIFFICULTY ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Difficulty</div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-option selected" data-difficulty="all" onclick="selectToggle(this,'difficulty')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">All Levels</div>
+            <div class="toggle-sublabel">Easy, medium &amp; hard mixed</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-difficulty="1" onclick="selectToggle(this,'difficulty')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Easy</div>
+            <div class="toggle-sublabel">Foundational recall</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-difficulty="2" onclick="selectToggle(this,'difficulty')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Medium</div>
+            <div class="toggle-sublabel">Application &amp; contrast</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-difficulty="3" onclick="selectToggle(this,'difficulty')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Hard</div>
+            <div class="toggle-sublabel">Scenarios &amp; implications</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 6. ANGLE FOCUS ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Angle Focus</div>
+      </div>
+      <div class="toggle-row" style="flex-wrap: wrap;">
+        <div class="toggle-option selected" data-angle="all" onclick="selectToggle(this,'angle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">All Angles</div>
+            <div class="toggle-sublabel">Mixed question types</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-angle="direct_recall" onclick="selectToggle(this,'angle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Recall</div>
+            <div class="toggle-sublabel">Definition &amp; identification</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-angle="clinical_scenario" onclick="selectToggle(this,'angle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Scenarios</div>
+            <div class="toggle-sublabel">Vignette application</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-angle="contrast" onclick="selectToggle(this,'angle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Contrast</div>
+            <div class="toggle-sublabel">Distinguish similar concepts</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-angle="example_recognition" onclick="selectToggle(this,'angle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Examples</div>
+            <div class="toggle-sublabel">Recognize real-world instances</div>
+          </div>
+        </div>
+        <div class="toggle-option" data-angle="implication" onclick="selectToggle(this,'angle')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">Implication</div>
+            <div class="toggle-sublabel">Higher-order consequences</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ── SUMMARY + START ── -->
     <div class="summary-bar">
       <div class="summary-item">
@@ -521,6 +609,16 @@
         <span class="s-label">Shuffle</span>
         <span class="s-val" id="sum-shuffle">On</span>
       </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Difficulty</span>
+        <span class="s-val" id="sum-difficulty">All</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
+        <span class="s-label">Angle</span>
+        <span class="s-val" id="sum-angle">All</span>
+      </div>
     </div>
 
     <button class="start-btn" onclick="startSession()">
@@ -531,11 +629,13 @@
 
   <script>
     const state = {
-      domains:   new Set(),
-      mixed:     false,
-      lives:     1,
-      lifeevery: '0',
-      shuffle:   'on',
+      domains:    new Set(),
+      mixed:      false,
+      lives:      1,
+      lifeevery:  '0',
+      shuffle:    'on',
+      difficulty: 'all',
+      angle:      'all',
     };
 
     // ── Domain ──
@@ -605,6 +705,12 @@
     // ── Summary ──
     const heartsMap = { 1: '&#10084;&#65039;', 2: '&#10084;&#65039;&#10084;&#65039;', 3: '&#10084;&#65039;&#10084;&#65039;&#10084;&#65039;' };
 
+    const diffLabels  = { all: 'All', '1': 'Easy', '2': 'Medium', '3': 'Hard' };
+    const angleLabels = {
+      all: 'All', direct_recall: 'Recall', clinical_scenario: 'Scenarios',
+      contrast: 'Contrast', example_recognition: 'Examples', implication: 'Impl.',
+    };
+
     function updateSummary() {
       document.getElementById('sum-domains').textContent =
         state.mixed ? 'Mixed' :
@@ -612,6 +718,8 @@
       document.getElementById('sum-lives').innerHTML = heartsMap[state.lives];
       document.getElementById('sum-lifeevery').textContent = state.lifeevery === '0' ? 'Off' : 'Every ' + state.lifeevery;
       document.getElementById('sum-shuffle').textContent = state.shuffle === 'on' ? 'On' : 'Off';
+      document.getElementById('sum-difficulty').textContent = diffLabels[state.difficulty] || 'All';
+      document.getElementById('sum-angle').textContent = angleLabels[state.angle] || 'All';
     }
 
     // ── Validate + Start ──
@@ -622,11 +730,33 @@
         return;
       }
       const domains = state.mixed ? 'mixed' : [...state.domains].join(',');
-      const params = new URLSearchParams({ domains, lives: state.lives, lifeevery: state.lifeevery, shuffle: state.shuffle });
+      const params = new URLSearchParams({
+        domains,
+        lives:      state.lives,
+        lifeevery:  state.lifeevery,
+        shuffle:    state.shuffle,
+        difficulty: state.difficulty,
+        angle:      state.angle,
+      });
       location.href = 'streak-exercise.html?' + params.toString();
     }
 
     updateSummary();
+
+    // Dynamically update question counts from manifest
+    fetch('data/streak_manifest.json')
+      .then(r => r.json())
+      .then(manifest => {
+        document.querySelectorAll('.domain-card').forEach(card => {
+          const code  = card.dataset.domain;
+          const count = manifest.domains && manifest.domains[code];
+          if (count !== undefined) {
+            const el = card.querySelector('.domain-q-count');
+            if (el) el.textContent = count.toLocaleString() + ' questions';
+          }
+        });
+      })
+      .catch(() => { /* Fail silently; hardcoded HTML values remain */ });
   </script>
 
 </body>

@@ -283,6 +283,26 @@
     .feedback-icon { font-size: 18px; }
     .feedback-sub { font-size: 12px; font-weight: 400; color: var(--text2); margin-top: 1px; }
 
+    /* Explanation panel */
+    .explanation-box {
+      display: none;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.65;
+      animation: slideUp 0.25s ease-out both;
+    }
+    .explanation-box.visible { display: block; }
+    .explanation-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text3);
+      margin-bottom: 8px;
+    }
+
     /* Next button */
     .next-btn {
       width: 100%; padding: 14px;
@@ -438,6 +458,11 @@
       </div>
     </div>
 
+    <div class="explanation-box" id="explanation-box">
+      <div class="explanation-label">&#128218; Explanation</div>
+      <div id="explanation-text"></div>
+    </div>
+
     <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question &#8594;</button>
   </div>
 
@@ -488,14 +513,19 @@
       contrast: 'Contrast', example_recognition: 'Example ID', implication: 'Implication',
     };
 
-    const params     = new URLSearchParams(location.search);
+    const params      = new URLSearchParams(location.search);
     const domainParam = params.get('domains') || 'mixed';
     const MAX_LIVES   = parseInt(params.get('lives')     || '1', 10);
     const LIFE_EVERY  = parseInt(params.get('lifeevery') || '0', 10);
     const SHUFFLE     = params.get('shuffle') !== 'off';
+    const DIFFICULTY  = params.get('difficulty') || 'all';
+    const ANGLE       = params.get('angle')      || 'all';
 
     const CFG_DOMAINS = domainParam === 'mixed' ? ALL_DOMAINS : domainParam.split(',');
-    const STORAGE_KEY = 'streak_best_' + CFG_DOMAINS.slice().sort().join('_');
+    const STORAGE_KEY = 'streak_best_'
+      + CFG_DOMAINS.slice().sort().join('_')
+      + '_d' + DIFFICULTY
+      + '_a' + ANGLE;
 
     // ── State ───────────────────────────────────────────────────────────────
     let pool         = [];
@@ -509,6 +539,7 @@
     let answered     = false;
     let gameOver     = false;
     let lastWrong    = null;
+    let newBestSet   = false;  // true if bestStreak was surpassed this run
 
     // ── Load questions ───────────────────────────────────────────────────────
     async function loadQuestions() {
@@ -533,6 +564,27 @@
       if (pool.length === 0) {
         document.getElementById('loading-text').textContent = 'No questions found. Check your settings.';
         return;
+      }
+
+      // Apply difficulty filter
+      if (DIFFICULTY !== 'all') {
+        const level = parseInt(DIFFICULTY, 10);
+        pool = pool.filter(q => q.difficulty_level === level);
+        if (pool.length === 0) {
+          document.getElementById('loading-text').textContent =
+            'No questions found for that difficulty level. Try a different setting.';
+          return;
+        }
+      }
+
+      // Apply angle filter
+      if (ANGLE !== 'all') {
+        pool = pool.filter(q => q.angle === ANGLE);
+        if (pool.length === 0) {
+          document.getElementById('loading-text').textContent =
+            'No questions found for that angle. Try a different setting.';
+          return;
+        }
       }
 
       if (SHUFFLE) {
@@ -610,7 +662,13 @@
       el.classList.add('bump');
       if (streak > peakStreak) peakStreak = streak;
       const bestInline = document.getElementById('streak-best-inline');
-      bestInline.textContent = peakStreak > streak ? `Session best: ${peakStreak}` : (bestStreak > streak ? `Personal best: ${bestStreak}` : '');
+      if (peakStreak > streak) {
+        bestInline.textContent = `Session best: ${peakStreak}`;
+      } else if (bestStreak > streak) {
+        bestInline.textContent = `Personal best: ${bestStreak}`;
+      } else {
+        bestInline.textContent = '';
+      }
     }
 
     // ── Next question ─────────────────────────────────────────────────────────
@@ -655,9 +713,12 @@
         list.appendChild(div);
       });
 
-      // Reset feedback
+      // Reset feedback + explanation
       const fb = document.getElementById('feedback-bar');
       fb.className = 'feedback-bar';
+      const expBox = document.getElementById('explanation-box');
+      expBox.classList.remove('visible');
+      document.getElementById('explanation-text').textContent = '';
       document.getElementById('next-btn').classList.remove('visible');
     }
 
@@ -691,6 +752,7 @@
         if (streak > bestStreak) {
           bestStreak = streak;
           localStorage.setItem(STORAGE_KEY, bestStreak);
+          newBestSet = true;
         }
         bumpStreakDisplay();
         updateNavStreak();
@@ -712,6 +774,12 @@
           updateNavStreak();
           document.getElementById('next-btn').classList.add('visible');
         }
+      }
+
+      // Show explanation after every answer
+      if (current.explanation) {
+        document.getElementById('explanation-text').textContent = current.explanation;
+        document.getElementById('explanation-box').classList.add('visible');
       }
     }
 
@@ -739,7 +807,7 @@
     function endGame(exhausted) {
       gameOver = true;
       const finalStreak = Math.max(streak, peakStreak);
-      const isNewBest = finalStreak > 0 && finalStreak >= bestStreak && !exhausted;
+      const isNewBest = newBestSet && !exhausted;
       if (finalStreak > bestStreak) {
         bestStreak = finalStreak;
         localStorage.setItem(STORAGE_KEY, bestStreak);
@@ -769,10 +837,11 @@
     }
 
     function restartStreak() {
-      streak   = 0;
-      lastWrong = null;
-      answered  = false;
-      gameOver  = false;
+      streak      = 0;
+      lastWrong   = null;
+      answered    = false;
+      gameOver    = false;
+      newBestSet  = false;
       // Re-shuffle pool (refill from scratch by reloading)
       location.reload();
     }
