@@ -1473,19 +1473,24 @@ function highlightRegion(regionId) {
 
   // _hideAllOverlays() skips permanent meshes, so prior highlight colors on the
   // brainstem persist. Explicitly restore brainstem when it's not the target region.
-  if (regionId !== 'brainstem') {
-    brainstemMeshes.forEach(function(m) {
-      var mat = m.userData.overlayMat;
-      if (!mat) return;
+  // _hideAllOverlays() skips permanent meshes, so prior highlight colors and
+  // selection outlines on brainstem/cerebellum persist. Restore each one when
+  // it is not the target region.
+  var _permanentRestoreIds = [];
+  if (regionId !== 'brainstem')   _permanentRestoreIds.push('brainstem');
+  if (regionId !== 'cerebellum')  _permanentRestoreIds.push('cerebellum');
+  permanentMeshes.forEach(function(m) {
+    if (_permanentRestoreIds.indexOf(m.userData.regionId) === -1) return;
+    var mat = m.userData.overlayMat;
+    if (mat) {
       mat.color.copy(mat._origColor);
       mat.emissive.copy(mat._origEmissive);
       mat.emissiveIntensity = 0.04;
       mat.needsUpdate = true;
-      // Also hide the selection outline — _hideAllOverlays() skips permanents
-      var sel = m.userData.selOutline;
-      if (sel) { sel.visible = false; sel.material.opacity = 0.0; }
-    });
-  }
+    }
+    var sel = m.userData.selOutline;
+    if (sel) { sel.visible = false; sel.material.opacity = 0.0; }
+  });
 
   // In glass mode, apply glass FIRST (before region material override)
   // and exclude the selected region from dimming
