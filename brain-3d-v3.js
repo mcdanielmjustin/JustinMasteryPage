@@ -123,7 +123,7 @@ try {
   window.dispatchEvent(new CustomEvent('brain3dNoWebGL'));
   window.__brain3d = {
     mount: function(){}, unmount: function(){}, setCameraView: function(){},
-    highlightRegion: function(){}, enterQuizMode: function(){}, dimAllRegions: function(){}, resetRegions: function(){},
+    highlightRegion: function(){}, enterQuizMode: function(){}, exitQuizCamera: function(){}, dimAllRegions: function(){}, resetRegions: function(){},
     toggleGlass: function(){}, toggleSplit: function(){}, toggleCerebellum: function(){}, toggleBrainstem: function(){},
     setSubcorticalVisible: function(){}, focusRegion: function(){},
     regionMeshes: [], corticalMeshes: [], subcorticalMeshes: [],
@@ -1524,14 +1524,24 @@ function enterQuizMode() {
   _hideAllOverlays();
 
   // Zoom out slightly so the brain fits comfortably above the quiz bar.
-  // Pull the camera 15% further from the orbit target with a smooth transition.
+  // _quizCamSavedPos is saved ONCE (at quiz start) and never overwritten mid-quiz,
+  // so the base position never drifts across questions or chip-click focus events.
+  // Always zoom relative to CAM_ORIGIN so the orbit target resets to brain center.
   if (!_quizCamSavedPos) {
     _quizCamSavedPos = camera.position.clone();
-    var tgt  = controls.target.clone();
-    var dir  = camera.position.clone().sub(tgt).normalize();
-    var dist = camera.position.distanceTo(tgt);
-    var newPos = tgt.clone().add(dir.multiplyScalar(dist * 1.15));
-    _startCamTransition(newPos, tgt);
+  }
+  var dir    = _quizCamSavedPos.clone().sub(CAM_ORIGIN).normalize();
+  var dist   = _quizCamSavedPos.distanceTo(CAM_ORIGIN);
+  var newPos = CAM_ORIGIN.clone().add(dir.multiplyScalar(dist * 1.15));
+  _startCamTransition(newPos, CAM_ORIGIN.clone());
+}
+
+// Restore camera to pre-quiz position. Call from stopQuiz() only — NOT between
+// questions — so the saved base is never lost mid-quiz.
+function exitQuizCamera() {
+  if (_quizCamSavedPos) {
+    _startCamTransition(_quizCamSavedPos, CAM_ORIGIN.clone());
+    _quizCamSavedPos = null;
   }
 }
 
@@ -1574,11 +1584,6 @@ function resetRegions() {
   hoveredRegionId = null;
   _hideAllOverlays();
 
-  // Restore pre-quiz camera distance if we zoomed out for quiz mode.
-  if (_quizCamSavedPos) {
-    _startCamTransition(_quizCamSavedPos, controls.target.clone());
-    _quizCamSavedPos = null;
-  }
   if (glassOn) {
     // Glass stays on — just remove the isolation (no selected region)
     _applyHiresGlass(true);
@@ -2108,6 +2113,7 @@ window.__brain3d = {
   CAMERA_VIEWS:        CAMERA_VIEWS,
   highlightRegion:     highlightRegion,
   enterQuizMode:       enterQuizMode,
+  exitQuizCamera:      exitQuizCamera,
   dimAllRegions:       dimAllRegions,
   resetRegions:        resetRegions,
   toggleGlass:         toggleGlass,
