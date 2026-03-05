@@ -495,6 +495,9 @@
     // Tap-to-select
     let selectedChip = null;
 
+    // Chip unique ID counter — prevents same-value chip disambiguation bug
+    let _chipIdSeq = 0;
+
     // ── Session persistence ───────────────────────────────────────────────
     const SESSION_KEY = 'table_session_' + JSON.stringify({
       d: DOMAIN_CODES.slice().sort().join(','),
@@ -621,7 +624,7 @@
       blankMap.clear();
       dtMap.clear();
 
-      document.getElementById('submit-btn').style.display = 'block';
+      document.getElementById('submit-btn').style.display = MODE === 'one' ? 'block' : 'none';
       document.getElementById('next-btn').style.display   = 'none';
 
       document.getElementById('progress-fill').style.width =
@@ -744,11 +747,13 @@
       chip.className    = 'answer-chip';
       chip.draggable    = true;
       chip.dataset.text = text;
+      chip.dataset.chipId = String(_chipIdSeq++);
       if (origIdx != null) chip.dataset.origIdx = String(origIdx);
       chip.textContent  = text;
 
       chip.ondragstart = e => {
         e.dataTransfer.setData('text', text);
+        e.dataTransfer.setData('chipId', chip.dataset.chipId);
         if (origIdx != null) e.dataTransfer.setData('origIdx', String(origIdx));
         e.dataTransfer.effectAllowed = 'move';
       };
@@ -769,6 +774,12 @@
         }
       };
       return chip;
+    }
+
+    function checkSubmitReady() {
+      if (MODE === 'one') return; // always visible for one-blank mode
+      const allFilled = blanks.every(b => b.placedText !== null);
+      document.getElementById('submit-btn').style.display = allFilled ? 'block' : 'none';
     }
 
     function returnChip(text, origIdx) {
@@ -800,6 +811,7 @@
 
       td.className = 'drop-target drop-placed';
       td.innerHTML = escHtml(text);
+      checkSubmitReady();
     }
 
     // ── Wire a cell to accept chip placements ─────────────────────────────
@@ -813,8 +825,11 @@
         if (answered) return;
         const text    = e.dataTransfer.getData('text');
         const rawIdx  = e.dataTransfer.getData('origIdx');
+        const chipId  = e.dataTransfer.getData('chipId');
         const origIdx = rawIdx ? parseInt(rawIdx) : null;
-        const chipEl  = chipEls.find(c => c.dataset.text === text && c.isConnected);
+        const chipEl  = chipId
+          ? chipEls.find(c => c.dataset.chipId === chipId && c.isConnected)
+          : chipEls.find(c => c.dataset.text === text && c.isConnected);
         // Clear any tap-selected chip state — drag completed the placement
         if (selectedChip) {
           chipEls.forEach(c => c.classList.remove('selected'));
@@ -845,6 +860,7 @@
           blank.placedOrigIdx = null;
           td.className = 'drop-target';
           td.innerHTML = '<span class="drop-hint">Drop here</span>';
+          checkSubmitReady();
         }
       };
     }
@@ -974,10 +990,17 @@
       document.getElementById('feedback-header').textContent =
         anyWrong ? 'Check highlighted cells above' : '\u2713 All correct!';
       document.getElementById('feedback-body').textContent = q.explanation;
-      document.getElementById('feedback-value').innerHTML  =
-        MODE === 'one'
-          ? `<strong>Answer:</strong> &ldquo;${escHtml(q.correct_value)}&rdquo;`
-          : `<strong>Key answer:</strong> &ldquo;${escHtml(q.correct_value)}&rdquo;`;
+      if (MODE === 'one') {
+        document.getElementById('feedback-value').innerHTML =
+          `<strong>Answer:</strong> &ldquo;${escHtml(q.correct_value)}&rdquo;`;
+      } else {
+        const lines = blanks.map(b => {
+          const colLabel = escHtml(q.headers[b.col] || ('Col ' + (b.col + 1)));
+          return `<span style="color:var(--text2)">${colLabel} \u2192</span> \u201c${escHtml(b.value)}\u201d`;
+        });
+        document.getElementById('feedback-value').innerHTML =
+          `<strong>Correct values:</strong><br>${lines.join('<br>')}`;
+      }
 
       const nb = document.getElementById('next-btn');
       nb.style.display = 'block';
@@ -1097,7 +1120,9 @@
         // Answer label
         const ansLabel = document.createElement('div');
         ansLabel.className = 'review-answer-label';
-        ansLabel.textContent = `\u2713 Correct answer: \u201c${q.correct_value}\u201d`;
+        ansLabel.textContent = MODE === 'one'
+          ? `\u2713 Correct answer: \u201c${q.correct_value}\u201d`
+          : '\u2713 All correct values shown in table above';
         card.appendChild(ansLabel);
 
         // Explanation

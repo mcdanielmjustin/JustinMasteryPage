@@ -74,6 +74,12 @@ Instructions:
    - Be distinct from the correct answer and from each other
    - Sound plausible enough to cause real confusion
 3. Write a clear 1-2 sentence explanation of why the correct answer is correct.
+4. LENGTH CONSTRAINT (hard limit): Every string in "options" — including the correct answer —
+   MUST be ≤ 140 characters.
+   - If the natural cell text is longer than 140 characters, abbreviate it while preserving
+     its key distinguishing details (keep technical terms, numbers, and proper names intact).
+   - If you cannot represent all 4 distinct options within 140 characters each, pick a
+     DIFFERENT cell to blank — one whose options will fit the length limit.
 
 Return ONLY valid JSON (no markdown, no extra text):
 {
@@ -90,7 +96,8 @@ Rules:
 - Shuffle the correct answer position — don't always put it at index 0.
 - All 4 options must be distinct strings.
 - blank_row and blank_col must be valid indices.
-- correct_value must match the cell text exactly (same case, same punctuation)."""
+- correct_value must match the cell text exactly (same case, same punctuation).
+- Every element of "options" MUST be ≤ 140 characters. This is a hard constraint with no exceptions."""
 
 
 # ── HTML extraction ────────────────────────────────────────────────────────────

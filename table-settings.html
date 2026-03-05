@@ -201,6 +201,28 @@
     }
     .count-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
 
+    /* Challenge mode buttons */
+    .diff-row { display: flex; flex-direction: column; gap: 10px; }
+    .diff-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s;
+      color: #fff;
+      width: 100%;
+    }
+    .diff-btn.active {
+      background: rgba(45,212,191,0.1);
+      border-color: rgba(45,212,191,0.5);
+    }
+    .diff-btn:hover:not(.active) { border-color: rgba(45,212,191,0.25); }
+    .d-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; color: var(--text); }
+    .diff-btn.active .d-title { color: var(--teal-light); }
+    .d-desc  { font-size: 11px; color: var(--text3); line-height: 1.4; }
+
     /* Summary bar */
     .summary-bar {
       background: rgba(45,212,191,0.07);
@@ -313,6 +335,7 @@
           <button class="count-btn" data-n="30" onclick="selectCount(30)">30</button>
           <button class="count-btn" data-n="40" onclick="selectCount(40)">40</button>
         </div>
+        <div id="count-warn" class="warn" style="color:#fbbf24; display:none;"></div>
       </div>
 
       <!-- Challenge Mode -->
@@ -431,15 +454,17 @@
     }
 
     function selectAllAvailable() {
-      const allBtns  = document.querySelectorAll('.domain-btn');
-      const allCodes = [...allBtns].map(b => b.dataset.code);
-      const allSelected = allCodes.every(c => state.domains.has(c));
+      const availBtns  = document.querySelectorAll('.domain-btn:not(.locked)');
+      const availCodes = [...availBtns].map(b => b.dataset.code);
+      const allSelected = availCodes.every(c => state.domains.has(c));
       if (allSelected) {
-        allCodes.forEach(c => state.domains.delete(c));
+        availCodes.forEach(c => state.domains.delete(c));
       } else {
-        allCodes.forEach(c => state.domains.add(c));
+        availCodes.forEach(c => state.domains.add(c));
       }
-      allBtns.forEach(b => b.classList.toggle('active', state.domains.has(b.dataset.code)));
+      document.querySelectorAll('.domain-btn').forEach(b =>
+        b.classList.toggle('active', state.domains.has(b.dataset.code))
+      );
       updateSummary();
     }
 
@@ -473,9 +498,18 @@
       document.getElementById('sum-count').textContent = state.count;
       document.getElementById('sum-available').textContent =
         totalQ > 0 ? totalQ.toLocaleString() + ' available' : '\u2014';
+
+      const countWarn = document.getElementById('count-warn');
+      if (totalQ > 0 && totalQ < state.count) {
+        countWarn.textContent =
+          `Only ${totalQ} question${totalQ === 1 ? '' : 's'} available \u2014 session will use all of them.`;
+        countWarn.style.display = 'block';
+      } else {
+        countWarn.style.display = 'none';
+      }
       document.getElementById('sum-mode').textContent = MODE_LABELS[state.mode];
 
-      const allBtnCodes = [...document.querySelectorAll('.domain-btn')].map(b => b.dataset.code);
+      const allBtnCodes = [...document.querySelectorAll('.domain-btn:not(.locked)')].map(b => b.dataset.code);
       const allSelected = allBtnCodes.length > 0 && allBtnCodes.every(c => state.domains.has(c));
       document.getElementById('select-all-btn').textContent =
         allSelected ? 'Deselect All' : 'Select All';
