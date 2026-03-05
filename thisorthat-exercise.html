@@ -211,6 +211,18 @@
     .btn-secondary { flex:1;padding:14px;min-width:140px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:14px;font-weight:600;border-radius:12px;cursor:pointer;transition:border-color .2s,background .2s; }
     .btn-secondary:hover { background:rgba(255,255,255,.07);border-color:rgba(147,51,234,.3); }
 
+    /* Pool warning */
+    .pool-warn {
+      display:none;font-size:12px;color:var(--gold);
+      background:rgba(212,160,84,0.08);border:1px solid rgba(212,160,84,0.2);
+      border-radius:10px;padding:9px 14px;text-align:center;
+    }
+
+    /* Keyboard hint */
+    .kb-hint { font-size:11px;color:var(--text3);text-align:center; }
+    kbd { font-size:10px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:1px 5px;font-family:inherit; }
+    @media (pointer:coarse) { .kb-hint { display:none; } }
+
     @media (max-width:600px) {
       #screen-quiz.active,#screen-results.active { padding:20px 16px 60px; }
       .choices-row { flex-direction:column; }
@@ -260,7 +272,11 @@
         <div class="clue-text" id="clue-text"></div>
       </div>
 
+      <div class="pool-warn" id="pool-warn"></div>
+
       <div class="choices-row" id="choices-row"><!-- filled by JS --></div>
+
+      <div class="kb-hint" id="kb-hint">Press <kbd>1</kbd> / <kbd>2</kbd> to choose &nbsp;&middot;&nbsp; <kbd>Enter</kbd> to continue</div>
 
       <div class="answer-reveal" id="answer-reveal">
         <div class="reveal-distinction" id="reveal-distinction"></div>
@@ -369,11 +385,12 @@
         : { clue: yDesc, correct: q.item_y, wrong: q.item_x };
     }
 
-    // Fallback: show the question itself as a clue, ask to identify item_x
+    // Fallback: show the full key_distinction as the clue; pick sides correctly
+    const correctItem = Math.random() < 0.5 ? q.item_x : q.item_y;
     return {
-      clue: q.key_distinction || q.question,
-      correct: Math.random() < 0.5 ? q.item_x : q.item_y,
-      wrong:   Math.random() < 0.5 ? q.item_x : q.item_y, // will be fixed below
+      clue:    q.key_distinction || q.question,
+      correct: correctItem,
+      wrong:   correctItem === q.item_x ? q.item_y : q.item_x,
     };
   }
 
@@ -426,6 +443,11 @@
     }
 
     questions = pool.slice(0, CFG.count);
+    if (questions.length < CFG.count) {
+      const warn = document.getElementById('pool-warn');
+      warn.textContent = `Only ${questions.length} question${questions.length === 1 ? '' : 's'} available for your selection — showing all ${questions.length}.`;
+      warn.style.display = 'block';
+    }
     document.getElementById('screen-loading').classList.remove('active');
     document.getElementById('screen-quiz').classList.add('active');
     renderQuestion();
@@ -518,8 +540,8 @@
     // Reveal correct
     document.querySelectorAll('.choice-btn').forEach(btn => {
       btn.classList.add(btn.dataset.correct === '1' ? 'correct' : 'dimmed');
-      revealBlindNames();
     });
+    revealBlindNames();
     recordAnswer(false); revealAnswer(); showFeedback('timeout');
   }
 
@@ -624,10 +646,16 @@
     else if (pct >= 60) h.innerHTML = 'Session <em>Complete</em>';
     else h.innerHTML = 'Keep <em>Practicing</em>';
 
+    const allStored = getStoredScores()[MODULE] || {};
+    let ltCorrect = 0, ltTotal = 0;
+    for (const s of Object.values(allStored)) { ltCorrect += s.correct || 0; ltTotal += s.total || 0; }
+    const ltPct = ltTotal ? Math.round(ltCorrect / ltTotal * 100) + '%' : '—';
+
     document.getElementById('results-summary').innerHTML = `
       <div class="rs-item"><span class="rs-label">Score</span><span class="rs-val">${pct}%</span></div>
       <div class="rs-item"><span class="rs-label">Correct</span><span class="rs-val">${correct}/${total}</span></div>
       <div class="rs-item"><span class="rs-label">Domains</span><span class="rs-val">${CFG.domains.length}</span></div>
+      <div class="rs-item"><span class="rs-label">Lifetime</span><span class="rs-val">${ltPct}</span></div>
     `;
 
     const rows = document.getElementById('domain-rows');
@@ -642,6 +670,31 @@
     }
     setTimeout(() => { rows.querySelectorAll('.db-fill').forEach(el => el.style.width = el.dataset.pct + '%'); }, 200);
   }
+
+  // ── Keyboard navigation ────────────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const nextBtn = document.getElementById('next-btn');
+
+    // Enter / Space → advance when next button is visible
+    if ((e.key === 'Enter' || e.key === ' ') && nextBtn && nextBtn.classList.contains('visible')) {
+      e.preventDefault();
+      nextBtn.click();
+      return;
+    }
+
+    // 1 / a / ArrowLeft → left choice   |   2 / d / l / ArrowRight → right choice
+    if (!answered) {
+      const allBtns = [...document.querySelectorAll('.choice-btn')];
+      if (allBtns.length === 2) {
+        if (e.key === '1' || e.key === 'a' || e.key === 'ArrowLeft') {
+          e.preventDefault(); allBtns[0].click();
+        } else if (e.key === '2' || e.key === 'd' || e.key === 'l' || e.key === 'ArrowRight') {
+          e.preventDefault(); allBtns[1].click();
+        }
+      }
+    }
+  });
 
   // ── Boot ───────────────────────────────────────────────────────────────────
   loadQuestions().catch(err => {

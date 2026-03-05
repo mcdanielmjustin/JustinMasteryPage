@@ -287,11 +287,6 @@
     .hw-detect-banner.visible { display: block; }
     .hw-detect-title { font-weight: 700; color: #fb923c; margin-bottom: 4px; }
 
-    /* Renderer card */
-    .renderer-note {
-      font-size: 12px; color: var(--text3); margin-top: 10px; line-height: 1.5;
-    }
-
     @media (max-width: 600px) {
       .chips-wrap { gap: 8px; }
     }
@@ -375,17 +370,6 @@
         </div>
       </div>
 
-      <!-- Brain Renderer -->
-      <div class="section-card">
-        <div class="section-label-row">
-          <div class="section-label">Brain Renderer</div>
-        </div>
-        <div class="count-row">
-          <button class="count-btn rend-btn active" data-rend="3d" onclick="selectRenderer('3d')">&#9650; 3D Model</button>
-          <button class="count-btn rend-btn" data-rend="2d" onclick="selectRenderer('2d')">&#9633; 2D Lightweight</button>
-        </div>
-        <p class="renderer-note" id="renderer-note">3D model — full interactive brain with region highlighting and camera animation.</p>
-      </div>
 
       <!-- Hardware Acceleration -->
       <div class="section-card hw-tip-card">
@@ -488,7 +472,6 @@
       cats:  new Set(),
       types: new Set(ALL_TYPES),   // all selected by default
       count: 20,
-      renderer: '3d',
     };
 
     // ── Available count ──────────────────────────────────────────────────
@@ -574,17 +557,6 @@
       updateSummary();
     }
 
-    // ── Renderer ─────────────────────────────────────────────────────────
-    function selectRenderer(r) {
-      state.renderer = r;
-      document.querySelectorAll('.rend-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.rend === r);
-      });
-      document.getElementById('renderer-note').textContent = r === '2d'
-        ? '2D mode uses no GPU — ideal if hardware acceleration is unavailable.'
-        : '3D model — full interactive brain with region highlighting and camera animation.';
-    }
-
     // ── Summary ──────────────────────────────────────────────────────────
     function updateSummary() {
       const cats      = [...state.cats];
@@ -635,7 +607,6 @@
         categories: [...state.cats].join(','),
         types:      [...state.types].join(','),
         count:      state.count,
-        renderer:   state.renderer,
       });
       location.href = 'brain-exercise-30.html?' + p.toString();
     }
