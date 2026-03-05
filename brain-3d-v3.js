@@ -310,6 +310,7 @@ var hoveredRegionId   = null;
 var glassOn           = false;
 var _autoGlassActive  = false;  // true when glass was auto-enabled for a buried region
 var splitOn           = false;
+var _autoSplitActive  = false;  // true when split was auto-enabled for a medial region
 var cerebellumVisible = true;
 var brainstemVisible  = true;
 var quizMode          = false;
@@ -1467,10 +1468,15 @@ function highlightRegion(regionId) {
   selectedRegionId = regionId;
 
   // Medial-wall structures — auto-enable split view so the medial surface is
-  // visible. The UI split button stays in sync via the brain3dSplitChanged event.
+  // visible. Auto-disable when leaving a medial region (mirrors _autoGlassActive).
+  // The UI split button stays in sync via the brain3dSplitChanged event.
   var _MEDIAL_AUTO_SPLIT = { cingulate_gyrus: true, medial_frontal: true, corpus_callosum: true };
   if (_MEDIAL_AUTO_SPLIT[regionId] && !splitOn) {
     toggleSplit(true);
+    _autoSplitActive = true;
+  } else if (_autoSplitActive && !_MEDIAL_AUTO_SPLIT[regionId]) {
+    toggleSplit(false);
+    _autoSplitActive = false;
   }
 
   _hideAllOverlays();
@@ -1669,6 +1675,7 @@ function toggleSplit(forceState) {
     splitOn = forceState;
   } else {
     splitOn = !splitOn;
+    _autoSplitActive = false;  // manual toggle clears auto-split tracking
   }
 
   if (splitOn) {
