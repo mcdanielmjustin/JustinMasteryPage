@@ -1071,29 +1071,6 @@
       else             stopQuiz();
     };
 
-    // Anchor the 3D brain to the visual safe-zone between top controls and quiz bar.
-    // Adding padding to #brain-stage (border-box) shrinks the canvas content area;
-    // Three.js ResizeObserver fires automatically and re-centers the brain.
-    function applyQuizLayout() {
-      var stage    = document.getElementById('brain-stage');
-      var controls = stage.querySelector('.brain-controls');
-      var quizBar  = document.getElementById('quiz-bar');
-      // Top: clear the brain-controls block (measured from brain-stage top)
-      var topPad = controls
-        ? Math.ceil(controls.getBoundingClientRect().bottom - stage.getBoundingClientRect().top) + 12
-        : 88;
-      // Bottom: full rendered height of the quiz bar (offsetHeight ignores CSS transforms)
-      var botPad = quizBar ? quizBar.offsetHeight + 8 : 190;
-      stage.style.paddingTop    = topPad + 'px';
-      stage.style.paddingBottom = botPad + 'px';
-    }
-
-    function clearQuizLayout() {
-      var stage = document.getElementById('brain-stage');
-      stage.style.paddingTop    = '';
-      stage.style.paddingBottom = '';
-    }
-
     function startQuiz() {
       closeInfoPanel();   // info panel has no place during quiz
       var qs = ALL_QS.slice();
@@ -1110,7 +1087,6 @@
     }
 
     function stopQuiz() {
-      clearQuizLayout();
       document.getElementById('quiz-bar').classList.remove('open');
       document.getElementById('nav-score').style.display = 'none';
       document.getElementById('highlighted-label').style.display = 'none';
@@ -1160,7 +1136,6 @@
       }
 
       document.getElementById('quiz-bar').classList.add('open');
-      applyQuizLayout();
     }
 
     function setupClickRegion(q) {
