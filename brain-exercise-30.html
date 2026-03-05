@@ -663,8 +663,10 @@
     var IS_QUIZ    = params.get('mode') === 'quiz';
     var IS_2D      = params.get('renderer') === '2d';
     var CATS_RAW   = (params.get('categories') || '').split(',').filter(Boolean);
+    var TYPES_RAW  = (params.get('types') || '').split(',').filter(Boolean);
     var COUNT_RAW  = parseInt(params.get('count') || '20', 10);
     var CATEGORIES = CATS_RAW.length ? CATS_RAW : null;
+    var QTYPES     = TYPES_RAW.length ? TYPES_RAW : null;
 
     if (IS_2D) {
       document.querySelector('.explorer').classList.add('mode-2d');
@@ -1092,6 +1094,7 @@
       closeInfoPanel();   // info panel has no place during quiz
       var qs = ALL_QS.slice();
       if (CATEGORIES) qs = qs.filter(function(q) { return CATEGORIES.indexOf(q.category) >= 0; });
+      if (QTYPES)     qs = qs.filter(function(q) { return QTYPES.indexOf(q.type) >= 0; });
       qs = shuffle(qs);
       if (COUNT_RAW > 0) qs = qs.slice(0, COUNT_RAW);
       _quizPool    = qs;
@@ -1136,7 +1139,9 @@
       var catLabels = {
         aphasia: 'Aphasia', motor: 'Motor', memory: 'Memory',
         visual: 'Visual', sensory: 'Sensory', executive: 'Executive / Frontal',
-        vascular: 'Vascular',
+        vascular: 'Vascular', psychiatric: 'Psychiatric', subcortical: 'Subcortical',
+        neurotransmitter: 'Neurotransmitter', developmental: 'Developmental',
+        learning: 'Learning', assessment: 'Assessment', endocrine: 'Endocrine',
       };
       document.getElementById('quiz-cat-label').textContent =
         (catLabels[q.category] || q.category || '') + ' \u2014 Brain Pathology 3.0';

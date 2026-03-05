@@ -124,7 +124,7 @@
       text-transform: uppercase; color: var(--rose-light);
     }
 
-    /* Category chips */
+    /* Category / type chips */
     .chips-wrap {
       display: flex; flex-wrap: wrap; gap: 10px;
     }
@@ -218,72 +218,65 @@
     }
     .explore-btn .explore-icon { font-size: 16px; }
 
-    .explore-btn-v2 {
-      width: 100%;
-      background: rgba(244,63,94,0.07);
-      border: 1px solid rgba(244,63,94,0.35);
-      border-radius: 14px;
-      padding: 13px 16px;
-      font-size: 14px; font-weight: 600; color: var(--rose-light);
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
-      letter-spacing: 0.01em;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .explore-btn-v2:hover {
-      border-color: rgba(244,63,94,0.65);
-      background: rgba(244,63,94,0.13);
-    }
-    .explore-btn-v2 .explore-icon { font-size: 16px; }
-    .v2-badge {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
-      background: var(--rose-dark); color: #fff;
-      border-radius: 4px; padding: 2px 5px; text-transform: uppercase;
-    }
+    .warn { font-size: 12px; color: #f87171; padding: 8px 0 0; display: none; }
 
-    .warn { font-size: 12px; color: #f87171; padding: 8px 0; display: none; }
-
-    /* Hardware acceleration banner */
-    .hw-banner {
-      display: none;
-      width: 100%; max-width: 680px;
-      margin: 14px 0 0;
-      position: relative; z-index: 1;
-      background: rgba(251,146,60,0.10);
-      border: 1px solid rgba(251,146,60,0.45);
-      border-radius: 16px;
-      padding: 16px 20px;
-      gap: 14px;
-      align-items: flex-start;
-      animation: fadeInUp 0.5s ease-out both;
+    /* Hardware acceleration tip card */
+    .hw-tip-card {
+      border-color: rgba(99,102,241,0.25);
+      background: rgba(99,102,241,0.04);
     }
-    .hw-banner.visible { display: flex; }
-    .hw-banner-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-    .hw-banner-body { flex: 1; }
-    .hw-banner-title { font-size: 14px; font-weight: 700; color: #fb923c; margin-bottom: 6px; }
-    .hw-banner-text { font-size: 12px; color: var(--text2); line-height: 1.7; }
-    .hw-banner-text code {
+    .hw-tip-intro {
+      font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 16px;
+    }
+    .hw-browsers {
+      display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;
+    }
+    .hw-browser-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 12px; color: var(--text2); line-height: 1.6;
+    }
+    .hw-browser-name {
+      font-size: 11px; font-weight: 700; color: #818cf8;
+      background: rgba(99,102,241,0.15);
+      border-radius: 5px; padding: 2px 7px;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .hw-browser-path { color: var(--text2); }
+    .hw-browser-path code {
       background: rgba(255,255,255,0.07);
       border-radius: 4px; padding: 1px 5px;
       font-size: 11px; color: #fde68a;
       font-family: monospace;
     }
     .hw-copy-btn {
-      display: flex; align-items: center; gap: 7px;
-      margin-top: 12px;
-      background: rgba(251,146,60,0.18);
-      border: 1px solid rgba(251,146,60,0.5);
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.4);
       border-radius: 9px;
       padding: 8px 14px;
-      font-size: 12px; font-weight: 700; color: #fb923c;
+      font-size: 12px; font-weight: 700; color: #818cf8;
       cursor: pointer; transition: background 0.2s, border-color 0.2s;
       letter-spacing: 0.03em;
     }
-    .hw-copy-btn:hover { background: rgba(251,146,60,0.30); border-color: rgba(251,146,60,0.7); }
+    .hw-copy-btn:hover { background: rgba(99,102,241,0.28); border-color: rgba(99,102,241,0.65); }
     .hw-copy-btn.copied { color: #34d399; border-color: rgba(52,211,153,0.5); background: rgba(52,211,153,0.12); }
-    .hw-copy-hint {
-      font-size: 11px; color: var(--text3); font-weight: 400;
-      margin-top: 4px; letter-spacing: 0;
+
+    /* Detection banner — shows only if software rendering detected */
+    .hw-detect-banner {
+      display: none;
+      margin-top: 12px;
+      background: rgba(251,146,60,0.10);
+      border: 1px solid rgba(251,146,60,0.45);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px; color: #fdba74; line-height: 1.6;
+    }
+    .hw-detect-banner.visible { display: block; }
+    .hw-detect-title { font-weight: 700; color: #fb923c; margin-bottom: 4px; }
+
+    /* Renderer card */
+    .renderer-note {
+      font-size: 12px; color: var(--text3); margin-top: 10px; line-height: 1.5;
     }
 
     @media (max-width: 600px) {
@@ -308,7 +301,7 @@
     <div class="header">
       <div class="eyebrow">&#129504; Neuropsychology</div>
       <h1>Brain <em>Pathology 3.0</em></h1>
-      <p class="subtitle">Identify lesion sites from clinical deficits and map dysfunctions to brain regions using an interactive diagram.</p>
+      <p class="subtitle">Identify lesion sites from clinical deficits and map dysfunctions to brain regions using an interactive 3D diagram.</p>
     </div>
 
     <div class="settings-wrap">
@@ -320,15 +313,36 @@
           <button class="select-all-btn" id="select-all-btn" onclick="toggleSelectAll()">Select All</button>
         </div>
         <div class="chips-wrap" id="chips-wrap">
-          <button class="chip" data-cat="aphasia" onclick="toggleCat('aphasia')">Aphasia</button>
-          <button class="chip" data-cat="motor" onclick="toggleCat('motor')">Motor / Movement</button>
-          <button class="chip" data-cat="memory" onclick="toggleCat('memory')">Memory</button>
-          <button class="chip" data-cat="visual" onclick="toggleCat('visual')">Visual</button>
-          <button class="chip" data-cat="sensory" onclick="toggleCat('sensory')">Sensory / Perceptual</button>
-          <button class="chip" data-cat="executive" onclick="toggleCat('executive')">Executive / Frontal</button>
-          <button class="chip" data-cat="vascular" onclick="toggleCat('vascular')">Vascular</button>
+          <button class="chip" data-cat="aphasia"         onclick="toggleCat('aphasia')">Aphasia</button>
+          <button class="chip" data-cat="motor"           onclick="toggleCat('motor')">Motor / Movement</button>
+          <button class="chip" data-cat="memory"          onclick="toggleCat('memory')">Memory</button>
+          <button class="chip" data-cat="visual"          onclick="toggleCat('visual')">Visual</button>
+          <button class="chip" data-cat="sensory"         onclick="toggleCat('sensory')">Sensory / Perceptual</button>
+          <button class="chip" data-cat="executive"       onclick="toggleCat('executive')">Executive / Frontal</button>
+          <button class="chip" data-cat="vascular"        onclick="toggleCat('vascular')">Vascular</button>
+          <button class="chip" data-cat="psychiatric"     onclick="toggleCat('psychiatric')">Psychiatric</button>
+          <button class="chip" data-cat="subcortical"     onclick="toggleCat('subcortical')">Subcortical</button>
+          <button class="chip" data-cat="neurotransmitter" onclick="toggleCat('neurotransmitter')">Neurotransmitter</button>
+          <button class="chip" data-cat="developmental"   onclick="toggleCat('developmental')">Developmental</button>
+          <button class="chip" data-cat="learning"        onclick="toggleCat('learning')">Learning</button>
+          <button class="chip" data-cat="assessment"      onclick="toggleCat('assessment')">Assessment</button>
+          <button class="chip" data-cat="endocrine"       onclick="toggleCat('endocrine')">Endocrine</button>
         </div>
         <div id="cat-warn" class="warn">Select at least one category to continue.</div>
+      </div>
+
+      <!-- Question Type -->
+      <div class="section-card">
+        <div class="section-label-row">
+          <div class="section-label">Question Type</div>
+          <button class="select-all-btn" id="type-all-btn" onclick="toggleTypeAll()">Deselect All</button>
+        </div>
+        <div class="chips-wrap" id="types-wrap">
+          <button class="chip active" data-type="deficit_to_location" onclick="toggleType('deficit_to_location')">Deficit &#8594; Region</button>
+          <button class="chip active" data-type="case_to_location"    onclick="toggleType('case_to_location')">Clinical Case &#8594; Region</button>
+          <button class="chip active" data-type="location_to_deficit" onclick="toggleType('location_to_deficit')">Region &#8594; Deficit</button>
+        </div>
+        <div id="type-warn" class="warn">Select at least one question type to continue.</div>
       </div>
 
       <!-- Question Count -->
@@ -340,24 +354,13 @@
           <button class="count-btn" data-n="10" onclick="selectCount(10)">10</button>
           <button class="count-btn active" data-n="20" onclick="selectCount(20)">20</button>
           <button class="count-btn" data-n="30" onclick="selectCount(30)">30</button>
-          <button class="count-btn" data-n="0" onclick="selectCount(0)">All</button>
+          <button class="count-btn" data-n="50" onclick="selectCount(50)">50</button>
+          <button class="count-btn" data-n="0"  onclick="selectCount(0)">All</button>
         </div>
       </div>
 
-      <!-- View -->
+      <!-- Brain Renderer -->
       <div class="section-card">
-        <div class="section-label-row">
-          <div class="section-label">Brain View</div>
-        </div>
-        <div class="count-row">
-          <button class="count-btn view-sel-btn active" data-view="lateral" onclick="selectView('lateral')">&#129504; Lateral</button>
-          <button class="count-btn view-sel-btn" data-view="medial" onclick="selectView('medial')">&#10022; Medial</button>
-          <button class="count-btn view-sel-btn" data-view="3d" onclick="selectView('3d')">&#9650; 3D</button>
-        </div>
-      </div>
-
-      <!-- Renderer -->
-      <div class="section-card" id="renderer-card">
         <div class="section-label-row">
           <div class="section-label">Brain Renderer</div>
         </div>
@@ -365,20 +368,43 @@
           <button class="count-btn rend-btn active" data-rend="3d" onclick="selectRenderer('3d')">&#9650; 3D Model</button>
           <button class="count-btn rend-btn" data-rend="2d" onclick="selectRenderer('2d')">&#9633; 2D Lightweight</button>
         </div>
+        <p class="renderer-note" id="renderer-note">3D model — full interactive brain with region highlighting and camera animation.</p>
+      </div>
 
-        <div id="hw-banner" class="hw-banner">
-          <div class="hw-banner-icon">⚠️</div>
-          <div class="hw-banner-body">
-            <div class="hw-banner-title" id="hw-banner-title">Hardware Acceleration Disabled</div>
-            <div class="hw-banner-text" id="hw-banner-text">
-              The 3D brain module requires GPU acceleration.<br>
-              In Chrome: <code>Settings → System → Use hardware acceleration when available → Relaunch</code>
-            </div>
-            <button class="hw-copy-btn" id="hw-copy-btn" onclick="copySettingsUrl()">
-              <span>📋</span> Copy chrome://settings/system
-            </button>
-            <div class="hw-copy-hint">Paste the copied URL into your Chrome address bar</div>
+      <!-- Hardware Acceleration -->
+      <div class="section-card hw-tip-card">
+        <div class="section-label-row">
+          <div class="section-label">&#128736; Hardware Acceleration</div>
+        </div>
+        <p class="hw-tip-intro">
+          The 3D brain requires GPU acceleration in your browser. This is enabled by default in most browsers — if the 3D model appears slow or fails to load, follow the steps below.
+        </p>
+        <div class="hw-browsers">
+          <div class="hw-browser-row">
+            <span class="hw-browser-name">Chrome</span>
+            <span class="hw-browser-path">Settings &#8594; System &#8594; <code>Use hardware acceleration when available</code> &#8594; Relaunch</span>
           </div>
+          <div class="hw-browser-row">
+            <span class="hw-browser-name">Edge</span>
+            <span class="hw-browser-path">Settings &#8594; System and performance &#8594; <code>Use hardware acceleration when available</code> &#8594; Restart</span>
+          </div>
+          <div class="hw-browser-row">
+            <span class="hw-browser-name">Firefox</span>
+            <span class="hw-browser-path">Settings &#8594; General &#8594; Performance &#8594; <code>Use hardware acceleration when available</code></span>
+          </div>
+          <div class="hw-browser-row">
+            <span class="hw-browser-name">Safari</span>
+            <span class="hw-browser-path">Hardware acceleration is always enabled — no setting needed.</span>
+          </div>
+        </div>
+        <button class="hw-copy-btn" id="hw-copy-btn" onclick="copySettingsUrl()">
+          &#128203; Copy chrome://settings/system
+        </button>
+
+        <!-- Auto-detected software rendering warning -->
+        <div class="hw-detect-banner" id="hw-detect-banner">
+          <div class="hw-detect-title">&#9888; Software Rendering Detected</div>
+          Your browser is currently rendering without GPU acceleration. The 3D brain module may run slowly. Enable hardware acceleration using the steps above, then relaunch your browser.
         </div>
       </div>
 
@@ -387,6 +413,10 @@
         <div class="sum-item">
           <span class="sum-label">Categories</span>
           <span class="sum-value" id="sum-cats">None selected</span>
+        </div>
+        <div class="sum-item">
+          <span class="sum-label">Types</span>
+          <span class="sum-value" id="sum-types">All</span>
         </div>
         <div class="sum-item">
           <span class="sum-label">Questions</span>
@@ -402,16 +432,8 @@
         Start Session &rarr;
       </button>
 
-      <button class="explore-btn" onclick="location.href='brain-exercise-30.html?mode=study&view=lateral'">
-        <span class="explore-icon">&#129504;</span> Explore Lateral Map
-      </button>
-
-      <button class="explore-btn" onclick="location.href='brain-exercise-30.html?mode=study&view=medial'">
-        <span class="explore-icon">&#10022;</span> Explore Medial Map
-      </button>
-
-      <button class="explore-btn" onclick="location.href='brain-exercise-30.html?mode=study&view=3d'">
-        <span class="explore-icon">&#9650;</span> Explore 3D Brain
+      <button class="explore-btn" onclick="location.href='brain-exercise-30.html?mode=study'">
+        <span class="explore-icon">&#9650;</span> Explore 3D Brain (Study Mode)
       </button>
 
     </div>
@@ -419,153 +441,181 @@
 
   <script src="data/brain_data.js"></script>
   <script>
-    const state = {
-      cats: new Set(),
-      count: 20,
-      view: 'lateral',
-      renderer: '3d',
+    const ALL_TYPES = ['deficit_to_location', 'case_to_location', 'location_to_deficit'];
+
+    const TYPE_LABELS = {
+      deficit_to_location: 'Deficit \u2192 Region',
+      case_to_location:    'Clinical Case \u2192 Region',
+      location_to_deficit: 'Region \u2192 Deficit',
     };
 
     const CAT_LABELS = {
-      aphasia:   'Aphasia',
-      motor:     'Motor / Movement',
-      memory:    'Memory',
-      visual:    'Visual',
-      sensory:   'Sensory / Perceptual',
-      executive: 'Executive / Frontal',
-      vascular:  'Vascular',
+      aphasia:          'Aphasia',
+      motor:            'Motor / Movement',
+      memory:           'Memory',
+      visual:           'Visual',
+      sensory:          'Sensory / Perceptual',
+      executive:        'Executive / Frontal',
+      vascular:         'Vascular',
+      psychiatric:      'Psychiatric',
+      subcortical:      'Subcortical',
+      neurotransmitter: 'Neurotransmitter',
+      developmental:    'Developmental',
+      learning:         'Learning',
+      assessment:       'Assessment',
+      endocrine:        'Endocrine',
     };
 
     const ALL_CATS = Object.keys(CAT_LABELS);
 
+    const state = {
+      cats:  new Set(),
+      types: new Set(ALL_TYPES),   // all selected by default
+      count: 20,
+      renderer: '3d',
+    };
+
+    // ── Available count ──────────────────────────────────────────────────
     function getAvailableCount() {
       const qs = (window.__BRAIN_DATA || {}).questions || [];
       if (state.cats.size === 0) return 0;
-      return qs.filter(q => state.cats.has(q.category)).length;
+      return qs.filter(function(q) {
+        return state.cats.has(q.category) && state.types.has(q.type);
+      }).length;
     }
 
+    // ── Category toggles ─────────────────────────────────────────────────
     function toggleCat(cat) {
-      if (state.cats.has(cat)) {
-        state.cats.delete(cat);
-      } else {
-        state.cats.add(cat);
-      }
-      document.querySelectorAll('.chip[data-cat]').forEach(c => {
+      state.cats.has(cat) ? state.cats.delete(cat) : state.cats.add(cat);
+      document.querySelectorAll('.chip[data-cat]').forEach(function(c) {
         c.classList.toggle('active', state.cats.has(c.dataset.cat));
       });
       updateSummary();
     }
 
     function toggleSelectAll() {
-      const allSelected = ALL_CATS.every(c => state.cats.has(c));
+      const allSelected = ALL_CATS.every(function(c) { return state.cats.has(c); });
       if (allSelected) {
-        ALL_CATS.forEach(c => state.cats.delete(c));
+        ALL_CATS.forEach(function(c) { state.cats.delete(c); });
       } else {
-        ALL_CATS.forEach(c => state.cats.add(c));
+        ALL_CATS.forEach(function(c) { state.cats.add(c); });
       }
-      document.querySelectorAll('.chip[data-cat]').forEach(c => {
+      document.querySelectorAll('.chip[data-cat]').forEach(function(c) {
         c.classList.toggle('active', state.cats.has(c.dataset.cat));
       });
       updateSummary();
     }
 
+    // ── Type toggles ─────────────────────────────────────────────────────
+    function toggleType(type) {
+      state.types.has(type) ? state.types.delete(type) : state.types.add(type);
+      document.querySelectorAll('.chip[data-type]').forEach(function(c) {
+        c.classList.toggle('active', state.types.has(c.dataset.type));
+      });
+      updateSummary();
+    }
+
+    function toggleTypeAll() {
+      const allSelected = ALL_TYPES.every(function(t) { return state.types.has(t); });
+      if (allSelected) {
+        ALL_TYPES.forEach(function(t) { state.types.delete(t); });
+      } else {
+        ALL_TYPES.forEach(function(t) { state.types.add(t); });
+      }
+      document.querySelectorAll('.chip[data-type]').forEach(function(c) {
+        c.classList.toggle('active', state.types.has(c.dataset.type));
+      });
+      updateSummary();
+    }
+
+    // ── Count ────────────────────────────────────────────────────────────
     function selectCount(n) {
       state.count = n;
-      document.querySelectorAll('.count-btn:not(.view-sel-btn)').forEach(b => {
+      document.querySelectorAll('.count-btn[data-n]').forEach(function(b) {
         b.classList.toggle('active', parseInt(b.dataset.n) === n);
       });
       updateSummary();
     }
 
-    function selectView(v) {
-      state.view = v;
-      document.querySelectorAll('.view-sel-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.view === v);
-      });
-    }
-
+    // ── Renderer ─────────────────────────────────────────────────────────
     function selectRenderer(r) {
       state.renderer = r;
-      document.querySelectorAll('.rend-btn').forEach(b => {
+      document.querySelectorAll('.rend-btn').forEach(function(b) {
         b.classList.toggle('active', b.dataset.rend === r);
       });
-      // Hide brain view option in 2D mode (view handled differently)
-      document.getElementById('renderer-hint').textContent = r === '2d'
+      document.getElementById('renderer-note').textContent = r === '2d'
         ? '2D mode uses no GPU — ideal if hardware acceleration is unavailable.'
-        : '3D model requires GPU acceleration for smooth performance.';
+        : '3D model — full interactive brain with region highlighting and camera animation.';
     }
 
+    // ── Summary ──────────────────────────────────────────────────────────
     function updateSummary() {
-      const cats = [...state.cats];
+      const cats      = [...state.cats];
+      const types     = [...state.types];
       const available = getAvailableCount();
 
-      // Category label
+      // Categories label
       document.getElementById('sum-cats').textContent =
-        cats.length === 0                 ? 'None selected' :
-        cats.length === ALL_CATS.length   ? 'All Categories' :
-        cats.length <= 2                  ? cats.map(c => CAT_LABELS[c]).join(', ') :
-        cats.length + ' Categories';
+        cats.length === 0               ? 'None selected' :
+        cats.length === ALL_CATS.length ? 'All' :
+        cats.length <= 2                ? cats.map(function(c) { return CAT_LABELS[c]; }).join(', ') :
+        cats.length + ' selected';
 
-      // Count label
+      // Types label
+      document.getElementById('sum-types').textContent =
+        types.length === 0                ? 'None selected' :
+        types.length === ALL_TYPES.length ? 'All' :
+        types.map(function(t) { return TYPE_LABELS[t]; }).join(', ');
+
+      // Count
       document.getElementById('sum-count').textContent = state.count === 0 ? 'All' : state.count;
 
+      // Available
       document.getElementById('sum-available').textContent =
         available > 0 ? available + ' available' : '\u2014';
 
-      // Select All label
-      const allSelected = ALL_CATS.every(c => state.cats.has(c));
-      document.getElementById('select-all-btn').textContent =
-        allSelected ? 'Deselect All' : 'Select All';
+      // Select all label
+      const allCatsSel = ALL_CATS.every(function(c) { return state.cats.has(c); });
+      document.getElementById('select-all-btn').textContent = allCatsSel ? 'Deselect All' : 'Select All';
 
-      // Warn + start button
-      const warn = document.getElementById('cat-warn');
-      const btn  = document.getElementById('start-btn');
-      if (cats.length === 0) {
-        warn.style.display = 'block';
-        btn.disabled = true;
-      } else {
-        warn.style.display = 'none';
-        btn.disabled = false;
-      }
+      // Type all label
+      const allTypesSel = ALL_TYPES.every(function(t) { return state.types.has(t); });
+      document.getElementById('type-all-btn').textContent = allTypesSel ? 'Deselect All' : 'Select All';
+
+      // Start button + warnings
+      const catOk  = cats.length > 0;
+      const typeOk = types.length > 0;
+      document.getElementById('cat-warn').style.display  = catOk  ? 'none' : 'block';
+      document.getElementById('type-warn').style.display = typeOk ? 'none' : 'block';
+      document.getElementById('start-btn').disabled = !(catOk && typeOk);
     }
 
+    // ── Start ────────────────────────────────────────────────────────────
     function startSession() {
-      if (state.cats.size === 0) return;
+      if (state.cats.size === 0 || state.types.size === 0) return;
       const p = new URLSearchParams({
+        mode:       'quiz',
         categories: [...state.cats].join(','),
-        count: state.count,
-        view: state.view,
-        renderer: state.renderer,
+        types:      [...state.types].join(','),
+        count:      state.count,
+        renderer:   state.renderer,
       });
       location.href = 'brain-exercise-30.html?' + p.toString();
     }
 
-    // Init
-    updateSummary();
-
-    // WebGL / hardware acceleration check
+    // ── Hardware acceleration detection ──────────────────────────────────
     (function() {
-      var banner = document.getElementById('hw-banner');
-      var title  = document.getElementById('hw-banner-title');
-      var text   = document.getElementById('hw-banner-text');
       try {
-        var c = document.createElement('canvas');
+        var c  = document.createElement('canvas');
         var gl = c.getContext('webgl') || c.getContext('experimental-webgl');
         if (!gl) throw new Error('no webgl');
-        var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        var dbg      = gl.getExtension('WEBGL_debug_renderer_info');
         var renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
-        var isSoftware = /swiftshader|software|llvmpipe|mesa/i.test(renderer);
-        if (isSoftware) {
-          title.textContent = 'Hardware Acceleration Disabled';
-          text.innerHTML = 'The 3D brain is running in <strong style="color:#fb923c">software mode</strong> — expect low FPS.<br>' +
-            'In Chrome: <code>Settings → System → Use hardware acceleration when available → Relaunch</code>';
-          banner.classList.add('visible');
+        if (/swiftshader|software|llvmpipe|mesa/i.test(renderer)) {
+          document.getElementById('hw-detect-banner').classList.add('visible');
         }
       } catch(e) {
-        title.textContent = 'WebGL Not Available';
-        text.innerHTML = 'Your browser cannot run the 3D brain module without hardware acceleration.<br>' +
-          'In Chrome: <code>Settings → System → Use hardware acceleration when available → Relaunch</code>';
-        banner.classList.add('visible');
+        document.getElementById('hw-detect-banner').classList.add('visible');
       }
     })();
 
@@ -575,11 +625,14 @@
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
         setTimeout(function() {
-          btn.textContent = 'Copy chrome://settings/system';
+          btn.innerHTML = '&#128203; Copy chrome://settings/system';
           btn.classList.remove('copied');
         }, 2000);
       });
     }
+
+    // Init
+    updateSummary();
   </script>
 </body>
 </html>
