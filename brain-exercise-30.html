@@ -191,8 +191,8 @@
 
     /* Camera controls — bottom-left overlay */
     .cam-controls {
-      position: absolute; bottom: 20px; left: 20px; z-index: 10;
-      display: flex; gap: 6px; flex-wrap: wrap;
+      position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 10;
+      display: flex; gap: 6px; flex-wrap: wrap; white-space: nowrap;
     }
     .cam-btn {
       height: 28px; padding: 0 10px; border-radius: 7px;
@@ -471,8 +471,8 @@
     /* Quadrant positions */
     .float-chip[data-quad="1"] { top: 14%;    left: 4%;   }
     .float-chip[data-quad="2"] { top: 14%;    right: 4%;  }
-    .float-chip[data-quad="3"] { bottom: 22%; left: 4%;   }
-    .float-chip[data-quad="4"] { bottom: 22%; right: 4%;  }
+    .float-chip[data-quad="3"] { bottom: 38%; left: 4%;   }
+    .float-chip[data-quad="4"] { bottom: 38%; right: 4%;  }
   </style>
 
   <script type="importmap">
@@ -835,6 +835,7 @@
     // ────────────────────────────────────────────────────────────────────
 
     function openInfoPanel(regionId) {
+      if (_quizActive) return;   // never show info panel during quiz
       var rData = REGIONS[regionId];
       var label = rData ? rData.label : regionId.replace(/_/g, ' ');
       var info  = (rData || {}).info || {};
@@ -1071,6 +1072,7 @@
     };
 
     function startQuiz() {
+      closeInfoPanel();   // info panel has no place during quiz
       var qs = ALL_QS.slice();
       if (CATEGORIES) qs = qs.filter(function(q) { return CATEGORIES.indexOf(q.category) >= 0; });
       qs = shuffle(qs);
