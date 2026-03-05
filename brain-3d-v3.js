@@ -505,8 +505,12 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
           tex.minFilter = THREE.LinearMipmapLinearFilter;
           tex.magFilter = THREE.LinearFilter;
 
+          var baseColor = new THREE.Color(TISSUE_COLOR);
           var mat = new THREE.MeshPhysicalMaterial({
             map:                tex,
+            color:              baseColor,
+            emissive:           new THREE.Color(0x000000),
+            emissiveIntensity:  0.04,
             envMap:             _envMap,
             envMapIntensity:    0.08,
             roughness:          0.68,
@@ -521,7 +525,6 @@ function _loadAtlasMesh(regionId, jsonUrl, textureUrl) {
             side:               THREE.DoubleSide,
             depthWrite:         true,
           });
-          var baseColor = new THREE.Color(TISSUE_COLOR);
           mat._origColor     = baseColor.clone();
           mat._origEmissive  = new THREE.Color(0x000000);
           mat._origRoughness = mat.roughness;
@@ -1297,6 +1300,7 @@ function focusRegion(regionId) {
 
 function _showOverlay(mesh, showOutline) {
   mesh.visible = true;
+  _visibleCacheDirty = true;
   var sel = mesh.userData.selOutline;
   if (sel) {
     sel.visible = !!showOutline;
@@ -1317,6 +1321,7 @@ function _showOverlay(mesh, showOutline) {
 function _hideOverlay(mesh) {
   if (mesh.userData.permanent) return;
   mesh.visible = false;
+  _visibleCacheDirty = true;
   var sel = mesh.userData.selOutline;
   if (sel) { sel.visible = false; sel.material.opacity = 0.0; }
   var mirror = mesh.userData.mirrorMesh;
@@ -1809,12 +1814,19 @@ function _findNearestRegion(point) {
   return (bestId && bestDist < 1.5) ? bestId : null;
 }
 
+var _visibleCache = [];
+var _visibleCacheDirty = true;
+
 function _rayHitRegion() {
   raycaster.setFromCamera(mouse, camera);
 
   // 1. Check visible overlay meshes first (they have priority)
-  var visible = regionMeshes.filter(function(m) { return m.visible; });
-  var overlayHits = raycaster.intersectObjects(visible, false);
+  // Reuse cached array to avoid per-call allocation
+  if (_visibleCacheDirty) {
+    _visibleCache = regionMeshes.filter(function(m) { return m.visible; });
+    _visibleCacheDirty = false;
+  }
+  var overlayHits = raycaster.intersectObjects(_visibleCache, false);
   for (var i = 0; i < overlayHits.length; i++) {
     if (!overlayHits[i].object.userData.isOutline) {
       return overlayHits[i].object;
@@ -1847,10 +1859,19 @@ function _setHoverEmissive(regionId, intensity) {
   });
 }
 
+var _lastHoverTime = 0;
+var _HOVER_THROTTLE = 50;  // ms — max 20 raycasts/sec instead of unlimited
+
 canvas.addEventListener('pointermove', function(e) {
   var r = canvas.getBoundingClientRect();
   mouse.x =  ((e.clientX - r.left) / r.width)  * 2 - 1;
   mouse.y = -((e.clientY - r.top)  / r.height) * 2 + 1;
+
+  // Skip raycasting while dragging (panning/rotating) or if throttled
+  if (downPos) { canvas.style.cursor = 'grabbing'; return; }
+  var now = performance.now();
+  if (now - _lastHoverTime < _HOVER_THROTTLE) return;
+  _lastHoverTime = now;
 
   var hit = _rayHitRegion();
   var id  = hit ? hit.userData.regionId : null;
