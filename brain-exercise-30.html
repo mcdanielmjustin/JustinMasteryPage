@@ -350,22 +350,42 @@
       transform: translateY(100%);
       transition: transform .35s cubic-bezier(.4,0,.2,1);
       max-height: 50vh; overflow-y: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .quiz-bar.open { transform: translateY(0); }
-    .quiz-bar-inner { padding: 16px 20px 20px; }
-    .quiz-cat-label {
-      font-size: 10px; font-weight: 700; letter-spacing: .07em;
-      text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+    .quiz-bar-inner { padding: 10px 18px 14px; }
+
+    /* Header row: category label + progress + submit/next — all one line, no extra height */
+    .quiz-header-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
     }
+    .quiz-cat-label {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text3);
+    }
+    .quiz-progress { font-size: 11px; color: var(--text3); margin-left: auto; }
+
+    .quiz-submit-btn, .quiz-next-btn {
+      height: 28px; padding: 0 14px; border-radius: 7px;
+      font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+      transition: opacity .15s, background .15s;
+    }
+    .quiz-submit-btn { background: var(--accent); border: none; color: #fff; }
+    .quiz-submit-btn:disabled { opacity: .4; cursor: default; }
+    .quiz-next-btn { background: none; border: 1px solid var(--border); color: var(--text2); }
+    .quiz-next-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
     .quiz-question {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 1.1rem; line-height: 1.45; color: var(--text); margin-bottom: 14px;
+      font-size: 1.15rem; line-height: 1.40; color: var(--text);
+      margin-bottom: 10px; text-rendering: optimizeLegibility;
     }
-    .quiz-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .quiz-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
     .quiz-chip {
-      padding: 7px 14px; border-radius: 10px;
+      padding: 6px 13px; border-radius: 10px;
       border: 1px solid var(--border); background: rgba(255,255,255,0.03);
-      font-size: 12.5px; color: var(--text2); cursor: pointer;
+      font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer;
       transition: border-color .15s, background .15s, color .15s;
     }
     .quiz-chip:hover { border-color: rgba(255,255,255,0.18); color: var(--text); }
@@ -374,26 +394,14 @@
     .quiz-chip.wrong    { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #f87171; }
     .quiz-chip.disabled { cursor: default; opacity: .6; }
 
-    .quiz-action-row { display: flex; gap: 8px; align-items: center; }
-    .quiz-submit-btn, .quiz-next-btn {
-      height: 34px; padding: 0 18px; border-radius: 9px;
-      font-size: 13px; font-weight: 600; cursor: pointer;
-      transition: opacity .15s, background .15s;
-    }
-    .quiz-submit-btn { background: var(--accent); border: none; color: #fff; }
-    .quiz-submit-btn:disabled { opacity: .4; cursor: default; }
-    .quiz-next-btn { background: none; border: 1px solid var(--border); color: var(--text2); }
-    .quiz-next-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
-    .quiz-progress { font-size: 11px; color: var(--text3); margin-left: auto; }
-
     .quiz-explanation {
-      margin-top: 10px; padding: 10px 12px; border-radius: 9px;
+      margin-top: 8px; padding: 9px 12px; border-radius: 9px;
       background: rgba(255,255,255,0.03); border: 1px solid var(--border2);
-      font-size: 12.5px; line-height: 1.55; color: var(--text2);
+      font-size: 13px; line-height: 1.55; color: var(--text2);
       display: none;
     }
     .quiz-explanation.visible { display: block; }
-    .quiz-verdict { font-size: 12px; font-weight: 700; margin-bottom: 5px; }
+    .quiz-verdict { font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
     .quiz-verdict.correct { color: var(--green); }
     .quiz-verdict.wrong   { color: #f87171; }
 
@@ -608,17 +616,17 @@
   <!-- ═══════ QUIZ BAR ═══════ -->
   <div class="quiz-bar" id="quiz-bar">
     <div class="quiz-bar-inner">
-      <div class="quiz-cat-label" id="quiz-cat-label">Brain Pathology 3.0</div>
+      <div class="quiz-header-row">
+        <div class="quiz-cat-label" id="quiz-cat-label">Brain Pathology 3.0</div>
+        <span class="quiz-progress"     id="quiz-progress"></span>
+        <button class="quiz-submit-btn" id="quiz-submit" onclick="handleSubmit()" disabled>Submit</button>
+        <button class="quiz-next-btn"   id="quiz-next"   onclick="nextQuestion()" style="display:none">Next &#8594;</button>
+      </div>
       <div class="quiz-question"  id="quiz-question"></div>
       <div class="quiz-chips"     id="quiz-chips"></div>
       <div class="quiz-explanation" id="quiz-explanation">
         <div class="quiz-verdict" id="quiz-verdict"></div>
         <span id="quiz-explanation-text"></span>
-      </div>
-      <div class="quiz-action-row">
-        <button class="quiz-submit-btn" id="quiz-submit" onclick="handleSubmit()" disabled>Submit</button>
-        <button class="quiz-next-btn"   id="quiz-next"   onclick="nextQuestion()" style="display:none">Next &#8594;</button>
-        <span class="quiz-progress"     id="quiz-progress"></span>
       </div>
     </div>
   </div>
