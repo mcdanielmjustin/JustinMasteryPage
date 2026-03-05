@@ -179,7 +179,13 @@
       border-color: rgba(244,63,94,0.5);
       color: var(--rose-light);
     }
-    .count-btn:hover:not(.active) { border-color: rgba(244,63,94,0.25); }
+    .count-btn:hover:not(.active):not(:disabled) { border-color: rgba(244,63,94,0.25); }
+    .count-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .count-locked-note {
+      font-size: 11px; color: var(--text3); margin-top: 10px; display: none;
+      font-style: italic;
+    }
+    .count-locked-note.visible { display: block; }
 
     /* Summary */
     .summary-bar {
@@ -364,6 +370,9 @@
           <button class="count-btn" data-n="50" onclick="selectCount(50)">50</button>
           <button class="count-btn" data-n="0"  onclick="selectCount(0)">All</button>
         </div>
+        <div class="count-locked-note" id="count-locked-note">
+          Clinical Case sessions always use all available questions.
+        </div>
       </div>
 
       <!-- Brain Renderer -->
@@ -514,11 +523,31 @@
     }
 
     // ── Type toggles ─────────────────────────────────────────────────────
+    function isCaseOnly() {
+      return state.types.size === 1 && state.types.has('case_to_location');
+    }
+
+    function applyCountLock() {
+      var locked = isCaseOnly();
+      var note   = document.getElementById('count-locked-note');
+      document.querySelectorAll('.count-btn[data-n]').forEach(function(b) {
+        b.disabled = locked;
+      });
+      note.classList.toggle('visible', locked);
+      if (locked) {
+        state.count = 0;
+        document.querySelectorAll('.count-btn[data-n]').forEach(function(b) {
+          b.classList.toggle('active', parseInt(b.dataset.n) === 0);
+        });
+      }
+    }
+
     function toggleType(type) {
       state.types.has(type) ? state.types.delete(type) : state.types.add(type);
       document.querySelectorAll('.chip[data-type]').forEach(function(c) {
         c.classList.toggle('active', state.types.has(c.dataset.type));
       });
+      applyCountLock();
       updateSummary();
     }
 
@@ -532,6 +561,7 @@
       document.querySelectorAll('.chip[data-type]').forEach(function(c) {
         c.classList.toggle('active', state.types.has(c.dataset.type));
       });
+      applyCountLock();
       updateSummary();
     }
 
