@@ -190,9 +190,15 @@
     }
 
     /* Camera controls — bottom-left overlay */
-    .cam-controls {
+    /* All brain controls — centered column at top of stage */
+    .brain-controls {
       position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 10;
-      display: flex; gap: 6px; flex-wrap: wrap; white-space: nowrap;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      pointer-events: none;
+    }
+    .cam-controls, .stage-controls {
+      display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+      pointer-events: all;
     }
     .cam-btn {
       height: 28px; padding: 0 10px; border-radius: 7px;
@@ -203,12 +209,6 @@
     }
     .cam-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text2); }
     .cam-btn.active { border-color: var(--gold); color: var(--gold); }
-
-    /* Stage controls — top-right overlay */
-    .stage-controls {
-      position: absolute; top: 16px; right: 16px; z-index: 10;
-      display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
-    }
     .stage-btn {
       height: 28px; padding: 0 10px; border-radius: 7px;
       border: 1px solid rgba(255,255,255,0.10);
@@ -530,30 +530,30 @@
     <!-- 3D BRAIN STAGE -->
     <main class="brain-stage" id="brain-stage">
 
-      <!-- Camera preset controls -->
-      <div class="cam-controls">
-        <button class="cam-btn"        data-view="lateral"    onclick="snapCam('lateral')">Lateral</button>
-        <button class="cam-btn active" data-view="medial"     onclick="snapCam('medial')">Medial</button>
-        <button class="cam-btn"        data-view="superior"   onclick="snapCam('superior')">Superior</button>
-        <button class="cam-btn"        data-view="anterior"   onclick="snapCam('anterior')">Anterior</button>
-        <button class="cam-btn"        data-view="posterior"  onclick="snapCam('posterior')">Posterior</button>
-        <button class="cam-btn"        data-view="inferior"   onclick="snapCam('inferior')">Inferior</button>
-      </div>
-
-      <!-- Stage controls — top-right: Glass, Split, Cerebellum -->
-      <div class="stage-controls">
-        <button class="stage-btn" id="btn-glass" onclick="doToggleGlass()" title="Toggle transparent brain shell">
-          <span class="stage-btn-icon">&#9672;</span> Glass Brain
-        </button>
-        <button class="stage-btn" id="btn-split" onclick="doToggleSplit()" title="Split brain to show medial structures">
-          <span class="stage-btn-icon">&#9674;</span> Split Brain
-        </button>
-        <button class="stage-btn active" id="btn-cerebellum" onclick="doToggleCerebellum()" title="Show/hide cerebellum">
-          <span class="stage-btn-icon">&#9679;</span> Cerebellum
-        </button>
-        <button class="stage-btn active" id="btn-brainstem" onclick="doToggleBrainstem()" title="Show/hide brainstem">
-          <span class="stage-btn-icon">&#9679;</span> Brainstem
-        </button>
+      <!-- Brain controls: camera presets + view toggles, centered at top -->
+      <div class="brain-controls">
+        <div class="cam-controls">
+          <button class="cam-btn"        data-view="lateral"    onclick="snapCam('lateral')">Lateral</button>
+          <button class="cam-btn active" data-view="medial"     onclick="snapCam('medial')">Medial</button>
+          <button class="cam-btn"        data-view="superior"   onclick="snapCam('superior')">Superior</button>
+          <button class="cam-btn"        data-view="anterior"   onclick="snapCam('anterior')">Anterior</button>
+          <button class="cam-btn"        data-view="posterior"  onclick="snapCam('posterior')">Posterior</button>
+          <button class="cam-btn"        data-view="inferior"   onclick="snapCam('inferior')">Inferior</button>
+        </div>
+        <div class="stage-controls">
+          <button class="stage-btn" id="btn-glass" onclick="doToggleGlass()" title="Toggle transparent brain shell">
+            <span class="stage-btn-icon">&#9672;</span> Glass Brain
+          </button>
+          <button class="stage-btn" id="btn-split" onclick="doToggleSplit()" title="Split brain to show medial structures">
+            <span class="stage-btn-icon">&#9674;</span> Split Brain
+          </button>
+          <button class="stage-btn active" id="btn-cerebellum" onclick="doToggleCerebellum()" title="Show/hide cerebellum">
+            <span class="stage-btn-icon">&#9679;</span> Cerebellum
+          </button>
+          <button class="stage-btn active" id="btn-brainstem" onclick="doToggleBrainstem()" title="Show/hide brainstem">
+            <span class="stage-btn-icon">&#9679;</span> Brainstem
+          </button>
+        </div>
       </div>
 
       <!-- Quiz highlighted-label -->
