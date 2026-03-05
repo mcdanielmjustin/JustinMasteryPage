@@ -929,9 +929,9 @@ window.__BRAIN_DATA = {
       "type": "case_to_location",
       "category": "motor",
       "question": "A 55-year-old woman has increasing resting tremor in her right hand, slowed voluntary movements (bradykinesia), and muscle rigidity. Her gait is shuffling with reduced arm swing. Cognition is intact. Which region contains the primary pathology?",
-      "target_region": "brainstem",
-      "distractor_regions": ["cerebellum", "frontal_lobe", "motor_cortex"],
-      "explanation": "Parkinson's disease involves loss of dopaminergic neurons in the substantia nigra (brainstem). The resulting nigrostriatal dopamine deficiency causes the cardinal features: resting tremor ('pill-rolling'), bradykinesia, cogwheel rigidity, and postural instability. Note the tremor is resting (vs. intention tremor in cerebellar disease)."
+      "target_region": "substantia_nigra",
+      "distractor_regions": ["cerebellum", "putamen", "motor_cortex"],
+      "explanation": "Parkinson's disease results from degeneration of dopaminergic neurons in the substantia nigra pars compacta. Loss of nigrostriatal dopamine causes resting tremor, bradykinesia, cogwheel rigidity, and postural instability. The cerebellum produces intention tremor (not resting), the putamen is a downstream target rather than the primary site, and motor cortex lesions produce UMN spasticity."
     },
     {
       "id": "BRAIN-016",
@@ -1437,19 +1437,19 @@ window.__BRAIN_DATA = {
       "id": "BRAIN-062",
       "type": "case_to_location",
       "category": "memory",
-      "question": "A 58-year-old man with chronic alcohol dependence is admitted malnourished and acutely confused, with ataxia and bilateral eye movement abnormalities. IV thiamine clears the acute confusion, but he is left with dense anterograde amnesia: he cannot recall any new events and has gaps spanning the past decade of autobiographical memory. When asked what he did this morning, he confidently describes detailed but demonstrably false activities (confabulation) without awareness that his answers are fabricated. MRI shows bilateral signal abnormality in the posterior hypothalamic region. Which structures are the critical lesion site?",
-      "target_region": "mamillary_bodies",
+      "question": "A 58-year-old man with chronic alcohol dependence is admitted malnourished and acutely confused with ataxia and bilateral eye movement abnormalities. IV thiamine resolves the acute confusion, but he is left with dense anterograde amnesia and confabulation. MRI shows bilateral atrophy in the posterior diencephalon. Korsakoff syndrome results from thiamine-deficiency damage to which diencephalic structure that serves as the critical Papez circuit relay between hippocampal output (via fornix) and the anterior thalamus?",
+      "target_region": "hypothalamus",
       "distractor_regions": ["hippocampus", "thalamus", "frontal_lobe"],
-      "explanation": "This is Korsakoff syndrome following Wernicke's encephalopathy. The mamillary bodies (posterior hypothalamus, visible as bilateral signal change or atrophy on MRI) are the pathognomonic lesion site. They are the Papez circuit relay receiving hippocampal projections via fornix, then projecting to anterior thalamus — bilateral destruction disrupts declarative memory consolidation. Confabulation (confident false memories without awareness of fabrication) is the characteristic behavioral feature distinguishing Korsakoff from hippocampal amnesia, where patients typically recognize their own memory failure. Immediate parenteral thiamine prevents progression; once mamillary body neuronal loss is established, Korsakoff amnesia is largely permanent."
+      "explanation": "Korsakoff syndrome is caused by thiamine deficiency destroying the mammillary bodies (located in the posterior hypothalamus), which relay hippocampal output to the anterior thalamus in the Papez circuit. Their destruction severs declarative memory consolidation, producing dense anterograde amnesia and confabulation. The hippocampus itself is relatively spared, distinguishing Korsakoff from H.M.-type amnesia — Korsakoff patients confabulate confidently, while hippocampal amnesia patients typically recognize their memory failure."
     },
     {
       "id": "BRAIN-063",
       "type": "case_to_location",
       "category": "memory",
-      "question": "An unkempt, malnourished man is brought to the ER obtunded. He has a broad-based ataxic gait and bilateral lateral gaze palsies. After IV thiamine, the eye movement abnormality and ataxia largely resolve over 48 hours. He remains awake and conversational — but now demonstrates severe anterograde amnesia and elaborately confabulates when asked about recent events. Subsequent MRI shows bilateral posterior hypothalamic atrophy. Which structure's bilateral destruction explains the persistent amnestic syndrome despite thiamine treatment?",
-      "target_region": "mamillary_bodies",
-      "distractor_regions": ["cerebellum", "brainstem", "hippocampus"],
-      "explanation": "This is the Wernicke-Korsakoff progression. Wernicke's encephalopathy (acute): confusion + ataxia (cerebellar vermis) + ophthalmoplegia (CN VI/III nuclei in brainstem) — all thiamine-vulnerable structures that respond to treatment. With thiamine, acute signs resolve; but if mamillary body damage is already established, the patient transitions to Korsakoff's psychosis (chronic): anterograde amnesia + confabulation. Cerebellar (ataxia) and brainstem (eye movements) signs respond to thiamine; mamillary body neuronal loss does not reverse. MRI showing bilateral mamillary body atrophy is the pathognomonic imaging finding of this transition. Immediate IV thiamine (before glucose) is the critical intervention to prevent permanent Korsakoff."
+      "question": "Following Wernicke-Korsakoff syndrome, a malnourished man's ataxia and ophthalmoplegia largely resolve with IV thiamine, but he retains severe anterograde amnesia with confabulation. The anchor point from EPPP research states: 'The amnesia associated with Wernicke-Korsakoff syndrome is due to damage to the thalamus and mammillary bodies.' Beyond the hypothalamic mammillary bodies, which thalamic nucleus — the anterior thalamic relay in the Papez circuit — contributes to the persistent amnestic syndrome?",
+      "target_region": "thalamus",
+      "distractor_regions": ["hippocampus", "hypothalamus", "frontal_lobe"],
+      "explanation": "Wernicke-Korsakoff syndrome damages both the mammillary bodies (posterior hypothalamus) and the dorsomedial and anterior thalamic nuclei. The thalamus is the critical Papez circuit relay projecting to the cingulate and then back to hippocampus. Thalamic neuronal loss is often irreversible and contributes as much as mammillary body damage to the persistent amnesia. This distinguishes Korsakoff amnesia (diencephalic/subcortical) from hippocampal amnesia — both produce anterograde amnesia, but only Korsakoff produces robust confabulation."
     },
     {
       "id": "BRAIN-064",
@@ -1521,10 +1521,10 @@ window.__BRAIN_DATA = {
       "id": "BRAIN-070",
       "type": "case_to_location",
       "category": "memory",
-      "question": "A 28-year-old man presents with episodic 'thunderclap' headaches that resolve within 30 minutes, sometimes followed by brief syncope when he tilts his head back. Between episodes, coworkers note that he sometimes cannot recall events from the previous several days. MRI reveals a smooth round cystic lesion at the foramen of Monro in the roof of the third ventricle. Which specific anatomical structure is most directly compressed by this lesion, producing the episodic memory impairment?",
-      "target_region": "fornix",
-      "distractor_regions": ["corpus_callosum", "hippocampus", "thalamus"],
-      "explanation": "Colloid cysts arise at the foramen of Monro (roof of third ventricle) and compress the fornix columns as they arch through this region en route to the mamillary bodies. Fornix compression disrupts hippocampal output — the postcommissural fornix carries hippocampal projections to mamillary bodies, breaking the Papez circuit relay essential for episodic memory. Position-dependent headaches and syncope reflect intermittent CSF obstruction (colloid cyst acting as a ball valve at the foramen of Monro). Colloid cysts are benign but potentially lethal — sudden CSF obstruction causes acute hydrocephalus and sudden death. The specific anatomy — fornix compressed by third-ventricle colloid cyst at the foramen of Monro — is a classic EPPP structural neuroanatomy question."
+      "question": "A 35-year-old man sustains a traumatic brain injury that damages the fiber bundle connecting his hippocampus to the mammillary bodies. Post-injury he is fully alert, speaks clearly, and scores in the average range on IQ testing. However, he cannot remember what he ate for breakfast, forgets appointments made hours earlier, and is unable to form any new long-term memories. Remote memories from before the injury are largely intact. Which structure\u2019s functional disconnection best explains this selective anterograde amnesia?",
+      "target_region": "hippocampus",
+      "distractor_regions": ["corpus_callosum", "thalamus", "hypothalamus"],
+      "explanation": "The fornix carries hippocampal output to the mammillary bodies and thalamus (key nodes of the Papez circuit). Damage to the fornix functionally disconnects the hippocampus from its diencephalic relays, producing anterograde amnesia nearly identical to direct hippocampal damage \u2014 new declarative memories cannot be consolidated because hippocampal signals cannot reach their downstream targets. IQ and procedural memory are spared (as in H.M.\u2019s case) because these depend on different neural systems. The thalamus and hypothalamus are downstream relays in the Papez circuit; the thalamic variant produces Korsakoff syndrome, but here the primary locus of disconnection is the hippocampus itself."
     },
     {
       "id": "BRAIN-071",
@@ -1564,7 +1564,7 @@ window.__BRAIN_DATA = {
       "type": "case_to_location",
       "category": "visual",
       "question": "A 75-year-old woman with severe hypertension has a bilateral posterior cerebral artery infarct. When her physician holds up a blue pen and asks 'what do you see?', she confidently says 'a pencil.' She bumps into furniture walking to her chair. Confrontation visual field testing reveals dense bilateral visual loss. Yet she insists her vision is 'fine' and elaborately describes the hospital room decor she cannot actually see. Pupillary light reflexes are brisk bilaterally. Which syndrome and which cortical region?",
-      "target_region": "occipital_medial",
+      "target_region": "occipital_lobe",
       "distractor_regions": ["temporal_lobe", "parietal_lobe", "thalamus"],
       "explanation": "Anton's syndrome (visual anosognosia) is cortical blindness with denial of blindness and confabulation of visual experiences. Bilateral destruction of primary visual cortex (V1), located on the medial occipital surface along the calcarine sulcus (supplied by PCA), produces complete cortical blindness. Preserved pupillary light reflexes confirm intact optic nerves and pretectal pathway — the blindness is cortical, not retinal or geniculate. The intact frontal lobe generates plausible confabulated visual reports without feedback from destroyed V1. Anton's syndrome is pathognomonic for bilateral calcarine cortex destruction and is distinguished from parietal neglect (visual input present but spatially ignored) and hemianopia (unilateral, partial field loss)."
     },
@@ -1572,10 +1572,775 @@ window.__BRAIN_DATA = {
       "id": "BRAIN-075",
       "type": "deficit_to_location",
       "category": "visual",
-      "question": "A patient with a left temporal lobe glioma compressing the inferior optic radiations (Meyer's loop) develops right superior quadrantanopia — loss of the upper-right visual field quadrant ('pie in the sky' defect). The inferior optic radiations that are compressed in the temporal lobe terminate on a specific bank of the calcarine sulcus. Which medial occipital region and calcarine bank processes the superior visual field that is now lost?",
-      "target_region": "occipital_medial",
+      "question": "A 58-year-old woman suffers bilateral posterior cerebral artery strokes affecting both occipital lobes. She reports complete loss of vision, yet insists to nursing staff that her eyesight is \u2018perfectly fine.\u2019 She collides with furniture while walking and confabulates visual experiences when questioned, denying any blindness. Bilateral damage to which region best explains both the visual loss and the denial of blindness?",
+      "target_region": "occipital_lobe",
       "distractor_regions": ["occipital_lobe", "parietal_lobe", "temporal_lobe"],
-      "explanation": "The calcarine sulcus organizes V1 retinotopically: the LOWER BANK (lingual gyrus) receives inferior optic radiations (Meyer's loop, traveling through the temporal lobe) and represents the SUPERIOR visual field. The UPPER BANK (cuneus) receives superior optic radiations (traveling through the parietal lobe) and represents the INFERIOR visual field. Therefore, temporal lobe damage compressing Meyer's loop causes loss of superior visual field ('pie in the sky'). Conversely, parietal lobe damage to superior radiations causes loss of inferior visual field ('pie in the floor'). Knowing which calcarine bank processes which quadrant — lingual = superior field, cuneus = inferior field — is high-yield for EPPP visual pathway localization questions."
+      "explanation": "Bilateral destruction of the primary visual cortex (occipital lobes) causes cortical blindness \u2014 complete loss of conscious vision despite structurally intact eyes and optic nerves. Anton\u2019s syndrome is the striking variant in which the patient denies being blind and confabulates visual experiences, because the cortical regions responsible for both visual processing and metacognitive awareness of deficit are simultaneously destroyed. Unilateral occipital damage produces a contralateral homonymous hemianopia without total blindness. The parietal lobe mediates spatial attention and neglect; the temporal lobe mediates object recognition \u2014 bilateral damage to either does not produce blindness with denial."
+    },
+    {
+        "id": "BRAIN-076",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "question": "A 24-year-old male with first-episode psychosis shows hypofrontality on fMRI during a working memory task. Postmortem studies in similar patients reveal reduced dendritic spine density in pyramidal neurons of this region. Which brain region is most implicated in the cognitive symptoms of schizophrenia?",
+        "target_region": "prefrontal_cortex",
+        "distractor_regions": [
+            "temporal_lobe",
+            "amygdala",
+            "caudate"
+        ],
+        "explanation": "The dorsolateral prefrontal cortex is consistently hypofunctional in schizophrenia, contributing to working memory deficits and negative symptoms. Reduced spine density on layer III pyramidal neurons reflects disrupted glutamatergic transmission. The temporal lobe relates more to hallucinations, and the caudate to movement, not the cognitive profile described."
+    },
+    {
+        "id": "BRAIN-077",
+        "type": "case_to_location",
+        "category": "memory",
+        "domain_source": "PHY",
+        "question": "A 58-year-old man who underwent bilateral medial temporal lobe surgery for intractable epilepsy can no longer form new declarative memories but retains procedural skills and emotional responses. He learns to solve a mirror-tracing puzzle across sessions without any recollection of prior practice. Which region's bilateral loss explains his anterograde declarative amnesia?",
+        "target_region": "hippocampus",
+        "distractor_regions": [
+            "amygdala",
+            "thalamus",
+            "cerebellum"
+        ],
+        "explanation": "Bilateral hippocampal removal (as in the famous H.M. case) abolishes new declarative memory formation while leaving procedural learning intact. The cerebellum supports the preserved mirror-tracing skill, and the amygdala mediates emotional conditioning. The thalamus can cause amnesia via Korsakoff's but is not the primary structure removed here."
+    },
+    {
+        "id": "BRAIN-078",
+        "type": "deficit_to_location",
+        "category": "aphasia",
+        "domain_source": "CLI",
+        "question": "A 67-year-old stroke patient produces fluent, melodic speech with normal phrase length but consistently substitutes incorrect words and fails to comprehend spoken language. Repetition is severely impaired. Neuroimaging reveals a lesion in the posterior superior temporal gyrus of the dominant hemisphere. Which region is damaged?",
+        "target_region": "wernickes_area",
+        "distractor_regions": [
+            "brocas_area",
+            "temporal_lobe",
+            "insula"
+        ],
+        "explanation": "Wernicke's area damage produces fluent but paraphasic speech with profound comprehension and repetition deficits \u2014 hallmarks of Wernicke's aphasia. Broca's area damage causes non-fluent, effortful speech with preserved comprehension. The insula is implicated in conduction aphasia, not this fluent-with-comprehension-loss pattern."
+    },
+    {
+        "id": "BRAIN-079",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "question": "A 62-year-old man presents with resting tremor, bradykinesia, cogwheel rigidity, and postural instability. Neuroimaging shows significant loss of dopaminergic neurons in the midbrain structure that projects to the striatum. Which region is most directly implicated in his motor deficits?",
+        "target_region": "substantia_nigra",
+        "distractor_regions": [
+            "putamen",
+            "cerebellum",
+            "globus_pallidus"
+        ],
+        "explanation": "Parkinson's disease results from degeneration of dopaminergic neurons in the substantia nigra pars compacta, which projects via the nigrostriatal pathway to the striatum. The putamen and globus pallidus are downstream targets whose dysfunction reflects the primary nigral loss. The cerebellum produces ataxia, not the rigidity-tremor pattern described."
+    },
+    {
+        "id": "BRAIN-080",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "question": "Neuroimaging studies of patients with OCD consistently show hyperactivity in a cortico-striato-thalamo-cortical loop. CBT and SSRI treatment both normalize activity in the specific striatal nucleus most implicated. Which region is this?",
+        "target_region": "caudate",
+        "distractor_regions": [
+            "nucleus_accumbens",
+            "putamen",
+            "cingulate_gyrus"
+        ],
+        "explanation": "The caudate nucleus is hyperactive in OCD within the orbitofrontal-caudate-thalamic loop; both SSRIs and CBT reduce this hyperactivity. The nucleus accumbens is primarily implicated in reward and addiction, and the putamen in motor control. The cingulate gyrus is involved but the caudate is the most consistently cited striatal node in OCD research."
+    },
+    {
+        "id": "BRAIN-081",
+        "type": "case_to_location",
+        "category": "developmental",
+        "domain_source": "LIF",
+        "question": "A 9-year-old boy diagnosed with ADHD-combined type performs two standard deviations below age norms on the Processing Speed Index of the WISC-V and shows impaired inhibitory control on a go/no-go task. Structural MRI reveals delayed cortical maturation, particularly in the anterior regions most associated with response inhibition. Which region shows the most clinically relevant developmental lag?",
+        "target_region": "prefrontal_cortex",
+        "distractor_regions": [
+            "caudate",
+            "cerebellum",
+            "parietal_lobe"
+        ],
+        "explanation": "ADHD is associated with delayed maturation of the prefrontal cortex, particularly areas supporting inhibitory control and working memory. The caudate also shows volume reductions in ADHD but is a downstream target of PFC. The cerebellum has timing-related contributions but the anterior cortical lag best explains the inhibitory profile described."
+    },
+    {
+        "id": "BRAIN-082",
+        "type": "case_to_location",
+        "category": "learning",
+        "domain_source": "LEA",
+        "question": "A patient with a cerebellar lesion has difficulty acquiring a conditioned eyeblink response despite intact declarative memory and normal eyeblink reflexes. Repeated tone-airpuff pairings fail to produce anticipatory blinks. Which region's damage explains this specific learning failure?",
+        "target_region": "cerebellum",
+        "distractor_regions": [
+            "hippocampus",
+            "amygdala",
+            "brainstem"
+        ],
+        "explanation": "Classical eyeblink conditioning is a form of procedural learning critically dependent on the cerebellum, particularly the interpositus nucleus. The hippocampus supports declarative memory but not this conditioning paradigm. The amygdala mediates fear conditioning; the brainstem houses the reflex arc but the cerebellum generates the learned anticipatory response."
+    },
+    {
+        "id": "BRAIN-083",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "question": "A patient with major depressive disorder shows heightened reactivity to negatively valenced stimuli and elevated glucose metabolism in a structure that assigns emotional salience to threat cues. Antidepressant treatment normalizes its hyperactivity. This region is enlarged in depression and central to fear and threat processing. Which region is most implicated?",
+        "target_region": "amygdala",
+        "distractor_regions": [
+            "insula",
+            "cingulate_gyrus",
+            "hippocampus"
+        ],
+        "explanation": "The amygdala is hyperactive and enlarged in major depression, generating exaggerated emotional responses to negative stimuli. Antidepressant normalization of amygdala reactivity correlates with symptom remission. The insula processes interoceptive signals, and the cingulate gyrus coordinates affect regulation, but the amygdala is the primary threat-salience node implicated here."
+    },
+    {
+        "id": "BRAIN-084",
+        "type": "case_to_location",
+        "category": "vascular",
+        "domain_source": "CLI",
+        "question": "A 71-year-old woman presents after a stroke with inability to recognize familiar faces despite intact visual acuity and object recognition. She can describe facial features accurately but cannot identify who the person is. MRI reveals bilateral lesions in the inferior occipito-temporal region. Which region is most damaged?",
+        "target_region": "temporal_lobe",
+        "distractor_regions": [
+            "occipital_lobe",
+            "parietal_lobe",
+            "insula"
+        ],
+        "explanation": "Prosopagnosia (face recognition failure) results from bilateral lesions at the occipito-temporal junction, most critically involving the fusiform gyrus of the temporal lobe. Occipital damage impairs basic visual processing rather than recognition specifically. Parietal lesions produce neglect or spatial deficits, not the isolated face-recognition failure described."
+    },
+    {
+        "id": "BRAIN-085",
+        "type": "deficit_to_location",
+        "category": "sensory",
+        "domain_source": "PHY",
+        "question": "A patient reports that she can feel touch and pressure on her left hand but cannot localize the stimulus accurately, compare textures, or detect which finger was touched. She also fails two-point discrimination testing. Which cortical region is most likely damaged?",
+        "target_region": "somatosensory_cortex",
+        "distractor_regions": [
+            "parietal_lobe",
+            "thalamus",
+            "motor_cortex"
+        ],
+        "explanation": "The primary somatosensory cortex (S1 in the postcentral gyrus) is essential for tactile discrimination, two-point discrimination, and finger localization. Crude touch preservation with loss of fine discrimination is the hallmark of S1 damage. Thalamic lesions impair all modalities together, and parietal association cortex damage produces higher-order deficits like agnosia."
+    },
+    {
+        "id": "BRAIN-086",
+        "type": "case_to_location",
+        "category": "subcortical",
+        "domain_source": "PHY",
+        "question": "A 45-year-old man receives a diagnosis of Huntington's disease. Early symptoms include chorea, irritability, and subtle executive dysfunction. Neuropathological studies of this condition reveal progressive degeneration of medium spiny neurons in a specific striatal structure. Which region shows the earliest and most severe degeneration?",
+        "target_region": "caudate",
+        "distractor_regions": [
+            "putamen",
+            "globus_pallidus",
+            "substantia_nigra"
+        ],
+        "explanation": "Huntington's disease preferentially destroys medium spiny neurons in the caudate nucleus, contributing to both the choreic movements and cognitive-psychiatric symptoms. The putamen is also affected but later and less prominently in early stages. The substantia nigra is the primary site in Parkinson's disease, not Huntington's."
+    },
+    {
+        "id": "BRAIN-087",
+        "type": "case_to_location",
+        "category": "executive",
+        "domain_source": "PAS",
+        "question": "A patient with a history of head injury performs within normal limits on standard IQ testing but scores in the severely impaired range on the Wisconsin Card Sorting Test, making perseverative errors across all categories. He cannot shift strategy when feedback indicates his current approach is wrong. Which region's dysfunction best explains this profile?",
+        "target_region": "prefrontal_cortex",
+        "distractor_regions": [
+            "caudate",
+            "parietal_lobe",
+            "thalamus"
+        ],
+        "explanation": "Perseverative errors on the WCST reflect impaired cognitive flexibility and set-shifting, core dorsolateral prefrontal functions. The WCST is a gold-standard measure of prefrontal integrity. Caudate lesions can also impair WCST performance but the perseverative error pattern most specifically implicates PFC; parietal damage produces spatial and attentional, not set-shifting, deficits."
+    },
+    {
+        "id": "BRAIN-088",
+        "type": "deficit_to_location",
+        "category": "neurotransmitter",
+        "domain_source": "PHY",
+        "question": "A drug that selectively lesions dopaminergic neurons projecting from the ventral tegmental area to the nucleus accumbens dramatically reduces an animal's willingness to work for food rewards without affecting its ability to consume or enjoy food when it is freely available. Which region, when lesioned, produces this motivational deficit?",
+        "target_region": "nucleus_accumbens",
+        "distractor_regions": [
+            "vta",
+            "hypothalamus",
+            "amygdala"
+        ],
+        "explanation": "The nucleus accumbens is the key interface of the mesolimbic dopamine system and mediates wanting (motivational salience) rather than liking (hedonic response). VTA is the origin of the projection, but the terminal region \u2014 the accumbens \u2014 specifically encodes effort-based motivation. Hypothalamus regulates hunger drives, and amygdala mediates reward-related emotion."
+    },
+    {
+        "id": "BRAIN-089",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "question": "A 55-year-old woman presents with past-pointing, dysdiadochokinesia, intention tremor, and gait ataxia. Her speech has a scanning, irregular quality. Neurological examination shows hypotonia. MRI reveals atrophy in the posterior fossa. Which structure is most damaged?",
+        "target_region": "cerebellum",
+        "distractor_regions": [
+            "brainstem",
+            "putamen",
+            "parietal_lobe"
+        ],
+        "explanation": "Cerebellar damage produces the classic triad of ataxia, intention tremor, and dysdiadochokinesia, along with scanning dysarthria and hypotonia. Brainstem lesions cause cranial nerve deficits and crossed signs rather than limb ataxia. Putamen lesions produce chorea or dystonia; parietal lesions cause sensory and spatial deficits."
+    },
+    {
+        "id": "BRAIN-090",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "question": "PET imaging of patients with active panic disorder shows significantly elevated resting-state activity in a region that processes interoceptive signals, bodily threat cues, and visceral pain. This region's activation correlates with the subjective intensity of panic symptoms. Which region is most implicated?",
+        "target_region": "insula",
+        "distractor_regions": [
+            "amygdala",
+            "cingulate_gyrus",
+            "hypothalamus"
+        ],
+        "explanation": "The insula is the primary cortical region for interoceptive awareness, monitoring internal bodily states including heartbeat and respiration \u2014 signals that become catastrophically interpreted in panic disorder. While the amygdala initiates fear responses, insula hyperactivity specifically links to the physical symptom interpretation characteristic of panic. The cingulate modulates affect but does not process interoception centrally."
+    },
+    {
+        "id": "BRAIN-091",
+        "type": "case_to_location",
+        "category": "visual",
+        "domain_source": "CLI",
+        "question": "A patient sustains a stroke affecting the calcarine fissure bilaterally. He opens his eyes and demonstrates intact pupillary light reflexes but cannot perceive any visual stimuli in any quadrant. He denies being blind and confabulates visual experiences (Anton's syndrome). Which region is damaged?",
+        "target_region": "occipital_lobe",
+        "distractor_regions": [
+            "thalamus",
+            "temporal_lobe",
+            "parietal_lobe"
+        ],
+        "explanation": "Bilateral occipital lobe infarction destroys primary visual cortex (V1), producing cortical blindness with intact pupillary reflexes (which use the brainstem, not cortex). Anton's syndrome \u2014 denial of blindness with confabulation \u2014 is a classic sequela of bilateral occipital damage. Thalamic lesions affect relay but preserve some V1 function; temporal lesions impair recognition, not raw visual input."
+    },
+    {
+        "id": "BRAIN-092",
+        "type": "case_to_location",
+        "category": "memory",
+        "domain_source": "PPA",
+        "question": "A 52-year-old alcohol-dependent man with thiamine deficiency presents with severe anterograde amnesia, confabulation, and intact remote memory. MRI reveals mammillary body atrophy and signal changes in the medial thalamus. Which structure's damage is most directly responsible for his amnesia?",
+        "target_region": "thalamus",
+        "distractor_regions": [
+            "hippocampus",
+            "frontal_lobe",
+            "hypothalamus"
+        ],
+        "explanation": "Korsakoff's syndrome results from thiamine-deficiency damage to the mammillary bodies and mediodorsal thalamic nuclei, disrupting the Papez circuit essential for memory consolidation. While hippocampal damage produces amnesia, the mediodorsal thalamus is the critical lesion site in Korsakoff's. The frontal lobe contributes to confabulation but is not the primary amnestic lesion."
+    },
+    {
+        "id": "BRAIN-093",
+        "type": "deficit_to_location",
+        "category": "aphasia",
+        "domain_source": "CLI",
+        "question": "A patient produces non-fluent, telegraphic speech with preserved comprehension. He speaks in short phrases with effortful articulation, omitting function words and grammatical morphemes. Repetition is also impaired. Lesion mapping localizes the damage to the left inferior frontal gyrus, pars opercularis and pars triangularis. Which region is damaged?",
+        "target_region": "brocas_area",
+        "distractor_regions": [
+            "wernickes_area",
+            "insula",
+            "motor_cortex"
+        ],
+        "explanation": "Broca's area (left inferior frontal gyrus) damage produces non-fluent, agrammatic speech with relatively preserved comprehension \u2014 the defining features of Broca's aphasia. Wernicke's area damage produces the opposite: fluent speech with poor comprehension. The insula is associated with apraxia of speech and conduction aphasia rather than this agrammatic profile."
+    },
+    {
+        "id": "BRAIN-094",
+        "type": "case_to_location",
+        "category": "developmental",
+        "domain_source": "LIF",
+        "question": "A 6-year-old boy with autism spectrum disorder shows reduced activation on fMRI in a region normally activated during observation of others' facial expressions and emotional states. This region in neurotypical individuals is activated during self-referential processing and has been proposed to support social cognition through simulating others' internal states. Which region is most implicated in this finding?",
+        "target_region": "insula",
+        "distractor_regions": [
+            "amygdala",
+            "prefrontal_cortex",
+            "temporal_lobe"
+        ],
+        "explanation": "The insula is critically involved in interoception and the simulation of others' emotional and bodily states, forming part of the social brain network. Reduced insular activation in ASD relates to impaired social and empathic processing. While the amygdala is also hypoactive in ASD during social stimuli, the simulation-of-internal-states description most specifically implicates the insula."
+    },
+    {
+        "id": "BRAIN-095",
+        "type": "deficit_to_location",
+        "category": "subcortical",
+        "domain_source": "PHY",
+        "question": "A patient with a lesion in a diencephalic structure presents with hyperphagia, temperature dysregulation, disrupted circadian rhythms, and altered hormonal secretion. Endocrine workup reveals abnormal cortisol and thyroid hormone levels. Which region is damaged?",
+        "target_region": "hypothalamus",
+        "distractor_regions": [
+            "thalamus",
+            "pituitary",
+            "amygdala"
+        ],
+        "explanation": "The hypothalamus regulates feeding, body temperature, circadian rhythms, and controls the HPA and HPT axes via the pituitary. This constellation of autonomic, endocrine, and homeostatic deficits points directly to hypothalamic damage. The pituitary executes hypothalamic commands but is not the integrating center; the thalamus relays sensory information without these homeostatic functions."
+    },
+    {
+        "id": "BRAIN-096",
+        "type": "case_to_location",
+        "category": "assessment",
+        "domain_source": "PAS",
+        "question": "A neuropsychologist administers the Rey-Osterrieth Complex Figure Test to a patient with a right hemisphere stroke. During the copy phase, the patient produces a fragmented, poorly organized reproduction with spatial distortions, missing left-sided details, and incorrect proportional relationships between elements. Which region is most likely damaged?",
+        "target_region": "parietal_lobe",
+        "distractor_regions": [
+            "temporal_lobe",
+            "occipital_lobe",
+            "frontal_lobe"
+        ],
+        "explanation": "The Rey-O copy task is sensitive to right parietal dysfunction, which disrupts visuospatial organization, spatial relationships, and contralateral neglect. Left-side omissions reflect hemispatial neglect associated with right parietal damage. Frontal damage affects planning strategy, producing a different disorganized pattern; occipital damage impairs basic perception rather than spatial construction."
+    },
+    {
+        "id": "BRAIN-097",
+        "type": "deficit_to_location",
+        "category": "neurotransmitter",
+        "domain_source": "PHY",
+        "question": "A patient begins a new antipsychotic medication that preferentially blocks dopamine D2 receptors in the mesolimbic pathway. After several weeks, she develops rigidity, bradykinesia, and tremor. The extrapyramidal side effects are attributed to unintended D2 blockade in which dopaminergic pathway's terminal structure?",
+        "target_region": "putamen",
+        "distractor_regions": [
+            "caudate",
+            "nucleus_accumbens",
+            "substantia_nigra"
+        ],
+        "explanation": "Antipsychotic-induced parkinsonism results from D2 receptor blockade in the nigrostriatal pathway, specifically at the putamen, which regulates motor execution. The caudate is more involved in cognitive-motor functions. The nucleus accumbens is the mesolimbic target; blocking it treats psychosis. The substantia nigra is the origin of the pathway, not the terminal where blockade produces EPS."
+    },
+    {
+        "id": "BRAIN-098",
+        "type": "case_to_location",
+        "category": "learning",
+        "domain_source": "LEA",
+        "question": "A patient with bilateral hippocampal damage is exposed to repeated tone-shock pairings and develops a conditioned fear response (freezing and elevated heart rate) to the tone alone. However, he has no conscious recollection of the conditioning sessions and cannot describe what happened in the experiment. Which region mediates the preserved fear conditioning?",
+        "target_region": "amygdala",
+        "distractor_regions": [
+            "hippocampus",
+            "cingulate_gyrus",
+            "insula"
+        ],
+        "explanation": "Fear conditioning to discrete cues (tone) depends on the amygdala, which associates conditioned stimuli with aversive outcomes and is intact here. The hippocampus supports contextual fear conditioning and declarative memory \u2014 its damage explains the absence of conscious recollection. This dissociation demonstrates that the amygdala operates independently of hippocampal-dependent explicit memory."
+    },
+    {
+        "id": "BRAIN-099",
+        "type": "case_to_location",
+        "category": "vascular",
+        "domain_source": "CLI",
+        "question": "A 78-year-old man has a series of small lacunar infarcts in the white matter pathways connecting the two cerebral hemispheres. He subsequently develops difficulties transferring learned information between hands \u2014 for example, he can solve a puzzle with his right hand but cannot perform the same task with his left, even after extensive practice. Which structure is most likely damaged?",
+        "target_region": "corpus_callosum",
+        "distractor_regions": [
+            "parietal_lobe",
+            "motor_cortex",
+            "thalamus"
+        ],
+        "explanation": "The corpus callosum connects the two hemispheres and allows intermanual transfer of learned skills. Callosal damage produces disconnection syndromes including ideomotor apraxia of the non-dominant hand and failure of intermanual transfer. Motor cortex damage would produce frank weakness; parietal lesions cause apraxia but through a different mechanism than this interhemispheric transfer failure."
+    },
+    {
+        "id": "BRAIN-100",
+        "type": "deficit_to_location",
+        "category": "executive",
+        "domain_source": "PAS",
+        "question": "Trail Making Test Part B performance is significantly more impaired than Part A in a patient with a frontal lobe lesion. The examiner notes the patient struggles specifically with alternating between number and letter sequences, frequently losing the set and returning to the previous sequence type. Which region best accounts for the Part B deficit?",
+        "target_region": "frontal_lobe",
+        "distractor_regions": [
+            "parietal_lobe",
+            "temporal_lobe",
+            "caudate"
+        ],
+        "explanation": "TMT Part B specifically assesses cognitive flexibility and set-shifting \u2014 executive functions mediated by the frontal lobe. Part A measures processing speed and is relatively frontal-independent. The parietal lobe is involved in visuospatial processing relevant to both parts, but the specific alternating-set impairment with perseveration implicates frontal executive dysfunction."
+    },
+    {
+        "id": "BRAIN-101",
+        "type": "case_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "question": "A patient with severe treatment-resistant depression undergoes deep brain stimulation. The targeted electrode site sits at the junction of the anterior cingulate and medial prefrontal cortex, a region showing hypermetabolism at rest that normalizes with successful antidepressant treatment. Stimulation produces rapid mood improvement. Which region is targeted?",
+        "target_region": "cingulate_gyrus",
+        "distractor_regions": [
+            "prefrontal_cortex",
+            "amygdala",
+            "nucleus_accumbens"
+        ],
+        "explanation": "The subgenual anterior cingulate cortex (Brodmann area 25) is hypermetabolic in depression and is a validated DBS target for treatment-resistant depression. Its activity normalizes with successful treatment across modalities. While the nucleus accumbens is another DBS target, the subgenual cingulate is specifically implicated by the medial frontal-anterior cingulate location and resting hypermetabolism described."
+    },
+    {
+        "id": "BRAIN-102",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "question": "A patient with a mesencephalic stroke develops inability to move his eyes upward voluntarily, convergence retraction nystagmus, and pupillary light-near dissociation. He also shows upper eyelid retraction. These signs are collectively known as Parinaud's syndrome. Which structure is most directly damaged?",
+        "target_region": "midbrain",
+        "distractor_regions": [
+            "pons",
+            "thalamus",
+            "frontal_lobe"
+        ],
+        "explanation": "Parinaud's syndrome results from dorsal midbrain compression or infarction, affecting the dorsal midbrain structures that coordinate vertical gaze and pupillary light responses. The pons mediates horizontal (not vertical) gaze; frontal eye fields initiate voluntary saccades but lesions produce a transient gaze deviation, not the fixed vertical palsy seen here. Thalamic lesions do not produce these oculomotor signs."
+    },
+    {
+        "id": "BRAIN-103",
+        "type": "deficit_to_location",
+        "category": "subcortical",
+        "domain_source": "PHY",
+        "question": "A patient with a tumor compressing a subcortical relay structure presents with hypersomnia, inability to selectively attend to stimuli, and sensory gating failure \u2014 she cannot filter irrelevant stimuli from the environment. Cortical function is grossly intact. Which structure is most likely compromised?",
+        "target_region": "thalamus",
+        "distractor_regions": [
+            "hypothalamus",
+            "brainstem",
+            "cingulate_gyrus"
+        ],
+        "explanation": "The thalamus serves as the primary sensory relay and attentional gating structure for all modalities except olfaction. Thalamic lesions impair consciousness, selective attention, and sensory filtering. The brainstem reticular formation also modulates arousal, but the selective sensory gating failure and hypersomnia with intact cortex most specifically implicate thalamic dysfunction."
+    },
+    {
+        "id": "BRAIN-104",
+        "type": "case_to_location",
+        "category": "developmental",
+        "domain_source": "LIF",
+        "question": "An 8-year-old child with a specific learning disorder in reading shows reduced activation on fMRI during phonological processing tasks in the left posterior temporal region, compared to typically developing readers. The child has difficulty decoding nonsense words and shows poor phoneme awareness. Which region is most implicated in this reading deficit?",
+        "target_region": "temporal_lobe",
+        "distractor_regions": [
+            "parietal_lobe",
+            "wernickes_area",
+            "occipital_lobe"
+        ],
+        "explanation": "Developmental dyslexia is consistently associated with hypoactivation of the left posterior temporal cortex, particularly the region supporting phonological processing and grapheme-phoneme correspondence. While Wernicke's area overlaps anatomically, the broader left temporal region including the superior temporal sulcus is the primary locus of reading-network dysfunction in dyslexia."
+    },
+    {
+        "id": "BRAIN-105",
+        "type": "deficit_to_location",
+        "category": "vascular",
+        "domain_source": "CLI",
+        "question": "A 44-year-old woman presents after a stroke with loss of smell (anosmia) on the ipsilateral side. She can identify objects normally and has no memory complaints. MRI shows an infarct at the base of the frontal lobe adjacent to the cribriform plate. Which structure is directly damaged?",
+        "target_region": "olfactory_bulb",
+        "distractor_regions": [
+            "temporal_lobe",
+            "hypothalamus",
+            "frontal_lobe"
+        ],
+        "explanation": "The olfactory bulb, located at the base of the frontal lobe above the cribriform plate, is the first cortical relay for olfactory information. Direct trauma or infarction at this location produces ipsilateral anosmia. The temporal lobe (piriform cortex) processes olfactory signals downstream; hypothalamic lesions impair many functions but not smell specifically."
+    },
+    {
+        "id": "BRAIN-106",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A 62-year-old man presents with hypophonia, masked facies, and resting tremor. Dopamine agonist therapy partially alleviates his symptoms. Crucially, neuroimaging reveals dramatic loss of pigmented neurons in a midbrain structure projecting to the striatum. Which region's degeneration is MOST directly responsible for his motor presentation?",
+        "target_region": "substantia_nigra",
+        "distractor_regions": [
+            "putamen",
+            "globus_pallidus",
+            "vta"
+        ],
+        "explanation": "Parkinson's disease results from degeneration of dopaminergic neurons in the substantia nigra pars compacta, which projects via the nigrostriatal pathway to the striatum. The VTA is a tempting distractor because it is an adjacent dopaminergic nucleus, but it projects to limbic and cortical areas, not the nigrostriatal motor circuit predominantly affected in classic Parkinson's."
+    },
+    {
+        "id": "BRAIN-107",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A neuroimaging study compares patients with OCD to healthy controls and finds hyperactivity specifically in a structure that receives glutamatergic input from the cortex and sends GABAergic projections to the globus pallidus. Lesioning this structure in animal models reduces compulsive grooming. Patients also score higher on the Intolerance of Uncertainty Scale. Which structure shows pathological hyperactivity?",
+        "target_region": "caudate",
+        "distractor_regions": [
+            "putamen",
+            "nucleus_accumbens",
+            "cingulate_gyrus"
+        ],
+        "explanation": "EPPP anchor [02-1] links OCD to increased basal ganglia activity, and anchor [139] associates intolerance of uncertainty with increased striatal volume. The caudate specifically mediates habit and goal-directed loops implicated in OCD compulsions. The putamen is more involved in sensorimotor rather than cognitive-affective cortico-striatal loops that underlie OCD."
+    },
+    {
+        "id": "BRAIN-108",
+        "type": "case_to_location",
+        "category": "neurotransmitter",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A 26-year-old man recovering from cocaine dependence reports profound anhedonia during abstinence \u2014 he no longer experiences pleasure from food, music, or socializing that he previously enjoyed. PET imaging shows blunted dopamine release in a subcortical ventral striatal structure during reward anticipation tasks. This same region shows peak dopamine activation during acute cocaine intoxication in healthy controls. Which structure\u2019s functional impairment most directly underlies his post-withdrawal anhedonia?",
+        "target_region": "nucleus_accumbens",
+        "distractor_regions": [
+            "vta",
+            "amygdala",
+            "caudate"
+        ],
+        "explanation": "The nucleus accumbens (ventral striatum) is the primary terminal of the mesolimbic dopamine pathway and serves as the reward-computation hub. Repeated cocaine use depletes dopamine receptor sensitivity here, producing post-withdrawal anhedonia \u2014 inability to experience pleasure from natural rewards. The VTA is the origin of mesolimbic dopamine projections, not the terminal reward-computation site. The caudate (dorsal striatum) drives habitual motor sequences rather than hedonic reward. The amygdala modulates emotional salience but the specific anticipatory reward deficit localizes to the nucleus accumbens."
+    },
+    {
+        "id": "BRAIN-109",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A 55-year-old woman presents with choreiform movements, emotional lability, and progressive cognitive decline. Genetic testing confirms a CAG repeat expansion. Neuroimaging reveals marked atrophy of a C-shaped structure lining the lateral ventricle, along with co-occurring atrophy of an adjacent striatal nucleus. Per EPPP anchor [177], which of the two striatal nuclei shows the MORE prominent early pathology in this disorder?",
+        "target_region": "caudate",
+        "distractor_regions": [
+            "putamen",
+            "globus_pallidus",
+            "nucleus_accumbens"
+        ],
+        "explanation": "Huntington's disease preferentially and earlier damages the caudate nucleus before the putamen; the caudate's degeneration drives cognitive and psychiatric symptoms. EPPP anchor [177] explicitly links motor symptoms of Huntington's to GABA and glutamate abnormalities in the caudate and putamen. The globus pallidus is affected downstream but is not the primary early site."
+    },
+    {
+        "id": "BRAIN-110",
+        "type": "deficit_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient with a subcortical lesion exhibits a resting tremor, bradykinesia, and rigidity. Unlike a patient with a lesion to a nearby structure, she shows NO choreiform movements, NO ataxia, and retains full sensory function. Levodopa produces significant improvement. The lesion is in a region that normally inhibits the globus pallidus interna via dopamine release. Which region is lesioned?",
+        "target_region": "substantia_nigra",
+        "distractor_regions": [
+            "putamen",
+            "globus_pallidus",
+            "cerebellum"
+        ],
+        "explanation": "The substantia nigra pars compacta modulates the striatum via dopamine, normally facilitating movement by inhibiting the globus pallidus interna through the direct pathway. Its degeneration produces the classic Parkinsonian triad. Cerebellum lesions produce ataxia, not resting tremor or bradykinesia, and do not respond to levodopa."
+    },
+    {
+        "id": "BRAIN-111",
+        "type": "case_to_location",
+        "category": "subcortical",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "Following a posterior fossa stroke, a 67-year-old man develops ipsilateral facial numbness, contralateral body pain/temperature loss, hoarseness, dysphagia, hiccups, and vertigo. His limb strength is intact. An MRI shows infarction of the lateral aspect of a brainstem structure receiving its blood supply from the posterior inferior cerebellar artery (PICA). Which structure is most affected?",
+        "target_region": "medulla",
+        "distractor_regions": [
+            "pons",
+            "midbrain",
+            "cerebellum"
+        ],
+        "explanation": "This is Wallenberg's lateral medullary syndrome caused by PICA occlusion affecting the lateral medulla. The crossed sensory pattern (ipsilateral face, contralateral body) and cranial nerve involvement (IX, X) uniquely localize to the medulla. The pons produces similar crossed findings but typically includes ipsilateral gaze palsy and facial nerve palsy, which are absent here."
+    },
+    {
+        "id": "BRAIN-112",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A 70-year-old man suffers a brainstem infarct. He presents with ipsilateral abducens palsy (lateral gaze palsy), ipsilateral facial nerve palsy producing hemifacial weakness, and contralateral hemiplegia of the limbs. Vertical gaze is preserved. Which brainstem structure contains the lesion?",
+        "target_region": "pons",
+        "distractor_regions": [
+            "midbrain",
+            "medulla",
+            "cerebellum"
+        ],
+        "explanation": "This is Millard-Gubler syndrome, a classic pontine lesion pattern involving cranial nerves VI and VII nuclei situated in the pons, with crossed pyramidal tract involvement producing contralateral hemiplegia. Midbrain lesions produce cranial nerve III or IV palsies instead of VI/VII. Preserved vertical gaze further excludes midbrain pathology."
+    },
+    {
+        "id": "BRAIN-113",
+        "type": "case_to_location",
+        "category": "subcortical",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient survives a hemorrhagic event in the dorsal pontine tegmentum. He is now locked-in: fully conscious, intact vertical eye movements and blinking, but completely paralyzed from the neck down with no horizontal gaze. Consciousness is preserved. Which region contains the lesion producing this specific profile?",
+        "target_region": "pons",
+        "distractor_regions": [
+            "medulla",
+            "midbrain",
+            "brainstem"
+        ],
+        "explanation": "Locked-in syndrome results from bilateral ventral pontine damage interrupting corticospinal and corticobulbar tracts while sparing the reticular activating system (consciousness) and the midbrain-controlled vertical gaze pathway. The medulla lesion would affect vital autonomic functions first. Using 'brainstem' generically is incorrect because the specific horizontal gaze center (PPRF) localizes uniquely to the pons."
+    },
+    {
+        "id": "BRAIN-114",
+        "type": "deficit_to_location",
+        "category": "neurotransmitter",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A psychopharmacologist explains that one dopaminergic pathway originating in the midbrain projects specifically to the prefrontal cortex and anterior cingulate, modulating working memory and mood. A separate pathway from a nearby midbrain structure projects primarily to the caudate and putamen, controlling motor initiation. In schizophrenia, the prefrontal pathway is hypoactive (producing negative symptoms and cognitive deficits) while the limbic pathway is hyperactive (producing positive symptoms). Which midbrain structure is the origin of the prefrontal dopamine projection implicated in cognitive symptoms?",
+        "target_region": "vta",
+        "distractor_regions": [
+            "substantia_nigra",
+            "nucleus_accumbens",
+            "midbrain"
+        ],
+        "explanation": "The VTA (ventral tegmental area) gives rise to both the mesocortical pathway (projecting to PFC and anterior cingulate, mediating cognition, working memory, and mood) and the mesolimbic pathway (projecting to the nucleus accumbens, mediating reward and motivation). In schizophrenia, mesocortical hypoactivity underlies negative and cognitive symptoms, while mesolimbic hyperactivity underlies positive symptoms like hallucinations and delusions. The substantia nigra projects via the nigrostriatal pathway to the dorsal striatum (caudate and putamen), controlling motor function \u2014 its degeneration causes Parkinson\u2019s disease, not cognitive-affective symptoms."
+    },
+    {
+        "id": "BRAIN-115",
+        "type": "case_to_location",
+        "category": "endocrine",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A 32-year-old woman presents with amenorrhea, galactorrhea, infertility, and visual field defects confined to bitemporal hemianopia. MRI reveals a sellar mass compressing the optic chiasm. Serum prolactin is markedly elevated. Which structure is the PRIMARY site of the lesion producing both the hormonal and visual symptoms?",
+        "target_region": "pituitary",
+        "distractor_regions": [
+            "hypothalamus",
+            "thalamus",
+            "occipital_lobe"
+        ],
+        "explanation": "A pituitary adenoma (prolactinoma) in the sella turcica causes hyperprolactinemia and \u2014 by superior extension \u2014 compresses the optic chiasm producing bitemporal hemianopia. The hypothalamus regulates prolactin release via dopamine but is not itself the tumor origin. Thalamus lesions do not produce this endocrine-visual symptom combination."
+    },
+    {
+        "id": "BRAIN-117",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A neuroimaging study examines patients with generalized anxiety disorder versus healthy controls. Per EPPP anchor [044], the key abnormality is reduced connectivity between the prefrontal cortex, amygdala, and which third region, whose reduced modulation by top-down control is predicted to sustain pathological worry?",
+        "target_region": "cingulate_gyrus",
+        "distractor_regions": [
+            "insula",
+            "hippocampus",
+            "thalamus"
+        ],
+        "explanation": "EPPP anchor [044] explicitly names the anterior cingulate cortex as the third node in the PFC-amygdala-ACC connectivity deficit model of GAD. Reduced top-down PFC regulation of the cingulate gyrus sustains worry and emotional reactivity. The insula contributes to interoceptive anxiety but is not part of the specific insufficient top-down control triad in the anchor."
+    },
+    {
+        "id": "BRAIN-118",
+        "type": "case_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A patient with a history of heavy alcohol use presents with severe anterograde amnesia, confabulation, and relatively preserved procedural memory. He fabricates elaborate stories about yesterday's events without awareness he is doing so. He lacks motivation to learn new information. Per EPPP anchor [218], which region is MOST damaged by the thiamine deficiency underlying this presentation?",
+        "target_region": "thalamus",
+        "distractor_regions": [
+            "hippocampus",
+            "prefrontal_cortex",
+            "medial_frontal"
+        ],
+        "explanation": "Korsakoff syndrome from thiamine deficiency characteristically damages the mediodorsal and anterior thalamic nuclei (and mammillary bodies), disrupting the Papez circuit and producing severe anterograde amnesia with confabulation. While the hippocampus is critical for memory, thalamic lesions are the hallmark neuropathology in Korsakoff's. Prefrontal damage contributes to confabulation but is secondary."
+    },
+    {
+        "id": "BRAIN-119",
+        "type": "case_to_location",
+        "category": "motor",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient with a basal ganglia lesion shows paradoxical kinesia \u2014 she can run but cannot walk normally. She also exhibits festinating gait and freezing episodes unresponsive to levodopa. Neuroimaging reveals atrophy specifically in a structure that normally releases GABA to suppress unwanted movement via the indirect pathway. Which structure is most directly disrupted?",
+        "target_region": "globus_pallidus",
+        "distractor_regions": [
+            "putamen",
+            "substantia_nigra",
+            "caudate"
+        ],
+        "explanation": "The globus pallidus interna (GPi) is the primary output nucleus of the basal ganglia, releasing GABA to the thalamus via the indirect pathway to suppress unwanted movements. GPi dysfunction leads to disinhibition or pathological suppression of movement. Levodopa resistance distinguishes this from substantia nigra-based Parkinsonism, as the dopaminergic substrate is intact but the downstream GPi is damaged."
+    },
+    {
+        "id": "BRAIN-121",
+        "type": "case_to_location",
+        "category": "sensory",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient with a right-sided lesion reports she can detect painful stimuli on her left arm but cannot identify the quality or localize the pain precisely. She also experiences difficulty recognizing her own body states and has reduced empathy for others in pain. Her autonomic responses to emotional images are blunted. Which region's damage best accounts for the FULL symptom cluster?",
+        "target_region": "insula",
+        "distractor_regions": [
+            "somatosensory_cortex",
+            "cingulate_gyrus",
+            "amygdala"
+        ],
+        "explanation": "The insular cortex integrates interoceptive signals, pain quality discrimination, autonomic responses, and empathy for pain in others. Insula lesions impair pain localization despite basic detection (preserved via thalamic pathways), reduce bodily self-awareness, and blunt empathic autonomic responses. The somatosensory cortex handles localization but not the affective-autonomic-empathic triad that uniquely implicates the insula."
+    },
+    {
+        "id": "BRAIN-122",
+        "type": "deficit_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A patient recovering from a stroke affecting the medial surface of the frontal lobe presents with profound apathy, markedly reduced spontaneous speech, impaired initiation of voluntary movement, akinetic mutism in the acute phase, and urinary incontinence. Comprehension and praxis are relatively preserved. Which region is most critically damaged?",
+        "target_region": "medial_frontal",
+        "distractor_regions": [
+            "cingulate_gyrus",
+            "prefrontal_cortex",
+            "brocas_area"
+        ],
+        "explanation": "Anterior communicating artery infarcts commonly damage the medial frontal cortex (including supplementary motor area) and anterior cingulate, producing akinetic mutism, apathy, and reduced initiation. The preserved comprehension and praxis distinguish this from Broca's aphasia. The medial frontal \u2014 not lateral prefrontal \u2014 is the critical node for spontaneous motor initiation and vocalization."
+    },
+    {
+        "id": "BRAIN-123",
+        "type": "case_to_location",
+        "category": "executive",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient completes neuropsychological testing. He performs normally on WCST perseverative errors and Trail Making B, suggesting intact executive set-shifting. However, he shows markedly reduced verbal fluency (FAS) and impaired generation of action sequences. He also displays transcortical motor aphasia \u2014 intact repetition, nonfluent spontaneous speech, and intact comprehension. Which region is most likely lesioned?",
+        "target_region": "medial_frontal",
+        "distractor_regions": [
+            "brocas_area",
+            "prefrontal_cortex",
+            "cingulate_gyrus"
+        ],
+        "explanation": "Transcortical motor aphasia with preserved repetition, nonfluent spontaneous speech, and reduced verbal initiation localizes to the supplementary motor area / medial frontal cortex, sparing Broca's area. Intact WCST and Trail Making B argue against dorsolateral prefrontal pathology. Broca's area lesions produce nonfluent aphasia with impaired repetition, unlike the transcortical pattern here."
+    },
+    {
+        "id": "BRAIN-124",
+        "type": "case_to_location",
+        "category": "psychiatric",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A 35-year-old patient with OCD describes an aversive visceral sensation \u2014 described as 'something is wrong, an urge I can't ignore' \u2014 that immediately precedes each compulsion and is relieved only by completing the ritual. Functional MRI during symptom provocation shows activation of a region involved in integrating interoceptive signals and assigning affective valence to bodily states, distinct from the frontal cortex. Which region generates this 'not-just-right' experience?",
+        "target_region": "insula",
+        "distractor_regions": [
+            "cingulate_gyrus",
+            "amygdala",
+            "caudate"
+        ],
+        "explanation": "The anterior insula generates and processes interoceptive awareness and the 'not-just-right' phenomenology characteristic of OCD, integrating visceral sensations with affective significance. This is distinct from the caudate-driven compulsion execution and the cingulate's conflict monitoring role. The amygdala mediates fear-based OCD variants but not the somatic urgency sensation specifically described here."
+    },
+    {
+        "id": "BRAIN-125",
+        "type": "case_to_location",
+        "category": "aphasia",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient produces fluent, melodic speech with normal phrase length and prosody. Comprehension is severely impaired for both spoken and written language. Repetition is also profoundly impaired. Naming is poor. Per EPPP anchor [131], her speech is devoid of meaning. Which region is most damaged?",
+        "target_region": "wernickes_area",
+        "distractor_regions": [
+            "brocas_area",
+            "temporal_lobe",
+            "insula"
+        ],
+        "explanation": "Wernicke's aphasia involves fluent, paraphasic speech with severely impaired comprehension and repetition, localizing to Wernicke's area (posterior superior temporal gyrus). Broca's aphasia produces nonfluent speech with intact comprehension, which is the opposite pattern. The broader temporal lobe is a distractor, but Wernicke's area is the specific subregion responsible for the classical comprehension and repetition deficits."
+    },
+    {
+        "id": "BRAIN-126",
+        "type": "deficit_to_location",
+        "category": "vascular",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A 60-year-old hypertensive man wakes up with sudden onset of nausea, vomiting, and severe vertigo. Examination reveals nystagmus, ipsilateral limb ataxia, and ipsilateral Horner's syndrome (ptosis, miosis, anhidrosis). There is no limb weakness. Imaging reveals an acute infarct in the posterolateral brainstem. Per EPPP anchor [111], which structure is the PRIMARY site of infarction?",
+        "target_region": "medulla",
+        "distractor_regions": [
+            "cerebellum",
+            "pons",
+            "midbrain"
+        ],
+        "explanation": "Lateral medullary (Wallenberg) syndrome from PICA territory infarction presents with vertigo, nystagmus, ipsilateral Horner's, ipsilateral ataxia, and crossed sensory loss \u2014 all without limb weakness. The pons would produce horizontal gaze palsy and facial nerve involvement. The cerebellum produces ataxia but not Horner's syndrome or the crossed sensory pattern seen in lateral medullary syndrome."
+    },
+    {
+        "id": "BRAIN-127",
+        "type": "case_to_location",
+        "category": "developmental",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "Neuroimaging of adolescents with Tourette's disorder reveals volumetric abnormalities in a striatal structure that is part of the sensorimotor cortico-striatal loop, distinct from the associative loop involving the caudate. Motor tics involve involuntary activation of this structure's circuits. Per EPPP anchor [065], which specific basal ganglia structure is most implicated?",
+        "target_region": "putamen",
+        "distractor_regions": [
+            "caudate",
+            "globus_pallidus",
+            "nucleus_accumbens"
+        ],
+        "explanation": "The putamen is the striatal node of the sensorimotor cortico-striatal loop and is most directly implicated in the motor tics of Tourette's disorder. The caudate is the associative loop striatal component linked more to OCD and cognitive symptoms. EPPP anchor [065] identifies the putamen as one of the basal ganglia structures implicated in Tourette's disorder."
+    },
+    {
+        "id": "BRAIN-128",
+        "type": "case_to_location",
+        "category": "sensory",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A patient with a right hemisphere lesion denies her left-sided paralysis (anosognosia), ignores stimuli on her left side (hemispatial neglect), and has difficulty dressing herself (dressing apraxia). She has no aphasia. Neuropsychological testing reveals she cannot draw a clock face accurately, with all numbers clustered on the right. Which region is primarily damaged?",
+        "target_region": "parietal_lobe",
+        "distractor_regions": [
+            "frontal_lobe",
+            "insula",
+            "cingulate_gyrus"
+        ],
+        "explanation": "Right parietal lobe lesions produce hemispatial neglect, anosognosia, dressing apraxia, and constructional deficits reflected in the clock drawing performance. The frontal lobe can contribute to neglect but does not explain the constructional and dressing apraxia. The insula mediates body awareness aspects of anosognosia but the full constellation including spatial neglect and constructional failure localizes to the parietal lobe."
+    },
+    {
+        "id": "BRAIN-129",
+        "type": "case_to_location",
+        "category": "memory",
+        "domain_source": "PPA",
+        "difficulty": "hard",
+        "question": "A 19-year-old male presents 48 hours after his first generalized tonic-clonic seizure. EEG shows bilateral temporal lobe abnormalities. Bilateral surgical resection of the mesial temporal structures is performed to control seizures. Post-operatively, he retains his procedural skills, remote semantic memories, and working memory span, but cannot form any new episodic memories. Per EPPP anchor [27-3], which structure's bilateral loss is the MOST critical determinant of this anterograde amnesia?",
+        "target_region": "hippocampus",
+        "distractor_regions": [
+            "amygdala",
+            "thalamus",
+            "temporal_lobe"
+        ],
+        "explanation": "Bilateral hippocampal removal, as in the classic H.M. case, produces severe anterograde amnesia for new declarative/episodic memories while sparing procedural memory, working memory, and remote semantic memory. The amygdala was also removed but primarily affects emotional memory consolidation. Thalamic lesions produce amnesia in Korsakoff's, not in the isolated mesial temporal resection pattern described."
+    },
+    {
+        "id": "BRAIN-130",
+        "type": "case_to_location",
+        "category": "neurotransmitter",
+        "domain_source": "PHY",
+        "difficulty": "hard",
+        "question": "A rat placed in a context previously paired with footshock displays freezing behavior, increased heart rate, and elevated corticosterone. Microinfusion of a GABA-A agonist into a specific limbic structure completely blocks the fear expression without impairing locomotion in a novel environment. A separate rat with a lesion to the same structure fails to acquire the conditioned fear association at all. Per EPPP anchor [01-3], which structure is targeted?",
+        "target_region": "amygdala",
+        "distractor_regions": [
+            "hippocampus",
+            "cingulate_gyrus",
+            "insula"
+        ],
+        "explanation": "EPPP anchor [01-3] explicitly identifies the amygdala as the site where electrical stimulation elicits conditioned fear responses including freezing, tachycardia, and stress hormone release. GABAergic inhibition within the amygdala suppresses conditioned fear expression. The hippocampus is required for contextual fear conditioning but does not mediate the expression of conditioned fear responses in the same direct manner."
     }
   ]
 };

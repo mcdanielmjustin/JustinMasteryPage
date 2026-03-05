@@ -425,6 +425,54 @@
       .sidebar { display: none; }
       .quiz-bar { left: 0; }
     }
+
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       FLOATING ANSWER CHIPS — 4 quadrants over the 3D brain
+       ═══════════════════════════════════════════════════════════════════════ */
+    .float-chips-overlay {
+      position: absolute; inset: 0; z-index: 15;
+      pointer-events: none;
+    }
+    .float-chip {
+      position: absolute;
+      pointer-events: all;
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 10px;
+      background: rgba(9,9,11,0.82); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.13);
+      font-size: 12.5px; font-weight: 500; color: var(--text2);
+      cursor: pointer; user-select: none;
+      transition: border-color .15s, background .15s, color .15s, transform .15s;
+      max-width: 180px; line-height: 1.35;
+    }
+    .float-chip:hover {
+      border-color: rgba(255,255,255,0.28); color: var(--text); transform: scale(1.04);
+    }
+    .float-chip.selected {
+      border-color: var(--accent); background: rgba(224,92,110,0.12); color: var(--text);
+    }
+    .float-chip.correct {
+      border-color: var(--green); background: rgba(52,211,153,0.1); color: var(--green);
+    }
+    .float-chip.wrong {
+      border-color: #ef4444; background: rgba(239,68,68,0.08); color: #f87171;
+    }
+    .float-chip.disabled { pointer-events: none; }
+    .float-chip-letter {
+      width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+      background: rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--text3);
+    }
+    .float-chip.selected .float-chip-letter { background: rgba(224,92,110,0.2); color: var(--accent2); }
+    .float-chip.correct  .float-chip-letter { background: rgba(52,211,153,0.15); color: var(--green); }
+    .float-chip.wrong    .float-chip-letter { background: rgba(239,68,68,0.1);   color: #f87171; }
+    /* Quadrant positions */
+    .float-chip[data-quad="1"] { top: 14%;    left: 4%;   }
+    .float-chip[data-quad="2"] { top: 14%;    right: 4%;  }
+    .float-chip[data-quad="3"] { bottom: 22%; left: 4%;   }
+    .float-chip[data-quad="4"] { bottom: 22%; right: 4%;  }
   </style>
 
   <script type="importmap">
@@ -516,6 +564,9 @@
         <div class="hover-tip-name" id="hover-tip-name"></div>
         <div class="hover-tip-hint">Click to explore</div>
       </div>
+
+      <!-- Floating answer chips overlay -->
+      <div class="float-chips-overlay" id="float-chips-overlay"></div>
 
       <!-- Loading overlay -->
       <div class="brain-loading" id="brain-loading">
@@ -922,6 +973,8 @@
         var rData = REGIONS[regionId];
         document.getElementById('hover-tip-name').textContent =
           rData ? rData.label : regionId.replace(/_/g, ' ');
+        tip.querySelector('.hover-tip-hint').textContent =
+          _quizActive ? 'Click to select answer' : 'Click to explore';
         tip.classList.add('visible');
       },
       closeRegion: function() {
@@ -1036,6 +1089,7 @@
       document.getElementById('nav-score').style.display = 'none';
       document.getElementById('highlighted-label').style.display = 'none';
       if (window.__brain3d) window.__brain3d.resetRegions();
+      clearFloatingChips();
       _quizClick = null;
     }
 
@@ -1047,6 +1101,7 @@
       _quizClick     = null;
 
       // Reset UI
+      clearFloatingChips();
       document.getElementById('quiz-question').textContent   = q.question;
       document.getElementById('quiz-chips').innerHTML        = '';
       document.getElementById('quiz-explanation').className  = 'quiz-explanation';
@@ -1103,10 +1158,11 @@
         });
       } else {
         if (window.__brain3d) window.__brain3d.dimAllRegions(activeIds);
+        setupFloatingChips(shuffle(activeIds.slice()));
         _quizClick = function(regionId) {
           if (_quizSubmitted) return;
-          _quizSelected = regionId;
-          document.getElementById('quiz-submit').disabled = false;
+          if (activeIds.indexOf(regionId) < 0) return;
+          selectFloatChip(regionId);
         };
       }
     }
@@ -1140,6 +1196,46 @@
       });
     }
 
+    // ────────────────────────────────────────────────────────────────────
+    // FLOATING ANSWER CHIPS
+    // ────────────────────────────────────────────────────────────────────
+
+    function clearFloatingChips() {
+      var el = document.getElementById('float-chips-overlay');
+      if (el) el.innerHTML = '';
+    }
+
+    function setupFloatingChips(regionIds) {
+      var overlay = document.getElementById('float-chips-overlay');
+      if (!overlay) return;
+      overlay.innerHTML = '';
+      var letters = ['A', 'B', 'C', 'D'];
+      regionIds.forEach(function(rId, i) {
+        var rData = REGIONS[rId];
+        var label = rData ? rData.label : rId.replace(/_/g, ' ');
+        var chip = document.createElement('div');
+        chip.className = 'float-chip';
+        chip.dataset.quad = i + 1;
+        chip.dataset.regionId = rId;
+        chip.innerHTML = '<span class="float-chip-letter">' + letters[i] + '</span>' + esc(label);
+        chip.addEventListener('click', function() {
+          if (_quizSubmitted) return;
+          selectFloatChip(rId);
+        });
+        overlay.appendChild(chip);
+      });
+    }
+
+    function selectFloatChip(rId) {
+      _quizSelected = rId;
+      document.querySelectorAll('.float-chip').forEach(function(c) {
+        c.classList.toggle('selected', c.dataset.regionId === rId);
+      });
+      if (window.__brain3d) window.__brain3d.highlightRegion(rId);
+      document.getElementById('quiz-submit').disabled = false;
+    }
+
+
     window.handleSubmit = function() {
       if (_quizSubmitted) return;
       var q = _quizPool[_quizCurrent];
@@ -1158,6 +1254,12 @@
         }
         isCorrect = _quizSelected === q.target_region;
         if (window.__brain3d) window.__brain3d.highlightRegion(q.target_region);
+        // Reveal correct/wrong on floating chips
+        document.querySelectorAll('.float-chip').forEach(function(c) {
+          c.classList.add('disabled');
+          if (c.dataset.regionId === q.target_region) c.classList.add('correct');
+          else if (c.dataset.regionId === _quizSelected && !isCorrect) c.classList.add('wrong');
+        });
       } else if (q.type === 'location_to_deficit') {
         if (_quizSelected === null) {
           _quizSubmitted = false;
