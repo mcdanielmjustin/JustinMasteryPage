@@ -389,8 +389,8 @@
     /* Speech bubble */
     .speech-bubble {
       position: relative;
-      background: rgba(255,255,255,.09);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.18);
       border-radius: 16px 16px 16px 4px;
       padding: 14px 18px;
       max-width: 380px; width: 100%;
@@ -448,7 +448,7 @@
     .bubble-dots span:nth-child(2) { animation-delay: .2s; }
     .bubble-dots span:nth-child(3) { animation-delay: .4s; }
     .bubble-dots.hidden { display: none; }
-    .bubble-text { font-size: 14px; color: var(--text); line-height: 1.7; overflow-wrap: break-word; }
+    .bubble-text { font-size: 15.5px; color: var(--text); line-height: 1.75; overflow-wrap: break-word; }
 
     /* Behavioral tags overlay */
     .tag-overlay {
@@ -578,9 +578,9 @@
 
     .option-letter {
       width: 28px; height: 28px; flex-shrink: 0; border-radius: 7px;
-      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700; color: var(--text2);
+      font-size: 12px; font-weight: 700; color: var(--text);
       transition: background .2s, border-color .2s, color .2s;
     }
     .option-btn.correct .option-letter { background: rgba(52,211,153,.2); border-color: var(--green); color: var(--green); }
@@ -2382,20 +2382,30 @@
       });
     });
 
-    // Show last phase dialogue, all tags
+    // Show all tags from all phases using column layout (no animation)
     document.getElementById('tag-overlay').innerHTML = '';
-    _tagSlotIdx = 0;
-    enc.encounter.phases.forEach(phase => {
-      (phase.behavioral_tags || []).forEach((tag, idx) => {
+    resetTagColumns();
+    let reviewColSide = 'left';
+    enc.encounter.phases.forEach((phase, pi) => {
+      const tags = phase.behavioral_tags || [];
+      if (\!tags.length) return;
+      const side = pi === 0 ? 'left' : reviewColSide;
+      reviewColSide = reviewColSide === 'left' ? 'right' : 'left';
+      tags.forEach(tag => {
+        const col = _tagCols[side];
+        if (col.count >= TAG_MAX_ROWS) return;
         const el = document.createElement('span');
         el.className = 'behavior-tag ' + getTagColor(tag);
         el.textContent = tag;
         el.style.opacity = '1';
         el.style.animation = 'none';
-        const pos = TAG_POSITIONS[_tagSlotIdx % TAG_POSITIONS.length];
-        _tagSlotIdx++;
-        Object.assign(el.style, pos);
+        const topPct = TAG_START_Y + col.count * (TAG_ROW_PX / window.innerHeight * 100 * 3.2);
+        if (side === 'left') { el.style.left = TAG_COL_X.left; }
+        else                 { el.style.right = TAG_COL_X.right; }
+        el.style.top = topPct + '%';
         document.getElementById('tag-overlay').appendChild(el);
+        col.els.push(el);
+        col.count++;
       });
     });
 

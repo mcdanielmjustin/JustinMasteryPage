@@ -84,6 +84,24 @@ QUESTION_TYPES = [
     "cultural_consideration","assessment_tool",
 ]
 
+# Remap model-invented near-miss types to the nearest valid type
+TYPE_ALIASES = {
+    "conceptual_knowledge":     "dsm_criteria",
+    "conceptual_understanding": "dsm_criteria",
+    "developmental_milestone":  "dsm_criteria",
+    "developmental_stage":      "dsm_criteria",
+    "psychopharmacology":      "treatment_planning",
+    "pharmacology":            "treatment_planning",
+    "diagnosis":               "primary_diagnosis",
+    "diagnosis_selection":     "primary_diagnosis",
+    "ethical_dilemma":         "treatment_planning",
+    "ethical_decision":        "treatment_planning",
+    "ethics_application":      "treatment_planning",
+    "case_conceptualization":  "differential_diagnosis",
+    "intervention_selection":  "immediate_intervention",
+    "clinical_intervention":   "immediate_intervention",
+}
+
 CHART_CATEGORIES = [
     "Chief Complaint","History of Present Illness","Mental Status Examination",
     "Psychosocial History","Collateral / Context","Labs / Observations",
@@ -375,6 +393,10 @@ def validate_encounter(enc: dict, domain_code: str) -> list[str]:
         errors.append(f"questions count must be 1-2, got {len(questions) if isinstance(questions,list) else '?'}")
     else:
         for qi, q in enumerate(questions):
+            # Normalize near-miss type names before validation
+            raw_type = q.get("type", "")
+            if raw_type not in QUESTION_TYPES and raw_type in TYPE_ALIASES:
+                q["type"] = TYPE_ALIASES[raw_type]
             if q.get("type","") not in QUESTION_TYPES:
                 errors.append(f"q[{qi}] bad type: {q.get('type')}")
             opts = q.get("options",{})
