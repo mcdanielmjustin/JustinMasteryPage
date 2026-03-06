@@ -130,6 +130,14 @@
       display: flex; align-items: center; gap: 10px; flex: 1;
     }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .domain-toggle-btn {
+      font-size: 12px; font-weight: 600; font-family: inherit;
+      padding: 7px 18px; border-radius: 8px; cursor: pointer;
+      background: rgba(99,102,241,0.15); color: var(--accent-light);
+      border: 1px solid rgba(99,102,241,0.4);
+      transition: background .15s, border-color .15s;
+    }
+    .domain-toggle-btn:hover { background: rgba(99,102,241,0.28); border-color: var(--accent); }
     .select-all-btn {
       font-size: 12px; font-weight: 500; color: var(--text3);
       background: none; border: none; cursor: pointer; padding: 0 0 0 14px;
@@ -193,7 +201,11 @@
       display: flex; flex-direction: column; gap: 8px;
     }
     .domain-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
-    .domain-card.selected { border-color: var(--accent); background: rgba(99,102,241,0.07); }
+    .domain-card.selected {
+      border-color: var(--accent-light);
+      background: rgba(99,102,241,0.18);
+      box-shadow: 0 0 0 1px rgba(99,102,241,0.4);
+    }
     .domain-card-top { display: flex; align-items: center; gap: 10px; }
     .domain-code-badge {
       font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
@@ -221,43 +233,9 @@
     .domain-card.selected .domain-q-count { color: var(--accent-dark); }
 
     .specific-domains-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin: 16px 0 12px;
-      font-size: 11px; font-weight: 600; letter-spacing: .07em;
-      text-transform: uppercase; color: var(--text3);
+      display: flex; align-items: center; gap: 8px;
+      margin: 0 0 12px;
     }
-
-    /* ── MIXED TAB ── */
-    .mixed-tab {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      width: 100%; margin-top: 0; margin-bottom: 0;
-      background: rgba(255,255,255,0.025);
-      border: 1px dashed rgba(99,102,241,0.25);
-      border-radius: 12px;
-      padding: 11px 20px;
-      cursor: pointer; user-select: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .mixed-tab:hover { background: rgba(255,255,255,0.04); border-color: rgba(99,102,241,0.45); }
-    .mixed-tab.selected {
-      border-style: solid;
-      border-color: var(--accent);
-      background: rgba(99,102,241,0.07);
-    }
-    .mixed-tab-icon { font-size: 14px; line-height: 1; }
-    .mixed-tab-label { font-size: 13px; font-weight: 600; color: var(--text2); }
-    .mixed-tab.selected .mixed-tab-label { color: var(--accent-light); }
-    .mixed-tab-desc { font-size: 11px; color: var(--text3); }
-    .mixed-tab.selected .mixed-tab-desc { color: var(--accent-dark); }
-    .mixed-tab-sep { width: 1px; height: 16px; background: var(--border); }
-    .mixed-tab-check {
-      width: 16px; height: 16px; flex-shrink: 0; margin-left: auto;
-      border: 2px solid var(--border); border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9px; color: transparent;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .mixed-tab.selected .mixed-tab-check { border-color: var(--accent); background: var(--accent); color: #fff; }
 
     /* ── ENCOUNTER COUNT ── */
     .count-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -282,29 +260,6 @@
     }
     .count-custom input:focus { border-color: var(--accent); }
     .count-custom label { font-size: 12px; color: var(--text3); }
-
-    /* ── SPEED CARDS ── */
-    .speed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .speed-card {
-      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
-      border-radius: 14px; padding: 16px 14px;
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      cursor: pointer; user-select: none;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    }
-    .speed-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-2px); }
-    .speed-card.selected { border-color: var(--accent); background: rgba(99,102,241,0.07); }
-    .speed-card.manual-card.selected { border-color: var(--text3); background: rgba(255,255,255,0.04); }
-    .speed-icon { font-size: 22px; line-height: 1; margin-bottom: 2px; }
-    .speed-name {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 1.25rem; line-height: 1; color: var(--accent-light);
-    }
-    .speed-card.manual-card .speed-name { color: var(--text3); font-size: 1.1rem; }
-    .speed-card.selected .speed-name { color: var(--accent-light); }
-    .speed-card.manual-card.selected .speed-name { color: var(--text2); }
-    .speed-label { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.04em; }
-    .speed-sublabel { font-size: 10px; color: var(--text3); opacity: 0.7; text-align: center; line-height: 1.3; }
 
     /* ── DISPLAY OPTION ROWS ── */
     .display-rows { display: flex; flex-direction: column; gap: 10px; }
@@ -453,12 +408,10 @@
     @media (max-width: 600px) {
       nav { padding: 0 16px; }
       .domains-grid { grid-template-columns: repeat(2, 1fr); }
-      .speed-grid   { grid-template-columns: repeat(2, 1fr); }
       .page { padding: 36px 16px 0; }
     }
     @media (max-width: 380px) {
       .domains-grid { grid-template-columns: 1fr; }
-      .speed-grid   { grid-template-columns: repeat(2, 1fr); }
       .count-options { flex-wrap: wrap; }
     }
   </style>
@@ -560,17 +513,8 @@
         <div class="section-label">Domain</div>
       </div>
 
-      <div class="mixed-tab" id="mixed-card" onclick="toggleMixed()">
-        <span class="mixed-tab-icon">🔀</span>
-        <span class="mixed-tab-label">Mixed Domains</span>
-        <div class="mixed-tab-sep"></div>
-        <span class="mixed-tab-desc">Draw from all 9 domains each session</span>
-        <div class="mixed-tab-check">✓</div>
-      </div>
-
       <div class="specific-domains-header">
-        <span>Or choose specific domains</span>
-        <button class="select-all-btn" id="domain-all-btn" onclick="toggleAllDomains()">Select all</button>
+        <button class="domain-toggle-btn" id="domain-all-btn" onclick="toggleAllDomains()">Select All</button>
       </div>
 
       <div class="domains-grid" id="domains-grid">
@@ -681,44 +625,6 @@
       <p class="warn" id="pool-warn" style="display:none"></p>
     </div>
 
-    <!-- ── 4. PRESENTATION SPEED ── -->
-    <div class="settings-section">
-      <div class="section-header">
-        <div class="section-label">Presentation Speed</div>
-      </div>
-      <div class="speed-grid">
-
-        <div class="speed-card" data-speed="slow" onclick="selectSpeed(this)">
-          <div class="speed-icon">🐢</div>
-          <div class="speed-name">Slow</div>
-          <div class="speed-label">Deliberate</div>
-          <div class="speed-sublabel">50ms/char · 3s hold between phases</div>
-        </div>
-
-        <div class="speed-card" data-speed="normal" onclick="selectSpeed(this)">
-          <div class="speed-icon">⚕</div>
-          <div class="speed-name">Normal</div>
-          <div class="speed-label">Recommended</div>
-          <div class="speed-sublabel">30ms/char · 1.5s hold · natural pacing</div>
-        </div>
-
-        <div class="speed-card" data-speed="fast" onclick="selectSpeed(this)">
-          <div class="speed-icon">⚡</div>
-          <div class="speed-name">Fast</div>
-          <div class="speed-label">Rapid</div>
-          <div class="speed-sublabel">12ms/char · 0.5s hold · stress your pattern recall</div>
-        </div>
-
-        <div class="speed-card manual-card selected" data-speed="manual" onclick="selectSpeed(this)">
-          <div class="speed-icon">👆</div>
-          <div class="speed-name">Manual</div>
-          <div class="speed-label">Click to advance</div>
-          <div class="speed-sublabel">You control the pace — click Next after each phase</div>
-        </div>
-
-      </div>
-    </div>
-
     <!-- ── 5. DISPLAY OPTIONS ── -->
     <div class="settings-section">
       <div class="section-header">
@@ -790,11 +696,6 @@
     <!-- ── SUMMARY + START ── -->
     <div class="summary-bar">
       <div class="summary-item">
-        <span class="s-label">Levels</span>
-        <span class="s-val" id="sum-levels">None</span>
-      </div>
-      <div class="summary-sep"></div>
-      <div class="summary-item">
         <span class="s-label">Domains</span>
         <span class="s-val" id="sum-domains">None</span>
       </div>
@@ -802,21 +703,6 @@
       <div class="summary-item">
         <span class="s-label">Encounters</span>
         <span class="s-val" id="sum-count">10</span>
-      </div>
-      <div class="summary-sep"></div>
-      <div class="summary-item">
-        <span class="s-label">Speed</span>
-        <span class="s-val" id="sum-speed">Manual</span>
-      </div>
-      <div class="summary-sep"></div>
-      <div class="summary-item">
-        <span class="s-label">Order</span>
-        <span class="s-val" id="sum-order">Shuffled</span>
-      </div>
-      <div class="summary-sep"></div>
-      <div class="summary-item">
-        <span class="s-label">Options</span>
-        <span class="s-val" id="sum-options">Tags + Chart</span>
       </div>
     </div>
 
@@ -830,10 +716,8 @@
     const state = {
       levels:  new Set(),
       domains: new Set(),
-      mixed:   false,
       count:   10,
       order:   'shuffled',
-      speed:   'manual',
       showTags:  true,
       showChart: true,
     };
@@ -846,26 +730,8 @@
       updateSummary();
     }
 
-    // ── Mixed Domains ──
-    function toggleMixed() {
-      state.mixed = !state.mixed;
-      document.getElementById('mixed-card').classList.toggle('selected', state.mixed);
-      if (state.mixed) {
-        document.querySelectorAll('.domain-card').forEach(c => {
-          c.classList.remove('selected');
-          state.domains.delete(c.dataset.domain);
-        });
-        document.getElementById('domain-all-btn').textContent = 'Select all';
-      }
-      updateSummary();
-    }
-
     // ── Individual Domain ──
     function toggleDomain(card) {
-      if (state.mixed) {
-        state.mixed = false;
-        document.getElementById('mixed-card').classList.remove('selected');
-      }
       const d = card.dataset.domain;
       state.domains.has(d) ? state.domains.delete(d) : state.domains.add(d);
       card.classList.toggle('selected');
@@ -874,10 +740,6 @@
     }
 
     function toggleAllDomains() {
-      if (state.mixed) {
-        state.mixed = false;
-        document.getElementById('mixed-card').classList.remove('selected');
-      }
       const cards = document.querySelectorAll('.domain-card');
       const allSelected = [...cards].every(c => c.classList.contains('selected'));
       cards.forEach(card => {
@@ -892,7 +754,7 @@
     function updateDomainAllBtn() {
       const cards = document.querySelectorAll('.domain-card');
       const allSelected = [...cards].every(c => c.classList.contains('selected'));
-      document.getElementById('domain-all-btn').textContent = allSelected ? 'Deselect all' : 'Select all';
+      document.getElementById('domain-all-btn').textContent = allSelected ? 'Deselect All' : 'Select All';
     }
 
     // ── Count ──
@@ -911,12 +773,6 @@
     }
 
     // ── Speed ──
-    function selectSpeed(card) {
-      document.querySelectorAll('.speed-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      state.speed = card.dataset.speed;
-      updateSummary();
-    }
 
     // ── Display Options ──
     function toggleDisplay(which) {
@@ -943,7 +799,6 @@
     }
 
     // ── Summary ──
-    const speedLabels = { slow: 'Slow', normal: 'Normal', fast: 'Fast', manual: 'Manual' };
     const orderLabels = { shuffled: 'Shuffled', sequential: 'Sequential', weakest: 'Weakest First' };
 
     // Per-domain, per-level encounter counts (verified 2026-03-05)
@@ -961,7 +816,7 @@
     const ALL_DOMAINS_LIST = Object.keys(DOMAIN_LEVEL_COUNTS);
 
     function estimatePoolSize() {
-      const domains = state.mixed ? ALL_DOMAINS_LIST : [...state.domains];
+      const domains = [...state.domains];
       let total = 0;
       domains.forEach(d => {
         const lvls = DOMAIN_LEVEL_COUNTS[d];
@@ -972,25 +827,18 @@
     }
 
     function updateSummary() {
-      document.getElementById('sum-levels').textContent =
-        state.levels.size ? [...state.levels].sort().map(l => 'L' + l).join(', ') : 'None';
-
       document.getElementById('sum-domains').textContent =
-        state.mixed ? 'Mixed' :
         state.domains.size ? state.domains.size + (state.domains.size === 1 ? ' domain' : ' domains') : 'None';
 
       document.getElementById('sum-count').textContent = state.count;
-      document.getElementById('sum-speed').textContent  = speedLabels[state.speed] || 'Normal';
-      document.getElementById('sum-order').textContent  = orderLabels[state.order];
 
       const opts = [];
       if (state.showTags)  opts.push('Tags');
       if (state.showChart) opts.push('Chart');
-      document.getElementById('sum-options').textContent = opts.length ? opts.join(' + ') : 'None';
 
       // Pool size warning
       const poolWarn = document.getElementById('pool-warn');
-      if (poolWarn && state.levels.size && (state.mixed || state.domains.size)) {
+      if (poolWarn && state.levels.size && state.domains.size) {
         const avail = estimatePoolSize();
         if (avail > 0 && avail < state.count) {
           poolWarn.textContent = `Only ~${avail} encounters match your selection (${state.count} requested)`;
@@ -1009,17 +857,16 @@
       if (state.levels.size === 0) {
         document.getElementById('level-warn').style.display = 'block'; valid = false;
       }
-      if (!state.mixed && state.domains.size === 0) {
+      if (state.domains.size === 0) {
         document.getElementById('domain-warn').style.display = 'block'; valid = false;
       }
       if (!valid) return;
 
       const params = new URLSearchParams({
         levels:  [...state.levels].sort().join(','),
-        domains: state.mixed ? 'mixed' : [...state.domains].join(','),
+        domains: [...state.domains].join(','),
         count:   state.count,
         order:   state.order,
-        speed:   state.speed,
         tags:    state.showTags  ? '1' : '0',
         chart:   state.showChart ? '1' : '0',
       });
@@ -1068,10 +915,9 @@
         const sp = new URLSearchParams(lastParams);
         const domains = sp.get('domains') || 'Mixed';
         const count   = sp.get('count')   || '10';
-        const speed   = sp.get('speed')   || 'normal';
         const levels  = sp.get('levels')  || '1,2,3,4';
         document.getElementById('resume-desc').textContent =
-          `${domains} · L${levels.replace(/,/g,'/')} · ${count} encounters · ${speed} speed`;
+          `${domains} · L${levels.replace(/,/g,'/')} · ${count} encounters`;
         document.getElementById('resume-btn').href =
           'clinical-presentation-exercise.html' + lastParams;
         document.getElementById('resume-banner').style.display = 'flex';

@@ -334,8 +334,6 @@
       scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent;
     }
 
-    /* Phase controls hidden in question mode */
-    .phase-controls.question-mode { opacity: 0; pointer-events: none; transition: opacity .2s; }
 
 
     .chart-section { margin-bottom: 16px; }
@@ -362,10 +360,10 @@
       color: rgba(99,102,241,.7);
     }
     .chart-key {
-      color: var(--text3); flex-shrink: 0;
-      min-width: 80px; font-weight: 500;
+      width: 90px; flex-shrink: 0;
+      color: var(--text3); font-weight: 500;
     }
-    .chart-val { color: var(--text2); min-width: 0; word-break: break-word; overflow-wrap: break-word; }
+    .chart-val { flex: 1; min-width: 0; color: var(--text2); overflow-wrap: break-word; }
     .chart-row-intake .chart-val { color: var(--text3); font-style: italic; }
 
     /* Phase controls — full-width bottom row, always visible */
@@ -1196,19 +1194,9 @@
 <div class="inline-question-scroll">
       <div class="question-wrap" id="question-wrap">
 
-        <div class="case-strip" id="case-strip">
-          <span class="case-domain-badge" id="case-domain-badge"></span>
-          <span class="case-patient-label" id="case-patient-label"></span>
-          <span class="case-strip-sep"></span>
-          <span class="case-setting-label" id="case-setting-label"></span>
-          <span class="case-strip-sep case-phase-sep" id="case-phase-sep"></span>
-          <span class="case-phase-progress" id="case-phase-progress"></span>
-        </div>
-
         <div class="q-header">
+          <span class="case-domain-badge" id="case-domain-badge"></span>
           <span class="q-type-badge" id="q-type-badge"></span>
-          <span class="q-multi-indicator" id="q-multi"></span>
-          <span class="q-encounter-counter" id="q-counter"></span>
         </div>
 
         <div class="q-prompt" id="q-prompt"></div>
@@ -1312,11 +1300,16 @@
 
   const LEVEL_LABELS = { 1:'Foundational', 2:'Intermediate', 3:'Advanced', 4:'Expert' };
 
-  const SPEED_CONFIG = {
-    slow:   { charMs: 50, holdMs: 3000 },
-    normal: { charMs: 30, holdMs: 1500 },
-    fast:   { charMs: 12, holdMs: 500  },
-    manual: { charMs: 30, holdMs: 0    },
+  const DOMAIN_NAMES = {
+    PMET: 'Psychometrics & Research Methods',
+    LDEV: 'Lifespan & Developmental Stages',
+    CPAT: 'Clinical Psychopathology (DSM-5-TR)',
+    PTHE: 'Psychotherapy Models & Interventions',
+    SOCU: 'Social & Cultural Psychology',
+    WDEV: 'Workforce Development & Leadership',
+    BPSY: 'Biopsychology',
+    CASS: 'Clinical Assessment & Interpretation',
+    PETH: 'Psychopharmacology & Ethics',
   };
 
   const TYPE_BADGE = {
@@ -1341,18 +1334,6 @@
     assessment_tool:        'Match the tool to the clinical question — ',
   };
 
-  const DOMAIN_NAMES = {
-    PMET: 'Measurement',
-    LDEV: 'Lifespan Dev',
-    CPAT: 'Psychopathology',
-    PTHE: 'Treatment',
-    SOCU: 'Social/Cultural',
-    WDEV: 'Organizations',
-    BPSY: 'Biological',
-    CASS: 'Assessment',
-    PETH: 'Ethics',
-  };
-
   /* ════════════════════════════════════════════════════════════════
      CONFIG — parsed from URLSearchParams
   ════════════════════════════════════════════════════════════════ */
@@ -1365,7 +1346,6 @@
     levels:    (sp.get('levels') || '1,2,3,4').split(',').map(Number),
     count:     parseInt(sp.get('count'))  || 10,
     order:     sp.get('order')  || 'shuffled',
-    speed:     sp.get('speed')  || 'manual',
     showTags:  sp.get('tags')   !== '0',
     showChart: sp.get('chart')  !== '0',
   };
@@ -1383,6 +1363,7 @@
     answered:       false,
     phaseRunning:   false,
     typewriterInt:  null,
+    typewriterPending: null,
     autoAdvanceInt: null,
     avatarState:    'idle',
     domainScores:    {},  // { CODE: { correct, total } }
@@ -1887,11 +1868,10 @@
 
     const startTypewriter = () => {
       dots.classList.add('hidden');
-      const spd = SPEED_CONFIG[CFG.speed] || SPEED_CONFIG.normal;
-      runTypewriter(phase.dialogue || '', spd.charMs, () => {
-        // Reveal chart items and behavioral tags with stagger
-        revealChartItems(phase.chart_reveals || []);
-        revealBehavioralTags(phase.behavioral_tags || []);
+      runTypewriter(phase.dialogue || '', 30, (instant) => {
+        // Reveal chart items and behavioral tags (instant when user skipped typewriter)
+        revealChartItems(phase.chart_reveals || [], instant);
+        revealBehavioralTags(phase.behavioral_tags || [], false, instant);
 
         // Wait for all staggered reveals to finish before enabling advance
         const chartMs = (phase.chart_reveals  || []).length * 90;
@@ -1952,6 +1932,7 @@
     let i = 0;
 
     startJaw();
+    state.typewriterPending = { text, el, onComplete, bubble: document.getElementById('speech-bubble') };
 
     // Click anywhere on the speech bubble to skip to full text instantly
     const bubble = document.getElementById('speech-bubble');
@@ -1959,6 +1940,7 @@
       if (state.typewriterInt === null) return; // already done
       clearInterval(state.typewriterInt);
       state.typewriterInt = null;
+      state.typewriterPending = null;
       el.textContent = text;
       stopJaw();
       dismissHint();
@@ -1972,6 +1954,7 @@
       if (i >= text.length) {
         clearInterval(state.typewriterInt);
         state.typewriterInt = null;
+        state.typewriterPending = null;
         stopJaw();
         dismissHint();
         bubble.removeEventListener('click', skipHandler);
@@ -1980,10 +1963,10 @@
     }, charMs);
   }
 
-  function revealChartItems(reveals) {
+  function revealChartItems(reveals, instant) {
     if (!CFG.showChart || !reveals.length) return;
     reveals.forEach((item, idx) => {
-      setTimeout(() => {
+      const appendItem = () => {
         const secId = 'chart-sec-' + item.category.replace(/[^a-zA-Z0-9]/g, '-');
         const sec = document.getElementById(secId);
         if (!sec) return;
@@ -1995,7 +1978,12 @@
         // Scroll chart body to show new item
         const chartBody = document.getElementById('chart-body');
         chartBody.scrollTop = chartBody.scrollHeight;
-      }, idx * 90);
+      };
+      if (instant) {
+        appendItem();
+      } else {
+        setTimeout(appendItem, idx * 90);
+      }
     });
   }
 
@@ -2036,7 +2024,7 @@
     _tagHeaderAdded = true;
   }
 
-  function revealBehavioralTags(tags, isAppearance) {
+  function revealBehavioralTags(tags, isAppearance, instant) {
     if (!CFG.showTags || !tags.length) return;
     const overlay = document.getElementById('tag-overlay');
 
@@ -2050,7 +2038,7 @@
     }
 
     tags.forEach((tag, idx) => {
-      const tid = setTimeout(() => {
+      const appendTag = () => {
         const col = _tagCols[side];
 
         // If this column is full, fade out the oldest tag in it
@@ -2080,8 +2068,13 @@
         overlay.appendChild(el);
         col.els.push(el);
         col.count++;
-      }, idx * 160);
-      _tagTimeouts.push(tid);
+      };
+      if (instant) {
+        appendTag();
+      } else {
+        const tid = setTimeout(appendTag, idx * 160);
+        _tagTimeouts.push(tid);
+      }
     });
   }
 
@@ -2104,10 +2097,19 @@
   }
 
   function advancePhase() {
-    // Cancel any in-progress typewriter/stagger — clicking Next always works immediately
-    clearInterval(state.typewriterInt);
-    state.typewriterInt = null;
-    cancelTagStagger();
+    // If typewriter is mid-run, complete dialogue and reveal tags/chart instantly
+    if (state.typewriterPending) {
+      const { text, el, onComplete, bubble } = state.typewriterPending;
+      clearInterval(state.typewriterInt);
+      state.typewriterInt = null;
+      state.typewriterPending = null;
+      el.textContent = text;
+      if (onComplete) onComplete(true); // instant=true
+    } else {
+      clearInterval(state.typewriterInt);
+      state.typewriterInt = null;
+      cancelTagStagger();
+    }
     state.phaseRunning = false;
     stopAutoAdvance();
     document.getElementById('btn-advance').classList.add('hidden');
@@ -2117,7 +2119,6 @@
 
   function showInlineQuestion() {
     document.getElementById('inline-question').classList.add('active');
-    document.getElementById('phase-controls').classList.add('question-mode');
     document.getElementById('clinician-prompt-wrap').style.display = 'none';
     const navProg = document.getElementById('nav-progress');
     navProg.textContent = `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
@@ -2126,7 +2127,6 @@
 
   function hideInlineQuestion() {
     document.getElementById('inline-question').classList.remove('active');
-    document.getElementById('phase-controls').classList.remove('question-mode');
     document.getElementById('feedback-panel').classList.remove('visible');
   }
 
@@ -2144,22 +2144,7 @@
     const q   = enc.questions[state.qIdx];
 
     // Populate case strip before screen transition
-    document.getElementById('case-domain-badge').textContent  = enc.domain_code;
-    document.getElementById('case-patient-label').textContent = enc.encounter.patient.label;
-    document.getElementById('case-setting-label').textContent = enc.encounter.setting;
-
-    const totalPhases = enc.encounter.phases.length;
-    const phasesShown = state.phaseIdx + 1;
-    const remaining   = totalPhases - phasesShown;
-    const phaseSep    = document.getElementById('case-phase-sep');
-    const phaseProgress = document.getElementById('case-phase-progress');
-    if (phaseSep && phaseProgress) {
-      phaseSep.style.display    = remaining > 0 ? '' : 'none';
-      phaseProgress.textContent = remaining > 0
-        ? `${remaining} phase${remaining > 1 ? 's' : ''} remaining`
-        : 'Final question';
-    }
-
+    document.getElementById('case-domain-badge').textContent = DOMAIN_NAMES[enc.domain_code] || enc.domain_code;
     showInlineQuestion();
     renderQuestion(q);
   }
@@ -2227,24 +2212,8 @@
     badge.style.borderColor = badgeConf.color + '44';
 
     // Encounter counter
-    document.getElementById('q-counter').textContent =
-      `Encounter ${state.encIdx + 1} / ${state.pool.length}`;
-
-    // Multi-question indicator — show which question of the encounter this is
-    const multiEl = document.getElementById('q-multi');
     const totalQs = enc.questions.length;
     const qNum    = state.qIdx + 1;
-    if (totalQs > 1) {
-      // Show which scene this question follows
-      const phaseStep = state.steps.slice(0, state.stepIdx).reverse().find(s => s.type === 'phase');
-      const sceneLabel = phaseStep ? enc.encounter.phases[phaseStep.phaseIdx].phase_label : '';
-      multiEl.textContent = sceneLabel
-        ? `After "${sceneLabel}" — Q ${qNum} of ${totalQs}`
-        : `Q ${qNum} of ${totalQs}`;
-      multiEl.classList.add('visible');
-    } else {
-      multiEl.classList.remove('visible');
-    }
 
     // Prompt
     document.getElementById('q-prompt').textContent = q.prompt;
@@ -2484,7 +2453,6 @@
     const advBtn = document.getElementById('btn-advance');
     advBtn.textContent = '← Back to Question';
     advBtn.classList.remove('hidden');
-    document.getElementById('phase-controls').classList.remove('question-mode');
     advBtn.onclick = () => {
       advBtn.textContent = 'Next →';
       advBtn.onclick = advancePhase;
