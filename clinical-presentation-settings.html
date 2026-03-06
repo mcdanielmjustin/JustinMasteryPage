@@ -387,23 +387,6 @@
     .hist-code  { font-size: 9px; font-weight: 700; letter-spacing: .1em; color: var(--text3); }
     .hist-pct   { font-family: 'Instrument Serif', serif; font-size: 1.1rem; }
 
-    /* ── RESUME BANNER ── */
-    .resume-banner {
-      display: flex; align-items: center; gap: 14px;
-      background: rgba(99,102,241,.06); border: 1px solid rgba(99,102,241,.2);
-      border-radius: 12px; padding: 14px 18px; margin-bottom: 28px;
-    }
-    .resume-icon { font-size: 18px; color: var(--accent-light); flex-shrink: 0; }
-    .resume-text { flex: 1; min-width: 0; }
-    .resume-title { font-size: 13px; font-weight: 600; color: var(--text); }
-    .resume-desc  { font-size: 11px; color: var(--text3); margin-top: 2px; }
-    .resume-btn {
-      flex-shrink: 0; padding: 8px 14px;
-      background: var(--accent); color: #fff; border-radius: 8px;
-      font-size: 12px; font-weight: 600; text-decoration: none;
-      transition: background .15s;
-    }
-    .resume-btn:hover { background: var(--accent-hover, #5558e0); }
 
     @media (max-width: 600px) {
       nav { padding: 0 16px; }
@@ -444,15 +427,6 @@
     <div id="history-banner" class="history-banner" style="display:none">
       <span class="history-banner-label">Past scores</span>
       <div class="hist-items" id="hist-items"></div>
-    </div>
-
-    <div id="resume-banner" class="resume-banner" style="display:none">
-      <div class="resume-icon">↩</div>
-      <div class="resume-text">
-        <div class="resume-title">Resume last session</div>
-        <div class="resume-desc" id="resume-desc"></div>
-      </div>
-      <a class="resume-btn" id="resume-btn" href="#">Resume →</a>
     </div>
 
     <!-- ── 1. DIFFICULTY LEVEL ── -->
@@ -907,26 +881,8 @@
       } catch (e) { /* localStorage unavailable */ }
     }
 
-    // ── Resume banner ──
-    function renderResumeBanner() {
-      const lastParams = localStorage.getItem('encounter_last_params');
-      if (!lastParams) return;
-      try {
-        const sp = new URLSearchParams(lastParams);
-        const domains = sp.get('domains') || 'Mixed';
-        const count   = sp.get('count')   || '10';
-        const levels  = sp.get('levels')  || '1,2,3,4';
-        document.getElementById('resume-desc').textContent =
-          `${domains} · L${levels.replace(/,/g,'/')} · ${count} encounters`;
-        document.getElementById('resume-btn').href =
-          'clinical-presentation-exercise.html' + lastParams;
-        document.getElementById('resume-banner').style.display = 'flex';
-      } catch {}
-    }
-
     updateSummary();
     renderHistoryBanner();
-    renderResumeBanner();
   </script>
 
 </body>

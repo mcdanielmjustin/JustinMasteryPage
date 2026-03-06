@@ -812,6 +812,15 @@
     }
     .btn-replay:hover { background: var(--accent-glow); }
 
+    .replay-level {
+      font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+      padding: 3px 7px; border-radius: 5px; flex-shrink: 0; border: 1px solid;
+    }
+    .replay-level.lvl-1 { color: #34d399; border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.08); }
+    .replay-level.lvl-2 { color: #60a5fa; border-color: rgba(96,165,250,.3); background: rgba(96,165,250,.08); }
+    .replay-level.lvl-3 { color: #fbbf24; border-color: rgba(251,191,36,.3);  background: rgba(251,191,36,.08); }
+    .replay-level.lvl-4 { color: #f87171; border-color: rgba(248,113,113,.3); background: rgba(248,113,113,.08); }
+
     /* Results action buttons */
     .results-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -2695,7 +2704,10 @@
       if (a.correct) encMap[a.encId].correct++;
     });
     state.pool.forEach((enc, idx) => {
-      if (encMap[enc.id]) encMap[enc.id].encIdx = idx;
+      if (encMap[enc.id]) {
+        encMap[enc.id].encIdx = idx;
+        encMap[enc.id].difficulty = enc.difficulty_level;
+      }
     });
 
     const replayList = document.getElementById('replay-list');
@@ -2707,10 +2719,14 @@
       const outcomeChar  = allCorrect ? '✓' : noneCorrect ? '✗' : '~';
       const row = document.createElement('div');
       row.className = 'replay-row';
+      const lvl = info.difficulty || '';
+      const lvlLabel = {1:'Foundational',2:'Intermediate',3:'Advanced',4:'Expert'}[lvl] || '';
+      const lvlHtml = lvl ? `<span class="replay-level lvl-${lvl}">${lvlLabel}</span>` : '';
       row.innerHTML = `
         <span class="replay-outcome ${outcomeClass}">${outcomeChar}</span>
         <span class="replay-label">${escapeHtml(info.label || '—')} — ${escapeHtml(info.subdomain || '—')}</span>
         <span class="replay-frac">${info.correct}/${info.total}</span>
+        ${lvlHtml}
         <span class="replay-domain">${escapeHtml(info.domain)}</span>
         <button class="btn-replay" onclick="replayEncounter(${info.encIdx})">Review</button>`;
       replayList.appendChild(row);
