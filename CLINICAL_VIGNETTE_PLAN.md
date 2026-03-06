@@ -406,13 +406,32 @@ PETH is named "Psychopharmacology & Ethics" but contains zero pharmacology conte
 | 11b | Keyboard navigation (A/B/C/D, Enter) | `clinical-exercise.html` | ✅ Done |
 | 11c | No-questions dead-end fix (back link) | `clinical-exercise.html` | ✅ Done |
 | 11d | Dynamic counts from vignette_stats.json | `clinical-settings.html` | ✅ Done |
-| 12 | Expand CASS content | `data/CASS_vignettes.json` | 🔄 In progress (~655 target) |
-| 13 | Resolve PMET anchor ID collisions | Data pipeline | ⏸ Deferred |
+| 12 | Expand CASS content | `data/CASS_vignettes.json` | ✅ Done (146 anchors · 750 vignettes) |
+| 13 | Resolve PMET anchor ID collisions | `data/PMET_vignettes.json` | ✅ Done (124 anchors · 620 vignettes, 0 duplicate IDs) |
+
+## Final vignette_stats.json (2026-03-05)
+| Domain | Anchors | Vignettes |
+|--------|---------|-----------|
+| PMET   | 124     | 620       |
+| LDEV   | 117     | 585       |
+| CPAT   | 132     | 660       |
+| PTHE   | 98      | 550       |
+| SOCU   | 96      | 505       |
+| WDEV   | 113     | 565       |
+| BPSY   | 131     | 695       |
+| CASS   | 146     | 750       |
+| PETH   | 112     | 560       |
+| **Total** | **1,069** | **5,490** |
 
 ## CASS Generation Notes (2026-03-05)
 - Generator: `mastery-page/generate_vignettes.py`
 - Source: `PassEPPP-website/content/questions/domain-8-{ae,ic,lf,ns,pa,ts,vi}.json`
 - Each file has 10 usable (single_choice/multiple_choice) + 16 non-standard (skipped)
-- 70 new anchors × 5 levels = 350 new vignettes → CASS total ≈ 675
+- 85 new anchors × 5 levels = 425 new vignettes → CASS total: 146 anchors, 750 vignettes
 - Manifest `data/vignette_stats.json` auto-updates after each anchor
-- To resume if interrupted: `python generate_vignettes.py --domain CASS --resume`
+
+## PMET ID Fix Notes (2026-03-05)
+- Script: `mastery-page/fix_pmet_ids.py`
+- Problem: 91 apparent source IDs but 124 true anchors (collisions via '1'/'01'/'001' normalization)
+- Fix: grouped by (source_question_id, source_summary) → assigned sequential zero-padded 3-digit IDs
+- Result: 124 unique anchors, 620 vignettes preserved, 0 duplicate vignette IDs
