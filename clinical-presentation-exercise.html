@@ -248,7 +248,7 @@
     /* Encounter layout skeleton — populated by Chunk 4 */
     .encounter-layout {
       display: grid;
-      grid-template-columns: 1fr 320px 0px;
+      grid-template-columns: 320px 1fr 0px;
       transition: grid-template-columns .42s ease;
       grid-template-rows: 1fr auto;
       gap: 0;
@@ -266,15 +266,17 @@
       gap: 12px;
       padding: 24px 24px 20px 308px; /* left = 24 + 260(avatar) + 24(gap) */
       position: relative;
-      border-right: 1px solid var(--border);
+      grid-column: 2;
+      border-left: none;
       overflow: hidden;
     }
 
     /* Chart panel — right column */
     .chart-panel {
       display: flex; flex-direction: column;
+      grid-column: 1;
       background: var(--surface);
-      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
       overflow: hidden;
     }
     .chart-header {
@@ -301,7 +303,7 @@
       transition: color .2s, background .2s; flex-shrink: 0;
     }
     .chart-collapse-btn:hover { color: var(--text2); background: rgba(255,255,255,.06); }
-    .encounter-layout.chart-collapsed { grid-template-columns: 1fr 40px 0px; }
+    .encounter-layout.chart-collapsed { grid-template-columns: 40px 1fr 0px; }
     /* inline-question panel uses position:fixed — encounter-layout never reflows */
     .chart-collapsed .chart-body,
     .chart-collapsed .chart-title,
