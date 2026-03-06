@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Patient Encounter — Mastery Page</title>
+  <title>Patient Encounter 2.0 — Mastery Page</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -887,7 +887,29 @@
       .type-badge-sm { min-width: 60px; font-size: 9px; }
       .db-domain-wrap { width: 72px; }
     }
+
+  /* ── Avatar 3D container (v2 — Three.js replaces SVG) ── */
+  .avatar-wrap { position: relative; width: 100%; }
+  #avatar-wrap canvas { width: 100% !important; height: auto !important; border-radius: 16px; display: block; }
+  .avatar-loading-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(10,11,16,0.65); border-radius: 16px;
+    color: var(--text2); font-size: 12px; font-weight: 500;
+    transition: opacity 0.4s; pointer-events: none;
+  }
+  .avatar-loading-overlay.hidden { opacity: 0; }
+
   </style>
+
+  <!-- Load Three.js avatar engine as ES module (async, non-blocking) -->
+  <script type="module">
+    import('./patient-avatar-v2.bundle.js').catch(function(e) {
+      console.warn('[encounter-v2] 3D avatar bundle not found:', e.message);
+      window.__PatientAvatar = null;
+    });
+  </script>
+
 </head>
 <body>
 
@@ -896,12 +918,13 @@
 
   <!-- ── Nav ── -->
   <nav>
-    <a href="clinical-presentation-settings.html" class="back-btn" id="nav-back">← Settings</a>
+    <a href="clinical-presentation-settings-v2.html" class="back-btn" id="nav-back">← Settings</a>
     <div class="nav-sep"></div>
     <a href="index.html" class="nav-logo">
       <div class="logo-icon">M</div>
       <span class="logo-title">MasteryPage</span>
     </a>
+    <span style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.05em;">2.0</span>
     <div class="nav-right">
       <span class="nav-progress" id="nav-progress"></span>
     </div>
@@ -953,9 +976,10 @@
           <span class="skip-hint" id="skip-hint">click or Space to skip</span>
         </div>
 
-        <!-- Avatar container — SVG injected dynamically by loadAvatar() -->
+        <!-- Avatar container — Three.js canvas injected by PatientAvatar.mount() -->
         <div class="avatar-wrap" id="avatar-wrap">
-          <!-- avatar SVG injected here by loadAvatar() based on patient demographics -->
+          <div class="avatar-loading-overlay" id="avatar-loading-overlay">Loading avatar…</div>
+          <!-- Three.js WebGL canvas injected here on mount -->
         </div>
 
         <!-- Patient info bar (below avatar) -->
@@ -1433,6 +1457,24 @@
     state.phaseIdx = 0;
     state.qIdx     = 0;
     showScreen('encounter');
+
+    // Mount Three.js avatar engine — poll until module bundle loads
+    (function _mountAvatarWhenReady() {
+      var _poll = setInterval(function() {
+        var pa = window.__PatientAvatar;
+        if (!pa) return;
+        clearInterval(_poll);
+        var wrap = document.getElementById('avatar-wrap');
+        if (!wrap) return;
+        pa.mount(wrap, {
+          width:    wrap.offsetWidth  || 320,
+          height:   Math.round((wrap.offsetWidth || 320) * 1.33),
+          controls: false,
+        });
+      }, 80);
+      setTimeout(function() { clearInterval(_poll); }, 5000);
+    })();
+
     startEncounter(state.pool[0]);
   }
 
@@ -1716,15 +1758,16 @@
   function runTypewriter(text, charMs, onComplete) {
     clearInterval(state.typewriterInt);
     const el     = document.getElementById('bubble-text');
-    const jaw    = document.getElementById('avatar-jaw');
     const hint   = document.getElementById('skip-hint');
     el.textContent = '';
 
     const startJaw = () => {
-      if (jaw) jaw.style.animation = 'jawSpeak .32s ease-in-out infinite';
+      const pa = window.__PatientAvatar;
+      if (pa) pa.setSpeaking(true);
     };
     const stopJaw = () => {
-      if (jaw) jaw.style.animation = '';
+      const pa = window.__PatientAvatar;
+      if (pa) pa.setSpeaking(false);
     };
 
     // Show skip hint during the first few typewriters, then hide permanently
@@ -2053,38 +2096,22 @@
   }
 
   function loadAvatar(avatarType) {
-    const wrap = document.getElementById('avatar-wrap');
-    if (!wrap || !window.__AVATAR_SVGS) return;
-    const svgStr = window.__AVATAR_SVGS[avatarType] || window.__AVATAR_SVGS['adult_male'];
-    wrap.innerHTML = svgStr;
-    const root = wrap.querySelector('#avatar-root');
-    if (root) root.setAttribute('class', 'state-idle');
+    const pa = window.__PatientAvatar;
+    if (!pa) return;
+    const overlay = document.getElementById('avatar-loading-overlay');
+    if (overlay) overlay.classList.remove('hidden');
+    pa.loadDemographic(avatarType).then(function() {
+      if (overlay) overlay.classList.add('hidden');
+    }).catch(function(e) {
+      console.warn('[encounter-v2] Avatar load failed:', e);
+      if (overlay) overlay.classList.add('hidden');
+    });
   }
 
   function setAvatarState(emotion) {
-    const root = document.getElementById('avatar-root');
-    if (!root) return;
-    // SVG elements use SVGAnimatedString for className — use getAttribute/setAttribute
-    const current = root.getAttribute('class') || '';
-    root.setAttribute('class', current.replace(/\bstate-\S+/g, '').trim());
-    root.classList.add('state-' + emotion);
+    const pa = window.__PatientAvatar;
+    if (pa) pa.setEmotion(emotion);
     state.avatarState = emotion;
-
-    // Morph mouth path for expressiveness
-    const mouth = document.getElementById('avatar-mouth');
-    if (mouth && MOUTH_PATHS[emotion]) {
-      mouth.setAttribute('d', MOUTH_PATHS[emotion]);
-    }
-
-    // Restart tearFall animation on group when switching to tearful
-    if (emotion === 'tearful') {
-      const tearGroup = document.getElementById('avatar-tear');
-      if (tearGroup) {
-        tearGroup.style.animation = 'none';
-        tearGroup.offsetHeight; // force reflow
-        tearGroup.style.animation = '';
-      }
-    }
   }
 
   /* ════════════════════════════════════════════════════════════════
@@ -2746,6 +2773,6 @@
       cursor:pointer; display:flex; align-items:center; justify-content:center;">›</button>
   </div>
 
-<script src="avatar-svgs.js"></script>
+<!-- patient-avatar-v2.bundle.js loaded as ES module in <head> -->
 </body>
 </html>
