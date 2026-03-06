@@ -250,6 +250,7 @@
     .encounter-layout {
       display: grid;
       grid-template-columns: 1fr 320px;
+      transition: grid-template-columns .32s ease;
       grid-template-rows: 1fr auto;
       gap: 0;
       height: calc(100vh - 58px);
@@ -290,6 +291,60 @@
       flex: 1; overflow-y: auto; padding: 14px 0 20px;
       scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent;
     }
+
+    /* Chart collapse button */
+    .chart-collapse-btn {
+      margin-left: auto; background: none; border: none;
+      color: var(--text3); cursor: pointer;
+      padding: 2px 6px; border-radius: 5px;
+      font-size: 14px; line-height: 1;
+      transition: color .2s, background .2s; flex-shrink: 0;
+    }
+    .chart-collapse-btn:hover { color: var(--text2); background: rgba(255,255,255,.06); }
+    .encounter-layout.chart-collapsed { grid-template-columns: 1fr 40px; }
+    .chart-collapsed .chart-body,
+    .chart-collapsed .chart-title,
+    .chart-collapsed .chart-header > span:first-child { display: none; }
+    .chart-collapsed .chart-header {
+      flex-direction: column; justify-content: flex-start;
+      align-items: center; padding: 14px 0; gap: 0;
+    }
+    .chart-collapsed .chart-panel { overflow: hidden; }
+    .chart-collapsed .chart-collapse-btn { margin: 0; }
+
+    /* Inline question panel */
+    .inline-question {
+      position: fixed; left: 0; bottom: 0; right: 320px;
+      max-height: min(68vh, 520px);
+      background: var(--bg2);
+      border-top: 2px solid var(--accent-border);
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -8px 32px rgba(0,0,0,.5);
+      transform: translateY(110%);
+      transition: transform .42s cubic-bezier(.25,.8,.25,1);
+      z-index: 25;
+      display: flex; flex-direction: column;
+    }
+    .inline-question.active { transform: translateY(0); }
+    .inline-question-drag {
+      width: 36px; height: 4px;
+      background: rgba(255,255,255,.15); border-radius: 2px;
+      margin: 10px auto 0; flex-shrink: 0;
+    }
+    .inline-question-scroll {
+      flex: 1; overflow-y: auto; padding: 12px 24px 28px;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent;
+    }
+    .encounter-layout.chart-collapsed .inline-question { right: 40px; }
+
+    /* Phase controls hidden in question mode */
+    .phase-controls.question-mode { opacity: 0; pointer-events: none; transition: opacity .2s; }
+
+    /* Speech bubble compact when question panel is active */
+    .patient-stage.question-mode .speech-bubble {
+      max-height: 90px; overflow: hidden; cursor: default; user-select: text;
+    }
+    .patient-stage.question-mode .skip-hint { display: none; }
     .chart-section { margin-bottom: 16px; }
     .chart-section-label {
       font-size: 9px; font-weight: 700; letter-spacing: .12em;
@@ -487,14 +542,6 @@
       overflow: visible;
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       SCREEN — QUESTION  (populated in Chunk 5)
-    ══════════════════════════════════════════════════════════════ */
-    #screen-question.active {
-      display: flex; flex-direction: column;
-      min-height: calc(100vh - 58px);
-      padding: 28px 24px 60px;
-    }
 
     .question-wrap {
       max-width: 720px; width: 100%; margin: 0 auto;
@@ -788,6 +835,8 @@
         overflow-y: auto;
         max-height: none;
       }
+      .inline-question { right: 0; max-height: 75vh; border-radius: 18px 18px 0 0; }
+      .inline-question-scroll { padding: 12px 16px 24px; }
       .chart-toggle-btn {
         font-size: 11px; font-weight: 600;
         padding: 5px 10px; border-radius: 6px;
@@ -798,7 +847,6 @@
       .avatar-wrap { width: 150px; height: 240px; }
       .speech-bubble { max-width: 100%; }
       .patient-info-bar { padding: 8px 12px; }
-      #screen-question.active { padding: 20px 16px 60px; }
       #screen-results.active  { padding: 24px 16px 60px; }
       /* Results: stack summary chips */
       .results-summary { gap: 14px; padding: 16px 18px; }
@@ -1146,6 +1194,8 @@
         <div class="chart-header">
           <span>📋</span>
           <span class="chart-title">Clinical Chart</span>
+          <button class="chart-collapse-btn" id="chart-collapse-btn"
+                  onclick="toggleChartPanel()" title="Collapse chart">&#x27E8;</button>
         </div>
         <div class="chart-body" id="chart-body"></div>
       </div>
@@ -1167,47 +1217,49 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════════
-       SCREEN: QUESTION  (shell — Chunk 5 populates this)
-  ════════════════════════════════════════════════════════════ -->
-  <div id="screen-question" class="screen">
-    <div class="question-wrap" id="question-wrap">
+  <!-- Inline question panel — slides up over patient stage during question phase -->
+  <div class="inline-question" id="inline-question">
+    <div class="inline-question-drag"></div>
+    <div class="inline-question-scroll">
+      <div class="question-wrap" id="question-wrap">
 
-      <!-- Case context reminder (populated by transitionToQuestion) -->
-      <div class="case-strip" id="case-strip">
-        <span class="case-domain-badge" id="case-domain-badge"></span>
-        <span class="case-patient-label" id="case-patient-label"></span>
-        <span class="case-strip-sep"></span>
-        <span class="case-setting-label" id="case-setting-label"></span>
-        <span class="case-strip-sep case-phase-sep" id="case-phase-sep"></span>
-        <span class="case-phase-progress" id="case-phase-progress"></span>
-      </div>
+        <div class="case-strip" id="case-strip">
+          <span class="case-domain-badge" id="case-domain-badge"></span>
+          <span class="case-patient-label" id="case-patient-label"></span>
+          <span class="case-strip-sep"></span>
+          <span class="case-setting-label" id="case-setting-label"></span>
+          <span class="case-strip-sep case-phase-sep" id="case-phase-sep"></span>
+          <span class="case-phase-progress" id="case-phase-progress"></span>
+        </div>
 
-      <div class="q-header">
-        <span class="q-type-badge" id="q-type-badge"></span>
-        <span class="q-multi-indicator" id="q-multi"></span>
-        <span class="q-encounter-counter" id="q-counter"></span>
-      </div>
+        <div class="q-header">
+          <span class="q-type-badge" id="q-type-badge"></span>
+          <span class="q-multi-indicator" id="q-multi"></span>
+          <span class="q-encounter-counter" id="q-counter"></span>
+        </div>
 
-      <div class="q-prompt" id="q-prompt"></div>
+        <div class="q-prompt" id="q-prompt"></div>
 
-      <div class="options-label">Press <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> to select &middot; <kbd>Enter</kbd> to advance</div>
+        <div class="options-label">Press <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> to select &middot; <kbd>Enter</kbd> to advance</div>
 
-      <div class="options-grid" id="options-grid"></div>
+        <div class="options-grid" id="options-grid"></div>
 
-      <div class="feedback-panel" id="feedback-panel">
-        <div class="feedback-inner">
-          <div class="feedback-header" id="feedback-header"></div>
-          <div class="feedback-explanation" id="feedback-explanation"></div>
-          <div class="feedback-distractors" id="feedback-distractors"></div>
-          <div class="feedback-actions">
-            <button class="btn-secondary" id="btn-review-enc" onclick="reviewEncounter()">Review Case</button>
-            <button class="btn-primary"   id="btn-next-q"     onclick="nextQuestion()">Next →</button>
+        <div class="feedback-panel" id="feedback-panel">
+          <div class="feedback-inner">
+            <div class="feedback-header" id="feedback-header"></div>
+            <div class="feedback-explanation" id="feedback-explanation"></div>
+            <div class="feedback-distractors" id="feedback-distractors"></div>
+            <div class="feedback-actions">
+              <button class="btn-secondary" id="btn-review-enc" onclick="reviewEncounter()">Review Case</button>
+              <button class="btn-primary"   id="btn-next-q"     onclick="nextQuestion()">Next →</button>
+            </div>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
+  </div>
+
   </div>
 
   <!-- ════════════════════════════════════════════════════════════
@@ -1365,13 +1417,11 @@
 
     // Update nav back target based on screen
     const backBtn = document.getElementById('nav-back');
-    if (name === 'encounter' || name === 'question') {
-      backBtn.href = 'clinical-presentation-settings.html';
-    }
+    backBtn.href = 'clinical-presentation-settings.html';
 
     // Show/hide nav progress counter
     const navProg = document.getElementById('nav-progress');
-    if (name === 'encounter' || name === 'question') {
+    if (name === 'encounter') {
       navProg.textContent = `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
       navProg.classList.add('visible');
     } else {
@@ -1622,6 +1672,7 @@
   ════════════════════════════════════════════════════════════════ */
 
   function startEncounter(enc) {
+    hideInlineQuestion();
     // Patient info bar
     document.getElementById('patient-label').textContent   = enc.encounter.patient.label || '—';
     document.getElementById('patient-setting').textContent = enc.encounter.setting || '—';
@@ -1708,26 +1759,16 @@
 
     if (step.type === 'phase') {
       state.phaseIdx = step.phaseIdx;
-      // If we're currently on the question screen, fade back to encounter first
-      if (document.getElementById('screen-question').classList.contains('active')) {
-        const qScreen = document.getElementById('screen-question');
-        qScreen.classList.add('fading-out');
-        setTimeout(() => {
-          qScreen.classList.remove('fading-out');
-          showScreen('encounter');
-          startPhase(enc.encounter.phases[step.phaseIdx]);
-        }, 380);
-      } else {
-        startPhase(enc.encounter.phases[step.phaseIdx]);
-      }
+      hideInlineQuestion();
+      startPhase(enc.encounter.phases[step.phaseIdx]);
     } else {
-      // Question step — transition to question screen
       state.qIdx = step.qIdx;
       transitionToQuestion();
     }
   }
 
   function nextEncounterOrResults() {
+    hideInlineQuestion();
     state.encIdx++;
     state.qIdx   = 0;
     _tagSlotIdx  = 0;
@@ -2107,6 +2148,32 @@
     advanceStep();
   }
 
+  function showInlineQuestion() {
+    document.getElementById('inline-question').classList.add('active');
+    document.getElementById('phase-controls').classList.add('question-mode');
+    document.getElementById('patient-stage').classList.add('question-mode');
+    document.getElementById('clinician-prompt-wrap').style.display = 'none';
+    const navProg = document.getElementById('nav-progress');
+    navProg.textContent = `Encounter ${state.encIdx + 1} of ${state.pool.length}`;
+    navProg.classList.add('visible');
+  }
+
+  function hideInlineQuestion() {
+    document.getElementById('inline-question').classList.remove('active');
+    document.getElementById('phase-controls').classList.remove('question-mode');
+    document.getElementById('patient-stage').classList.remove('question-mode');
+    document.getElementById('feedback-panel').classList.remove('visible');
+  }
+
+  function toggleChartPanel() {
+    const layout = document.querySelector('.encounter-layout');
+    const btn    = document.getElementById('chart-collapse-btn');
+    const collapsed = layout.classList.toggle('chart-collapsed');
+    btn.textContent = collapsed ? '⟩' : '⟨';
+    btn.title = collapsed ? 'Expand chart' : 'Collapse chart';
+    localStorage.setItem('encounter_chart_collapsed', collapsed ? '1' : '');
+  }
+
   function transitionToQuestion() {
     const enc = state.pool[state.encIdx];
     const q   = enc.questions[state.qIdx];
@@ -2128,13 +2195,8 @@
         : 'Final question';
     }
 
-    const encScreen = document.getElementById('screen-encounter');
-    encScreen.classList.add('fading-out');
-    setTimeout(() => {
-      encScreen.classList.remove('fading-out');
-      showScreen('question');
-      renderQuestion(q);
-    }, 380);
+    showInlineQuestion();
+    renderQuestion(q);
   }
 
   /* ════════════════════════════════════════════════════════════════
@@ -2186,6 +2248,10 @@
   ════════════════════════════════════════════════════════════════ */
   function renderQuestion(q) {
     const enc = state.pool[state.encIdx];
+    // Reset scroll and feedback panel for each new question
+    document.getElementById('feedback-panel').classList.remove('visible');
+    const iqScroll = document.querySelector('.inline-question-scroll');
+    if (iqScroll) iqScroll.scrollTop = 0;
 
     // Type badge
     const badgeConf = TYPE_BADGE[q.type] || { label: q.type, color: '#6366f1' };
@@ -2360,10 +2426,10 @@
   }
 
   function reviewEncounter() {
-    // Show the encounter in read-only mode (all phases complete)
+    // Show encounter in read-only mode (already on encounter screen)
     state.reviewMode = true;
     const enc = state.pool[state.encIdx];
-    showScreen('encounter');
+    hideInlineQuestion();
 
     // Rebuild chart with ALL reveals immediately (no animation)
     buildChartSections(enc);
@@ -2444,17 +2510,19 @@
     // Avatar at last-phase emotion
     setAvatarState(lastPhase.avatar_emotion || 'idle');
 
-    // Replace advance button with "Return to Question"
+    // Replace advance button with return affordance
     const advBtn = document.getElementById('btn-advance');
-    advBtn.textContent = '← Return to Question';
+    advBtn.textContent = '← Back to Question';
     advBtn.classList.remove('hidden');
+    document.getElementById('phase-controls').classList.remove('question-mode');
     advBtn.onclick = () => {
       advBtn.textContent = 'Next →';
       advBtn.onclick = advancePhase;
       state.reviewMode = false;
-      // Restore the question screen as-is (DOM preserved, state.answered intact)
+      // Restore inline question panel (DOM preserved, state.answered intact)
       // Do NOT call renderQuestion — that would reset answered and allow double-scoring
-      showScreen('question');
+      showInlineQuestion();
+      document.getElementById('speech-bubble').classList.remove('expanded');
     };
   }
 
@@ -2462,6 +2530,7 @@
      RESULTS  (Chunk 6 adds full ring animation + replay list)
   ════════════════════════════════════════════════════════════════ */
   function buildResults() {
+    hideInlineQuestion();
     const answers = state.sessionAnswers;
     const total   = answers.length;
     const correct = answers.filter(a => a.correct).length;
@@ -2607,6 +2676,8 @@
     state.stepIdx     = 0;
     state.phaseRunning = false;
     state.steps       = buildSteps(state.pool[idx]);
+    showScreen('encounter');
+    hideInlineQuestion();
     reviewEncounter();
     // reviewEncounter() sets "← Return to Question" — override for results context
     const advBtn = document.getElementById('btn-advance');
@@ -2629,9 +2700,11 @@
     const active = document.querySelector('.screen.active');
     if (!active) return;
 
-    // ── Encounter screen ──────────────────────────────────────────
-    if (active.id === 'screen-encounter' && !state.reviewMode) {
-      // Escape or Backspace — skip typewriter (same as clicking bubble)
+    const inlineActive = document.getElementById('inline-question').classList.contains('active');
+
+    // ── Encounter screen — phase mode ─────────────────────────────
+    if (active.id === 'screen-encounter' && !state.reviewMode && !inlineActive) {
+      // Escape or Backspace — skip typewriter
       if (e.key === 'Escape' || e.key === 'Backspace') {
         if (state.typewriterInt !== null) {
           e.preventDefault();
@@ -2639,7 +2712,7 @@
           return;
         }
       }
-      // Space or Enter — advance phase (only when not mid-typewriter)
+      // Space or Enter — advance phase
       if ((e.key === ' ' || e.key === 'Enter') && state.typewriterInt === null && !state.phaseRunning) {
         e.preventDefault();
         const btn = document.getElementById('btn-advance');
@@ -2648,8 +2721,8 @@
       }
     }
 
-    // ── Question screen ───────────────────────────────────────────
-    if (active.id === 'screen-question') {
+    // ── Inline question panel ─────────────────────────────────────
+    if (inlineActive) {
       // A/B/C/D — select answer (only before answering)
       if (!state.answered) {
         const key = e.key.toUpperCase();
@@ -2683,6 +2756,16 @@
     };
     const navRight = document.querySelector('.nav-right');
     if (navRight) navRight.prepend(chartToggle);
+  }
+
+  // Restore chart collapse preference
+  if (localStorage.getItem('encounter_chart_collapsed')) {
+    const layout = document.querySelector('.encounter-layout');
+    if (layout) {
+      layout.classList.add('chart-collapsed');
+      const btn = document.getElementById('chart-collapse-btn');
+      if (btn) { btn.textContent = '⟩'; btn.title = 'Expand chart'; }
+    }
   }
 
   loadEncounters().catch(err => {
