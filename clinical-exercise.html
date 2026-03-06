@@ -110,7 +110,7 @@
       transition:border-color .2s, background .2s, transform .15s;
       user-select:none;
     }
-    .option-btn:hover:not(.answered-*) { background:rgba(255,255,255,.045); border-color:rgba(212,160,84,.3); transform:translateX(2px); }
+    .option-btn:hover:not(.answered) { background:rgba(255,255,255,.045); border-color:rgba(212,160,84,.3); transform:translateX(2px); }
     .option-btn.correct  { border-color:var(--green)!important; background:rgba(52,211,153,.08)!important; }
     .option-btn.wrong    { border-color:var(--red)!important;   background:rgba(248,113,113,.07)!important; }
     .option-btn.dimmed   { opacity:.4; cursor:default; }
@@ -308,9 +308,23 @@
         <div id="domain-rows"></div>
       </div>
 
-      <div class="results-actions">
+      <div class="results-actions" id="results-actions">
         <button class="btn-primary" onclick="newSession()">New Session</button>
         <button class="btn-secondary" onclick="retrySession()">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review -->
+  <div id="screen-review" class="screen">
+    <div class="results-inner">
+      <div class="results-hero" style="padding-bottom:0;">
+        <h1 id="review-heading">Review <em>Mistakes</em></h1>
+      </div>
+      <div id="review-questions"></div>
+      <div class="results-actions">
+        <button class="btn-primary" onclick="newSession()">New Session</button>
+        <button class="btn-secondary" onclick="backToResults()">← Back to Results</button>
       </div>
     </div>
   </div>
@@ -342,8 +356,9 @@
   let timerInterval = null;
   let timerLeft  = 0;
   let timerRunning = false;
-  const domainScores = {};  // { CODE: { correct, total } }
+  const domainScores   = {};  // { CODE: { correct, total } }
   const sessionAnswers = [];
+  const wrongQuestions = [];
 
   // ── Helpers ────────────────────────────────────────────────────────────────
   function shuffle(arr) {
@@ -366,13 +381,16 @@
 
   function highlightHints(text, words) {
     if (!words || !words.length) return escapeHtml(text);
-    let result = escapeHtml(text);
-    for (const w of words) {
-      const safe = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      result = result.replace(new RegExp(`\\b(${safe})\\b`, 'gi'),
-        '<span class="hint-word">$1</span>');
-    }
-    return result;
+    // Sort longest first to avoid partial matches on overlapping phrases
+    const sorted  = [...words].sort((a, b) => b.length - a.length);
+    const pattern = sorted.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    const re = new RegExp(`(${pattern})`, 'gi');
+    // Split on hint matches before escaping so special chars are handled correctly
+    return text.split(re).map((seg, i) =>
+      i % 2 === 1
+        ? `<span class="hint-word">${escapeHtml(seg)}</span>`
+        : escapeHtml(seg)
+    ).join('');
   }
 
   function escapeHtml(s) {
@@ -383,6 +401,12 @@
   async function loadQuestions() {
     const progressFill = document.getElementById('loading-progress-fill');
     const loadingText  = document.getElementById('loading-text');
+
+    // Check for retry mode (replay exact same question set)
+    const isRetry   = sessionStorage.getItem('clinical_retry_mode') === '1';
+    const retryIds  = isRetry ? JSON.parse(sessionStorage.getItem('clinical_retry_ids') || '[]') : null;
+    sessionStorage.removeItem('clinical_retry_mode');
+
     let pool = [];
     for (let i = 0; i < CFG.domains.length; i++) {
       const d = CFG.domains[i];
@@ -401,30 +425,43 @@
       domainScores[d] = prev ? { ...prev } : { correct: 0, total: 0, sessionCorrect: 0, sessionTotal: 0 };
     }
 
-    // Order
-    if (CFG.order === 'weakest') {
-      const prevScores = (getStoredScores()[MODULE] || {});
-      const byDomain = {};
-      for (const q of pool) {
-        if (!byDomain[q.domain_code]) byDomain[q.domain_code] = [];
-        byDomain[q.domain_code].push(q);
-      }
-      const domainOrder = Object.keys(byDomain).sort((a, b) => {
-        const aS = prevScores[a], bS = prevScores[b];
-        const aA = aS && aS.total ? aS.correct / aS.total : 0.5;
-        const bA = bS && bS.total ? bS.correct / bS.total : 0.5;
-        return aA - bA;
-      });
-      pool = domainOrder.flatMap(d => shuffle(byDomain[d]));
-    } else if (CFG.order === 'sequential') {
-      pool.sort((a, b) => (a.subdomain || '').localeCompare(b.subdomain || ''));
+    if (isRetry && retryIds && retryIds.length) {
+      // Restore exact question set in original order
+      const idSet   = new Set(retryIds);
+      const idOrder = new Map(retryIds.map((id, i) => [id, i]));
+      questions = pool.filter(q => idSet.has(q.id)).sort((a, b) => idOrder.get(a.id) - idOrder.get(b.id));
     } else {
-      shuffle(pool);
+      // Normal ordering
+      if (CFG.order === 'weakest') {
+        const prevScores = (getStoredScores()[MODULE] || {});
+        const byDomain = {};
+        for (const q of pool) {
+          if (!byDomain[q.domain_code]) byDomain[q.domain_code] = [];
+          byDomain[q.domain_code].push(q);
+        }
+        const domainOrder = Object.keys(byDomain).sort((a, b) => {
+          const aS = prevScores[a], bS = prevScores[b];
+          const aA = aS && aS.total ? aS.correct / aS.total : 0.5;
+          const bA = bS && bS.total ? bS.correct / bS.total : 0.5;
+          return aA - bA;
+        });
+        pool = domainOrder.flatMap(d => shuffle(byDomain[d]));
+      } else if (CFG.order === 'sequential') {
+        pool.sort((a, b) => (a.subdomain || '').localeCompare(b.subdomain || ''));
+      } else {
+        shuffle(pool);
+      }
+      questions = pool.slice(0, CFG.count);
+      // Store IDs for potential retry
+      sessionStorage.setItem('clinical_retry_ids', JSON.stringify(questions.map(q => q.id)));
     }
-
-    questions = pool.slice(0, CFG.count);
     if (!questions.length) {
-      document.getElementById('loading-text').textContent = 'No questions match your settings. Go back and adjust filters.';
+      document.getElementById('loading-text').textContent = 'No questions match your settings.';
+      const backBtn = document.createElement('a');
+      backBtn.href = 'clinical-settings.html';
+      backBtn.textContent = '← Adjust Filters';
+      backBtn.style.cssText = 'margin-top:12px;font-size:14px;color:var(--accent);text-decoration:none;font-weight:600;';
+      document.getElementById('screen-loading').appendChild(backBtn);
       return;
     }
     showQuiz();
@@ -532,6 +569,7 @@
     const q = questions[current];
     // Highlight correct answer
     document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.classList.add('answered');
       if (btn.dataset.letter === q.correct_answer) {
         btn.classList.add('correct');
         btn.querySelector('.option-icon').textContent = '✓';
@@ -555,6 +593,7 @@
 
     document.querySelectorAll('.option-btn').forEach(btn => {
       const bl = btn.dataset.letter;
+      btn.classList.add('answered');
       if (bl === q.correct_answer) {
         btn.classList.add('correct');
         btn.querySelector('.option-icon').textContent = '✓';
@@ -581,6 +620,7 @@
       domainScores[code].sessionCorrect = (domainScores[code].sessionCorrect || 0) + 1;
     }
     sessionAnswers.push({ id: q.id, correct: isCorrect, domain: code });
+    if (!isCorrect) wrongQuestions.push(q);
   }
 
   function showFeedback(type, correctLetter) {
@@ -646,18 +686,18 @@
     else heading.innerHTML = 'Keep <em>Practicing</em>';
 
     // Summary
-    const levelsUsed = [...new Set(questions.map(q => q.difficulty_level))].sort().map(l => 'L' + l).join(', ');
+    const domainsUsed = [...new Set(sessionAnswers.map(a => a.domain))];
+    const levelsUsed  = [...new Set(questions.map(q => q.difficulty_level))].sort().map(l => 'L' + l).join(', ');
     document.getElementById('results-summary').innerHTML = `
       <div class="rs-item"><span class="rs-label">Score</span><span class="rs-val">${pct}%</span></div>
       <div class="rs-item"><span class="rs-label">Correct</span><span class="rs-val">${correct}/${total}</span></div>
       <div class="rs-item"><span class="rs-label">Levels</span><span class="rs-val">${levelsUsed}</span></div>
-      <div class="rs-item"><span class="rs-label">Domains</span><span class="rs-val">${CFG.domains.length}</span></div>
+      <div class="rs-item"><span class="rs-label">Domains</span><span class="rs-val">${domainsUsed.length}</span></div>
     `;
 
     // Domain breakdown
     const rows = document.getElementById('domain-rows');
     rows.innerHTML = '';
-    const domainsUsed = [...new Set(sessionAnswers.map(a => a.domain))];
     for (const d of domainsUsed.sort()) {
       const s = domainScores[d] || { sessionCorrect:0, sessionTotal:0 };
       const sc = s.sessionCorrect || 0;
@@ -674,10 +714,99 @@
     setTimeout(() => {
       rows.querySelectorAll('.db-fill').forEach(el => el.style.width = el.dataset.pct + '%');
     }, 200);
+
+    // Inject "Review Mistakes" button if there are wrong answers
+    if (wrongQuestions.length > 0) {
+      const reviewBtn = document.createElement('button');
+      reviewBtn.className = 'btn-secondary';
+      reviewBtn.textContent = `Review Mistakes (${wrongQuestions.length})`;
+      reviewBtn.onclick = renderReview;
+      document.getElementById('results-actions').appendChild(reviewBtn);
+    }
+  }
+
+  // ── Review missed questions ─────────────────────────────────────────────────
+  function renderReview() {
+    document.getElementById('screen-results').classList.remove('active');
+    document.getElementById('screen-review').classList.add('active');
+    document.getElementById('review-heading').innerHTML =
+      `Review <em>Mistakes</em> <span style="font-family:Inter,sans-serif;font-size:1rem;color:var(--text3);font-style:normal;">(${wrongQuestions.length})</span>`;
+
+    const container = document.getElementById('review-questions');
+    container.innerHTML = '';
+    wrongQuestions.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.style.cssText = 'margin-bottom:32px; border-top:1px solid var(--border); padding-top:24px;';
+      div.innerHTML = `
+        <div class="meta-row" style="margin-bottom:12px;">
+          <span class="badge badge-domain">${escapeHtml(q.domain_code)}</span>
+          <span class="badge badge-sub">${escapeHtml(q.subdomain || '')}</span>
+          <span class="badge ${LEVEL_BADGE_CLASS[q.difficulty_level]}">${LEVEL_LABELS[q.difficulty_level]}</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3);">${idx + 1} / ${wrongQuestions.length}</span>
+        </div>
+        <div class="vignette-card" style="margin-bottom:16px;">
+          <div class="vignette-label">Vignette</div>
+          <div class="vignette-text">${escapeHtml(q.vignette)}</div>
+        </div>
+        <div class="question-text" style="margin-bottom:16px;">${escapeHtml(q.question)}</div>
+        <div class="options-grid">
+          ${Object.entries(q.options).map(([letter, text]) => {
+            const isCorrect = letter === q.correct_answer;
+            const cls  = isCorrect ? 'correct' : 'dimmed';
+            const icon = isCorrect ? '✓' : '';
+            const exp  = (q.option_explanations || {})[letter] || '';
+            return `
+              <div class="option-btn ${cls}" style="cursor:default;">
+                <div class="option-letter">${escapeHtml(letter)}</div>
+                <div class="option-content">
+                  <div class="option-text">${escapeHtml(text)}</div>
+                  ${exp ? `<div class="option-explanation">${escapeHtml(exp)}</div>` : ''}
+                </div>
+                <span class="option-icon">${icon}</span>
+              </div>`;
+          }).join('')}
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function backToResults() {
+    document.getElementById('screen-review').classList.remove('active');
+    document.getElementById('screen-results').classList.add('active');
   }
 
   function newSession() { location.href = 'clinical-settings.html'; }
-  function retrySession() { location.href = location.href; }
+  function retrySession() {
+    sessionStorage.setItem('clinical_retry_mode', '1');
+    location.href = location.href;
+  }
+
+  // ── Keyboard navigation ────────────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    // Don't intercept while focus is on an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    // Only active on the quiz screen
+    if (!document.getElementById('screen-quiz').classList.contains('active')) return;
+
+    const key = e.key.toUpperCase();
+
+    // A/B/C/D or 1/2/3/4 → select that answer (only before answering)
+    if (!answered) {
+      const letterMap = { '1': 'A', '2': 'B', '3': 'C', '4': 'D', 'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D' };
+      const letter = letterMap[key];
+      if (letter) {
+        const btn = document.querySelector(`.option-btn[data-letter="${letter}"]`);
+        if (btn) { e.preventDefault(); btn.click(); }
+      }
+    }
+
+    // Enter or Space → advance after answering
+    if (answered && (e.key === 'Enter' || e.key === ' ')) {
+      const nextBtn = document.getElementById('next-btn');
+      if (nextBtn && nextBtn.classList.contains('visible')) { e.preventDefault(); nextBtn.click(); }
+    }
+  });
 
   // ── Boot ───────────────────────────────────────────────────────────────────
   loadQuestions().catch(err => {

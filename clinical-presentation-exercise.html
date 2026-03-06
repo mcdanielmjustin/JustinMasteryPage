@@ -218,6 +218,7 @@
       transition: color .3s;
     }
     .loader-status.error { color: var(--red); }
+    .loader-status.warn  { color: var(--orange); }
     .loader-bar-track {
       width: 100%; height: 4px;
       background: rgba(255,255,255,.06);
@@ -325,16 +326,21 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 14px 24px;
       border-top: 1px solid var(--border);
-      background: var(--surface);
+      background: var(--bg3);
+      box-shadow: 0 -1px 0 rgba(99,102,241,.12);
       position: sticky;
       bottom: 0;
       z-index: 10;
     }
     .phase-indicator { display: flex; align-items: center; gap: 14px; }
     .phase-num {
-      font-size: 12px; font-weight: 700;
+      font-size: 11px; font-weight: 700;
       letter-spacing: .06em; text-transform: uppercase;
       color: var(--accent-light);
+      background: rgba(99,102,241,.1);
+      border: 1px solid rgba(99,102,241,.2);
+      border-radius: 20px;
+      padding: 3px 10px;
     }
     .phase-dots { display: flex; align-items: center; gap: 6px; }
     .phase-dot {
@@ -358,12 +364,12 @@
 
     /* Auto-advance progress bar */
     .auto-bar {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px; background: transparent; overflow: hidden; display: none;
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px; background: transparent; overflow: hidden; display: none;
     }
     .auto-bar.running { display: block; }
     .auto-bar-fill {
-      height: 100%; background: var(--accent);
+      height: 100%; background: var(--accent-light);
       width: 0%; animation: none;
     }
 
@@ -376,11 +382,8 @@
       border-radius: 10px; margin-bottom: 16px;
       width: 100%; max-width: 380px;
     }
-    .patient-label { font-size: 13px; font-weight: 600; color: var(--text); flex-shrink: 0; }
-    .patient-setting {
-      font-size: 11px; color: var(--text3);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
-    }
+    .patient-setting { font-size: 12px; color: var(--text2); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .patient-label   { font-size: 11px; color: var(--text3); flex-shrink: 0; }
     .patient-info-sep { width: 1px; height: 16px; background: var(--border); }
 
     /* Speech bubble */
@@ -393,6 +396,7 @@
       max-width: 380px; width: 100%;
       margin-bottom: 16px;
       min-height: 60px;
+      max-height: 60vh; overflow-y: auto;
       flex-shrink: 0;
       animation: bubbleIn .3s ease-out;
       cursor: pointer;
@@ -406,18 +410,22 @@
       background: rgba(255,255,255,.09);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
     }
-    .clinician-probe {
-      font-size: 11px; font-style: italic; color: var(--text2);
-      margin-bottom: 6px; padding: 5px 12px;
-      max-width: 380px; width: 100%;
+    .clinician-prompt-wrap {
+      width: 100%; max-width: 380px;
+      margin-bottom: 8px;
+      flex-direction: column; gap: 2px;
+    }
+    .clinician-prompt-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--accent); opacity: .7;
+    }
+    .clinician-prompt-text {
+      font-size: 12px; font-style: italic; color: var(--text3);
+      padding: 6px 10px;
       border-left: 2px solid rgba(99,102,241,.35);
       background: rgba(99,102,241,.04);
       border-radius: 0 6px 6px 0;
-      display: none;
-      flex-shrink: 0;
-      animation: fadeIn .25s ease;
     }
-    .clinician-probe.visible { display: block; }
     /* Skip hint — shown during first typewriter, then hidden permanently */
     .skip-hint {
       position: absolute; bottom: 5px; right: 10px;
@@ -426,6 +434,12 @@
       transition: opacity .3s ease;
     }
     .skip-hint.hidden { display: none; }
+    /* Full-transcript layout (review mode) */
+    .transcript-phase { padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .transcript-phase:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .transcript-phase-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-light); opacity: .7; margin-bottom: 4px; }
+    .transcript-probe { font-size: 11px; font-style: italic; color: var(--text3); margin-bottom: 5px; padding: 4px 8px; border-left: 2px solid rgba(99,102,241,.3); background: rgba(99,102,241,.04); border-radius: 0 4px 4px 0; }
+    .transcript-dialogue { font-size: 14px; color: var(--text); line-height: 1.7; }
     .bubble-dots { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
     .bubble-dots span {
       width: 6px; height: 6px; background: var(--text3); border-radius: 50%;
@@ -485,8 +499,12 @@
     .question-wrap {
       max-width: 720px; width: 100%; margin: 0 auto;
       display: flex; flex-direction: column; gap: 20px;
-      animation: questionSlide .35s ease both;
     }
+    .question-wrap .case-strip   { animation: fadeInUp .28s ease both; }
+    .question-wrap .q-header     { animation: fadeInUp .28s ease .05s both; }
+    .question-wrap .q-prompt     { animation: fadeInUp .3s ease .08s both; }
+    .question-wrap .options-label{ animation: fadeInUp .28s ease .14s both; }
+    .question-wrap .options-grid { animation: fadeInUp .3s ease .18s both; }
 
     /* Case context strip — patient reminder above question */
     .case-strip {
@@ -504,6 +522,7 @@
     .case-patient-label { font-weight: 600; color: var(--text2); }
     .case-strip-sep { width: 1px; height: 12px; background: var(--border); flex-shrink: 0; }
     .case-setting-label { color: var(--text3); font-style: italic; }
+    .case-phase-progress { font-size: 11px; color: var(--text3); font-style: italic; }
 
     /* Question header row */
     .q-header {
@@ -532,7 +551,13 @@
     }
 
     /* Answer options */
-    .options-label { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: -8px; }
+    .options-label { font-size: 11px; color: var(--text3); letter-spacing: .03em; margin-bottom: -8px; }
+    .options-label kbd {
+      font-family: inherit; font-size: 9px; font-weight: 700;
+      padding: 1px 5px; border-radius: 4px;
+      background: rgba(255,255,255,.07); border: 1px solid var(--border);
+      color: var(--text3);
+    }
     .options-grid { display: flex; flex-direction: column; gap: 10px; }
     .option-btn {
       display: flex; align-items: flex-start; gap: 14px;
@@ -553,9 +578,9 @@
 
     .option-letter {
       width: 28px; height: 28px; flex-shrink: 0; border-radius: 7px;
-      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1);
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700; color: var(--text3);
+      font-size: 12px; font-weight: 700; color: var(--text2);
       transition: background .2s, border-color .2s, color .2s;
     }
     .option-btn.correct .option-letter { background: rgba(52,211,153,.2); border-color: var(--green); color: var(--green); }
@@ -565,16 +590,17 @@
     .option-btn.correct .option-text,
     .option-btn.wrong   .option-text { color: var(--text); }
 
-    /* Feedback panel */
+    /* Feedback panel — grid-row animation avoids max-height hack */
     .feedback-panel {
-      max-height: 0; overflow: hidden;
-      transition: max-height .4s ease;
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows .38s ease;
       border-radius: 12px;
     }
-    .feedback-panel.visible { max-height: 2000px; transition: max-height .5s ease; }
+    .feedback-panel.visible { grid-template-rows: 1fr; }
     .feedback-inner {
+      overflow: hidden;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; overflow: hidden;
+      border-radius: 12px;
     }
     .feedback-header {
       padding: 14px 20px;
@@ -618,7 +644,7 @@
     }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,.38); }
     .btn-secondary {
-      padding: 13px 18px;
+      flex: 0 0 auto; padding: 13px 16px;
       background: rgba(255,255,255,.04); border: 1px solid var(--border);
       color: var(--text2); font-family: inherit; font-size: 14px; font-weight: 600;
       border-radius: 10px; cursor: pointer; transition: border-color .2s, background .2s;
@@ -651,6 +677,8 @@
     .results-ring-wrap svg { width: 100%; height: 100%; }
     .ring-bg   { fill: none; stroke: rgba(255,255,255,.06); stroke-width: 10; }
     .ring-fill { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; }
+    .ring-tick { fill: none; stroke: rgba(255,255,255,.3); stroke-width: 12; stroke-linecap: round; }
+    .ring-benchmark { font-size: 9px; color: var(--text3); letter-spacing: .06em; margin-top: 2px; }
     .ring-text-overlay {
       position: absolute; inset: 0;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -684,6 +712,14 @@
     .type-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
     .type-bar-fill  { height: 100%; border-radius: 3px; transition: width .8s .2s ease; width: 0%; }
     .type-fraction  { font-size: 12px; font-weight: 600; color: var(--text2); width: 36px; text-align: right; }
+    .weakest-callout {
+      align-items: center; gap: 8px;
+      background: rgba(251,146,60,.08); border: 1px solid rgba(251,146,60,.22);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 12px; color: var(--text2); line-height: 1.4;
+    }
+    .weakest-callout strong { color: #fb923c; }
+    .callout-icon { font-size: 14px; color: #fb923c; flex-shrink: 0; }
 
     /* Domain breakdown */
     .domain-breakdown { display: flex; flex-direction: column; gap: 10px; }
@@ -714,6 +750,7 @@
     .replay-outcome.correct { color: var(--green); }
     .replay-outcome.partial { color: #fbbf24; }
     .replay-outcome.wrong   { color: var(--red); }
+    .replay-empty  { font-size: 13px; color: var(--text3); text-align: center; padding: 20px 0; }
     .replay-label  { flex: 1; font-size: 13px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     .replay-frac   { font-size: 11px; font-weight: 600; color: var(--text3); flex-shrink: 0; }
     .replay-domain { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .06em; flex-shrink: 0; }
@@ -734,10 +771,29 @@
     @media (max-width: 760px) {
       .encounter-layout {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: auto auto;
+        height: auto;
+        min-height: calc(100vh - 58px);
       }
       .patient-stage { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px 18px; }
-      .chart-panel   { border-left: none; border-top: 1px solid var(--border); max-height: 260px; }
+      .chart-panel {
+        display: none;
+      }
+      .chart-panel.mobile-visible {
+        display: flex;
+        position: fixed;
+        inset: 58px 0 0 0;
+        z-index: 50;
+        background: var(--surface);
+        overflow-y: auto;
+        max-height: none;
+      }
+      .chart-toggle-btn {
+        font-size: 11px; font-weight: 600;
+        padding: 5px 10px; border-radius: 6px;
+        background: rgba(255,255,255,.06); border: 1px solid var(--border);
+        color: var(--text2); cursor: pointer;
+      }
       .phase-controls { grid-column: 1; }
       .avatar-wrap { width: 150px; height: 240px; }
       .speech-bubble { max-width: 100%; }
@@ -810,8 +866,11 @@
       <!-- Left: patient stage -->
       <div class="patient-stage" id="patient-stage">
 
-        <!-- Clinician probe (above bubble — separate speaker) -->
-        <div class="clinician-probe" id="clinician-probe"></div>
+        <!-- Clinician prompt — separate speaker, above patient bubble -->
+        <div class="clinician-prompt-wrap" id="clinician-prompt-wrap" style="display:none">
+          <div class="clinician-prompt-label">You ask:</div>
+          <div class="clinician-prompt-text" id="clinician-probe"></div>
+        </div>
 
         <!-- Speech bubble (above avatar) -->
         <div class="speech-bubble hidden" id="speech-bubble">
@@ -1072,9 +1131,9 @@
 
         <!-- Patient info bar (below avatar) -->
         <div class="patient-info-bar" id="patient-info-bar">
-          <span class="patient-label" id="patient-label">—</span>
-          <div class="patient-info-sep"></div>
           <span class="patient-setting" id="patient-setting">—</span>
+          <div class="patient-info-sep"></div>
+          <span class="patient-label" id="patient-label">—</span>
         </div>
 
         <!-- Behavioral tag overlay -->
@@ -1120,6 +1179,8 @@
         <span class="case-patient-label" id="case-patient-label"></span>
         <span class="case-strip-sep"></span>
         <span class="case-setting-label" id="case-setting-label"></span>
+        <span class="case-strip-sep case-phase-sep" id="case-phase-sep"></span>
+        <span class="case-phase-progress" id="case-phase-progress"></span>
       </div>
 
       <div class="q-header">
@@ -1130,7 +1191,7 @@
 
       <div class="q-prompt" id="q-prompt"></div>
 
-      <div class="options-label">Select the best answer:</div>
+      <div class="options-label">Press <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> to select &middot; <kbd>Enter</kbd> to advance</div>
 
       <div class="options-grid" id="options-grid"></div>
 
@@ -1163,10 +1224,14 @@
             <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="52"
               stroke-dasharray="326.7" stroke-dashoffset="326.7"
               transform="rotate(-90 65 65)"/>
+            <circle class="ring-tick" cx="65" cy="65" r="52"
+              stroke-dasharray="2 324.7" stroke-dashoffset="-98.0"
+              transform="rotate(-90 65 65)"/>
           </svg>
           <div class="ring-text-overlay">
             <span class="ring-pct" id="ring-pct">—</span>
             <span class="ring-label">score</span>
+            <span class="ring-benchmark">target: 70%</span>
           </div>
         </div>
         <h1 id="results-heading" style="margin-top:20px;">Session <em>Complete</em></h1>
@@ -1177,6 +1242,7 @@
       <div class="type-breakdown">
         <div class="breakdown-title">By Question Type</div>
         <div id="type-rows"></div>
+        <div id="weakest-callout" class="weakest-callout" style="display:none"></div>
       </div>
 
       <div class="domain-breakdown">
@@ -1223,6 +1289,17 @@
     assessment_tool:       { label: 'Assessment',   color: '#d4a054' },
   };
 
+  const WRONG_PREFIX = {
+    primary_diagnosis:      'Review the full symptom picture — ',
+    differential_diagnosis: 'Weigh each option against the presentation — ',
+    immediate_intervention: 'Prioritize by acuity and safety first — ',
+    treatment_planning:     'Match the intervention to the formulation — ',
+    risk_assessment:        'Consider all risk and protective factors — ',
+    dsm_criteria:           'Check the diagnostic criteria carefully — ',
+    cultural_consideration: 'Factor in cultural context — ',
+    assessment_tool:        'Match the tool to the clinical question — ',
+  };
+
   const DOMAIN_NAMES = {
     PMET: 'Measurement',
     LDEV: 'Lifespan Dev',
@@ -1267,9 +1344,10 @@
     typewriterInt:  null,
     autoAdvanceInt: null,
     avatarState:    'idle',
-    domainScores:   {},   // { CODE: { correct, total } }
-    typeScores:     {},   // { type: { correct, total } }
-    sessionAnswers: [],   // [ { encId, qId, type, correct, domain } ]
+    domainScores:    {},  // { CODE: { correct, total } }
+    typeScores:      {},  // { type: { correct, total } }
+    subdomainScores: {},  // { "CODE::subdomain": { correct, total } }
+    sessionAnswers:  [],  // [ { encId, qId, type, correct, domain, subdomain } ]
     reviewMode:     false,
   };
 
@@ -1331,6 +1409,15 @@
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  // Like escapeHtml but allows <strong>, <em>, <br> for explanation text
+  function safeHtml(s) {
+    if (!s) return '';
+    return escapeHtml(s)
+      .replace(/&lt;strong&gt;(.*?)&lt;\/strong&gt;/gi, '<strong>$1</strong>')
+      .replace(/&lt;em&gt;(.*?)&lt;\/em&gt;/gi, '<em>$1</em>')
+      .replace(/&lt;br\s*\/?&gt;/gi, '<br>');
+  }
+
   function getStoredScores() {
     try { return JSON.parse(localStorage.getItem('encounter_scores') || '{}'); }
     catch { return {}; }
@@ -1338,6 +1425,11 @@
 
   function getStoredTypeScores() {
     try { return JSON.parse(localStorage.getItem('encounter_type_scores') || '{}'); }
+    catch { return {}; }
+  }
+
+  function getStoredSubdomainScores() {
+    try { return JSON.parse(localStorage.getItem('encounter_subdomain_scores') || '{}'); }
     catch { return {}; }
   }
 
@@ -1358,6 +1450,15 @@
       allType[t].total   += s.total;
     });
     localStorage.setItem('encounter_type_scores', JSON.stringify(allType));
+
+    // Subdomain scores — keyed as "DOMAIN::subdomain"
+    const allSub = getStoredSubdomainScores();
+    Object.entries(state.subdomainScores).forEach(([k, s]) => {
+      allSub[k] = allSub[k] || { correct: 0, total: 0 };
+      allSub[k].correct += s.correct;
+      allSub[k].total   += s.total;
+    });
+    localStorage.setItem('encounter_subdomain_scores', JSON.stringify(allSub));
   }
 
   function initDomainScores() {
@@ -1372,22 +1473,25 @@
   ════════════════════════════════════════════════════════════════ */
   function sortPool(pool) {
     if (CFG.order === 'weakest') {
-      const stored = getStoredScores();
+      const subScores = getStoredSubdomainScores();
+      const domScores = getStoredScores();
       // No history yet — fall back to fully shuffled
-      const hasAnyHistory = Object.values(stored).some(s => s && s.total > 0);
+      const hasAnyHistory = Object.values(domScores).some(s => s && s.total > 0);
       if (!hasAnyHistory) return shuffle(pool.slice());
-      const byDomain = {};
-      pool.forEach(e => {
-        if (!byDomain[e.domain_code]) byDomain[e.domain_code] = [];
-        byDomain[e.domain_code].push(e);
-      });
-      const domainOrder = Object.keys(byDomain).sort((a, b) => {
-        const aS = stored[a], bS = stored[b];
-        const aA = aS && aS.total ? aS.correct / aS.total : 0.5;
-        const bA = bS && bS.total ? bS.correct / bS.total : 0.5;
+      // Sort by subdomain accuracy (falling back to domain accuracy for unseen subdomains)
+      return pool.slice().sort((a, b) => {
+        const aKey = a.domain_code + '::' + a.subdomain;
+        const bKey = b.domain_code + '::' + b.subdomain;
+        const aSubS = subScores[aKey];
+        const bSubS = subScores[bKey];
+        const aDomS = domScores[a.domain_code];
+        const bDomS = domScores[b.domain_code];
+        const aA = aSubS && aSubS.total ? aSubS.correct / aSubS.total
+                 : aDomS && aDomS.total ? aDomS.correct / aDomS.total : 0.5;
+        const bA = bSubS && bSubS.total ? bSubS.correct / bSubS.total
+                 : bDomS && bDomS.total ? bDomS.correct / bDomS.total : 0.5;
         return aA - bA;
       });
-      return domainOrder.flatMap(d => shuffle(byDomain[d]));
     }
     if (CFG.order === 'sequential') {
       return pool.slice().sort((a, b) =>
@@ -1401,6 +1505,9 @@
      DATA LOADING
   ════════════════════════════════════════════════════════════════ */
   async function loadEncounters() {
+    // Persist session params so settings page can offer a Resume option
+    localStorage.setItem('encounter_last_params', location.search);
+
     const fillEl  = document.getElementById('loader-fill');
     const statusEl = document.getElementById('loader-status');
     const detailEl = document.getElementById('loader-detail');
@@ -1488,7 +1595,17 @@
     console.log(`[loader] CFG:`, CFG);
 
     fillEl.style.width = '100%';
-    detailEl.textContent = `${state.pool.length} encounters ready`;
+
+    // Warn if fewer encounters available than requested
+    if (state.pool.length < CFG.count) {
+      statusEl.textContent = `${state.pool.length} of ${CFG.count} encounters available`;
+      statusEl.classList.add('warn');
+      detailEl.textContent = 'Try selecting more levels or domains for a longer session';
+      await new Promise(r => setTimeout(r, 1800));
+      statusEl.classList.remove('warn');
+    } else {
+      detailEl.textContent = `${state.pool.length} encounters ready`;
+    }
 
     await new Promise(r => setTimeout(r, 380));
 
@@ -1527,7 +1644,8 @@
     const bubble = document.getElementById('speech-bubble');
     bubble.classList.add('hidden');
     document.getElementById('bubble-text').textContent = '';
-    document.getElementById('clinician-probe').classList.remove('visible');
+    document.getElementById('clinician-prompt-wrap').style.display = 'none';
+    document.getElementById('clinician-probe').textContent = '';
 
     // Reset state
     state.phaseIdx = 0;
@@ -1614,7 +1732,6 @@
     state.qIdx   = 0;
     _tagSlotIdx  = 0;
     if (state.encIdx >= state.pool.length) {
-      persistScores();
       showScreen('results');
       buildResults();
     } else {
@@ -1735,7 +1852,7 @@
 
     bubText.textContent = '';
     dots.classList.remove('hidden');
-    probe.classList.remove('visible');
+    document.getElementById('clinician-prompt-wrap').style.display = 'none';
     probe.textContent = '';
 
     const startTypewriter = () => {
@@ -1764,8 +1881,8 @@
     };
 
     if (phase.clinician_prompt) {
-      probe.textContent = `You ask: "${phase.clinician_prompt}"`;
-      probe.classList.add('visible');
+      probe.textContent = phase.clinician_prompt;
+      document.getElementById('clinician-prompt-wrap').style.display = 'flex';
       setTimeout(() => {
         dots.classList.remove('hidden');
         setTimeout(startTypewriter, 600);
@@ -1775,7 +1892,7 @@
     }
   }
 
-  let _skipHintDismissed = false;
+  let _skipHintDismissed = !!localStorage.getItem('encounter_skip_hint_shown');
 
   function runTypewriter(text, charMs, onComplete) {
     clearInterval(state.typewriterInt);
@@ -1798,6 +1915,7 @@
     const dismissHint = () => {
       if (hint && !_skipHintDismissed) {
         _skipHintDismissed = true;
+        localStorage.setItem('encounter_skip_hint_shown', '1');
         hint.classList.add('hidden');
       }
     };
@@ -1998,6 +2116,18 @@
     document.getElementById('case-patient-label').textContent = enc.encounter.patient.label;
     document.getElementById('case-setting-label').textContent = enc.encounter.setting;
 
+    const totalPhases = enc.encounter.phases.length;
+    const phasesShown = state.phaseIdx + 1;
+    const remaining   = totalPhases - phasesShown;
+    const phaseSep    = document.getElementById('case-phase-sep');
+    const phaseProgress = document.getElementById('case-phase-progress');
+    if (phaseSep && phaseProgress) {
+      phaseSep.style.display    = remaining > 0 ? '' : 'none';
+      phaseProgress.textContent = remaining > 0
+        ? `${remaining} phase${remaining > 1 ? 's' : ''} remaining`
+        : 'Final question';
+    }
+
     const encScreen = document.getElementById('screen-encounter');
     encScreen.classList.add('fading-out');
     setTimeout(() => {
@@ -2124,11 +2254,14 @@
 
     state.answered = false;
 
-    // Re-animate card
-    const wrap = document.getElementById('question-wrap');
-    wrap.style.animation = 'none';
-    wrap.offsetHeight;
-    wrap.style.animation = '';
+    // Re-trigger stagger animations on each question render
+    ['.case-strip','.q-header','.q-prompt','.options-label','.options-grid'].forEach(sel => {
+      const el = document.getElementById('question-wrap').querySelector(sel);
+      if (!el) return;
+      el.style.animation = 'none';
+      void el.offsetHeight;
+      el.style.animation = '';
+    });
   }
 
   function selectAnswer(letter) {
@@ -2149,14 +2282,18 @@
     });
 
     // Score tracking
-    const domain = enc.domain_code;
+    const domain    = enc.domain_code;
+    const subKey    = domain + '::' + enc.subdomain;
     state.domainScores[domain] = state.domainScores[domain] || { correct: 0, total: 0 };
     state.domainScores[domain].total++;
     state.typeScores[q.type] = state.typeScores[q.type] || { correct: 0, total: 0 };
     state.typeScores[q.type].total++;
+    state.subdomainScores[subKey] = state.subdomainScores[subKey] || { correct: 0, total: 0 };
+    state.subdomainScores[subKey].total++;
     if (isCorrect) {
       state.domainScores[domain].correct++;
       state.typeScores[q.type].correct++;
+      state.subdomainScores[subKey].correct++;
     }
 
     state.sessionAnswers.push({
@@ -2178,11 +2315,12 @@
   function showFeedback(q, isCorrect) {
     const header = document.getElementById('feedback-header');
     header.className = 'feedback-header ' + (isCorrect ? 'correct' : 'wrong');
+    const wrongPrefix = WRONG_PREFIX[q.type] || '';
     header.innerHTML = isCorrect
       ? '<span>✓</span> Correct!'
-      : `<span>✗</span> Incorrect — the correct answer is <strong>${q.correct_answer}</strong>`;
+      : `<span>✗</span> ${escapeHtml(wrongPrefix)}the correct answer is <strong>${q.correct_answer}</strong>`;
 
-    document.getElementById('feedback-explanation').textContent = q.explanation || '';
+    document.getElementById('feedback-explanation').innerHTML = safeHtml(q.explanation);
 
     // Distractor rationale — correct answer first (why it's right), then wrong options
     const dr = q.distractor_rationale || {};
@@ -2274,8 +2412,22 @@
       if (dot) dot.className = 'phase-dot done';
     });
 
-    // Last phase dialogue shown statically
-    document.getElementById('bubble-text').textContent = lastPhase.dialogue || '';
+    // Hide clinician prompt wrap in review (transcript includes all prompts inline)
+    document.getElementById('clinician-prompt-wrap').style.display = 'none';
+    document.getElementById('clinician-probe').textContent = '';
+
+    // Full transcript — all phases in sequence
+    const transcript = enc.encounter.phases.map(ph => {
+      const probeHtml = ph.clinician_prompt
+        ? `<div class="transcript-probe">${escapeHtml(ph.clinician_prompt)}</div>`
+        : '';
+      return `<div class="transcript-phase">
+        <div class="transcript-phase-label">${escapeHtml(ph.phase_label)}</div>
+        ${probeHtml}
+        <div class="transcript-dialogue">${escapeHtml(ph.dialogue)}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('bubble-text').innerHTML = transcript;
     document.getElementById('speech-bubble').classList.remove('hidden');
     document.getElementById('bubble-dots').classList.add('hidden');
 
@@ -2307,9 +2459,9 @@
 
     // Heading
     const heading = document.getElementById('results-heading');
-    if (pct >= 80)      heading.innerHTML = 'Great <em>Work!</em>';
+    if (pct >= 80)      heading.innerHTML = 'Strong <em>Performance</em>';
     else if (pct >= 60) heading.innerHTML = 'Session <em>Complete</em>';
-    else                heading.innerHTML = 'Keep <em>Practicing</em>';
+    else                heading.innerHTML = 'Review <em>Flagged Cases</em>';
 
     // Score ring animation — reset to empty first, then animate to pct
     const ring  = document.getElementById('ring-fill');
@@ -2360,7 +2512,26 @@
     });
     setTimeout(() => {
       typeRows.querySelectorAll('.type-bar-fill').forEach(el => el.style.width = el.dataset.pct + '%');
-    }, 200);
+    }, 620);
+
+    // Weakest-area callout
+    const callout = document.getElementById('weakest-callout');
+    if (callout) {
+      const typeEntries = Object.entries(state.typeScores).filter(([,s]) => s.total >= 2);
+      if (typeEntries.length >= 2) {
+        const weakest = typeEntries.reduce((a, b) => {
+          const aPct = a[1].correct / a[1].total;
+          const bPct = b[1].correct / b[1].total;
+          return aPct <= bPct ? a : b;
+        });
+        const wConf = TYPE_BADGE[weakest[0]] || { label: weakest[0] };
+        const wPct  = Math.round((weakest[1].correct / weakest[1].total) * 100);
+        callout.innerHTML = `<span class="callout-icon">⚑</span> Focus area: <strong>${escapeHtml(wConf.label)}</strong> — ${wPct}% correct this session`;
+        callout.style.display = 'flex';
+      } else {
+        callout.style.display = 'none';
+      }
+    }
 
     // Domain breakdown
     const domRows = document.getElementById('domain-rows');
@@ -2382,7 +2553,7 @@
     });
     setTimeout(() => {
       domRows.querySelectorAll('.db-fill').forEach(el => el.style.width = el.dataset.pct + '%');
-    }, 200);
+    }, 820);
 
     // Encounter replay list
     // Group answers by encounter
@@ -2402,7 +2573,7 @@
       const allCorrect  = info.correct === info.total;
       const noneCorrect = info.correct === 0;
       const outcomeClass = allCorrect ? 'correct' : noneCorrect ? 'wrong' : 'partial';
-      const outcomeChar  = allCorrect ? '✓' : '✗';
+      const outcomeChar  = allCorrect ? '✓' : noneCorrect ? '✗' : '~';
       const row = document.createElement('div');
       row.className = 'replay-row';
       row.innerHTML = `
@@ -2413,12 +2584,19 @@
         <button class="btn-replay" onclick="replayEncounter(${info.encIdx})">Review</button>`;
       replayList.appendChild(row);
     });
+    if (Object.keys(encMap).length === 0) {
+      replayList.innerHTML = '<div class="replay-empty">No encounters recorded this session.</div>';
+    }
   }
 
   function replayEncounter(idx) {
     if (idx === null || idx < 0) return;
-    state.encIdx = idx;
-    state.qIdx   = 0;
+    state.encIdx      = idx;
+    state.qIdx        = 0;
+    state.phaseIdx    = 0;
+    state.stepIdx     = 0;
+    state.phaseRunning = false;
+    state.steps       = buildSteps(state.pool[idx]);
     reviewEncounter();
     // reviewEncounter() sets "← Return to Question" — override for results context
     const advBtn = document.getElementById('btn-advance');
@@ -2483,6 +2661,20 @@
   /* ════════════════════════════════════════════════════════════════
      BOOT
   ════════════════════════════════════════════════════════════════ */
+  // On mobile, inject chart toggle button into nav
+  if (window.innerWidth <= 760) {
+    const chartToggle = document.createElement('button');
+    chartToggle.className = 'chart-toggle-btn';
+    chartToggle.textContent = 'Chart';
+    chartToggle.onclick = () => {
+      const panel = document.querySelector('.chart-panel');
+      if (panel) panel.classList.toggle('mobile-visible');
+      chartToggle.textContent = document.querySelector('.chart-panel.mobile-visible') ? 'Close' : 'Chart';
+    };
+    const navRight = document.querySelector('.nav-right');
+    if (navRight) navRight.prepend(chartToggle);
+  }
+
   loadEncounters().catch(err => {
     showError('Error loading encounters: ' + err.message);
     console.error('[boot]', err);

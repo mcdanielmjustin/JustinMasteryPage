@@ -375,10 +375,14 @@
         <div class="section-label-row">
           <div class="section-label">Passage Type</div>
         </div>
-        <div class="diff-row">
+        <div class="diff-row" style="flex-wrap:wrap; gap:10px;">
           <button class="diff-btn active" data-type="all" onclick="selectType('all')">
             <div class="d-title">All Types</div>
             <div class="d-desc">Definitions, examples, clinical notes, paragraphs</div>
+          </button>
+          <button class="diff-btn" data-type="paragraph" onclick="selectType('paragraph')">
+            <div class="d-title">Paragraphs</div>
+            <div class="d-desc">Standard study text passages</div>
           </button>
           <button class="diff-btn" data-type="definition" onclick="selectType('definition')">
             <div class="d-title">Definitions</div>
@@ -431,10 +435,12 @@
       mode: 'all',
     };
 
-    const DOMAIN_COUNTS = {}; // populated by checkAvailability()
+    const DOMAIN_COUNTS = {}; // code -> total question count (for domain btn display)
+    const DOMAIN_DATA   = {}; // code -> full questions array (for filtered available count)
 
     const TYPE_LABELS = {
       all:          'All Types',
+      paragraph:    'Paragraphs',
       definition:   'Definitions',
       clinical_note:'Clinical Notes',
     };
@@ -456,11 +462,13 @@
         const countEl = document.getElementById(`count-${code}`);
         const btn     = document.querySelector(`[data-code="${code}"]`);
         const data    = spotData[code];
-        const n       = data ? (data.questions || []).length : 0;
+        const qs      = data ? (data.questions || []) : [];
+        const n       = qs.length;
 
         countEl.classList.remove('loading');
         if (n > 0) {
           DOMAIN_COUNTS[code] = n;
+          DOMAIN_DATA[code]   = qs;
           countEl.textContent = `${n.toLocaleString()} question${n === 1 ? '' : 's'}`;
         } else {
           countEl.textContent = 'Not yet available';
@@ -493,15 +501,16 @@
     }
 
     function selectAllAvailable() {
-      const allBtns    = document.querySelectorAll('.domain-btn');
-      const allCodes   = [...allBtns].map(b => b.dataset.code);
-      const allSelected = allCodes.every(c => state.domains.has(c));
+      const available  = Object.keys(DOMAIN_COUNTS); // only domains with questions
+      const allSelected = available.every(c => state.domains.has(c));
       if (allSelected) {
-        allCodes.forEach(c => state.domains.delete(c));
+        available.forEach(c => state.domains.delete(c));
       } else {
-        allCodes.forEach(c => state.domains.add(c));
+        available.forEach(c => state.domains.add(c));
       }
-      allBtns.forEach(b => b.classList.toggle('active', state.domains.has(b.dataset.code)));
+      document.querySelectorAll('.domain-btn').forEach(b =>
+        b.classList.toggle('active', state.domains.has(b.dataset.code))
+      );
       updateSummary();
     }
 
@@ -542,18 +551,23 @@
         codes.length <= 3                         ? codes.join(', ') :
         codes.length + ' Domains';
 
-      // Total questions available across selected domains
-      const totalQ = codes.reduce((s, c) => s + (DOMAIN_COUNTS[c] || 0), 0);
+      // Filtered available count — respects active mode + type filters
+      const filteredQ = codes.reduce((s, c) => {
+        let qs = DOMAIN_DATA[c] || [];
+        if (state.type !== 'all') qs = qs.filter(q => q.passage_type === state.type);
+        if (state.mode !== 'all') qs = qs.filter(q => (q.mode || 'mc') === state.mode);
+        return s + qs.length;
+      }, 0);
       document.getElementById('sum-count').textContent = state.count;
       document.getElementById('sum-available').textContent =
-        totalQ > 0 ? totalQ.toLocaleString() + ' available' : '\u2014';
+        codes.length === 0 ? '\u2014' :
+        filteredQ > 0      ? filteredQ.toLocaleString() + ' available' : '0 available';
 
-      document.getElementById('sum-type').textContent = TYPE_LABELS[state.type];
+      document.getElementById('sum-type').textContent = TYPE_LABELS[state.type] || state.type;
       document.getElementById('sum-mode').textContent = MODE_LABELS[state.mode];
 
-      // Select All label
-      const allBtnCodes = [...document.querySelectorAll('.domain-btn')].map(b => b.dataset.code);
-      const allSelected = allBtnCodes.length > 0 && allBtnCodes.every(c => state.domains.has(c));
+      // Select All label — only considers available (non-locked) domains
+      const allSelected = available.length > 0 && available.every(c => state.domains.has(c));
       document.getElementById('select-all-btn').textContent =
         allSelected ? 'Deselect All' : 'Select All';
 
@@ -561,6 +575,11 @@
       const warn = document.getElementById('domain-warn');
       const btn  = document.getElementById('start-btn');
       if (codes.length === 0) {
+        warn.textContent = 'Select at least one domain to continue.';
+        warn.style.display = 'block';
+        btn.disabled = true;
+      } else if (filteredQ === 0) {
+        warn.textContent = 'No questions match the selected mode and passage type. Try different filters.';
         warn.style.display = 'block';
         btn.disabled = true;
       } else {

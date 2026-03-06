@@ -3,30 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mastery Page</title>
+  <title>MasteryPage — EPPP Prep Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #09090b;
-      --bg2: #0c0c0e;
-      --bg3: #121214;
-      --gold: #d4a054;
-      --gold-light: #e4b76a;
-      --gold-dark: #b8863c;
-      --green: #34d399;
-      --purple: #9333ea;
-      --orange: #f97316;
-      --text: #fafafa;
-      --text2: #a8a8b3;
-      --text3: #6b6b76;
-      --border: rgba(255,255,255,0.07);
-    }
-
-    html, body {
-      height: 100%;
+      --bg:          #09090b;
+      --bg3:         #121214;
+      --gold:        #d4a054;
+      --gold-light:  #e4b76a;
+      --gold-dark:   #b8863c;
+      --green:       #34d399;
+      --purple:      #9333ea;
+      --orange:      #f97316;
+      --text:        #fafafa;
+      --text2:       #a8a8b3;
+      --text3:       #52525b;
+      --border:      rgba(255,255,255,0.07);
     }
 
     body {
@@ -38,8 +33,8 @@
     }
 
     @keyframes pulseGlow {
-      0%, 100% { opacity: 0.10; }
-      50%       { opacity: 0.18; }
+      0%, 100% { opacity: 0.08; }
+      50%       { opacity: 0.15; }
     }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -54,312 +49,280 @@
       50%       { box-shadow: 0 0 0 8px rgba(212,160,84,0); }
     }
 
-    /* Ambient glow blobs */
     .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(100px);
-      pointer-events: none;
-      animation: pulseGlow 6s ease-in-out infinite;
-      z-index: 0;
+      position: fixed; border-radius: 50%; filter: blur(120px);
+      pointer-events: none; animation: pulseGlow 7s ease-in-out infinite; z-index: 0;
     }
-    .blob-gold {
-      width: 600px; height: 600px;
-      background: #d4a054;
-      top: -180px; right: -160px;
-    }
-    .blob-purple {
-      width: 500px; height: 500px;
-      background: #9333ea;
-      bottom: -160px; left: -140px;
-      animation-delay: 3s;
-    }
+    .blob-gold   { width:600px; height:600px; background:#b8863c; top:-200px; right:-180px; }
+    .blob-purple { width:500px; height:500px; background:#6d28d9; bottom:-180px; left:-160px; animation-delay:3.5s; }
 
-    /* Nav */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 10;
-      height: 64px;
-      background: rgba(9,9,11,0.8);
-      backdrop-filter: blur(20px);
+      position: fixed; top:0; left:0; right:0; z-index:10; height:60px;
+      background: rgba(9,9,11,0.85); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 32px;
+      display: flex; align-items: center; padding: 0 32px;
     }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
     .logo-icon {
-      width: 34px; height: 34px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #9333ea, #6d28d9);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 16px; color: #fff;
+      width:32px; height:32px; border-radius:8px;
+      background: linear-gradient(135deg,#9333ea,#6d28d9);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:15px; color:#fff;
     }
-    .logo-title { font-weight: 700; font-size: 15px; }
-    .logo-sub { font-size: 10px; color: var(--text3); letter-spacing: 0.06em; display: block; }
+    .logo-title { font-weight:700; font-size:15px; }
+    .logo-sub   { font-size:10px; color:var(--text3); letter-spacing:0.07em; display:block; }
 
-    /* Page content */
     .page {
-      position: relative;
-      z-index: 1;
-      padding-top: 64px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      position:relative; z-index:1;
+      padding: 60px 0 80px;
+      display: flex; flex-direction: column; align-items: center;
     }
 
-    /* Banner */
-    .banner-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
+    /* ── Hero header ─────────────────────────────── */
+    .hero {
       text-align: center;
-      padding: 52px 24px 40px;
-      animation: fadeInUp 0.7s ease-out both;
+      padding: 56px 24px 48px;
+      animation: fadeInUp 0.6s ease-out both;
     }
-
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(212,160,84,0.1);
       border: 1px solid rgba(212,160,84,0.28);
-      border-radius: 40px;
-      padding: 6px 16px;
-      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-      color: var(--gold-light);
-      text-transform: uppercase;
+      border-radius: 40px; padding: 6px 16px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      color: var(--gold-light); text-transform: uppercase; margin-bottom: 20px;
     }
     .pulse-dot {
-      width: 7px; height: 7px;
-      background: var(--gold);
-      border-radius: 50%;
-      animation: ping 2s ease-in-out infinite;
+      width:6px; height:6px; background:var(--gold); border-radius:50%;
+      animation: ping 2.2s ease-in-out infinite;
     }
-
     h1 {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: clamp(2.6rem, 6vw, 4.2rem);
-      line-height: 1.08;
-      letter-spacing: -0.01em;
-      color: var(--text);
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      line-height: 1.08; letter-spacing: -0.01em;
     }
     h1 em {
       font-style: italic;
       background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
       background-size: 600px 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 4s linear infinite;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; animation: shimmer 4s linear infinite;
     }
-
-    .divider {
-      width: 50px; height: 2px;
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 15px; color: var(--text2); line-height: 1.6;
+      max-width: 440px; margin-left: auto; margin-right: auto;
+    }
+    .hero-divider {
+      width: 48px; height: 2px; margin: 24px auto 0;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
       border-radius: 2px;
     }
 
-    /* Module grid */
-    .modules-grid {
+    /* ── Layout wrapper ──────────────────────────── */
+    .content {
+      width: 100%; max-width: 960px;
+      padding: 0 24px;
+    }
+
+    /* ── Section label ───────────────────────────── */
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text3);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Featured row (Brain Path 3.0 + Patient Encounter) ── */
+    .featured-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
-      width: 100%;
-      max-width: 900px;
-      padding: 0 24px 60px;
-      animation: fadeInUp 0.8s ease-out 0.15s both;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.7s ease-out 0.05s both;
     }
 
     .module-card {
       background: rgba(255,255,255,0.025);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 32px 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      padding: 28px 26px;
+      display: flex; flex-direction: column; gap: 12px;
       cursor: pointer;
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      position: relative;
-      overflow: hidden;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+      position: relative; overflow: hidden;
     }
     .module-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.3s;
-      border-radius: inherit;
+      content: ''; position:absolute; inset:0;
+      opacity: 0; transition: opacity 0.3s; border-radius: inherit;
     }
-    .module-card:hover { transform: translateY(-5px); }
+    .module-card:hover { transform: translateY(-4px); }
 
-    /* Clinical — gold */
-    .card-clinical {
-      border-color: rgba(212,160,84,0.2);
+    /* Featured cards — taller, richer */
+    .card-featured {
+      padding: 32px 30px 28px;
     }
-    .card-clinical::before {
-      background: radial-gradient(ellipse at top left, rgba(212,160,84,0.08), transparent 70%);
+    .card-featured .module-title {
+      font-size: 1.5rem;
     }
-    .card-clinical:hover {
-      border-color: rgba(212,160,84,0.45);
-      box-shadow: 0 20px 50px rgba(212,160,84,0.12);
+    .card-featured .module-desc {
+      font-size: 13.5px;
+      color: var(--text2);
     }
+
+    /* ── Practice grid (3-col) ────────────────────── */
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      animation: fadeInUp 0.8s ease-out 0.12s both;
+    }
+    .practice-grid .module-card {
+      padding: 22px 20px;
+    }
+    .practice-grid .module-icon {
+      width: 40px; height: 40px; font-size: 19px;
+    }
+    .practice-grid .module-title {
+      font-size: 1.05rem;
+    }
+    .practice-grid .module-desc {
+      font-size: 12px;
+    }
+
+    /* ── Card colors ─────────────────────────────── */
+
+    /* Brain Pathology 3.0 — deep ruby */
+    .card-neuro30 { border-color: rgba(159,18,57,0.30); }
+    .card-neuro30::before { background: radial-gradient(ellipse at top left, rgba(159,18,57,0.14), transparent 70%); }
+    .card-neuro30:hover { border-color: rgba(244,63,94,0.5); box-shadow: 0 24px 60px rgba(159,18,57,0.18); }
+    .card-neuro30:hover::before { opacity: 1; }
+    .card-neuro30:hover .module-arrow { color: #f43f5e; }
+
+    /* Patient Encounter — indigo */
+    .card-encounter { border-color: rgba(99,102,241,0.25); }
+    .card-encounter::before { background: radial-gradient(ellipse at top left, rgba(99,102,241,0.12), transparent 70%); }
+    .card-encounter:hover { border-color: rgba(99,102,241,0.5); box-shadow: 0 24px 60px rgba(99,102,241,0.16); }
+    .card-encounter:hover::before { opacity: 1; }
+    .card-encounter:hover .module-arrow { color: #818cf8; }
+
+    /* Clinical Vignette — gold */
+    .card-clinical { border-color: rgba(212,160,84,0.2); }
+    .card-clinical::before { background: radial-gradient(ellipse at top left, rgba(212,160,84,0.08), transparent 70%); }
+    .card-clinical:hover { border-color: rgba(212,160,84,0.45); box-shadow: 0 16px 40px rgba(212,160,84,0.12); }
     .card-clinical:hover::before { opacity: 1; }
+    .card-clinical:hover .module-arrow { color: var(--gold); }
 
     /* Ethics — green */
-    .card-ethics {
-      border-color: rgba(52,211,153,0.2);
-    }
-    .card-ethics::before {
-      background: radial-gradient(ellipse at top left, rgba(52,211,153,0.08), transparent 70%);
-    }
-    .card-ethics:hover {
-      border-color: rgba(52,211,153,0.45);
-      box-shadow: 0 20px 50px rgba(52,211,153,0.1);
-    }
+    .card-ethics { border-color: rgba(52,211,153,0.18); }
+    .card-ethics::before { background: radial-gradient(ellipse at top left, rgba(52,211,153,0.07), transparent 70%); }
+    .card-ethics:hover { border-color: rgba(52,211,153,0.4); box-shadow: 0 16px 40px rgba(52,211,153,0.10); }
     .card-ethics:hover::before { opacity: 1; }
+    .card-ethics:hover .module-arrow { color: var(--green); }
 
     /* This or That — purple */
-    .card-thisorthat {
-      border-color: rgba(147,51,234,0.2);
-    }
-    .card-thisorthat::before {
-      background: radial-gradient(ellipse at top left, rgba(147,51,234,0.08), transparent 70%);
-    }
-    .card-thisorthat:hover {
-      border-color: rgba(147,51,234,0.45);
-      box-shadow: 0 20px 50px rgba(147,51,234,0.12);
-    }
+    .card-thisorthat { border-color: rgba(147,51,234,0.2); }
+    .card-thisorthat::before { background: radial-gradient(ellipse at top left, rgba(147,51,234,0.08), transparent 70%); }
+    .card-thisorthat:hover { border-color: rgba(147,51,234,0.45); box-shadow: 0 16px 40px rgba(147,51,234,0.12); }
     .card-thisorthat:hover::before { opacity: 1; }
+    .card-thisorthat:hover .module-arrow { color: #c084fc; }
 
+    /* Streak — orange */
+    .card-streak { border-color: rgba(249,115,22,0.2); }
+    .card-streak::before { background: radial-gradient(ellipse at top left, rgba(249,115,22,0.08), transparent 70%); }
+    .card-streak:hover { border-color: rgba(249,115,22,0.45); box-shadow: 0 16px 40px rgba(249,115,22,0.12); }
+    .card-streak:hover::before { opacity: 1; }
+    .card-streak:hover .module-arrow { color: #fb923c; }
+
+    /* Spot the Error — teal */
+    .card-spot { border-color: rgba(45,212,191,0.18); }
+    .card-spot::before { background: radial-gradient(ellipse at top left, rgba(45,212,191,0.07), transparent 70%); }
+    .card-spot:hover { border-color: rgba(45,212,191,0.4); box-shadow: 0 16px 40px rgba(45,212,191,0.10); }
+    .card-spot:hover::before { opacity: 1; }
+    .card-spot:hover .module-arrow { color: #5eead4; }
+
+    /* Complete the Table — blue */
+    .card-studyguide { border-color: rgba(59,130,246,0.18); }
+    .card-studyguide::before { background: radial-gradient(ellipse at top left, rgba(59,130,246,0.07), transparent 70%); }
+    .card-studyguide:hover { border-color: rgba(59,130,246,0.4); box-shadow: 0 16px 40px rgba(59,130,246,0.10); }
+    .card-studyguide:hover::before { opacity: 1; }
+    .card-studyguide:hover .module-arrow { color: #60a5fa; }
+
+    /* ── Card internals ──────────────────────────── */
     .module-icon {
-      width: 50px; height: 50px;
-      border-radius: 12px;
+      width: 46px; height: 46px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      font-size: 22px; flex-shrink: 0;
     }
-    .icon-gold    { background: rgba(212,160,84,0.12); }
-    .icon-green   { background: rgba(52,211,153,0.12); }
-    .icon-purple  { background: rgba(147,51,234,0.12); }
-    .icon-orange  { background: rgba(249,115,22,0.12); }
+    .icon-ruby   { background: rgba(159,18,57,0.15); }
+    .icon-indigo { background: rgba(99,102,241,0.12); }
+    .icon-gold   { background: rgba(212,160,84,0.12); }
+    .icon-green  { background: rgba(52,211,153,0.12); }
+    .icon-purple { background: rgba(147,51,234,0.12); }
+    .icon-orange { background: rgba(249,115,22,0.12); }
+    .icon-teal   { background: rgba(45,212,191,0.12); }
+    .icon-blue   { background: rgba(59,130,246,0.12); }
+
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+
+    .module-badge {
+      display: inline-flex; align-items: center;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+      border-radius: 6px; padding: 3px 8px; text-transform: uppercase;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .badge-featured {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--text2);
+    }
+    .badge-new {
+      background: rgba(99,102,241,0.18);
+      border: 1px solid rgba(99,102,241,0.4);
+      color: #a5b4fc;
+    }
 
     .module-label {
       font-size: 10px; font-weight: 600;
       letter-spacing: 0.1em; text-transform: uppercase;
     }
+    .label-ruby   { color: #f43f5e; }
+    .label-indigo { color: #818cf8; }
     .label-gold   { color: var(--gold-light); }
     .label-green  { color: var(--green); }
     .label-purple { color: #c084fc; }
     .label-orange { color: #fb923c; }
+    .label-teal   { color: #5eead4; }
+    .label-blue   { color: #60a5fa; }
 
     .module-title {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 1.35rem;
-      line-height: 1.2;
-      color: var(--text);
+      font-size: 1.25rem; line-height: 1.2; color: var(--text);
     }
 
     .module-desc {
-      font-size: 13px;
-      color: var(--text3);
-      line-height: 1.6;
+      font-size: 13px; color: var(--text3); line-height: 1.65;
+      flex: 1;
     }
 
     .module-arrow {
-      margin-top: auto;
-      font-size: 18px;
-      color: var(--text3);
+      font-size: 16px; color: var(--text3);
       transition: color 0.2s, transform 0.2s;
+      margin-top: auto; align-self: flex-end;
     }
     .module-card:hover .module-arrow { transform: translateX(4px); }
-    .card-clinical:hover   .module-arrow { color: var(--gold); }
-    .card-ethics:hover     .module-arrow { color: var(--green); }
-    .card-thisorthat:hover .module-arrow { color: #c084fc; }
 
-    /* Streak — orange */
-    .card-streak {
-      border-color: rgba(249,115,22,0.2);
+    /* ── Responsive ──────────────────────────────── */
+    @media (max-width: 760px) {
+      .featured-grid  { grid-template-columns: 1fr; }
+      .practice-grid  { grid-template-columns: 1fr 1fr; }
     }
-    .card-streak::before {
-      background: radial-gradient(ellipse at top left, rgba(249,115,22,0.08), transparent 70%);
-    }
-    .card-streak:hover {
-      border-color: rgba(249,115,22,0.45);
-      box-shadow: 0 20px 50px rgba(249,115,22,0.12);
-    }
-    .card-streak:hover::before { opacity: 1; }
-    .card-streak:hover .module-arrow { color: #fb923c; }
-
-    /* Spot the Error — teal */
-    .card-spot {
-      border-color: rgba(45,212,191,0.2);
-    }
-    .card-spot::before {
-      background: radial-gradient(ellipse at top left, rgba(45,212,191,0.08), transparent 70%);
-    }
-    .card-spot:hover {
-      border-color: rgba(45,212,191,0.45);
-      box-shadow: 0 20px 50px rgba(45,212,191,0.12);
-    }
-    .card-spot:hover::before { opacity: 1; }
-    .card-spot:hover .module-arrow { color: #5eead4; }
-    .icon-teal  { background: rgba(45,212,191,0.12); }
-    .label-teal { color: #5eead4; }
-
-    /* Study Guide — blue */
-    .card-studyguide {
-      border-color: rgba(59,130,246,0.2);
-    }
-    .card-studyguide::before {
-      background: radial-gradient(ellipse at top left, rgba(59,130,246,0.08), transparent 70%);
-    }
-    .card-studyguide:hover {
-      border-color: rgba(59,130,246,0.45);
-      box-shadow: 0 20px 50px rgba(59,130,246,0.12);
-    }
-    .card-studyguide:hover::before { opacity: 1; }
-    .card-studyguide:hover .module-arrow { color: #60a5fa; }
-    .icon-blue { background: rgba(59,130,246,0.12); }
-    .label-blue { color: #60a5fa; }
-
-    /* Brain Pathology 3.0 — dark ruby */
-    .card-neuro30 {
-      border-color: rgba(159,18,57,0.30);
-    }
-    .card-neuro30::before {
-      background: radial-gradient(ellipse at top left, rgba(159,18,57,0.12), transparent 70%);
-    }
-    .card-neuro30:hover {
-      border-color: rgba(159,18,57,0.55);
-      box-shadow: 0 20px 50px rgba(159,18,57,0.16);
-    }
-    .card-neuro30:hover::before { opacity: 1; }
-    .card-neuro30:hover .module-arrow { color: #f43f5e; }
-    .icon-ruby  { background: rgba(159,18,57,0.12); }
-    .label-ruby { color: #f43f5e; }
-
-    /* Patient Encounter — indigo */
-    .card-encounter {
-      border-color: rgba(99,102,241,0.2);
-    }
-    .card-encounter::before {
-      background: radial-gradient(ellipse at top left, rgba(99,102,241,0.1), transparent 70%);
-    }
-    .card-encounter:hover {
-      border-color: rgba(99,102,241,0.45);
-      box-shadow: 0 20px 50px rgba(99,102,241,0.14);
-    }
-    .card-encounter:hover::before { opacity: 1; }
-    .card-encounter:hover .module-arrow { color: #818cf8; }
-    .icon-indigo  { background: rgba(99,102,241,0.12); }
-    .label-indigo { color: #818cf8; }
-
-    @media (max-width: 700px) {
-      .modules-grid { grid-template-columns: 1fr; }
+    @media (max-width: 480px) {
+      .practice-grid  { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -369,94 +332,112 @@
   <div class="blob blob-purple"></div>
 
   <nav>
-    <div class="logo">
+    <a class="logo" href="index.html">
       <div class="logo-icon">M</div>
       <div>
         <span class="logo-title">MasteryPage</span>
-        <span class="logo-sub">MASTERY PREP PLATFORM</span>
+        <span class="logo-sub">EPPP PREP PLATFORM</span>
       </div>
-    </div>
+    </a>
   </nav>
 
   <div class="page">
 
-    <div class="banner-wrap">
+    <div class="hero">
       <div class="eyebrow">
         <span class="pulse-dot"></span>
         Mastery Prep Platform
       </div>
-      <h1>Mastery <em>Modules</em></h1>
-      <div class="divider"></div>
+      <h1>Choose Your <em>Module</em></h1>
+      <p class="hero-sub">Evidence-based tools for EPPP preparation — built around active recall, clinical reasoning, and spaced practice.</p>
+      <div class="hero-divider"></div>
     </div>
 
-    <div class="modules-grid">
+    <div class="content">
 
-      <div class="module-card card-encounter" onclick="location.href='clinical-presentation-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-indigo">⚕</div>
-        <div class="module-label label-indigo">Immersive</div>
-        <div class="module-title">Patient Encounter</div>
-        <div class="module-desc">Animated patient cases. Watch symptoms unfold, read the chart, then make real clinical judgments.</div>
-        <div class="module-arrow">→</div>
+      <!-- Featured -->
+      <div class="section-label">Featured</div>
+      <div class="featured-grid">
+
+        <div class="module-card card-neuro30 card-featured" onclick="location.href='brain-settings-30.html'">
+          <div class="card-header">
+            <div class="module-icon icon-ruby">&#129504;</div>
+            <span class="module-badge badge-featured">3.0</span>
+          </div>
+          <div class="module-label label-ruby">Neuropsychology</div>
+          <div class="module-title">Brain Pathology</div>
+          <div class="module-desc">Identify lesion sites from clinical deficits using a fully interactive 3D brain model. 141 clinical case, deficit, and region questions across 14 categories.</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
+
+        <div class="module-card card-encounter card-featured" onclick="location.href='clinical-presentation-settings.html'">
+          <div class="card-header">
+            <div class="module-icon icon-indigo">&#9877;</div>
+            <span class="module-badge badge-new">New</span>
+          </div>
+          <div class="module-label label-indigo">Immersive</div>
+          <div class="module-title">Patient Encounter</div>
+          <div class="module-desc">Watch symptoms unfold in animated patient cases, review the clinical chart, then make real diagnostic and treatment decisions.</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
+
       </div>
 
-      <div class="module-card card-clinical" onclick="location.href='clinical-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-gold">🧠</div>
-        <div class="module-label label-gold">Vignette</div>
-        <div class="module-title">Clinical Vignette</div>
-        <div class="module-desc">Work through real-world clinical scenarios and sharpen your diagnostic and intervention reasoning.</div>
-        <div class="module-arrow">→</div>
-      </div>
+      <!-- Practice Modules -->
+      <div class="section-label">Practice Modules</div>
+      <div class="practice-grid">
 
-      <div class="module-card card-ethics" onclick="location.href='ethics-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-green">⚖️</div>
-        <div class="module-label label-green">Vignette</div>
-        <div class="module-title">Ethics Vignette</div>
-        <div class="module-desc">Navigate complex ethical dilemmas grounded in professional codes and real-practice situations.</div>
-        <div class="module-arrow">→</div>
-      </div>
+        <div class="module-card card-clinical" onclick="location.href='clinical-settings.html'">
+          <div class="module-icon icon-gold">&#129504;</div>
+          <div class="module-label label-gold">Vignette</div>
+          <div class="module-title">Clinical Vignette</div>
+          <div class="module-desc">Work through real-world clinical scenarios and sharpen diagnostic and intervention reasoning.</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
 
-      <div class="module-card card-thisorthat" onclick="location.href='thisorthat-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-purple">&#9889;</div>
-        <div class="module-label label-purple">Module</div>
-        <div class="module-title">This or That</div>
-        <div class="module-desc">Sharpen your ability to distinguish between closely related concepts, theories, and approaches.</div>
-        <div class="module-arrow">&#8594;</div>
-      </div>
+        <div class="module-card card-ethics" onclick="location.href='ethics-settings.html'">
+          <div class="module-icon icon-green">&#9878;</div>
+          <div class="module-label label-green">Vignette</div>
+          <div class="module-title">Ethics Vignette</div>
+          <div class="module-desc">Navigate ethical dilemmas grounded in the APA Ethics Code and real professional practice.</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
 
-      <div class="module-card card-streak" onclick="location.href='streak-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-orange">&#128293;</div>
-        <div class="module-label label-orange">Challenge</div>
-        <div class="module-title">Streak Challenge</div>
-        <div class="module-desc">How far can you go? Answer correctly to build your streak — one wrong answer ends the run.</div>
-        <div class="module-arrow">&#8594;</div>
-      </div>
+        <div class="module-card card-thisorthat" onclick="location.href='thisorthat-settings.html'">
+          <div class="module-icon icon-purple">&#9889;</div>
+          <div class="module-label label-purple">Discrimination</div>
+          <div class="module-title">This or That</div>
+          <div class="module-desc">Distinguish between closely related concepts, theories, and approaches that are commonly confused.</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
 
-      <div class="module-card card-spot" onclick="location.href='spot-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-teal">&#128270;</div>
-        <div class="module-label label-teal">Module</div>
-        <div class="module-title">Spot the Error</div>
-        <div class="module-desc">Read a passage from the EPPP Study Guide with one deliberate error. Can you catch what's wrong?</div>
-        <div class="module-arrow">&#8594;</div>
-      </div>
+        <div class="module-card card-streak" onclick="location.href='streak-settings.html'">
+          <div class="module-icon icon-orange">&#128293;</div>
+          <div class="module-label label-orange">Challenge</div>
+          <div class="module-title">Streak Challenge</div>
+          <div class="module-desc">Build your streak by answering correctly — one wrong answer ends the run. How far can you go?</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
 
-      <div class="module-card card-studyguide" onclick="location.href='table-settings.html'" style="cursor:pointer;">
-        <div class="module-icon icon-blue">&#128203;</div>
-        <div class="module-label label-blue">Module</div>
-        <div class="module-title">Complete the Table</div>
-        <div class="module-desc">Comparison tables from the EPPP Study Guide with cells blanked out. Drag the correct value into each blank.</div>
-        <div class="module-arrow">&#8594;</div>
-      </div>
+        <div class="module-card card-spot" onclick="location.href='spot-settings.html'">
+          <div class="module-icon icon-teal">&#128270;</div>
+          <div class="module-label label-teal">Error Detection</div>
+          <div class="module-title">Spot the Error</div>
+          <div class="module-desc">Read a study guide passage with one deliberate factual error embedded. Can you catch it?</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
 
-      <div class="module-card card-neuro30" onclick="location.href='brain-settings-30.html'" style="cursor:pointer;">
-        <div class="module-icon icon-ruby">&#129504;</div>
-        <div class="module-label label-ruby">Module <span class="module-version-badge">3.0</span></div>
-        <div class="module-title">Brain Pathology 3.0</div>
-        <div class="module-desc">Identify lesion sites from clinical deficits and map dysfunctions to brain regions using an interactive diagram.</div>
-        <div class="module-arrow">&#8594;</div>
+        <div class="module-card card-studyguide" onclick="location.href='table-settings.html'">
+          <div class="module-icon icon-blue">&#128203;</div>
+          <div class="module-label label-blue">Recall</div>
+          <div class="module-title">Complete the Table</div>
+          <div class="module-desc">Comparison tables from the EPPP Study Guide with cells blanked out — drag the correct value into each blank.</div>
+          <div class="module-arrow">&#8594;</div>
+        </div>
+
       </div>
 
     </div>
-
   </div>
 
 </body>

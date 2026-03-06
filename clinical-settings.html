@@ -521,8 +521,8 @@
             <span class="domain-code-badge">PMET</span>
             <div class="domain-check-small">✓</div>
           </div>
-          <div class="domain-full-name">Psychometrics &amp; Research Methods</div>
-          <div class="domain-q-count">193 anchors · 965 vignettes</div>
+          <div class="domain-full-name">Research Methods, Measurement &amp; Learning</div>
+          <div class="domain-q-count">91 anchors · 620 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="LDEV" onclick="toggleDomain(this)">
@@ -531,7 +531,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Lifespan &amp; Developmental Stages</div>
-          <div class="domain-q-count">174 anchors · 870 vignettes</div>
+          <div class="domain-q-count">117 anchors · 585 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="CPAT" onclick="toggleDomain(this)">
@@ -540,7 +540,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Clinical Psychopathology (DSM-5)</div>
-          <div class="domain-q-count">134 anchors · 670 vignettes</div>
+          <div class="domain-q-count">132 anchors · 660 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="PTHE" onclick="toggleDomain(this)">
@@ -549,7 +549,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Psychotherapy Models, Interventions &amp; Prevention</div>
-          <div class="domain-q-count">168 anchors · 840 vignettes</div>
+          <div class="domain-q-count">98 anchors · 550 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="SOCU" onclick="toggleDomain(this)">
@@ -558,7 +558,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Social &amp; Cultural Psychology</div>
-          <div class="domain-q-count">153 anchors · 765 vignettes</div>
+          <div class="domain-q-count">96 anchors · 505 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="WDEV" onclick="toggleDomain(this)">
@@ -567,7 +567,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Workforce Development &amp; Leadership</div>
-          <div class="domain-q-count">172 anchors · 860 vignettes</div>
+          <div class="domain-q-count">113 anchors · 565 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="BPSY" onclick="toggleDomain(this)">
@@ -576,7 +576,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Biopsychology</div>
-          <div class="domain-q-count">192 anchors · 960 vignettes</div>
+          <div class="domain-q-count">131 anchors · 695 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="CASS" onclick="toggleDomain(this)">
@@ -585,7 +585,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Clinical Assessment &amp; Interpretation</div>
-          <div class="domain-q-count">190 anchors · 950 vignettes</div>
+          <div class="domain-q-count">61 anchors · 325 vignettes</div>
         </div>
 
         <div class="domain-card" data-domain="PETH" onclick="toggleDomain(this)">
@@ -593,8 +593,8 @@
             <span class="domain-code-badge">PETH</span>
             <div class="domain-check-small">✓</div>
           </div>
-          <div class="domain-full-name">Psychopharmacology &amp; Ethics</div>
-          <div class="domain-q-count">191 anchors · 955 vignettes</div>
+          <div class="domain-full-name">Ethics, Law &amp; Professional Practice</div>
+          <div class="domain-q-count">112 anchors · 560 vignettes</div>
         </div>
 
       </div>
@@ -696,6 +696,7 @@
         </div>
 
       </div>
+      <p class="warn" id="timer-level-warn" style="display:none;">⚠ 25 seconds may be insufficient for L4/L5 vignettes — these require reading 150–300+ words and evaluating complex distractors.</p>
     </div>
 
     <!-- ── 6. ANNOTATIONS ── -->
@@ -774,6 +775,7 @@
       state.levels.has(lvl) ? state.levels.delete(lvl) : state.levels.add(lvl);
       card.classList.toggle('selected');
       updateSummary();
+      updateTimerLevelWarn();
     }
 
     // ── Mixed Domains ──
@@ -857,6 +859,14 @@
       card.classList.add('selected');
       state.timer = card.dataset.timer;
       updateSummary();
+      updateTimerLevelWarn();
+    }
+
+    function updateTimerLevelWarn() {
+      const hasHighLevel = state.levels.has('4') || state.levels.has('5');
+      const isRapidFire  = state.timer === '25';
+      document.getElementById('timer-level-warn').style.display =
+        (hasHighLevel && isRapidFire) ? 'block' : 'none';
     }
 
     // ── Annotations ──
@@ -908,6 +918,38 @@
     }
 
     updateSummary();
+
+    // ── Live domain counts from manifest ──
+    fetch('data/vignette_stats.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(stats => {
+        if (!stats) return;
+        document.querySelectorAll('.domain-card[data-domain]').forEach(card => {
+          const code = card.dataset.domain;
+          const s = stats[code];
+          if (!s) return;
+          const el = card.querySelector('.domain-q-count');
+          if (el) el.textContent = `${s.anchors} anchors · ${s.vignettes} vignettes`;
+        });
+      })
+      .catch(() => {});
+
+    // ── Weakest First: disable when no session history exists ──
+    (function checkWeakestFirst() {
+      try {
+        const stored = JSON.parse(localStorage.getItem('mastery_scores') || '{}');
+        const hasHistory = stored.clinical && Object.values(stored.clinical).some(s => s.total > 0);
+        if (!hasHistory) {
+          const weakestOption = document.querySelector('[data-order="weakest"]');
+          if (weakestOption) {
+            weakestOption.style.opacity = '0.4';
+            weakestOption.style.cursor  = 'default';
+            weakestOption.style.pointerEvents = 'none';
+            weakestOption.querySelector('.toggle-sublabel').textContent = 'Complete a session first to unlock';
+          }
+        }
+      } catch {}
+    })();
   </script>
 
 </body>

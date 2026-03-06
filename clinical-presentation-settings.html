@@ -220,10 +220,17 @@
     .domain-q-count { font-size: 11px; color: var(--text3); }
     .domain-card.selected .domain-q-count { color: var(--accent-dark); }
 
+    .specific-domains-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 16px 0 12px;
+      font-size: 11px; font-weight: 600; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--text3);
+    }
+
     /* ── MIXED TAB ── */
     .mixed-tab {
       display: flex; align-items: center; justify-content: center; gap: 12px;
-      width: 100%; margin-top: 10px;
+      width: 100%; margin-top: 0; margin-bottom: 0;
       background: rgba(255,255,255,0.025);
       border: 1px dashed rgba(99,102,241,0.25);
       border-radius: 12px;
@@ -409,6 +416,40 @@
 
     .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 
+    /* ── HISTORY BANNER ── */
+    .history-banner {
+      display: flex; gap: 0; flex-wrap: wrap;
+      background: rgba(255,255,255,.025); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 18px; margin-bottom: 32px;
+      align-items: center;
+    }
+    .history-banner-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text3); margin-right: 16px; flex-shrink: 0;
+    }
+    .hist-items { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hist-item  { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .hist-code  { font-size: 9px; font-weight: 700; letter-spacing: .1em; color: var(--text3); }
+    .hist-pct   { font-family: 'Instrument Serif', serif; font-size: 1.1rem; }
+
+    /* ── RESUME BANNER ── */
+    .resume-banner {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(99,102,241,.06); border: 1px solid rgba(99,102,241,.2);
+      border-radius: 12px; padding: 14px 18px; margin-bottom: 28px;
+    }
+    .resume-icon { font-size: 18px; color: var(--accent-light); flex-shrink: 0; }
+    .resume-text { flex: 1; min-width: 0; }
+    .resume-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .resume-desc  { font-size: 11px; color: var(--text3); margin-top: 2px; }
+    .resume-btn {
+      flex-shrink: 0; padding: 8px 14px;
+      background: var(--accent); color: #fff; border-radius: 8px;
+      font-size: 12px; font-weight: 600; text-decoration: none;
+      transition: background .15s;
+    }
+    .resume-btn:hover { background: var(--accent-hover, #5558e0); }
+
     @media (max-width: 600px) {
       nav { padding: 0 16px; }
       .domains-grid { grid-template-columns: repeat(2, 1fr); }
@@ -447,10 +488,25 @@
     <h1 class="page-title">Session <em>Settings</em></h1>
     <p class="page-sub">Configure your clinical encounter session.</p>
 
+    <div id="history-banner" class="history-banner" style="display:none">
+      <span class="history-banner-label">Past scores</span>
+      <div class="hist-items" id="hist-items"></div>
+    </div>
+
+    <div id="resume-banner" class="resume-banner" style="display:none">
+      <div class="resume-icon">↩</div>
+      <div class="resume-text">
+        <div class="resume-title">Resume last session</div>
+        <div class="resume-desc" id="resume-desc"></div>
+      </div>
+      <a class="resume-btn" id="resume-btn" href="#">Resume →</a>
+    </div>
+
     <!-- ── 1. DIFFICULTY LEVEL ── -->
     <div class="settings-section">
       <div class="section-header">
         <div class="section-label">Difficulty Level</div>
+        <button class="select-all-btn" id="level-all-btn" onclick="toggleAllLevels()">Select all</button>
       </div>
       <div class="levels-grid">
 
@@ -502,6 +558,18 @@
     <div class="settings-section">
       <div class="section-header">
         <div class="section-label">Domain</div>
+      </div>
+
+      <div class="mixed-tab" id="mixed-card" onclick="toggleMixed()">
+        <span class="mixed-tab-icon">🔀</span>
+        <span class="mixed-tab-label">Mixed Domains</span>
+        <div class="mixed-tab-sep"></div>
+        <span class="mixed-tab-desc">Draw from all 9 domains each session</span>
+        <div class="mixed-tab-check">✓</div>
+      </div>
+
+      <div class="specific-domains-header">
+        <span>Or choose specific domains</span>
         <button class="select-all-btn" id="domain-all-btn" onclick="toggleAllDomains()">Select all</button>
       </div>
 
@@ -513,7 +581,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Psychometrics &amp; Research Methods</div>
-          <div class="domain-q-count">Assessment intake encounters</div>
+          <div class="domain-q-count">30 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="LDEV" onclick="toggleDomain(this)">
@@ -522,7 +590,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Lifespan &amp; Developmental Stages</div>
-          <div class="domain-q-count">Lifespan patient encounters</div>
+          <div class="domain-q-count">32 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="CPAT" onclick="toggleDomain(this)">
@@ -531,7 +599,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Clinical Psychopathology (DSM-5-TR)</div>
-          <div class="domain-q-count">Diagnostic clinical encounters</div>
+          <div class="domain-q-count">32 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="PTHE" onclick="toggleDomain(this)">
@@ -540,7 +608,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Psychotherapy Models &amp; Interventions</div>
-          <div class="domain-q-count">Therapy approach encounters</div>
+          <div class="domain-q-count">32 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="SOCU" onclick="toggleDomain(this)">
@@ -549,7 +617,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Social &amp; Cultural Psychology</div>
-          <div class="domain-q-count">Multicultural clinical encounters</div>
+          <div class="domain-q-count">30 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="WDEV" onclick="toggleDomain(this)">
@@ -558,7 +626,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Workforce Development &amp; Leadership</div>
-          <div class="domain-q-count">Supervision &amp; consultation cases</div>
+          <div class="domain-q-count">30 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="BPSY" onclick="toggleDomain(this)">
@@ -567,7 +635,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Biopsychology</div>
-          <div class="domain-q-count">Neurobiological case encounters</div>
+          <div class="domain-q-count">32 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="CASS" onclick="toggleDomain(this)">
@@ -576,7 +644,7 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Clinical Assessment &amp; Interpretation</div>
-          <div class="domain-q-count">Assessment session encounters</div>
+          <div class="domain-q-count">30 encounters</div>
         </div>
 
         <div class="domain-card" data-domain="PETH" onclick="toggleDomain(this)">
@@ -585,17 +653,9 @@
             <div class="domain-check-small">✓</div>
           </div>
           <div class="domain-full-name">Psychopharmacology &amp; Ethics</div>
-          <div class="domain-q-count">Ethics dilemma encounters</div>
+          <div class="domain-q-count">38 encounters</div>
         </div>
 
-      </div>
-
-      <div class="mixed-tab" id="mixed-card" onclick="toggleMixed()">
-        <span class="mixed-tab-icon">🔀</span>
-        <span class="mixed-tab-label">Mixed Domains</span>
-        <div class="mixed-tab-sep"></div>
-        <span class="mixed-tab-desc">Draw from all 9 domains each session</span>
-        <div class="mixed-tab-check">✓</div>
       </div>
 
       <p class="warn" id="domain-warn">Select at least one domain to continue.</p>
@@ -618,6 +678,7 @@
           <label for="custom-count">custom</label>
         </div>
       </div>
+      <p class="warn" id="pool-warn" style="display:none"></p>
     </div>
 
     <!-- ── 4. PRESENTATION SPEED ── -->
@@ -631,28 +692,28 @@
           <div class="speed-icon">🐢</div>
           <div class="speed-name">Slow</div>
           <div class="speed-label">Deliberate</div>
-          <div class="speed-sublabel">More time to read and absorb each phase</div>
+          <div class="speed-sublabel">50ms/char · 3s hold between phases</div>
         </div>
 
         <div class="speed-card" data-speed="normal" onclick="selectSpeed(this)">
           <div class="speed-icon">⚕</div>
           <div class="speed-name">Normal</div>
-          <div class="speed-label">Auto-Advance</div>
-          <div class="speed-sublabel">Balanced pace for most learners</div>
+          <div class="speed-label">Recommended</div>
+          <div class="speed-sublabel">30ms/char · 1.5s hold · natural pacing</div>
         </div>
 
         <div class="speed-card" data-speed="fast" onclick="selectSpeed(this)">
           <div class="speed-icon">⚡</div>
           <div class="speed-name">Fast</div>
           <div class="speed-label">Rapid</div>
-          <div class="speed-sublabel">Quick read, tests rapid clinical pattern recognition</div>
+          <div class="speed-sublabel">12ms/char · 0.5s hold · stress your pattern recall</div>
         </div>
 
         <div class="speed-card manual-card selected" data-speed="manual" onclick="selectSpeed(this)">
           <div class="speed-icon">👆</div>
           <div class="speed-name">Manual</div>
-          <div class="speed-label">Recommended</div>
-          <div class="speed-sublabel">Click to advance each phase yourself</div>
+          <div class="speed-label">Click to advance</div>
+          <div class="speed-sublabel">You control the pace — click Next after each phase</div>
         </div>
 
       </div>
@@ -885,6 +946,31 @@
     const speedLabels = { slow: 'Slow', normal: 'Normal', fast: 'Fast', manual: 'Manual' };
     const orderLabels = { shuffled: 'Shuffled', sequential: 'Sequential', weakest: 'Weakest First' };
 
+    // Per-domain, per-level encounter counts (verified 2026-03-05)
+    const DOMAIN_LEVEL_COUNTS = {
+      BPSY: {1:5, 2:13, 3:9,  4:5},
+      CASS: {1:5, 2:11, 3:5,  4:9},
+      CPAT: {1:5, 2:12, 3:7,  4:8},
+      LDEV: {1:5, 2:12, 3:7,  4:8},
+      PETH: {1:5, 2:13, 3:11, 4:9},
+      PMET: {1:5, 2:11, 3:5,  4:9},
+      PTHE: {1:5, 2:13, 3:6,  4:8},
+      SOCU: {1:5, 2:11, 3:6,  4:8},
+      WDEV: {1:5, 2:11, 3:7,  4:7},
+    };
+    const ALL_DOMAINS_LIST = Object.keys(DOMAIN_LEVEL_COUNTS);
+
+    function estimatePoolSize() {
+      const domains = state.mixed ? ALL_DOMAINS_LIST : [...state.domains];
+      let total = 0;
+      domains.forEach(d => {
+        const lvls = DOMAIN_LEVEL_COUNTS[d];
+        if (!lvls) return;
+        [...state.levels].forEach(l => { total += lvls[l] || 0; });
+      });
+      return total;
+    }
+
     function updateSummary() {
       document.getElementById('sum-levels').textContent =
         state.levels.size ? [...state.levels].sort().map(l => 'L' + l).join(', ') : 'None';
@@ -901,6 +987,18 @@
       if (state.showTags)  opts.push('Tags');
       if (state.showChart) opts.push('Chart');
       document.getElementById('sum-options').textContent = opts.length ? opts.join(' + ') : 'None';
+
+      // Pool size warning
+      const poolWarn = document.getElementById('pool-warn');
+      if (poolWarn && state.levels.size && (state.mixed || state.domains.size)) {
+        const avail = estimatePoolSize();
+        if (avail > 0 && avail < state.count) {
+          poolWarn.textContent = `Only ~${avail} encounters match your selection (${state.count} requested)`;
+          poolWarn.style.display = 'block';
+        } else {
+          poolWarn.style.display = 'none';
+        }
+      }
     }
 
     // ── Validate + Start ──
@@ -928,7 +1026,61 @@
       location.href = 'clinical-presentation-exercise.html?' + params.toString();
     }
 
+    // ── Level select-all ──
+    function toggleAllLevels() {
+      const cards = document.querySelectorAll('.level-card');
+      const allSelected = [...cards].every(c => c.classList.contains('selected'));
+      cards.forEach(card => {
+        const lvl = card.dataset.level;
+        if (allSelected) { card.classList.remove('selected'); state.levels.delete(lvl); }
+        else             { card.classList.add('selected');    state.levels.add(lvl); }
+      });
+      document.getElementById('level-all-btn').textContent = allSelected ? 'Select all' : 'Deselect all';
+      updateSummary();
+    }
+
+    // ── History banner ──
+    function renderHistoryBanner() {
+      try {
+        const scores = JSON.parse(localStorage.getItem('encounter_scores') || '{}');
+        const entries = Object.entries(scores).filter(([, s]) => s && s.total > 0);
+        if (!entries.length) return;
+        const banner = document.getElementById('history-banner');
+        const items  = document.getElementById('hist-items');
+        banner.style.display = 'flex';
+        items.innerHTML = entries
+          .sort((a, b) => (b[1].correct / b[1].total) - (a[1].correct / a[1].total))
+          .map(([d, s]) => {
+            const pct = Math.round(s.correct / s.total * 100);
+            const color = pct >= 75 ? '#34d399' : pct >= 55 ? '#fb923c' : '#f87171';
+            return `<span class="hist-item"><span class="hist-code">${d}</span><span class="hist-pct" style="color:${color}">${pct}%</span></span>`;
+          }).join('');
+        // Also reduce page-sub margin since banner follows immediately
+        document.querySelector('.page-sub').style.marginBottom = '16px';
+      } catch (e) { /* localStorage unavailable */ }
+    }
+
+    // ── Resume banner ──
+    function renderResumeBanner() {
+      const lastParams = localStorage.getItem('encounter_last_params');
+      if (!lastParams) return;
+      try {
+        const sp = new URLSearchParams(lastParams);
+        const domains = sp.get('domains') || 'Mixed';
+        const count   = sp.get('count')   || '10';
+        const speed   = sp.get('speed')   || 'normal';
+        const levels  = sp.get('levels')  || '1,2,3,4';
+        document.getElementById('resume-desc').textContent =
+          `${domains} · L${levels.replace(/,/g,'/')} · ${count} encounters · ${speed} speed`;
+        document.getElementById('resume-btn').href =
+          'clinical-presentation-exercise.html' + lastParams;
+        document.getElementById('resume-banner').style.display = 'flex';
+      } catch {}
+    }
+
     updateSummary();
+    renderHistoryBanner();
+    renderResumeBanner();
   </script>
 
 </body>

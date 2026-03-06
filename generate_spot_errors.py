@@ -296,6 +296,7 @@ def generate_question(client: anthropic.Anthropic, passage: dict,
 
             return {
                 "id":                passage['id'],
+                "mode":              "mc",
                 "domain_code":       passage['domain_code'],
                 "domain_name":       passage['domain_name'],
                 "chapter_file":      passage['chapter_file'],
@@ -639,8 +640,8 @@ def main():
     parser.add_argument('--resume', action='store_true',
                         help='Skip already-generated questions')
     parser.add_argument('--mode', default='mc',
-                        choices=['mc', 'passage_click', 'sentence_click', 'vocab'],
-                        help='Question mode to generate (default: mc)')
+                        choices=['mc', 'passage_click', 'sentence_click', 'vocab', 'all'],
+                        help='Question mode to generate (default: mc); "all" runs all four modes')
     parser.add_argument('--api-key', default=None,
                         help='Anthropic API key (overrides env / .env)')
     args = parser.parse_args()
@@ -657,8 +658,11 @@ def main():
             sys.exit(1)
         domains = [args.domain]
 
-    for code in domains:
-        process_domain(client, code, args.count, args.resume, args.mode)
+    modes = ['mc', 'passage_click', 'sentence_click', 'vocab'] \
+        if args.mode == 'all' else [args.mode]
+    for m in modes:
+        for code in domains:
+            process_domain(client, code, args.count, args.resume, m)
 
     print("\nRebuilding spot_data.js bundle...")
     import subprocess

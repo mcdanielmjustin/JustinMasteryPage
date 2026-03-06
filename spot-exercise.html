@@ -216,9 +216,9 @@
     .option-btn.reveal .opt-letter { background: rgba(52,211,153,0.15); color: var(--green); }
 
     /* ── passage_click mode ──────────────────────────────────────────────── */
-    .passage-sentences { display: flex; flex-direction: column; gap: 8px; }
+    .passage-sentences { display: flex; flex-direction: column; gap: 8px; counter-reset: sentence-num; }
     .clickable-sentence {
-      padding: 10px 14px;
+      padding: 10px 14px 10px 44px;
       border: 1px solid var(--border);
       border-radius: 10px;
       cursor: pointer;
@@ -226,6 +226,16 @@
       line-height: 1.75;
       color: var(--text2);
       transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      counter-increment: sentence-num;
+    }
+    .clickable-sentence::before {
+      content: counter(sentence-num);
+      position: absolute; left: 12px; top: 12px;
+      font-size: 10px; font-weight: 700; color: var(--text3);
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 5px; min-width: 18px; height: 18px;
+      text-align: center; line-height: 18px; padding: 0 2px;
     }
     .clickable-sentence:hover:not(.sentence-correct):not(.sentence-wrong) {
       border-color: rgba(45,212,191,0.45);
@@ -291,6 +301,14 @@
       padding: 16px;
       cursor: pointer;
       transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .vocab-num {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 10px; font-weight: 700; color: var(--text3);
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 5px; min-width: 18px; height: 18px;
+      text-align: center; line-height: 18px; padding: 0 3px;
     }
     .vocab-card:hover:not(.vocab-correct):not(.vocab-wrong) {
       border-color: rgba(45,212,191,0.4);
@@ -716,6 +734,25 @@
       return q.mode || 'mc';
     }
 
+    // ── Build a fresh shuffled pool from the full domain data ─────────────────
+    function buildFreshPool() {
+      const spotData = window.__SPOT_DATA || {};
+      const all      = [];
+      for (const code of DOMAIN_CODES) {
+        const data = spotData[code];
+        if (!data) continue;
+        let qs = data.questions || [];
+        if (TYPE_FILTER !== 'all') qs = qs.filter(q => q.passage_type === TYPE_FILTER);
+        if (MODE_FILTER !== 'all') qs = qs.filter(q => qMode(q) === MODE_FILTER);
+        all.push(...qs);
+      }
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+      return all.slice(0, COUNT);
+    }
+
     // ── Load question data from bundled script tag ─────────────────────────────
     function loadData() {
       const spotData = window.__SPOT_DATA || {};
@@ -731,12 +768,8 @@
         }
         let qs = data.questions || [];
         const beforeFilter = qs.length;
-        if (TYPE_FILTER !== 'all') {
-          qs = qs.filter(q => q.passage_type === TYPE_FILTER);
-        }
-        if (MODE_FILTER !== 'all') {
-          qs = qs.filter(q => qMode(q) === MODE_FILTER);
-        }
+        if (TYPE_FILTER !== 'all') qs = qs.filter(q => q.passage_type === TYPE_FILTER);
+        if (MODE_FILTER !== 'all') qs = qs.filter(q => qMode(q) === MODE_FILTER);
         all.push(...qs);
         console.log(`${code}: ${beforeFilter} total → ${qs.length} after filter (type=${TYPE_FILTER}, mode=${MODE_FILTER})`);
       }
@@ -765,11 +798,7 @@
       }
 
       // Fresh session — Fisher-Yates shuffle then trim to COUNT
-      for (let i = all.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [all[i], all[j]] = [all[j], all[i]];
-      }
-      pool = all.slice(0, COUNT);
+      pool = buildFreshPool();
       showQuestion();
     }
 
@@ -947,7 +976,7 @@
       body.appendChild(card);
 
       document.getElementById('kbd-hint').innerHTML =
-        'Click a sentence &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
+        '<kbd>1</kbd>&ndash;<kbd>N</kbd> to select &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
     }
 
     // ── Renderer: Click the Phrase ────────────────────────────────────────────
@@ -1004,11 +1033,15 @@
         [displayOrder[i], displayOrder[j]] = [displayOrder[j], displayOrder[i]];
       }
 
-      displayOrder.forEach(origIdx => {
+      displayOrder.forEach((origIdx, displayIdx) => {
         const entry = q.entries[origIdx];
         const card  = document.createElement('div');
         card.className = 'vocab-card';
         card.dataset.origIdx = origIdx;
+
+        const numEl = document.createElement('div');
+        numEl.className = 'vocab-num';
+        numEl.textContent = displayIdx + 1;
 
         const termEl = document.createElement('div');
         termEl.className = 'vocab-term';
@@ -1018,6 +1051,7 @@
         defEl.className = 'vocab-def';
         defEl.textContent = entry.definition;
 
+        card.appendChild(numEl);
         card.appendChild(termEl);
         card.appendChild(defEl);
 
@@ -1046,7 +1080,7 @@
       body.appendChild(wrapper);
 
       document.getElementById('kbd-hint').innerHTML =
-        'Click a card &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
+        '<kbd>1</kbd>&ndash;<kbd>4</kbd> to select card &nbsp;&middot;&nbsp; <kbd>&crarr;</kbd> to continue';
     }
 
     // ── Navigation ────────────────────────────────────────────────────────────
@@ -1100,11 +1134,9 @@
     function restartSession() {
       current = 0; correct = 0; answered = false;
       missed = [];
-      document.getElementById('btn-review').style.display = 'none';
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
+      clearSession();
+      pool = buildFreshPool(); // draw a new random sample from the full pool
+      document.getElementById('btn-review').style.display    = 'none';
       document.getElementById('screen-results').style.display = 'none';
       document.getElementById('progress-fill').style.width    = '0%';
       showQuestion();
@@ -1230,20 +1262,30 @@
 
     // ── Keyboard shortcuts ────────────────────────────────────────────────────
     document.addEventListener('keydown', e => {
-      const q    = pool[current];
-      const mode = q ? qMode(q) : 'mc';
-
-      // 1–4: select option (MC only, before answering)
-      if (['1', '2', '3', '4'].includes(e.key) && !answered && mode === 'mc') {
-        const btns = document.querySelectorAll('.option-btn:not(:disabled)');
-        const idx  = parseInt(e.key) - 1;
-        if (btns[idx]) btns[idx].click();
-        return;
-      }
       // Enter or → : advance (after answering)
       if ((e.key === 'Enter' || e.key === 'ArrowRight') && answered) {
         const nb = document.getElementById('next-btn');
         if (nb && nb.style.display !== 'none') nb.click();
+        return;
+      }
+
+      // Number keys 1–8: select item by display position (before answering)
+      if (!answered && /^[1-8]$/.test(e.key)) {
+        const q    = pool[current];
+        const mode = q ? qMode(q) : 'mc';
+        const idx  = parseInt(e.key) - 1;
+
+        if (mode === 'mc') {
+          const btns = document.querySelectorAll('.option-btn:not(:disabled)');
+          if (btns[idx]) btns[idx].click();
+        } else if (mode === 'passage_click') {
+          const sents = document.querySelectorAll('.clickable-sentence');
+          if (sents[idx]) sents[idx].click();
+        } else if (mode === 'vocab') {
+          const cards = document.querySelectorAll('.vocab-card');
+          if (cards[idx]) cards[idx].click();
+        }
+        // sentence_click: inline phrase text — no numbered keyboard selection
       }
     });
 

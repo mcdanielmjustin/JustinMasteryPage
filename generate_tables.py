@@ -24,6 +24,10 @@ import json, pathlib, argparse, time, random, sys, os, re
 import anthropic
 from bs4 import BeautifulSoup
 
+# Ensure stdout handles Unicode on Windows (cp1252 console can't print Greek/special chars)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 # ── Paths ─────────────────────────────────────────────────────────────────────
 DATA = pathlib.Path("data")
 
