@@ -316,7 +316,7 @@ var brainstemVisible  = true;
 var quizMode          = false;
 
 var dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('./node_modules/three/examples/jsm/libs/draco/gltf/');
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 var loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader);
 
