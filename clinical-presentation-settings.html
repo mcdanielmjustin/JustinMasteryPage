@@ -371,21 +371,6 @@
 
     .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 
-    /* ── HISTORY BANNER ── */
-    .history-banner {
-      display: flex; gap: 0; flex-wrap: wrap;
-      background: rgba(255,255,255,.025); border: 1px solid var(--border);
-      border-radius: 12px; padding: 12px 18px; margin-bottom: 32px;
-      align-items: center;
-    }
-    .history-banner-label {
-      font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--text3); margin-right: 16px; flex-shrink: 0;
-    }
-    .hist-items { display: flex; gap: 16px; flex-wrap: wrap; }
-    .hist-item  { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-    .hist-code  { font-size: 9px; font-weight: 700; letter-spacing: .1em; color: var(--text3); }
-    .hist-pct   { font-family: 'Instrument Serif', serif; font-size: 1.1rem; }
 
 
     @media (max-width: 600px) {
@@ -423,11 +408,6 @@
     </div>
     <h1 class="page-title">Session <em>Settings</em></h1>
     <p class="page-sub">Configure your clinical encounter session.</p>
-
-    <div id="history-banner" class="history-banner" style="display:none">
-      <span class="history-banner-label">Past scores</span>
-      <div class="hist-items" id="hist-items"></div>
-    </div>
 
     <!-- ── 1. DIFFICULTY LEVEL ── -->
     <div class="settings-section">
@@ -860,29 +840,7 @@
       updateSummary();
     }
 
-    // ── History banner ──
-    function renderHistoryBanner() {
-      try {
-        const scores = JSON.parse(localStorage.getItem('encounter_scores') || '{}');
-        const entries = Object.entries(scores).filter(([, s]) => s && s.total > 0);
-        if (!entries.length) return;
-        const banner = document.getElementById('history-banner');
-        const items  = document.getElementById('hist-items');
-        banner.style.display = 'flex';
-        items.innerHTML = entries
-          .sort((a, b) => (b[1].correct / b[1].total) - (a[1].correct / a[1].total))
-          .map(([d, s]) => {
-            const pct = Math.round(s.correct / s.total * 100);
-            const color = pct >= 75 ? '#34d399' : pct >= 55 ? '#fb923c' : '#f87171';
-            return `<span class="hist-item"><span class="hist-code">${d}</span><span class="hist-pct" style="color:${color}">${pct}%</span></span>`;
-          }).join('');
-        // Also reduce page-sub margin since banner follows immediately
-        document.querySelector('.page-sub').style.marginBottom = '16px';
-      } catch (e) { /* localStorage unavailable */ }
-    }
-
     updateSummary();
-    renderHistoryBanner();
   </script>
 
 </body>
