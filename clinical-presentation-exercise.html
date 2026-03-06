@@ -330,7 +330,7 @@
     .inline-question.active { transform: translateX(0); }
     .inline-question-drag { display: none; }
     .inline-question-scroll {
-      flex: 1; overflow-y: auto; padding: 20px 24px 28px;
+      flex: 1; overflow-y: auto; padding: 20px 24px 80px;
       scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.08) transparent;
     }
 
@@ -376,7 +376,7 @@
       box-shadow: 0 -1px 0 rgba(99,102,241,.12);
       position: sticky;
       bottom: 0;
-      z-index: 10;
+      z-index: 30;
     }
     .phase-indicator { display: flex; align-items: center; gap: 14px; }
     .phase-num {
@@ -439,6 +439,26 @@
       box-shadow: 0 4px 20px rgba(0,0,0,.3);
     }
     .speech-bubble.hidden { display: none; }
+    .bubble-pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 10px; padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      gap: 8px;
+    }
+    .bubble-page-btn {
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+      color: var(--text2); border-radius: 6px;
+      width: 28px; height: 24px; font-size: 16px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s; flex-shrink: 0;
+    }
+    .bubble-page-btn:hover:not(:disabled) { background: rgba(255,255,255,.16); color: var(--text); }
+    .bubble-page-btn:disabled { opacity: .3; cursor: default; }
+    .bubble-page-label {
+      font-size: 10px; font-weight: 600; letter-spacing: .06em;
+      color: var(--text3); text-align: center; flex: 1;
+      text-transform: uppercase;
+    }
     .bubble-tail {
       position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
       width: 8px; height: 14px;
@@ -492,7 +512,7 @@
       pointer-events: none;
       display: flex; flex-wrap: wrap; gap: 6px 8px;
       align-content: flex-start;
-      overflow: hidden;
+      overflow: visible;
     }
     .tag-row-break { flex-basis: 100%; height: 0; }
     .behavior-tag {
@@ -916,7 +936,12 @@
             <span></span><span></span><span></span>
           </div>
           <div class="bubble-text" id="bubble-text"></div>
-          <span class="skip-hint" id="skip-hint">click or Esc to skip</span>
+          <div class="bubble-pagination" id="bubble-pagination" style="display:none">
+            <button class="bubble-page-btn" id="bubble-prev" onclick="prevDialoguePage()">&#8249;</button>
+            <span class="bubble-page-label" id="bubble-page-label"></span>
+            <button class="bubble-page-btn" id="bubble-next" onclick="nextDialoguePage()">&#8250;</button>
+          </div>
+          <span class="skip-hint" id="skip-hint">click or Space to skip</span>
         </div>
 
         <!-- Avatar container — inline SVG patient -->
@@ -1364,6 +1389,10 @@
     phaseRunning:   false,
     typewriterInt:  null,
     typewriterPending: null,
+    typewriterStartTimeout: null,
+    pendingPhase:   null,
+    dialogueHistory: [],
+    dialoguePage:    0,
     autoAdvanceInt: null,
     avatarState:    'idle',
     domainScores:    {},  // { CODE: { correct, total } }
@@ -1371,6 +1400,9 @@
     subdomainScores: {},  // { "CODE::subdomain": { correct, total } }
     sessionAnswers:  [],  // [ { encId, qId, type, correct, domain, subdomain } ]
     reviewMode:     false,
+    optionMap:      {},   // display letter -> original letter
+    reverseOptionMap: {}, // original letter -> display letter
+    correctDisplayLetter: null,
   };
 
   /* ════════════════════════════════════════════════════════════════
@@ -1643,6 +1675,13 @@
 
   function startEncounter(enc) {
     hideInlineQuestion();
+    state.dialogueHistory = [];
+    state.dialoguePage    = 0;
+    state.pendingPhase    = null;
+    if (state.typewriterStartTimeout !== null) {
+      clearTimeout(state.typewriterStartTimeout);
+      state.typewriterStartTimeout = null;
+    }
     // Patient info bar
     document.getElementById('patient-label').textContent   = enc.encounter.patient.label || '—';
     document.getElementById('patient-setting').textContent = enc.encounter.setting || '—';
@@ -1867,7 +1906,12 @@
     probe.textContent = '';
 
     const startTypewriter = () => {
+      state.typewriterStartTimeout = null;
       dots.classList.add('hidden');
+      // Record this phase's dialogue in navigation history
+      state.dialogueHistory.push({ text: phase.dialogue || '', label: phase.phase_label || phase.phase_id || '' });
+      state.dialoguePage = state.dialogueHistory.length - 1;
+      updateBubblePagination();
       runTypewriter(phase.dialogue || '', 30, (instant) => {
         // Reveal chart items and behavioral tags (instant when user skipped typewriter)
         revealChartItems(phase.chart_reveals || [], instant);
@@ -1885,15 +1929,16 @@
       });
     };
 
+    state.pendingPhase = phase;
     if (phase.clinician_prompt) {
       probe.textContent = phase.clinician_prompt;
       document.getElementById('clinician-prompt-wrap').style.display = 'flex';
-      setTimeout(() => {
+      state.typewriterStartTimeout = setTimeout(() => {
         dots.classList.remove('hidden');
-        setTimeout(startTypewriter, 600);
+        state.typewriterStartTimeout = setTimeout(startTypewriter, 600);
       }, 800);
     } else {
-      setTimeout(startTypewriter, 600);
+      state.typewriterStartTimeout = setTimeout(startTypewriter, 600);
     }
   }
 
@@ -2097,8 +2142,24 @@
   }
 
   function advancePhase() {
+    // If phase is still in pre-typewriter delay, flush it instantly
+    if (state.typewriterStartTimeout !== null) {
+      clearTimeout(state.typewriterStartTimeout);
+      state.typewriterStartTimeout = null;
+      const phase = state.pendingPhase;
+      state.pendingPhase = null;
+      if (phase) {
+        document.getElementById('bubble-dots').classList.add('hidden');
+        const el = document.getElementById('bubble-text');
+        el.textContent = phase.dialogue || '';
+        state.dialogueHistory.push({ text: phase.dialogue || '', label: phase.phase_label || phase.phase_id || '' });
+        state.dialoguePage = state.dialogueHistory.length - 1;
+        updateBubblePagination();
+        revealChartItems(phase.chart_reveals || [], true);
+        revealBehavioralTags(phase.behavioral_tags || [], false, true);
+      }
     // If typewriter is mid-run, complete dialogue and reveal tags/chart instantly
-    if (state.typewriterPending) {
+    } else if (state.typewriterPending) {
       const { text, el, onComplete, bubble } = state.typewriterPending;
       clearInterval(state.typewriterInt);
       state.typewriterInt = null;
@@ -2110,11 +2171,40 @@
       state.typewriterInt = null;
       cancelTagStagger();
     }
+    state.pendingPhase = null;
     state.phaseRunning = false;
     stopAutoAdvance();
     document.getElementById('btn-advance').classList.add('hidden');
 
     advanceStep();
+  }
+
+  function updateBubblePagination() {
+    const pag   = document.getElementById('bubble-pagination');
+    const prev  = document.getElementById('bubble-prev');
+    const next  = document.getElementById('bubble-next');
+    const label = document.getElementById('bubble-page-label');
+    const n = state.dialogueHistory.length;
+    if (n <= 1) { pag.style.display = 'none'; return; }
+    pag.style.display = 'flex';
+    const p = state.dialoguePage;
+    label.textContent = state.dialogueHistory[p].label || `Phase ${p + 1}`;
+    prev.disabled = (p === 0);
+    next.disabled = (p === n - 1);
+  }
+
+  function prevDialoguePage() {
+    if (state.dialoguePage <= 0) return;
+    state.dialoguePage--;
+    document.getElementById('bubble-text').textContent = state.dialogueHistory[state.dialoguePage].text;
+    updateBubblePagination();
+  }
+
+  function nextDialoguePage() {
+    if (state.dialoguePage >= state.dialogueHistory.length - 1) return;
+    state.dialoguePage++;
+    document.getElementById('bubble-text').textContent = state.dialogueHistory[state.dialoguePage].text;
+    updateBubblePagination();
   }
 
   function showInlineQuestion() {
@@ -2127,7 +2217,7 @@
 
   function hideInlineQuestion() {
     document.getElementById('inline-question').classList.remove('active');
-    document.getElementById('feedback-panel').classList.remove('visible');
+    // NOTE: feedback-panel.visible is NOT cleared here — renderQuestion() handles that
   }
 
   function toggleChartPanel() {
@@ -2218,19 +2308,36 @@
     // Prompt
     document.getElementById('q-prompt').textContent = q.prompt;
 
-    // Options
+    // Options — shuffle to randomize correct-answer position (skip in review mode)
+    const origLetters = ['A','B','C','D'].filter(l => q.options[l]);
+    if (!state.reviewMode) {
+      for (let i = origLetters.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [origLetters[i], origLetters[j]] = [origLetters[j], origLetters[i]];
+      }
+    }
+    const dispLetters = ['A','B','C','D'].slice(0, origLetters.length);
+    state.optionMap = {};
+    state.reverseOptionMap = {};
+    state.correctDisplayLetter = null;
+    origLetters.forEach((origLetter, idx) => {
+      const dispLetter = dispLetters[idx];
+      state.optionMap[dispLetter] = origLetter;
+      state.reverseOptionMap[origLetter] = dispLetter;
+      if (origLetter === q.correct_answer) state.correctDisplayLetter = dispLetter;
+    });
     const grid = document.getElementById('options-grid');
     grid.innerHTML = '';
-    ['A','B','C','D'].forEach(letter => {
-      if (!q.options[letter]) return;
+    dispLetters.forEach(dispLetter => {
+      const origLetter = state.optionMap[dispLetter];
       const btn = document.createElement('button');
       btn.className = 'option-btn';
-      btn.dataset.letter = letter;
-      btn.onclick = () => selectAnswer(letter);
+      btn.dataset.letter = dispLetter;
+      btn.onclick = () => selectAnswer(dispLetter);
       btn.innerHTML = `
-        <div class="option-letter">${letter}</div>
+        <div class="option-letter">${dispLetter}</div>
         <div class="option-content">
-          <div class="option-text">${escapeHtml(q.options[letter])}</div>
+          <div class="option-text">${escapeHtml(q.options[origLetter])}</div>
         </div>`;
       grid.appendChild(btn);
     });
@@ -2242,6 +2349,9 @@
     document.getElementById('feedback-header').textContent = '';
     document.getElementById('feedback-explanation').textContent = '';
     document.getElementById('feedback-distractors').innerHTML = '';
+    document.getElementById('btn-review-enc').style.display = '';
+    document.getElementById('btn-next-q').textContent = 'Next →';
+    document.getElementById('btn-next-q').onclick = nextQuestion;
 
     // Next button label — based on what the next step in the sequence is
     const nextStep  = state.steps[state.stepIdx + 1];
@@ -2270,13 +2380,13 @@
 
     const enc = state.pool[state.encIdx];
     const q   = enc.questions[state.qIdx];
-    const isCorrect = letter === q.correct_answer;
+    const isCorrect = letter === state.correctDisplayLetter;
 
     // Lock + style options
     document.querySelectorAll('.option-btn').forEach(btn => {
       btn.disabled = true;
       const l = btn.dataset.letter;
-      if (l === q.correct_answer)        btn.classList.add('correct');
+      if (l === state.correctDisplayLetter) btn.classList.add('correct');
       else if (l === letter)             btn.classList.add('wrong');
       else                               btn.classList.add('dimmed');
     });
@@ -2304,6 +2414,7 @@
       domain,
       encLabel: enc.encounter.patient.label,
       subdomain: enc.subdomain,
+      selectedOrigLetter: state.optionMap[letter],
     });
 
     // Persist after every question so partial-session data survives browser close
@@ -2318,7 +2429,7 @@
     const wrongPrefix = WRONG_PREFIX[q.type] || '';
     header.innerHTML = isCorrect
       ? '<span>✓</span> Correct!'
-      : `<span>✗</span> ${escapeHtml(wrongPrefix)}the correct answer is <strong>${q.correct_answer}</strong>`;
+      : `<span>✗</span> ${escapeHtml(wrongPrefix)}the correct answer is <strong>${state.correctDisplayLetter}</strong>`;
 
     document.getElementById('feedback-explanation').innerHTML = safeHtml(q.explanation);
 
@@ -2331,15 +2442,17 @@
     if (dr[q.correct_answer]) {
       const correctRow = document.createElement('div');
       correctRow.className = 'distractor-row distractor-correct';
-      correctRow.innerHTML = `<span class="distractor-letter distractor-letter-correct">Why ${q.correct_answer}?</span><span class="distractor-text distractor-text-correct">${escapeHtml(dr[q.correct_answer])}</span>`;
+      const corrDisp = state.correctDisplayLetter || q.correct_answer;
+      correctRow.innerHTML = `<span class="distractor-letter distractor-letter-correct">Why ${corrDisp}?</span><span class="distractor-text distractor-text-correct">${escapeHtml(dr[q.correct_answer])}</span>`;
       distEl.appendChild(correctRow);
     }
 
-    ['A','B','C','D'].forEach(letter => {
-      if (letter === q.correct_answer || !dr[letter]) return;
+    ['A','B','C','D'].forEach(origLetter => {
+      if (origLetter === q.correct_answer || !dr[origLetter]) return;
+      const dispLetter = state.reverseOptionMap[origLetter] || origLetter;
       const row = document.createElement('div');
       row.className = 'distractor-row';
-      row.innerHTML = `<span class="distractor-letter">Why not ${letter}?</span><span class="distractor-text">${escapeHtml(dr[letter])}</span>`;
+      row.innerHTML = `<span class="distractor-letter">Why not ${dispLetter}?</span><span class="distractor-text">${escapeHtml(dr[origLetter])}</span>`;
       distEl.appendChild(row);
     });
 
@@ -2456,6 +2569,7 @@
     advBtn.onclick = () => {
       advBtn.textContent = 'Next →';
       advBtn.onclick = advancePhase;
+      advBtn.classList.add('hidden');
       state.reviewMode = false;
       // Restore inline question panel (DOM preserved, state.answered intact)
       // Do NOT call renderQuestion — that would reset answered and allow double-scoring
@@ -2606,6 +2720,42 @@
     }
   }
 
+  function showReplayQuestion(qIdx) {
+    const enc = state.pool[state.encIdx];
+    const q   = enc.questions[qIdx];
+    state.qIdx = qIdx;
+
+    showInlineQuestion();
+    renderQuestion(q); // reviewMode=true → no shuffle, identity optionMap
+
+    // Find what the user answered for this question
+    const saved = state.sessionAnswers.find(a => a.encId === enc.id && a.qId === q.question_id);
+    if (saved) {
+      const userDisp = state.reverseOptionMap[saved.selectedOrigLetter] || saved.selectedOrigLetter;
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.disabled = true;
+        const l = btn.dataset.letter;
+        if (l === state.correctDisplayLetter)             btn.classList.add('correct');
+        else if (l === userDisp && !saved.correct)        btn.classList.add('wrong');
+        else                                              btn.classList.add('dimmed');
+      });
+      state.answered = true;
+      showFeedback(q, saved.correct);
+    }
+
+    // Override feedback action buttons for Q&A review navigation
+    document.getElementById('btn-review-enc').style.display = 'none';
+    const nextBtn = document.getElementById('btn-next-q');
+    const totalQs = enc.questions.length;
+    if (qIdx < totalQs - 1) {
+      nextBtn.textContent = 'Next Q →';
+      nextBtn.onclick = () => showReplayQuestion(qIdx + 1);
+    } else {
+      nextBtn.textContent = '← Back to Results';
+      nextBtn.onclick = () => { hideInlineQuestion(); showScreen('results'); };
+    }
+  }
+
   function replayEncounter(idx) {
     if (idx === null || idx < 0) return;
     state.encIdx      = idx;
@@ -2617,15 +2767,18 @@
     showScreen('encounter');
     hideInlineQuestion();
     reviewEncounter();
-    // reviewEncounter() sets "← Return to Question" — override for results context
+    // Override advance button for results context
     const advBtn = document.getElementById('btn-advance');
     advBtn.textContent = '← Back to Results';
     advBtn.onclick = () => {
       advBtn.textContent = 'Next →';
       advBtn.onclick = advancePhase;
+      advBtn.classList.add('hidden');
       state.reviewMode = false;
       showScreen('results');
     };
+    // Immediately show first question with pre-filled answer
+    showReplayQuestion(0);
   }
 
   function newSession()   { location.href = 'clinical-presentation-settings.html'; }
@@ -2642,16 +2795,27 @@
 
     // ── Encounter screen — phase mode ─────────────────────────────
     if (active.id === 'screen-encounter' && !state.reviewMode && !inlineActive) {
+      // Space — skip typewriter if running, otherwise advance phase
+      if (e.key === ' ') {
+        e.preventDefault();
+        if (state.typewriterInt !== null || state.typewriterStartTimeout !== null) {
+          document.getElementById('speech-bubble').click();
+        } else if (!state.phaseRunning) {
+          const btn = document.getElementById('btn-advance');
+          if (btn && !btn.classList.contains('hidden')) advancePhase();
+        }
+        return;
+      }
       // Escape or Backspace — skip typewriter
       if (e.key === 'Escape' || e.key === 'Backspace') {
-        if (state.typewriterInt !== null) {
+        if (state.typewriterInt !== null || state.typewriterStartTimeout !== null) {
           e.preventDefault();
           document.getElementById('speech-bubble').click();
           return;
         }
       }
-      // Space or Enter — advance phase
-      if ((e.key === ' ' || e.key === 'Enter') && state.typewriterInt === null && !state.phaseRunning) {
+      // Enter — advance phase
+      if (e.key === 'Enter' && state.typewriterInt === null && !state.phaseRunning) {
         e.preventDefault();
         const btn = document.getElementById('btn-advance');
         if (btn && !btn.classList.contains('hidden')) advancePhase();
