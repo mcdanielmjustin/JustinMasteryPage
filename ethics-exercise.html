@@ -24,6 +24,8 @@
     @keyframes fadeIn   { from{opacity:0;}to{opacity:1;} }
     @keyframes pulse    { 0%,100%{opacity:.1;}50%{opacity:.18;} }
     @keyframes spin     { to{transform:rotate(360deg);} }
+    @keyframes loadBar  { 0%{width:0%} 60%{width:82%} 100%{width:93%} }
+    .loading-progress-fill.animating { animation: loadBar 1.4s ease-out forwards; }
 
     .blob { position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;animation:pulse 7s ease-in-out infinite;z-index:0; }
     .blob-green  { width:500px;height:500px;background:#34d399;top:-180px;right:-160px;opacity:.25; }
@@ -159,7 +161,7 @@
     .domain-breakdown { display:flex;flex-direction:column;gap:10px; }
     .db-label { font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px; }
     .db-row { background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px; }
-    .db-domain { font-size:11px;font-weight:700;color:var(--accent);width:44px;flex-shrink:0; }
+    .db-domain { font-size:10px;font-weight:700;color:var(--accent);width:76px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
     .db-track  { flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden; }
     .db-fill   { height:100%;border-radius:3px;background:var(--accent);transition:width .8s .2s ease; }
     .db-fill.high { background:var(--green); }
@@ -183,6 +185,35 @@
       #screen-quiz.active,#screen-results.active { padding:20px 16px 60px; }
       .vignette-card { padding:18px; }
     }
+
+    /* ── REVIEW SCREEN ── */
+    #screen-review.active { display:block;padding:32px 24px 80px; }
+    .review-inner { max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px;animation:fadeInUp .4s ease-out both; }
+    .review-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:4px; }
+    .review-title { font-family:'Instrument Serif',Georgia,serif;font-size:1.6rem; }
+    .review-title em { font-style:italic;color:var(--accent-light); }
+    .review-back { font-size:13px;font-weight:500;color:var(--text3);background:none;border:none;cursor:pointer;transition:color .2s; }
+    .review-back:hover { color:var(--accent); }
+    .review-card { background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:14px;overflow:hidden; }
+    .review-card.card-correct { border-color:rgba(52,211,153,.3); }
+    .review-card.card-wrong   { border-color:rgba(248,113,113,.25); }
+    .review-card-header { display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none; }
+    .review-q-num { font-size:11px;font-weight:700;color:var(--text3);width:26px;flex-shrink:0; }
+    .review-q-snippet { flex:1;font-size:13px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .review-result { font-size:12px;font-weight:700;flex-shrink:0; }
+    .card-correct .review-result { color:var(--green); }
+    .card-wrong   .review-result { color:var(--red); }
+    .review-chevron { font-size:13px;color:var(--text3);flex-shrink:0;transition:transform .2s; }
+    .review-card.expanded .review-chevron { transform:rotate(90deg); }
+    .review-card-body { display:none;padding:0 18px 18px;border-top:1px solid var(--border); }
+    .review-card.expanded .review-card-body { display:block; }
+    .review-vignette { font-size:13px;color:var(--text3);line-height:1.7;padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:12px; }
+    .review-answers { display:flex;flex-direction:column;gap:10px; }
+    .review-answer-row { display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5; }
+    .review-answer-label { font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:2px;white-space:nowrap; }
+    .label-your-wrong { background:rgba(248,113,113,.15);color:var(--red); }
+    .label-correct    { background:rgba(52,211,153,.08);color:var(--green);border:1px solid rgba(52,211,153,.2); }
+    .review-explanation { font-size:12px;color:var(--text3);line-height:1.55;margin-top:6px;padding:8px 10px;background:rgba(255,255,255,.02);border-radius:7px;border-left:2px solid rgba(52,211,153,.3); }
   </style>
 </head>
 <body>
@@ -253,14 +284,19 @@
       </div>
       <div class="results-summary" id="results-summary"></div>
       <div class="domain-breakdown">
-        <div class="db-label">Score by Domain</div>
+        <div class="db-label">Score by Subdomain</div>
         <div id="domain-rows"></div>
       </div>
       <div class="results-actions">
         <button class="btn-primary" onclick="location.href='ethics-settings.html'">New Session</button>
+        <button class="btn-secondary" onclick="showReview()">Review Session</button>
         <button class="btn-secondary" onclick="location.href=location.href">Try Again</button>
       </div>
     </div>
+  </div>
+
+  <div id="screen-review" class="screen">
+    <div class="review-inner" id="review-inner"></div>
   </div>
 
   <script>
@@ -268,14 +304,32 @@
   const DATA_BASE = 'data/';
   const LEVEL_LABELS = {1:'Easy',2:'Medium',3:'Hard',4:'Extremely Hard',5:'Almost Impossible'};
   const LEVEL_BADGE_CLASS = {1:'badge-l1',2:'badge-l2',3:'badge-l3',4:'badge-l4',5:'badge-l5'};
+  const SUBDOMAIN_ORDER = [
+    'APA Ethics Code Overview and Standards 1 & 2',
+    'APA Ethics Code Standards 3 & 4',
+    'APA Ethics Code Standards 5 & 6',
+    'APA Ethics Code Standards 7 & 8',
+    'APA Ethics Code Standards 9 & 10',
+    'Professional Issues',
+  ];
+  const SUBDOMAIN_SHORT = {
+    'APA Ethics Code Overview and Standards 1 & 2': 'Stds 1-2',
+    'APA Ethics Code Standards 3 & 4':              'Stds 3-4',
+    'APA Ethics Code Standards 5 & 6':              'Stds 5-6',
+    'APA Ethics Code Standards 7 & 8':              'Stds 7-8',
+    'APA Ethics Code Standards 9 & 10':             'Stds 9-10',
+    'Professional Issues':                          'Prof. Issues',
+  };
 
   const sp = new URLSearchParams(location.search);
+  const _subParam = sp.get('subdomains');
   const CFG = {
-    levels: (sp.get('levels') || '1,2,3,4,5').split(',').map(Number),
-    count:  parseInt(sp.get('count')) || 10,
-    order:  sp.get('order') || 'shuffled',
-    timer:  sp.get('timer') || 'off',
-    hints:  sp.get('hints') === '1',
+    levels:     (sp.get('levels') || '1,2,3,4,5').split(',').map(Number),
+    count:      parseInt(sp.get('count')) || 10,
+    order:      sp.get('order') || 'shuffled',
+    timer:      sp.get('timer') || 'off',
+    hints:      sp.get('hints') === '1',
+    subdomains: _subParam ? _subParam.split('|') : null,
   };
   const timerSec = parseInt(CFG.timer) || 0;
 
@@ -294,14 +348,35 @@
   }
 
   async function loadQuestions(){
+    document.getElementById('loading-progress-fill').classList.add('animating');
     const r = await fetch(`${DATA_BASE}PETH_vignettes.json`).then(r=>r.json());
     let pool = r.questions.filter(q => CFG.levels.includes(q.difficulty_level));
-    domainScores['PETH'] = (getStoredScores()[MODULE]||{})['PETH'] || {correct:0,total:0,sessionCorrect:0,sessionTotal:0};
-    if(CFG.order==='weakest') shuffle(pool);
-    else if(CFG.order==='sequential') pool.sort((a,b)=>(a.subdomain||'').localeCompare(b.subdomain||''));
-    else shuffle(pool);
+    if(CFG.subdomains) pool = pool.filter(q => CFG.subdomains.includes(q.subdomain));
+    const storedModule = getStoredScores()[MODULE] || {};
+    domainScores['PETH']     = storedModule['PETH']     || {correct:0, total:0};
+    domainScores._subdomains = storedModule._subdomains || {};
+    if(CFG.order==='weakest'){
+      const subs = domainScores._subdomains;
+      const subPct = (subName) => {
+        const s = subs[subName];
+        if(!s || s.total === 0) return -1; // unplayed = weakest, comes first
+        return s.correct / s.total;
+      };
+      pool.sort((a,b) => {
+        const diff = subPct(a.subdomain) - subPct(b.subdomain);
+        if(diff !== 0) return diff;
+        return Math.random() - 0.5; // shuffle within same subdomain bucket
+      });
+    } else if(CFG.order==='sequential'){
+      pool.sort((a,b)=>(a.subdomain||'').localeCompare(b.subdomain||''));
+    } else {
+      shuffle(pool);
+    }
     questions = pool.slice(0, CFG.count);
     if(!questions.length){ document.querySelector('.loading-text').textContent='No questions match your settings.'; return; }
+    const pf = document.getElementById('loading-progress-fill');
+    pf.style.animation = 'none'; pf.style.width = '100%';
+    await new Promise(r => setTimeout(r, 120));
     document.getElementById('screen-loading').classList.remove('active');
     document.getElementById('screen-quiz').classList.add('active');
     renderQuestion();
@@ -319,6 +394,15 @@
       ${timerSec?`<div class="timer-wrap"><div class="timer-track"><div class="timer-fill green" id="timer-fill"></div></div><span class="timer-count" id="timer-count">${timerSec}</span></div>`:''}
     `;
     document.getElementById('vignette-text').innerHTML = CFG.hints ? highlightHints(q.vignette,q.hint_words) : escapeHtml(q.vignette);
+    let noHintNote = document.getElementById('no-hint-note');
+    if(!noHintNote){
+      noHintNote = document.createElement('div');
+      noHintNote.id = 'no-hint-note';
+      noHintNote.style.cssText = 'font-size:11px;color:var(--text3);margin-top:7px;font-style:italic;';
+      document.querySelector('.vignette-card').appendChild(noHintNote);
+    }
+    const showNote = CFG.hints && (!q.hint_words || q.hint_words.length === 0);
+    noHintNote.textContent = showNote ? 'L5 — no hint words by design.' : '';
     document.getElementById('question-text').textContent = q.question;
     const grid=document.getElementById('options-grid');
     grid.innerHTML='';
@@ -362,14 +446,22 @@
       else if(bl===letter){btn.classList.add('wrong');btn.querySelector('.option-icon').textContent='✗';}
       else btn.classList.add('dimmed');
     });
-    recordAnswer(isCorrect); showFeedback(isCorrect?'correct':'wrong',q.correct_answer);
+    recordAnswer(isCorrect, letter); showFeedback(isCorrect?'correct':'wrong',q.correct_answer);
   }
-  function recordAnswer(isCorrect){
-    const code='PETH';
-    if(!domainScores[code]) domainScores[code]={correct:0,total:0,sessionCorrect:0,sessionTotal:0};
-    domainScores[code].total++; domainScores[code].sessionTotal=(domainScores[code].sessionTotal||0)+1;
-    if(isCorrect){domainScores[code].correct++;domainScores[code].sessionCorrect=(domainScores[code].sessionCorrect||0)+1;}
-    sessionAnswers.push({id:questions[current].id,correct:isCorrect,domain:code});
+  function recordAnswer(isCorrect, yourLetter){
+    const code = 'PETH';
+    const sub  = questions[current].subdomain || 'Unknown';
+    // cumulative all-time tracking
+    if(!domainScores[code]) domainScores[code]={correct:0, total:0};
+    domainScores[code].total++;
+    if(isCorrect) domainScores[code].correct++;
+    // subdomain-level cumulative tracking (powers Weakest First)
+    if(!domainScores._subdomains) domainScores._subdomains={};
+    if(!domainScores._subdomains[sub]) domainScores._subdomains[sub]={correct:0, total:0};
+    domainScores._subdomains[sub].total++;
+    if(isCorrect) domainScores._subdomains[sub].correct++;
+    // session record — always fresh, includes subdomain and chosen letter
+    sessionAnswers.push({id:questions[current].id, correct:isCorrect, domain:code, subdomain:sub, yourLetter: yourLetter||null});
   }
   function showFeedback(type,correctLetter){
     const fb=document.getElementById('feedback-bar'),icon=document.getElementById('feedback-icon'),msg=document.getElementById('feedback-msg'),sub=document.getElementById('feedback-sub');
@@ -395,12 +487,91 @@
     if(pct>=80) h.innerHTML='Great <em>Work!</em>'; else if(pct>=60) h.innerHTML='Session <em>Complete</em>'; else h.innerHTML='Keep <em>Practicing</em>';
     const levelsUsed=[...new Set(questions.map(q=>q.difficulty_level))].sort().map(l=>'L'+l).join(', ');
     document.getElementById('results-summary').innerHTML=`<div class="rs-item"><span class="rs-label">Score</span><span class="rs-val">${pct}%</span></div><div class="rs-item"><span class="rs-label">Correct</span><span class="rs-val">${correct}/${total}</span></div><div class="rs-item"><span class="rs-label">Levels</span><span class="rs-val">${levelsUsed}</span></div>`;
-    const s=domainScores['PETH']||{sessionCorrect:0,sessionTotal:0};
-    const sc=s.sessionCorrect||0,st=s.sessionTotal||0,dp=st?Math.round(sc/st*100):0,cls=dp>=75?'high':dp>=50?'mid':'low';
-    document.getElementById('domain-rows').innerHTML=`<div class="db-row"><span class="db-domain">PETH</span><div class="db-track"><div class="db-fill ${cls}" style="width:0%" data-pct="${dp}"></div></div><span class="db-score">${sc}/${st}</span></div>`;
+    const subRows = document.getElementById('domain-rows');
+    subRows.innerHTML = '';
+    const sessionSubs = SUBDOMAIN_ORDER.filter(s => sessionAnswers.some(a => a.subdomain === s));
+    if(sessionSubs.length === 0){
+      const tot = sessionAnswers.length, cor = sessionAnswers.filter(a=>a.correct).length;
+      const dp = tot ? Math.round(cor/tot*100) : 0, cls = dp>=75?'high':dp>=50?'mid':'low';
+      subRows.innerHTML = '<div class="db-row"><span class="db-domain">PETH</span><div class="db-track"><div class="db-fill ' + cls + '" style="width:0%" data-pct="' + dp + '"></div></div><span class="db-score">' + cor + '/' + tot + '</span></div>';
+    } else {
+      sessionSubs.forEach(sub => {
+        const subAnswers = sessionAnswers.filter(a => a.subdomain === sub);
+        const st = subAnswers.length, sc = subAnswers.filter(a=>a.correct).length;
+        const dp = st ? Math.round(sc/st*100) : 0, cls = dp>=75?'high':dp>=50?'mid':'low';
+        const label = SUBDOMAIN_SHORT[sub] || sub;
+        subRows.innerHTML += '<div class="db-row"><span class="db-domain" title="' + sub + '">' + label + '</span><div class="db-track"><div class="db-fill ' + cls + '" style="width:0%" data-pct="' + dp + '"></div></div><span class="db-score">' + sc + '/' + st + '</span></div>';
+      });
+    }
     setTimeout(()=>{ document.querySelectorAll('.db-fill').forEach(el=>el.style.width=el.dataset.pct+'%'); },200);
   }
 
+  function showReview(){
+    document.getElementById('screen-results').classList.remove('active');
+    document.getElementById('screen-review').classList.add('active');
+    const container = document.getElementById('review-inner');
+    container.innerHTML = '';
+    const header = document.createElement('div');
+    header.className = 'review-header';
+    header.innerHTML = '<h2 class="review-title">Session <em>Review</em></h2><button class="review-back" onclick="showResultsFromReview()">← Back to Results</button>';
+    container.appendChild(header);
+    sessionAnswers.forEach((ans, i) => {
+      const q = questions[i];
+      if(!q) return;
+      const card = document.createElement('div');
+      card.className = 'review-card ' + (ans.correct ? 'card-correct' : 'card-wrong');
+      const snippet = escapeHtml(q.question.length > 80 ? q.question.slice(0,80)+'...' : q.question);
+      card.innerHTML = '<div class="review-card-header" onclick="toggleReviewCard(this.parentElement)"><span class="review-q-num">Q' + (i+1) + '</span><span class="review-q-snippet">' + snippet + '</span><span class="review-result">' + (ans.correct ? '&#10003; Correct' : '&#10007; Wrong') + '</span><span class="review-chevron">&#8250;</span></div><div class="review-card-body"><div class="review-vignette">' + escapeHtml(q.vignette) + '</div><div class="review-answers">' + buildReviewAnswers(q,ans) + '</div></div>';
+      container.appendChild(card);
+    });
+    document.querySelectorAll('.review-card.card-wrong').forEach(c => c.classList.add('expanded'));
+  }
+  function buildReviewAnswers(q, ans){
+    let html = '';
+    if(ans.yourLetter && ans.yourLetter !== q.correct_answer){
+      html += '<div class="review-answer-row"><span class="review-answer-label label-your-wrong">Your answer (' + ans.yourLetter + ')</span><span>' + escapeHtml(q.options[ans.yourLetter]||'') + '</span></div>';
+    }
+    const cl = q.correct_answer;
+    html += '<div class="review-answer-row"><span class="review-answer-label label-correct">Correct (' + cl + ')</span><div><div>' + escapeHtml(q.options[cl]||'') + '</div><div class="review-explanation">' + escapeHtml((q.option_explanations||{})[cl]||'') + '</div></div></div>';
+    return html;
+  }
+  function toggleReviewCard(card){ card.classList.toggle('expanded'); }
+  function showResultsFromReview(){
+    document.getElementById('screen-review').classList.remove('active');
+    document.getElementById('screen-results').classList.add('active');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if(document.getElementById('screen-quiz').classList.contains('active') && !answered){
+      const keyMap = {a:'A',b:'B',c:'C',d:'D','1':'A','2':'B','3':'C','4':'D'};
+      const letter = keyMap[e.key.toLowerCase()];
+      if(letter){
+        const btn = document.querySelector('.option-btn[data-letter="' + letter + '"]');
+        if(btn){ e.preventDefault(); btn.click(); }
+      }
+    }
+    if(['Enter','ArrowRight',' '].includes(e.key)){
+      const nextBtn = document.getElementById('next-btn');
+      if(nextBtn && nextBtn.classList.contains('visible')){ e.preventDefault(); nextBtn.click(); }
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if(!timerSec || answered) return;
+    if(document.hidden){
+      clearInterval(timerInterval);
+    } else {
+      if(timerLeft > 0 && !answered){
+        timerInterval = setInterval(()=>{
+          timerLeft--; updateTimerUI();
+          if(timerLeft <= 0){ clearInterval(timerInterval); if(!answered) timeoutQuestion(); }
+        }, 1000);
+      }
+    }
+  });
+
+  loadQuestions().catch(err=>{ document.querySelector('.loading-text').textContent='Error: '+err.message; });
   loadQuestions().catch(err=>{ document.querySelector('.loading-text').textContent='Error: '+err.message; });
   </script>
 

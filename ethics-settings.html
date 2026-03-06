@@ -334,6 +334,24 @@
 
     .warn { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 
+
+    /* ── SUBDOMAIN CHIPS ── */
+    .subdomain-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .sub-chip {
+      padding: 7px 14px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text3);
+      cursor: pointer; user-select: none;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .sub-chip:hover { background: rgba(255,255,255,0.05); }
+    .sub-chip.selected { border-color: var(--gold); background: rgba(212,160,84,0.08); color: var(--gold-light); }
+    .select-all-btn {
+      font-size: 11px; font-weight: 500; color: var(--text3);
+      background: none; border: none; cursor: pointer; padding: 0;
+      transition: color 0.2s;
+    }
+    .select-all-btn:hover { color: var(--gold); }
     @media (max-width: 600px) {
       .rapid-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -371,7 +389,7 @@
       </div>
       <div class="levels-grid">
 
-        <div class="level-card" data-level="1" onclick="toggleLevel(this)">
+        <div class="level-card selected" data-level="1" onclick="toggleLevel(this)">
           <div class="level-check">✓</div>
           <div class="level-badge badge-l1">L1</div>
           <div class="level-info">
@@ -468,10 +486,21 @@
           <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
           <div>
             <div class="toggle-label">Weakest First</div>
-            <div class="toggle-sublabel">Prioritize your lowest-scoring domains</div>
+            <div class="toggle-sublabel">Prioritize your lowest-scoring subdomains</div>
           </div>
         </div>
       </div>
+    </div>
+
+
+    <!-- ── 3b. FOCUS AREA ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Focus Area</div>
+        <button class="select-all-btn" id="sub-select-all" onclick="toggleAllSubdomains()">Deselect All</button>
+      </div>
+      <div class="subdomain-chips" id="subdomain-chips"></div>
+      <p class="warn" id="subdomain-warn">Select at least one focus area to continue.</p>
     </div>
 
     <!-- ── 4. RAPID FIRE ── -->
@@ -555,6 +584,11 @@
       </div>
       <div class="summary-sep"></div>
       <div class="summary-item">
+        <span class="s-label">Focus</span>
+        <span class="s-val" id="sum-subs">All</span>
+      </div>
+      <div class="summary-sep"></div>
+      <div class="summary-item">
         <span class="s-label">Hints</span>
         <span class="s-val" id="sum-hints">Off</span>
       </div>
@@ -567,15 +601,33 @@
   </div>
 
   <script>
+    const SUBDOMAINS = [
+      'APA Ethics Code Overview and Standards 1 & 2',
+      'APA Ethics Code Standards 3 & 4',
+      'APA Ethics Code Standards 5 & 6',
+      'APA Ethics Code Standards 7 & 8',
+      'APA Ethics Code Standards 9 & 10',
+      'Professional Issues',
+    ];
+    const SUBDOMAIN_SHORT = {
+      'APA Ethics Code Overview and Standards 1 & 2': 'Stds 1 & 2',
+      'APA Ethics Code Standards 3 & 4':              'Stds 3 & 4',
+      'APA Ethics Code Standards 5 & 6':              'Stds 5 & 6',
+      'APA Ethics Code Standards 7 & 8':              'Stds 7 & 8',
+      'APA Ethics Code Standards 9 & 10':             'Stds 9 & 10',
+      'Professional Issues':                          'Prof. Issues',
+    };
+
     const state = {
-      levels:      new Set(),
+      levels:      new Set(['1']),
       count:       10,
       order:       'shuffled',
       timer:       'off',
       annotations: false,
+      subdomains:  new Set(SUBDOMAINS),
     };
 
-    // ── Level ──
+    // -- Level --
     function toggleLevel(card) {
       const lvl = card.dataset.level;
       state.levels.has(lvl) ? state.levels.delete(lvl) : state.levels.add(lvl);
@@ -583,7 +635,7 @@
       updateSummary();
     }
 
-    // ── Count ──
+    // -- Count --
     function selectCount(btn) {
       document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
@@ -598,15 +650,15 @@
       updateSummary();
     }
 
-    // ── Order / generic toggle ──
+    // -- Order / generic toggle --
     function selectToggle(el, group) {
-      document.querySelectorAll(`[data-${group}]`).forEach(o => o.classList.remove('selected'));
+      document.querySelectorAll('[data-' + group + ']').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
       state[group] = el.dataset[group];
       updateSummary();
     }
 
-    // ── Rapid fire ──
+    // -- Rapid fire --
     function selectRapid(card) {
       document.querySelectorAll('.rapid-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
@@ -614,7 +666,7 @@
       updateSummary();
     }
 
-    // ── Annotations ──
+    // -- Annotations --
     function toggleAnnotations() {
       state.annotations = !state.annotations;
       document.getElementById('annotation-row').classList.toggle('on', state.annotations);
@@ -623,7 +675,47 @@
       updateSummary();
     }
 
-    // ── Summary ──
+    // -- Subdomain chips --
+    function initSubdomainChips() {
+      const container = document.getElementById('subdomain-chips');
+      SUBDOMAINS.forEach(sub => {
+        const chip = document.createElement('div');
+        chip.className = 'sub-chip selected';
+        chip.dataset.sub = sub;
+        chip.textContent = SUBDOMAIN_SHORT[sub];
+        chip.onclick = () => toggleSubdomain(chip, sub);
+        container.appendChild(chip);
+      });
+    }
+    function toggleSubdomain(chip, sub) {
+      if(state.subdomains.has(sub)){
+        state.subdomains.delete(sub);
+        chip.classList.remove('selected');
+      } else {
+        state.subdomains.add(sub);
+        chip.classList.add('selected');
+      }
+      syncSelectAllBtn();
+      updateSummary();
+    }
+    function toggleAllSubdomains() {
+      const allSelected = state.subdomains.size === SUBDOMAINS.length;
+      if(allSelected){
+        state.subdomains.clear();
+        document.querySelectorAll('.sub-chip').forEach(c => c.classList.remove('selected'));
+      } else {
+        SUBDOMAINS.forEach(s => state.subdomains.add(s));
+        document.querySelectorAll('.sub-chip').forEach(c => c.classList.add('selected'));
+      }
+      syncSelectAllBtn();
+      updateSummary();
+    }
+    function syncSelectAllBtn() {
+      document.getElementById('sub-select-all').textContent =
+        state.subdomains.size === SUBDOMAINS.length ? 'Deselect All' : 'Select All';
+    }
+
+    // -- Summary --
     const orderLabels = { shuffled: 'Shuffled', sequential: 'Sequential', weakest: 'Weakest First' };
     const timerLabels = { off: 'Off', '60': '60s', '45': '45s', '25': '25s' };
 
@@ -634,26 +726,87 @@
       document.getElementById('sum-order').textContent = orderLabels[state.order];
       document.getElementById('sum-timer').textContent  = timerLabels[state.timer] || 'Off';
       document.getElementById('sum-hints').textContent  = state.annotations ? 'On' : 'Off';
+      const subCount = state.subdomains.size;
+      document.getElementById('sum-subs').textContent =
+        subCount === SUBDOMAINS.length ? 'All' : subCount + ' area' + (subCount !== 1 ? 's' : '');
     }
 
-    // ── Validate + Start ──
+    // -- Validate + Start --
     function startSession() {
-      document.getElementById('level-warn').style.display  = 'none';
+      document.getElementById('level-warn').style.display = 'none';
+      document.getElementById('subdomain-warn').style.display = 'none';
       let valid = true;
       if (state.levels.size === 0) {
         document.getElementById('level-warn').style.display = 'block'; valid = false;
       }
+      if (state.subdomains.size === 0) {
+        document.getElementById('subdomain-warn').style.display = 'block'; valid = false;
+      }
       if (!valid) return;
+      localStorage.setItem('ethics_session_prefs', JSON.stringify({
+        levels:     [...state.levels],
+        count:      state.count,
+        order:      state.order,
+        timer:      state.timer,
+        subdomains: [...state.subdomains],
+      }));
       const params = new URLSearchParams({
-        levels: [...state.levels].sort().join(','),
-        count:  state.count,
-        order:  state.order,
-        timer:  state.timer,
-        hints:  state.annotations ? '1' : '0',
+        levels:     [...state.levels].sort().join(','),
+        count:      state.count,
+        order:      state.order,
+        timer:      state.timer,
+        hints:      state.annotations ? '1' : '0',
+        subdomains: [...state.subdomains].join('|'),
       });
       location.href = 'ethics-exercise.html?' + params.toString();
     }
 
+    // -- Load saved settings --
+    function loadSavedSettings() {
+      let saved;
+      try { saved = JSON.parse(localStorage.getItem('ethics_session_prefs') || 'null'); }
+      catch { return; }
+      if(!saved) return;
+      if(Array.isArray(saved.levels) && saved.levels.length) {
+        document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+        state.levels = new Set();
+        saved.levels.forEach(l => {
+          state.levels.add(String(l));
+          const card = document.querySelector('[data-level="' + l + '"]');
+          if(card) card.classList.add('selected');
+        });
+      }
+      if(saved.count) {
+        state.count = saved.count;
+        const preset = document.querySelector('[data-count="' + saved.count + '"]');
+        document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('selected'));
+        if(preset) preset.classList.add('selected');
+        else document.getElementById('custom-count').value = saved.count;
+      }
+      if(saved.order) {
+        state.order = saved.order;
+        document.querySelectorAll('[data-order]').forEach(o =>
+          o.classList.toggle('selected', o.dataset.order === saved.order)
+        );
+      }
+      if(saved.timer !== undefined) {
+        state.timer = String(saved.timer);
+        document.querySelectorAll('.rapid-card').forEach(c =>
+          c.classList.toggle('selected', c.dataset.timer === String(saved.timer))
+        );
+      }
+      if(Array.isArray(saved.subdomains)) {
+        state.subdomains = new Set(saved.subdomains);
+        document.querySelectorAll('.sub-chip').forEach(c =>
+          c.classList.toggle('selected', state.subdomains.has(c.dataset.sub))
+        );
+        syncSelectAllBtn();
+      }
+    }
+
+    // -- Init --
+    initSubdomainChips();
+    loadSavedSettings();
     updateSummary();
   </script>
 
