@@ -489,12 +489,14 @@
 
     /* Behavioral tags overlay */
     .tag-overlay {
-      position: absolute; top: 0; left: 0; width: 308px; bottom: 0;
+      position: absolute; top: 14px; left: 24px; right: 24px;
       pointer-events: none;
+      display: flex; flex-wrap: wrap; gap: 6px 8px;
+      align-content: flex-start;
       overflow: hidden;
     }
+    .tag-row-break { flex-basis: 100%; height: 0; }
     .behavior-tag {
-      position: absolute;
       font-size: 10px; font-weight: 700; letter-spacing: .04em;
       padding: 4px 10px; border-radius: 20px;
       animation: tagPop .32s cubic-bezier(.34,1.56,.64,1) forwards;
@@ -507,9 +509,9 @@
     .tag-purple     { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
     /* Appearance tags — shown before encounter begins; subtler grey style */
     .tag-appearance { background: rgba(255,255,255,.06); color: var(--text3);  border: 1px solid rgba(255,255,255,.12); font-style: italic; }
-    /* Tag column header */
+    /* Tag row header */
     .tag-header {
-      position: absolute; top: 2%; left: 50%; transform: translateX(-50%);
+      flex-basis: 100%;
       font-size: 9px; font-weight: 700; letter-spacing: .12em;
       color: rgba(255,255,255,.18); pointer-events: none;
     }
@@ -2009,6 +2011,7 @@
   let _tagTimeouts  = [];
   let _phaseColumn  = 'left';   // alternates per phase call
   let _tagHeaderAdded = false;
+  let _rowWords = 0;            // word count in current tag row
 
   function cancelTagStagger() {
     _tagTimeouts.forEach(t => clearTimeout(t));
@@ -2019,6 +2022,7 @@
     _tagCols = { left: { count: 0, els: [] }, right: { count: 0, els: [] } };
     _phaseColumn = 'left';
     _tagHeaderAdded = false;
+    _rowWords = 0;
   }
 
   function _ensureTagHeader() {
@@ -2062,14 +2066,15 @@
         el.textContent = tag;
         el.style.animationDelay = '0ms';
 
-        // Position: fixed left or right, stacked top-down
-        const topPct = TAG_START_Y + col.count * (TAG_ROW_PX / window.innerHeight * 100 * 3.2);
-        if (side === 'left') {
-          el.style.left = TAG_COL_X.left;
-        } else {
-          el.style.right = TAG_COL_X.right;
+        // Word-count row break: max 9 words per row
+        const _words = tag.trim().split(/\s+/).length;
+        if (_rowWords > 0 && _rowWords + _words > 9) {
+          const br = document.createElement('div');
+          br.className = 'tag-row-break';
+          overlay.insertBefore(br, null);
+          _rowWords = 0;
         }
-        el.style.top = topPct + '%';
+        _rowWords += _words;
 
         overlay.appendChild(el);
         col.els.push(el);
@@ -2424,10 +2429,15 @@
         el.textContent = tag;
         el.style.opacity = '1';
         el.style.animation = 'none';
-        const topPct = TAG_START_Y + col.count * (TAG_ROW_PX / window.innerHeight * 100 * 3.2);
-        if (side === 'left') { el.style.left = TAG_COL_X.left; }
-        else                 { el.style.right = TAG_COL_X.right; }
-        el.style.top = topPct + '%';
+        // Word-count row break: max 9 words per row
+        const _wds = tag.trim().split(/\s+/).length;
+        if (_rowWords > 0 && _rowWords + _wds > 9) {
+          const br = document.createElement('div');
+          br.className = 'tag-row-break';
+          document.getElementById('tag-overlay').appendChild(br);
+          _rowWords = 0;
+        }
+        _rowWords += _wds;
         document.getElementById('tag-overlay').appendChild(el);
         col.els.push(el);
         col.count++;
