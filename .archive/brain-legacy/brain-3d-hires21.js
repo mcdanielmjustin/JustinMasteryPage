@@ -12,7 +12,7 @@ import * as THREE        from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 
-console.log('[brain-3d-hires] Module loaded, Three.js r' + THREE.REVISION);
+console.log('[brain-3d-hires21] Module loaded, Three.js r' + THREE.REVISION);
 
 // ── Renderer ──────────────────────────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ try {
   canvas = renderer.domElement;
   canvas.style.cssText = 'display:block; border-radius:16px; cursor:grab;';
 } catch (e) {
-  console.error('[brain-3d-hires] WebGL unavailable:', e.message);
+  console.error('[brain-3d-hires21] WebGL unavailable:', e.message);
   window.dispatchEvent(new CustomEvent('brain3dNoWebGL'));
   window.__brain3d = {
     mount:()=>{}, unmount:()=>{}, setCameraView:()=>{},
@@ -93,8 +93,8 @@ const CAMERA_VIEWS = {
   inferior:   new THREE.Vector3( 0,     0,   -4.5 ),
   anterior:   new THREE.Vector3( 0,     4.5,  0   ),
   posterior:  new THREE.Vector3( 0,    -4.5,  0   ),
-  brainstem:  new THREE.Vector3( 0.3,  -3.2, -3.2 ),  // inferior-posterior oblique
-  cerebellum: new THREE.Vector3( 0,    -4.2, -1.5 ),  // posterior-inferior
+  brainstem:  new THREE.Vector3( 0,    -0.5, -4.5 ),  // from directly below (cortex has opening here)
+  cerebellum: new THREE.Vector3( 0,    -3.5, -3.0 ),  // posterior-inferior oblique
 };
 
 // camera.up per view — lateral/anterior/posterior use z-up (superior = top of screen);
@@ -106,13 +106,20 @@ const VIEW_UP = {
   inferior:   new THREE.Vector3(0, 1, 0),
   anterior:   new THREE.Vector3(0, 0, 1),
   posterior:  new THREE.Vector3(0, 0, 1),
-  brainstem:  new THREE.Vector3(0, 0, 1),
-  cerebellum: new THREE.Vector3(0, 0, 1),
+  brainstem:  new THREE.Vector3(0, 1, 0),  // y-up: anterior = top (same as inferior view)
+  cerebellum: new THREE.Vector3(0, 0, 1),  // z-up: superior = top
 };
 
 var camFrom   = null, camTo   = null, camT = 0;
 var camUpFrom = null, camUpTo = null;
 const CAM_DUR = 0.72;
+
+// Orbit target per view — brainstem/cerebellum orbit their own centroid,
+// all other views orbit the brain centre.
+const CAMERA_TARGETS = {
+  brainstem:  new THREE.Vector3(0,    -0.16, -0.58),
+  cerebellum: new THREE.Vector3(0,    -0.46, -0.50),  // actual cerebellum centroid
+};
 
 function setCameraView(name) {
   var tgt = CAMERA_VIEWS[name];
@@ -122,7 +129,8 @@ function setCameraView(name) {
   camUpFrom = camera.up.clone();
   camUpTo   = VIEW_UP[name].clone();
   camT      = 0;
-  controls.target.set(0, 0, 0);
+  var orbitTarget = CAMERA_TARGETS[name] || new THREE.Vector3(0, 0, 0);
+  controls.target.copy(orbitTarget);
 }
 
 // ── Load GLB ──────────────────────────────────────────────────────────────────
@@ -130,46 +138,75 @@ function setCameraView(name) {
 var _readyResolve;
 var _readyPromise = new Promise(function(res) { _readyResolve = res; });
 
-var brainGroup = null;
+var brainGroups       = [];   // all loaded mesh groups (cortex + brainstem + cerebellum)
+var subcorticalGroups = [];   // brainstem + cerebellum — hidden during split view
+var brainGroup        = null; // alias for cortex group
 
-var KNOWN_SIZE = 18700000;  // ~18.7 MB — used when xhr.total is 0
+// Track how many GLBs we expect so we fire brain3dReady exactly once
+var _glbTotal  = 3;
+var _glbLoaded = 0;
 
-new GLTFLoader().load(
-  'data/brain_meshes/full_brain_hires.glb',
-
-  function onLoad(gltf) {
-    brainGroup = gltf.scene;
-    gltf.scene.traverse(function(child) {
-      if (!child.isMesh) return;
-      child.geometry.computeVertexNormals();
-      if (child.material) {
-        child.material.roughness   = 0.82;
-        child.material.metalness   = 0.00;
-        child.material.needsUpdate = true;
-      }
-      child.castShadow    = false;
-      child.receiveShadow = false;
-    });
-    scene.add(gltf.scene);
-    console.log('[brain-3d-hires] GLB loaded successfully');
-    window.dispatchEvent(new CustomEvent('brain3dReady', { detail: { regionCount: 1 } }));
+function _onGlbDone() {
+  _glbLoaded++;
+  if (_glbLoaded >= _glbTotal) {
+    window.dispatchEvent(new CustomEvent('brain3dReady', { detail: { regionCount: _glbTotal } }));
     _readyResolve();
-  },
+  }
+}
 
+var KNOWN_SIZE = 18700000;  // ~18.7 MB cortex — used when xhr.total is 0
+
+function loadBrainGlb(url, onDone, onProgress) {
+  new GLTFLoader().load(
+    url,
+    function(gltf) {
+      gltf.scene.traverse(function(child) {
+        if (!child.isMesh) return;
+        child.geometry.computeVertexNormals();
+        if (child.material) {
+          child.material.roughness   = 0.82;
+          child.material.metalness   = 0.00;
+          child.material.needsUpdate = true;
+        }
+        child.castShadow    = false;
+        child.receiveShadow = false;
+      });
+      scene.add(gltf.scene);
+      brainGroups.push(gltf.scene);
+      if (onDone) onDone(gltf.scene);
+      var _box = new THREE.Box3().setFromObject(gltf.scene);
+      console.log('[brain-3d-hires21] Loaded:', url,
+        'BBox x[' + _box.min.x.toFixed(3) + ',' + _box.max.x.toFixed(3) + ']',
+        'y[' + _box.min.y.toFixed(3) + ',' + _box.max.y.toFixed(3) + ']',
+        'z[' + _box.min.z.toFixed(3) + ',' + _box.max.z.toFixed(3) + ']');
+      _onGlbDone();
+    },
+    onProgress || null,
+    function(err) {
+      console.warn('[brain-3d-hires21] Failed to load (skipping):', url, err.message || err);
+      _onGlbDone();  // still counts toward total so ready fires
+    }
+  );
+}
+
+// ── Cortex (large, track progress for the loading bar) ────────────────────────
+loadBrainGlb(
+  'data/brain_meshes/full_brain_hires.glb',
+  function(group) { brainGroup = group; },
   function onProgress(xhr) {
     var total  = xhr.total  || KNOWN_SIZE;
     var loaded = xhr.loaded || 0;
     window.dispatchEvent(new CustomEvent('brain3dProgress', {
       detail: { loaded: loaded, total: total }
     }));
-  },
-
-  function onError(err) {
-    console.error('[brain-3d-hires] GLB load failed:', err);
-    window.dispatchEvent(new CustomEvent('brain3dReady', { detail: { regionCount: 0 } }));
-    _readyResolve();
   }
 );
+
+// ── Brainstem + Cerebellum ────────────────────────────────────────────────────
+loadBrainGlb('data/brain_meshes/hires_brainstem.glb',
+  function(group) { subcorticalGroups.push(group); });
+loadBrainGlb('data/brain_meshes/hires_cerebellum.glb',
+  function(group) { subcorticalGroups.push(group); });
 
 // ── Glass / Split toggles ─────────────────────────────────────────────────────
 
@@ -177,35 +214,66 @@ var _glassOn = false;
 
 function toggleGlass() {
   _glassOn = !_glassOn;
-  if (!brainGroup) return;
-  brainGroup.traverse(function(child) {
-    if (!child.isMesh || !child.material) return;
-    if (_glassOn) {
-      child.material.transparent = true;
-      child.material.opacity     = 0.18;
-      child.material.depthWrite  = false;
-      child.material.side        = THREE.DoubleSide;
-    } else {
-      child.material.transparent = false;
-      child.material.opacity     = 1.0;
-      child.material.depthWrite  = true;
-      child.material.side        = THREE.FrontSide;
-    }
-    child.material.needsUpdate = true;
+  brainGroups.forEach(function(group) {
+    group.traverse(function(child) {
+      if (!child.isMesh || !child.material) return;
+      if (_glassOn) {
+        child.material.transparent = true;
+        child.material.opacity     = 0.18;
+        child.material.depthWrite  = false;
+        child.material.side        = THREE.DoubleSide;
+      } else {
+        child.material.transparent = false;
+        child.material.opacity     = 1.0;
+        child.material.depthWrite  = true;
+        child.material.side        = THREE.FrontSide;
+      }
+      child.material.needsUpdate = true;
+    });
   });
 }
 
 var _splitOn = false;
 
+// Clip plane: normal (1,0,0), constant -0.03 → clips x < 0.03.
+// Removes the left hemisphere plus the thin midline strip where
+// left-hemisphere medial-wall vertices cross x = 0.
+var _splitPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), -0.03);
+
 function toggleSplit() {
   _splitOn = !_splitOn;
   if (_splitOn) {
-    // Clip x < 0 (left hemisphere), revealing the right hemisphere's medial face.
-    // Camera moves to medial preset at (-3.5, 0, 0), looking toward +x —
-    // this correctly faces the right hemisphere's medial surface (normals toward -x).
-    renderer.clippingPlanes = [new THREE.Plane(new THREE.Vector3(1, 0, 0), 0)];
+    // Per-material clipping so we can clip the cortex only.
+    renderer.localClippingEnabled = true;
+
+    // Cortex: clip at x = 0.03.
+    // FrontSide only — the medial wall's normals face -x (toward the camera at
+    // (-3.5, 0, 0)), so it renders correctly.  DoubleSide must NOT be used here
+    // because it would also render the back of the lateral surface, which faces
+    // the camera from behind and looks like the other hemisphere showing through.
+    if (brainGroup) {
+      brainGroup.traverse(function(child) {
+        if (!child.isMesh || !child.material) return;
+        child.material.clippingPlanes = [_splitPlane];
+        child.material.side = THREE.FrontSide;
+        child.material.needsUpdate = true;
+      });
+    }
+
+    // Brainstem + cerebellum straddle the midline — hide them completely
+    // so only the clean cortical medial face is shown.
+    subcorticalGroups.forEach(function(g) { g.visible = false; });
   } else {
-    renderer.clippingPlanes = [];
+    subcorticalGroups.forEach(function(g) { g.visible = true; });
+    renderer.localClippingEnabled = false;
+    brainGroups.forEach(function(group) {
+      group.traverse(function(child) {
+        if (!child.isMesh || !child.material) return;
+        child.material.clippingPlanes = [];
+        child.material.side = _glassOn ? THREE.DoubleSide : THREE.FrontSide;
+        child.material.needsUpdate = true;
+      });
+    });
   }
 }
 
