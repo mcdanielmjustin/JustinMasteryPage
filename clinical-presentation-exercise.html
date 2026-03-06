@@ -262,11 +262,12 @@
     /* Patient stage — left column */
     .patient-stage {
       display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-start;
-      padding: 28px 28px 24px;
+      align-items: stretch; justify-content: flex-end;
+      gap: 12px;
+      padding: 24px 24px 20px 308px; /* left = 24 + 260(avatar) + 24(gap) */
       position: relative;
       border-right: 1px solid var(--border);
-      overflow-y: auto;
+      overflow: hidden;
     }
 
     /* Chart panel — right column */
@@ -414,8 +415,8 @@
       padding: 10px 16px;
       background: rgba(255,255,255,.025);
       border: 1px solid var(--border);
-      border-radius: 10px; margin-bottom: 16px;
-      width: 100%; max-width: 380px;
+      border-radius: 10px; margin-bottom: 0;
+      width: 100%; max-width: none;
     }
     .patient-setting { font-size: 12px; color: var(--text2); font-weight: 500; word-break: break-word; }
     .patient-label   { font-size: 11px; color: var(--text3); }
@@ -426,10 +427,10 @@
       position: relative; z-index: 1;
       background: rgba(255,255,255,.13);
       border: 1px solid rgba(255,255,255,.18);
-      border-radius: 16px 16px 16px 4px;
+      border-radius: 16px;
       padding: 14px 18px;
-      max-width: 380px; width: 100%;
-      margin-bottom: 16px;
+      width: 100%; max-width: none;
+      margin-bottom: 0;
       min-height: 60px;
       max-height: 60vh; overflow-y: auto;
       flex-shrink: 0;
@@ -440,14 +441,14 @@
     }
     .speech-bubble.hidden { display: none; }
     .bubble-tail {
-      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-      width: 14px; height: 8px;
+      position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+      width: 8px; height: 14px;
       background: rgba(255,255,255,.09);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      clip-path: polygon(100% 0, 100% 100%, 0 50%);
     }
     .clinician-prompt-wrap {
-      width: 100%; max-width: 380px;
-      margin-bottom: 8px;
+      width: 100%; max-width: none;
+      margin-bottom: 0;
       position: relative; z-index: 1;
       display: flex; flex-direction: column; gap: 2px;
     }
@@ -488,7 +489,7 @@
 
     /* Behavioral tags overlay */
     .tag-overlay {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 60px;
+      position: absolute; top: 0; left: 0; width: 308px; bottom: 0;
       pointer-events: none;
       overflow: hidden;
     }
@@ -516,7 +517,7 @@
     /* Avatar container — larger on desktop for clinical presence */
     .avatar-wrap {
       width: 260px; height: 416px;
-      position: relative; flex-shrink: 0;
+      position: absolute; left: 24px; bottom: 0;
     }
     #avatar-root {
       width: 100%; height: 100%;
@@ -803,7 +804,13 @@
         height: auto;
         min-height: calc(100vh - 58px);
       }
-      .patient-stage { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px 18px; }
+      .patient-stage { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px 18px; align-items: center; justify-content: flex-start; gap: 0; overflow-y: auto; }
+      .avatar-wrap { position: relative; left: auto; bottom: auto; margin-bottom: 12px; }
+      .speech-bubble { max-width: 100%; margin-bottom: 12px; border-radius: 16px 16px 16px 4px; }
+      .bubble-tail { left: 50%; top: auto; bottom: -8px; transform: translateX(-50%); width: 14px; height: 8px; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+      .clinician-prompt-wrap { margin-bottom: 8px; }
+      .patient-info-bar { max-width: 100%; margin-bottom: 0; }
+      .tag-overlay { width: auto; right: 0; bottom: 0; }
       .chart-panel {
         display: none;
       }
