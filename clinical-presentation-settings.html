@@ -579,6 +579,32 @@
       <p class="warn" id="pool-warn" style="display:none"></p>
     </div>
 
+    <!-- ── 4. PATIENT AVATAR ── -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div class="section-label">Patient Avatar</div>
+      </div>
+      <div class="toggle-row">
+
+        <div class="toggle-option selected" data-avatar="2d" onclick="selectToggle(this, 'avatar')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">2D</div>
+            <div class="toggle-sublabel">Illustrated patient avatar</div>
+          </div>
+        </div>
+
+        <div class="toggle-option" data-avatar="3d" onclick="selectToggle(this, 'avatar')">
+          <div class="toggle-radio"><div class="toggle-radio-dot"></div></div>
+          <div>
+            <div class="toggle-label">3D <span style="font-size:10px;color:var(--accent-light);font-weight:600;margin-left:4px;background:rgba(99,102,241,0.15);padding:1px 7px;border-radius:10px;">NEW</span></div>
+            <div class="toggle-sublabel">Realistic 3D avatar · requires hardware acceleration</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ── 5. DISPLAY OPTIONS ── -->
     <div class="settings-section">
       <div class="section-header">
@@ -672,6 +698,7 @@
       domains: new Set(),
       count:   10,
       order:   'shuffled',
+      avatar:  '2d',
       showTags:  true,
       showChart: true,
     };
@@ -824,7 +851,11 @@
         tags:    state.showTags  ? '1' : '0',
         chart:   state.showChart ? '1' : '0',
       });
-      location.href = 'clinical-presentation-exercise.html?' + params.toString();
+      if (state.avatar === '3d') {
+        location.href = 'http://localhost:8083/clinical-presentation-exercise-v2.html?' + params.toString();
+      } else {
+        location.href = 'clinical-presentation-exercise.html?' + params.toString();
+      }
     }
 
     // ── Level select-all ──
