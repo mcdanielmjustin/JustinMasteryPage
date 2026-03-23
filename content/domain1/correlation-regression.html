@@ -361,6 +361,47 @@
 
         <p><span class="key-term">Incremental validity</span> refers to the additional predictive power provided by adding a new predictor to an existing set of predictors. A predictor has incremental validity if it significantly increases R² beyond what existing predictors already explain. This concept is important in personnel selection and clinical assessment when evaluating whether adding a new test improves prediction.</p>
 
+        <!-- anchor:005 coverage:missing -->
+        <h3>Multicollinearity</h3>
+        <p><span class="key-term">Multicollinearity</span> is a condition in multiple regression analysis in which two or more predictor variables are highly intercorrelated with one another. When predictors share substantial overlapping variance, it becomes difficult to determine each predictor's unique contribution to explaining the criterion. Although the overall R² may remain accurate, the individual regression coefficients become unstable, their standard errors inflate, and statistical tests of individual predictors lose power.</p>
+        <div class="definition-box"><h4>Multicollinearity</h4><p>A problem that arises in multiple regression when predictor (explanatory) variables are strongly correlated with each other, making it difficult to isolate the independent effect of each predictor on the criterion variable. Severe multicollinearity distorts regression weights and undermines interpretability of the model.</p></div>
+        <p>Several diagnostic indicators help detect multicollinearity. The <span class="key-term">tolerance</span> statistic represents the proportion of a predictor's variance that is not explained by other predictors in the model (tolerance = 1 − R² for that predictor regressed on all other predictors). Values below .10 suggest serious multicollinearity. The <span class="key-term">variance inflation factor (VIF)</span>, which is the reciprocal of tolerance (VIF = 1/tolerance), quantifies how much the variance of a regression coefficient is inflated due to collinearity; VIF values exceeding 10 are commonly flagged as problematic.</p>
+        <div class="example-box"><h4>Example: Redundant Predictors in Clinical Research</h4><p>A researcher predicts therapy outcomes using three predictors: the BDI-II (depression), the PHQ-9 (depression), and a social support scale. Because the BDI-II and PHQ-9 both measure depression, they correlate at r = .85. In the regression model, neither depression measure shows a statistically significant unique effect, even though depression is strongly related to outcomes. The high intercorrelation between the two depression measures has inflated their standard errors and obscured their individual contributions. Removing one of the redundant measures resolves the issue, and the remaining depression predictor emerges as a strong, significant predictor.</p></div>
+        <p>Remedies for multicollinearity include removing or combining redundant predictors, using principal components analysis to create orthogonal composites, or employing ridge regression, which adds a small bias to stabilize coefficient estimates. Recognizing and addressing multicollinearity is essential for producing interpretable and replicable regression models in psychological research.</p>
+        <!-- /anchor:005 -->
+
+
+        <!-- anchor:09 coverage:missing -->
+        <h3>Canonical Correlation</h3>
+        <p><span class="key-term">Canonical correlation</span> is a multivariate extension of multiple regression designed for situations in which a researcher seeks to examine the relationship between a set of predictor variables and a set of criterion variables simultaneously. While multiple regression handles one criterion at a time, canonical correlation accommodates two or more criteria, making it the most general form of the linear correlation model.</p>
+        <div class="definition-box"><h4>Canonical Correlation</h4><p>A multivariate statistical technique that identifies the linear combinations of two or more predictor variables and two or more criterion variables that are maximally correlated with each other. Each pair of linear combinations is called a canonical variate pair, and the correlation between them is the canonical correlation coefficient (Rc).</p></div>
+        <p>The procedure works by creating weighted composites—called <span class="key-term">canonical variates</span>—from each variable set. The first canonical variate pair is derived to maximize the correlation between the predictor composite and the criterion composite. Subsequent pairs are extracted to capture remaining shared variance, subject to the constraint that each new pair is uncorrelated with all previous pairs. The number of possible canonical variate pairs equals the number of variables in the smaller set.</p>
+        <div class="example-box"><h4>Example: Predicting Multiple Academic Outcomes</h4><p>An educational psychologist wants to understand how a battery of cognitive measures (working memory, processing speed, and verbal reasoning) relates to a set of academic outcomes (reading achievement, mathematics achievement, and written expression). Running three separate multiple regressions—one for each outcome—would ignore the intercorrelations among the criteria. Canonical correlation analyzes all predictor-criterion relationships simultaneously, revealing, for instance, that one canonical variate pair reflects a verbal dimension linking verbal reasoning to reading and writing, while a second pair captures a quantitative dimension linking working memory and processing speed to mathematics performance.</p></div>
+        <table>
+        <thead>
+        <tr><th>Technique</th><th>Number of Predictors</th><th>Number of Criteria</th><th>Criterion Scale</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>Simple Regression</td><td>1</td><td>1</td><td>Continuous</td></tr>
+        <tr><td>Multiple Regression</td><td>2+</td><td>1</td><td>Continuous</td></tr>
+        <tr><td>Discriminant Analysis</td><td>2+</td><td>1</td><td>Categorical (groups)</td></tr>
+        <tr><td>Canonical Correlation</td><td>2+</td><td>2+</td><td>Continuous</td></tr>
+        </tbody>
+        </table>
+        <p>Canonical correlation subsumes several other techniques as special cases: when there is only one criterion, it reduces to multiple regression; when there is one predictor and one criterion, it reduces to bivariate correlation. Because of its generality, canonical correlation is valuable in psychological research where constructs are multidimensional and outcomes are naturally measured across multiple indicators.</p>
+        <!-- /anchor:09 -->
+
+
+        <!-- anchor:124 coverage:missing -->
+        <h3>Discriminant Function Analysis</h3>
+        <p><span class="key-term">Discriminant function analysis</span> (also called <span class="key-term">discriminant analysis</span>) is the appropriate multivariate technique when two or more predictor variables are used to classify individuals into discrete criterion groups. Unlike multiple regression, where the criterion is a continuous variable, discriminant analysis addresses situations in which the outcome is categorical—such as diagnostic category, group membership, or program placement.</p>
+        <div class="definition-box"><h4>Discriminant Function Analysis</h4><p>A multivariate statistical procedure that uses a set of continuous predictor variables to determine which of two or more groups an individual is most likely to belong to. The analysis derives one or more discriminant functions—linear combinations of the predictors—that maximally separate the groups.</p></div>
+        <p>The analysis produces <span class="key-term">discriminant functions</span>, which are weighted linear combinations of the predictor variables that maximize the separation between groups. When there are <em>k</em> groups, up to <em>k</em> − 1 discriminant functions can be extracted. Each function captures a dimension along which the groups differ most. Classification is achieved by computing each individual's score on the discriminant function(s) and assigning them to the group whose centroid (multivariate mean) is closest.</p>
+        <div class="example-box"><h4>Example: Vocational Program Placement</h4><p>A vocational counselor needs to determine which of five training programs is the best fit for unemployed young adults who did not complete high school. The counselor collects data on mechanical aptitude, reading comprehension, interpersonal skills, and numerical reasoning. Discriminant function analysis uses these four predictors to generate up to four discriminant functions that differentiate among the five program groups. For a new client, the analysis produces classification probabilities—for instance, a 62% probability of success in the automotive technology program, 20% in culinary arts, and lower probabilities for the remaining programs—guiding placement decisions.</p></div>
+        <p>Discriminant analysis is widely used in clinical and organizational settings for tasks such as differentiating diagnostic groups (e.g., distinguishing among mood, anxiety, and psychotic disorders based on test profiles), predicting group membership in personnel selection, and assigning individuals to treatment conditions based on intake characteristics.</p>
+        <!-- /anchor:124 -->
+
+
         <div class="example-box">
           <h4>Example: Incremental Validity in Clinical Assessment</h4>
           <p>A researcher examines whether a new anxiety questionnaire adds predictive value for treatment outcomes beyond existing measures. A regression using only the BDI-II yields R² = .30. Adding the new anxiety measure increases R² to .38. The increment of .08 (8% additional variance explained) represents the incremental validity of the new measure. Statistical tests can determine whether this increment is significant.</p>
@@ -368,6 +409,13 @@
       </section>
 
       <section class="content-section">
+
+        <!-- anchor:127 coverage:partial -->
+        <p>A common application of multiple regression in organizational psychology involves identifying the most parsimonious set of predictors for forecasting job performance. <span class="key-term">Stepwise multiple regression</span> is a variable selection procedure that systematically adds or removes predictors based on their statistical contribution. In <span class="key-term">forward selection</span>, the predictor with the highest correlation to the criterion is entered first, and subsequent predictors are added one at a time based on which provides the greatest incremental increase in R². In <span class="key-term">backward elimination</span>, all predictors are entered initially, and those contributing the least are removed sequentially. <span class="key-term">Stepwise regression</span> combines both approaches, re-evaluating previously entered variables at each step and potentially removing them if their contribution becomes redundant after newer predictors are added.</p>
+        <div class="example-box"><h4>Example: Stepwise Regression in Personnel Selection</h4><p>An I/O psychologist administers six assessment measures to 300 job applicants: a cognitive ability test, a structured interview rating, a personality conscientiousness scale, a work sample test, a biographical data form, and a situational judgment test. Rather than using all six predictors—which may add complexity without meaningful gains in accuracy—the psychologist conducts stepwise multiple regression. The analysis reveals that cognitive ability enters first (R² = .20), the structured interview enters second (R² increases to .30), and the work sample test enters third (R² increases to .34). The remaining three measures fail to add significant predictive power. The result is a streamlined, three-predictor model that achieves nearly the same accuracy as the full six-predictor equation while being more practical and cost-effective to administer.</p></div>
+        <p>Stepwise methods are useful for applied prediction problems but have notable limitations. They capitalize on sample-specific variance and may produce results that do not replicate well in new samples, particularly when the sample size is small relative to the number of candidate predictors. Cross-validation is strongly recommended whenever stepwise procedures are employed.</p>
+        <!-- /anchor:127 -->
+
         <h2>Regression to the Mean</h2>
 
         <p><span class="key-term">Regression to the mean</span> is a statistical phenomenon wherein extreme scores on one measurement tend to be followed by less extreme scores on subsequent measurements. This occurs whenever the correlation between two variables is less than perfect (r &lt; 1.00). The term "regression" was coined by Francis Galton based on this observation (Galton, 1886).</p>
@@ -403,6 +451,56 @@
         <h3>Meta-Analysis</h3>
 
         <p><span class="key-term">Meta-analysis</span> is a quantitative method for systematically combining results from multiple studies to arrive at an overall estimate of an effect. Unlike a narrative literature review, meta-analysis uses statistical techniques to integrate findings, weight studies by quality or sample size, and assess variability across studies (Borenstein et al., 2009). Correlation coefficients can be converted to other effect size metrics and combined to estimate population-level relationships while accounting for sampling error and study artifacts (Hunter & Schmidt, 2004).</p>
+
+        <!-- anchor:184 coverage:missing -->
+        <h3>Structural Equation Modeling (SEM)</h3>
+        <p><span class="key-term">Structural equation modeling (SEM)</span> is a multivariate statistical framework that allows researchers to evaluate complex theoretical models specifying relationships among both <span class="key-term">observed variables</span> (directly measured indicators) and <span class="key-term">latent variables</span> (unobserved constructs inferred from observed indicators). SEM integrates two components: a <em>measurement model</em>, which defines how latent constructs are represented by their observed indicators (essentially confirmatory factor analysis), and a <em>structural model</em>, which specifies the hypothesized directional and correlational paths among latent and observed variables.</p>
+        <p>Unlike standard regression, which examines prediction of a single outcome from one or more predictors, SEM can simultaneously estimate multiple regression equations, model mediating and moderating relationships, account for measurement error in observed variables, and test whether an entire theoretical model is consistent with the observed data. The degree to which the hypothesized model reproduces the actual covariance matrix of observed variables determines <span class="key-term">model fit</span>. Common fit indices include the chi-square goodness-of-fit test, the Comparative Fit Index (CFI), the Root Mean Square Error of Approximation (RMSEA), and the Standardized Root Mean Square Residual (SRMR). Adequate fit suggests the proposed model is a plausible representation of the data, although alternative models may fit equally well.</p>
+        <p>SEM is widely used in psychology to test theories about the structure of psychological constructs, evaluate causal process models, and confirm factor structures of assessment instruments. Path coefficients within the structural model are interpreted similarly to regression weights and represent the estimated strength of directional relationships. Despite its power, SEM requires large sample sizes (often 200 or more), assumes multivariate normality, and—critically—cannot establish causation from cross-sectional data alone, even though the models depict directional arrows.</p>
+        <div class="example-box"><h4>Example</h4><p>A researcher theorizes that perceived social support reduces depressive symptoms through the mediating mechanism of self-efficacy. Using SEM, she specifies social support as a latent variable measured by three questionnaire subscales, self-efficacy as a latent variable indicated by two scales, and depression as a latent variable with three symptom cluster indicators. The structural portion of the model includes a direct path from social support to depression and an indirect path through self-efficacy. SEM allows her to test whether this mediation model fits the data well and to estimate the magnitude of both the direct and indirect effects simultaneously while accounting for measurement error in each construct.</p></div>
+        <table>
+        <thead>
+        <tr>
+        <th>Feature</th>
+        <th>Multiple Regression</th>
+        <th>Structural Equation Modeling</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Number of outcome variables</td>
+        <td>Single criterion (Y)</td>
+        <td>Multiple endogenous variables simultaneously</td>
+        </tr>
+        <tr>
+        <td>Latent variables</td>
+        <td>Not modeled</td>
+        <td>Explicitly modeled with measurement indicators</td>
+        </tr>
+        <tr>
+        <td>Measurement error</td>
+        <td>Assumed absent in predictors</td>
+        <td>Estimated and separated from structural relationships</td>
+        </tr>
+        <tr>
+        <td>Mediation testing</td>
+        <td>Requires sequential analyses</td>
+        <td>Tested within a single integrated model</td>
+        </tr>
+        <tr>
+        <td>Overall model fit</td>
+        <td>Not assessed</td>
+        <td>Evaluated with fit indices (CFI, RMSEA, SRMR)</td>
+        </tr>
+        <tr>
+        <td>Sample size requirements</td>
+        <td>Moderate</td>
+        <td>Large (typically ≥ 200)</td>
+        </tr>
+        </tbody>
+        </table>
+        <!-- /anchor:184 -->
+
 
         <h4>Effect Size Calculation</h4>
         <p>The foundation of meta-analysis is the <span class="key-term">effect size</span>—a standardized measure of the magnitude of an effect that can be compared across studies with different scales and designs. Common effect size metrics include Cohen's d (standardized mean difference), Pearson's r (correlation), and odds ratios (for binary outcomes). Each study's effect size is calculated and then combined into a weighted average, with larger studies typically receiving more weight.</p>

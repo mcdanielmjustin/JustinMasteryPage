@@ -192,6 +192,66 @@
 
         <p>Inferential statistics allow researchers to draw conclusions about populations based on data collected from samples. Unlike descriptive statistics, which simply summarize data, inferential statistics enable us to make predictions, test hypotheses, and determine whether observed differences are likely due to chance or reflect true effects in the population (Field, 2018).</p>
 
+        <!-- anchor:002 coverage:missing -->
+        <p>Understanding what determines the magnitude of the <span class="key-term">standard error of the mean</span> is essential for grasping how sample-based estimates gain or lose precision. The standard error (SE = σ / √n) is governed by two factors that work in opposing directions:</p>
+        <table>
+        <thead>
+        <tr>
+        <th>Factor</th>
+        <th>Change</th>
+        <th>Effect on Standard Error</th>
+        <th>Consequence for Estimation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Population standard deviation (σ)</td>
+        <td>Increases</td>
+        <td>SE increases</td>
+        <td>Less precise estimate of μ; wider confidence intervals</td>
+        </tr>
+        <tr>
+        <td>Population standard deviation (σ)</td>
+        <td>Decreases</td>
+        <td>SE decreases</td>
+        <td>More precise estimate of μ; narrower confidence intervals</td>
+        </tr>
+        <tr>
+        <td>Sample size (n)</td>
+        <td>Increases</td>
+        <td>SE decreases</td>
+        <td>More precise estimate of μ; greater statistical power</td>
+        </tr>
+        <tr>
+        <td>Sample size (n)</td>
+        <td>Decreases</td>
+        <td>SE increases</td>
+        <td>Less precise estimate of μ; reduced statistical power</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>Researchers can reduce the standard error—and thereby increase the precision and power of their analyses—by collecting larger samples. However, they cannot directly control population variability. In some cases, researchers employ strategies to indirectly reduce variability, such as using more homogeneous samples, standardizing measurement procedures, or employing within-subjects designs that remove individual differences from the error term. Each of these approaches effectively reduces the variability that feeds into the standard error, producing more sensitive statistical tests.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>In clinical research, populations often exhibit high variability in treatment response due to differences in severity, comorbidities, and individual characteristics. This inherent variability inflates the standard error and makes it harder to detect treatment effects. Researchers may address this by using ANCOVA to control for baseline severity or by employing repeated measures designs, both of which reduce error variance and effectively lower the standard error used in hypothesis tests.</p></div>
+        <!-- /anchor:002 -->
+
+
+        <!-- anchor:10 coverage:missing -->
+        <p>The <span class="key-term">central limit theorem (CLT)</span> is one of the most foundational principles in inferential statistics. It states that the <span class="key-term">sampling distribution of the mean</span> will approximate a normal (bell-shaped) distribution as sample size grows, regardless of how the original population scores are distributed. Even if the population is heavily skewed, bimodal, or uniform, the distribution formed by repeatedly drawing samples of size n and plotting their means will become increasingly normal as n increases.</p>
+        <p>This theorem has profound practical consequences. Most parametric inferential tests—including t-tests, ANOVA, and z-tests—rely on the assumption that sampling distributions are normal. The CLT provides the mathematical justification for using these tests even when the underlying population distribution departs from normality, provided the sample size is sufficiently large. A commonly cited guideline is that sample sizes of 30 or more generally produce sampling distributions that are approximately normal, though more extreme population skew may require larger samples.</p>
+        <p>The CLT also specifies two additional properties of the sampling distribution of means: (1) the mean of the sampling distribution equals the population mean (μ), making the sample mean an <span class="key-term">unbiased estimator</span>, and (2) the standard deviation of the sampling distribution—the standard error—equals σ / √n, meaning it shrinks as sample size increases.</p>
+        <div class="definition-box"><h4>Central Limit Theorem</h4><p>As sample size increases, the distribution of sample means approaches a normal curve with a mean equal to the population mean (μ) and a standard deviation equal to σ / √n, irrespective of the shape of the original population distribution.</p></div>
+        <div class="example-box"><h4>Example</h4><p>Imagine a population of reaction times that is strongly positively skewed, with most responses clustered at fast times and a long tail of slow responses. If you draw thousands of random samples of n = 5 and plot the means, the resulting distribution will still show some skew. However, if you repeat this process with samples of n = 50, the distribution of those sample means will closely resemble a symmetric, normal curve—even though no individual sample of reaction times is normally distributed.</p></div>
+        <!-- /anchor:10 -->
+
+
+        <!-- anchor:037 coverage:missing -->
+        <p>The <span class="key-term">standard error of the mean (SEM)</span> quantifies how much variability we can expect among sample means drawn from the same population. It serves as a measure of the precision of the sample mean as an estimate of the population mean. The SEM is calculated by dividing the population standard deviation (σ) by the square root of the sample size (n): SEM = σ / √n.</p>
+        <p>This formula reveals two critical relationships. First, as the <strong>population standard deviation increases</strong>, the standard error grows larger. When individual scores in a population are widely dispersed, sample means drawn from that population will also be more variable, making any single sample mean a less precise estimate. Second, as <strong>sample size decreases</strong>, the standard error increases. Smaller samples are more susceptible to the influence of extreme scores and provide less stable estimates of the population mean. Conversely, increasing sample size reduces the standard error, which is why larger studies yield more precise estimates.</p>
+        <p>These relationships have direct implications for hypothesis testing: a larger standard error makes it harder to detect true population differences because test statistics (such as t and z) place the standard error in the denominator. When the SEM is large, the resulting test statistic is smaller, reducing the likelihood of achieving statistical significance. This is one reason why increasing sample size is one of the most effective strategies for boosting statistical power.</p>
+        <div class="example-box"><h4>Example</h4><p>Suppose a population has σ = 20. With a sample of n = 25, the SEM = 20 / √25 = 4.0. If the sample size increases to n = 100, the SEM = 20 / √100 = 2.0. Doubling the square root of n cuts the standard error in half, illustrating why researchers seek larger samples for greater precision. Now consider a different population where σ = 40 with n = 100: the SEM = 40 / √100 = 4.0—twice as large as before, demonstrating how greater population variability inflates the standard error.</p></div>
+        <!-- /anchor:037 -->
+
+
         <p>The foundation of inferential statistics rests on probability theory and sampling distributions. Understanding these concepts is essential for interpreting research findings and making evidence-based clinical decisions.</p>
 
         <div class="definition-box">
@@ -339,6 +399,11 @@
 
         <p>Used when there is one independent variable with three or more levels. For example, comparing therapy outcomes across three treatment conditions (CBT, psychodynamic, medication).</p>
 
+        <!-- anchor:11-3 coverage:partial -->
+        <p>Understanding the components of the <span class="key-term">F-ratio</span> is essential for interpreting ANOVA results. The F-ratio is calculated as between-group variance divided by within-group variance. Critically, the numerator (between-group mean square) reflects <em>both</em> systematic differences due to treatment effects <em>and</em> random error. The denominator (within-group mean square) reflects only random variability—individual differences and measurement error unrelated to the independent variable. When the null hypothesis is true and there are no treatment effects, both the numerator and denominator estimate the same error variance, yielding an F-ratio near 1.0. When a genuine treatment effect exists, the numerator becomes larger than the denominator because it contains the additional systematic variance, pushing the F-ratio above 1.0. The larger the treatment effect relative to error, the larger the F-ratio and the more likely the result will be statistically significant.</p>
+        <!-- /anchor:11-3 -->
+
+
         <h3>Factorial ANOVA</h3>
 
         <p>Used when there are two or more independent variables. A 2×3 factorial ANOVA, for example, examines two IVs—one with 2 levels and one with 3 levels. Factorial ANOVA can detect:</p>
@@ -355,6 +420,17 @@
         <h3>Repeated Measures ANOVA</h3>
 
         <p>Used when the same participants are measured under multiple conditions or at multiple time points. This is the extension of the paired t-test to three or more measurements. Also called within-subjects ANOVA.</p>
+
+        <!-- anchor:12-2 coverage:missing -->
+        <h3>Split-Plot (Mixed) ANOVA</h3>
+        <p>When a research design includes both a <span class="key-term">between-subjects factor</span> and a <span class="key-term">within-subjects factor</span>, the appropriate analysis is a <span class="key-term">split-plot ANOVA</span>, also referred to as a mixed-design ANOVA or mixed-factorial ANOVA. This design is extremely common in clinical research because it allows investigators to compare different groups of participants (e.g., treatment vs. control) across repeated measurement occasions (e.g., pre-treatment, post-treatment, and follow-up).</p>
+        <p>The split-plot ANOVA produces three F-tests: one for the between-subjects main effect, one for the within-subjects main effect, and one for the interaction between the two factors. The interaction is often of greatest theoretical interest because it reveals whether changes over time (or across conditions) differ depending on group membership. For instance, if a treatment group shows significant symptom reduction from pre- to post-treatment but a waitlist group does not, this would manifest as a significant group × time interaction.</p>
+        <div class="example-box"><h4>Example</h4>
+        <p>A researcher randomly assigns 60 participants to either CBT or a waitlist control condition (between-subjects factor: group) and measures anxiety at baseline, 8 weeks, and 16 weeks (within-subjects factor: time). A split-plot ANOVA is used to analyze the data. The key finding is a significant group × time interaction (F = 8.42, p < .01), indicating that the pattern of anxiety change over the three time points differed between CBT and waitlist participants. Follow-up analyses reveal that the CBT group showed a steady decline in anxiety while the waitlist group remained relatively stable.</p>
+        </div>
+        <p>Assumptions of the split-plot ANOVA include independence of observations between groups, normality, homogeneity of variance for the between-subjects factor, and <span class="key-term">sphericity</span> for the within-subjects factor (tested via Mauchly's test). When sphericity is violated, corrections such as Greenhouse-Geisser or Huynh-Feldt are applied to the degrees of freedom.</p>
+        <!-- /anchor:12-2 -->
+
 
         <h3>Post Hoc Tests</h3>
 
@@ -457,6 +533,11 @@
           </tr>
         </table>
 
+        <!-- anchor:080 coverage:partial -->
+        <p>A key trade-off to understand is that <span class="key-term">parametric tests are generally more powerful</span> than their nonparametric counterparts. Because parametric tests make use of all the quantitative information in the data—means, variances, and the precise distances between scores—they extract more statistical information from the same dataset. This means that when an effect truly exists in the population, a parametric test is more likely to detect it (i.e., correctly reject a false null hypothesis). Nonparametric tests, by contrast, typically convert raw scores to ranks or frequencies, discarding some of the information contained in interval- or ratio-level data. This loss of information reduces their sensitivity to real effects. For this reason, nonparametric tests should generally be reserved for situations where parametric assumptions are clearly untenable—such as when data are ordinal, sample sizes are very small and distributions are markedly skewed, or when the dependent variable is categorical. When assumptions of normality and homogeneity of variance are reasonably met, parametric tests remain the preferred choice because of their superior ability to detect true differences.</p>
+        <!-- /anchor:080 -->
+
+
         <h3>Chi-Square Tests</h3>
 
         <p>The <span class="key-term">chi-square (χ²) test</span> is used for categorical data:</p>
@@ -467,6 +548,12 @@
       </section>
 
       <section class="content-section">
+
+        <!-- anchor:10-2 coverage:partial -->
+        <p>The chi-square test of independence is equally applicable when one categorical variable has only two levels. For instance, a researcher interested in whether <span class="key-term">gender</span> (male vs. female) is associated with <span class="key-term">department of admission</span> (six departments) would arrange the data in a 2 × 6 contingency table. Each cell represents the count of applicants of a given gender who were accepted into a specific department. Because both variables are categorical and the research question concerns the relationship between them, a multiple-sample chi-square test is the correct analytic strategy. A significant result would indicate that the proportion of males and females admitted is not uniform across departments—suggesting that gender and department acceptance are statistically dependent. This design parallels the classic Berkeley admissions study, which famously illustrated how aggregate patterns can differ from department-level patterns (Simpson's paradox), underscoring the importance of examining contingency tables at the appropriate level of analysis.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>When expected cell frequencies are small (conventionally below 5 in more than 20% of cells), the chi-square approximation becomes unreliable. In such cases, researchers may collapse categories, collect additional data, or use Fisher's exact test (particularly for 2 × 2 tables) to obtain accurate p-values.</p></div>
+        <!-- /anchor:10-2 -->
+
         <h2>Effect Sizes</h2>
 
         <p><span class="key-term">Effect size</span> quantifies the magnitude of a difference or relationship, independent of sample size. While statistical significance tells us whether an effect exists, effect size tells us how large the effect is. This distinction is crucial because even trivial effects can be statistically significant with large samples.</p>
@@ -533,9 +620,65 @@
       </section>
 
       <section class="content-section">
+
+        <!-- anchor:220 coverage:partial -->
+        <p>The <span class="key-term">Reliable Change Index (RCI)</span>, developed by Jacobson and Truax (1991), provides a method for evaluating whether the change in an individual client's score from pre-treatment to post-treatment represents genuine improvement (or deterioration) rather than fluctuation attributable to measurement error. The RCI is calculated by dividing the difference between pre- and post-treatment scores by the standard error of the difference, which is derived from the test's reliability coefficient and the standard deviation of scores. An RCI value exceeding ±1.96 indicates that the observed change is statistically reliable at the .05 level—meaning there is less than a 5% probability that the change resulted from imprecision of the measure alone. This metric is particularly valuable in clinical practice and single-case research where the focus is on individual-level change rather than group-level averages. When combined with the concept of <span class="key-term">clinically significant change</span>—which requires that the client's post-treatment score falls within the functional (non-clinical) population range—the RCI provides a comprehensive framework for determining whether therapy has produced meaningful real-world benefit for a specific client.</p>
+        <!-- /anchor:220 -->
+
         <h2>Confidence Intervals</h2>
 
         <p>A <span class="key-term">confidence interval (CI)</span> provides a range of values within which the population parameter is likely to fall. A 95% CI means that if we repeated the study many times, 95% of the calculated intervals would contain the true population parameter.</p>
+
+        <!-- anchor:201 coverage:missing -->
+        <h3>Bayesian Inference: An Alternative Framework</h3>
+        <p>The hypothesis testing and confidence interval approaches discussed throughout this chapter fall within the <span class="key-term">frequentist</span> tradition of statistics, which defines probability as the long-run frequency of events across repeated sampling. An alternative framework—<span class="key-term">Bayesian inference</span>—defines probability as a degree of belief and provides a fundamentally different method for drawing conclusions from data.</p>
+
+        <div class="definition-box"><h4>Bayes' Theorem</h4><p>Bayes' theorem is a mathematical rule for updating beliefs in light of new evidence. It specifies how to combine a <span class="key-term">prior probability distribution</span> (what we believed about a parameter before collecting data) with a <span class="key-term">likelihood function</span> (how probable the observed data are under different parameter values) to produce a <span class="key-term">posterior probability distribution</span> (our updated belief about the parameter after seeing the data).</p></div>
+
+        <p>In Bayesian analysis, parameters such as a treatment effect are treated as having probability distributions rather than being fixed, unknown constants. Before a study begins, the researcher specifies a prior distribution reflecting existing knowledge or theoretical expectations. After data collection, the prior is mathematically combined with the likelihood of the observed results to yield the posterior distribution. This posterior directly answers questions like "What is the probability that the treatment effect exceeds zero?"—a question that frequentist methods cannot address.</p>
+
+        <p>A key output of Bayesian analysis is the <span class="key-term">credible interval</span>, which differs conceptually from a confidence interval. A 95% credible interval indicates that there is a 95% probability the parameter falls within that range, given the data and the prior. By contrast, a 95% confidence interval means that 95% of intervals constructed from repeated sampling would contain the true value—a statement about the procedure, not about the specific interval obtained.</p>
+
+        <table>
+        <thead>
+        <tr>
+        <th>Feature</th>
+        <th>Frequentist Approach</th>
+        <th>Bayesian Approach</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Definition of probability</td>
+        <td>Long-run relative frequency</td>
+        <td>Degree of belief or certainty</td>
+        </tr>
+        <tr>
+        <td>Parameters</td>
+        <td>Fixed but unknown values</td>
+        <td>Random variables with distributions</td>
+        </tr>
+        <tr>
+        <td>Prior information</td>
+        <td>Not formally incorporated</td>
+        <td>Explicitly specified as prior distribution</td>
+        </tr>
+        <tr>
+        <td>Interval estimate</td>
+        <td>Confidence interval (about the procedure)</td>
+        <td>Credible interval (about the parameter)</td>
+        </tr>
+        <tr>
+        <td>Result interpretation</td>
+        <td>Probability of data given H₀</td>
+        <td>Probability of hypothesis given the data</td>
+        </tr>
+        </tbody>
+        </table>
+
+        <div class="clinical-note"><h4>Clinical Note</h4><p>Bayesian methods are increasingly used in clinical research, particularly in adaptive clinical trials and meta-analyses where accumulating evidence across studies naturally fits the framework of updating prior beliefs. For the EPPP, understand that Bayesian analysis yields direct probability statements about parameters by incorporating prior knowledge, whereas frequentist p-values only express the probability of obtaining the observed (or more extreme) data under the null hypothesis.</p></div>
+        <!-- /anchor:201 -->
+
 
         <p>Confidence intervals provide more information than p-values alone because they indicate both the precision of the estimate (width of the interval) and the direction and magnitude of effects. Narrow intervals indicate precise estimates; wide intervals indicate imprecise estimates.</p>
 
@@ -548,6 +691,13 @@
 
       <section class="content-section">
         <h2>EPPP Exam Focus Points</h2>
+
+
+        <!-- anchor:025 coverage:missing -->
+        <div class="clinical-note"><h4>External Validity and Generalizability</h4>
+        <p>While much of inferential statistics focuses on <span class="key-term">internal validity</span>—whether we can draw causal conclusions from our data—exam items also test understanding of <span class="key-term">external validity</span>, which concerns whether research findings can be generalized beyond the specific study conditions. External validity asks: Do these results apply to other populations, settings, times, and outcome measures? A study may demonstrate a statistically significant treatment effect with strong internal controls, yet lack generalizability if the sample was narrowly defined (e.g., only college students), the setting was artificial (e.g., a highly controlled laboratory), or the measures were idiosyncratic. Threats to external validity include selection bias in sampling, reactive effects of the experimental arrangement (e.g., participants behaving differently because they know they are being studied), and interactions between treatment and specific participant characteristics. For EPPP purposes, remember that random <em>assignment</em> strengthens internal validity, while random <em>selection</em> from the population of interest strengthens external validity. Both are essential for drawing conclusions that are simultaneously trustworthy and broadly applicable.</p>
+        </div>
+        <!-- /anchor:025 -->
 
         <div class="key-concepts" style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
           <h4 style="color: var(--accent); margin-top: 0;">Commonly Tested Topics for the EPPP</h4>
