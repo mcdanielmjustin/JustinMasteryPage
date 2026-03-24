@@ -12,6 +12,7 @@ Run:
   python scripts/generate_anchor_content.py --all
   python scripts/generate_anchor_content.py --domain PMET
   python scripts/generate_anchor_content.py --resume
+  python scripts/generate_anchor_content.py --targets data/direct_gap_targets.json --direct
 """
 
 import json, pathlib, re, sys, argparse, time, os, math
@@ -71,6 +72,25 @@ Respond with ONLY valid JSON:
         {
             "anchor_id": "020",
             "generated_html": "<!-- anchor:020 coverage:missing -->\\n        <p>Content...</p>\\n        <!-- /anchor:020 -->"
+        }
+    ]
+}"""
+
+# Variant system prompt for --targets mode: Claude must also determine inject_after heading
+SYSTEM_PROMPT_WITH_INJECT = SYSTEM_PROMPT.rsplit("Respond with ONLY valid JSON:", 1)[0] + """\
+ADDITIONAL RULE — inject_after:
+For each anchor, also determine the best existing heading (h2 or h3) in the
+chapter context after which this content should be injected. Return the heading
+text exactly as it appears in the chapter (e.g. "### Higher-Order Conditioning").
+Choose the heading whose section is most topically relevant to the anchor concept.
+
+Respond with ONLY valid JSON:
+{
+    "content": [
+        {
+            "anchor_id": "020",
+            "inject_after": "### Higher-Order Conditioning",
+            "generated_html": "<!-- anchor:020 coverage:partial -->\\n        <p>Content...</p>\\n        <!-- /anchor:020 -->"
         }
     ]
 }"""
@@ -158,8 +178,11 @@ def poll_and_collect(client, batch_id):
     return results
 
 
-def direct_generate(client, by_chapter, anchors_per_call=ANCHORS_PER_CALL):
+def direct_generate(client, by_chapter, anchors_per_call=ANCHORS_PER_CALL,
+                    system_prompt=None):
     """Send individual API requests instead of batch (fallback when batch API is down)."""
+    if system_prompt is None:
+        system_prompt = SYSTEM_PROMPT
     raw_results = {}
     anchors_index = {}
     total_chapters = len(by_chapter)
@@ -194,7 +217,7 @@ def direct_generate(client, by_chapter, anchors_per_call=ANCHORS_PER_CALL):
                 msg = client.messages.create(
                     model="claude-opus-4-6",
                     max_tokens=16384,
-                    system=SYSTEM_PROMPT,
+                    system=system_prompt,
                     messages=[{"role": "user",
                                "content": build_user_prompt(chapter_context, anchors_batch)}],
                 )
@@ -228,6 +251,8 @@ def main():
     group.add_argument("--all", action="store_true")
     group.add_argument("--domain", type=str, help="Single domain code (e.g. PMET)")
     group.add_argument("--resume", action="store_true")
+    group.add_argument("--targets", type=str,
+                        help="JSON file with target anchors (bypasses coverage_audit.json)")
     parser.add_argument("--direct", action="store_true",
                         help="Use direct API calls instead of batch (fallback)")
     args = parser.parse_args()
@@ -245,19 +270,34 @@ def main():
         merge_results(state["anchors_index"], raw_results, state.get("domain_filter"))
         return
 
-    # ── Load audit results, filter to partial/missing ────────────────────
-    if not AUDIT_FILE.exists():
-        print(f"ERROR: {AUDIT_FILE} not found. Run audit_coverage.py first.")
-        sys.exit(1)
+    # ── Load targets ─────────────────────────────────────────────────────
+    targets_mode = bool(args.targets)
 
-    audit = json.loads(AUDIT_FILE.read_text(encoding="utf-8"))
-    todo = [a for a in audit if a.get("coverage") in ("partial", "missing")]
+    if targets_mode:
+        targets_path = pathlib.Path(args.targets)
+        if not targets_path.is_absolute():
+            targets_path = SCRIPTS_DIR / args.targets
+        if not targets_path.exists():
+            print(f"ERROR: {targets_path} not found.")
+            sys.exit(1)
+        todo = json.loads(targets_path.read_text(encoding="utf-8"))
+        # All targets treated as partial (concept is covered, just missing anchor block)
+        for a in todo:
+            a.setdefault("coverage", "partial")
+        print(f"Loaded {len(todo)} targets from {targets_path.name}")
+    else:
+        if not AUDIT_FILE.exists():
+            print(f"ERROR: {AUDIT_FILE} not found. Run audit_coverage.py first.")
+            sys.exit(1)
 
-    if args.domain:
-        todo = [a for a in todo if a["domain_code"] == args.domain.upper()]
+        audit = json.loads(AUDIT_FILE.read_text(encoding="utf-8"))
+        todo = [a for a in audit if a.get("coverage") in ("partial", "missing")]
+
+        if args.domain:
+            todo = [a for a in todo if a["domain_code"] == args.domain.upper()]
 
     if not todo:
-        print("No partial/missing anchors to process.")
+        print("No anchors to process.")
         return
 
     # Group by chapter
@@ -267,11 +307,17 @@ def main():
 
     print(f"Generating content for {len(todo)} anchors across {len(by_chapter)} chapters...")
 
+    # Choose system prompt
+    active_prompt = SYSTEM_PROMPT_WITH_INJECT if targets_mode else SYSTEM_PROMPT
+
     # ── Direct mode (bypass batch API) ───────────────────────────────────
     if args.direct:
         print(f"\nDirect mode: sending individual requests...")
-        anchors_index, raw_results = direct_generate(client, by_chapter)
-        merge_results(anchors_index, raw_results, args.domain)
+        anchors_index, raw_results = direct_generate(
+            client, by_chapter, system_prompt=active_prompt)
+        merge_results(anchors_index, raw_results,
+                      args.domain if not targets_mode else None,
+                      targets_mode=targets_mode)
         return
 
     # ── Build batch requests (3-5 anchors per call) ──────────────────────
@@ -300,7 +346,7 @@ def main():
                 "params": {
                     "model": "claude-opus-4-6",
                     "max_tokens": 16384,
-                    "system": SYSTEM_PROMPT,
+                    "system": active_prompt,
                     "messages": [{"role": "user",
                                   "content": build_user_prompt(chapter_context, anchors_batch)}],
                 },
@@ -329,7 +375,9 @@ def main():
 
     # ── Poll and collect ─────────────────────────────────────────────────
     raw_results = poll_and_collect(client, batch.id)
-    merge_results(anchors_index, raw_results, args.domain)
+    merge_results(anchors_index, raw_results,
+                  args.domain if not targets_mode else None,
+                  targets_mode=targets_mode)
 
 
 def validate_generated(record):
@@ -385,7 +433,8 @@ def validate_generated(record):
     return len(issues) == 0, issues
 
 
-def merge_results(anchors_index, raw_results, domain_filter=None):
+def merge_results(anchors_index, raw_results, domain_filter=None,
+                   targets_mode=False):
     """Merge generated content with anchor metadata, validate, and save."""
     results = []
     matched = 0
@@ -407,13 +456,20 @@ def merge_results(anchors_index, raw_results, domain_filter=None):
             print(f"  WARNING: No generated content for [{anchor['anchor_id']}]")
             continue
 
+        # In targets mode, Claude provides inject_after in its response
+        inject_after = anchor.get("inject_after")
+        if targets_mode and item.get("inject_after"):
+            inject_after = item["inject_after"]
+            # Strip markdown heading prefixes (### / ##) if present
+            inject_after = re.sub(r'^#{1,4}\s*', '', inject_after).strip()
+
         record = {
             "anchor_id": anchor["anchor_id"],
             "domain_num": anchor["domain_num"],
             "domain_code": anchor["domain_code"],
             "chapter_file": anchor["chapter_file"],
             "coverage": anchor["coverage"],
-            "inject_after": anchor.get("inject_after"),
+            "inject_after": inject_after,
             "content": anchor["content"],
             "embed_eligible": anchor.get("embed_eligible", True),
             "generated_html": item.get("generated_html", ""),
@@ -430,8 +486,15 @@ def merge_results(anchors_index, raw_results, domain_filter=None):
         results.append(record)
         matched += 1
 
-    # Merge mode: preserve results from other domains
-    if domain_filter and domain_filter != "all" and OUTPUT_FILE.exists():
+    # Merge mode: preserve existing results not in this batch
+    if targets_mode and OUTPUT_FILE.exists():
+        # Replace matching (anchor_id, domain_num) entries, preserve everything else
+        new_keys = set((r["anchor_id"], r["domain_num"]) for r in results)
+        existing = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
+        kept = [r for r in existing
+                if (r["anchor_id"], r["domain_num"]) not in new_keys]
+        results = kept + results
+    elif domain_filter and domain_filter != "all" and OUTPUT_FILE.exists():
         existing = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
         existing = [r for r in existing if r.get("domain_code") != domain_filter.upper()]
         results = existing + results

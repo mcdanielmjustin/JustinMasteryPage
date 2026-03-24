@@ -278,6 +278,8 @@ def inject_into_file(file_path, injections, dry_run=False):
 # ══════════════════════════════════════════════════════════════════════
 
 def main():
+    global CONTENT_DIR, BACKUP_DIR
+
     if sys.stdout.encoding != "utf-8":
         sys.stdout.reconfigure(encoding="utf-8")
 
@@ -288,7 +290,17 @@ def main():
     group.add_argument("--verify", action="store_true",
                        help="Verify already-injected files against backups")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--target-dir", type=str,
+                        help="Override content directory (e.g. path to PassEPPP-website/content)")
     args = parser.parse_args()
+
+    if args.target_dir:
+        CONTENT_DIR = pathlib.Path(args.target_dir).resolve()
+        if not CONTENT_DIR.is_dir():
+            print(f"ERROR: --target-dir {CONTENT_DIR} is not a directory")
+            sys.exit(1)
+        target_label = CONTENT_DIR.parent.name
+        BACKUP_DIR = DATA_DIR / "backup" / target_label
 
     if not GENERATED_FILE.exists():
         print(f"ERROR: {GENERATED_FILE} not found. Run generate_anchor_content.py first.")
