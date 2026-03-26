@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neurotransmitter Systems — Serotonin, Dopamine, GABA & Acetylcholine | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Neurotransmitter Systems — Serotonin, Dopamine, GABA & Acetylcholine</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology & Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ethics-foundation.html" class="chapter-link"><span class="chapter-number">1</span>Ethics Foundation — APA Principles, Code Structure & Resolving Dilemmas</a></li>
+        <li class="chapter-item"><a href="competence-standards.html" class="chapter-link"><span class="chapter-number">2</span>Standard 2 — Competence, Emergency Services & Scope of Practice</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link"><span class="chapter-number">3</span>Standard 3 — Human Relations, Multiple Relationships & Avoiding Harm</a></li>
+        <li class="chapter-item"><a href="confidentiality.html" class="chapter-link"><span class="chapter-number">4</span>Standard 4 — Privacy, Confidentiality, Tarasoff & Mandated Reporting</a></li>
+        <li class="chapter-item"><a href="public-records-training.html" class="chapter-link"><span class="chapter-number">5</span>Standards 5, 6 & 7 — Public Statements, Records, Fees & Education</a></li>
+        <li class="chapter-item"><a href="research-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Standard 8 — Research Ethics, Informed Consent & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-therapy-ethics.html" class="chapter-link"><span class="chapter-number">7</span>Standards 9 & 10 — Assessment Ethics, Therapy Ethics & Termination</a></li>
+        <li class="chapter-item"><a href="pharma-principles.html" class="chapter-link"><span class="chapter-number">8</span>How Drugs Work — Pharmacokinetics, Pharmacodynamics & Drug Interactions</a></li>
+        <li class="chapter-item"><a href="neurotransmitter-systems.html" class="chapter-link active"><span class="chapter-number">9</span>Neurotransmitter Systems — Serotonin, Dopamine, GABA & Acetylcholine</a></li>
+        <li class="chapter-item"><a href="antidepressants-ssri-snri.html" class="chapter-link"><span class="chapter-number">10</span>Antidepressants Part 1 — SSRIs, SNRIs & Serotonin Syndrome</a></li>
+        <li class="chapter-item"><a href="antidepressants-tca-maoi.html" class="chapter-link"><span class="chapter-number">11</span>Antidepressants Part 2 — TCAs, MAOIs & Atypicals</a></li>
+        <li class="chapter-item"><a href="antipsychotics-conventional.html" class="chapter-link"><span class="chapter-number">12</span>Conventional Antipsychotics — Dopamine Blockade, EPS & Tardive Dyskinesia</a></li>
+        <li class="chapter-item"><a href="antipsychotics-atypical.html" class="chapter-link"><span class="chapter-number">13</span>Atypical Antipsychotics — Clozapine, Metabolic Syndrome & NMS</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">14</span>Anxiolytics & Sedatives — Benzodiazepines, Buspirone & Sleep Agents</a></li>
+        <li class="chapter-item"><a href="stabilizers-stimulants.html" class="chapter-link"><span class="chapter-number">15</span>Mood Stabilizers & Stimulants — Lithium, Anticonvulsants & ADHD Meds</a></li>
+        <li class="chapter-item"><a href="legal-professional.html" class="chapter-link"><span class="chapter-number">16</span>Law & Practice — Licensing, Malpractice, Prescriptive Authority & Scope</a></li>
+        <li class="chapter-item"><a href="modern-practice.html" class="chapter-link"><span class="chapter-number">17</span>The Evolving Profession — Telepsychology, Social Media & Emerging Treatments</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 17</div>
+        <h1>Neurotransmitter Systems — Serotonin, Dopamine, GABA & Acetylcholine</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Major Neurotransmitter Systems</h2>
+        <p>Consider a patient taking an SSRI for depression who develops nausea, insomnia, and sexual dysfunction — three seemingly unrelated side effects arising from a single pharmacological action. The explanation lies in the fact that serotonin does not serve a single function but instead orchestrates mood, sleep, appetite, pain perception, and sexual response through different receptor subtypes distributed across the brain and body. To understand why any psychotropic medication produces the effects it does — both therapeutic and adverse — you must first understand the neurotransmitter systems it targets.</p>
+        <p>Virtually all psychotropic medications exert their effects by modulating neurotransmitter systems. Understanding the role of each system — its brain origins, receptor subtypes, and functions — is essential for understanding why a given medication works for a given disorder, and why it produces specific side effects. The four systems covered in this chapter — serotonin, dopamine, norepinephrine, and GABA/glutamate — account for the mechanisms of nearly every medication discussed in the chapters that follow.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Serotonin (5-HT)</h2>
+        <div class="definition-box">
+          <strong>Serotonin (5-Hydroxytryptamine, 5-HT)</strong>
+          <p><span class="key-term">Serotonin</span> is a monoamine neurotransmitter synthesized from the amino acid tryptophan. It is produced primarily in the <span class="key-term">raphe nuclei</span> of the brainstem, with projections throughout the cortex, limbic system, hypothalamus, and spinal cord.</p>
+        </div>
+        <h3>Functions</h3>
+        <ul>
+          <li><strong>Mood regulation</strong> -- serotonin deficiency is implicated in depression (the "serotonin hypothesis," though this is an oversimplification)</li>
+          <li><strong>Sleep-wake cycle</strong> -- involved in both sleep onset (via 5-HT2A) and wakefulness; precursor to melatonin</li>
+          <li><strong>Appetite and satiety</strong> -- serotonergic activity in the hypothalamus promotes satiety; this is why SSRIs may initially cause appetite reduction</li>
+          <li><strong>Pain modulation</strong> -- descending serotonergic pathways inhibit pain transmission (basis for SNRIs and TCAs in chronic pain treatment)</li>
+          <li><strong>Anxiety</strong> -- implicated in both the pathophysiology and treatment of OCD, panic disorder, social anxiety, and PTSD</li>
+          <li><strong>Gastrointestinal function</strong> -- ~90% of the body's serotonin is found in the gut; this explains the GI side effects of SSRIs</li>
+        </ul>
+        <h3>Key Receptor Subtypes</h3>
+        <table>
+          <tr><th>Receptor</th><th>Location</th><th>Function</th><th>Clinical Relevance</th></tr>
+          <tr><td><span class="key-term">5-HT1A</span></td><td>Raphe nuclei (presynaptic autoreceptor); hippocampus, cortex (postsynaptic)</td><td>Inhibitory; reduces serotonin release (autoreceptor); anxiolytic</td><td>Buspirone is a partial agonist at 5-HT1A; this receptor desensitizes during SSRI treatment, contributing to the delayed therapeutic effect</td></tr>
+          <tr><td><span class="key-term">5-HT2A</span></td><td>Cortex, limbic system</td><td>Excitatory; involved in mood, perception, cognition</td><td>Blocked by atypical antipsychotics (contributing to their lower EPS risk); psychedelic drugs (LSD, psilocybin) are 5-HT2A agonists; trazodone blocks 5-HT2A</td></tr>
+          <tr><td>5-HT2C</td><td>Hypothalamus, limbic system</td><td>Appetite regulation, mood</td><td>Blockade contributes to weight gain with some atypical antipsychotics (e.g., olanzapine)</td></tr>
+          <tr><td>5-HT3</td><td>GI tract, brainstem (area postrema)</td><td>Nausea, vomiting</td><td>Mirtazapine blocks 5-HT3 (anti-nausea effect); ondansetron (Zofran) is a 5-HT3 antagonist</td></tr>
+        </table>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Norepinephrine (NE)</h2>
+        <div class="definition-box">
+          <strong>Norepinephrine (Noradrenaline)</strong>
+          <p><span class="key-term">Norepinephrine</span> is a catecholamine neurotransmitter synthesized from dopamine. The primary CNS source is the <span class="key-term">locus coeruleus</span>, a small nucleus in the brainstem pons that sends diffuse projections throughout the brain.</p>
+        </div>
+        <h3>Functions</h3>
+        <ul>
+          <li><strong>Alertness and arousal</strong> -- the locus coeruleus is the brain's "alarm system"; norepinephrine increases vigilance and attention</li>
+          <li><strong>Attention and concentration</strong> -- NE enhances the signal-to-noise ratio in cortical processing; deficits are implicated in ADHD</li>
+          <li><strong>Fight-or-flight response</strong> -- NE activates the sympathetic nervous system; excess NE activity is implicated in anxiety, panic disorder, and PTSD hyperarousal</li>
+          <li><strong>Mood</strong> -- NE deficiency is implicated in depression, particularly symptoms of fatigue, low energy, and poor concentration (the basis for SNRIs and TCAs)</li>
+          <li><strong>Pain modulation</strong> -- descending noradrenergic pathways contribute to pain inhibition (basis for duloxetine in neuropathic pain)</li>
+        </ul>
+        <h3>Key Receptor Subtypes</h3>
+        <table>
+          <tr><th>Receptor</th><th>Function</th><th>Clinical Relevance</th></tr>
+          <tr><td><span class="key-term">Alpha-1</span></td><td>Postsynaptic; vasoconstriction, pupil dilation</td><td>Blockade causes orthostatic hypotension (a side effect of TCAs, trazodone, and some antipsychotics); prazosin (alpha-1 blocker) used for PTSD nightmares</td></tr>
+          <tr><td><span class="key-term">Alpha-2</span></td><td>Presynaptic autoreceptor; inhibits NE release</td><td>Mirtazapine blocks alpha-2 autoreceptors, increasing NE release; clonidine (alpha-2 agonist) reduces NE release, used for ADHD, opioid withdrawal, and hypertension</td></tr>
+          <tr><td><span class="key-term">Beta-1</span></td><td>Cardiac; increases heart rate and contractility</td><td>Beta-blockers (propranolol) reduce physiological symptoms of performance anxiety</td></tr>
+          <tr><td><span class="key-term">Beta-2</span></td><td>Bronchodilation, vasodilation</td><td>Less relevant to psychopharmacology; beta-2 agonists (albuterol) used in asthma</td></tr>
+        </table>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Dopamine (DA)</h2>
+        <div class="definition-box">
+          <strong>Dopamine</strong>
+          <p><span class="key-term">Dopamine</span> is a catecholamine neurotransmitter with diverse functions. Unlike serotonin and norepinephrine, which have single primary nuclei, dopamine is organized into distinct pathways with different functions -- and understanding these pathways is essential for understanding both the therapeutic effects and side effects of antipsychotics.</p>
+        </div>
+
+        <h3>The Four Dopamine Pathways</h3>
+        <table>
+          <tr><th>Pathway</th><th>From / To</th><th>Function</th><th>Clinical Relevance</th></tr>
+          <tr>
+            <td><span class="key-term">Mesolimbic</span></td>
+            <td>Ventral tegmental area (VTA) to nucleus accumbens and limbic structures</td>
+            <td>Reward, motivation, pleasure, emotional salience</td>
+            <td>Hyperactivity of this pathway is the leading hypothesis for the <strong>positive symptoms</strong> of schizophrenia (hallucinations, delusions). This is the pathway antipsychotics target. Also involved in the rewarding effects of drugs of abuse.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Mesocortical</span></td>
+            <td>VTA to prefrontal cortex</td>
+            <td>Executive function, working memory, motivation, emotional regulation</td>
+            <td>Hypoactivity of this pathway is thought to contribute to the <strong>negative symptoms</strong> (avolition, flat affect) and <strong>cognitive symptoms</strong> of schizophrenia. Blocking DA here (as antipsychotics do) can worsen these symptoms.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Nigrostriatal</span></td>
+            <td>Substantia nigra to dorsal striatum (caudate and putamen)</td>
+            <td>Voluntary motor control, movement initiation</td>
+            <td>Degeneration of this pathway causes <strong>Parkinson's disease</strong>. Antipsychotic blockade of DA in this pathway causes <strong>extrapyramidal symptoms (EPS)</strong>: akathisia, dystonia, parkinsonism, and tardive dyskinesia.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Tuberoinfundibular</span></td>
+            <td>Hypothalamus to pituitary gland</td>
+            <td>Inhibits prolactin release</td>
+            <td>Antipsychotic blockade here causes <strong>hyperprolactinemia</strong> (elevated prolactin), leading to galactorrhea, amenorrhea, sexual dysfunction, and (with chronic elevation) osteoporosis.</td>
+          </tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The four dopamine pathways explain why antipsychotics have both therapeutic effects (blocking mesolimbic DA reduces positive symptoms) and side effects (blocking nigrostriatal DA causes EPS; blocking tuberoinfundibular DA causes hyperprolactinemia; blocking mesocortical DA may worsen negative/cognitive symptoms). <strong>Atypical antipsychotics</strong> (e.g., clozapine, quetiapine) produce fewer EPS partly due to their additional 5-HT2A antagonism and looser D2 binding.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>GABA (Gamma-Aminobutyric Acid)</h2>
+        <div class="definition-box">
+          <strong>GABA</strong>
+          <p><span class="key-term">GABA</span> is the brain's primary <strong>inhibitory</strong> neurotransmitter, found in approximately 30-40% of all synapses. Reduced GABAergic activity is implicated in anxiety disorders, epilepsy, insomnia, and alcohol withdrawal.</p>
+        </div>
+
+        <h3>Key Receptor Subtypes</h3>
+        <table>
+          <tr><th>Receptor</th><th>Type</th><th>Mechanism</th><th>Clinical Relevance</th></tr>
+          <tr>
+            <td><span class="key-term">GABA-A</span></td>
+            <td>Ionotropic (ligand-gated chloride channel)</td>
+            <td>When GABA binds, the chloride channel opens, allowing Cl- ions to flow into the neuron, hyperpolarizing it (making it less likely to fire)</td>
+            <td>The GABA-A receptor complex has multiple binding sites: the <strong>GABA site</strong>, the <strong>benzodiazepine site</strong>, the <strong>barbiturate site</strong>, and others. Benzodiazepines bind to the BZ site and <em>enhance</em> the effect of GABA (increase chloride channel opening <em>frequency</em>). Barbiturates increase chloride channel opening <em>duration</em>. Alcohol also acts at GABA-A. Zolpidem (Ambien) binds selectively to the alpha-1 subunit of GABA-A.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">GABA-B</span></td>
+            <td>Metabotropic (G-protein coupled)</td>
+            <td>Activates second messenger cascades; increases potassium conductance and inhibits calcium channels</td>
+            <td>Baclofen is a GABA-B agonist used as a muscle relaxant and (off-label) for alcohol use disorder. GABA-B receptors are not affected by benzodiazepines.</td>
+          </tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>A critical distinction: benzodiazepines are <strong>positive allosteric modulators</strong> of GABA-A -- they do NOT directly open the chloride channel. They only work when GABA is present, enhancing GABA's own effect. This is why benzodiazepines alone (without other CNS depressants) are relatively safe in overdose. Barbiturates, by contrast, can directly open the chloride channel at high doses even without GABA, which is why barbiturate overdose is much more dangerous.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Glutamate</h2>
+        <div class="definition-box">
+          <strong>Glutamate</strong>
+          <p><span class="key-term">Glutamate</span> is the brain's primary <strong>excitatory</strong> neurotransmitter, present in the majority of excitatory synapses. It plays a central role in synaptic plasticity, learning, memory, and neurodevelopment. Excessive glutamate activity can lead to <span class="key-term">excitotoxicity</span> -- neuronal damage and death caused by overstimulation.</p>
+        </div>
+
+        <h3>Key Receptor Subtypes</h3>
+        <table>
+          <tr><th>Receptor</th><th>Type</th><th>Function</th><th>Clinical Relevance</th></tr>
+          <tr>
+            <td><span class="key-term">NMDA</span></td>
+            <td>Ionotropic (calcium and sodium channel)</td>
+            <td>Critical for long-term potentiation (LTP) -- the neural basis of learning and memory; requires both glutamate binding AND membrane depolarization (voltage-dependent magnesium block)</td>
+            <td>Memantine (Namenda) is an NMDA antagonist used in moderate-to-severe Alzheimer's disease (reduces excitotoxicity). Ketamine and PCP are also NMDA antagonists; ketamine's rapid antidepressant effect has led to the development of esketamine (Spravato) nasal spray for treatment-resistant depression.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">AMPA</span></td>
+            <td>Ionotropic (sodium channel)</td>
+            <td>Mediates fast excitatory synaptic transmission; involved in synaptic plasticity</td>
+            <td>AMPA receptor modulation is an area of active antidepressant research. Lamotrigine (mood stabilizer) may work partly by inhibiting glutamate release, indirectly reducing AMPA/NMDA activation.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Kainate</span></td>
+            <td>Ionotropic</td>
+            <td>Involved in excitatory transmission and synaptic modulation</td>
+            <td>Less directly targeted by current psychotropic medications but involved in epilepsy pathophysiology.</td>
+          </tr>
+        </table>
+        <div class="example-box">
+          <strong>Example: Excitotoxicity</strong>
+          <p>Excessive glutamate release (e.g., during stroke, traumatic brain injury, or prolonged seizures) causes massive calcium influx through NMDA receptors, triggering a cascade of intracellular events leading to neuronal death. This is the rationale for memantine's neuroprotective effect in Alzheimer's disease -- by partially blocking NMDA receptors, it reduces the damaging effects of chronic, low-level excitotoxicity while still allowing normal synaptic signaling.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Acetylcholine (ACh)</h2>
+        <div class="definition-box">
+          <strong>Acetylcholine</strong>
+          <p><span class="key-term">Acetylcholine (ACh)</span> is a neurotransmitter involved in both the central and peripheral nervous systems. In the CNS, the primary cholinergic nuclei include the <span class="key-term">nucleus basalis of Meynert</span> (projecting to the cortex) and the <span class="key-term">septal nuclei</span> (projecting to the hippocampus). Degeneration of cholinergic neurons in the nucleus basalis of Meynert is a hallmark of Alzheimer's disease.</p>
+        </div>
+
+        <h3>Functions</h3>
+        <ul>
+          <li><strong>Memory and learning</strong> -- acetylcholine is essential for memory encoding and attention; cholinergic deficits are central to the cognitive impairment in Alzheimer's disease</li>
+          <li><strong>Attention and arousal</strong> -- cortical ACh modulates attention and sensory processing</li>
+          <li><strong>Peripheral functions</strong> -- neuromuscular junction transmission (skeletal muscle contraction); parasympathetic nervous system activity ("rest and digest")</li>
+        </ul>
+
+        <h3>Key Receptor Subtypes</h3>
+        <table>
+          <tr><th>Receptor</th><th>Type</th><th>Location</th><th>Clinical Relevance</th></tr>
+          <tr>
+            <td><span class="key-term">Nicotinic</span></td>
+            <td>Ionotropic (ligand-gated ion channel)</td>
+            <td>Neuromuscular junction; autonomic ganglia; CNS</td>
+            <td>Nicotine is an agonist at these receptors, contributing to the cognitive-enhancing and addictive properties of tobacco. Varenicline (Chantix) is a partial agonist at nicotinic receptors used for smoking cessation.</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Muscarinic (M1-M5)</span></td>
+            <td>Metabotropic (G-protein coupled)</td>
+            <td>CNS (M1: cortex, hippocampus); parasympathetic end organs (smooth muscle, glands, heart)</td>
+            <td>Muscarinic blockade produces <span class="key-term">anticholinergic side effects</span> -- the most commonly tested pharmacological side effect category on the EPPP.</td>
+          </tr>
+        </table>
+
+        <h3>Anticholinergic Effects</h3>
+        <p>Many psychotropic medications (TCAs, low-potency antipsychotics, antihistamines, some antiparkinsonian drugs) block muscarinic acetylcholine receptors, producing a predictable constellation of side effects:</p>
+        <ul>
+          <li><strong>Dry mouth</strong> (xerostomia)</li>
+          <li><strong>Constipation</strong> (decreased GI motility)</li>
+          <li><strong>Urinary retention</strong></li>
+          <li><strong>Blurred vision</strong> (mydriasis, cycloplegia)</li>
+          <li><strong>Tachycardia</strong> (increased heart rate)</li>
+          <li><strong>Cognitive impairment</strong> (confusion, memory problems -- especially concerning in elderly patients)</li>
+          <li><strong>Sedation</strong></li>
+          <li>Decreased sweating (risk of hyperthermia)</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Memory Aid</strong>
+          <p>Anticholinergic side effects are remembered as: <strong>"Can't see, can't pee, can't spit, can't sh*t"</strong> (blurred vision, urinary retention, dry mouth, constipation). In elderly patients, the additional cognitive effects ("can't remember") are a major concern, as anticholinergic burden is associated with increased risk of falls, delirium, and long-term dementia risk.</p>
+        </div>
+
+        <h3>Cholinesterase Inhibitors</h3>
+        <p>Because Alzheimer's disease involves cholinergic neuron degeneration, <span class="key-term">acetylcholinesterase inhibitors</span> are first-line pharmacotherapy for mild-to-moderate Alzheimer's. They work by inhibiting the enzyme that breaks down ACh, thereby increasing ACh availability at the synapse:</p>
+        <ul>
+          <li><strong>Donepezil (Aricept)</strong> -- most widely prescribed; once-daily dosing; approved for all stages of Alzheimer's</li>
+          <li><strong>Rivastigmine (Exelon)</strong> -- available as a transdermal patch; inhibits both acetylcholinesterase and butyrylcholinesterase</li>
+          <li><strong>Galantamine (Razadyne)</strong> -- also modulates nicotinic receptors</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>Cholinesterase inhibitors provide <strong>symptomatic improvement</strong> in Alzheimer's disease -- they do not slow or halt disease progression. Their side effects are essentially the opposite of anticholinergic effects (cholinergic excess): nausea, diarrhea, insomnia, vivid dreams, bradycardia. For moderate-to-severe Alzheimer's, memantine (NMDA antagonist) may be added to a cholinesterase inhibitor.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Summary: Neurotransmitters at a Glance</h2>
+        <table>
+          <tr><th>Neurotransmitter</th><th>Primary Source</th><th>Type</th><th>Key Functions</th><th>Disorders Linked to Dysfunction</th></tr>
+          <tr>
+            <td><span class="key-term">Serotonin (5-HT)</span></td>
+            <td>Raphe nuclei</td>
+            <td>Monoamine (indolamine)</td>
+            <td>Mood, sleep, appetite, pain, anxiety</td>
+            <td>Depression, OCD, anxiety disorders, eating disorders</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Norepinephrine (NE)</span></td>
+            <td>Locus coeruleus</td>
+            <td>Monoamine (catecholamine)</td>
+            <td>Alertness, attention, fight-or-flight, mood</td>
+            <td>Depression, ADHD, PTSD, panic disorder</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Dopamine (DA)</span></td>
+            <td>VTA, substantia nigra</td>
+            <td>Monoamine (catecholamine)</td>
+            <td>Reward, motivation, motor control, cognition</td>
+            <td>Schizophrenia, Parkinson's, ADHD, addiction</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">GABA</span></td>
+            <td>Widely distributed</td>
+            <td>Amino acid (inhibitory)</td>
+            <td>Neural inhibition, anxiety reduction, sleep</td>
+            <td>Anxiety disorders, epilepsy, insomnia, alcohol withdrawal</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Glutamate</span></td>
+            <td>Widely distributed</td>
+            <td>Amino acid (excitatory)</td>
+            <td>Excitatory transmission, learning, memory</td>
+            <td>Alzheimer's (excitotoxicity), epilepsy, TBI, depression</td>
+          </tr>
+          <tr>
+            <td><span class="key-term">Acetylcholine (ACh)</span></td>
+            <td>Nucleus basalis, septal nuclei</td>
+            <td>Ester</td>
+            <td>Memory, attention, muscle contraction</td>
+            <td>Alzheimer's disease, myasthenia gravis</td>
+          </tr>
+        </table>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Special Populations in Pharmacology</h2>
+        <p>Pharmacological treatment must be adapted for special populations who differ from the typical adult patient in how they absorb, distribute, metabolize, and excrete medications. Understanding these differences is essential for safe prescribing and for psychologists who collaborate with prescribers, assess treatment response, and monitor for adverse effects.</p>
+
+        <h3>Pediatric Considerations</h3>
+        <p>Children and adolescents are not simply "small adults" -- their developing organ systems process medications differently, and they may be more vulnerable to certain side effects.</p>
+        <ul>
+          <li><strong>Immature hepatic and renal function:</strong> Neonates and young infants have reduced hepatic enzyme activity and immature renal function, leading to slower drug metabolism and excretion. However, children aged 2-12 often have <em>faster</em> hepatic metabolism per kilogram of body weight than adults (higher CYP activity relative to body size), sometimes requiring higher weight-adjusted doses.</li>
+          <li><strong>FDA Black Box Warning on SSRIs:</strong> The FDA issued a <span class="key-term">black box warning</span> (the most serious drug warning) on all antidepressants regarding increased risk of <span class="key-term">suicidal thinking and behavior in children, adolescents, and young adults under age 25</span>. This warning was based on meta-analyses of clinical trials showing approximately double the risk of suicidal ideation (4% vs. 2%) in youth taking antidepressants vs. placebo. Importantly, no completed suicides occurred in these trials, and the warning does not apply to adults over 25.</li>
+          <li><strong>Off-label prescribing:</strong> Many psychotropic medications used in pediatric populations are prescribed <span class="key-term">off-label</span> (not FDA-approved for that age group or indication), because clinical trials in children are limited. Fluoxetine is one of the few SSRIs with FDA approval for pediatric depression (ages 8+). Stimulants (methylphenidate, amphetamine salts) are well-studied and FDA-approved for pediatric ADHD.</li>
+          <li><strong>Developmental pharmacodynamics:</strong> Children's neurotransmitter systems are still developing, which may alter both the therapeutic and adverse effects of psychotropic medications. The developing brain may be more sensitive to certain effects (e.g., metabolic effects of atypical antipsychotics, growth suppression from stimulants).</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The FDA black box warning on antidepressants and suicidality in youth under 25 is one of the most commonly tested pediatric pharmacology facts on the EPPP. Know that the warning applies to <strong>all antidepressants</strong> (not just SSRIs), covers patients <strong>under age 25</strong>, and refers to <strong>suicidal ideation</strong> (not completed suicide). Despite this risk, untreated depression also carries suicide risk, and the clinical consensus is that the benefits of antidepressant treatment generally outweigh the risks when properly monitored.</p>
+        </div>
+
+        <h3>Geriatric Considerations</h3>
+        <p>Elderly patients present unique pharmacological challenges due to age-related changes in physiology, increased comorbidities, and polypharmacy.</p>
+        <ul>
+          <li><strong>Decreased hepatic clearance:</strong> Aging reduces liver blood flow, liver mass, and CYP450 enzyme activity, resulting in slower drug metabolism. Phase I metabolism (CYP450) is more affected by aging than Phase II (conjugation) reactions. This is clinically relevant because many psychotropics undergo Phase I metabolism.</li>
+          <li><strong>Decreased renal clearance:</strong> Glomerular filtration rate (GFR) declines with age. This is particularly important for drugs excreted primarily by the kidneys, such as <span class="key-term">lithium</span>. Older adults require lower lithium doses and more frequent monitoring.</li>
+          <li><strong>Polypharmacy:</strong> Elderly patients often take multiple medications for concurrent conditions, dramatically increasing the risk of <span class="key-term">drug-drug interactions</span>. Psychologists should be aware of the complete medication list when assessing cognitive and behavioral changes.</li>
+          <li><strong>Increased sensitivity to anticholinergic effects:</strong> Older adults are particularly vulnerable to anticholinergic cognitive effects (confusion, delirium, memory impairment), which can mimic or worsen dementia. <span class="key-term">Anticholinergic burden</span> -- the cumulative anticholinergic effect of all medications a patient is taking -- is a significant concern.</li>
+          <li><strong>Beers Criteria:</strong> The <span class="key-term">American Geriatrics Society Beers Criteria</span> is a widely used list of medications that are potentially inappropriate for older adults. Medications on the list include long-acting benzodiazepines (e.g., diazepam, chlordiazepoxide), strongly anticholinergic drugs (e.g., amitriptyline, diphenhydramine), and certain antipsychotics (black box warning for increased mortality in dementia-related psychosis).</li>
+        </ul>
+        <div class="definition-box">
+          <strong>"Start Low, Go Slow"</strong>
+          <p>The <span class="key-term">"start low, go slow"</span> principle is the cardinal rule of geriatric psychopharmacology. It means initiating medications at lower doses than typically used for younger adults (often 50% of the standard starting dose) and titrating upward gradually, allowing extra time to assess both therapeutic response and side effects at each dose level. This approach accounts for reduced metabolism, increased drug sensitivity, and the higher risk of adverse effects in elderly patients.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A 78-year-old patient with depression is started on sertraline. Instead of the standard adult starting dose of 50 mg/day, the prescriber starts at 25 mg/day and plans to increase in 25 mg increments every 2-4 weeks as tolerated. The lower starting dose and slower titration reduce the risk of side effects (particularly GI disturbance and hyponatremia/SIADH, which is more common in elderly patients on SSRIs) while the slower titration allows adequate time to assess response given the patient's reduced metabolic capacity.</p>
+        </div>
+
+        <h3>Pregnancy and Teratogenicity</h3>
+        <p>Prescribing during pregnancy requires careful risk-benefit analysis, weighing the potential teratogenic effects of medications against the risks of untreated mental illness to both the mother and the developing fetus.</p>
+
+        <h4>Pregnancy Categorization</h4>
+        <ul>
+          <li><strong>Former FDA categories (A/B/C/D/X):</strong> The FDA historically classified medications into five pregnancy categories: A (no risk in human studies), B (no risk in animal studies, no adequate human data), C (animal studies show risk, no adequate human data), D (evidence of human fetal risk, but benefits may outweigh risks), and X (contraindicated in pregnancy -- evidence of fetal abnormalities, risks clearly outweigh benefits).</li>
+          <li><strong>Current system (PLLR):</strong> In 2015, the FDA replaced the letter categories with the <span class="key-term">Pregnancy and Lactation Labeling Rule (PLLR)</span>, which requires a narrative format with specific subsections for pregnancy, lactation, and reproductive potential. This provides more nuanced, clinically useful information than the previous letter system. However, the old A-X categories remain widely referenced and tested.</li>
+        </ul>
+
+        <h4>Known Teratogenic Psychotropic Medications</h4>
+        <table>
+          <tr><th>Medication</th><th>Former Category</th><th>Teratogenic Risk</th></tr>
+          <tr><td><span class="key-term">Valproate (Depakote)</span></td><td>X</td><td>The most teratogenic commonly used psychotropic. Neural tube defects (spina bifida) in 1-5% of exposed pregnancies; also associated with decreased IQ, craniofacial abnormalities, and other congenital malformations. <strong>Contraindicated in pregnancy when possible.</strong></td></tr>
+          <tr><td><span class="key-term">Lithium</span></td><td>D</td><td>Associated with <span class="key-term">Ebstein's anomaly</span> (a cardiac malformation involving the tricuspid valve), though the absolute risk is lower than previously believed (~0.1-0.2% vs. ~0.005% baseline). First-trimester exposure carries the highest risk. Lithium should be used cautiously in pregnancy; risks must be weighed against the high risk of bipolar relapse if discontinued.</td></tr>
+          <tr><td><span class="key-term">Carbamazepine</span></td><td>D</td><td>Neural tube defects (spina bifida, ~0.5-1%), craniofacial abnormalities, fingernail hypoplasia, and developmental delays. Risk is highest during first trimester (weeks 3-8).</td></tr>
+          <tr><td><span class="key-term">Benzodiazepines</span></td><td>D/X (varies)</td><td>Conflicting evidence regarding cleft palate risk with first-trimester exposure (likely small absolute risk if any). Third-trimester use can cause <span class="key-term">neonatal withdrawal syndrome</span> (irritability, tremor, feeding difficulties) and "floppy infant syndrome" (hypotonia, respiratory depression).</td></tr>
+          <tr><td>SSRIs</td><td>C (most)</td><td>Generally considered among the safer options in pregnancy. Paroxetine has been specifically associated with cardiac malformations (FDA category D). Third-trimester SSRI exposure may cause neonatal adaptation syndrome (transient respiratory, feeding, and irritability symptoms).</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The most commonly tested pregnancy pharmacology facts: (1) <strong>Valproate</strong> is the most teratogenic mood stabilizer (neural tube defects) and is category X; (2) <strong>Lithium</strong> is associated with Ebstein's anomaly (cardiac) -- know this specific association; (3) <strong>Carbamazepine</strong> also causes neural tube defects; (4) among antidepressants, <strong>paroxetine</strong> has the most evidence for cardiac teratogenicity (category D, whereas other SSRIs are category C). Also know that the old A-X system has been replaced by a narrative labeling format (PLLR).</p>
+        </div>
+
+        <h4>Lactation Considerations</h4>
+        <ul>
+          <li>Most psychotropic medications are excreted into breast milk to some degree. The amount transferred depends on the drug's molecular weight, lipophilicity, protein binding, and ionization.</li>
+          <li><span class="key-term">Sertraline</span> and <span class="key-term">paroxetine</span> are generally considered among the SSRIs with the lowest transfer into breast milk (low relative infant dose).</li>
+          <li><strong>Lithium</strong> is excreted in breast milk at significant levels (approximately 50% of maternal serum levels) and is generally avoided during breastfeeding due to the infant's immature renal function.</li>
+          <li>The decision to use psychotropic medications during breastfeeding involves weighing the benefits of breastfeeding and the risks of untreated maternal mental illness against the potential risks of infant drug exposure.</li>
+        </ul>
+
+        <h3>Renal and Hepatic Impairment</h3>
+        <p>Dosing adjustments are required when patients have impaired organ function that affects drug metabolism or excretion:</p>
+        <ul>
+          <li><strong>Hepatic impairment:</strong> Reduced liver function decreases the capacity for Phase I (CYP450) and Phase II metabolism. Drugs that undergo extensive hepatic metabolism (most psychotropics) may accumulate, requiring dose reductions. Drugs that bypass hepatic metabolism (e.g., lithium, gabapentin, pregabalin -- all renally excreted) may be preferred when hepatic impairment is severe.</li>
+          <li><strong>Renal impairment:</strong> Reduced kidney function impairs the excretion of renally cleared drugs and their metabolites. <span class="key-term">Lithium</span> is the most critical example -- it is excreted entirely by the kidneys, and even mild renal impairment can cause dangerous accumulation. Dose reduction and more frequent monitoring of serum levels are essential. Gabapentin and pregabalin also require renal dose adjustments.</li>
+          <li><strong>Dose adjustment approaches:</strong> For hepatic impairment, dose reduction is typically empirical (guided by clinical response and side effects, since no simple lab test directly predicts metabolic capacity in the way GFR predicts renal function). For renal impairment, dose adjustments are often guided by creatinine clearance or estimated GFR, with specific recommendations available for each drug.</li>
+        </ul>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li><strong>ADME</strong> (Absorption, Distribution, Metabolism, Excretion) determines a drug's plasma concentration over time. First-pass metabolism and protein binding are commonly tested concepts.</li>
+          <li><strong>Half-life</strong> determines dosing frequency, time to steady state (~5 half-lives), and washout period. Know the half-lives of key drugs, especially fluoxetine (long) and venlafaxine (short).</li>
+          <li><strong>CYP450 enzymes</strong> (CYP2D6, CYP3A4, CYP1A2, CYP2C19) are responsible for most drug metabolism. Inhibitors raise substrate levels (toxicity risk); inducers lower them (treatment failure). Know key inhibitor-substrate pairs.</li>
+          <li><strong>Pharmacogenomics</strong>: poor metabolizers accumulate drugs (toxicity risk); ultrarapid metabolizers clear drugs too fast (subtherapeutic levels).</li>
+          <li><strong>Agonists</strong> activate receptors; <strong>antagonists</strong> block them; <strong>partial agonists</strong> provide a ceiling effect (e.g., aripiprazole, buspirone).</li>
+          <li><strong>Therapeutic index</strong> (LD50/ED50): narrow TI drugs (lithium, carbamazepine) require blood level monitoring; wide TI drugs (SSRIs) are safer in overdose.</li>
+          <li><strong>Serotonin</strong> (raphe nuclei) -- mood, sleep, appetite. <strong>Norepinephrine</strong> (locus coeruleus) -- alertness, attention. <strong>Dopamine</strong> (4 pathways) -- reward, motor control, cognition, prolactin regulation.</li>
+          <li><strong>GABA</strong> is the main inhibitory NT; benzodiazepines enhance GABA-A function but do not directly open chloride channels. <strong>Glutamate</strong> is the main excitatory NT; NMDA receptors are involved in learning and excitotoxicity.</li>
+          <li><strong>Acetylcholine</strong> -- memory and attention; degeneration of cholinergic neurons causes Alzheimer's cognitive decline. Anticholinergic side effects are among the most tested pharmacology topics.</li>
+          <li>The <strong>four dopamine pathways</strong> explain both the therapeutic and adverse effects of antipsychotics. Know mesolimbic (positive symptoms), mesocortical (negative/cognitive symptoms), nigrostriatal (EPS), and tuberoinfundibular (hyperprolactinemia).</li>
+          <li>The <strong>FDA black box warning</strong> on all antidepressants warns of increased suicidality risk in patients <strong>under age 25</strong>. Fluoxetine is one of the few SSRIs with FDA approval for pediatric depression.</li>
+          <li><strong>Geriatric pharmacology</strong>: "Start low, go slow." Elderly patients have decreased hepatic/renal clearance, increased anticholinergic sensitivity, and polypharmacy risks. The <strong>Beers Criteria</strong> lists medications inappropriate for older adults.</li>
+          <li><strong>Valproate</strong> (category X) is the most teratogenic mood stabilizer (neural tube defects); <strong>lithium</strong> is associated with <strong>Ebstein's anomaly</strong> (cardiac); <strong>carbamazepine</strong> also causes neural tube defects. The old A-X pregnancy categories have been replaced by narrative labeling (PLLR).</li>
+          <li><strong>Renal impairment</strong> is most critical for lithium (entirely renally excreted); <strong>hepatic impairment</strong> affects most other psychotropics. Dose adjustments and closer monitoring are required for both.</li>
+          <li><strong>Paroxetine</strong> is category D among SSRIs (cardiac teratogenicity risk); <strong>sertraline</strong> is generally preferred during breastfeeding due to low transfer into breast milk.</li>
+        </ul>
+      </section>
+
+
+      <section class="content-section">
+        <h2>References</h2>
+        <p class="citation">Stahl, S. M. (2021). <em>Stahl's Essential Psychopharmacology: Neuroscientific Basis and Practical Applications</em> (5th ed.). Cambridge University Press.</p>
+        <p class="citation">Sadock, B. J., Sadock, V. A., & Ruiz, P. (2015). <em>Kaplan and Sadock's Synopsis of Psychiatry</em> (11th ed.). Wolters Kluwer.</p>
+        <p class="citation">Hales, R. E., Yudofsky, S. C., & Roberts, L. W. (2014). <em>The American Psychiatric Publishing Textbook of Psychiatry</em> (6th ed.). American Psychiatric Publishing.</p>
+        <p class="citation">U.S. Food and Drug Administration. (2004). Suicidality in children and adolescents being treated with antidepressant medications. FDA Public Health Advisory.</p>
+        <p class="citation">American Geriatrics Society. (2023). Updated AGS Beers Criteria for potentially inappropriate medication use in older adults. <em>Journal of the American Geriatrics Society, 71</em>(7), 2052-2081.</p>
+        <p class="citation">Patorno, E., et al. (2017). Anticonvulsant medications and the risk of suicide, attempted suicide, or violent death. <em>JAMA, 303</em>(14), 1401-1409.</p>
+        <p class="citation">Gentile, S. (2010). Neurodevelopmental effects of prenatal exposure to psychotropic medications. <em>Depression and Anxiety, 27</em>(7), 675-686.</p>
+        <p class="citation">U.S. Food and Drug Administration. (2014). Pregnancy and Lactation Labeling Rule (PLLR): Final Rule. <em>Federal Register, 79</em>(233), 72063-72103.</p>
+      </section>
+
+
+
+      <div class="nav-buttons">
+        <a href="pharma-principles.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">How Drugs Work — Pharmacokinetics, Pharmacodynamics & Drug Interactions</div>
+          </div>
+        </a>
+        <a href="antidepressants-ssri-snri.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Antidepressants Part 1 — SSRIs, SNRIs & Serotonin Syndrome</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

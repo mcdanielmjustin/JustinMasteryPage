@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developing Talent — Needs Assessment, Methods & Evaluation | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Developing Talent — Needs Assessment, Methods & Evaluation</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 6</div>
+        <div class="domain-title">Workforce Development & Leadership</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations — Classical, Human Relations & Systems</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work — Job Analysis, Descriptions & Performance</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People — Interviews, Assessment Centers & Predictors</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection — Utility, Adverse Impact & Validity</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link active"><span class="chapter-number">5</span>Developing Talent — Needs Assessment, Methods & Evaluation</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths — Holland, Super & Work Adjustment</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance — Content & Process Theories</a></li>
+        <li class="chapter-item"><a href="satisfaction-commitment.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement — Satisfaction, Commitment & OCB</a></li>
+        <li class="chapter-item"><a href="occupational-stress.html" class="chapter-link"><span class="chapter-number">9</span>When Work Hurts — Stress, Burnout & Work-Life Balance</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">10</span>Leading People — Traits, Behaviors & Contingency Models</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">11</span>Making Better Decisions — Bounded Rationality, Groupthink & Models</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">12</span>Transforming Organizations — Lewin, Kotter & OD Interventions</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 12</div>
+        <h1>Developing Talent — Needs Assessment, Methods & Evaluation</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Training and Development</h2>
+        <p>Consider a hospital system that hires a cohort of newly licensed psychologists. Each clinician arrives with strong graduate training, yet none has used the hospital's electronic health record system, few have experience with brief intervention models in fast-paced medical settings, and most have never navigated interdisciplinary team rounds. Within weeks, patient satisfaction scores dip on the units where the new hires are stationed. The problem is not a lack of talent — it is a lack of targeted preparation for the specific demands of the role. This is precisely the gap that well-designed training is built to close.</p>
+        <p><span class="key-term">Training</span> refers to the systematic acquisition of knowledge, skills, and attitudes that result in improved performance in a specific job or role. Unlike informal on-the-job learning — which can be haphazard and inconsistent — effective training is intentional and structured. It begins by identifying what people need to learn, moves into carefully designed instruction, and concludes with evaluation of whether the learning actually changed behavior on the job. In short, the best training programs follow a systematic three-phase process: needs assessment, design and delivery, and evaluation. Each phase depends on the others; skip the needs assessment and you may train people on content they have already mastered, while neglecting evaluation leaves an organization guessing about whether its investment produced real results.</p>
+        <p>Why does this matter so much for professional practice — and for the EPPP? Psychologists frequently design, deliver, or evaluate training programs in clinical, organizational, and educational settings. Whether you are teaching motivational interviewing skills to substance-abuse counselors, onboarding new staff at a community mental health center, or consulting with a corporation on leadership development, the same foundational principles apply. For the EPPP, you must understand the three levels of needs assessment, the major training methods, Kirkpatrick's evaluation model, and the factors that influence transfer of training. The sections that follow walk through each of these building blocks, beginning with how organizations determine what training is actually needed — and for whom.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Training Needs Assessment</h2>
+        <p>A <span class="key-term">training needs assessment</span> is the systematic process of determining what training is needed, who needs it, and what conditions are necessary for effective training. It involves three levels of analysis:</p>
+
+        <h3>Organizational Analysis</h3>
+        <p><span class="key-term">Organizational analysis</span> examines the broader context to determine where training is needed within the organization and whether conditions support training effectiveness. Key considerations include:</p>
+        <ul>
+          <li>Strategic goals and objectives that require new competencies</li>
+          <li>Available resources (budget, time, facilities) for training</li>
+          <li>Organizational climate and support for training (supervisor support, opportunity to practice)</li>
+          <li>Environmental constraints or changes (new technology, regulations, restructuring)</li>
+        </ul>
+
+        <h3>Task Analysis</h3>
+        <p><span class="key-term">Task analysis</span> (also called operations analysis) identifies the specific tasks, knowledge, skills, and abilities (KSAs) required for successful job performance. It determines what the content of training should be.</p>
+        <div class="definition-box">
+          <h4>Steps in Task Analysis</h4>
+          <ol>
+            <li>Identify the job and its component tasks (using job analysis data)</li>
+            <li>Determine the KSAs required for each task</li>
+            <li>Identify the performance standards and conditions under which tasks are performed</li>
+            <li>Prioritize training content based on task importance, frequency, and difficulty</li>
+          </ol>
+        </div>
+
+        <h3>Person Analysis</h3>
+        <p><span class="key-term">Person analysis</span> determines which specific employees need training and what kind of training they need. It identifies discrepancies between current and required performance levels.</p>
+        <div class="example-box">
+          <h4>Example: Three-Level Needs Assessment</h4>
+          <p>A hospital implements a new electronic health records system. <strong>Organizational analysis:</strong> Strategic goal of digitization requires staff retraining; budget allocated. <strong>Task analysis:</strong> Identifies specific EHR functions staff must perform (entering patient data, ordering labs, documenting notes). <strong>Person analysis:</strong> Performance data shows that nurses over 55 have the lowest proficiency on the new system and need the most intensive training.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+
+        <!-- anchor:100-1 coverage:partial -->
+        <p>Some models of needs assessment include a fourth component: <span class="key-term">demographic analysis</span>. This level examines the characteristics of the workforce — such as age, education level, language proficiency, cultural background, and technological literacy — to determine whether training content and delivery methods should be tailored for specific subgroups. For instance, a demographic analysis might reveal that a significant portion of the workforce has limited English proficiency, prompting the design of bilingual training materials. By accounting for demographic variables, organizations can ensure that training is accessible, culturally appropriate, and optimally designed for the learners who will participate in it.</p>
+        <!-- /anchor:100-1 -->
+
+        <h2>Training Methods</h2>
+        <p>With needs assessment complete -- the organization understands where training is needed, what content to cover, and who requires development -- the next challenge is selecting the right delivery method. The range of available approaches is broader than ever, from traditional classroom instruction and apprenticeships to high-fidelity simulations and technology-mediated learning platforms. Each method has distinct strengths, limitations, and conditions under which it works best, and choosing wisely requires matching the method to the learning objectives identified in the needs assessment.</p>
+
+        <!-- anchor:045 coverage:partial -->
+        <p>A common misconception about organizational mentoring is that the <span class="key-term">mentor</span> unilaterally sets the agenda, determining the nature and direction of the relationship. In effective mentoring relationships, the process is far more collaborative and often <em>protégé-driven</em>. The mentee's developmental needs, career aspirations, and learning goals should shape the relationship's focus. Mentors provide guidance, share expertise, offer psychosocial support, and open doors to professional networks, but they do so in response to what the protégé needs rather than imposing a predetermined plan. Research on mentoring consistently distinguishes two primary functions: <span class="key-term">career functions</span> (sponsorship, exposure, coaching, protection, and challenging assignments) and <span class="key-term">psychosocial functions</span> (role modeling, acceptance, counseling, and friendship). Both sets of functions are most effective when they emerge from mutual dialogue and the mentee's expressed goals. For EPPP purposes, statements suggesting that mentors alone dictate the relationship agenda represent the least accurate characterization of how mentoring operates in organizations.</p>
+        <!-- /anchor:045 -->
+
+
+
+        <!-- anchor:10-1 coverage:missing -->
+        <p><span class="key-term">Cross-training</span> is a team-oriented development method in which each team member learns the core duties and responsibilities carried out by other members of the team. Rather than focusing solely on individual skill-building, cross-training aims to strengthen the team as a functional unit by giving every member a working understanding of the roles their colleagues perform. This shared knowledge base enhances coordination, communication, and mutual support during team operations.</p>
+        <p>Cross-training can be implemented at varying levels of depth. At the shallowest level, members receive <em>positional clarification</em>—verbal or written descriptions of what each role entails. At a deeper level, members engage in <em>positional modeling</em>, where they observe teammates performing their tasks. The most intensive form involves <em>positional rotation</em>, where members actually practice performing each other's jobs. Research indicates that deeper levels of cross-training produce greater improvements in team performance, particularly for teams that must adapt to unexpected changes or coordinate actions under time pressure.</p>
+        <div class="example-box"><h4>Example</h4><p>In an emergency department, nurses, respiratory therapists, and physicians participate in cross-training so that each professional understands the essential steps the others perform during a cardiac arrest response. When a code is called, each team member can anticipate what others need, fill in temporarily if someone is delayed, and communicate more effectively—all because they have practiced and understood each other's roles.</p></div>
+        <p>Cross-training is especially valuable in contexts where team members must operate interdependently, where staffing shortages may require flexible role coverage, or where coordination failures carry serious consequences. It differs from <em>job rotation</em> in that its primary purpose is building shared mental models within a team rather than broadening an individual employee's career experience.</p>
+        <!-- /anchor:10-1 -->
+
+        <h3>On-the-Job Training Methods</h3>
+        <div class="definition-box">
+          <h4>Common On-the-Job Approaches</h4>
+          <ul>
+            <li><strong>Job rotation:</strong> Moving employees through different positions to broaden skills and understanding. Effective for management development and succession planning.</li>
+            <li><strong>Apprenticeship:</strong> Structured combination of on-the-job training under a skilled worker and classroom instruction. Common in trades.</li>
+            <li><strong>Coaching/mentoring:</strong> One-on-one developmental relationship with a more experienced person. Mentoring is broader and career-focused; coaching is more task-specific.</li>
+            <li><strong>Job instruction training (JIT):</strong> A structured four-step method: (1) prepare the trainee, (2) present the task, (3) have the trainee perform, (4) follow up and provide feedback.</li>
+          </ul>
+        </div>
+
+        <h3>Simulation-Based Training</h3>
+        <p><span class="key-term">Simulation training</span> creates realistic replicas of work situations for practice without real-world consequences:</p>
+        <ul>
+          <li><strong>Role playing:</strong> Trainees act out scenarios to practice interpersonal skills (conflict resolution, customer service, counseling)</li>
+          <li><strong>Business simulations/games:</strong> Participants make decisions in a simulated business environment and see the consequences</li>
+          <li><strong>Virtual reality/computer simulations:</strong> Technology-based recreations of work environments for high-fidelity practice (surgical simulators, flight simulators)</li>
+          <li><strong>Case studies:</strong> Detailed analysis of real or hypothetical situations to develop analytical and decision-making skills</li>
+        </ul>
+
+        <!-- anchor:111 coverage:missing -->
+        <h4>Vestibule Training</h4>
+        <p><span class="key-term">Vestibule training</span> takes place in a dedicated space — sometimes called a "vestibule" or training laboratory — that replicates the actual work environment using the same or similar equipment and materials found on the job. Trainees learn and practice tasks in this controlled setting before transitioning to the real workplace. This method is especially valuable in industries where on-the-job training would pose safety hazards, risk costly equipment damage, or disrupt ongoing production. Manufacturing, heavy equipment operation, and medical procedures are common contexts where vestibule training is preferred precisely because mistakes during the learning process carry no real-world consequences.</p>
+        <p>Because the training environment closely mirrors the actual job setting, vestibule training capitalizes on identical elements theory to promote strong positive transfer. At the same time, it allows trainers to control the pace of instruction, introduce errors in a safe context, and provide immediate feedback without the pressures of live operations. The primary disadvantages include the cost of duplicating equipment and maintaining a separate facility, as well as the possibility that subtle differences between the training and actual work environments may limit transfer.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>For the EPPP, vestibule training is the preferred answer when a question describes a situation requiring realistic practice but where on-the-job training is too dangerous, expensive, or disruptive. It is distinct from general simulation in that vestibule training specifically uses actual or near-identical equipment in a physically separate space designed to mirror the work setting.</p></div>
+        <!-- /anchor:111 -->
+
+
+        <h3>E-Learning and Technology-Based Training</h3>
+        <p><span class="key-term">E-learning</span> encompasses training delivered via electronic media, including computer-based training, web-based courses, and mobile learning. Research shows e-learning is generally as effective as classroom instruction for knowledge acquisition, with advantages in cost-efficiency, flexibility, and standardization of content (Sitzmann et al., 2006).</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>The most effective e-learning incorporates learner control, practice opportunities, and feedback -- consistent with principles from learning theory. <span class="key-term">Blended learning</span>, which combines online and face-to-face components, often produces the best outcomes by leveraging the advantages of both approaches.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Kirkpatrick's Training Evaluation Model</h2>
+        <p><span class="key-term">Donald Kirkpatrick</span> (1959, 1994) developed the most widely used framework for evaluating training effectiveness. It consists of four levels, each building on the previous:</p>
+        <div class="definition-box">
+
+        <!-- anchor:100-2 coverage:missing -->
+        <p>Before examining Kirkpatrick's framework, it is useful to distinguish between two broader categories of program evaluation that apply to training contexts. <span class="key-term">Formative evaluation</span> occurs during the design and development of a training program, with the goal of improving the program before full implementation. It answers the question, "How can we make this training better?" In contrast, <span class="key-term">summative evaluation</span> occurs after a training program has been delivered and focuses on judging its overall effectiveness and worth. It answers the question, "Did this training achieve its intended outcomes?"</p>
+        <div class="definition-box"><h4>Summative Evaluation</h4><p>According to evaluation methodology (Trochim, 2020), summative evaluation encompasses outcome evaluation (examining whether the program produced its intended effects) and impact evaluation (assessing the broader, longer-term consequences of the program). Notably, summative evaluation does <em>not</em> include implementation evaluation — the assessment of how faithfully a program was carried out according to its design. Implementation evaluation falls under the formative category because its purpose is to monitor and improve program delivery processes rather than to render a final judgment on program effectiveness.</p></div>
+        <table>
+        <thead>
+        <tr>
+        <th>Feature</th>
+        <th>Formative Evaluation</th>
+        <th>Summative Evaluation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Timing</td>
+        <td>During design and delivery</td>
+        <td>After program completion</td>
+        </tr>
+        <tr>
+        <td>Purpose</td>
+        <td>Improve the program</td>
+        <td>Judge overall effectiveness</td>
+        </tr>
+        <tr>
+        <td>Key Components</td>
+        <td>Implementation evaluation, process monitoring, pilot testing</td>
+        <td>Outcome evaluation, impact evaluation</td>
+        </tr>
+        <tr>
+        <td>Primary Question</td>
+        <td>"Is the program being delivered as intended?"</td>
+        <td>"Did the program produce desired results?"</td>
+        </tr>
+        </tbody>
+        </table>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>For the EPPP, remember that implementation evaluation — which examines fidelity of program delivery — is a formative activity, not a summative one. A common exam distractor pairs implementation evaluation with summative evaluation. Summative evaluation is concerned exclusively with outcomes and broader impact, not with the process of how the program was carried out.</p></div>
+        <!-- /anchor:100-2 -->
+
+
+        <!-- anchor:11-1 coverage:missing -->
+        <p>Before examining outcome evaluation through Kirkpatrick's framework, it is essential to distinguish between two fundamental purposes of training evaluation. <span class="key-term">Formative evaluation</span> occurs during the design and development phase of a training program, with the explicit goal of identifying modifications needed to help the program achieve its intended objectives. In contrast, <span class="key-term">summative evaluation</span> is conducted after the program has been fully implemented to determine its overall effectiveness and value.</p>
+        <p>Formative evaluation uses a variety of diagnostic methods to refine program components before full-scale delivery. Subject matter experts (SMEs) may be asked to review curriculum content, instructional materials, and assessment instruments for accuracy, relevance, and completeness. Pilot testing—delivering the program to a small sample of representative trainees—allows developers to administer measures of trainee attitudes and learning outcomes after each module or component. This component-by-component assessment reveals which segments are working well and which require revision. Trainees in pilot groups may also provide qualitative feedback on clarity of instruction, pacing, and perceived relevance.</p>
+        <div class="definition-box"><h4>Formative vs. Summative Evaluation</h4><p><strong>Formative evaluation</strong> answers the question: "How can we improve this program while it is still being developed?" It is process-oriented and iterative.<br/><strong>Summative evaluation</strong> answers the question: "Did this program work?" It is outcome-oriented and typically conducted after full implementation, as described in Kirkpatrick's four-level model below.</p></div>
+        <p>By catching design flaws, content gaps, and delivery problems early, formative evaluation substantially increases the likelihood that the final training program will produce meaningful learning and behavioral change. Organizations that skip this step risk investing heavily in a program that fails to meet its objectives—problems that summative evaluation can detect but cannot easily correct after the fact.</p>
+        <!-- /anchor:11-1 -->
+
+          <h4>Kirkpatrick's Four Levels</h4>
+          <table>
+            <tr><th>Level</th><th>What It Measures</th><th>How It Is Measured</th></tr>
+            <tr><td><strong>1. Reaction</strong></td><td>Trainees' satisfaction with and attitudes toward the training</td><td>Post-training surveys, "smile sheets," satisfaction ratings</td></tr>
+            <tr><td><strong>2. Learning</strong></td><td>Knowledge, skills, or attitudes acquired during training</td><td>Pre/post tests, skill demonstrations, written exams</td></tr>
+            <tr><td><strong>3. Behavior</strong></td><td>Transfer of training to actual job performance</td><td>Supervisor ratings, on-the-job observation, performance data</td></tr>
+            <tr><td><strong>4. Results</strong></td><td>Organizational impact (productivity, quality, profits, turnover)</td><td>Organizational records, ROI analysis, business metrics</td></tr>
+          </table>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Most organizations evaluate only at Level 1 (reaction), even though higher levels provide more meaningful information. Importantly, the levels are not strongly correlated: positive reactions (Level 1) do not guarantee learning (Level 2), and learning does not guarantee behavioral change on the job (Level 3). The most critical and least measured level is Level 4 (results). A <span class="key-term">fifth level</span> has been proposed -- return on investment (ROI) -- which calculates the monetary value of training results compared to training costs.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Transfer of Training</h2>
+        <p>Consider this scenario: An organization invests $50,000 in an intensive leadership development program. Participants rave about the facilitator (Level 1 — great reactions), demonstrate mastery on post-training assessments (Level 2 — solid learning), and even show improved coaching behaviors during the first month back on the job (Level 3 — behavioral change). But six months later, every participant has quietly reverted to their old management style. Was that training a success? Most would say no — because the skills never truly transferred in a lasting way. This is the central challenge that separates genuinely effective training from expensive feel-good experiences.</p>
+
+        <p>As we discussed in Kirkpatrick's model, the higher evaluation levels — behavior and results — capture whether training actually makes a difference where it counts: on the job, over time. The concept that bridges training design and real-world impact is <span class="key-term">transfer of training</span>, which refers to the degree to which knowledge, skills, and abilities learned in training are applied on the job and maintained over time. Transfer is, in the truest sense, the ultimate goal of training. Without it, every dollar spent and every hour invested amounts to little more than an intellectual exercise. Understanding the types of transfer, the conditions that promote it, and the factors that undermine it is essential both for professional practice and for the EPPP.</p>
+
+        <h3>Types of Transfer</h3>
+        <p>Not all transfer is created equal — and not all of it is beneficial. Imagine a clinician who completes a workshop on motivational interviewing and seamlessly integrates those reflective listening techniques into her next client session. That is the ideal outcome. But now imagine an American psychologist who relocates to the United Kingdom and keeps instinctively reaching for the gear shift with her right hand because she learned to drive on the right side of the road. The old training actively interferes with new performance demands. Researchers distinguish several forms of transfer based on their direction and scope:</p>
+        <ul>
+        <li><strong>Positive transfer:</strong> Training improves job performance (the goal)</li>
+        <li><strong>Negative transfer:</strong> Training interferes with job performance (e.g., learning to drive on the right after years of driving on the left)</li>
+        <li><strong>Zero transfer:</strong> Training has no effect on job performance</li>
+        <li><strong>Near transfer:</strong> Applying learned skills to situations very similar to the training context</li>
+        <li><strong>Far transfer:</strong> Applying learned skills to situations quite different from the training context (more difficult to achieve)</li>
+        </ul>
+        <p>The distinction between near and far transfer is particularly important for training designers. Near transfer — such as a trainee who learned to administer the WAIS-IV in a controlled classroom setting and then administers it competently in a testing office — is relatively straightforward to achieve because the contexts closely resemble each other. Far transfer, on the other hand, asks the trainee to generalize principles to novel situations. A therapist who learns solution-focused techniques in a workshop on depression and then creatively applies those same principles to a client struggling with workplace conflict is demonstrating far transfer. Because far transfer demands deeper conceptual understanding rather than rote application, it is significantly harder to achieve — and requires more deliberate instructional strategies.</p>
+
+        <h3>Factors Affecting Transfer</h3>
+        <p>Why do some training programs produce lasting behavioral change while others fade from memory within weeks? Decades of research point to a convergence of three broad categories of influence: how the training itself is designed, who the trainees are, and what kind of environment they return to. Baldwin and Ford synthesized this research into a comprehensive framework that remains the dominant model in the field.</p>
+
+        <div class="definition-box">
+        <h4>Baldwin and Ford's (1988) Transfer Model</h4>
+        <p>This influential model organizes the factors that determine whether training transfers into three interdependent categories. Importantly, all three must be addressed — a brilliantly designed program will still fail if trainees lack motivation or return to an unsupportive workplace:</p>
+        <ul>
+        <li><strong>Training design:</strong> Identical elements (Thorndike), general principles, stimulus variability, practice and overlearning, feedback</li>
+        <li><strong>Trainee characteristics:</strong> Ability, personality (self-efficacy, motivation to learn, locus of control), perceived utility of training</li>
+        <li><strong>Work environment:</strong> Supervisor support, peer support, opportunity to perform, organizational climate for transfer</li>
+        </ul>
+        </div>
+
+        <p>Among the training design factors, one of the oldest and most influential ideas comes from Edward Thorndike. <span class="key-term">Identical elements theory</span> (Thorndike & Woodworth, 1901) predicts that transfer is maximized when the training environment closely matches the job environment. The logic is intuitive: the more the practice context mirrors the performance context, the more readily skills will carry over. This principle is the theoretical basis for simulation training and high-fidelity practice environments — from flight simulators that replicate cockpit conditions down to turbulence and instrument readings, to medical training mannequins that bleed and breathe, to clinical role-plays that use standardized patients presenting with realistic symptom profiles. When training looks, feels, and functions like the real thing, positive transfer follows naturally.</p>
+
+        <p>Trainee characteristics matter just as much as program design. A trainee with high self-efficacy — the belief that she can successfully learn and apply new skills — is far more likely to persist through challenges and attempt new behaviors on the job. Similarly, a trainee with an internal locus of control attributes outcomes to her own effort, making her more likely to take ownership of applying what she learned. Perhaps most critically, perceived utility of training — whether the trainee believes the content is genuinely relevant and useful — predicts engagement, effort, and ultimately transfer. This is why skilled trainers begin by connecting material to real job demands rather than launching directly into abstract theory.</p>
+
+        <p>Even when training design is superb and trainees are motivated, the work environment can make or break transfer. A supervisee who returns from a trauma-focused CBT workshop excited to implement new techniques will quickly abandon them if her supervisor dismisses the approach, if peers ridicule evidence-based methods, or if her caseload leaves no time to practice new skills. Research consistently shows that supervisor support — through encouragement, modeling, and providing opportunities to use new skills — is one of the strongest predictors of successful transfer. Organizations that invest in training but neglect the post-training environment are, in effect, planting seeds in barren soil.</p>
+
+        <div class="example-box">
+        <h4>Example: Enhancing Transfer</h4>
+        <p>A therapy training program maximizes transfer by: (1) using role-plays with realistic client scenarios (identical elements), (2) screening trainees for motivation and readiness (trainee characteristics), (3) arranging post-training supervision and case consultation (work environment support), and (4) requiring trainees to set specific goals for applying new techniques (relapse prevention). Notice how each strategy targets a different factor in Baldwin and Ford's model — effective transfer enhancement is always multifaceted.</p>
+        </div>
+
+        <p>The fourth strategy in the example above — goal-setting to maintain new behaviors — draws on a particularly creative adaptation from the addiction literature. <span class="key-term">Relapse prevention</span>, adapted from Marlatt and Gordon's addiction model by Marx (1982), teaches trainees to anticipate situations where they might revert to old behaviors, develop coping strategies, and maintain new skills. Just as a person recovering from alcohol dependence learns to identify high-risk situations (a stressful day, a social gathering) and plan alternative responses, a trainee using relapse prevention might identify conditions likely to trigger a return to old habits — heavy caseloads, skeptical colleagues, time pressure — and proactively develop strategies for staying on course. This approach has been shown to improve long-term transfer, making it a valuable tool for any training program that aims to produce lasting change rather than temporary enthusiasm.</p>
+      </section>
+
+
+      <section class="content-section">
+
+        <!-- anchor:009 coverage:partial -->
+        <p>Beyond its general benefits for retention, overlearning takes on special significance when the cost of making errors is high. In domains where mistakes can result in injury, loss of life, financial catastrophe, or irreversible damage—such as aviation, surgery, nuclear power operations, or crisis intervention—practitioners cannot afford hesitation or inaccuracy during performance. By drilling skills well past the threshold of initial competence, trainees develop deeply encoded response patterns that remain robust under stress, fatigue, and time pressure. This makes overlearning a preferred training strategy whenever correct execution is not merely desirable but essential.</p>
+        <!-- /anchor:009 -->
+
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Three levels of needs assessment: organizational, task, person</li>
+            <li>Organizational analysis determines where training is needed and if conditions support it</li>
+            <li>Task analysis identifies what should be trained; person analysis identifies who needs training</li>
+            <li>Kirkpatrick's four levels: reaction, learning, behavior, results</li>
+            <li>Levels are not strongly correlated -- satisfaction does not ensure learning or transfer</li>
+            <li>Most organizations only measure Level 1 (reaction); Level 4 (results) is most meaningful but least measured</li>
+            <li>Transfer of training: positive, negative, zero, near, far</li>
+            <li>Identical elements theory: transfer improves as training-job similarity increases</li>
+            <li>Baldwin and Ford model: training design + trainee characteristics + work environment = transfer</li>
+            <li>Supervisor support is one of the strongest work environment predictors of transfer</li>
+            <li>Overlearning (practicing beyond mastery) enhances retention and transfer</li>
+          </ul>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Baldwin, T. T., & Ford, J. K. (1988). Transfer of training: A review and directions for future research. <em>Personnel Psychology, 41</em>(1), 63-105.</div>
+        <div class="citation">Kirkpatrick, D. L. (1994). <em>Evaluating training programs: The four levels</em>. Berrett-Koehler.</div>
+        <div class="citation">Marx, R. D. (1982). Relapse prevention for managerial training. <em>Academy of Management Review, 7</em>(3), 433-441.</div>
+        <div class="citation">Sitzmann, T., Kraiger, K., Stewart, D., & Wisher, R. (2006). The comparative effectiveness of web-based and classroom instruction. <em>Personnel Psychology, 59</em>(3), 623-664.</div>
+        <div class="citation">Thorndike, E. L., & Woodworth, R. S. (1901). The influence of improvement in one mental function upon the efficiency of other functions. <em>Psychological Review, 8</em>, 247-261.</div>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="selection-evaluation.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Evaluating Selection — Utility, Adverse Impact & Validity</div>
+          </div>
+        </a>
+        <a href="career-development.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Navigating Career Paths — Holland, Super & Work Adjustment</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

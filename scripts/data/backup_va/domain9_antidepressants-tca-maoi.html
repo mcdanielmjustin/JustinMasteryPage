@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antidepressants Part 2 — TCAs, MAOIs & Atypicals | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Antidepressants Part 2 — TCAs, MAOIs & Atypicals</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology & Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ethics-foundation.html" class="chapter-link"><span class="chapter-number">1</span>Ethics Foundation — APA Principles, Code Structure & Resolving Dilemmas</a></li>
+        <li class="chapter-item"><a href="competence-standards.html" class="chapter-link"><span class="chapter-number">2</span>Standard 2 — Competence, Emergency Services & Scope of Practice</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link"><span class="chapter-number">3</span>Standard 3 — Human Relations, Multiple Relationships & Avoiding Harm</a></li>
+        <li class="chapter-item"><a href="confidentiality.html" class="chapter-link"><span class="chapter-number">4</span>Standard 4 — Privacy, Confidentiality, Tarasoff & Mandated Reporting</a></li>
+        <li class="chapter-item"><a href="public-records-training.html" class="chapter-link"><span class="chapter-number">5</span>Standards 5, 6 & 7 — Public Statements, Records, Fees & Education</a></li>
+        <li class="chapter-item"><a href="research-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Standard 8 — Research Ethics, Informed Consent & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-therapy-ethics.html" class="chapter-link"><span class="chapter-number">7</span>Standards 9 & 10 — Assessment Ethics, Therapy Ethics & Termination</a></li>
+        <li class="chapter-item"><a href="pharma-principles.html" class="chapter-link"><span class="chapter-number">8</span>How Drugs Work — Pharmacokinetics, Pharmacodynamics & Drug Interactions</a></li>
+        <li class="chapter-item"><a href="neurotransmitter-systems.html" class="chapter-link"><span class="chapter-number">9</span>Neurotransmitter Systems — Serotonin, Dopamine, GABA & Acetylcholine</a></li>
+        <li class="chapter-item"><a href="antidepressants-ssri-snri.html" class="chapter-link"><span class="chapter-number">10</span>Antidepressants Part 1 — SSRIs, SNRIs & Serotonin Syndrome</a></li>
+        <li class="chapter-item"><a href="antidepressants-tca-maoi.html" class="chapter-link active"><span class="chapter-number">11</span>Antidepressants Part 2 — TCAs, MAOIs & Atypicals</a></li>
+        <li class="chapter-item"><a href="antipsychotics-conventional.html" class="chapter-link"><span class="chapter-number">12</span>Conventional Antipsychotics — Dopamine Blockade, EPS & Tardive Dyskinesia</a></li>
+        <li class="chapter-item"><a href="antipsychotics-atypical.html" class="chapter-link"><span class="chapter-number">13</span>Atypical Antipsychotics — Clozapine, Metabolic Syndrome & NMS</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">14</span>Anxiolytics & Sedatives — Benzodiazepines, Buspirone & Sleep Agents</a></li>
+        <li class="chapter-item"><a href="stabilizers-stimulants.html" class="chapter-link"><span class="chapter-number">15</span>Mood Stabilizers & Stimulants — Lithium, Anticonvulsants & ADHD Meds</a></li>
+        <li class="chapter-item"><a href="legal-professional.html" class="chapter-link"><span class="chapter-number">16</span>Law & Practice — Licensing, Malpractice, Prescriptive Authority & Scope</a></li>
+        <li class="chapter-item"><a href="modern-practice.html" class="chapter-link"><span class="chapter-number">17</span>The Evolving Profession — Telepsychology, Social Media & Emerging Treatments</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 11 of 17</div>
+        <h1>Antidepressants Part 2 — TCAs, MAOIs & Atypicals</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Tricyclic Antidepressants (TCAs)</h2>
+        <p>A 52-year-old man with chronic depression has failed two adequate trials of SSRIs and one SNRI — his mood remains bleak, his energy is nonexistent, and he wakes at 3 a.m. every night unable to fall back asleep. His psychiatrist decides to try nortriptyline, a tricyclic antidepressant, carefully monitoring blood levels to stay within the therapeutic window. Within three weeks, his sleep architecture improves and his mood begins to lift — but he also develops dry mouth and mild constipation, the predictable anticholinergic fingerprint of this older medication class. His case illustrates both why TCAs remain valuable tools for treatment-resistant cases and why they were ultimately displaced as first-line agents by newer, better-tolerated alternatives.</p>
+        <p><span class="key-term">TCAs</span> were the first widely used antidepressants but have largely been replaced by SSRIs and SNRIs as first-line treatments due to their significant side effect profile and lethality in overdose. They remain clinically important for treatment-resistant depression, chronic pain syndromes, migraine prophylaxis, and — in the case of clomipramine — obsessive-compulsive disorder.</p>
+
+        <h3>Mechanism of Action</h3>
+        <p>TCAs block the reuptake of both serotonin and norepinephrine but also block histamine (H1), acetylcholine (muscarinic), and alpha-1 adrenergic receptors, which produces many of their side effects.</p>
+
+        <h3>Common TCAs</h3>
+        <table>
+          <tr><th>Generic Name</th><th>Brand Name</th><th>Notable Features</th></tr>
+          <tr><td>Amitriptyline</td><td>Elavil</td><td>Highly sedating; used for chronic pain and migraine prophylaxis; most anticholinergic TCA</td></tr>
+          <tr><td>Imipramine</td><td>Tofranil</td><td>First TCA discovered; used for enuresis in children; panic disorder</td></tr>
+          <tr><td>Nortriptyline</td><td>Pamelor</td><td>Active metabolite of amitriptyline; less sedating; therapeutic window for blood levels</td></tr>
+          <tr><td>Clomipramine</td><td>Anafranil</td><td>Most serotonergic TCA; first-line pharmacotherapy for OCD</td></tr>
+          <tr><td>Desipramine</td><td>Norpramin</td><td>Most noradrenergic TCA; least sedating; less anticholinergic</td></tr>
+        </table>
+
+        <h3>Side Effects of TCAs</h3>
+        <ul>
+          <li><strong>Anticholinergic effects</strong> (dry mouth, constipation, urinary retention, blurred vision, tachycardia) -- remember "can't see, can't pee, can't spit, can't sh*t"</li>
+          <li><strong>Sedation</strong> (due to histamine blockade)</li>
+          <li><strong>Orthostatic hypotension</strong> (due to alpha-1 blockade)</li>
+          <li><strong>Weight gain</strong></li>
+          <li><strong>Cardiac toxicity</strong> -- fatal in overdose due to cardiac arrhythmias (QT prolongation, heart block). This is why TCAs are dangerous in suicidal patients.</li>
+          <li>Lowered seizure threshold</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>TCAs are <strong>lethal in overdose</strong> due to cardiac arrhythmias. This is a critical clinical consideration and a frequently tested EPPP fact. For this reason, TCAs are prescribed cautiously (if at all) to patients with suicidal ideation. A one-week supply of TCAs can be lethal in overdose.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example: Choosing the Right TCA for the Right Condition</strong>
+          <p>A 14-year-old boy with severe OCD has not responded to two adequate trials of SSRIs (fluoxetine and fluvoxamine). His psychiatrist considers clomipramine — the most serotonergic TCA and the original first-line pharmacotherapy for OCD, predating SSRI use for this disorder. Clomipramine's stronger serotonin reuptake inhibition compared to other TCAs explains its unique efficacy for obsessive-compulsive symptoms. However, his parents must be informed about the cardiac monitoring requirement, the anticholinergic side effects their son may experience, and the critical importance of keeping the medication securely stored given the overdose risk. This scenario illustrates the clinical principle that within the TCA class, individual agents have distinct receptor profiles that make them suited for specific conditions — a nuance frequently tested on the EPPP (Stahl, 2013).</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Monoamine Oxidase Inhibitors (MAOIs)</h2>
+        <p>If TCAs represent the first generation of antidepressants with their broad receptor blockade and overdose lethality, the MAOIs represent an even older pharmacological strategy — one that attacks depression from a completely different angle. Rather than blocking reuptake of neurotransmitters at the synapse, MAOIs prevent the enzymatic breakdown of monoamines inside the neuron, flooding the brain with serotonin, norepinephrine, and dopamine simultaneously. This powerful mechanism makes MAOIs remarkably effective, particularly for the subtype of depression that SSRIs and SNRIs often struggle with: atypical depression, characterized by mood reactivity, hypersomnia, leaden paralysis, and interpersonal rejection sensitivity. However, that same powerful mechanism creates dangerous vulnerabilities — particularly when certain foods or medications enter the picture.</p>
+        <p><span class="key-term">MAOIs</span> are the oldest class of antidepressants. They are now typically reserved for treatment-resistant depression and atypical depression because of their potentially dangerous drug and food interactions.</p>
+
+        <h3>Mechanism of Action</h3>
+        <p>MAOIs inhibit the enzyme <span class="key-term">monoamine oxidase</span>, which normally breaks down serotonin, norepinephrine, and dopamine. By inhibiting this enzyme, MAOIs increase the availability of all three monoamines.</p>
+        <ul>
+          <li><strong>MAO-A</strong> preferentially metabolizes serotonin and norepinephrine</li>
+          <li><strong>MAO-B</strong> preferentially metabolizes dopamine (selegiline, used in Parkinson's disease, is selective for MAO-B at low doses)</li>
+        </ul>
+
+        <h3>Common MAOIs</h3>
+        <ul>
+          <li><strong>Phenelzine (Nardil)</strong> -- irreversible, nonselective</li>
+          <li><strong>Tranylcypromine (Parnate)</strong> -- irreversible, nonselective</li>
+          <li><strong>Selegiline (Emsam)</strong> -- available as a transdermal patch; at low doses, selective for MAO-B; dietary restrictions may not be required at lowest patch dose</li>
+        </ul>
+
+        <h3>The Tyramine Crisis (Hypertensive Crisis)</h3>
+        <div class="definition-box">
+          <strong>Tyramine Crisis</strong>
+          <p>Patients taking MAOIs must follow strict dietary restrictions to avoid <span class="key-term">tyramine</span>-containing foods. Tyramine is normally broken down by MAO in the gut. When MAO is inhibited, tyramine accumulates and causes the release of large amounts of norepinephrine, leading to a potentially fatal <strong>hypertensive crisis</strong> (severe headache, rapid heart rate, stiff neck, nausea, stroke, death).</p>
+        </div>
+        <p>Foods to avoid while taking MAOIs include:</p>
+        <ul>
+          <li>Aged cheeses (cheddar, Swiss, parmesan, blue cheese)</li>
+          <li>Cured or smoked meats (salami, pepperoni, smoked fish)</li>
+          <li>Fermented foods (sauerkraut, kimchi, soy sauce)</li>
+          <li>Draft beer, red wine</li>
+          <li>Broad (fava) beans</li>
+          <li>Certain dietary supplements and over-the-counter cold medications containing pseudoephedrine or phenylephrine</li>
+        </ul>
+
+        <h3>Drug Interactions with MAOIs</h3>
+        <p>MAOIs have dangerous interactions with many medications, including SSRIs, SNRIs, TCAs, meperidine (Demerol), dextromethorphan, and sympathomimetic drugs. A <strong>washout period of at least 2 weeks</strong> is required when switching between MAOIs and serotonergic medications (5 weeks for fluoxetine due to its long half-life).</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Atypical Antidepressants</h2>
+        <p>Having explored the major classes of antidepressants — SSRIs, SNRIs, TCAs, and MAOIs — you might assume that these categories cover the full pharmacological landscape for treating depression. But the brain's complexity has inspired medications that break the mold entirely, targeting neurotransmitter systems and receptor mechanisms that don't fit neatly into any of those established categories. These are the <span class="key-term">atypical antidepressants</span>, a diverse group of medications united not by a shared mechanism but by their refusal to be classified elsewhere. Understanding these agents is clinically essential because they are often the medications patients turn to when first-line treatments fail, when side effect profiles of conventional antidepressants prove intolerable, or when the clinical picture demands something different — like rapid relief from acute suicidal ideation.</p>
+        <p>What makes this group particularly interesting for the practicing psychologist is that each atypical antidepressant has a distinctive pharmacological fingerprint: one targets the glutamate system and can lift depression within hours, another boosts norepinephrine and dopamine without touching serotonin at all, and still another is prescribed more often as a sleep aid than as an antidepressant. Knowing these distinctions helps psychologists understand why a psychiatrist might choose one agent over another, anticipate side effects that could affect therapy engagement, and recognize when a patient's experience in session might be medication-related.</p>
+
+        <!-- anchor:25 coverage:missing -->
+        <h3>Esketamine (Spravato)</h3>
+        <p>Imagine a patient who has been struggling with severe depression for years — she has tried three different SSRIs, an SNRI, and augmentation with an atypical antipsychotic, yet nothing has meaningfully lifted the darkness. For patients like her, the approval of <span class="key-term">esketamine</span> in 2019 represented something genuinely new: a fundamentally different approach to treating depression. Esketamine is the S-enantiomer of <span class="key-term">ketamine</span>, an NMDA (N-methyl-D-aspartate) glutamate receptor antagonist. While every antidepressant we have discussed so far works by modulating monoamine neurotransmitter systems — serotonin, norepinephrine, or dopamine — esketamine acts on the glutamatergic system, the brain's primary excitatory neurotransmitter network. This mechanistic difference is not merely academic: it translates into a clinical timeline that would have seemed impossible a generation ago. Rather than the weeks-long wait typical of conventional antidepressants, esketamine can produce meaningful antidepressant effects within hours to days.</p>
+        <p>Esketamine is administered as a <span class="key-term">nasal spray</span> and is specifically indicated for <span class="key-term">treatment-resistant depression</span> (TRD), which is formally defined as depression that has failed to respond to at least two adequate antidepressant trials in the current episode. This is an important threshold to remember — the medication is not a first- or second-line treatment but rather a tool reserved for patients whose illness has already proven refractory to standard approaches. It is always used as an adjunct to an oral antidepressant rather than as monotherapy, meaning the patient continues a conventional medication alongside the esketamine treatments.</p>
+        <p>Because of concerns about dissociative effects, sedation, abuse potential, and transient increases in blood pressure, esketamine is available only through a restricted distribution system called the REMS (Risk Evaluation and Mitigation Strategy) program. In practice, this means a patient cannot simply pick up a prescription at the pharmacy and use it at home. Instead, each dose must be administered in a certified healthcare setting — typically a psychiatrist's office or specialized clinic — and the patient must be observed for at least two hours following administration. Common adverse effects include dissociation, dizziness, nausea, sedation, vertigo, and a feeling of disconnection from reality. These effects are typically transient and resolve within the monitoring period, but they can be unsettling for patients who are unprepared for them.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>Esketamine's rapid onset of action makes it a particularly valuable option for patients in acute depressive crises, including those with suicidal ideation. In 2020, the FDA expanded its approval to include depressive symptoms in adults with major depressive disorder accompanied by acute suicidal thinking or behavior. This expanded indication is especially relevant for psychologists working in crisis settings, where knowing that a rapid-acting pharmacological intervention exists can inform safety planning and referral decisions. Psychologists should be aware that patients receiving esketamine may experience perceptual disturbances — sometimes described as feeling "floaty," detached, or as though the world looks different — and should not drive or operate machinery until the following day after a restful sleep. If a patient reports unusual perceptual experiences following a treatment session, it is important to contextualize these as expected medication effects rather than symptoms of a new psychiatric condition.</p></div>
+        <!-- /anchor:25 -->
+
+
+        <h3>Bupropion (Wellbutrin)</h3>
+        <p>Consider a patient who responds well to antidepressant medication in terms of mood but finds the sexual side effects — diminished libido, difficulty reaching orgasm — so distressing that he stops taking the medication entirely. Or picture a woman who is trying to quit smoking while also managing a depressive episode. In both scenarios, <span class="key-term">bupropion</span> (marketed as Wellbutrin for depression and Zyban for smoking cessation) stands out as a uniquely suited option, precisely because of what it does not do: it does not affect serotonin. This is the defining characteristic that sets bupropion apart from nearly every other antidepressant on the market.</p>
+        <ul>
+        <li><strong>Mechanism:</strong> Norepinephrine-dopamine reuptake inhibitor (NDRI); does NOT affect serotonin</li>
+        <li><strong>Uses:</strong> Depression, smoking cessation (marketed as Zyban), ADHD (off-label)</li>
+        <li><strong>Advantages:</strong> No sexual dysfunction (may actually improve libido); no weight gain (may cause weight loss); activating rather than sedating</li>
+        <li><strong>Risks:</strong> Lowers seizure threshold (contraindicated in patients with seizure disorders, eating disorders, or those undergoing abrupt alcohol withdrawal); may increase anxiety</li>
+        </ul>
+        <p>The seizure risk associated with bupropion is one of its most clinically important features and a frequent exam topic. Its contraindication in eating disorders — particularly bulimia nervosa and anorexia nervosa — stems from the fact that electrolyte imbalances common in these conditions already lower the seizure threshold, and bupropion further compounds that risk. Similarly, abrupt alcohol withdrawal can provoke seizures, making bupropion a poor choice during active detoxification. The activating profile of bupropion (boosting dopamine and norepinephrine) means it can feel stimulating — helpful for patients with fatigue and low motivation, but potentially problematic for patients already experiencing significant anxiety or agitation.</p>
+
+        <h3>Mirtazapine (Remeron)</h3>
+        <p>Now consider a very different clinical picture: an elderly patient with depression who has lost 15 pounds because she has no appetite, lies awake most of the night, and feels nauseated much of the time. For this patient, the side effect profile of <span class="key-term">mirtazapine</span> (Remeron) is not a drawback — it is the treatment plan. Mirtazapine's most prominent effects — sedation, increased appetite, and weight gain — are precisely what certain patients need, making it a case study in how pharmacological "side effects" can become therapeutic advantages when matched to the right clinical presentation.</p>
+        <ul>
+        <li><strong>Mechanism:</strong> Noradrenergic and specific serotonergic antidepressant (NaSSA); blocks alpha-2 autoreceptors (increasing NE and 5-HT release) and 5-HT2 and 5-HT3 receptors; potent H1 antagonist</li>
+        <li><strong>Uses:</strong> Depression, especially with insomnia, poor appetite, or weight loss</li>
+        <li><strong>Side effects:</strong> Significant sedation and weight gain (due to H1 blockade); increased appetite; useful when these "side effects" are actually therapeutic goals</li>
+        <li><strong>Advantages:</strong> Minimal sexual dysfunction; helpful for nausea (5-HT3 blockade)</li>
+        </ul>
+        <p>The mechanism of mirtazapine is more complex than most antidepressants and worth understanding. By blocking alpha-2 autoreceptors — the receptors that normally serve as a "brake" on norepinephrine and serotonin release — mirtazapine effectively takes the foot off the brake, allowing more of both neurotransmitters to flow. Its blockade of 5-HT3 receptors explains its anti-nausea properties (the same receptor targeted by ondansetron, a dedicated anti-nausea medication), and its potent antagonism of histamine H1 receptors accounts for the pronounced sedation and appetite stimulation. Because it causes minimal sexual dysfunction, mirtazapine is sometimes combined with an SSRI or SNRI — a combination colloquially known as "California rocket fuel" — to leverage complementary mechanisms while counteracting the sexual side effects of the serotonergic agent.</p>
+
+        <h3>Trazodone (Desyrel)</h3>
+        <p>If you ask most clinicians what <span class="key-term">trazodone</span> is used for, the first answer will almost certainly be "sleep" — even though it is technically classified as an antidepressant. Trazodone occupies an unusual niche in psychopharmacology: while it does have genuine antidepressant properties at higher doses, its sedating effects are so prominent that it is far more commonly prescribed at low doses as a sleep aid than as a treatment for depression. This makes it one of the most frequently encountered medications in clinical practice, since insomnia is a near-universal companion of depression and anxiety disorders.</p>
+        <ul>
+        <li><strong>Mechanism:</strong> Serotonin antagonist and reuptake inhibitor (SARI)</li>
+        <li><strong>Uses:</strong> Primarily used as a sleep aid at low doses; antidepressant at higher doses (rarely used this way due to sedation)</li>
+        <li><strong>Side effects:</strong> Sedation, orthostatic hypotension, <span class="key-term">priapism</span> (rare but serious -- prolonged painful erection requiring emergency treatment)</li>
+        </ul>
+        <p>The side effect of <span class="key-term">priapism</span> — a rare but potentially serious condition involving a prolonged, painful erection — is a high-yield exam fact for trazodone. Although uncommon (occurring in roughly 1 in 6,000 male patients), priapism constitutes a medical emergency because it can lead to permanent tissue damage if not treated promptly. Patients prescribed trazodone should be warned about this risk and instructed to seek emergency medical attention if an erection persists for more than four hours. Orthostatic hypotension — a drop in blood pressure upon standing that can cause dizziness or fainting — is another clinically relevant concern, particularly for elderly patients who may be at increased risk of falls.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Serotonin Syndrome</h2>
+
+        <!-- anchor:157 coverage:missing -->
+        <h3>St. John's Wort (Hypericum perforatum)</h3>
+        <p><span class="key-term">St. John's Wort</span> is a herbal supplement widely used as an over-the-counter remedy for depression, particularly in Europe. Research evidence suggests that for <span class="key-term">mild to moderate depression</span>, St. John's Wort extract demonstrates comparable efficacy to SSRIs in producing therapeutic response, while being associated with fewer adverse effects such as sexual dysfunction, gastrointestinal distress, and sedation. However, its efficacy for severe major depression is not well supported. The active compounds — primarily hypericin and hyperforin — are believed to inhibit the reuptake of serotonin, norepinephrine, and dopamine, though the precise mechanism remains under investigation.</p>
+        <p>Despite its favorable side effect profile, St. John's Wort poses substantial risks through drug interactions. It is a potent inducer of cytochrome P450 enzymes (particularly CYP3A4) and the P-glycoprotein transport system, which can significantly reduce the plasma levels and effectiveness of numerous medications, including oral contraceptives, anticoagulants (warfarin), immunosuppressants (cyclosporine), antiretrovirals, and certain cardiac drugs. Of particular relevance to this chapter, combining St. John's Wort with serotonergic medications such as SSRIs, SNRIs, or MAOIs can precipitate <span class="key-term">serotonin syndrome</span>. Patients should be specifically asked about St. John's Wort use, as many individuals do not spontaneously report herbal supplements when listing their medications.</p>
+        <div class="example-box"><h4>Example</h4><p>A 32-year-old woman presents with worsening depressive symptoms despite taking sertraline 100 mg daily. Upon careful inquiry, she reveals she recently began taking St. John's Wort on the recommendation of a friend. She reports new symptoms of agitation, tremor, and excessive sweating. Her clinician recognizes these as potential early signs of serotonin syndrome resulting from the combination of two serotonergic agents and immediately advises discontinuation of the herbal supplement.</p></div>
+        <!-- /anchor:157 -->
+
+        <div class="definition-box">
+          <strong>Serotonin Syndrome</strong>
+          <p><span class="key-term">Serotonin syndrome</span> is a potentially life-threatening condition caused by excessive serotonergic activity, typically resulting from combining two or more serotonergic medications (e.g., SSRI + MAOI, SSRI + tramadol, SSRI + St. John's Wort). It requires immediate medical attention.</p>
+        </div>
+        <h3>Clinical Triad of Serotonin Syndrome</h3>
+        <ol>
+          <li><strong>Cognitive/behavioral changes:</strong> Agitation, confusion, hypomania, restlessness</li>
+          <li><strong>Autonomic instability:</strong> Hyperthermia, tachycardia, diaphoresis (sweating), diarrhea, fluctuating blood pressure</li>
+          <li><strong>Neuromuscular abnormalities:</strong> Tremor, myoclonus (muscle jerking), hyperreflexia, rigidity, clonus</li>
+        </ol>
+        <p><strong>Treatment:</strong> Discontinue all serotonergic agents; supportive care; cyproheptadine (a serotonin antagonist) may be used in severe cases; benzodiazepines for agitation.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>The FDA Black Box Warning</h2>
+        <p>Having just explored serotonin syndrome — a potentially life-threatening consequence of serotonergic excess — we turn now to another critical safety concern that every psychologist must understand: the relationship between antidepressants and suicidality in young people. This topic sits at the intersection of psychopharmacology and ethics, and it is one of the most frequently tested areas on the EPPP. Understanding the nuances of this warning can mean the difference between a correct and incorrect answer on exam day — and, far more importantly, between safe and unsafe clinical practice.</p>
+
+        <p>Imagine you are supervising a trainee who has just learned that a 16-year-old client was started on sertraline one week ago. The trainee asks, "Should we be worried about the medication making things worse?" This is exactly the kind of question that the FDA's most serious regulatory action on antidepressants was designed to address. In 2004, after reviewing data from multiple clinical trials, the FDA issued a <span class="key-term">black box warning</span> — the strongest warning the agency can place on a prescription medication — for all antidepressants. The warning alerts prescribers and patients to an increased risk of <strong>suicidal thinking and behavior in children, adolescents, and young adults (up to age 24)</strong> during the initial weeks of treatment. The name "black box" comes from the literal black border that surrounds the warning text on the medication's packaging, signaling that this is not routine precautionary language but a serious, evidence-based safety concern.</p>
+
+        <p>Several key details about this warning are essential for clinical practice and for the EPPP. First, the warning applies to all antidepressants — not just SSRIs. This is a common misconception. Whether the medication is an SSRI, SNRI, tricyclic, or atypical antidepressant, the black box warning applies universally across the class. Second, the risk appears to be highest during the first one to two months of treatment, or following any dose change. This is the critical window when vigilance must be greatest. Third, the proposed mechanism is both clinically intuitive and somewhat paradoxical: antidepressants may initially restore energy and psychomotor activation before they meaningfully improve mood. A patient who was previously too lethargic and hopeless to act on suicidal thoughts may suddenly have the energy to do so — while still experiencing the despair that drives the ideation. This temporal mismatch between restored motivation and still-depressed mood creates a dangerous window of vulnerability.</p>
+
+        <p>Perhaps the most important nuance — and one that the EPPP frequently tests — is what the warning does <em>not</em> say. The black box warning does NOT state that antidepressants should not be prescribed to young people. Rather, it emphasizes that close monitoring is essential during the initial treatment period, especially in younger patients. The clinical consensus remains that for most children and adolescents with moderate to severe depression, the benefits of antidepressant treatment generally outweigh the risks — provided that careful, frequent follow-up occurs. Ironically, some research has suggested that the black box warning itself may have had unintended consequences: after its release, antidepressant prescriptions for young people declined significantly, and some epidemiological data indicated a concurrent rise in youth suicide rates, raising concern that undertreating depression may pose a greater risk than the medications themselves.</p>
+
+        <ul>
+        <li>The warning applies to all antidepressants, not just SSRIs</li>
+        <li>The risk appears to be highest during the first 1-2 months of treatment or after dose changes</li>
+        <li>The mechanism is thought to involve an initial increase in energy and motivation before mood fully improves, potentially enabling a suicidal individual to act on preexisting ideation</li>
+        <li>Close monitoring is recommended during the initial period of treatment, especially in young patients</li>
+        <li>The warning does NOT state that antidepressants should not be prescribed to young people; the benefits generally outweigh the risks, but careful monitoring is essential</li>
+        </ul>
+
+        <p>For psychologists who do not prescribe, understanding the black box warning remains critical. You may be the provider who sees a young client most frequently, placing you in the best position to detect early warning signs of increased suicidality after a medication change. Knowing when the risk is highest — and communicating effectively with the prescribing physician — is a core competency that bridges pharmacological knowledge and ethical responsibility.</p>
+
+        <div class="clinical-note">
+        <strong>EPPP Tip</strong>
+        <p>The black box warning is limited to <strong>ages 24 and under</strong>. For adults aged 25-64, antidepressants showed no increased suicidality, and for adults 65+, antidepressants appeared to <em>reduce</em> suicidal risk. The only SSRI FDA-approved for use in children with depression is <strong>fluoxetine</strong> (ages 8+). Remember these age cutoffs — they are high-yield distinctions that appear repeatedly on the exam. A helpful mnemonic: "24 and under, watch like thunder; 65 and older, depression's the smolder" — reminding you that the risk profile shifts across the lifespan.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li><strong>SSRIs</strong> are first-line treatment for depression and anxiety; primary side effects include sexual dysfunction and GI disturbance.</li>
+          <li><strong>Fluoxetine</strong> has the longest half-life and is the only SSRI FDA-approved for pediatric depression.</li>
+          <li><strong>SNRIs</strong> block both serotonin and norepinephrine reuptake; venlafaxine can raise blood pressure.</li>
+          <li><strong>TCAs</strong> are lethal in overdose due to cardiac arrhythmias; cause anticholinergic side effects and sedation.</li>
+          <li><strong>Clomipramine</strong> is the most serotonergic TCA and the first-line pharmacotherapy for OCD.</li>
+          <li><strong>MAOIs</strong> require strict dietary restrictions to avoid tyramine-induced hypertensive crisis; require a 2-week washout before switching to serotonergic drugs.</li>
+          <li><strong>Bupropion</strong> (NDRI) does not cause sexual dysfunction, aids in smoking cessation, but lowers seizure threshold.</li>
+          <li><strong>Mirtazapine</strong> causes sedation and weight gain but no sexual dysfunction; useful when appetite stimulation and sleep are needed.</li>
+          <li><strong>Serotonin syndrome</strong> results from combining serotonergic agents and presents with the triad of cognitive changes, autonomic instability, and neuromuscular hyperactivity.</li>
+          <li>The <strong>FDA black box warning</strong> applies to suicidality risk in patients aged 24 and under during initial antidepressant treatment.</li>
+        </ul>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="antidepressants-ssri-snri.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Antidepressants Part 1 — SSRIs, SNRIs & Serotonin Syndrome</div>
+          </div>
+        </a>
+        <a href="antipsychotics-conventional.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Conventional Antipsychotics — Dopamine Blockade, EPS & Tardive Dyskinesia</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

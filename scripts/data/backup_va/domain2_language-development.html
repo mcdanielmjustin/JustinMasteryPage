@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finding Words — Language Acquisition, Theories & Milestones | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Finding Words — Language Acquisition, Theories & Milestones</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan & Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development — Nature, Nurture & Grand Theories</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath — Genetics & Prenatal Development</a></li>
+        <li class="chapter-item"><a href="cognitive-awakening.html" class="chapter-link"><span class="chapter-number">3</span>Cognitive Awakening — Piaget's Sensorimotor World & Early Thought</a></li>
+        <li class="chapter-item"><a href="bonds-temperament.html" class="chapter-link"><span class="chapter-number">4</span>Bonds That Shape Us — Attachment, Temperament & Early Emotion</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link active"><span class="chapter-number">5</span>Finding Words — Language Acquisition, Theories & Milestones</a></li>
+        <li class="chapter-item"><a href="early-childhood.html" class="chapter-link"><span class="chapter-number">6</span>Discovering the World — Preoperational Thought, Play & Parenting</a></li>
+        <li class="chapter-item"><a href="middle-childhood.html" class="chapter-link"><span class="chapter-number">7</span>Building Competence — Concrete Operations, Peers & Moral Reasoning</a></li>
+        <li class="chapter-item"><a href="adolescence.html" class="chapter-link"><span class="chapter-number">8</span>Transformation — Puberty, Identity & the Adolescent Brain</a></li>
+        <li class="chapter-item"><a href="early-adulthood.html" class="chapter-link"><span class="chapter-number">9</span>Adulthood Begins — Intimacy, Career & Generativity</a></li>
+        <li class="chapter-item"><a href="middle-late-adulthood.html" class="chapter-link"><span class="chapter-number">10</span>The Long Horizon — Cognitive Aging, Wisdom & Successful Aging</a></li>
+        <li class="chapter-item"><a href="death-dying.html" class="chapter-link"><span class="chapter-number">11</span>The Final Chapter — Death, Grief & End-of-Life Psychology</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 11</div>
+        <h1>Finding Words — Language Acquisition, Theories & Milestones</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Language Development</h2>
+        <p>In the previous chapter, we explored how infants form emotional bonds with their caregivers and how temperament shapes the child's characteristic response to the social world. But there is another developmental achievement unfolding in parallel during the first two years of life -- one that is arguably the most distinctly human capacity of all. The emergence of language transforms an infant who communicates through cries, coos, and gestures into a toddler who can name objects, express desires, and narrate experiences. This transformation follows a remarkably predictable sequence across cultures, though the rate varies among individuals, and it has generated one of the most influential theoretical debates in all of psychology.</p>
+
+        <table>
+          <tr><th>Age</th><th>Milestone</th><th>Description</th></tr>
+          <tr><td>0&ndash;2 months</td><td>Cooing</td><td>Production of vowel-like sounds ("ooo," "aah"); social in nature</td></tr>
+          <tr><td>4&ndash;6 months</td><td>Babbling</td><td>Consonant-vowel combinations ("bababa," "mamama"); increasingly resembles native language</td></tr>
+          <tr><td>8&ndash;10 months</td><td>Echolalia / variegated babbling</td><td>Imitation of speech sounds; varied syllable combinations</td></tr>
+          <tr><td>~12 months</td><td>First words</td><td>Typically referential (naming objects/people); vocabulary of ~1&ndash;3 words</td></tr>
+          <tr><td>12&ndash;18 months</td><td>Holophrastic stage</td><td>Single words used to convey entire sentences ("milk" = "I want milk")</td></tr>
+          <tr><td>18&ndash;24 months</td><td>Vocabulary spurt / telegraphic speech</td><td>Rapid word acquisition (~50+ words); two-word combinations ("mommy go," "more juice")</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Holophrastic Speech</strong>
+          <p>The use of a single word to express a complete thought or sentence. The meaning is derived from context, intonation, and gesture. For example, "up" accompanied by raised arms means "pick me up."</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Telegraphic Speech</strong>
+          <p>Two- or three-word utterances that contain only the most essential content words (nouns, verbs) and omit grammatical function words (articles, prepositions). Example: "daddy go work." This stage typically emerges around 18&ndash;24 months.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>Language delay is one of the most common reasons for referral in early childhood. While late talkers (children with expressive vocabularies below 50 words at 24 months) often catch up, persistent language delays by age 3 may signal specific language impairment, autism spectrum disorder, or hearing loss and warrant formal evaluation.</p>
+        </div>
+
+        <h3>Overextension and Underextension</h3>
+        <p>As toddlers begin mapping words to meanings, they make characteristic semantic errors:</p>
+        <div class="definition-box">
+          <strong>Overextension</strong>
+          <p>Using a word too broadly by applying it to objects that share perceptual features with the original referent. For example, calling all four-legged animals "doggie" or all round objects "ball." Overextension is more common in production than comprehension and typically resolves as vocabulary expands.</p>
+        </div>
+        <div class="definition-box">
+          <strong>Underextension</strong>
+          <p>Using a word too narrowly by restricting it to only a specific instance of a category. For example, a child may use "car" only for the family car and not recognize that other vehicles are also cars. Underextension is less commonly tested but reflects the child's initial context-bound word learning.</p>
+        </div>
+
+        <p class="citation">Bates, E., &amp; Goodman, J. C. (1999). On the emergence of grammar from the lexicon. In B. MacWhinney (Ed.), The emergence of language (pp. 29&ndash;79). Erlbaum.</p>
+      </div>
+
+      <!-- Section 4b: Language Acquisition Theories -->
+
+      <div class="content-section">
+        <h2>Language Acquisition Theories</h2>
+        <p>The milestones we just traced -- from cooing to babbling to first words to telegraphic speech -- describe <em>what</em> happens during language development. But the deeper question is <em>how</em> it happens: What mechanisms drive a child from reflexive vocalization to grammatically complex speech in just a few years? This question has generated one of the most influential debates in all of psychology, pitting behaviorist, nativist, and interactionist perspectives against one another. The <span class="key-term">Skinner&ndash;Chomsky debate</span> remains a foundational topic for the EPPP, and understanding each perspective's strengths and limitations is essential for both the exam and for clinical work with language-disordered populations.</p>
+
+        <h3>Skinner's Behaviorist Approach</h3>
+        <p>In <em>Verbal Behavior</em> (1957), <span class="key-term">B. F. Skinner</span> argued that language is acquired through the same principles of <span class="key-term">operant conditioning</span> that govern all learned behavior. According to Skinner, children learn to speak through reinforcement (a parent smiles and responds when a child says "mama"), shaping (successive approximations of correct speech are differentially reinforced), and imitation (children repeat the speech they hear modeled by adults).</p>
+
+        <div class="definition-box">
+          <strong>Skinner's Verbal Operants</strong>
+          <p><strong>Mand:</strong> A verbal response driven by a state of deprivation or need (essentially a request; e.g., saying "water" when thirsty).<br>
+          <strong>Tact:</strong> A verbal response evoked by a nonverbal stimulus (essentially labeling; e.g., saying "dog" upon seeing a dog).<br>
+          <strong>Echoic:</strong> Repeating the verbal behavior of another (imitation).<br>
+          <strong>Intraverbal:</strong> Verbal behavior controlled by other verbal behavior (e.g., answering a question, holding a conversation).</p>
+        </div>
+
+        <h3>Chomsky's Nativist Approach</h3>
+        <p><span class="key-term">Noam Chomsky</span> fundamentally challenged Skinner's account in his landmark 1959 review of <em>Verbal Behavior</em>, arguing that reinforcement and imitation cannot explain the speed, creativity, and rule-governed nature of language acquisition. Chomsky proposed that humans are born with an innate <span class="key-term">Language Acquisition Device (LAD)</span>&mdash;a neurological mechanism containing <span class="key-term">Universal Grammar (UG)</span>, the set of grammatical principles shared by all human languages.</p>
+
+        <div class="definition-box">
+          <strong>Key Nativist Arguments</strong>
+          <p><strong>Poverty of the stimulus:</strong> The language input children receive is too incomplete, error-ridden, and unstructured to account for the complex and creative grammar they produce. Children routinely generate sentences they have never heard.<br>
+          <strong>Universal Grammar:</strong> All human languages share deep structural features (e.g., noun phrases, verb phrases, recursion), suggesting an innate grammatical blueprint.<br>
+          <strong>Critical/sensitive period:</strong> There is a biologically determined window (roughly the first 12 years) during which language acquisition occurs most naturally and completely. Evidence includes cases of extreme deprivation (Genie) and research on deaf signers and second-language learners.<br>
+          <strong>Overregularization:</strong> Errors like "goed" and "mouses" demonstrate that children extract rules rather than simply imitating what they hear.</p>
+        </div>
+
+        <div class="clinical-note">
+          <strong>Historical Significance</strong>
+          <p>Chomsky's 1959 review of Skinner's <em>Verbal Behavior</em> is widely regarded as one of the pivotal events in the <span class="key-term">cognitive revolution</span>, helping shift psychology away from strict behaviorism and toward the study of internal mental structures and processes. This is a high-frequency EPPP topic.</p>
+        </div>
+
+        <h3>Interactionist Approaches</h3>
+        <p>Contemporary theories recognize that both biological endowment and social experience are necessary for language development. Interactionist perspectives emphasize the scaffolding role of the social environment in activating and shaping innate capacities.</p>
+        <ul>
+          <li><strong>Bruner's Language Acquisition Support System (LASS):</strong> <span class="key-term">Jerome Bruner</span> (1983) proposed that social interaction&mdash;particularly structured routines like peekaboo, book reading, and naming games&mdash;provides the essential scaffold for language learning. The LASS complements Chomsky's LAD: biology provides the capacity, but social interaction activates and shapes it.</li>
+          <li><strong>Vygotsky's Zone of Proximal Development:</strong> <span class="key-term">Lev Vygotsky</span> emphasized that language is fundamentally social in origin. Caregivers scaffold language learning by operating within the child's <span class="key-term">zone of proximal development</span>&mdash;the gap between what the child can do alone and what the child can do with assistance.</li>
+          <li><strong>Social pragmatic theory:</strong> <span class="key-term">Michael Tomasello</span> (2003) argued that children learn language through general cognitive abilities (pattern recognition, intention-reading, joint attention) applied within social interactions, rather than through a specialized language module.</li>
+          <li><strong>Child-directed speech (CDS):</strong> Also called "motherese" or "parentese"&mdash;the simplified, high-pitched, melodic speech that adults naturally use with infants. CDS features shorter sentences, exaggerated intonation, repetition, and a focus on the here-and-now, all of which facilitate language learning.</li>
+          <li><strong>Connectionist models:</strong> <span class="key-term">Connectionist</span> (or parallel distributed processing) approaches propose that language is acquired through neural network-like learning mechanisms that detect statistical patterns in language input -- without requiring an innate grammar module. These models have shown that many features of language acquisition (including overregularization errors) can emerge from exposure to large amounts of input processed by general-purpose learning algorithms. Connectionists argue that Chomsky's LAD is unnecessary because the input is richer and more patterned than nativists claim.</li>
+        </ul>
+
+        <table>
+          <tr><th>Theory</th><th>Key Figure(s)</th><th>Primary Mechanism</th><th>Core Strength</th><th>Key Limitation</th></tr>
+          <tr><td>Behaviorist</td><td>Skinner</td><td>Reinforcement, shaping, imitation</td><td>Explains vocabulary learning and pragmatic aspects</td><td>Cannot explain creativity, overregularization, or poverty of stimulus</td></tr>
+          <tr><td>Nativist</td><td>Chomsky</td><td>Innate LAD / Universal Grammar</td><td>Explains universality, speed, creativity, and rule-governed nature</td><td>Underestimates role of input; LAD difficult to test empirically</td></tr>
+          <tr><td>Interactionist</td><td>Bruner, Vygotsky, Tomasello</td><td>Biology + social scaffolding</td><td>Integrates biological and environmental contributions</td><td>Less precise about specific mechanisms than nativist or connectionist models</td></tr>
+          <tr><td>Connectionist</td><td>Rumelhart, Elman</td><td>Statistical pattern detection in neural networks</td><td>Models learning without innate grammar; explains error patterns computationally</td><td>May not fully account for abstract grammatical knowledge</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 2-year-old says "I goed to the park" even though no adult has ever modeled this sentence. This <span class="key-term">overregularization</span> error provides evidence for Chomsky's nativist theory over Skinner's behaviorist account, because the child is applying an internalized grammatical rule (past tense = verb + "-ed") rather than imitating adult speech.</p>
+        </div>
+
+        <p class="citation">Skinner, B. F. (1957). Verbal behavior. Appleton-Century-Crofts.</p>
+        <p class="citation">Chomsky, N. (1959). A review of B. F. Skinner's Verbal Behavior. Language, 35(1), 26&ndash;58.</p>
+        <p class="citation">Bruner, J. (1983). Child's talk: Learning to use language. Oxford University Press.</p>
+      </div>
+
+      <div class="content-section">
+        <h2>Bilingualism and Language Disorders</h2>
+        <p>The theories we have just explored -- behaviorist, nativist, and interactionist -- were developed largely with monolingual children in mind. But more than half the world's population speaks two or more languages, and in the United States, over 20% of school-aged children come from homes where a language other than English is spoken. Understanding how bilingualism affects cognitive development, and knowing when language differences cross the line into language disorders, are essential competencies for clinicians working with diverse populations.</p>
+
+        <h3>Bilingualism and Cognitive Development</h3>
+        <p>For decades, bilingualism was viewed with suspicion -- early-20th-century researchers warned that learning two languages confused children and stunted intellectual growth. Modern research has largely reversed this view. While bilingual children may show a slightly smaller vocabulary in each individual language compared to monolingual peers (a difference that typically narrows by middle childhood), they demonstrate advantages in several domains of cognitive functioning. The most robust finding is the <span class="key-term">bilingual advantage in executive function</span>: bilingual children and adults tend to perform better on tasks requiring inhibitory control, cognitive flexibility, and selective attention. This advantage likely arises because managing two language systems requires the constant suppression of the non-target language, exercising the same executive control mechanisms that support non-linguistic cognitive tasks.</p>
+
+        <p>Clinicians should be aware that apparent language delays in bilingual children are often normal features of dual-language acquisition rather than signs of disorder. Code-switching -- alternating between languages within a conversation or even within a sentence -- was once mistakenly viewed as evidence of confusion but is now understood as a sophisticated linguistic skill that reflects grammatical knowledge of both languages. The critical clinical question when evaluating a bilingual child's language development is whether the child shows delays in <em>both</em> languages, which may signal a genuine disorder, versus delays in only the non-dominant language, which typically reflects normal variation in bilingual development.</p>
+
+        <h3>Language Disorders</h3>
+        <p>When language development deviates significantly from expected milestones in ways not explained by hearing loss, intellectual disability, or lack of language exposure, clinicians must consider the possibility of a <span class="key-term">language disorder</span>. The DSM-5 includes Language Disorder (which encompasses both expressive and receptive deficits) under Communication Disorders, while the research literature has traditionally used the term <span class="key-term">Specific Language Impairment (SLI)</span> -- now increasingly called <span class="key-term">Developmental Language Disorder (DLD)</span> -- to describe children with language deficits in the absence of other neurodevelopmental conditions.</p>
+
+        <p>Children with DLD typically show difficulties with grammatical morphology (verb tenses, plurals, pronouns), sentence structure, and vocabulary, despite otherwise normal nonverbal intelligence. The condition affects approximately 7% of kindergarten-age children and is more common in boys. It tends to persist and can affect academic achievement, social relationships, and later reading ability. A separate condition, <span class="key-term">Social (Pragmatic) Communication Disorder</span>, involves difficulty with the social use of language -- understanding implied meaning, taking turns in conversation, adjusting language to context, and following conversational rules -- while structural language (grammar and vocabulary) is relatively intact. This disorder was introduced as a new diagnosis in the DSM-5 and occupies important differential-diagnostic space between language disorder and autism spectrum disorder.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Note: Differential Diagnosis</strong>
+          <p>Distinguishing between language disorder, social (pragmatic) communication disorder, and autism spectrum disorder is a common EPPP challenge. Language Disorder primarily affects structural language (grammar, vocabulary, sentence formation). Social (Pragmatic) Communication Disorder primarily affects the social use of language (conversational rules, implied meaning, context-dependent communication) while sparing structural language. Autism Spectrum Disorder involves pragmatic deficits alongside restricted, repetitive behaviors -- if the child meets criteria for ASD, the pragmatic communication diagnosis is not given separately. When evaluating bilingual children, assessment must be conducted in both languages by a culturally competent clinician to avoid misdiagnosis of normal bilingual variation as disorder.</p>
+        </div>
+
+        <h3>Pragmatic Development Milestones</h3>
+        <p>Beyond vocabulary and grammar, children must also learn the pragmatic rules of communication -- how to use language appropriately in social contexts. Pragmatic development follows a predictable trajectory that clinicians should know:</p>
+        <ul>
+          <li><strong>12&ndash;18 months:</strong> Joint attention (following and directing another person's gaze), pointing to communicate, turn-taking in proto-conversations</li>
+          <li><strong>2&ndash;3 years:</strong> Topic maintenance in short conversations, simple requests and refusals, beginning to adjust speech for different listeners</li>
+          <li><strong>3&ndash;5 years:</strong> Narrative skills emerge, understanding of conversational repair (clarifying when misunderstood), more sophisticated listener adaptation</li>
+          <li><strong>5&ndash;7 years:</strong> Understanding indirect requests ("Can you close the door?" as a command, not a question), early appreciation of humor and sarcasm</li>
+          <li><strong>7&ndash;12 years:</strong> Full command of conversational rules, understanding of figurative language (idioms, metaphors), skilled negotiation and persuasion</li>
+        </ul>
+
+        <p class="citation">Bialystok, E. (2001). Bilingualism in development: Language, literacy, and cognition. Cambridge University Press.</p>
+        <p class="citation">Bishop, D. V. M., Snowling, M. J., Thompson, P. A., &amp; Greenhalgh, T. (2017). Phase 2 of CATALISE: A multinational and multidisciplinary Delphi consensus study of problems with language development. Journal of Child Psychology and Psychiatry, 58(10), 1068&ndash;1080.</p>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Language milestones:</strong> Cooing (2 months), babbling (6 months), first words (12 months), holophrastic speech (12&ndash;18 months), telegraphic speech (18&ndash;24 months). Know overextension (word used too broadly) and underextension (word used too narrowly).</li>
+          <li><strong>Skinner vs. Chomsky:</strong> Skinner's <em>Verbal Behavior</em> (1957) proposed language is learned through operant conditioning. Chomsky's 1959 review argued reinforcement cannot explain language creativity and triggered the cognitive revolution. Know Skinner's verbal operants (mand, tact, echoic, intraverbal) and Chomsky's LAD, Universal Grammar, and poverty of the stimulus argument.</li>
+          <li><strong>Interactionist theories:</strong> Bruner's LASS (social scaffolding complements LAD), Vygotsky's ZPD, Tomasello's social-pragmatic theory. Child-directed speech (motherese/parentese) facilitates acquisition.</li>
+          <li><strong>Overregularization:</strong> Errors like "goed" and "mouses" support nativist theory -- children extract rules rather than merely imitating adult speech.</li>
+          <li><strong>Bilingual advantage:</strong> Enhanced executive function (inhibitory control, cognitive flexibility). Code-switching is a sign of competence, not confusion. Evaluate language delays in both languages before diagnosing disorder.</li>
+          <li><strong>Language Disorder vs. Social (Pragmatic) Communication Disorder vs. ASD:</strong> Language Disorder affects structure; Pragmatic Communication Disorder affects social use with intact structure; ASD includes pragmatic deficits plus restricted/repetitive behaviors. If ASD criteria are met, do not diagnose Pragmatic Communication Disorder separately.</li>
+          <li><strong>Developmental Language Disorder (DLD):</strong> Formerly called Specific Language Impairment. Affects ~7% of kindergartners, more common in boys. Difficulties with grammar, vocabulary, and sentence structure despite normal nonverbal IQ.</li>
+          <li><strong>Pragmatic milestones:</strong> Joint attention (12&ndash;18 months), topic maintenance (2&ndash;3 years), narrative skills (3&ndash;5 years), indirect requests and humor (5&ndash;7 years), figurative language mastery (7&ndash;12 years).</li>
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+
+
+      <div class="nav-buttons">
+        <a href="bonds-temperament.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Bonds That Shape Us — Attachment, Temperament & Early Emotion</div>
+          </div>
+        </a>
+        <a href="early-childhood.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Discovering the World — Preoperational Thought, Play & Parenting</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

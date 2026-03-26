@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Endocrine Conditions, Neuroimaging & Diagnostics | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Endocrine Conditions, Neuroimaging & Diagnostics</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 7</div>
+        <div class="domain-title">Biopsychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">1</span>The Cerebral Cortex — Lobes, Lateralization & Higher Functions</a></li>
+        <li class="chapter-item"><a href="subcortical-brainstem.html" class="chapter-link"><span class="chapter-number">2</span>Below the Cortex — Thalamus, Limbic System, Brainstem & Cerebellum</a></li>
+        <li class="chapter-item"><a href="learning-encoding.html" class="chapter-link"><span class="chapter-number">3</span>How We Learn — Encoding Strategies & Levels of Processing</a></li>
+        <li class="chapter-item"><a href="memory-architecture.html" class="chapter-link"><span class="chapter-number">4</span>Memory Architecture — Multi-Store Model, Working Memory & LTM</a></li>
+        <li class="chapter-item"><a href="forgetting-amnesia.html" class="chapter-link"><span class="chapter-number">5</span>How Memory Fails — Forgetting, Interference & Amnesia Syndromes</a></li>
+        <li class="chapter-item"><a href="sleep-dreaming.html" class="chapter-link"><span class="chapter-number">6</span>Sleep Architecture — Stages, Circadian Rhythm, Disorders & Dreams</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">7</span>Neurons, Neurotransmitters & Neural Signaling</a></li>
+        <li class="chapter-item"><a href="emotion-arousal.html" class="chapter-link"><span class="chapter-number">8</span>Emotion, Arousal & the Autonomic Nervous System</a></li>
+        <li class="chapter-item"><a href="sensation-psychophysics.html" class="chapter-link"><span class="chapter-number">9</span>Sensation — Transduction, Thresholds & Psychophysics</a></li>
+        <li class="chapter-item"><a href="perception-attention.html" class="chapter-link"><span class="chapter-number">10</span>Perception & Attention — Gestalt, Depth Cues & Selective Processing</a></li>
+        <li class="chapter-item"><a href="neurodegenerative.html" class="chapter-link"><span class="chapter-number">11</span>When the Brain Breaks — Parkinson's, Huntington's, Stroke & Injury</a></li>
+        <li class="chapter-item"><a href="endocrine-neuroimaging.html" class="chapter-link active"><span class="chapter-number">12</span>Endocrine Conditions, Neuroimaging & Diagnostics</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">13</span>Neurocognitive Disorders — Alzheimer's, Vascular & Frontotemporal</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 12 of 13</div>
+        <h1>Endocrine Conditions, Neuroimaging & Diagnostics</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>The Endocrine System: Overview &amp; the Hypothalamic-Pituitary Axis</h2>
+        <p>A 42-year-old woman presents to her primary care physician with complaints of crushing fatigue, unexplained weight gain, difficulty concentrating, and a pervasive sense of hopelessness that has been worsening for months. Her physician initially suspects major depressive disorder and considers a referral for psychotherapy and antidepressant medication. However, a routine blood panel reveals markedly elevated TSH and low free T4 — her thyroid gland is failing, and the symptoms that looked like depression are actually the psychiatric manifestation of hypothyroidism. Within weeks of thyroid hormone replacement, her mood, energy, and cognition return to normal. This scenario, which plays out in clinics every day, illustrates one of the most clinically important principles in biopsychology: the endocrine system profoundly influences brain function, mood, and cognition, and failing to consider hormonal causes of psychiatric symptoms can lead to misdiagnosis and ineffective treatment.</p>
+        <p>The <span class="key-term">endocrine system</span> communicates via hormones secreted into the bloodstream by glands. Unlike the rapid electrochemical signaling of the nervous system, endocrine signaling is slower but produces longer-lasting and more widespread effects. For the EPPP, the critical concept is the tight integration between the nervous and endocrine systems, particularly through the <span class="key-term">hypothalamic-pituitary axis</span>.</p>
+        <div class="definition-box">
+          <strong>Hypothalamic-Pituitary Axis:</strong>
+          <p>The <span class="key-term">hypothalamus</span> serves as the master integrator, linking the nervous system to the endocrine system through the pituitary gland. The <span class="key-term">anterior pituitary</span> (adenohypophysis) releases hormones in response to hypothalamic releasing and inhibiting factors delivered via the hypophyseal portal system. Key anterior pituitary hormones include ACTH (adrenocorticotropic hormone), TSH (thyroid-stimulating hormone), GH (growth hormone), FSH, LH, and prolactin. The <span class="key-term">posterior pituitary</span> (neurohypophysis) stores and releases oxytocin and vasopressin (ADH), which are actually synthesized in the hypothalamus and transported down axons to the posterior pituitary.</p>
+        </div>
+        <p>Endocrine regulation relies on <span class="key-term">negative feedback loops</span>: when circulating hormone levels rise above a set point, the hypothalamus and pituitary reduce stimulatory signals. This is analogous to a thermostat. Disruptions to feedback loops produce the clinical conditions frequently tested on the EPPP.</p>
+        <div class="example-box">
+          <strong>HPA Axis &amp; Stress:</strong>
+          <p>The <span class="key-term">hypothalamic-pituitary-adrenal (HPA) axis</span> is the primary neuroendocrine stress response system. Stress activates the hypothalamus to release CRH (corticotropin-releasing hormone), which stimulates ACTH release from the anterior pituitary, which stimulates cortisol release from the adrenal cortex. Chronically elevated cortisol is associated with hippocampal atrophy, immune suppression, insulin resistance, and psychiatric conditions including depression and PTSD. Dexamethasone suppression test abnormalities (failure to suppress cortisol) have been associated with melancholic depression.</p>
+        </div>
+      </div>
+
+
+      <div class="content-section">
+        <h2>Thyroid Disorders &amp; Psychiatric Manifestations</h2>
+        <p>The <span class="key-term">thyroid gland</span> produces thyroxine (T4) and triiodothyronine (T3), hormones that regulate metabolism, energy, and brain development. The hypothalamic-pituitary-thyroid (HPT) axis controls thyroid function: the hypothalamus releases TRH, which stimulates TSH from the anterior pituitary, which stimulates T3/T4 release from the thyroid.</p>
+        <table>
+          <tr><th>Condition</th><th>Hormonal Pattern</th><th>Psychiatric Symptoms</th><th>Physical Signs</th></tr>
+          <tr><td><span class="key-term">Hypothyroidism</span></td><td>Low T3/T4, elevated TSH</td><td>Depression, cognitive slowing, fatigue, apathy, psychomotor retardation; can mimic major depressive disorder</td><td>Weight gain, cold intolerance, dry skin, constipation, bradycardia, myxedema</td></tr>
+          <tr><td><span class="key-term">Hyperthyroidism</span></td><td>Elevated T3/T4, suppressed TSH</td><td>Anxiety, irritability, emotional lability, insomnia, difficulty concentrating; can mimic generalized anxiety disorder or mania</td><td>Weight loss, heat intolerance, tremor, tachycardia, exophthalmos (Graves' disease)</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>Clinical Pearl &mdash; Thyroid Screening:</strong>
+          <p>Thyroid dysfunction is one of the most common medical mimics of psychiatric disorders. The EPPP tests knowledge that thyroid function should be evaluated (via TSH and free T4 levels) whenever a patient presents with new-onset depression, anxiety, or cognitive complaints, particularly in women over 40, postpartum women, and elderly patients. <span class="key-term">Congenital hypothyroidism</span> (cretinism), if untreated, causes severe intellectual disability, emphasizing the critical role of thyroid hormone in brain development.</p>
+        </div>
+        <p><span class="key-term">Hashimoto's thyroiditis</span> is the most common cause of hypothyroidism in iodine-sufficient areas and is an autoimmune condition. <span class="key-term">Graves' disease</span> is the most common cause of hyperthyroidism and is also autoimmune, caused by thyroid-stimulating antibodies that mimic TSH. Lithium, a first-line mood stabilizer for bipolar disorder, can cause hypothyroidism in 20-30% of patients, requiring regular thyroid monitoring.</p>
+      </div>
+
+
+      <div class="content-section">
+        <h2>Adrenal Gland Disorders</h2>
+        <p>The <span class="key-term">adrenal glands</span> sit atop each kidney and contain two functionally distinct regions. The <span class="key-term">adrenal medulla</span> (inner portion) is part of the sympathetic nervous system and releases epinephrine and norepinephrine during the fight-or-flight response. The <span class="key-term">adrenal cortex</span> (outer portion) produces corticosteroids: glucocorticoids (cortisol), mineralocorticoids (aldosterone), and androgens.</p>
+        <div class="definition-box">
+          <strong>Cushing's Syndrome vs. Addison's Disease:</strong>
+          <p><span class="key-term">Cushing's syndrome</span> results from chronic cortisol excess, caused by exogenous corticosteroid use (most common), pituitary adenoma (Cushing's disease), or adrenal tumor. Psychiatric features include depression (most common, ~50-80%), cognitive impairment, psychosis, and emotional lability. Physical signs: central obesity, moon face, buffalo hump, purple striae, easy bruising, osteoporosis, and hypertension. <span class="key-term">Addison's disease</span> results from adrenal insufficiency (insufficient cortisol and aldosterone production). Psychiatric features include fatigue, depression, irritability, social withdrawal, and cognitive slowing. Physical signs: hyperpigmentation, weight loss, hypotension, salt craving, and potentially life-threatening adrenal crisis. The classic EPPP distinction is that Cushing's produces cortisol excess effects while Addison's produces cortisol deficiency effects.</p>
+        </div>
+        <h3>Sex Hormones &amp; Behavioral Effects</h3>
+        <p><span class="key-term">Sex hormones</span> (estrogen, progesterone, testosterone) are produced primarily by the gonads and also by the adrenal cortex. These hormones have significant effects on brain function and behavior throughout the lifespan.</p>
+        <ul>
+          <li><strong>Testosterone:</strong> Associated with aggression, dominance behavior, spatial cognition, and libido. Declining testosterone in older males (andropause) can produce fatigue, depressed mood, and cognitive changes. Anabolic steroid abuse can cause mood instability, aggression ("roid rage"), and psychotic symptoms.</li>
+          <li><strong>Estrogen:</strong> Has neuroprotective effects, modulates serotonin receptors, and influences mood regulation. Estrogen withdrawal contributes to postpartum depression, perimenopausal mood changes, and premenstrual dysphoric disorder (PMDD). Estrogen decline after menopause is associated with increased risk for Alzheimer's disease.</li>
+          <li><strong>Oxytocin:</strong> Released during childbirth, breastfeeding, and social bonding. Promotes trust, pair bonding, and social recognition. Sometimes called the "bonding hormone," though its effects are context-dependent and more nuanced than popular accounts suggest.</li>
+        </ul>
+        <div class="citation">Nemeroff, C. B. (2007). The Neurobiology of Depression. Scientific American, 296(6), 42-49. The HPA axis dysregulation model of depression remains one of the most replicated findings in biological psychiatry.</div>
+      </div>
+
+
+      <div class="content-section">
+        <h2>Structural Neuroimaging: CT &amp; MRI</h2>
+        <p>Having explored how the endocrine system — including the adrenal glands and sex hormones — shapes brain function and behavior, we now turn to the tools clinicians use to actually look inside the living brain. Imagine a 68-year-old man who collapses at a family dinner, suddenly unable to speak or move his right arm. Within minutes, paramedics rush him to the emergency department. The neurologist needs to answer one urgent question before treatment can begin: Is this a stroke caused by a blocked blood vessel, or by bleeding in the brain? The answer determines whether a clot-busting drug could save brain tissue — or kill the patient. That answer comes from neuroimaging, and the choice of which scan to order in those first critical minutes is a decision the EPPP expects you to understand.</p>
+        <p>Neuroimaging techniques fall into two broad categories: <em>structural</em> methods that reveal the brain's physical anatomy, and <em>functional</em> methods that measure brain activity in real time. This section focuses on the structural side — the scans that let clinicians visualize tumors, hemorrhages, atrophy, and white matter damage. In the next section, we will examine functional imaging. For now, think of structural neuroimaging as the brain's architectural blueprint: it shows you what is there (or what is missing), even when the building looks quiet from the outside.</p>
+        <p>The two workhorses of structural neuroimaging are CT and MRI. Each has a distinct mechanism, and each earns its clinical role because of a unique profile of strengths and limitations. Understanding when to choose one over the other — and what each scan can and cannot show — is essential knowledge for the EPPP and for any psychologist working alongside medical teams.</p>
+        <table>
+        <tr><th>Modality</th><th>Mechanism</th><th>Strengths</th><th>Limitations</th><th>Primary Uses</th></tr>
+        <tr><td><span class="key-term">CT (computed tomography)</span></td><td>X-ray beams rotated around the head; computer reconstruction of cross-sectional images</td><td>Fast (minutes), widely available, excellent for bone and acute hemorrhage</td><td>Ionizing radiation, lower soft tissue resolution than MRI</td><td>Emergency evaluation of acute stroke (rule out hemorrhage), head trauma, skull fractures</td></tr>
+        <tr><td><span class="key-term">MRI (magnetic resonance imaging)</span></td><td>Strong magnetic field aligns hydrogen atoms; radiofrequency pulses cause signal emission detected by receiver coils</td><td>Superior soft tissue contrast, no ionizing radiation, multiplanar imaging</td><td>Slower, more expensive, contraindicated with certain metal implants and pacemakers, claustrophobia</td><td>Detailed brain anatomy, white matter lesions (MS plaques), tumor characterization, hippocampal atrophy</td></tr>
+        </table>
+        <p>Return to our collapsing dinner guest. The emergency physician orders a <span class="key-term">CT (computed tomography)</span> scan — not because it produces the most beautiful brain images, but because speed saves lives. A CT scanner rotates X-ray beams around the head and reconstructs cross-sectional slices in just a few minutes. It excels at detecting acute hemorrhage, which appears as a bright white area on the scan. If the CT shows no bleeding, clinicians can confidently proceed with clot-busting thrombolytic therapy. Think of CT as the rapid-response tool: fast, widely available, and superb at answering binary emergency questions — is there blood, is there a fracture, is there gross structural damage?</p>
+        <p>The tradeoff is resolution. CT uses ionizing radiation (a consideration when repeated scans are needed) and offers relatively modest soft-tissue contrast compared to MRI. If you want to distinguish gray matter from white matter in fine detail, see subtle tissue changes in the hippocampus, or characterize a tumor's internal structure, CT falls short. That is where <span class="key-term">MRI (magnetic resonance imaging)</span> takes center stage. MRI harnesses a powerful magnetic field to align hydrogen atoms in brain tissue; radiofrequency pulses then knock those atoms out of alignment, and as they snap back, they emit signals that receiver coils detect and translate into exquisitely detailed images. Because different tissues contain different amounts of water and fat, MRI generates superb soft-tissue contrast — making it the preferred modality for evaluating demyelinating diseases like multiple sclerosis, measuring hippocampal atrophy in Alzheimer's disease, and mapping tumor boundaries before surgery.</p>
+        <p>A clinical psychologist conducting a neuropsychological evaluation of a 55-year-old woman with progressive memory complaints might recommend an MRI rather than a CT. Why? Because MRI can reveal hippocampal volume loss — a structural hallmark of early Alzheimer's disease — with a sensitivity that CT simply cannot match. Similarly, a neurologist evaluating a young adult with intermittent vision loss and limb numbness would order an MRI to look for the periventricular white matter plaques characteristic of multiple sclerosis. These diagnostic decisions hinge on understanding each modality's strengths, a conceptual distinction the EPPP frequently tests.</p>
+        <p>MRI's limitations are practical rather than scientific: scans take longer (often 30–60 minutes), the machine is loud and confining (problematic for patients with claustrophobia or young children who cannot hold still), and the powerful magnet makes MRI dangerous for patients with certain ferromagnetic implants, older pacemakers, or metallic foreign bodies. On the EPPP, questions about MRI contraindications often feature a patient with a cardiac pacemaker — the answer is almost always that MRI is contraindicated in that scenario.</p>
+        <div class="definition-box">
+        <strong>Key MRI Variants:</strong>
+        <p>Beyond standard structural MRI, several specialized sequences provide information no conventional scan can offer. <span class="key-term">Diffusion-weighted imaging (DWI)</span> detects the restricted movement of water molecules inside swollen, oxygen-starved brain cells — a signature of early ischemic stroke. Remarkably, DWI can reveal stroke damage within minutes of symptom onset, well before a CT scan shows any abnormality, making it the gold standard for acute stroke diagnosis when MRI is available quickly. <span class="key-term">Diffusion tensor imaging (DTI)</span> extends this principle by tracking the directional flow of water along axon bundles, producing vivid three-dimensional maps of white matter pathways — a technique called tractography. Clinicians and researchers use DTI to assess traumatic axonal injury after head trauma and to study white matter connectivity in conditions ranging from autism spectrum disorder to schizophrenia. Finally, <span class="key-term">FLAIR (Fluid-Attenuated Inversion Recovery)</span> is a sequence that suppresses the bright signal normally produced by cerebrospinal fluid, making periventricular white matter lesions — such as the plaques of multiple sclerosis — dramatically more visible against a dark fluid background. Think of FLAIR as removing the "glare" of spinal fluid so that subtle lesions stand out clearly.</p>
+        </div>
+        <p>A helpful mnemonic for remembering the CT-versus-MRI decision tree: <em>"CT for the crash, MRI for the map."</em> When a patient arrives in crisis — trauma, suspected hemorrhage, acute neurological emergency — CT provides fast, reliable answers. When a clinician needs a detailed map of brain structure to guide diagnosis, treatment planning, or longitudinal monitoring, MRI delivers unmatched anatomical precision. Both modalities reveal anatomy rather than activity, which is why clinicians turn to functional neuroimaging — the subject of the next section — when they need to understand what the brain is <em>doing</em>, not just what it looks like.</p>
+        <h2>Functional Neuroimaging: fMRI, PET &amp; SPECT</h2>
+        <p>Imagine a neurologist reviewing MRI scans of a patient with early-onset memory complaints. The structural images look pristine — no tumors, no lesions, no obvious atrophy. Yet the patient is clearly declining. Something is going wrong in this brain, but the anatomy alone doesn't reveal it. The problem isn't a missing structure; it's a malfunctioning process. To see that, the clinician needs a window not into what the brain looks like, but into what the brain is doing. This is the fundamental shift from structural to functional neuroimaging — and it changes everything about how we detect, monitor, and understand neurological and psychiatric disease.</p>
+        <p>As we discussed in the preceding section, CT and MRI excel at revealing the brain's anatomy — its structural architecture. But a building's blueprint tells you nothing about which rooms have the lights on. Functional neuroimaging captures brain activity in real time (or near-real time), measuring metabolic or hemodynamic changes associated with neural activity. When neurons fire more intensely in a region, that region consumes more glucose, demands more oxygen, and receives increased blood flow. Functional imaging modalities exploit these metabolic signatures to create maps of brain activity, allowing clinicians and researchers to observe the living brain at work — during a memory task, while processing language, or even at rest to detect abnormal patterns of metabolism that signal disease.</p>
+        <p>Three functional neuroimaging modalities dominate both clinical practice and EPPP exam questions: <span class="key-term">fMRI</span>, <span class="key-term">PET</span>, and <span class="key-term">SPECT</span>. Each measures a different physiological proxy for neural activity, and each has distinctive strengths, limitations, and clinical niches. Understanding how they differ — in mechanism, resolution, and clinical application — is essential for making informed imaging decisions and for navigating the exam confidently. The table below summarizes the critical comparisons, followed by a deeper exploration of each modality.</p>
+        <table>
+        <tr><th>Modality</th><th>Mechanism</th><th>Temporal Resolution</th><th>Spatial Resolution</th><th>Primary Uses</th></tr>
+        <tr><td><span class="key-term">fMRI</span></td><td>Detects blood-oxygen-level-dependent (BOLD) signal changes; increased neural activity = increased local blood flow = increased oxygenated hemoglobin</td><td>Seconds (~1-2 sec)</td><td>Excellent (millimeters)</td><td>Research on cognitive processes, presurgical functional mapping, language lateralization</td></tr>
+        <tr><td><span class="key-term">PET</span></td><td>Radioactive tracer (e.g., FDG labeled with fluorine-18) injected; emits positrons that produce gamma rays detected by scanner</td><td>Minutes</td><td>Good (4-6 mm)</td><td>Detecting hypometabolism in Alzheimer's (temporoparietal), dopamine system imaging (Parkinson's), amyloid plaque imaging</td></tr>
+        <tr><td><span class="key-term">SPECT</span></td><td>Radioactive tracer emitting gamma rays directly; single-photon detection</td><td>Minutes</td><td>Lower than PET (8-10 mm)</td><td>Cerebral blood flow patterns, epileptic focus localization (ictal SPECT), differentiating dementia subtypes</td></tr>
+        </table>
+        <p>Let's unpack each modality in clinical context. <span class="key-term">fMRI</span> — functional magnetic resonance imaging — is the workhorse of cognitive neuroscience research and an increasingly important clinical tool. It leverages the same MRI hardware discussed in the previous section, but instead of creating a single anatomical snapshot, it tracks moment-to-moment changes in blood oxygenation. When a brain region becomes more active, it receives a surge of oxygenated blood that exceeds its immediate metabolic demands — a phenomenon known as the blood-oxygen-level-dependent (BOLD) response. Because oxygenated and deoxygenated hemoglobin have different magnetic properties, the MRI scanner can detect this shift and map which regions "light up" during a task. The result is spatial resolution measured in millimeters and temporal resolution of about one to two seconds — fast enough to track which brain areas engage during language tasks, memory retrieval, or emotional processing. In clinical settings, fMRI is invaluable for presurgical mapping: before removing a brain tumor near Broca's area, a neurosurgeon can use fMRI to confirm exactly where language function resides in that individual patient, helping preserve eloquent cortex during surgery.</p>
+        <p><span class="key-term">PET</span> — positron emission tomography — takes a fundamentally different approach. Instead of exploiting magnetic properties of blood, PET requires injecting a radioactive tracer into the bloodstream. The most commonly used tracer, fluorodeoxyglucose (FDG) labeled with fluorine-18, is a glucose analog that active neurons absorb. As the tracer decays, it emits positrons that collide with nearby electrons, producing pairs of gamma rays that the scanner's ring of detectors captures. The resulting image reveals which brain regions are consuming the most glucose — a direct metabolic map of neural activity. Consider a 72-year-old patient presenting with progressive memory loss and word-finding difficulty: a PET scan showing characteristic temporoparietal hypometabolism — reduced glucose uptake in the temporal and parietal lobes — provides strong evidence for Alzheimer's disease, even before significant structural atrophy appears on MRI. Newer PET tracers can even bind directly to amyloid plaques or tau tangles, offering molecular-level diagnostic specificity that no other imaging modality can match. PET's temporal resolution is slower than fMRI (minutes rather than seconds), but its ability to image specific neurotransmitter systems — such as dopamine receptor density in Parkinson's disease — makes it clinically irreplaceable for certain diagnostic questions.</p>
+        <p><span class="key-term">SPECT</span> — single-photon emission computed tomography — is PET's more accessible cousin. Like PET, SPECT uses injected radioactive tracers, but these tracers emit single gamma rays directly rather than positron-electron pairs. The technology is simpler and more widely available than PET, though it trades off some spatial resolution (typically 8–10 mm versus PET's 4–6 mm). SPECT's most distinctive clinical application involves epilepsy: during an ictal SPECT study, a tracer is injected at the moment a seizure begins, "freezing" the cerebral blood flow pattern of the seizure focus. Because increased blood flow marks the seizure's epicenter, the resulting image can guide surgical planning with remarkable precision. SPECT is also valuable for differentiating dementia subtypes — for instance, distinguishing Alzheimer's disease (posterior cerebral blood flow reduction) from frontotemporal dementia (anterior blood flow reduction) when clinical presentation alone is ambiguous.</p>
+        <p>A key distinction worth committing to memory: fMRI requires no radiation exposure and no injected tracers, making it the safest option for repeated measurements and research protocols involving healthy volunteers. PET and SPECT both involve ionizing radiation from their radioactive tracers, which limits how often they can be repeated in the same patient. However, PET and SPECT offer unique biochemical specificity — they can image neurotransmitter receptor density, metabolic rate, and even the molecular pathology of disease — capabilities that fMRI simply cannot provide. Think of fMRI as showing you where the brain is working hardest right now, while PET and SPECT can show you what molecules and metabolic processes are at play in those regions.</p>
+        <div class="example-box">
+        <strong>EPPP Application &mdash; Choosing the Right Imaging:</strong>
+        <p>For the EPPP, know these clinical decision rules: (1) <strong>Acute hemorrhagic stroke</strong> = CT first (fast, detects blood immediately); (2) <strong>Acute ischemic stroke</strong> = MRI with DWI (most sensitive early); (3) <strong>MS white matter plaques</strong> = MRI with FLAIR; (4) <strong>Alzheimer's disease</strong> = PET (temporoparietal hypometabolism) or MRI (hippocampal atrophy); (5) <strong>Epileptic focus localization</strong> = ictal SPECT or interictal PET; (6) <strong>Presurgical language mapping</strong> = fMRI or Wada test; (7) <strong>Research on real-time cognition</strong> = fMRI (best combination of spatial and temporal resolution among non-invasive methods). A useful mnemonic for functional modalities: "fMRI for function in real time, PET for pathology at the molecular level, SPECT for seizures and blood flow." These rules integrate the structural imaging decisions from the previous section with the functional modalities covered here — together, they form a comprehensive imaging decision framework that will serve you well on exam day and in clinical practice.</p>
+        </div>
+        <h2>Electrophysiological Methods: EEG &amp; Evoked Potentials</h2>
+        <p>The <span class="key-term">electroencephalogram (EEG)</span> records electrical activity from the scalp using surface electrodes. It has excellent temporal resolution (milliseconds) but poor spatial resolution compared to neuroimaging. EEG is the primary diagnostic tool for epilepsy and is essential for sleep staging.</p>
+        <h3>EEG Frequency Bands</h3>
+        <table>
+          <tr><th>Band</th><th>Frequency</th><th>Associated State</th></tr>
+          <tr><td>Delta</td><td>0.5-4 Hz</td><td>Deep sleep (NREM Stage 3); pathological if present during waking in adults (brain damage, encephalopathy)</td></tr>
+          <tr><td>Theta</td><td>4-8 Hz</td><td>Drowsiness, light sleep, meditative states; normal in children; may indicate pathology in awake adults</td></tr>
+          <tr><td>Alpha</td><td>8-13 Hz</td><td>Relaxed wakefulness with eyes closed; prominent over occipital regions; attenuates when eyes open ("alpha blocking")</td></tr>
+          <tr><td>Beta</td><td>13-30 Hz</td><td>Active thinking, concentration, anxiety; prominent over frontal regions</td></tr>
+          <tr><td>Gamma</td><td>&gt;30 Hz</td><td>Higher cognitive processing, perceptual binding; associated with consciousness</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>Evoked Potentials (EPs):</strong>
+          <p><span class="key-term">Evoked potentials</span> are EEG recordings time-locked to specific sensory stimuli, averaged over many trials to extract signal from noise. Types include visual evoked potentials (VEPs), brainstem auditory evoked responses (BAERs), and somatosensory evoked potentials (SSEPs). The <span class="key-term">P300</span> is a cognitive evoked potential (event-related potential, or ERP) appearing ~300 ms after a rare target stimulus. The P300 amplitude is reduced in schizophrenia and Alzheimer's disease and is used in research on attention and working memory. Evoked potentials are particularly useful for detecting subclinical demyelination in multiple sclerosis.</p>
+        </div>
+      </div>
+
+
+      <div class="content-section">
+        <h2>Other Diagnostic Procedures</h2>
+        <h3>Lumbar Puncture (Spinal Tap)</h3>
+        <p>A <span class="key-term">lumbar puncture</span> involves inserting a needle into the subarachnoid space (typically L3-L4 or L4-L5 level) to collect cerebrospinal fluid (CSF) for analysis. Indications include suspected meningitis or encephalitis, subarachnoid hemorrhage (when CT is negative), normal pressure hydrocephalus (therapeutic and diagnostic), and certain dementia evaluations (CSF biomarkers for Alzheimer's: decreased amyloid-beta-42, increased tau and phospho-tau).</p>
+        <h3>The Wada Test (Intracarotid Amobarbital Procedure)</h3>
+        <div class="definition-box">
+          <strong>Wada Test:</strong>
+          <p>The <span class="key-term">Wada test</span> involves injecting a barbiturate (sodium amobarbital) into one internal carotid artery at a time, temporarily anesthetizing one hemisphere. While one hemisphere is "offline," the patient is tested for language and memory functions to determine hemispheric dominance. Historically used before epilepsy surgery to identify the language-dominant hemisphere and assess whether the contralateral hemisphere can support memory after temporal lobectomy. Increasingly being replaced by fMRI for language lateralization, though Wada remains important for memory adequacy testing.</p>
+        </div>
+        <h3>Neuropsychological Assessment in Diagnostic Context</h3>
+        <p>Neuropsychological testing complements neuroimaging by providing sensitive measures of cognitive function. Key assessment batteries and their applications include:</p>
+        <ul>
+          <li><strong>Halstead-Reitan Neuropsychological Battery:</strong> Comprehensive fixed battery measuring attention, motor function, sensory-perceptual abilities, language, and abstract reasoning. Includes the Category Test, Tactual Performance Test, Trail Making Tests (A and B), and Finger Oscillation Test.</li>
+          <li><strong>Luria-Nebraska Neuropsychological Battery:</strong> Based on Luria's theory of functional systems; includes scales for motor function, rhythm, tactile function, visual function, receptive and expressive speech, writing, reading, arithmetic, memory, and intellectual processes.</li>
+          <li><strong>Boston Diagnostic Aphasia Examination (BDAE):</strong> Comprehensive assessment of language function used to classify aphasia type and severity.</li>
+          <li><strong>Wisconsin Card Sorting Test (WCST):</strong> Measures executive function, cognitive flexibility, and abstract reasoning; sensitive to frontal lobe dysfunction. Perseverative errors suggest prefrontal pathology.</li>
+        </ul>
+        <div class="citation">Lezak, M. D., Howieson, D. B., Bigler, E. D., &amp; Tranel, D. (2012). Neuropsychological Assessment (5th ed.). Oxford University Press. The standard reference for clinical neuropsychological assessment methodology.</div>
+      </div>
+
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Hypothalamus</strong> links nervous and endocrine systems through the pituitary; anterior pituitary releases ACTH, TSH, GH, FSH, LH, prolactin; posterior pituitary releases oxytocin and vasopressin</li>
+          <li><strong>HPA axis</strong>: hypothalamus (CRH) &rarr; anterior pituitary (ACTH) &rarr; adrenal cortex (cortisol); chronic elevation = hippocampal atrophy, immune suppression, depression</li>
+          <li><strong>Hypothyroidism</strong> mimics depression; <strong>hyperthyroidism</strong> mimics anxiety/mania. Always screen thyroid when psychiatric symptoms present</li>
+          <li><strong>Lithium</strong> causes hypothyroidism in 20-30% of patients; requires thyroid monitoring</li>
+          <li><strong>Cushing's</strong> = cortisol excess (moon face, central obesity, depression); <strong>Addison's</strong> = cortisol deficiency (hyperpigmentation, fatigue, hypotension)</li>
+          <li><strong>CT</strong>: fast, best for acute hemorrhage and bone; <strong>MRI</strong>: best soft tissue resolution, no radiation</li>
+          <li><strong>DWI-MRI</strong>: earliest detection of ischemic stroke; <strong>FLAIR-MRI</strong>: best for MS plaques</li>
+          <li><strong>fMRI</strong> measures BOLD signal; best spatial resolution among functional methods; used for presurgical mapping</li>
+          <li><strong>PET</strong>: detects Alzheimer's hypometabolism (temporoparietal), dopamine system (Parkinson's); uses radioactive tracers</li>
+          <li><strong>EEG</strong>: best temporal resolution (ms); primary tool for epilepsy diagnosis; alpha = relaxed wakefulness, delta = deep sleep</li>
+          <li><strong>P300 ERP</strong>: reduced amplitude in schizophrenia and Alzheimer's; ~300 ms after rare target stimulus</li>
+          <li><strong>Wada test</strong>: anesthetizes one hemisphere to lateralize language; being replaced by fMRI</li>
+          <li><strong>WCST</strong>: measures executive function/cognitive flexibility; perseverative errors = frontal lobe dysfunction</li>
+          <li><strong>Halstead-Reitan</strong>: fixed comprehensive battery; <strong>Luria-Nebraska</strong>: based on functional systems theory</li>
+        </ul>
+      </div>
+
+
+
+      <div class="nav-buttons">
+        <a href="neurodegenerative.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">When the Brain Breaks — Parkinson's, Huntington's, Stroke & Injury</div>
+          </div>
+        </a>
+        <a href="neurocognitive.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Neurocognitive Disorders — Alzheimer's, Vascular & Frontotemporal</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When We're Together — Group Performance, Decisions & Social Roles | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>When We're Together — Group Performance, Decisions & Social Roles</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cultural-identity.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From — Cultural Roots, Self-Concept & Social Identity</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">2</span>How We Judge — Attribution Theory & Causal Explanations</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">3</span>The Shortcuts We Take — Cognitive Biases, Heuristics & Impression Formation</a></li>
+        <li class="chapter-item"><a href="attitudes-dissonance.html" class="chapter-link"><span class="chapter-number">4</span>What We Believe — Attitudes, Dissonance & Self-Perception</a></li>
+        <li class="chapter-item"><a href="persuasion-influence.html" class="chapter-link"><span class="chapter-number">5</span>How We're Moved — Persuasion, ELM & Cialdini's Principles</a></li>
+        <li class="chapter-item"><a href="conformity-obedience.html" class="chapter-link"><span class="chapter-number">6</span>The Power of the Situation — Conformity, Obedience & Compliance</a></li>
+        <li class="chapter-item"><a href="attraction-prosocial.html" class="chapter-link"><span class="chapter-number">7</span>Why We Connect — Attraction, Love, Altruism & Helping</a></li>
+        <li class="chapter-item"><a href="prejudice-discrimination.html" class="chapter-link"><span class="chapter-number">8</span>Where We Break — Prejudice, Stereotypes & Discrimination</a></li>
+        <li class="chapter-item"><a href="group-dynamics.html" class="chapter-link active"><span class="chapter-number">9</span>When We're Together — Group Performance, Decisions & Social Roles</a></li>
+        <li class="chapter-item"><a href="acculturation-models.html" class="chapter-link"><span class="chapter-number">10</span>Between Two Worlds — Berry, Cross, Helms & Racial Identity Development</a></li>
+        <li class="chapter-item"><a href="multicultural-competence.html" class="chapter-link"><span class="chapter-number">11</span>Across the Divide — Sue's Framework, APA Guidelines & Cultural Formulation</a></li>
+        <li class="chapter-item"><a href="health-disparities.html" class="chapter-link"><span class="chapter-number">12</span>Barriers to Treatment — Health Disparities, Microaggressions & Social Justice</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 12</div>
+        <h1>When We're Together — Group Performance, Decisions & Social Roles</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>How Groups Affect Performance</h2>
+        <p>Anyone who has ever worked on a group project knows an uncomfortable truth: groups can bring out both the best and the worst in their members. A surgical team performing flawlessly under pressure. A corporate board ignoring every warning sign before a catastrophic decision. A therapy group where one member's breakthrough inspires everyone else to dig deeper. The question for social psychology &mdash; and for the EPPP &mdash; is not simply whether groups help or hurt performance, but <em>under what conditions</em> each outcome occurs. The answer involves several well-documented phenomena, each with distinct mechanisms and predictable boundary conditions.</p>
+        <h3>Social Facilitation</h3>
+        <div class="definition-box">
+          <strong>Social Facilitation (Zajonc, 1965)</strong>
+          <p>The presence of others enhances performance on <strong>simple or well-learned tasks</strong> (dominant responses) but impairs performance on <strong>complex or novel tasks</strong> (non-dominant responses). Robert Zajonc proposed that the presence of others increases physiological arousal, which strengthens the emission of the dominant response &mdash; whatever response is most likely in that situation.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>An experienced pianist performs better in concert (audience present) than during practice alone &mdash; the well-practiced responses are facilitated. A beginning pianist makes more mistakes in concert because arousal strengthens their dominant (incorrect) responses. This same principle explains why expert pool players make more shots with observers while novices make fewer.</p>
+        </div>
+
+        <h3>Social Loafing</h3>
+        <div class="definition-box">
+          <strong>Social Loafing</strong>
+          <p>The tendency for individuals to exert less effort when working in a group than when working alone. First demonstrated by Ringelmann (1913), who found that people pulling a rope exerted less force in groups than individually. This occurs when individual contributions are not identifiable and when the task feels unimportant or when others are perceived as not trying.</p>
+        </div>
+        <p>Social loafing is reduced when: individual contributions are identifiable, the task is meaningful or personally involving, the group is small, group members are friends, and in collectivist cultures (where group goals are more salient).</p>
+
+        <h3>Deindividuation</h3>
+        <div class="definition-box">
+          <strong>Deindividuation</strong>
+          <p>A loss of self-awareness and individual accountability that occurs in group situations, especially when anonymity is high. Deindividuated individuals are more likely to engage in impulsive, antisocial, or atypical behavior because the normal restraints of self-monitoring are weakened. Contributing factors include anonymity, arousal, group size, and reduced personal responsibility.</p>
+        </div>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>Zimbardo (1970) demonstrated that participants wearing hoods (anonymous) delivered longer shocks than those wearing name tags. This principle extends to online behavior: the anonymity of the internet can produce deindividuation effects, contributing to cyberbullying and aggressive online behavior.</p>
+        </div>
+        <p class="citation">Zajonc, R. B. (1965). Social facilitation. Science, 149(3681), 269&ndash;274.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Group Decision-Making</h2>
+        <h3>Groupthink</h3>
+        <div class="definition-box">
+          <strong>Groupthink (Janis, 1972)</strong>
+          <p><span class="key-term">Groupthink</span> is a deterioration of mental efficiency, reality testing, and moral judgment resulting from in-group pressures. It occurs in highly cohesive groups with strong leaders, insulation from outside opinions, and high stress. The group's desire for unanimity overrides realistic appraisal of alternatives.</p>
+        </div>
+        <p>Symptoms of groupthink include:</p>
+        <ul>
+          <li><strong>Illusion of invulnerability:</strong> Excessive optimism and risk-taking</li>
+          <li><strong>Collective rationalization:</strong> Discounting warnings that challenge assumptions</li>
+          <li><strong>Belief in inherent morality:</strong> Ignoring ethical consequences of decisions</li>
+          <li><strong>Stereotyping out-groups:</strong> Viewing opponents as weak or stupid</li>
+          <li><strong>Pressure on dissenters:</strong> Members who question the group are pressured to conform</li>
+          <li><strong>Self-censorship:</strong> Members withhold dissenting opinions</li>
+          <li><strong>Illusion of unanimity:</strong> Silence is interpreted as agreement</li>
+          <li><strong>Self-appointed mindguards:</strong> Members shield the group from contradictory information</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>Prevention of Groupthink</strong>
+          <p>Janis recommended: assigning a devil's advocate, encouraging open debate, inviting outside experts, having the leader withhold their opinion initially, and holding a "second chance" meeting to reconsider decisions. These strategies are relevant to clinical team decision-making and organizational consulting.</p>
+        </div>
+
+        <h3>Group Polarization</h3>
+        <div class="definition-box">
+          <strong>Group Polarization</strong>
+          <p>The tendency for group discussion to strengthen the average initial position of group members. If members initially lean toward risk, discussion makes them riskier (<span class="key-term">risky shift</span>). If they lean toward caution, discussion makes them more cautious. The group does not move to a moderate position &mdash; it moves to a more extreme version of where it started.</p>
+        </div>
+        <p>Two mechanisms explain group polarization: <strong>persuasive arguments</strong> (hearing new arguments supporting the dominant position) and <strong>social comparison</strong> (learning that others share your view, but more extremely, motivating you to distinguish yourself by being even more extreme).</p>
+        <p class="citation">Janis, I. L. (1972). Victims of groupthink. Houghton Mifflin.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Social Roles &amp; the Stanford Prison Experiment</h2>
+
+        <p>Having explored how groups make decisions — and how those decisions can go terribly wrong through phenomena like groupthink — we now turn to an even more fundamental question: What happens to individuals when they step into social roles within a group? Can the mere assignment of a role change how a person thinks, feels, and behaves? The answer, as one of psychology's most famous and controversial studies demonstrated, is a resounding and unsettling yes. When we examined group decision-making, we saw how group membership shapes what people <em>think</em>. Now we examine how it shapes what people <em>do</em> — sometimes in ways that would be unrecognizable to the individuals themselves.</p>
+
+        <p>Imagine this scenario: A group of psychologically healthy, well-adjusted college students volunteers for a two-week study on prison life. They are screened carefully — no criminal history, no psychological disorders, no history of substance abuse. By every measure, they are ordinary, prosocial young men. Yet within 36 hours of the study's beginning, some of these same individuals are forcing their peers to do push-ups as punishment, stripping them of their clothing, and placing them in solitary confinement. Others — those assigned to be prisoners — are sobbing uncontrollably, experiencing psychosomatic rashes, and showing signs of acute emotional breakdown. What could possibly produce such a dramatic transformation in such a short time? The answer lies in the extraordinary power of <span class="key-term">social roles</span> — the behavioral expectations that accompany a given position in a social structure.</p>
+
+        <div class="definition-box">
+        <strong>Stanford Prison Experiment (Zimbardo, 1971)</strong>
+        <p>In one of the most dramatic demonstrations of situational power in the history of social psychology, Philip Zimbardo randomly assigned college students to be "guards" or "prisoners" in a simulated prison constructed in the basement of Stanford University's psychology building. The random assignment is critical: there were no pre-existing differences between the two groups. Yet within days, guards became increasingly authoritarian and abusive — devising creative punishments, dehumanizing prisoners, and relishing their authority — while prisoners became passive, distressed, and psychologically deteriorated. The study was terminated after only 6 days (of a planned 14) due to the alarming deterioration of participants' well-being. Zimbardo concluded that <strong>situational forces and social roles</strong> can powerfully override individual dispositions, suggesting that cruelty is less about "bad apples" and more about "bad barrels."</p>
+        </div>
+
+        <p>The implications of this study extend well beyond the laboratory. Consider why it matters for clinicians: When a client describes behaving in ways that seem "out of character" — a normally gentle parent who becomes punitive in a high-authority workplace role, a compassionate nurse who grows callous after years in an understaffed institution, a soldier who commits atrocities during wartime — the Stanford Prison Experiment reminds us to look beyond individual personality and consider the <em>situational architecture</em> that surrounds the person. The roles we occupy come with scripts, and those scripts can be extraordinarily powerful in directing behavior.</p>
+
+        <div class="example-box">
+        <strong>Key Takeaway</strong>
+        <p>The Stanford Prison Experiment illustrates the power of <strong>situational factors</strong> over personality. It supports the fundamental attribution error in reverse: we routinely assume people's behavior reflects who they are — their character, their values, their dispositions — but this study showed that normal, psychologically healthy individuals can behave cruelly when placed in roles that sanction and encourage it. A guard who humiliates a prisoner is not necessarily a sadistic person; he may be a perfectly ordinary person who has internalized the behavioral expectations of a role that grants unchecked authority. The study also raised serious ethical concerns about psychological harm to participants, concerns that helped reshape how institutional review boards evaluate research involving human subjects.</p>
+        </div>
+
+        <p>For EPPP preparation, it is essential to understand not only the study's findings but also its significant limitations and the ethical controversies it generated. Zimbardo's study has been re-examined extensively in recent decades, and contemporary scholars have raised serious questions about the degree to which the findings can be taken at face value. Understanding these criticisms demonstrates the kind of critical thinking about research methodology that the EPPP expects.</p>
+
+        <div class="clinical-note">
+        <strong>Ethical Note</strong>
+        <p>The Stanford Prison Experiment has been criticized for significant methodological problems, including demand characteristics (guards may have behaved as they believed the experimenters wanted them to), lack of fully informed consent about the specific psychological risks participants would face, and Zimbardo's problematic dual role as both lead researcher and "prison superintendent" — meaning he was simultaneously an objective scientist and an active participant in the social system he was studying. Some critics have also argued that Zimbardo overstated the power of the situation, noting that not all guards became abusive and that individual differences still played a meaningful role. Despite these substantial criticisms, the study remains one of the most cited experiments in social psychology and is frequently tested on the EPPP, both for its core findings about situational influence and as an illustration of ethical issues in psychological research.</p>
+        </div>
+
+        <p>As we move into the next section on stages of group development, keep the Stanford Prison Experiment in mind as a vivid backdrop. Groups are not static — they evolve over time, and the roles within them shift and solidify as the group matures. Understanding how groups develop helps explain how role expectations become entrenched and why the dynamics Zimbardo observed escalated so rapidly in such a short period.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Stages of Group Development</h2>
+        <p>Having explored how powerfully social roles can shape individual behavior — as the Stanford Prison Experiment so dramatically illustrated — we now turn to a broader question: How do groups themselves change over time? If you've ever joined a new team, started a therapy group, or been assigned to a committee, you've likely noticed a pattern. At first, everyone is polite and cautious. Then disagreements surface. Eventually, if the group survives those tensions, something clicks — people start collaborating effectively and actually getting things done. This progression isn't random. Psychologist <span class="key-term">Bruce Tuckman</span> studied it systematically and proposed that groups move through predictable, sequential stages of development.</p>
+        <p>Think about a clinical scenario: A psychologist launches a new therapy group for adults coping with grief. In the first session, members sit quietly, look to the therapist for guidance, and share only surface-level details. By the third or fourth session, two members clash over how much emotional vulnerability the group should expect. By session eight, the group has developed its own unspoken rules — people take turns, they challenge each other respectfully, and the therapist barely needs to intervene. This arc from cautious dependence to autonomous functioning is exactly what Tuckman's model describes, and understanding it is essential for both clinical practice and the EPPP.</p>
+        <div class="definition-box">
+        <strong>Tuckman's Stages (1965)</strong>
+        <p>Bruce Tuckman proposed that groups progress through predictable stages:<br>
+        <strong>1. Forming:</strong> Orientation, testing boundaries, dependence on the leader.<br>
+        <strong>2. Storming:</strong> Conflict, resistance to group influence, power struggles.<br>
+        <strong>3. Norming:</strong> Cohesion develops, group norms established, roles clarified.<br>
+        <strong>4. Performing:</strong> Functional, flexible, productive teamwork.<br>
+        <strong>5. Adjourning</strong> (added 1977): Termination, disengagement, potential grief over group ending.</p>
+        </div>
+        <p>A helpful mnemonic for remembering the sequence is that groups must <em>form</em> before they can <em>storm</em>, <em>storm</em> before they can <em>norm</em>, and <em>norm</em> before they can truly <em>perform</em>. Each stage builds on the resolution of the previous one. The <span class="key-term">forming</span> stage is characterized by a kind of social politeness — members are sizing each other up, figuring out whether the group feels safe, and relying heavily on the designated leader for structure and direction. It's the "honeymoon phase" of group life, where real opinions stay hidden beneath pleasant conversation.</p>
+        <p>The <span class="key-term">storming</span> stage is where that politeness breaks down. Members begin to push back against the group's influence, jockey for status, and express frustration — sometimes with each other, sometimes with the leader. This stage often feels uncomfortable, and inexperienced group facilitators may interpret it as a sign that the group is failing. In reality, storming is a necessary developmental step: the group is negotiating how power will be shared and whose voices will be heard. Groups that never storm often remain superficial.</p>
+        <p>If the group navigates conflict successfully, it enters the <span class="key-term">norming</span> stage, where cohesion solidifies. Members develop shared expectations, trust deepens, and roles become clearer. People begin to identify with the group — saying "we" instead of "I and them." This sense of belonging creates the psychological safety that makes the next stage possible.</p>
+        <p>In the <span class="key-term">performing</span> stage, the group reaches its peak functionality. Energy that was previously consumed by interpersonal tension is now directed toward the group's actual task or purpose. Members collaborate flexibly, solve problems creatively, and support one another without the leader needing to orchestrate every interaction. Not all groups reach this stage — some remain stuck in storming or settle into a low-functioning version of norming.</p>
+        <p>Tuckman added the fifth stage, <span class="key-term">adjourning</span>, in 1977 (with colleague Mary Ann Jensen) to account for what happens when a group's work is complete. Whether it's the final session of a time-limited therapy group or a project team disbanding after a successful launch, members must process the ending. This stage can involve reflection, celebration, sadness, or even anxiety about losing the connections and identity the group provided — feelings that closely parallel the termination phase of individual therapy.</p>
+        <table>
+        <tr><th>Stage</th><th>Key Theme</th><th>Group Behavior</th></tr>
+        <tr><td>Forming</td><td>Orientation</td><td>Polite, tentative, dependent on leader</td></tr>
+        <tr><td>Storming</td><td>Conflict</td><td>Disagreements, power struggles, resistance</td></tr>
+        <tr><td>Norming</td><td>Cohesion</td><td>Cooperation, shared norms, trust</td></tr>
+        <tr><td>Performing</td><td>Productivity</td><td>Effective collaboration, problem-solving</td></tr>
+        <tr><td>Adjourning</td><td>Termination</td><td>Closure, reflection, possible sadness</td></tr>
+        </table>
+        <div class="clinical-note">
+        <strong>Clinical Application</strong>
+        <p>Tuckman's model is widely applied in group therapy. Understanding that storming (conflict) is a normal and necessary stage helps group therapists avoid prematurely intervening to suppress disagreement. The therapist's role shifts across stages: more directive in forming, facilitating conflict resolution in storming, reinforcing norms in norming, and stepping back in performing. For example, a therapist running a cognitive-behavioral group for social anxiety might initially provide high structure and psychoeducation during forming, gently process interpersonal friction during storming ("It sounds like there's some tension about how we use our time together — let's talk about that"), encourage mutual support and feedback during norming, and increasingly let members lead skill-practice exercises during performing. Recognizing which stage a group occupies allows the clinician to calibrate their interventions appropriately rather than applying a one-size-fits-all leadership style.</p>
+        </div>
+        <p>For the EPPP, remember that Tuckman's model is one of the most frequently tested frameworks in group dynamics. Be prepared to identify stages from brief clinical descriptions — a vignette describing members competing for the therapist's attention signals storming, while one depicting smooth collaboration signals performing. Also note that the original 1965 model contained only four stages; <span class="key-term">adjourning</span> was added in 1977, a detail that occasionally appears in exam questions.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Social facilitation</strong> (Zajonc): Others' presence improves simple/well-learned tasks but impairs complex/novel tasks via increased arousal.</li>
+          <li><strong>Social loafing:</strong> Reduced effort in groups when individual contributions are not identifiable. Reduced in collectivist cultures.</li>
+          <li><strong>Deindividuation:</strong> Loss of self-awareness in groups leads to impulsive behavior. Anonymity is the key factor.</li>
+          <li><strong>Groupthink</strong> (Janis): Know the 8 symptoms, antecedent conditions (cohesion, insulation, directive leader), and prevention strategies.</li>
+          <li><strong>Group polarization:</strong> Discussion amplifies the group's initial tendency. Risky shift is one specific case.</li>
+          <li><strong>Stanford Prison Experiment</strong> (Zimbardo): Demonstrates the power of social roles and situations over personality. Know the ethical criticisms.</li>
+          <li><strong>Tuckman's stages:</strong> Forming, Storming, Norming, Performing, Adjourning. Know the characteristic behavior at each stage.</li>
+          <li>Distinguish <strong>social facilitation</strong> (enhanced performance of easy tasks) from <strong>social loafing</strong> (reduced effort in group tasks). Facilitation involves evaluation apprehension; loafing involves diffusion of responsibility.</li>
+        </ul>
+      </section>
+
+
+
+      <div class="nav-buttons">
+        <a href="prejudice-discrimination.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Where We Break — Prejudice, Stereotypes & Discrimination</div>
+          </div>
+        </a>
+        <a href="acculturation-models.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Between Two Worlds — Berry, Cross, Helms & Racial Identity Development</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

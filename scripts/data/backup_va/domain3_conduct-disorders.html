@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Defiance & Aggression — ODD, Conduct Disorder & Antisocial Trajectories | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Defiance & Aggression — ODD, Conduct Disorder & Antisocial Trajectories</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">1</span>Early-Onset Conditions — ADHD, ASD & Intellectual Disability</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">2</span>Fractured Reality — Schizophrenia & the Psychotic Spectrum</a></li>
+        <li class="chapter-item"><a href="depressive-disorders.html" class="chapter-link"><span class="chapter-number">3</span>When Darkness Descends — MDD, Dysthymia & Grief</a></li>
+        <li class="chapter-item"><a href="bipolar-spectrum.html" class="chapter-link"><span class="chapter-number">4</span>The Pendulum Swings — Bipolar I, II & Cyclothymia</a></li>
+        <li class="chapter-item"><a href="anxiety-disorders.html" class="chapter-link"><span class="chapter-number">5</span>Fear Without Cause — GAD, Phobias, Panic & Social Anxiety</a></li>
+        <li class="chapter-item"><a href="ocd-spectrum.html" class="chapter-link"><span class="chapter-number">6</span>Rituals & Repetition — OCD, BDD, Hoarding & Related Conditions</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">7</span>When the World Breaks In — PTSD, Dissociation & Somatic Responses</a></li>
+        <li class="chapter-item"><a href="eating-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Feeding & Eating Disorders — Anorexia, Bulimia & BED</a></li>
+        <li class="chapter-item"><a href="sleep-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Sleep-Wake Disturbances — Insomnia, Narcolepsy & Circadian Disruption</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">10</span>Sexual Dysfunctions, Gender Dysphoria & Paraphilias</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link active"><span class="chapter-number">11</span>Defiance & Aggression — ODD, Conduct Disorder & Antisocial Trajectories</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">12</span>Substance Use & Behavioral Addictions — From Use to Dependence</a></li>
+        <li class="chapter-item"><a href="personality-clusters-ab.html" class="chapter-link"><span class="chapter-number">13</span>Personality Pathology Part 1 — Clusters A & B</a></li>
+        <li class="chapter-item"><a href="personality-cluster-c.html" class="chapter-link"><span class="chapter-number">14</span>Personality Pathology Part 2 — Cluster C, the AMPD & Treatment</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 11 of 14</div>
+        <h1>Defiance & Aggression — ODD, Conduct Disorder & Antisocial Trajectories</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Overview of Disruptive, Impulse-Control, and Conduct Disorders</h2>
+        <p>Imagine a seven-year-old who throws chairs when frustrated, a teenager who deliberately sets fires in abandoned buildings, or a young adult who cannot resist shoplifting despite having money to pay. On the surface, these individuals look quite different — but they share a common thread that the DSM-5 recognizes: a persistent difficulty regulating emotions and behaviors in ways that bring them into serious conflict with other people, social norms, or authority figures. Understanding this shared thread is essential for clinicians, because these presentations are among the most frequent reasons children and adolescents are referred for psychological services.</p>
+        <p>The DSM-5 groups these conditions together in a single chapter — Disruptive, Impulse-Control, and Conduct Disorders — precisely because they all involve failures of self-regulation that manifest outwardly. The behaviors may take different forms: aggression toward people or animals, destruction of property, chronic defiance of rules, or impulsive acts that disregard consequences. What unites them is that the problem shows up in the environment rather than being suffered silently. Notably, these disorders are more common in males than females and typically emerge during childhood or adolescence, though some — such as intermittent explosive disorder and certain impulse-control conditions — may first present in adulthood.</p>
+        <p>For clinicians preparing to work with these populations, two critical principles stand out from the start. First, context matters enormously: a child growing up in a war zone or a dangerous neighborhood may display aggressive behavior that is adaptive rather than disordered. The DSM-5 cautions against pathologizing behavior that may be a reasonable response to a threatening environment. Second, these disorders rarely travel alone. Children diagnosed with Oppositional Defiant Disorder frequently meet criteria for ADHD; adolescents with Conduct Disorder often carry co-occurring depressive or substance use disorders. Recognizing these comorbid patterns is vital for treatment planning and prognosis.</p>
+        <div class="definition-box">
+        <h4>Key Concept: Externalizing vs. Internalizing</h4>
+        <p>One of the most useful frameworks in developmental psychopathology is the distinction between <span class="key-term">externalizing disorders</span> and <span class="key-term">internalizing disorders</span>. When a child's distress is directed outward toward the environment — through aggression, defiance, rule-breaking, or destruction — clinicians describe these as externalizing problems. The disruptive and conduct disorders are the prototypical externalizing conditions. By contrast, internalizing disorders such as depression and anxiety involve distress directed inward, manifesting as sadness, withdrawal, worry, or somatic complaints. In clinical practice, however, the boundary between these categories is far less tidy than it appears in textbooks. A child who punches a classmate (externalizing) may also be deeply anxious about a chaotic home life (internalizing). Research consistently shows significant comorbidity between externalizing and internalizing disorders, which means that a thorough assessment should always look beyond the presenting behavioral complaint to screen for emotional suffering that may be fueling — or accompanying — the disruptive behavior.</p>
+        </div>
+        <p>With this broader framework in mind, we turn next to the disorder that often represents the earliest point on the developmental spectrum of disruptive behavior: Oppositional Defiant Disorder. Understanding ODD — its symptom clusters, its developmental significance, and its relationship to more severe conduct problems — provides the foundation for everything that follows in this chapter.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Oppositional Defiant Disorder (ODD)</h2>
+
+        <p>Picture a seven-year-old who, when told it's time to turn off the video game for dinner, doesn't simply grumble — he erupts. He shouts that the rule is "stupid," slams the controller on the floor, and screams that his parents "never let him do anything." After the storm passes, he refuses to sit at the table and deliberately kicks his sister's chair until she cries. His parents feel like they're walking on eggshells, and his teacher reports the same hair-trigger defiance at school. An occasional tantrum is part of normal childhood, but when this level of emotional volatility and opposition becomes the rule rather than the exception — persisting for months and disrupting relationships across settings — clinicians begin to consider <span class="key-term">Oppositional Defiant Disorder</span>.</p>
+
+        <p>Formally, ODD is defined as a pattern of angry/irritable mood, argumentative/defiant behavior, or vindictiveness lasting at least 6 months, evidenced by at least four symptoms drawn from three distinct categories. What sets ODD apart from the everyday pushback that most children display is the frequency, intensity, and persistence of these behaviors — and the degree to which they impair the child's functioning at home, in school, and with peers. As we discussed in the previous section, ODD falls squarely within the externalizing spectrum: distress is expressed outward, through conflict with others. Yet, as we will see, one of ODD's symptom dimensions — angry/irritable mood — actually serves as a bridge to the internalizing disorders, making this diagnosis a fascinating crossroads in developmental psychopathology.</p>
+
+        <!-- anchor:23-1 coverage:partial -->
+        <p>Although ODD and conduct disorder share features of defiance and conflict with authority, a critical diagnostic distinction involves the nature and severity of aggressive behavior. ODD is primarily defined by emotional dysregulation and oppositional attitudes — losing one's temper, arguing, and refusing to comply — but it does not include the pattern of serious physical aggression toward people or animals that is characteristic of conduct disorder. When a child presents with <span class="key-term">repeated acts of aggression</span>, such as initiating physical fights, bullying, using weapons, or engaging in physical cruelty, the clinician should strongly consider the possibility that conduct disorder is present, either as a primary diagnosis or as a comorbid condition alongside ODD. In clinical practice, persistent aggression that escalates beyond verbal outbursts and minor provocations marks a qualitative shift from oppositional behavior into conduct-disordered territory. Think of the difference this way: the child with ODD screams "You can't make me!" and slams a door; the child with conduct disorder punches a classmate in the face or threatens a peer with a sharp object. Both are externalizing, but they differ in kind, not just degree. Because the two diagnoses frequently co-occur, careful assessment of the full behavioral picture — including whether acts of aggression are recurrent and involve violation of others' physical safety — is essential for accurate differential diagnosis and appropriate treatment planning.</p>
+        <!-- /anchor:23-1 -->
+
+        <h3>Symptom Categories</h3>
+
+        <p>Oppositional Defiant Disorder is organized around three distinct symptom clusters that reflect different facets of the disorder — one primarily emotional, one primarily behavioral, and one reflecting a retaliatory interpersonal pattern. Understanding these categories is essential not only for accurate diagnosis but also for distinguishing ODD from the normative developmental opposition that nearly every parent witnesses during the toddler and early adolescent years. Importantly, research has shown that these three dimensions carry different prognostic implications, a point that has significant consequences for treatment planning and long-term risk assessment.</p>
+
+        <h4>Angry/Irritable Mood</h4>
+        <p>This first cluster captures the emotional core of ODD — the child who seems perpetually on the verge of an outburst. These are the children whose parents describe as "always in a bad mood" or who "go from zero to sixty in seconds." The symptoms in this cluster include:</p>
+        <ul>
+        <li>Often loses temper</li>
+        <li>Is often touchy or easily annoyed</li>
+        <li>Is often angry and resentful</li>
+        </ul>
+        <p>Clinically, this dimension is particularly important because it represents the affective dysregulation that links ODD to later emotional disorders. A child who is chronically irritable and resentful is not just difficult to manage — that child is often suffering internally as well, experiencing a persistent state of frustration and distress that can evolve into depression or anxiety over time.</p>
+
+        <h4>Argumentative/Defiant Behavior</h4>
+        <p>The second cluster captures the behavioral hallmark of ODD — active resistance to authority and a pattern of deliberately provocative conduct. These are the children who seem to draw energy from power struggles and who can turn a simple request like "Please put your shoes on" into a thirty-minute standoff. The symptoms include:</p>
+        <ul>
+        <li>Often argues with authority figures or adults</li>
+        <li>Often actively defies or refuses to comply with requests or rules</li>
+        <li>Often deliberately annoys others</li>
+        <li>Often blames others for his or her mistakes or misbehavior</li>
+        </ul>
+        <p>Notice the externalization of responsibility in the last symptom — blaming others for one's own mistakes. This pattern can be particularly frustrating for parents and teachers, who may feel that the child never takes accountability. It also has clinical relevance: children who consistently externalize blame may be more resistant to therapeutic interventions that require self-reflection and ownership of behavior.</p>
+
+        <h4>Vindictiveness</h4>
+        <p>The third and final cluster is the most narrowly defined, consisting of a single criterion, but it carries outsized diagnostic weight because it signals a retaliatory, spiteful quality that goes beyond mere defiance:</p>
+        <ul>
+        <li>Has been spiteful or vindictive at least twice within the past 6 months</li>
+        </ul>
+        <p>Vindictiveness involves intentionally causing distress or seeking revenge — for example, a child who deliberately destroys a sibling's prized possession after a conflict, not in the heat of a tantrum but later, with calculated intent. This dimension, more than the others, has been linked to the later development of conduct disorder and antisocial personality disorder, making it a particularly important area to assess during clinical evaluation.</p>
+
+        <div class="clinical-note">
+        <h4>Clinical Pearl</h4>
+        <p>DSM-5 added severity specifiers for ODD: <strong>mild</strong> (symptoms confined to one setting), <strong>moderate</strong> (some symptoms in at least two settings), and <strong>severe</strong> (symptoms in three or more settings). Research suggests the angry/irritable mood dimension of ODD is a stronger predictor of later internalizing disorders (depression, anxiety), while the behavioral dimensions predict later conduct disorder and ASPD (Stringaris & Goodman, 2009). This dimensional finding has practical implications for the EPPP: when a question stem describes a child with ODD whose primary symptoms are chronic irritability and resentfulness, think about comorbid or future mood disorders; when the emphasis is on defiance, provocation, and vindictiveness, think about the developmental trajectory toward conduct disorder.</p>
+        </div>
+
+        <p>ODD prevalence is approximately 3.3%, with a male predominance in childhood that equalizes by adolescence — a gender ratio shift that likely reflects both differential socialization patterns and the increasing salience of relational aggression in adolescent girls. The disorder typically emerges in the preschool years and is usually evident before age 8, a time when children are first navigating structured expectations from adults outside the family. ODD often precedes the development of conduct disorder, and this sequential relationship is one of the best-established developmental pathways in child psychopathology. However, a crucial point to remember is that the majority of children with ODD do not progress to conduct disorder — many improve with appropriate intervention, and some outgrow the pattern as they develop better emotion-regulation skills and more adaptive coping strategies.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Conduct Disorder (CD)</h2>
+        <p>While most children with Oppositional Defiant Disorder do not go on to develop more severe behavioral problems, some do — and when they do, the trajectory often leads to a diagnosis that carries significantly greater clinical and legal weight. Consider a 13-year-old who has moved far beyond arguing with teachers and defying household rules. He has been suspended for physically threatening classmates, was caught breaking into cars in his neighborhood, and recently set fire to a dumpster behind his school. His behavior is no longer simply oppositional — it has crossed into territory where the fundamental rights of others and basic societal norms are being violated in a persistent, escalating pattern.</p>
+        <p><span class="key-term">Conduct Disorder</span> involves exactly this kind of repetitive and persistent behavioral pattern — one in which the basic rights of others or major age-appropriate societal norms are violated. Unlike ODD, which is characterized by emotional dysregulation and defiance directed primarily toward authority figures, Conduct Disorder encompasses a broader and more serious range of behaviors including aggression, property destruction, deceit, and rule violations that can have profound consequences for victims and communities alike. The DSM-5 requires at least 3 of 15 criteria to have been present in the past 12 months, with at least 1 criterion present in the past 6 months, drawn from four distinct categories of conduct problems.</p>
+        <h3>Symptom Categories</h3>
+        <p>The DSM-5 organizes the 15 possible criteria for Conduct Disorder into four behavioral categories, each reflecting a different domain of antisocial behavior. Understanding these categories is essential not only for diagnostic accuracy but also for treatment planning, as the specific profile of behaviors often guides the intensity and type of intervention needed. Note that the behaviors range from interpersonal aggression to covert acts of deception and theft — a breadth that distinguishes CD from other disruptive behavior disorders.</p>
+        <table>
+        <tr><th>Category</th><th>Examples</th></tr>
+        <tr><td>Aggression to people and animals</td><td>Bullying, initiating fights, using weapons, physical cruelty to people or animals, forcing sexual activity</td></tr>
+        <tr><td>Destruction of property</td><td>Deliberately setting fires, deliberately destroying property</td></tr>
+        <tr><td>Deceitfulness or theft</td><td>Breaking into someone's house/car, lying to obtain goods, shoplifting</td></tr>
+        <tr><td>Serious violations of rules</td><td>Staying out late (before age 13), running away, truancy (before age 13)</td></tr>
+        </table>
+        <p>A clinically important detail for the EPPP: the threshold is three criteria from anywhere across these four categories, not one from each. A child who bullies, initiates physical fights, and has been cruel to animals meets criteria through a single category — aggression to people and animals — even if no property destruction, theft, or rule violations are present. Conversely, a pattern that spans all four categories may signal a more pervasive and entrenched behavioral disturbance.</p>
+        <h3>Onset Specifiers</h3>
+        <p>One of the most clinically significant distinctions in Conduct Disorder is not the specific behaviors displayed, but <em>when</em> those behaviors first appeared. Research consistently shows that the age of onset carries powerful prognostic implications — children who begin showing conduct problems early follow a fundamentally different developmental trajectory than those whose antisocial behavior first emerges in adolescence. The DSM-5 captures this distinction through onset specifiers that every clinician should understand.</p>
+        <div class="definition-box">
+        <h4>Childhood-Onset vs. Adolescent-Onset</h4>
+        <p><strong>Childhood-onset type:</strong> At least one criterion characteristic of CD prior to age 10. This subtype is associated with more persistent and severe aggression, a worse overall prognosis, and a substantially higher likelihood of developing Antisocial Personality Disorder (ASPD) in adulthood. These children often show neurobiological risk factors including temperamental difficulties and cognitive deficits that predate their behavioral problems. <strong>Adolescent-onset type:</strong> No criteria present prior to age 10. This subtype is associated with less physical aggression, greater influence of deviant peer groups as a driving factor, and a considerably better prognosis — many of these adolescents desist from antisocial behavior as they transition into adulthood. <strong>Unspecified onset:</strong> Criteria for CD are met but there is insufficient information available to determine whether any criterion was present before age 10.</p>
+        </div>
+        <p>Think of it this way: childhood-onset CD often reflects a deeply rooted developmental vulnerability — a child who has been aggressive, deceitful, and rule-breaking from early elementary school is showing a pattern that is more trait-like and resistant to change. Adolescent-onset CD, by contrast, frequently reflects the powerful pull of social context — a teenager who falls in with an antisocial peer group and begins engaging in delinquent behavior she never exhibited before. This distinction has direct implications for treatment planning and for the conversations clinicians have with worried parents about what the future may hold.</p>
+        <h3>The Callous-Unemotional (CU) Specifier</h3>
+        <p>Perhaps the most important addition the DSM-5 made to the Conduct Disorder diagnosis was the recognition that not all children with CD are alike in their emotional processing. Some children who engage in serious conduct problems experience genuine remorse, react emotionally when confronted with the harm they have caused, and are distressed by their own behavior. Others, however, seem strikingly indifferent — they harm without guilt, manipulate without empathy, and appear unmoved by consequences. This latter group represents a clinically distinct subtype that carries a different neurobiological profile, different treatment needs, and a more concerning long-term trajectory.</p>
+        <p>The DSM-5 added the specifier <span class="key-term">"with limited prosocial emotions"</span> (the callous-unemotional traits specifier) to capture this distinction. To qualify for this specifier, the individual must display at least two of the following characteristics persistently over at least 12 months and across multiple settings — not just at home or just at school, but in a pattern that is pervasive across the child's life:</p>
+        <ul>
+        <li><strong>Lack of remorse or guilt</strong> -- does not feel bad about misbehavior</li>
+        <li><strong>Callous -- lack of empathy</strong> -- disregards others' feelings</li>
+        <li><strong>Unconcerned about performance</strong> -- does not show concern about poor performance at school, work, or other activities</li>
+        <li><strong>Shallow or deficient affect</strong> -- does not express emotions or appears insincere</li>
+        </ul>
+        <p>The requirement that these traits be evident across multiple settings is critical for accurate diagnosis. A child who appears remorseless in the principal's office but breaks down crying at home when discussing the same incident is not displaying the pervasive emotional deficit that this specifier is designed to capture. Clinicians must gather information from multiple informants — parents, teachers, peers — to reliably assess whether callous-unemotional traits are truly present.</p>
+        <div class="example-box">
+        <h4>EPPP Example</h4>
+        <p>Children with CD and CU traits show distinct neurobiological features: reduced amygdala reactivity to fearful facial expressions, lower cortisol reactivity to stress, and diminished autonomic arousal (Frick et al., 2014). They tend to show <strong>proactive (instrumental) aggression</strong> rather than reactive aggression, and they respond poorly to punishment-based interventions but may respond to reward-based approaches.</p>
+        </div>
+        <p>This neurobiological profile has direct treatment implications that are highly testable on the EPPP. Because children with CU traits show reduced fear reactivity and diminished sensitivity to punishment cues, traditional behavioral approaches that rely on consequences — time-outs, loss of privileges, suspension — tend to be ineffective. These children simply do not experience the aversive emotional response that makes punishment a learning signal. Instead, reward-based interventions that leverage their intact reward sensitivity show more promise. Clinically, this means that identifying CU traits early can fundamentally redirect the treatment approach a clinician selects, making the specifier far more than an academic distinction — it is a practical guide to intervention.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Intermittent Explosive Disorder (IED)</h2>
+
+        <p>Having explored Conduct Disorder — a pattern of persistent, rule-violating behavior that often begins in childhood — we now turn to a disorder that centers on a very different kind of aggression. Imagine a man in his thirties who is, by all accounts, generally reasonable and well-functioning. Yet several times a month, seemingly minor provocations — a slow driver, a misplaced remote control, a mildly dismissive comment from a coworker — ignite explosive rage that is wildly disproportionate to the trigger. He screams, throws objects, slams doors so hard the frame splinters. Minutes later, the storm passes, and he is flooded with remorse and confusion. He cannot explain what happened. Unlike the calculated, instrumental aggression seen in Conduct Disorder with callous-unemotional traits, these outbursts are impulsive, unplanned, and serve no strategic purpose. This is the clinical picture of <span class="key-term">Intermittent Explosive Disorder</span>.</p>
+
+        <p>Intermittent Explosive Disorder is characterized by recurrent behavioral outbursts representing a failure to control aggressive impulses. The outbursts are grossly out of proportion to the provocation, are not premeditated, and are not committed to achieve a tangible objective — they are reactive eruptions, not instrumental acts. What distinguishes IED from ordinary anger is both the intensity and the frequency of these episodes, along with the distress and impairment they cause. Individuals with IED often describe their outbursts as "snapping" or feeling as though a switch has been flipped, followed by genuine regret once the episode subsides. Clinically, IED is important to recognize because it is more common than many clinicians expect — community prevalence estimates range from approximately 2.7% to 7.3% — and it carries significant consequences, including damaged relationships, job loss, legal problems, and physical injury to self or others.</p>
+
+        <h3>DSM-5 Criteria</h3>
+
+        <p>The DSM-5 criteria for IED are designed to capture two distinct patterns of aggressive outbursts, reflecting the clinical reality that some individuals display frequent lower-intensity episodes while others have rarer but more severe explosions. A clinician should be attentive to both patterns, as either can qualify for diagnosis. Importantly, the disorder requires a minimum chronological age of 6 years (or equivalent developmental level), which helps differentiate IED from the developmentally normative tantrums of early childhood. The full diagnostic picture includes the following criteria:</p>
+
+        <ul>
+        <li><strong>Frequency:</strong> Verbal aggression (tantrums, tirades) or physical aggression toward property, animals, or others occurring twice weekly on average for 3 months (need not cause damage), OR three behavioral outbursts involving damage/destruction or physical assault within a 12-month period</li>
+        <li>The magnitude of aggression is grossly out of proportion to the provocation</li>
+        <li>Not premeditated or committed to achieve a tangible objective</li>
+        <li>Causes marked distress or impairment, or financial/legal consequences</li>
+        <li>Chronological age of at least 6 years (or equivalent developmental level)</li>
+        <li>Not better explained by another mental disorder, medical condition, or substance</li>
+        </ul>
+
+        <p>The differential diagnosis requirement is especially important for exam preparation. A clinician must rule out conditions where aggressive outbursts are better accounted for by another disorder. For example, aggression during a manic episode would be attributed to Bipolar Disorder, not IED. Similarly, the chronic irritability and anger outbursts seen in Disruptive Mood Dysregulation Disorder (DMDD) in children may superficially resemble IED, but DMDD is characterized by a persistently irritable or angry mood between outbursts — a feature not required in IED. Aggression in the context of Conduct Disorder or Antisocial Personality Disorder is typically more instrumental and goal-directed, whereas IED aggression is reactive and impulsive. Substance intoxication (particularly with alcohol or stimulants) and medical conditions affecting the central nervous system (such as traumatic brain injury or epilepsy) must also be excluded.</p>
+
+        <p>Consider a clinical vignette: A 28-year-old woman presents after her third road rage incident in six months, the most recent involving her slamming her car into a guardrail after another driver cut her off. Between episodes, she describes herself as "easygoing" and is genuinely distressed by her behavior. She has no history of conduct problems, substance use, mood episodes, or neurological conditions. Her outbursts are sudden, unplanned, and grossly disproportionate to the provocation. This presentation — episodic, impulsive, disproportionate aggression causing distress and impairment in an otherwise functioning adult — is a textbook case of IED.</p>
+
+        <p>Understanding the neurobiology of IED helps explain why these individuals seem unable to "just control themselves." The disorder appears to involve a breakdown in the brain's top-down regulatory system. Specifically, reduced serotonergic activity in the prefrontal cortex weakens the capacity to inhibit aggressive impulses generated by the amygdala. Think of it as a dimmer switch on impulse control: when prefrontal serotonin function is diminished, the amygdala's threat-response signals go unchecked, leading to explosive reactions to minor provocations. This neurobiological model has important treatment implications — selective serotonin reuptake inhibitors (SSRIs) have shown some efficacy in reducing aggressive outbursts in IED, and cognitive-behavioral interventions targeting anger management and impulse control are considered first-line psychosocial treatments.</p>
+
+        <div class="citation">Research suggests that IED involves dysregulation of serotonergic systems, particularly reduced serotonin activity in the prefrontal cortex, leading to impaired top-down regulation of aggression mediated by the amygdala (Coccaro et al., 2015).</div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>The Developmental Trajectory to Antisocial Personality Disorder</h2>
+        <p>One of the most important concepts for the EPPP is the developmental progression from childhood disruptive behavior to adult <span class="key-term">Antisocial Personality Disorder (ASPD)</span>. This trajectory is well-established but not inevitable.</p>
+
+        <!-- anchor:24 coverage:partial -->
+        <p>Moffitt's (2003) updated formulation of the <span class="key-term">life-course persistent</span> pathway emphasizes that this trajectory arises from the transactional interplay between neurological vulnerabilities and adverse rearing environments. Specifically, children who enter the world with inherited or acquired neurocognitive deficits — such as executive function impairments, verbal skill deficits, or temperamental difficulties like high irritability and low self-regulation — are disproportionately likely to be born into or raised within high-risk contexts characterized by inadequate parenting, family instability, poverty, and exposure to violence. These neurological and environmental risk factors do not simply add together; rather, they interact in a cascading fashion. A child with subtle neuropsychological compromise elicits harsher and more inconsistent discipline from caregivers, which in turn exacerbates the child's behavioral dysregulation, narrowing opportunities for prosocial learning. This reciprocal, escalating process distinguishes life-course persistent antisocial behavior from the adolescence-limited type and accounts for its stability across the lifespan and its resistance to intervention.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>When evaluating youth with early-onset conduct problems, clinicians should assess for both neurocognitive vulnerabilities (e.g., language delays, executive function deficits, low verbal IQ) and environmental adversity. The co-occurrence of these factors signals a life-course persistent trajectory and warrants more intensive, multi-systemic intervention rather than watchful waiting.</p></div>
+        <!-- /anchor:24 -->
+
+
+        <!-- anchor:190 coverage:partial -->
+        <p>Moffitt's (1993) developmental taxonomy provides a particularly compelling explanation for why antisocial behavior surges during adolescence even among youth who had no prior history of behavioral problems. The concept central to understanding <span class="key-term">adolescent-onset conduct disorder</span> is the <span class="key-term">maturity gap</span> — the discrepancy between biological readiness for adult roles (triggered by puberty) and the social constraints that delay access to adult privileges such as autonomy, financial independence, and decision-making authority. Adolescents who experience this gap acutely may mimic the antisocial behaviors of life-course persistent peers as a strategy for asserting independence and claiming adult-like status. Because the motivation is rooted in this developmentally bound mismatch rather than in enduring neuropsychological vulnerabilities, the antisocial behavior typically desists as legitimate adult roles become available in late adolescence and early adulthood. The maturity gap framework thus explains both the sharp rise in prevalence of conduct problems during the teenage years and the relatively favorable prognosis associated with the adolescent-onset subtype.</p>
+        <!-- /anchor:190 -->
+
+        <h3>The Typical Pathway</h3>
+        <ol>
+          <li><strong>Temperamental risk factors</strong> in infancy (difficult temperament, irritability)</li>
+          <li><strong>ODD</strong> emerging in preschool/early childhood (ages 3-8)</li>
+          <li><strong>Conduct Disorder</strong>, childhood-onset type (before age 10)</li>
+          <li><strong>ASPD</strong> diagnosis at age 18 or older (requires evidence of CD before age 15)</li>
+        </ol>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>ASPD in DSM-5 <strong>requires evidence of conduct disorder with onset before age 15</strong>. Approximately 40% of children with childhood-onset CD develop ASPD. Moffitt's (1993) developmental taxonomy distinguishes <span class="key-term">life-course persistent</span> antisocial behavior (beginning in childhood, neuropsychological deficits, poor prognosis) from <span class="key-term">adolescence-limited</span> antisocial behavior (emerging in teen years, peer-influenced, typically resolves by adulthood).</p>
+        </div>
+        <h3>Risk and Protective Factors</h3>
+        <table>
+          <tr><th>Risk Factors</th><th>Protective Factors</th></tr>
+          <tr><td>Harsh/inconsistent parenting</td><td>Warm, supportive parent-child relationship</td></tr>
+          <tr><td>Parental antisocial behavior or substance use</td><td>Positive school engagement</td></tr>
+          <tr><td>Low socioeconomic status</td><td>Prosocial peer group</td></tr>
+          <tr><td>Peer rejection, deviant peer association</td><td>Higher IQ and verbal abilities</td></tr>
+          <tr><td>Neighborhood violence exposure</td><td>Effective emotion regulation skills</td></tr>
+          <tr><td>Low resting heart rate (autonomic underarousal)</td><td>Community support systems</td></tr>
+          <tr><td>Callous-unemotional traits</td><td>Responsive to behavioral interventions</td></tr>
+        </table>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Etiology and Theoretical Models</h2>
+        <h3>Biological Factors</h3>
+        <ul>
+          <li><strong>Genetics:</strong> Heritability of antisocial behavior is estimated at 40-60%. CU traits show particularly strong heritability (Viding et al., 2005).</li>
+          <li><strong>Autonomic underarousal:</strong> Low resting heart rate is one of the most replicated biological correlates of antisocial behavior in children (Ortiz & Raine, 2004).</li>
+          <li><strong>Neurotransmitters:</strong> Low serotonin levels associated with impulsive aggression; abnormal dopamine functioning linked to reward sensitivity.</li>
+          <li><strong>Neuroanatomy:</strong> Reduced prefrontal cortex volume and function, reduced amygdala reactivity (particularly in those with CU traits).</li>
+        </ul>
+
+        <!-- anchor:018 coverage:partial -->
+        <p>Research on stress reactivity provides further support for the autonomic underarousal hypothesis. In laboratory studies, male adolescents diagnosed with conduct disorder demonstrated significantly <span class="key-term">blunted cortisol responses</span> and reduced cardiovascular reactivity when exposed to standardized stress-induction procedures, compared to psychiatrically healthy adolescents. Critically, this physiological hyporeactivity occurred despite all groups reporting equivalent levels of subjective distress — suggesting a dissociation between the conscious experience of negative emotion and the body's neuroendocrine and autonomic stress response. This pattern of reduced hypothalamic-pituitary-adrenal (HPA) axis activation in the presence of normal subjective distress implies that the deficit is not in perceiving stressors but in mounting an appropriate biological response to them. Such dampened physiological arousal may impair fear conditioning and reduce sensitivity to the aversive consequences of harmful behavior, thereby contributing to persistent rule-breaking and aggression.</p>
+        <!-- /anchor:018 -->
+
+        <h3>Psychological and Social Factors</h3>
+        <ul>
+          <li><strong>Patterson's coercion theory</strong> (1982): Maladaptive parent-child interaction cycles in which the child learns that escalating aversive behavior is reinforced by parental capitulation, creating a coercive cycle.</li>
+          <li><strong>Social information processing:</strong> Dodge and Crick's (1994) model posits that aggressive children show biases in processing social cues, particularly a <span class="key-term">hostile attribution bias</span> -- the tendency to attribute hostile intent to ambiguous social situations.</li>
+          <li><strong>Attachment:</strong> Disorganized attachment in infancy is associated with increased risk for externalizing behavior problems.</li>
+        </ul>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Evidence-Based Treatments</h2>
+
+        <!-- anchor:019 coverage:missing -->
+        <div class="clinical-note">
+        <h4>Clinical Note: Iatrogenic Effects of Deterrence-Based Programs</h4>
+        <p>Not all interventions targeting youth with conduct problems are beneficial — some are actively harmful. <span class="key-term">Scared Straight programs</span> and similar deterrence-based interventions bring at-risk or justice-involved youth into prison facilities to witness the harsh realities of incarceration firsthand, typically through confrontational interactions with adult inmates. The underlying rationale is that exposing young people to the consequences of criminal behavior will deter them from future offending.</p>
+        <p>However, rigorous evaluations — including meta-analyses of randomized controlled trials — have consistently demonstrated that these programs produce <em>iatrogenic effects</em>: youth who participate are actually <em>more likely</em> to engage in subsequent criminal behavior compared to control groups who received no intervention at all (Petrosino et al., 2013). The estimated increase in offending ranges from 1% to 28% across studies. Several mechanisms may account for this paradoxical outcome. Exposure to antisocial role models may inadvertently normalize criminal identity. The confrontational approach may trigger psychological reactance in oppositional youth. Additionally, aggregating at-risk adolescents together can facilitate <span class="key-term">deviancy training</span>, a peer contagion process in which youth reinforce one another's antisocial attitudes and behaviors.</p>
+        <p>These findings underscore a broader principle in the treatment of disruptive behavior disorders: interventions must be grounded in empirical evidence rather than intuitive appeal. Programs that aggregate deviant youth without structured therapeutic components — including boot camps and some group-based residential treatments — carry similar risks of worsening outcomes. Clinicians should prioritize evidence-based approaches such as MST, FFT, and PMT, all of which have demonstrated genuine reductions in antisocial behavior through controlled research.</p>
+        </div>
+        <!-- /anchor:019 -->
+
+        <h3>Parent-Focused Interventions</h3>
+        <ul>
+          <li><strong>Parent Management Training (PMT):</strong> Based on Patterson's coercion theory; teaches parents to use positive reinforcement, effective commands, consistent consequences, and to avoid coercive cycles. PMT has the strongest evidence base for ODD and early-onset CD (Kazdin, 2005).</li>
+          <li><strong>Parent-Child Interaction Therapy (PCIT):</strong> For children ages 2-7; uses live coaching (via earpiece) to improve the parent-child relationship and teach effective discipline strategies in real time.</li>
+          <li><strong>The Incredible Years:</strong> Group-based parent training program with additional child and teacher components; reduces conduct problems and increases positive parenting.</li>
+        </ul>
+        <h3>Child/Adolescent-Focused Interventions</h3>
+        <ul>
+          <li><strong>Problem-Solving Skills Training (PSST):</strong> Teaches cognitive problem-solving steps to reduce aggressive responses to social situations; addresses hostile attribution bias.</li>
+          <li><strong>Multisystemic Therapy (MST):</strong> Intensive, family- and community-based treatment for serious juvenile offenders; addresses multiple systems (family, peer, school, community); reduces recidivism and out-of-home placements (Henggeler et al., 1998).</li>
+          <li><strong>Functional Family Therapy (FFT):</strong> Addresses family communication patterns and relational dynamics; evidence-based for adolescents with conduct problems.</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>For children with CU traits, standard punishment-based approaches are less effective because these children show reduced sensitivity to punishment cues. <strong>Reward-based approaches</strong> emphasizing positive reinforcement are recommended instead. Dadds et al. (2012) demonstrated that targeting emotion recognition and empathy through parent-mediated interventions can improve outcomes for children with CU traits.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>ODD requires <strong>4 symptoms for 6 months</strong> across three categories: angry/irritable mood, argumentative/defiant behavior, vindictiveness</li>
+          <li>Conduct disorder requires <strong>3 of 15 criteria in 12 months</strong> (at least 1 in past 6 months)</li>
+          <li><strong>Childhood-onset CD</strong> (before age 10) has a worse prognosis than adolescent-onset</li>
+          <li>The <strong>"with limited prosocial emotions" specifier</strong> (CU traits) is new in DSM-5 and associated with proactive aggression, reduced empathy, and lower treatment response</li>
+          <li>ASPD requires <strong>evidence of CD before age 15</strong> and cannot be diagnosed before age 18</li>
+          <li>Moffitt's taxonomy: <strong>life-course persistent</strong> vs. <strong>adolescence-limited</strong> antisocial behavior</li>
+          <li><strong>Low resting heart rate</strong> is a robust biological correlate of antisocial behavior in youth</li>
+          <li>Patterson's <strong>coercion theory</strong>: parent-child coercive cycles maintain oppositional behavior</li>
+          <li>Dodge's <strong>hostile attribution bias</strong>: aggressive children attribute hostile intent to ambiguous situations</li>
+          <li>IED requires outbursts <strong>grossly out of proportion</strong> to the provocation and is linked to serotonergic dysfunction</li>
+        </ul>
+      </section>
+
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Coccaro, E. F., Lee, R., & Kavoussi, R. J. (2015). Aggression, suicidality, and intermittent explosive disorder: Serotonergic correlates in personality disorder and healthy control subjects. <em>Neuropsychopharmacology, 35</em>(2), 435-444.</div>
+        <div class="citation">Dodge, K. A., & Crick, N. R. (1994). A review and reformulation of social information-processing mechanisms in children's social adjustment. <em>Psychological Bulletin, 115</em>(1), 74-101.</div>
+        <div class="citation">Frick, P. J., Ray, J. V., Thornton, L. C., & Kahn, R. E. (2014). Can callous-unemotional traits enhance the understanding, diagnosis, and treatment of serious conduct problems? <em>Psychological Bulletin, 140</em>(1), 1-57.</div>
+        <div class="citation">Moffitt, T. E. (1993). Adolescence-limited and life-course-persistent antisocial behavior: A developmental taxonomy. <em>Psychological Review, 100</em>(4), 674-701.</div>
+        <div class="citation">Ortiz, J., & Raine, A. (2004). Heart rate level and antisocial behavior in children and adolescents: A meta-analysis. <em>Journal of the American Academy of Child & Adolescent Psychiatry, 43</em>(2), 154-162.</div>
+        <div class="citation">Patterson, G. R. (1982). <em>Coercive family process</em>. Castalia Publishing.</div>
+        <div class="citation">Stringaris, A., & Goodman, R. (2009). Three dimensions of oppositionality in youth. <em>Journal of Child Psychology and Psychiatry, 50</em>(3), 216-223.</div>
+        <div class="citation">Viding, E., Blair, R. J. R., Moffitt, T. E., & Plomin, R. (2005). Evidence for substantial genetic risk for psychopathy in 7-year-olds. <em>Journal of Child Psychology and Psychiatry, 46</em>(6), 592-597.</div>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="sexual-disorders.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Sexual Dysfunctions, Gender Dysphoria & Paraphilias</div>
+          </div>
+        </a>
+        <a href="substance-disorders.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Substance Use & Behavioral Addictions — From Use to Dependence</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

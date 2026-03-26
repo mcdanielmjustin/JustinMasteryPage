@@ -1,4 +1,9 @@
-# JustinMasteryPage — Brain Pathology Module
+# JustinMasteryPage — Development / Staging
+
+> **WARNING FOR AI ASSISTANTS:** This is the development/staging version of the textbook.
+> The **production** textbook is in **PassEPPP-website** (`C:\Users\Admin\PassEPPP-website\content\`).
+> Do NOT use this repo's data files for question generation — use `JQD-2.0/data/` for anchor data
+> and `PassEPPP-website/content/` for chapter HTML.
 
 > **EPPP mastery practice site** — clinical vignettes, ethics, This or That, Spot the Error, and an interactive 3D Brain module.
 > Hosted at: [GitHub repo](https://github.com/mcdanielmjustin/JustinMasteryPage)

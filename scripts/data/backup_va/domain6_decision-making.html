@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Making Better Decisions — Bounded Rationality, Groupthink & Models | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Making Better Decisions — Bounded Rationality, Groupthink & Models</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 6</div>
+        <div class="domain-title">Workforce Development & Leadership</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations — Classical, Human Relations & Systems</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work — Job Analysis, Descriptions & Performance</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People — Interviews, Assessment Centers & Predictors</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection — Utility, Adverse Impact & Validity</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent — Needs Assessment, Methods & Evaluation</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths — Holland, Super & Work Adjustment</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance — Content & Process Theories</a></li>
+        <li class="chapter-item"><a href="satisfaction-commitment.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement — Satisfaction, Commitment & OCB</a></li>
+        <li class="chapter-item"><a href="occupational-stress.html" class="chapter-link"><span class="chapter-number">9</span>When Work Hurts — Stress, Burnout & Work-Life Balance</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">10</span>Leading People — Traits, Behaviors & Contingency Models</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link active"><span class="chapter-number">11</span>Making Better Decisions — Bounded Rationality, Groupthink & Models</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">12</span>Transforming Organizations — Lewin, Kotter & OD Interventions</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 11 of 12</div>
+        <h1>Making Better Decisions — Bounded Rationality, Groupthink & Models</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Organizational Decision Making</h2>
+        <p>Consider this scenario: A hospital leadership team must decide whether to implement a new electronic health records system. The CEO favors one vendor based on a colleague's recommendation. The IT director has analyzed three options but only had time to review partial data. During the committee meeting, two dissenting voices stay silent because the CEO has already expressed a preference. Meanwhile, everyone assumes a competitor hospital's recent switch to the same vendor validates their choice — even though the competitor's needs are entirely different. In this single decision, we can spot nearly every phenomenon that organizational psychologists have spent decades studying: <span class="key-term">bounded rationality</span>, <span class="key-term">groupthink</span>, cognitive biases, and the dynamics of participative versus top-down decision making.</p>
+        <p>Decision making in organizations is rarely the clean, linear process that introductory management textbooks describe. In theory, decision makers identify a problem, generate a comprehensive set of alternatives, evaluate each option against clear criteria, and select the optimal course of action. In practice, however, decisions unfold under time pressure, incomplete information, competing agendas, and powerful social dynamics that can steer groups toward premature consensus or outright error. Understanding how and why organizational decisions go wrong — and what conditions help them go right — is essential knowledge for psychologists who consult with organizations, lead teams, or evaluate workplace functioning.</p>
+        <p>The study of organizational decision making sits at the intersection of cognitive psychology, social psychology, and industrial-organizational psychology. It asks questions that matter deeply in applied settings: Why do intelligent, well-intentioned leaders sometimes make catastrophic choices? How does the presence of a group change the quality of a decision compared to an individual working alone? When does inviting broader participation improve outcomes, and when does it introduce new problems? These are not merely academic questions — they have shaped policy responses to disasters ranging from the Bay of Pigs invasion to the Challenger space shuttle explosion, and they inform everyday consulting work in healthcare systems, corporations, schools, and government agencies.</p>
+        <p>For the EPPP, this domain requires you to understand several interconnected topics. You will need to recognize how <span class="key-term">bounded rationality</span> constrains real-world decision makers, how group phenomena — especially <span class="key-term">groupthink</span> — can distort collective judgment, how participative decision models like the Vroom-Yetton framework guide leaders in choosing the right level of group involvement, and how cognitive biases such as anchoring, availability, and confirmation bias systematically skew organizational choices. In the sections that follow, we will build from the individual level outward — starting with the fundamental limits on human rationality that Herbert Simon first described, then moving to group-level phenomena, and finally examining structured approaches designed to improve decision quality.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Bounded Rationality</h2>
+        <p><span class="key-term">Herbert Simon</span> (1957, Nobel Prize 1978) challenged the classical economic assumption that decision makers are fully rational. He proposed that human rationality is <span class="key-term">bounded</span> -- limited by cognitive capacity, available information, and time constraints.</p>
+        <div class="definition-box">
+          <h4>Key Concepts in Bounded Rationality</h4>
+          <ul>
+            <li><strong>Bounded rationality:</strong> Decision makers cannot process all available information, consider all alternatives, or accurately predict all consequences. Instead, they use simplified models of reality.</li>
+            <li><strong>Satisficing:</strong> Rather than optimizing (finding the best possible solution), people <span class="key-term">satisfice</span> -- they search through alternatives until they find one that meets their minimum criteria ("good enough"). This is a rational response to cognitive limitations.</li>
+            <li><strong>Administrative model:</strong> Simon's descriptive model of how decisions are actually made, in contrast to the classical rational model of how decisions should ideally be made.</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Example: Satisficing vs. Optimizing</h4>
+          <p>A hiring manager using the <strong>rational/optimizing</strong> approach would interview every qualified candidate, systematically compare all on every dimension, and select the objectively best one. A <strong>satisficing</strong> manager would interview candidates sequentially and hire the first one who meets predetermined minimum qualifications. Given real-world time and resource constraints, satisficing is often the more practical strategy.</p>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Simon distinguished between <strong>programmed decisions</strong> (routine, repetitive problems handled by established procedures, rules, or algorithms) and <strong>nonprogrammed decisions</strong> (novel, complex, unstructured problems requiring creativity and judgment). Organizations should develop standard procedures for programmed decisions and reserve executive judgment for nonprogrammed decisions.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Groupthink</h2>
+        <p>Bounded rationality describes the cognitive limitations that constrain individual decision makers, but organizations rarely leave critical decisions to a single person. They convene committees, task forces, advisory boards, and leadership teams precisely because they believe that collective judgment will be superior to individual judgment. Yet groups introduce their own set of psychological hazards -- and none is more dramatic or consequential than the phenomenon <span class="key-term">Irving Janis</span> (1972, 1982) called <span class="key-term">groupthink</span>: a mode of thinking that occurs in highly cohesive groups when the desire for unanimity and conformity overrides realistic appraisal of alternatives. Groupthink leads to defective decision making.</p>
+
+        <h3>Antecedent Conditions</h3>
+        <ul>
+          <li><strong>High group cohesiveness:</strong> Strong sense of group identity and desire to maintain harmony</li>
+          <li><strong>Insulation of the group:</strong> Limited exposure to outside opinions and information</li>
+          <li><strong>Directive leadership:</strong> Leader who promotes their preferred solution early in discussions</li>
+          <li><strong>Lack of methodical procedures:</strong> Absence of systematic norms for evaluating alternatives</li>
+          <li><strong>High stress with low hope:</strong> External threats with limited perceived alternatives</li>
+          <li><strong>Homogeneity of members:</strong> Similar backgrounds, values, and ideologies</li>
+        </ul>
+
+        <h3>Symptoms of Groupthink</h3>
+        <div class="definition-box">
+          <h4>Janis's Eight Symptoms</h4>
+          <ol>
+            <li><strong>Illusion of invulnerability:</strong> Excessive optimism and risk-taking</li>
+            <li><strong>Collective rationalization:</strong> Discounting warnings or negative feedback</li>
+            <li><strong>Belief in inherent morality:</strong> Unquestioned belief in the group's rightness, ignoring ethical consequences</li>
+            <li><strong>Stereotyping of out-groups:</strong> Viewing opponents as evil, weak, or stupid</li>
+            <li><strong>Pressure on dissenters:</strong> Direct pressure on members who express dissenting views</li>
+            <li><strong>Self-censorship:</strong> Members withhold doubts and concerns to maintain group harmony</li>
+            <li><strong>Illusion of unanimity:</strong> False perception that everyone agrees (silence = consent)</li>
+            <li><strong>Self-appointed mindguards:</strong> Members who shield the group from information that contradicts the group's view</li>
+          </ol>
+        </div>
+        <div class="example-box">
+          <h4>Classic Examples of Groupthink</h4>
+          <p>Janis analyzed several historical decision-making fiascoes as examples of groupthink: the Bay of Pigs invasion (1961), the failure to anticipate the attack on Pearl Harbor (1941), and the escalation of the Vietnam War. In each case, highly cohesive advisory groups failed to critically evaluate alternatives or consider risks, leading to disastrous outcomes.</p>
+        </div>
+
+        <h3>Preventing Groupthink</h3>
+        <p>Janis recommended several strategies to prevent groupthink:</p>
+        <ul>
+          <li>Leader should encourage open criticism and withhold their own opinion initially</li>
+          <li>Assign one member the role of <span class="key-term">devil's advocate</span> to deliberately challenge proposals</li>
+          <li>Divide into subgroups to independently develop recommendations, then reconvene</li>
+          <li>Invite outside experts to observe and critique the group's process</li>
+          <li>Hold a "second chance" meeting to reconsider the decision before finalizing</li>
+          <li>Encourage each member to discuss the group's deliberations with trusted associates outside the group</li>
+        </ul>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Vroom-Yetton-Jago Decision Model</h2>
+        <p><span class="key-term">Victor Vroom and Philip Yetton</span> (1973), later revised with Arthur Jago (Vroom & Jago, 1988), developed a normative model that prescribes how much participation leaders should allow subordinates in making decisions. The model identifies five decision-making styles:</p>
+        <div class="definition-box">
+          <h4>Five Decision-Making Styles</h4>
+          <table>
+            <tr><th>Style</th><th>Description</th><th>Participation Level</th></tr>
+            <tr><td><strong>AI (Autocratic I)</strong></td><td>Leader makes the decision alone using available information</td><td>None</td></tr>
+            <tr><td><strong>AII (Autocratic II)</strong></td><td>Leader obtains information from subordinates, then decides alone</td><td>Minimal (information only)</td></tr>
+            <tr><td><strong>CI (Consultative I)</strong></td><td>Leader shares the problem with individual subordinates, gets ideas, then decides</td><td>Moderate (individual input)</td></tr>
+            <tr><td><strong>CII (Consultative II)</strong></td><td>Leader shares the problem with the group, gets collective ideas, then decides</td><td>Moderate (group input)</td></tr>
+            <tr><td><strong>GII (Group II)</strong></td><td>Leader shares the problem with the group; group generates and evaluates alternatives and reaches consensus. Leader facilitates but does not impose.</td><td>Full (group decision)</td></tr>
+          </table>
+        </div>
+        <p>The appropriate style depends on situational factors assessed through a series of diagnostic questions:</p>
+        <ul>
+          <li>Is decision quality important?</li>
+          <li>Does the leader have sufficient information?</li>
+          <li>Is the problem structured?</li>
+          <li>Is subordinate acceptance critical for implementation?</li>
+          <li>Would subordinates accept an autocratic decision?</li>
+          <li>Do subordinates share the organizational goals?</li>
+          <li>Is conflict among subordinates likely?</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>The Vroom-Yetton-Jago model is a <strong>normative</strong> (prescriptive) model -- it tells leaders what they <em>should</em> do, not what they typically do. The model demonstrates that no single leadership decision style is universally best: sometimes autocratic decisions are optimal (when the leader has expertise and acceptance is not critical), and sometimes participative decisions are needed (when acceptance is essential and the leader lacks information).</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Escalation of Commitment</h2>
+        <p>Having explored how leaders choose between autocratic and participative decision styles through the Vroom-Yetton-Jago model, we now turn to a darker side of decision making — what happens when a decision has already been made, evidence accumulates that it was the wrong call, and yet the decision maker doubles down. This pattern is one of the most costly and psychologically fascinating phenomena in organizational life, and understanding it is essential for any psychologist working in leadership consultation, program evaluation, or organizational change.</p>
+        <p>Consider this scenario: A hospital system spent three years and $12 million implementing a new electronic health records platform. Six months after launch, clinicians are frustrated, patient wait times have increased, and an independent audit reveals that the system's architecture cannot support the hospital's expanding telehealth services. The rational response might be to cut losses and explore alternatives. Instead, the executive team authorizes an additional $5 million for "enhancements," publicly declaring that the system just needs more time. Behind closed doors, the CIO who championed the platform insists that abandoning it would make the entire leadership team look incompetent. What is happening here is not simply poor judgment — it is a well-documented psychological trap.</p>
+        <p><span class="key-term">Escalation of commitment</span> (Staw, 1976) refers to the tendency to continue investing in a failing course of action despite mounting evidence that the decision is not working. Often called the "sunk cost fallacy" or colloquially described as "throwing good money after bad," this phenomenon occurs across contexts — from multibillion-dollar government defense programs to a graduate student's reluctance to abandon a dissertation topic that clearly isn't viable. The core dynamic is that prior investment, whether measured in money, time, effort, or emotional attachment, creates a gravitational pull that distorts future decision making.</p>
+        <div class="definition-box">
+        <h4>Factors Contributing to Escalation</h4>
+        <ul>
+        <li><strong>Self-justification:</strong> The need to justify previous decisions and demonstrate consistency</li>
+        <li><strong>Sunk costs:</strong> Focus on what has already been invested rather than future costs and benefits</li>
+        <li><strong>Completion effect:</strong> The closer a project is to completion, the more reluctant people are to abandon it</li>
+        <li><strong>Public commitment:</strong> Having made the decision publicly increases pressure to follow through</li>
+        <li><strong>Selective perception:</strong> Attending to information that supports the original decision while ignoring negative evidence</li>
+        <li><strong>Organizational factors:</strong> Political pressures, administrative inertia, and project champions who tie their reputation to the outcome</li>
+        </ul>
+        </div>
+        <p>Notice how these factors interact and amplify one another. A leader who publicly championed a new initiative (public commitment) naturally seeks confirming evidence that the initiative is working (selective perception), and when confronted with disconfirming data, experiences a powerful internal drive to prove the original decision was sound (self-justification). The more money or time already spent (sunk costs), the more painful it feels to walk away — even though, from a purely rational standpoint, sunk costs are irretrievable and should be irrelevant to future decisions. And when a project is tantalizingly close to a finish line — even if that finish line keeps receding — the completion effect makes abandonment feel almost unbearable.</p>
+        <p>Self-justification deserves special attention because it operates at both individual and group levels. Individually, Staw's research demonstrated that decision makers who were personally responsible for the initial investment were significantly more likely to escalate than those who inherited the decision. This is why organizations sometimes benefit from rotating leadership on long-term projects — a fresh set of eyes is not burdened by the psychological need to validate past choices. At the group level, teams can develop a shared narrative around a project's importance that becomes resistant to contradictory evidence, a dynamic that overlaps with groupthink.</p>
+        <div class="example-box">
+        <h4>Example: Escalation in Organizations</h4>
+        <p>A company has invested $50 million in developing a new product. Market research now shows minimal consumer interest, but executives authorize another $20 million to "see it through." Their reasoning focuses on the $50 million already spent (sunk cost) rather than the realistic prospects of future returns. Rational decision making would focus only on whether the additional $20 million investment is justified by expected future returns. A psychologist consulting with this organization might point out that the $50 million is gone regardless of the next decision — the only question that matters is whether investing $20 million today, with everything currently known about the market, would be a wise use of resources if the company were starting from scratch.</p>
+        </div>
+        <p>Strategies to reduce escalation include setting advance limits on investment before a project begins, separating initial and continuation decisions by assigning them to different decision makers, establishing clear and measurable criteria for abandoning a project (sometimes called "kill criteria"), and creating an organizational culture that does not punish failure but instead rewards honest reassessment. Some organizations formalize this through structured decision reviews — periodic checkpoints where the question is explicitly reframed: "Knowing what we know now, would we start this project today?" This reframing helps bypass the sunk cost trap by directing attention toward future costs and benefits rather than past expenditures. For the EPPP, remember that escalation of commitment is driven by psychological and social forces — self-justification, sunk costs, public commitment — and that the most effective countermeasures involve structural safeguards that protect decision makers from these very human tendencies.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Prospect Theory in Organizations</h2>
+        <p><span class="key-term">Prospect theory</span>, developed by Daniel Kahneman and Amos Tversky (1979, Nobel Prize 2002), describes how people make decisions under conditions of risk and uncertainty. It challenges classical expected utility theory with several key insights:</p>
+        <div class="definition-box">
+          <h4>Key Principles of Prospect Theory</h4>
+          <ul>
+            <li><strong>Reference dependence:</strong> People evaluate outcomes relative to a reference point (typically the status quo), not in absolute terms</li>
+            <li><strong>Loss aversion:</strong> Losses loom larger than equivalent gains -- the pain of losing $100 is greater than the pleasure of gaining $100 (approximately 2:1 ratio). This is the most important concept for organizational applications.</li>
+            <li><strong>Diminishing sensitivity:</strong> The marginal impact of gains and losses decreases as their magnitude increases (the difference between $100 and $200 feels larger than between $1,100 and $1,200)</li>
+            <li><strong>Risk attitudes:</strong> People are generally risk-averse for gains (preferring a certain $50 over a 50% chance of $100) but risk-seeking for losses (preferring a 50% chance of losing $100 over a certain loss of $50)</li>
+          </ul>
+        </div>
+        <div class="clinical-note">
+          <h4>Organizational Applications of Prospect Theory</h4>
+          <p>Prospect theory has important implications for organizational decision making: (1) <strong>Framing effects:</strong> The same decision presented as a potential loss vs. potential gain leads to different choices. Managers can influence decisions by how they frame options. (2) <strong>Resistance to change:</strong> Loss aversion helps explain why people resist organizational change -- the potential losses feel more significant than equivalent potential gains. (3) <strong>Escalation of commitment:</strong> When decision makers frame additional investment as a way to avoid acknowledging a loss, they become risk-seeking and more likely to escalate.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Group Decision-Making Techniques</h2>
+
+        <p>Having explored how individual cognitive biases — from framing effects to loss aversion — distort decision making, we now turn to a fundamental question facing every organization: Can groups do better? When a hospital committee convenes to select a new electronic health records system, when a school psychologist joins a multidisciplinary team to design an intervention plan, or when a corporate board debates whether to enter a new market, the implicit assumption is that pooling multiple minds will yield wiser choices than any one person could make alone. But anyone who has sat through a meandering committee meeting knows that groups don't automatically outperform individuals. In fact, without deliberate structure, groups often perform worse — dominated by the loudest voice, derailed by social pressure, or paralyzed by diffuse responsibility.</p>
+
+        <p>This realization has driven organizational psychologists to develop structured techniques that harness the genuine advantages of collective intelligence — diverse perspectives, broader knowledge bases, error-checking — while minimizing the well-documented pitfalls of group interaction. Each technique addresses a slightly different set of problems, and understanding their distinct mechanisms is critical for both the EPPP and for real-world consultation. Consider, for example, a psychologist asked to facilitate strategic planning for a community mental health center. Choosing the right group decision-making method isn't just an academic exercise; it directly shapes whether marginalized voices are heard, whether creative solutions surface, and whether the final decision reflects genuine consensus or mere acquiescence to authority.</p>
+
+        <p>The following table summarizes four major techniques, each designed to improve upon unstructured group discussion in specific ways:</p>
+
+        <table>
+        <tr><th>Technique</th><th>Description</th><th>Primary Benefit</th></tr>
+        <tr><td><span class="key-term">Brainstorming</span></td><td>Group generates as many ideas as possible without criticism; evaluation comes later</td><td>Quantity of ideas (though research shows individuals produce more ideas working alone)</td></tr>
+        <tr><td><span class="key-term">Nominal Group Technique (NGT)</span></td><td>Members individually generate ideas in writing, then share in round-robin format, discuss, and vote privately</td><td>Reduces production blocking and social loafing; equalizes participation</td></tr>
+        <tr><td><span class="key-term">Delphi Technique</span></td><td>Experts respond to questionnaires independently through multiple rounds; responses are aggregated and shared; process continues until convergence</td><td>Eliminates conformity pressure; useful when experts cannot meet face-to-face</td></tr>
+        <tr><td><span class="key-term">Stepladder Technique</span></td><td>Members join the group one at a time, presenting their ideas before hearing the group's discussion</td><td>Ensures each member contributes independently before being influenced by the group</td></tr>
+        </table>
+
+        <p>Let's bring these techniques to life. <span class="key-term">Brainstorming</span>, introduced by advertising executive Alex Osborn in the 1950s, is arguably the most widely recognized — and the most misunderstood. Osborn's original rules were straightforward: generate as many ideas as possible, withhold criticism, welcome wild ideas, and combine or improve upon others' suggestions. The intuition is appealing — surely a room full of creative people riffing off each other's ideas will produce something brilliant. Yet decades of research have delivered a humbling finding: brainstorming groups typically generate fewer and less original ideas than the same number of individuals working independently. The reasons are instructive. In a face-to-face group, only one person can speak at a time (production blocking), members self-censor ideas they fear will be judged (evaluation apprehension), and some participants coast on others' efforts (social loafing). Despite this, brainstorming remains popular — partly because participants consistently believe their groups performed well, illustrating yet another cognitive bias.</p>
+
+        <p>The <span class="key-term">Nominal Group Technique (NGT)</span> was specifically engineered to overcome these limitations. Imagine a treatment team at an inpatient psychiatric unit trying to identify barriers to patient discharge. Rather than opening the floor to free discussion — where the attending psychiatrist's opinion might dominate — the facilitator asks each team member to silently write down their ideas for five minutes. Then, in a structured round-robin, each person shares one idea at a time, which is recorded on a whiteboard without debate. Only after all ideas are listed does the group engage in clarifying discussion. Finally, members privately rank or vote on the ideas. This elegant sequence ensures that the quiet but insightful social worker's observations receive the same initial platform as the senior physician's, and the private voting prevents conformity pressure from collapsing diverse perspectives into premature consensus.</p>
+
+        <p>The <span class="key-term">Delphi Technique</span> takes the separation of individual judgment from group influence even further by eliminating face-to-face interaction entirely. Originally developed by the RAND Corporation for military forecasting, this method is ideal when expert panelists are geographically dispersed or when the topic is so contentious that direct interaction would generate more heat than light. A psychologist using the Delphi method to establish best-practice guidelines for telehealth, for example, might survey a panel of experts across the country, aggregate their anonymous responses, share the summarized results back to the panel, and repeat for several rounds. Through iterative feedback, opinions tend to converge toward well-reasoned positions — without any single dominant personality steering the outcome.</p>
+
+        <p>Finally, the <span class="key-term">Stepladder Technique</span> addresses group influence through a clever structural innovation: rather than having all members present from the start, members are added one at a time. Each newcomer must present their preliminary ideas to the existing group before hearing what has already been discussed. Picture a hiring committee evaluating candidates — each new committee member who enters the room first shares their independent assessment, then engages with the group's evolving discussion. This prevents the anchoring effect that occurs when early speakers set the frame, and it ensures that each individual's unique perspective enters the conversation uncorrupted by premature social influence.</p>
+
+        <div class="clinical-note">
+        <h4>EPPP Key Concept</h4>
+        <p>Research consistently shows that <strong>nominal groups</strong> (individuals working alone whose ideas are pooled) outperform <strong>interacting groups</strong> (face-to-face brainstorming) in both quantity and quality of ideas. This is due to production blocking (waiting to speak), evaluation apprehension (fear of criticism), and social loafing (reduced effort in groups). The Nominal Group Technique and Delphi Technique were designed to address these problems. For the exam, remember this counterintuitive finding: despite our strong intuition that interactive groups are more creative, the evidence favors structured methods that protect independent thinking before allowing group discussion. The three process losses to memorize — production blocking, evaluation apprehension, and social loafing — explain why unstructured brainstorming underperforms, and they map directly onto the design features of NGT and Delphi that correct for each one.</p>
+        </div>
+
+        <p>Understanding these techniques matters not only for selecting the right tool in a given organizational context but also for appreciating a broader theme in decision-making research: the tension between the richness of social interaction and the distorting power of social influence. As we turn next to group polarization and the risky shift phenomenon, we'll see what happens when groups make decisions without these structural safeguards — and how the very act of group discussion can push decisions toward more extreme positions than any individual member would endorse alone.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Group Polarization and Risky Shift</h2>
+        <p><span class="key-term">James Stoner</span> (1961) made the surprising discovery that groups tend to make riskier decisions than the average of individual members' pre-discussion preferences. This phenomenon was initially called the <span class="key-term">risky shift</span>.</p>
+        <p>Subsequent research revealed that groups do not always shift toward greater risk. Sometimes groups shift toward greater caution (<span class="key-term">cautious shift</span>). The broader phenomenon was reconceptualized as <span class="key-term">group polarization</span> (Moscovici & Zavalloni, 1969): after group discussion, the group's position tends to become <strong>more extreme in the direction of the pre-discussion tendency</strong>. If members initially lean toward risk, the group becomes riskier; if members initially lean toward caution, the group becomes more cautious.</p>
+        <div class="definition-box">
+          <h4>Two Explanations for Group Polarization</h4>
+          <ul>
+            <li><strong>Persuasive arguments theory:</strong> During discussion, members are exposed to <em>novel arguments</em> favoring the already-preferred direction. Since the pool of available arguments is skewed toward the initial tendency, discussion introduces new supporting arguments that further strengthen the dominant position.</li>
+            <li><strong>Social comparison theory:</strong> Members want to be perceived as holding socially desirable positions. When they discover the group's average position during discussion, they shift further in that direction to appear more extreme (in a valued direction) than others. People want to be seen as at least as risk-taking (or cautious) as their peers.</li>
+          </ul>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Group polarization is distinct from groupthink. Groupthink involves suppression of dissent and defective decision processes in highly cohesive groups. Group polarization is a general tendency for group discussion to amplify pre-existing preferences, regardless of cohesion. Both can lead to poor decisions, but through different mechanisms. Know that the <strong>risky shift</strong> was the original finding (Stoner, 1961) and that <strong>group polarization</strong> is the broader, more accurate concept -- groups shift toward extremity, not necessarily toward risk.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Simon's bounded rationality: cognitive limits prevent fully rational decisions; people satisfice rather than optimize</li>
+            <li>Satisficing = choosing the first "good enough" option; optimizing = finding the absolute best</li>
+            <li>Programmed decisions = routine, handled by procedures; nonprogrammed = novel, requiring judgment</li>
+            <li>Groupthink: cohesive groups prioritize unanimity over critical thinking (Janis)</li>
+            <li>Eight symptoms of groupthink: invulnerability, rationalization, morality, stereotyping, pressure, self-censorship, unanimity illusion, mindguards</li>
+            <li>Antecedents: high cohesiveness, insulation, directive leader, homogeneity, high stress</li>
+            <li>Prevention: devil's advocate, outside experts, leader withholds opinion, subgroups</li>
+            <li>Vroom-Yetton-Jago: normative model with five decision styles (AI, AII, CI, CII, GII) based on situational factors</li>
+            <li>Escalation of commitment: continuing to invest in a failing course of action (driven by sunk costs, self-justification)</li>
+            <li>Prospect theory: loss aversion (losses hurt ~2x more than gains); risk-averse for gains, risk-seeking for losses</li>
+            <li>Nominal groups outperform brainstorming groups for idea generation</li>
+            <li>Delphi technique: experts respond independently in iterative rounds; no face-to-face interaction</li>
+            <li>Risky shift (Stoner, 1961): groups tend to make riskier decisions than individual averages</li>
+            <li>Group polarization: groups shift toward more extreme position in the direction of pre-discussion tendency (not always riskier -- cautious shift also possible)</li>
+            <li>Two mechanisms: persuasive arguments (novel arguments) and social comparison (wanting to be seen as more extreme)</li>
+          </ul>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Janis, I. L. (1982). <em>Groupthink: Psychological studies of policy decisions and fiascoes</em> (2nd ed.). Houghton Mifflin.</div>
+        <div class="citation">Kahneman, D., & Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <em>Econometrica, 47</em>(2), 263-292.</div>
+        <div class="citation">Simon, H. A. (1957). <em>Models of man: Social and rational</em>. Wiley.</div>
+        <div class="citation">Moscovici, S., & Zavalloni, M. (1969). The group as a polarizer of attitudes. <em>Journal of Personality and Social Psychology, 12</em>(2), 125-135.</div>
+        <div class="citation">Staw, B. M. (1976). Knee-deep in the big muddy: A study of escalating commitment to a chosen course of action. <em>Organizational Behavior and Human Performance, 16</em>(1), 27-44.</div>
+        <div class="citation">Stoner, J. A. F. (1961). <em>A comparison of individual and group decisions involving risk</em> (Unpublished master's thesis). Massachusetts Institute of Technology.</div>
+        <div class="citation">Vroom, V. H., & Jago, A. G. (1988). <em>The new leadership: Managing participation in organizations</em>. Prentice Hall.</div>
+        <div class="citation">Vroom, V. H., & Yetton, P. W. (1973). <em>Leadership and decision-making</em>. University of Pittsburgh Press.</div>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="leadership.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Leading People — Traits, Behaviors & Contingency Models</div>
+          </div>
+        </a>
+        <a href="org-change.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Transforming Organizations — Lewin, Kotter & OD Interventions</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

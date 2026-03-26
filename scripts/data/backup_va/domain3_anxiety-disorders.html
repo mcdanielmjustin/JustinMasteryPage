@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fear Without Cause — GAD, Phobias, Panic & Social Anxiety | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Fear Without Cause — GAD, Phobias, Panic & Social Anxiety</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">1</span>Early-Onset Conditions — ADHD, ASD & Intellectual Disability</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">2</span>Fractured Reality — Schizophrenia & the Psychotic Spectrum</a></li>
+        <li class="chapter-item"><a href="depressive-disorders.html" class="chapter-link"><span class="chapter-number">3</span>When Darkness Descends — MDD, Dysthymia & Grief</a></li>
+        <li class="chapter-item"><a href="bipolar-spectrum.html" class="chapter-link"><span class="chapter-number">4</span>The Pendulum Swings — Bipolar I, II & Cyclothymia</a></li>
+        <li class="chapter-item"><a href="anxiety-disorders.html" class="chapter-link active"><span class="chapter-number">5</span>Fear Without Cause — GAD, Phobias, Panic & Social Anxiety</a></li>
+        <li class="chapter-item"><a href="ocd-spectrum.html" class="chapter-link"><span class="chapter-number">6</span>Rituals & Repetition — OCD, BDD, Hoarding & Related Conditions</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">7</span>When the World Breaks In — PTSD, Dissociation & Somatic Responses</a></li>
+        <li class="chapter-item"><a href="eating-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Feeding & Eating Disorders — Anorexia, Bulimia & BED</a></li>
+        <li class="chapter-item"><a href="sleep-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Sleep-Wake Disturbances — Insomnia, Narcolepsy & Circadian Disruption</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">10</span>Sexual Dysfunctions, Gender Dysphoria & Paraphilias</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">11</span>Defiance & Aggression — ODD, Conduct Disorder & Antisocial Trajectories</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">12</span>Substance Use & Behavioral Addictions — From Use to Dependence</a></li>
+        <li class="chapter-item"><a href="personality-clusters-ab.html" class="chapter-link"><span class="chapter-number">13</span>Personality Pathology Part 1 — Clusters A & B</a></li>
+        <li class="chapter-item"><a href="personality-cluster-c.html" class="chapter-link"><span class="chapter-number">14</span>Personality Pathology Part 2 — Cluster C, the AMPD & Treatment</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 14</div>
+        <h1>Fear Without Cause — GAD, Phobias, Panic & Social Anxiety</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Overview of Anxiety Disorders</h2>
+        <p>Anxiety disorders are among the most prevalent psychiatric conditions, affecting approximately 31% of adults at some point during their lives (Kessler et al., 2005). The DSM-5 categorizes anxiety disorders as conditions characterized by excessive fear and anxiety along with related behavioral disturbances. <span class="key-term">Fear</span> is the emotional response to a real or perceived imminent threat, while <span class="key-term">anxiety</span> is the anticipation of a future threat.</p>
+        <div class="definition-box">
+          <h4>Key Distinction: Fear vs. Anxiety</h4>
+          <p><strong>Fear</strong> involves surges of autonomic arousal necessary for fight-or-flight, thoughts of immediate danger, and escape behaviors. <strong>Anxiety</strong> involves muscle tension, vigilance in preparation for future danger, and cautious or avoidant behaviors. Both can overlap, but the distinction is clinically important for differential diagnosis.</p>
+        </div>
+        <p>Anxiety disorders differ from normal developmental anxiety by being excessive, persistent (typically lasting 6 months or more), and causing clinically significant distress or impairment. The DSM-5 reorganized the anxiety chapter by removing OCD and PTSD into their own chapters, though they share features with anxiety disorders.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Generalized Anxiety Disorder (GAD)</h2>
+        <p>Imagine a client who sits in your office and tells you she worries about everything — her job performance, her children's safety, whether she paid a bill on time, whether a mole on her arm looks different than it did last week. She knows the worry is excessive. She tries to stop, but the thoughts just keep cycling. She hasn't slept well in months, her neck and shoulders are locked in a permanent knot of tension, and she snaps at her partner over trivial things. She can't point to a single triggering event or a specific feared object — the worry simply saturates every domain of her life. This pervasive, free-floating pattern of apprehension is the hallmark of <span class="key-term">Generalized Anxiety Disorder</span>, a condition characterized by persistent and excessive worry across a variety of domains including work, health, family, finances, and everyday matters. Unlike the focused dread we see in phobias or the episodic surges of panic disorder, GAD spreads its anxious net wide — and the person finds it extraordinarily difficult to rein the worry in.</p>
+        <p>As we discussed in the overview, anxiety disorders share the core feature of excessive, persistent fear and anxiety that causes significant distress or impairment. GAD exemplifies that definition in its purest form: the worry itself becomes the central problem, and it drags along at least three somatic or cognitive symptoms that compound the individual's suffering. Understanding GAD well prepares you not only for exam questions but also for clinical practice, because this disorder shows up frequently — and rarely travels alone.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <p>The DSM-5 lays out a structured set of criteria that capture both the cognitive and physiological dimensions of GAD. Pay close attention to the temporal requirement and the specific symptom threshold, as these details commonly appear on licensing examinations.</p>
+        <ol>
+        <li><strong>Criterion A:</strong> Excessive anxiety and worry occurring more days than not for at least 6 months, about a number of events or activities.</li>
+        <li><strong>Criterion B:</strong> The individual finds it difficult to control the worry.</li>
+        <li><strong>Criterion C:</strong> The anxiety and worry are associated with three or more of the following (only one required in children): restlessness or feeling keyed up, being easily fatigued, difficulty concentrating or mind going blank, irritability, muscle tension, sleep disturbance.</li>
+        <li><strong>Criterion D:</strong> The disturbance causes clinically significant distress or impairment.</li>
+        <li><strong>Criterion E:</strong> Not attributable to substances or another medical condition.</li>
+        <li><strong>Criterion F:</strong> Not better explained by another mental disorder.</li>
+        </ol>
+        <p>A few clinical details deserve emphasis here. First, notice that Criterion A demands worry across multiple events or activities — a person who worries exclusively about contamination or social evaluation likely meets criteria for a different diagnosis. Second, the "three or more" somatic/cognitive symptom threshold in Criterion C drops to just one symptom for children, reflecting the developmental reality that younger individuals may not yet articulate or manifest the full adult symptom profile. Third, muscle tension stands out among the Criterion C symptoms as particularly characteristic of GAD; many clients present initially to primary care physicians with chronic neck pain, headaches, or jaw clenching before anyone identifies the underlying anxiety disorder.</p>
+        <div class="clinical-note">
+        <h4>Clinical Pearl</h4>
+        <p>GAD has the highest comorbidity rate of any anxiety disorder. Approximately 90% of individuals with GAD have at least one comorbid disorder, most commonly MDD. The <span class="key-term">intolerance of uncertainty model</span> (Dugas et al., 1998) posits that individuals with GAD have difficulty tolerating ambiguous situations, which fuels the worry cycle.</p>
+        </div>
+        <p>That staggering 90% comorbidity figure deserves a moment of reflection. In clinical practice, "pure" GAD — without depression, another anxiety disorder, or a substance use problem alongside it — is the exception rather than the rule. This means that when you identify GAD, your next step should always involve a thorough assessment for co-occurring conditions, especially major depressive disorder. The intolerance of uncertainty model offers a particularly useful clinical lens: picture a client who cannot leave any question unanswered, who Googles every minor health symptom at 2 a.m., and who demands reassurance from loved ones about outcomes no one can predict. That intolerance of "not knowing" drives a relentless search for certainty that, paradoxically, generates more worry rather than less. Therapeutic approaches informed by this model — such as those developed by Dugas and colleagues — help clients gradually increase their tolerance for ambiguity, often through behavioral experiments that expose them to deliberately uncertain situations.</p>
+        <h3>Epidemiology</h3>
+        <p>GAD affects approximately 5.7% of adults over their lifetime, making it one of the more common anxiety disorders encountered in both outpatient mental health and primary care settings. Women receive the diagnosis roughly twice as often as men, a gender disparity consistent with most anxiety disorders. Unlike many anxiety conditions that emerge in childhood or adolescence, GAD tends to develop gradually, with a median age of onset around 30 years — later than most other anxiety disorders. Clinicians should keep this timeline in mind: a 35-year-old presenting with a years-long pattern of diffuse worry fits the typical GAD profile, whereas the same presentation in a 12-year-old warrants careful differential diagnosis.</p>
+        <p>Once established, GAD typically follows a chronic, waxing-and-waning course. Clients often describe periods where the worry becomes more manageable — perhaps during a vacation or a stretch of relative stability — only to intensify again when new stressors emerge. This fluctuating trajectory can mislead both clients and clinicians into believing the problem has resolved, when in reality the underlying vulnerability persists. Recognizing this pattern helps set appropriate treatment expectations: the goal is not just symptom relief during a "good phase" but durable skills and, when indicated, sustained pharmacological support that prevents the next escalation.</p>
+      </section>
+
+        <!-- anchor:134 coverage:missing -->
+        <div class="clinical-note"><h4>Clinical Note</h4><p>In children and adolescents, the presentation of GAD differs somewhat from the adult form. Children with GAD are most frequently preoccupied with concerns about <span class="key-term">academic and athletic competence</span> — worrying excessively about grades, test performance, or their ability in sports. They also commonly express fears about <span class="key-term">catastrophic events and natural disasters</span> such as earthquakes, tornadoes, or wars. Unlike adults, who more often worry about finances, health, or job performance, children tend to focus on areas where they are being evaluated or where they perceive uncontrollable external threats. Only one somatic or cognitive symptom from Criterion C is required for diagnosis in children, compared to three for adults. Children with GAD frequently seek excessive reassurance from parents and teachers and may present as "little perfectionists" who redo assignments or become visibly distressed about minor mistakes. Recognizing these age-specific worry themes is essential for accurate identification, as children may not label their experience as "worry" and instead present with somatic complaints such as stomachaches or headaches.</p></div>
+        <!-- /anchor:134 -->
+
+
+
+      <section class="content-section">
+
+        <!-- anchor:11 coverage:partial -->
+        <p>Onset of separation anxiety disorder is frequently precipitated by identifiable <span class="key-term">life stressors</span> that disrupt the child's sense of security. Common triggers include the death of a relative or family pet, a change in schools, parental divorce, a move to a new home, or an illness in the family. For example, a child who had previously attended school without difficulty may begin refusing to leave home and exhibit intense distress about being apart from her parents following the loss of a beloved pet. The experience of loss or disruption activates fears about the permanence of attachment relationships, making the child hypervigilant about potential threats to remaining attachment figures. Clinicians should routinely assess for recent psychosocial stressors when separation anxiety symptoms emerge or intensify, as identifying the precipitant can guide both case conceptualization and therapeutic intervention.</p>
+        <!-- /anchor:11 -->
+
+        <h2>Specific Phobias</h2>
+        <p>While GAD casts its anxious net wide — worrying about everything and nothing in particular — specific phobias represent the opposite end of the anxiety spectrum: intense, sharply focused fear directed at a single object, creature, or situation. A person with GAD dreads the undefined; a person with a specific phobia knows exactly what terrifies them and will go to remarkable lengths to avoid it. Understanding this contrast helps clinicians make accurate differential diagnoses when patients present with avoidance behavior.</p>
+        <p><span class="key-term">Specific phobia</span> involves marked and disproportionate fear or anxiety about a specific object or situation that is actively avoided or endured with intense distress. The DSM-5 identifies five specifier subtypes:</p>
+        <ul>
+          <li><strong>Animal type</strong> (e.g., spiders, dogs, insects) -- typically onset in childhood</li>
+          <li><strong>Natural environment type</strong> (e.g., heights, storms, water)</li>
+          <li><strong>Blood-injection-injury (BII) type</strong> -- uniquely associated with a <span class="key-term">vasovagal response</span> (fainting)</li>
+          <li><strong>Situational type</strong> (e.g., airplanes, elevators, enclosed places)</li>
+          <li><strong>Other type</strong> (e.g., choking, vomiting, loud sounds)</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>A patient faints at the sight of blood during a medical procedure. Unlike other phobias that involve sustained sympathetic arousal, BII phobia involves an initial sympathetic spike followed by a parasympathetic rebound, producing bradycardia and hypotension. This is why <strong>applied tension</strong> (Ost & Sterner, 1987) is the treatment of choice for BII phobia, rather than standard relaxation techniques.</p>
+        </div>
+        <p>Specific phobias are the most common anxiety disorder, with a lifetime prevalence of approximately 12.5%. They are often acquired through direct traumatic experience, observation, or informational transmission (Rachman, 1977).</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Social Anxiety Disorder</h2>
+        <p>Imagine a graduate student who has thoroughly prepared a case presentation for her practicum seminar. She knows the material cold — she could explain her conceptualization in her sleep. Yet as she walks toward the front of the room, her heart pounds, her face flushes, and her mind goes blank. She is certain that every person in the room can see her hands trembling, that they are judging her as incompetent. She stumbles through her presentation, then spends the rest of the day replaying every perceived misstep. This is not ordinary stage fright. This is <span class="key-term">Social Anxiety Disorder</span> — and it is one of the most prevalent and impairing anxiety conditions clinicians encounter.</p>
+        <p>Having just explored how specific phobias involve intense fear tied to circumscribed objects or situations, we now turn to a disorder where the feared stimulus is fundamentally interpersonal: other people's judgment. <span class="key-term">Social Anxiety Disorder</span> (SAD), previously known as social phobia, involves marked and persistent fear or anxiety about social situations in which the individual may be scrutinized by others. The core dread is not simply of the situation itself — it is of acting in a way that will be negatively evaluated, leading to humiliation, embarrassment, or rejection. Unlike the person with a specific phobia of heights who can simply avoid balconies, the person with SAD faces their feared stimulus every time they enter a classroom, attend a meeting, or make small talk at a gathering.</p>
+        <p>What makes SAD particularly insidious is its self-reinforcing quality. A person who fears negative evaluation begins monitoring themselves intensely during social interactions — scrutinizing their own words, facial expressions, and body language. This inward focus paradoxically makes them less attuned to actual social cues (like the friendly nods of listeners) and more convinced that they are performing badly. They leave the interaction believing their worst fears were confirmed, which strengthens avoidance the next time. This internal feedback loop is central to understanding why the disorder persists even when others perceive the individual as perfectly competent.</p>
+
+        <h3>Key Features</h3>
+        <p>The DSM-5 diagnostic criteria for Social Anxiety Disorder capture a pattern that goes well beyond ordinary shyness or nervousness. Consider the difference between a new employee who feels butterflies before her first team meeting versus someone who has called in sick three times this month specifically to avoid speaking up in those meetings. The diagnostic features reflect this level of intensity and impairment:</p>
+        <ul>
+        <li>The social situations almost always provoke fear or anxiety</li>
+        <li>Situations are avoided or endured with intense fear or anxiety</li>
+        <li>The fear is out of proportion to the actual threat posed</li>
+        <li>Duration of at least 6 months</li>
+        <li>Specify if <strong>performance only</strong> (limited to speaking or performing in public)</li>
+        </ul>
+        <p>The six-month duration requirement is particularly important for the EPPP. This criterion helps clinicians distinguish SAD from transient social anxiety that might arise during a stressful life transition — such as starting a new job or adjusting to college — and the chronic, entrenched pattern that characterizes the disorder. Additionally, clinicians must rule out that the fear and avoidance are not better explained by another condition, such as body dysmorphic disorder (where the person fears scrutiny of a perceived physical flaw) or autism spectrum disorder (where social difficulties stem from different underlying mechanisms).</p>
+
+        <div class="citation">Cognitive models (Clark & Wells, 1995) emphasize that individuals with SAD shift attention inward to monitor their own behavior and appearance, creating a distorted self-image that perpetuates anxiety in social situations.</div>
+
+        <p>The Clark and Wells (1995) cognitive model deserves particular attention because it has profoundly shaped evidence-based treatment for SAD. According to this model, when a person with SAD enters a feared social situation, they activate a set of negative beliefs about themselves ("I'm boring," "People will see how anxious I am"). These beliefs trigger a shift in attention — instead of focusing outward on the conversation or audience, the person turns their attention inward, constructing a mental image of how they believe they appear to others. This self-image is almost always distorted and catastrophic: they picture themselves visibly sweating, stammering, or looking foolish. Because they are relying on this internal "camera" rather than on actual social feedback, they leave the situation convinced that their worst fears came true. This model explains why people with SAD can receive compliments on a presentation yet remain certain it went terribly — they trusted their internal self-monitoring over external evidence.</p>
+        <p>Clinically, this has direct treatment implications. Cognitive-behavioral interventions for SAD often include behavioral experiments designed to shift attention outward, video feedback to correct distorted self-imagery, and systematic testing of catastrophic predictions. For example, a therapist might ask a client to deliberately focus on their conversational partner's responses during a social interaction and then compare what actually happened to what they predicted would happen.</p>
+        <p>SAD has a lifetime prevalence of approximately 12% in the United States, making it one of the most common mental disorders. It typically begins in the mid-teens, often following a history of social inhibition or behavioral inhibition temperament — that quiet, watchful child who clings to a parent at birthday parties and takes a long time to warm up to new people. Research consistently shows that behavioral inhibition in early childhood is one of the strongest temperamental risk factors for developing SAD later in life, though not all inhibited children go on to develop the disorder. Onset after age 25 is relatively uncommon; when social anxiety appears for the first time in adulthood, clinicians should carefully consider whether it might be secondary to another condition, such as depression or a medical illness.</p>
+        <p>The <span class="key-term">performance only</span> specifier was introduced in DSM-5 and distinguishes individuals whose fears are restricted to public speaking or performance contexts from those with the more generalized form. This distinction matters both clinically and on the EPPP. A person with the performance only specifier may function well in one-on-one conversations, small group interactions, and even casual social gatherings — their anxiety is triggered specifically when they must perform or speak before an audience. In contrast, the generalized form of SAD involves fear across a broad range of social interactions, including casual conversations, eating in front of others, or even making eye contact. The performance only subtype tends to have a later onset, may be less associated with comorbid conditions, and sometimes responds well to beta-blockers (such as propranolol) taken before a performance — a pharmacological strategy that is less effective for generalized SAD, where SSRIs and comprehensive CBT are typically first-line treatments.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Panic Disorder and Agoraphobia</h2>
+        <p>The anxiety disorders we have examined so far — GAD, specific phobias, and social anxiety disorder — all involve fear directed at identifiable targets, whether those targets are diffuse worries, discrete objects, or social evaluation. Panic disorder introduces a fundamentally different clinical experience: the fear arrives without warning, without a clear trigger, and with such overwhelming physiological intensity that many individuals genuinely believe they are having a heart attack or dying. It is this terrifying unpredictability that makes panic disorder uniquely debilitating and that drives the avoidance behaviors often culminating in agoraphobia.</p>
+        <h3>Panic Disorder</h3>
+        <p><span class="key-term">Panic disorder</span> is characterized by recurrent, unexpected panic attacks -- abrupt surges of intense fear or discomfort that reach a peak within minutes. At least one attack must be followed by one month or more of persistent concern about additional attacks or maladaptive behavioral changes related to the attacks.</p>
+        <h4>Panic Attack Symptoms (4 or more required)</h4>
+        <ol>
+          <li>Palpitations, pounding heart, or accelerated heart rate</li>
+          <li>Sweating</li>
+          <li>Trembling or shaking</li>
+          <li>Sensations of shortness of breath or smothering</li>
+          <li>Feelings of choking</li>
+          <li>Chest pain or discomfort</li>
+          <li>Nausea or abdominal distress</li>
+          <li>Feeling dizzy, unsteady, light-headed, or faint</li>
+          <li>Chills or heat sensations</li>
+          <li>Paresthesias (numbness or tingling)</li>
+          <li>Derealization or depersonalization</li>
+          <li>Fear of losing control or "going crazy"</li>
+          <li>Fear of dying</li>
+        </ol>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>The <span class="key-term">anxiety sensitivity model</span> (Reiss & McNally, 1985) proposes that individuals with panic disorder have elevated fear of anxiety-related sensations themselves, believing these sensations have harmful consequences. Clark's (1986) <span class="key-term">cognitive model of panic</span> emphasizes catastrophic misinterpretation of benign bodily sensations as the core mechanism.</p>
+        </div>
+        <h3>Agoraphobia</h3>
+        <p>In DSM-5, <span class="key-term">agoraphobia</span> is diagnosed as a separate disorder from panic disorder. It involves marked fear or anxiety about two or more of the following five situations: using public transportation, being in open spaces, being in enclosed places, standing in line or being in a crowd, and being outside of the home alone. The fear is that escape might be difficult or help unavailable in the event of panic-like symptoms.</p>
+        <p>Approximately one-third to one-half of individuals with panic disorder also develop agoraphobia. Notably, agoraphobia can occur without a history of panic disorder.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>GAD requires worry on more days than not for at least <strong>6 months</strong> plus <strong>3+ associated symptoms</strong> (only 1 for children)</li>
+          <li>GAD has the <strong>highest comorbidity rate</strong> of any anxiety disorder; approximately 90% have a comorbid condition</li>
+          <li>Specific phobias are the <strong>most common anxiety disorder</strong> (12.5% lifetime prevalence)</li>
+          <li>BII phobia uniquely involves a <strong>vasovagal response</strong> (fainting); treated with <strong>applied tension</strong>, not relaxation</li>
+          <li>Social anxiety disorder: Clark and Wells (1995) model emphasizes <strong>inward attentional shift</strong> and distorted self-image</li>
+          <li>Panic disorder requires <strong>recurrent, unexpected panic attacks</strong> plus 1+ month of concern or behavioral change</li>
+          <li>DSM-5 made <strong>agoraphobia a separate diagnosis</strong> from panic disorder; requires fear of 2+ of 5 situations</li>
+          <li>Anxiety sensitivity (fear of anxiety sensations) is a key vulnerability factor for <strong>panic disorder</strong></li>
+          <li>Separation anxiety disorder can now be diagnosed in <strong>adults</strong> (not just children) under DSM-5</li>
+          <li>The <strong>performance only</strong> specifier for SAD distinguishes circumscribed public speaking fear from generalized social anxiety</li>
+        </ul>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="bipolar-spectrum.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">The Pendulum Swings — Bipolar I, II & Cyclothymia</div>
+          </div>
+        </a>
+        <a href="ocd-spectrum.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Rituals & Repetition — OCD, BDD, Hoarding & Related Conditions</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

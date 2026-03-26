@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standard 3 — Human Relations, Multiple Relationships & Avoiding Harm | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Standard 3 — Human Relations, Multiple Relationships & Avoiding Harm</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology & Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ethics-foundation.html" class="chapter-link"><span class="chapter-number">1</span>Ethics Foundation — APA Principles, Code Structure & Resolving Dilemmas</a></li>
+        <li class="chapter-item"><a href="competence-standards.html" class="chapter-link"><span class="chapter-number">2</span>Standard 2 — Competence, Emergency Services & Scope of Practice</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link active"><span class="chapter-number">3</span>Standard 3 — Human Relations, Multiple Relationships & Avoiding Harm</a></li>
+        <li class="chapter-item"><a href="confidentiality.html" class="chapter-link"><span class="chapter-number">4</span>Standard 4 — Privacy, Confidentiality, Tarasoff & Mandated Reporting</a></li>
+        <li class="chapter-item"><a href="public-records-training.html" class="chapter-link"><span class="chapter-number">5</span>Standards 5, 6 & 7 — Public Statements, Records, Fees & Education</a></li>
+        <li class="chapter-item"><a href="research-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Standard 8 — Research Ethics, Informed Consent & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-therapy-ethics.html" class="chapter-link"><span class="chapter-number">7</span>Standards 9 & 10 — Assessment Ethics, Therapy Ethics & Termination</a></li>
+        <li class="chapter-item"><a href="pharma-principles.html" class="chapter-link"><span class="chapter-number">8</span>How Drugs Work — Pharmacokinetics, Pharmacodynamics & Drug Interactions</a></li>
+        <li class="chapter-item"><a href="neurotransmitter-systems.html" class="chapter-link"><span class="chapter-number">9</span>Neurotransmitter Systems — Serotonin, Dopamine, GABA & Acetylcholine</a></li>
+        <li class="chapter-item"><a href="antidepressants-ssri-snri.html" class="chapter-link"><span class="chapter-number">10</span>Antidepressants Part 1 — SSRIs, SNRIs & Serotonin Syndrome</a></li>
+        <li class="chapter-item"><a href="antidepressants-tca-maoi.html" class="chapter-link"><span class="chapter-number">11</span>Antidepressants Part 2 — TCAs, MAOIs & Atypicals</a></li>
+        <li class="chapter-item"><a href="antipsychotics-conventional.html" class="chapter-link"><span class="chapter-number">12</span>Conventional Antipsychotics — Dopamine Blockade, EPS & Tardive Dyskinesia</a></li>
+        <li class="chapter-item"><a href="antipsychotics-atypical.html" class="chapter-link"><span class="chapter-number">13</span>Atypical Antipsychotics — Clozapine, Metabolic Syndrome & NMS</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">14</span>Anxiolytics & Sedatives — Benzodiazepines, Buspirone & Sleep Agents</a></li>
+        <li class="chapter-item"><a href="stabilizers-stimulants.html" class="chapter-link"><span class="chapter-number">15</span>Mood Stabilizers & Stimulants — Lithium, Anticonvulsants & ADHD Meds</a></li>
+        <li class="chapter-item"><a href="legal-professional.html" class="chapter-link"><span class="chapter-number">16</span>Law & Practice — Licensing, Malpractice, Prescriptive Authority & Scope</a></li>
+        <li class="chapter-item"><a href="modern-practice.html" class="chapter-link"><span class="chapter-number">17</span>The Evolving Profession — Telepsychology, Social Media & Emerging Treatments</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 17</div>
+        <h1>Standard 3 — Human Relations, Multiple Relationships & Avoiding Harm</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+<section class="content-section">
+        <h2>Overview of Standard 3: Human Relations</h2>
+        <p>A psychologist in a small rural community discovers that the new client sitting in her waiting room is the parent of her child's best friend — someone she sees at school events, birthday parties, and weekend soccer games. Can she ethically provide therapy to this person? What if this is the only psychologist within a hundred miles? Situations like this — where professional and personal lives collide — are the daily reality for many practitioners, and they represent the core territory of Standard 3.</p>
+        <p>Standard 3 of the APA Ethics Code addresses the complexities of professional relationships, including <span class="key-term">multiple relationships</span>, unfair discrimination, sexual harassment, conflicts of interest, and exploitation. The standard applies across all professional roles — therapy, assessment, research, teaching, supervision, and consultation — and emphasizes that the power differential inherent in psychologists' roles creates special obligations to protect those with whom they work. These topics are among the most heavily tested on the EPPP because they arise in nearly every professional context.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Standard 3.01: Unfair Discrimination</h2>
+
+        <p>Having established that Standard 3 governs how psychologists navigate their professional relationships — and that the inherent power differential in these roles creates special obligations — we turn now to the very first provision in this standard: the prohibition against unfair discrimination. This standard comes first for good reason. Before we can discuss the nuances of multiple relationships, informed consent, or collaborative practice, we must establish a foundational principle: every person who encounters a psychologist in a professional context deserves to be treated equitably, regardless of who they are.</p>
+
+        <p>Consider a clinical scenario: A psychologist working in a community mental health center receives a referral for a new client — a 68-year-old transgender woman who recently immigrated from Guatemala and uses a wheelchair. Before the psychologist has even met this client, multiple dimensions of identity are already present in the room. Standard 3.01 makes clear that none of these characteristics — not her age, gender identity, national origin, disability status, nor any other protected characteristic — may serve as a basis for <span class="key-term">unfair discrimination</span> in the services she receives. She is entitled to the same quality of care, the same professional respect, and the same access to psychological services as any other client who walks through that door.</p>
+
+        <p>Psychologists do not engage in unfair discrimination based on age, gender, gender identity, race, ethnicity, culture, national origin, religion, sexual orientation, disability, socioeconomic status, or any basis proscribed by law. This prohibition is sweeping in its scope — it applies to all professional activities, whether the psychologist is conducting therapy, performing assessments, teaching a graduate course, supervising a trainee, designing a research study, or consulting with an organization. The standard recognizes that discrimination can surface in subtle ways across all of these contexts: in who gets accepted into a training program, in how quickly a clinician returns phone calls, in whose research contributions are acknowledged, and in whose pain is taken seriously.</p>
+
+        <p>What makes this standard particularly important for practice — and particularly testable on the EPPP — is the careful inclusion of the word "unfair." This single word carries enormous weight because it acknowledges a crucial clinical reality: not all differential treatment is discriminatory. In fact, ethical practice often requires psychologists to treat people differently based on their individual characteristics and needs. A neuropsychologist who selects an age-normed cognitive battery for an elderly client is engaging in appropriate differential treatment. A therapist who modifies session structure — perhaps incorporating more frequent breaks or providing materials in larger print — for a client with a physical disability is practicing responsively, not discriminatorily. A school psychologist who conducts a bilingual evaluation for a child whose primary language is Spanish is honoring best practices, not showing favoritism. The ethical line is crossed not when treatment differs, but when that difference is rooted in bias, prejudice, or stereotyping rather than in the genuine needs of the individual.</p>
+
+        <div class="clinical-note">
+        <strong>EPPP Tip</strong>
+        <p>Note the word "unfair" in this standard. Not all differential treatment constitutes discrimination. For example, using age-appropriate assessment instruments or adapting therapy techniques for clients with disabilities is appropriate differential treatment, not unfair discrimination. On the exam, watch for answer choices that conflate responsive, individualized practice with discriminatory behavior — the Ethics Code explicitly carves out space for clinically appropriate differentiation. The key question is always whether the differential treatment serves the client's welfare or reflects the psychologist's bias.</p>
+        </div>
+
+        <p>It is also worth noting that Standard 3.01 uses the phrase "or any basis proscribed by law," which means the list of protected categories is not exhaustive. As laws evolve at the federal, state, and local levels — for instance, expanding protections based on veteran status, genetic information, or other characteristics — psychologists are expected to remain current and ensure their practices do not violate those evolving legal standards. This provision ties the Ethics Code to the broader legal landscape, reminding psychologists that ethical obligations and legal requirements often work hand in hand, and that the floor of acceptable conduct may shift upward over time.</p>
+
+        <p>With this foundational principle in place — that psychologists must treat all individuals equitably across every professional context — we can now examine how Standard 3 addresses specific forms of conduct that violate this principle, beginning with the prohibition against sexual harassment.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Standard 3.02: Sexual Harassment</h2>
+        <p>Having established that psychologists must not engage in unfair discrimination based on personal characteristics, the Ethics Code turns to a specific and particularly harmful form of misconduct: sexual harassment. This standard exists because the power dynamics inherent in psychological practice — between therapist and client, supervisor and supervisee, professor and student — create contexts where sexual misconduct can cause profound harm. A supervisee who receives sexually suggestive comments from a training director may feel unable to object for fear of career repercussions. A graduate student subjected to unwanted physical contact from a professor may endure it silently rather than risk academic standing. The Ethics Code addresses these realities directly and unequivocally.</p>
+        <p>Psychologists do not engage in <span class="key-term">sexual harassment</span>, which consists of sexual solicitation, physical advances, or verbal or nonverbal conduct that is sexual in nature and that either:</p>
+        <ul>
+        <li>Is unwelcome, offensive, or creates a hostile workplace or educational environment, and the psychologist knows or is told this, <strong>or</strong></li>
+        <li>Is sufficiently severe or intense to be abusive to a reasonable person in the context</li>
+        </ul>
+        <p>Notice the important structure of this standard: it provides two independent pathways by which conduct qualifies as sexual harassment. Under the first prong, the psychologist has been informed — or otherwise knows — that the behavior is unwelcome. Imagine a clinical supervisor who repeatedly makes flirtatious remarks to a supervisee; when the supervisee finally says "that makes me uncomfortable," any continuation of such behavior clearly meets this criterion. Under the second prong, the conduct is so severe or intense that no explicit objection is necessary — a reasonable person standard applies. For example, a psychologist who makes graphic sexual comments during a professional meeting would violate this standard regardless of whether anyone explicitly objects, because the behavior is abusive to any reasonable person in that context.</p>
+        <p>Sexual harassment can occur between any parties in a professional relationship: psychologist-client, supervisor-supervisee, professor-student, or between colleagues. For exam preparation, it is essential to remember that this standard is not limited to situations involving direct clinical contact. A psychologist who sends sexually suggestive emails to a colleague or who makes persistent sexual jokes in a departmental meeting is equally subject to this prohibition. The common thread is that the psychologist's professional role carries ethical obligations that extend across all professional contexts, not just the therapy room.</p>
+        <p>When studying this standard, also note how it differs from the later standards addressing sexual intimacies with clients (Standards 10.05–10.08). Standard 3.02 broadly prohibits sexual harassment in all professional relationships, while the later standards specifically address romantic and sexual relationships with current and former therapy clients. Both are critical, but this standard casts the wider net — applying to every professional context in which a psychologist operates.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Standard 3.05: Multiple Relationships</h2>
+        <p>Imagine you are a psychologist in a small town. You treat a client for anxiety on Tuesday afternoons, and on Saturday mornings you see that same client coaching your child's soccer team. Or perhaps a graduate student you supervise turns out to be your neighbor's son. These overlapping connections are not just awkward social moments — they raise some of the most frequently tested and practically important ethical questions in professional psychology. Understanding when overlapping roles cross the line from inevitable to harmful is essential for ethical practice and for success on the EPPP.</p>
+        <p>A <span class="key-term">multiple relationship</span> (also called a dual relationship) occurs when a psychologist is in a professional role with a person and simultaneously:</p>
+        <ol>
+        <li>Is in another role with the same person, <strong>or</strong></li>
+        <li>Is in a relationship with a person closely associated with or related to the person with whom the psychologist has the professional relationship, <strong>or</strong></li>
+        <li>Promises to enter into another relationship in the future with the person or a person closely associated with the person</li>
+        </ol>
+        <p>Notice how broadly this standard is written. It is not limited to the psychologist having two roles with the same individual — it also covers relationships with people connected to the client, and even promises of future relationships. A psychologist who tells a current therapy client, "After we terminate, I'd love to go into business with you," has already entered problematic ethical territory by making that promise, even though the second relationship has not yet begun.</p>
+
+        <h3>When Multiple Relationships Are Prohibited</h3>
+        <p>Not every multiple relationship is unethical, but the Ethics Code draws a clear line around those that pose genuine risks. A psychologist refrains from entering into a multiple relationship if the relationship could reasonably be expected to:</p>
+        <ul>
+        <li>Impair the psychologist's objectivity, competence, or effectiveness, <strong>or</strong></li>
+        <li>Risk exploitation of or harm to the person with whom the professional relationship exists</li>
+        </ul>
+        <p>The key phrase here is "reasonably be expected to." The standard does not require proof that harm has already occurred — it asks psychologists to exercise prospective judgment. Consider a psychologist who enters a business partnership with a current therapy client. Even if no harm has materialized yet, the power differential inherent in the therapy relationship, combined with the financial entanglement, creates conditions ripe for impaired objectivity and potential exploitation. A reasonable psychologist would foresee this risk, and the Ethics Code requires avoiding it.</p>
+
+        <h3>When Multiple Relationships Are Permissible</h3>
+        <p>Here is where many examinees stumble: the Ethics Code does not prohibit all multiple relationships. It acknowledges that multiple relationships that would not reasonably be expected to cause impairment or risk exploitation or harm are <strong>not unethical</strong>. This is an important nuance for the EPPP. Running into a client at the grocery store and exchanging brief pleasantries, for instance, does not constitute a prohibited multiple relationship. The question is always whether the overlapping role could compromise the professional relationship or harm the client.</p>
+        <p>This nuance leads to one of the most clinically useful distinctions in professional ethics — the difference between boundary crossings and boundary violations. These terms appear frequently on the EPPP and in ethical decision-making frameworks, and understanding the distinction can prevent both overcautious rigidity and dangerous permissiveness.</p>
+        <div class="definition-box">
+        <strong>Key Distinction: Boundary Crossings vs. Boundary Violations</strong>
+        <p>A <span class="key-term">boundary crossing</span> is a deviation from standard clinical practice that is not harmful and may even be therapeutic (e.g., attending a client's graduation, brief self-disclosure, accepting a small culturally appropriate gift). A <span class="key-term">boundary violation</span> is a deviation that exploits or harms the client (e.g., entering a sexual relationship, engaging in a business partnership). Not all boundary crossings become violations. The critical distinction lies in the impact on the client and the professional relationship: crossings may be benign or beneficial when handled thoughtfully, while violations always involve exploitation, harm, or a serious risk thereof.</p>
+        </div>
+        <p>Think of it this way: a therapist who accepts a handmade card from a child client at the end of treatment is engaging in a boundary crossing — a small, clinically sensitive departure from strict neutrality that honors the therapeutic relationship. By contrast, a therapist who begins dating a supervisee has committed a boundary violation because the power imbalance inherent in the supervisory relationship makes genuine consent problematic and the risk of harm substantial. For the EPPP, remember that the Ethics Code takes a contextual, risk-based approach rather than an absolute prohibition on all overlapping roles.</p>
+
+        <h3>Managing Unavoidable Multiple Relationships</h3>
+        <p>In an ideal world, psychologists would simply avoid all potentially problematic dual roles. But practice does not always afford that luxury. Rural communities, military settings, close-knit cultural or religious groups, and academic departments are all contexts where overlapping relationships are nearly unavoidable. The Ethics Code recognizes this reality and provides guidance: if a potentially harmful multiple relationship has arisen due to unforeseen factors, the psychologist takes reasonable steps to resolve it with due regard for the best interests of the affected person and maximal compliance with the Ethics Code. Strategies include:</p>
+        <ul>
+        <li>Documenting the situation and the steps taken to address it</li>
+        <li>Consulting with colleagues</li>
+        <li>Discussing the situation openly with the client (when appropriate)</li>
+        <li>Referring the client to another provider if the relationship cannot be managed ethically</li>
+        <li>Increasing supervision or oversight</li>
+        </ul>
+        <p>Notice that referral is listed as one option among several, not as the automatic default. This is clinically and ethically important: in some settings, referral may cause more harm than carefully managed boundary navigation. The psychologist's obligation is to think through each step deliberately, seek consultation, and document the reasoning process — not simply to flee from complexity.</p>
+        <div class="example-box">
+        <strong>Example</strong>
+        <p>A psychologist in a rural community discovers that a new therapy client is the parent of a child on the psychologist's daughter's sports team. This creates a social-professional overlap. Because the psychologist is the only provider within 100 miles, referral may not be practical. The ethical response is to carefully manage the boundaries, document the decision-making process, and consult with a colleague about how to minimize potential conflicts. The psychologist might discuss with the client that they may encounter each other at games, agree on how to handle those interactions (e.g., polite but brief acknowledgment, no discussion of therapy content), and revisit the arrangement periodically to ensure it continues to serve the client's best interests.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Standard 3.04: Avoiding Harm</h2>
+        <p>Psychologists take reasonable steps to avoid harming their clients, students, supervisees, research participants, organizational clients, and others with whom they work, and to minimize harm where it is foreseeable and unavoidable.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Standard 3.06: Conflict of Interest</h2>
+        <p>Having just explored how psychologists must take reasonable steps to avoid harming those they serve (Standard 3.04), we now turn to one of the most insidious — and often invisible — threats to ethical practice: the conflict of interest. Unlike more obvious boundary violations, conflicts of interest can quietly distort a psychologist's professional judgment without the psychologist even recognizing it. A forensic evaluator who also happens to be a close friend of the referring attorney; a researcher whose grant funding depends on producing favorable results for a pharmaceutical company; a consultant who stands to gain financially from recommending one organizational restructuring plan over another — in each of these cases, a competing interest threatens to erode the very objectivity and competence that clients, organizations, and the public rightfully expect from psychological professionals.</p>
+        <p>What makes conflicts of interest particularly dangerous is that they do not require malicious intent. A well-meaning psychologist may genuinely believe she can remain impartial despite holding a financial stake in a particular outcome. Yet decades of research on cognitive bias — including motivated reasoning and the self-serving bias — demonstrate that personal interests reliably warp judgment, often without conscious awareness. This is precisely why the Ethics Code does not ask psychologists to simply "try harder to be objective" when competing interests arise; instead, it sets a clear preventive standard.</p>
+        <p>Under this standard, psychologists refrain from taking on a <span class="key-term">professional role</span> when personal, scientific, professional, legal, financial, or other interests or relationships could reasonably be expected to:</p>
+        <ul>
+        <li>Impair their objectivity, competence, or effectiveness, <strong>or</strong></li>
+        <li>Expose the person or organization with whom the professional relationship exists to harm or exploitation</li>
+        </ul>
+        <p>Notice the breadth of this standard: it encompasses not only financial conflicts — the type most people envision — but also personal relationships, scientific allegiances, legal entanglements, and any other interest that could compromise professional functioning. The standard also uses the phrase "could reasonably be expected to," which means the threshold is not whether harm actually occurred, but whether a reasonable psychologist would anticipate that competing interests might impair objectivity or put others at risk. This prospective, preventive orientation is a hallmark of ethical decision-making: psychologists must evaluate potential conflicts before assuming a professional role, not after problems have already surfaced.</p>
+        <p>Consider a clinical scenario: a psychologist in a small rural community is asked to provide therapy to a local school principal who is experiencing burnout. The psychologist's own child attends the principal's school and has recently been involved in a disciplinary dispute with the administration. Even if the psychologist feels confident she could separate personal frustration from clinical objectivity, the overlapping relationship creates a situation where personal interests could reasonably impair therapeutic effectiveness — or expose the principal to subtle bias. The ethical course of action is to recognize the conflict and either decline the referral or, if no alternative providers exist, take concrete steps to address the conflict transparently.</p>
+        <p>In practice, managing conflicts of interest involves several key strategies: identifying competing interests early through honest self-reflection, consulting with colleagues when uncertain, disclosing conflicts to relevant parties, and — when the risk of impairment is significant — declining or withdrawing from the professional role altogether. Transparency and proactive decision-making are the psychologist's strongest safeguards against the subtle distortions that conflicts of interest can introduce.</p>
+        <div class="example-box">
+        <strong>Example</strong>
+        <p>A psychologist is hired by a company to conduct fitness-for-duty evaluations. The psychologist also owns stock in a competitor company. If the evaluation results could affect the stock value of the competitor, a conflict of interest exists — even if the psychologist has no conscious intention to let the financial interest influence her conclusions. The financial stake creates a situation where objectivity could reasonably be compromised, and the hiring company could be exposed to biased findings. The psychologist should disclose the conflict or decline the engagement. Failing to do so risks both ethical violation and real-world harm: an employee might be unfairly deemed unfit for duty, or the company might receive a tainted evaluation that drives consequential personnel decisions.</p>
+        </div>
+        <p>As we move into Standard 3.07, which addresses situations where a third party — rather than the client — requests psychological services, you will see how conflicts of interest become even more layered. When the person paying for services is not the person receiving them, the psychologist must navigate competing loyalties with particular care, making the principles covered here an essential foundation for what comes next.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Standard 3.07: Third-Party Requests for Services</h2>
+        <p>Imagine this scenario: A parent calls your office to schedule a therapy appointment — not for themselves, but for their 17-year-old child who is reluctant to attend. Or consider a corporate human resources director who contacts you to provide anger management counseling for an employee following a workplace incident. In both cases, the person sitting across from you in session is not the person who initiated — and may be paying for — the service. This triangular arrangement raises a crucial question: Who is the client? The answer is rarely as simple as it seems, and getting it wrong can lead to serious ethical violations, damaged trust, and even legal liability. Standard 3.07 addresses precisely this kind of complexity, building on the conflict-of-interest concerns we just examined by focusing on situations where someone other than the direct recipient is requesting or funding psychological services.</p>
+        <p>When psychologists agree to provide services at the request of a <span class="key-term">third party</span>, they clarify at the outset:</p>
+        <ul>
+        <li>The nature of the relationship with each party</li>
+        <li>The role of the psychologist (e.g., therapist vs. evaluator)</li>
+        <li>The probable uses of the services provided or information obtained</li>
+        <li>Limits of confidentiality</li>
+        </ul>
+        <p>These four clarification requirements are not mere formalities — they form the ethical scaffolding that protects everyone involved. Consider why each matters. A psychologist conducting a child custody evaluation at the request of a family court must make clear to both parents that the psychologist's role is that of an evaluator, not a therapist. The information gathered will be used to inform the court's custody decision, and statements made during the evaluation are not protected by the same confidentiality that would apply in a therapeutic relationship. Without these explicit clarifications, a parent might mistakenly treat the evaluation interview like a therapy session, sharing deeply personal material under the assumption that it will remain private — only to find those disclosures detailed in a court report.</p>
+        <p>This standard commonly applies in forensic, organizational, custody evaluation, and insurance-related contexts. In forensic settings, an attorney may retain a psychologist to evaluate a defendant's competency to stand trial. In organizational consulting, a company may hire a psychologist to assess leadership potential among executives. In insurance contexts, a managed care company may authorize a set number of sessions and expect progress reports. In each of these situations, the psychologist must proactively clarify the arrangement before services begin. The key principle is transparency at the outset — not after misunderstandings have already taken root. When a psychologist waits until midway through an evaluation to explain that findings will be shared with the referring attorney, the ethical damage is already done, because the examinee's informed consent was never truly informed.</p>
+        <p>A useful clinical rule of thumb: whenever someone other than the person receiving services is paying for, requesting, or directing those services, Standard 3.07 is activated. The psychologist should document these clarifications in writing, ideally through an informed consent document that all relevant parties review and sign. This protects the psychologist, the individual receiving services, and the third party by ensuring that expectations are aligned from the very first interaction. On the EPPP, questions involving third-party requests frequently test whether candidates can identify which clarifications are required and when they must occur — the answer is always at the outset, before services begin.</p>
+      </section>
+
+        <!-- anchor:11-3 coverage:missing -->
+        <div class="definition-box">
+        <h4>Consultation and Client Authorization</h4>
+        <p>Under both the APA and Canadian Psychological Association ethics codes, psychologists may discuss a client's case with a professional consultant <strong>without obtaining the client's explicit authorization</strong>, provided they take reasonable steps to disguise identifying information so that the client cannot be recognized. Consultation is a routine and often essential part of ethical practice — it helps psychologists maintain competence, obtain guidance on complex cases, and manage difficult clinical situations. Because the purpose of consultation is to benefit the client and improve professional services, the ethical codes treat it differently from disclosures that would require a signed release. The key safeguard is that the psychologist must ensure confidentiality by omitting or altering details such as the client's name, workplace, specific demographic identifiers, and any other information that could reasonably lead to identification.</p>
+        </div>
+        <div class="clinical-note">
+        <h4>Clinical Note</h4>
+        <p>Although formal authorization is not required for consultation when identifying details are disguised, best practice often involves informing clients during the informed consent process that consultation with colleagues may occur as part of providing quality care. This proactive transparency builds trust and avoids potential misunderstandings. Additionally, psychologists should exercise caution in small communities or specialized settings where even de-identified case details might inadvertently reveal a client's identity due to the limited pool of individuals who match certain clinical profiles.</p>
+        </div>
+        <!-- /anchor:11-3 -->
+
+
+
+      <section class="content-section">
+        <h2>Standard 3.08: Exploitative Relationships</h2>
+        <p>Having explored how psychologists navigate the complexities of third-party requests and consultation, we now turn to a principle that sits at the very heart of ethical practice: the prohibition against exploitation. Every professional relationship in psychology involves a power differential — and where power exists, the potential for its misuse follows. A supervisor who pressures a supervisee into providing free childcare, a professor who requires students to purchase products from a personal business venture, a researcher who coerces participants into continuing a study they wish to leave — each of these scenarios illustrates how authority can be twisted into personal advantage, often in ways the person with less power feels unable to resist.</p>
+        <p>Standard 3.08 addresses this reality directly: psychologists do not exploit persons over whom they have supervisory, evaluative, or other authority, such as clients, students, supervisees, research participants, and employees. The term <span class="key-term">exploitative relationships</span> encompasses any situation in which a psychologist leverages their professional position to gain an unfair advantage — whether financial, sexual, emotional, or otherwise — at the expense of someone who depends on them. Exploitation can be financial, sexual, emotional, or otherwise take advantage of the power differential inherent in professional relationships. What makes exploitation particularly insidious is that the person being exploited may not even recognize it as such; the authority figure's position can make unreasonable demands feel like normal expectations.</p>
+        <p>Consider, for example, a clinical supervisor who asks a supervisee to co-author a paper but then assigns the supervisee all of the writing while claiming first authorship and offering no meaningful mentorship in return. The supervisee, aware that this person controls their training evaluations and future recommendation letters, may comply without protest. Or consider a therapist who repeatedly schedules a client's sessions at inconvenient times to accommodate the therapist's personal schedule, subtly communicating that the client's needs are secondary. These situations may not always rise to the level of dramatic ethical violations, but they represent a misuse of the trust and authority that define psychological relationships.</p>
+        <p>For the EPPP, it is important to recognize that Standard 3.08 is deliberately broad — it is not limited to sexual or financial exploitation but covers any form of taking advantage of a power differential. The standard applies across all professional roles a psychologist may hold, from therapy and assessment to teaching, supervision, and research. When evaluating exam scenarios, ask yourself: Is the psychologist using their position of authority to benefit themselves at the cost of someone who has less power in the relationship? If the answer is yes, Standard 3.08 is likely being violated. This standard works in concert with more specific prohibitions — such as those governing sexual relationships, which we will examine next — but it serves as a broad ethical guardrail ensuring that psychologists remain vigilant about the trust placed in them by every person they serve.</p>
+      </section>
+
+        <!-- anchor:175 coverage:missing -->
+        <p>An often-overlooked aspect of professional responsibility involves planning for the possibility that a psychologist may become incapacitated or die unexpectedly. A <span class="key-term">professional executor</span> (sometimes called a "professional will" designee or records custodian) is an individual appointed to manage a psychologist's clinical records, notify clients, and handle ongoing professional obligations in such circumstances. This person serves a role analogous to a legal executor but focuses specifically on the psychologist's professional practice rather than personal estate matters.</p>
+        <div class="definition-box">
+        <h4>Professional Executor</h4>
+        <p>A professional executor is typically another <strong>licensed psychologist</strong> or <strong>licensed health care provider</strong> who has been designated in advance to assume responsibility for a practitioner's clinical records, client notifications, and practice-related matters in the event of the psychologist's death, disability, or incapacitation. This individual should be familiar with relevant ethical and legal standards governing record keeping, confidentiality, and client welfare.</p>
+        </div>
+        <p>The designation of a professional executor is considered a component of sound practice management and ethical foresight. By arranging for a qualified colleague to step in, the psychologist ensures that clients are not abandoned, that protected health information remains secure, and that continuity of care can be facilitated through appropriate referrals. The professional executor should have access to essential practice information — such as the location of records, a current client list, and emergency contact details — and should understand the relevant confidentiality obligations that accompany access to clinical files. Many licensing boards and professional organizations recommend that psychologists formalize this arrangement in a written professional will or directive.</p>
+        <div class="example-box">
+        <h4>Example</h4>
+        <p>A psychologist in solo private practice creates a professional will designating a trusted colleague — a licensed clinical psychologist in the same community — as her professional executor. The document specifies that, in the event of the psychologist's sudden incapacity, the executor will secure all client files, contact active clients to arrange referrals, and ensure that records are maintained in compliance with state retention requirements. The psychologist provides the executor with a sealed envelope containing the location of electronic and paper records, passwords for the electronic health record system, and a current list of active clients.</p>
+        </div>
+        <!-- /anchor:175 -->
+
+
+
+      <section class="content-section">
+        <h2>Sexual Relationships: Standards 3.05 and 10.05-10.08</h2>
+        <p>Few ethical violations carry as much potential for harm — or as much clarity in the Ethics Code — as sexual relationships between psychologists and the people they serve. Consider a scenario: a therapist has been working with a client through a painful divorce for eight months. Over time, the client begins expressing romantic interest, telling the therapist, "You understand me better than anyone ever has." The therapist, recently single, finds the feelings mutual. What happens next is not a gray area — it is one of the most unambiguous prohibitions in all of professional psychology. The power differential inherent in the therapeutic relationship means that any sexual contact constitutes a fundamental betrayal of the trust clients place in their psychologists, regardless of who initiates the contact or how genuine the feelings may seem.</p>
+        <p>Having examined exploitative relationships broadly in the preceding section, we now turn to the specific standards that address sexual intimacies — a domain where the APA Ethics Code draws its sharpest and most carefully delineated lines. These standards span multiple sections of the Code, reflecting the reality that sexual boundary violations can occur not only in therapy but also in supervisory relationships, teaching contexts, and interactions with clients' family members. Understanding exactly which relationships are always prohibited, which carry time-limited restrictions, and where the burden of proof falls is essential both for ethical practice and for success on the EPPP.</p>
+        <p>Sexual intimacies with clients and other protected parties receive special attention in the Ethics Code, with each standard addressing a distinct relational configuration:</p>
+        <table>
+        <tr><th>Situation</th><th>Standard</th><th>Rule</th></tr>
+        <tr><td>Sexual intimacies with current therapy clients</td><td>10.05</td><td>Always prohibited</td></tr>
+        <tr><td>Sexual intimacies with relatives/significant others of current clients</td><td>10.06</td><td>Always prohibited</td></tr>
+        <tr><td>Therapy with former sexual partners</td><td>10.07</td><td>Always prohibited -- psychologists do not accept as therapy clients persons with whom they have engaged in sexual intimacies</td></tr>
+        <tr><td>Sexual intimacies with former therapy clients</td><td>10.08</td><td>Prohibited for at least <strong>two years</strong> after termination, and even after two years only in the most unusual circumstances with the burden on the psychologist to demonstrate no exploitation</td></tr>
+        <tr><td>Sexual relationships with current students/supervisees</td><td>7.07</td><td>Always prohibited</td></tr>
+        </table>
+        <p>Notice the pattern across these standards: four of the five situations involve absolute, unconditional prohibitions. There is no exception for mutual consent, no carve-out for cases where the client initiates, and no consideration of how brief or intensive the professional relationship may have been. Standard 10.06 is particularly worth examining — it extends the prohibition beyond the client to include the client's relatives and significant others, recognizing that sexual involvement with a client's family member can be just as damaging to the therapeutic relationship and to the client's well-being as direct sexual contact with the client.</p>
+        <p>Standard 10.07 operates in the reverse direction and is sometimes overlooked: a psychologist must never accept someone as a therapy client if the two have previously been sexually intimate. The reasoning is straightforward — a prior sexual relationship would fatally compromise the objectivity and professional boundary structure that effective therapy requires. Imagine a psychologist who begins providing couples therapy and discovers that one partner is a former romantic interest. The ethical course is clear: the psychologist cannot serve as the therapist, regardless of how distant the prior relationship may be.</p>
+        <p>The one standard that permits any flexibility at all is 10.08, governing sexual intimacies with former therapy clients. Even here, the Code imposes a mandatory two-year waiting period after termination, and the language makes clear that this waiting period is a floor, not a ceiling. After two years, such a relationship is permissible only "in the most unusual circumstances," and the burden of proof falls squarely on the psychologist to demonstrate that no exploitation has occurred. Factors the psychologist must consider include the length and nature of the therapy, the client's current mental status, the likelihood that the client's feelings are rooted in transference, and the circumstances of termination — including whether termination was undertaken specifically to pursue the relationship, which would itself be ethically problematic.</p>
+        <div class="clinical-note">
+        <strong>EPPP Tip</strong>
+        <p>The two-year rule (10.08) is one of the most tested facts in the Ethics domain. Remember: the two-year clock starts at <em>termination</em>, not at the start of therapy. Even after two years, the burden falls on the psychologist to prove the relationship is not exploitative. Most ethics scholars advise that sexual relationships with former clients should always be avoided. On the exam, if a question describes a psychologist entering a sexual relationship with a former client 18 months after termination — regardless of any other mitigating details — the answer is that this constitutes an ethics violation. The two-year minimum is absolute and admits no exceptions.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Informed Consent in Therapy (Standard 10.01)</h2>
+        <p>Having explored the complex boundaries surrounding sexual relationships in professional practice, we turn now to a foundational obligation that shapes the very first moments of any therapeutic relationship: informed consent. Consider this scenario — a new client arrives for an initial session, anxious and uncertain about what therapy will involve. She has never seen a psychologist before and assumes that everything she says will be kept in absolute confidence, that she can stop at any time without consequence, and that she won't be charged for missed appointments. If the psychologist simply launches into assessment or intervention without addressing any of these assumptions, the entire therapeutic relationship rests on a shaky ethical foundation. Standard 10.01 exists precisely to prevent this situation, ensuring that clients enter treatment as informed participants rather than passive recipients of care.</p>
+        <p>The principle underlying <span class="key-term">informed consent</span> in therapy is deceptively simple: clients deserve to know what they are agreeing to before they agree to it. But in practice, this obligation requires psychologists to cover a surprisingly broad range of topics — and to do so as early as feasible in the therapeutic relationship. Think of informed consent not as a single form to be signed, but as an ongoing conversation that begins at the first contact and may need to be revisited as circumstances change throughout treatment.</p>
+        <p>Psychologists inform clients as early as possible in the therapeutic relationship about the following key elements:</p>
+        <ul>
+        <li>The nature and anticipated course of therapy</li>
+        <li>Fees, billing practices, and insurance involvement</li>
+        <li>The limits of confidentiality</li>
+        <li>The extent and limits of the therapist's involvement of third parties</li>
+        <li>The client's right to refuse or withdraw from treatment</li>
+        <li>Potential risks and benefits of treatment</li>
+        <li>Available alternatives to the proposed treatment</li>
+        </ul>
+        <p>Each of these elements serves a distinct protective function. Discussing the nature and anticipated course of therapy helps clients form realistic expectations — a client beginning exposure therapy for PTSD, for example, needs to understand that treatment may temporarily increase distress before it brings relief. Clarifying fees and billing practices prevents misunderstandings that can erode the therapeutic alliance; imagine a client who discovers only after several sessions that her insurance does not cover the psychologist's services, leaving her with an unexpected bill of several hundred dollars. Explaining the limits of confidentiality is perhaps the most clinically consequential element — clients must understand before they disclose sensitive information that certain revelations, such as imminent danger to self or others, or suspected child abuse, may compel the psychologist to break confidentiality. Without this foreknowledge, a breach of confidentiality — even a legally mandated one — can feel like a profound betrayal.</p>
+        <p>Equally important is informing clients about their right to refuse or withdraw from treatment at any time. This element reinforces the voluntary nature of the therapeutic relationship and helps protect against the power differential inherent in the psychologist-client dynamic. Clients should also be told about potential risks and benefits, which requires the psychologist to exercise honest clinical judgment rather than overselling the promise of therapy. Finally, discussing available alternatives — such as group therapy, medication, or different therapeutic modalities — respects the client's autonomy to choose among viable options.</p>
+        <p>When the client is legally incapable of giving informed consent — for instance, a seven-year-old child referred for behavioral problems, or an adult who has been adjudicated incompetent due to severe cognitive impairment — the psychologist's obligations do not simply disappear. Instead, Standard 10.01 requires a layered approach: the psychologist provides an age-appropriate or capacity-appropriate explanation of what will occur, actively seeks the individual's <span class="key-term">assent</span> (their agreement to participate, even if it does not carry legal force), considers the person's preferences and best interests, and obtains appropriate permission from a legally authorized person such as a parent, guardian, or court-appointed representative. This approach honors the dignity of individuals who cannot legally consent while still ensuring that someone with legal authority has formally agreed to treatment. For EPPP purposes, remember that assent from the client and consent from the legal guardian are both required — one does not substitute for the other.</p>
+      </section>
+
+        <!-- anchor:209 coverage:missing -->
+        <p>While informed consent involves an explicit agreement following a deliberate disclosure of relevant information, <span class="key-term">implied consent</span> is a distinct concept in which agreement is inferred from a person's actions, behavior, or the surrounding circumstances rather than from a direct verbal or written statement. Implied consent operates on the assumption that a reasonable person's conduct signals their willingness to participate.</p>
+
+        <div class="definition-box"><h4>Implied Consent</h4><p>Consent that is not expressly granted through words or writing but is instead reasonably inferred from an individual's conduct or from the situational context. For example, a person who voluntarily enters a clinic, completes intake paperwork, and sits down in a therapy session has implicitly consented to the initial interaction through their behavior.</p></div>
+
+        <p>In psychological practice, implied consent has limited applicability and should not be treated as a substitute for informed consent in most clinical, research, or assessment contexts. The APA Ethics Code requires psychologists to obtain explicit informed consent that covers specific elements—such as the nature of services, fees, and confidentiality limits—before proceeding with professional activities. Relying solely on implied consent would fail to meet this standard because it does not ensure that the individual has been adequately informed about relevant risks, benefits, and alternatives.</p>
+
+        <p>Implied consent may, however, play a role in certain narrow situations. Emergency medical contexts sometimes invoke implied consent when an individual is incapacitated and unable to provide explicit authorization. In research, observational studies of behavior in public settings may rely on the principle that individuals in public spaces have implicitly consented to being observed, though institutional review boards carefully evaluate such claims. For EPPP purposes, candidates should understand that implied consent differs fundamentally from informed consent in that it lacks the deliberate informational exchange that ethical practice demands.</p>
+
+        <div class="example-box"><h4>Example</h4><p>A patient is brought to a hospital emergency department unconscious after a suicide attempt. Because the patient cannot provide explicit consent, treatment proceeds under the doctrine of implied consent—the assumption that a reasonable person would consent to life-saving intervention. Once the patient regains the capacity to communicate, the treatment team should obtain informed consent for any ongoing psychological services.</p></div>
+        <!-- /anchor:209 -->
+
+
+
+      <section class="content-section">
+
+        <!-- anchor:08-2 coverage:partial -->
+        <p>Informed consent does not require a specific format to be ethically valid. Both the APA Ethics Code and the Canadian Code of Ethics for Psychologists recognize that consent may be obtained in <span class="key-term">written or verbal</span> form, depending on the context and applicable legal requirements. However, regardless of the method used, the consent process and its content should be thoroughly documented in the clinical record. Written consent forms are generally preferred in practice because they provide clear evidence that the client was informed and agreed to treatment. When verbal consent is obtained—such as in crisis situations or telehealth contacts where written signatures are impractical—the psychologist should note in the record what information was provided, that the client expressed understanding and agreement, and the date and circumstances of the conversation. Jurisdictional laws may impose additional requirements beyond what the ethics codes specify, making it essential for psychologists to know their local regulations regarding consent documentation.</p>
+        <!-- /anchor:08-2 -->
+
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li>Multiple relationships are <strong>not automatically unethical</strong> -- they are problematic only when they could reasonably impair objectivity or risk exploitation/harm.</li>
+          <li><strong>Boundary crossings</strong> (e.g., accepting a small gift, attending a public event) differ from <strong>boundary violations</strong> (e.g., sexual relationships, business partnerships with clients).</li>
+          <li>In rural or small communities, multiple relationships may be unavoidable; the ethical response is to manage them carefully with documentation and consultation.</li>
+          <li>Sexual intimacies with current clients, their relatives, or current students/supervisees are <strong>always prohibited</strong>.</li>
+          <li>The <strong>two-year rule</strong> applies to sexual intimacies with former therapy clients (Standard 10.08), with the burden on the psychologist to demonstrate no exploitation even after two years.</li>
+          <li>Psychologists may <strong>never</strong> accept as therapy clients persons with whom they have had sexual relationships (Standard 10.07).</li>
+          <li>Third-party referrals require clarification of roles, relationships, and confidentiality limits at the outset (Standard 3.07).</li>
+          <li>Informed consent must be obtained as early as possible and include information about the nature of therapy, fees, confidentiality limits, and the right to withdraw.</li>
+        </ul>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="competence-standards.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Standard 2 — Competence, Emergency Services & Scope of Practice</div>
+          </div>
+        </a>
+        <a href="confidentiality.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Standard 4 — Privacy, Confidentiality, Tarasoff & Mandated Reporting</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>
