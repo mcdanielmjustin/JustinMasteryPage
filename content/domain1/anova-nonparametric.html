@@ -262,6 +262,31 @@
 
         <p>These extensions either add covariates to control for pre-existing differences, accommodate multiple outcome measures simultaneously, or do both at once. Understanding when and why to use each one is essential for both the EPPP and for reading clinical research critically (Tabachnick & Fidell, 2019).</p>
 
+        <!-- visual-aid:va-PMET-anova-nonparametric-001 -->
+        <div class="visual-aid">
+        <div class="visual-aid-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6.75"/></svg>
+        ANOVA Extensions: When to Use Each
+        </div>
+        <div class="va-tree">
+        <div class="va-tree-node va-root">Group Comparison Design<div class="va-tree-node-sub">How many DVs? Covariates needed?</div></div>
+        <div class="va-tree-children">
+        <div class="va-tree-node">One DV<div class="va-tree-node-sub">Single outcome measure</div></div>
+        <div class="va-tree-children">
+        <div class="va-tree-node">No Covariate<div class="va-tree-node-sub">Use: ANOVA</div></div>
+        <div class="va-tree-node">Covariate Present<div class="va-tree-node-sub">Use: ANCOVA — controls pre-existing differences; assumes homogeneity of regression slopes</div></div>
+        </div>
+        <div class="va-tree-node">Multiple DVs<div class="va-tree-node-sub">Two or more outcomes</div></div>
+        <div class="va-tree-children">
+        <div class="va-tree-node">No Covariate<div class="va-tree-node-sub">Use: MANOVA — Wilks' Lambda or Pillai's Trace; follow up with discriminant function analysis</div></div>
+        <div class="va-tree-node">Covariate Present<div class="va-tree-node-sub">Use: MANCOVA — combines MANOVA + ANCOVA; requires larger samples</div></div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <!-- /visual-aid:va-PMET-anova-nonparametric-001 -->
+
+
         <h3>Analysis of Covariance (ANCOVA)</h3>
 
         <p>Here's a common frustration in clinical research: you've randomly assigned participants to three different treatment groups, but despite randomization, the groups aren't perfectly equivalent at baseline. One group's average pre-treatment depression score is noticeably higher than the others. When you compare post-treatment scores, how do you know whether the differences reflect your treatments or simply the head start one group had? This is exactly the problem that <span class="key-term">ANCOVA</span> was built to solve. By blending the logic of ANOVA with the precision of regression, ANCOVA lets you statistically adjust for pre-existing differences on continuous variables called <span class="key-term">covariates</span>. In essence, it asks: "If all groups had started at the same level on the covariate, would their outcomes still differ?"</p>
@@ -330,37 +355,41 @@
 
         <p>Every parametric test we have discussed — t-tests, ANOVA, ANCOVA, MANOVA — rests on assumptions about the data: normally distributed populations, interval or ratio scales, homogeneous variances. But what happens when those assumptions are clearly violated? A researcher working with ranked preference data, severely skewed distributions, or small samples that cannot justify normality assumptions needs an alternative toolkit. <span class="key-term">Non-parametric tests</span> (also called distribution-free tests) fill this role, providing valid inference without requiring the stringent assumptions of their parametric counterparts.</p>
 
-        <table>
-          <tr>
-            <th>Parametric Test</th>
-            <th>Non-Parametric Alternative</th>
-            <th>Use Case</th>
-          </tr>
-          <tr>
-            <td>Independent t-test</td>
-            <td>Mann-Whitney U</td>
-            <td>Compare two independent groups</td>
-          </tr>
-          <tr>
-            <td>Paired t-test</td>
-            <td>Wilcoxon Signed-Rank</td>
-            <td>Compare two related samples</td>
-          </tr>
-          <tr>
-            <td>One-way ANOVA</td>
-            <td>Kruskal-Wallis H</td>
-            <td>Compare three+ independent groups</td>
-          </tr>
-          <tr>
-            <td>Repeated measures ANOVA</td>
-            <td>Friedman Test</td>
-            <td>Compare three+ related samples</td>
-          </tr>
-        </table>
-
         <!-- anchor:080 coverage:partial -->
-        <p>A key trade-off to understand is that <span class="key-term">parametric tests are generally more powerful</span> than their nonparametric counterparts. Because parametric tests make use of all the quantitative information in the data—means, variances, and the precise distances between scores—they extract more statistical information from the same dataset. This means that when an effect truly exists in the population, a parametric test is more likely to detect it (i.e., correctly reject a false null hypothesis). Nonparametric tests, by contrast, typically convert raw scores to ranks or frequencies, discarding some of the information contained in interval- or ratio-level data. This loss of information reduces their sensitivity to real effects. For this reason, nonparametric tests should generally be reserved for situations where parametric assumptions are clearly untenable—such as when data are ordinal, sample sizes are very small and distributions are markedly skewed, or when the dependent variable is categorical. When assumptions of normality and homogeneity of variance are reasonably met, parametric tests remain the preferred choice because of their superior ability to detect true differences.</p>
+        <p>Each parametric test has a nonparametric counterpart designed for the same comparison design; the matrix below pairs them side by side. A key trade-off to understand is that <span class="key-term">parametric tests are generally more powerful</span> than their nonparametric counterparts. Because parametric tests make use of all the quantitative information in the data—means, variances, and the precise distances between scores—they extract more statistical information from the same dataset. This means that when an effect truly exists in the population, a parametric test is more likely to detect it (i.e., correctly reject a false null hypothesis). Nonparametric tests, by contrast, typically convert raw scores to ranks or frequencies, discarding some of the information contained in interval- or ratio-level data. This loss of information reduces their sensitivity to real effects. For this reason, nonparametric tests should generally be reserved for situations where parametric assumptions are clearly untenable—such as when data are ordinal, sample sizes are very small and distributions are markedly skewed, or when the dependent variable is categorical. When assumptions of normality and homogeneity of variance are reasonably met, parametric tests remain the preferred choice because of their superior ability to detect true differences.</p>
         <!-- /anchor:080 -->
+
+        <!-- visual-aid:va-PMET-anova-nonparametric-002 -->
+        <div class="visual-aid">
+        <div class="visual-aid-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6.75"/></svg>
+        Parametric Tests and Nonparametric Alternatives
+        </div>
+        <div class="va-matrix" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="va-matrix-cell va-matrix-header">Parametric Test</div>
+        <div class="va-matrix-cell va-matrix-header">Nonparametric Alternative</div>
+        <div class="va-matrix-cell va-matrix-header">Design</div>
+        <div class="va-matrix-cell va-matrix-header">When to Use</div>
+        <div class="va-matrix-cell va-matrix-label">Independent t-test</div>
+        <div class="va-matrix-cell">Mann-Whitney U</div>
+        <div class="va-matrix-cell">2 independent groups</div>
+        <div class="va-matrix-cell">Ordinal data, skewed distribution, small n</div>
+        <div class="va-matrix-cell va-matrix-label">Paired t-test</div>
+        <div class="va-matrix-cell">Wilcoxon Signed-Rank</div>
+        <div class="va-matrix-cell">2 related samples</div>
+        <div class="va-matrix-cell">Ordinal data, non-normal difference scores</div>
+        <div class="va-matrix-cell va-matrix-label">One-Way ANOVA</div>
+        <div class="va-matrix-cell">Kruskal-Wallis H</div>
+        <div class="va-matrix-cell">3+ independent groups</div>
+        <div class="va-matrix-cell">Violated normality or homogeneity assumptions</div>
+        <div class="va-matrix-cell va-matrix-label">Repeated Measures ANOVA</div>
+        <div class="va-matrix-cell">Friedman Test</div>
+        <div class="va-matrix-cell">3+ related samples</div>
+        <div class="va-matrix-cell">Ordinal outcomes, small within-subjects samples</div>
+        </div>
+        </div>
+        <!-- /visual-aid:va-PMET-anova-nonparametric-002 -->
+
 
 
         <h3>Chi-Square Tests</h3>
@@ -384,60 +413,65 @@
 
         <p>After running a significance test — whether parametric or non-parametric — you know whether an effect is statistically significant. But significance alone can be deeply misleading. With a sample of 10,000 participants, even a half-point difference on a 100-point depression scale can reach p < .05. Does that mean the treatment is clinically meaningful? Not necessarily. This is why modern research standards and the APA Publication Manual insist on reporting <span class="key-term">effect sizes</span>, which quantify the magnitude of a difference or relationship independent of sample size, telling us how large the effect actually is.</p>
 
+        <!-- visual-aid:va-PMET-anova-nonparametric-003 -->
+        <div class="visual-aid">
+        <div class="visual-aid-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6.75"/></svg>
+        Effect Size Benchmarks: Cohen's d and Eta-Squared
+        </div>
+        <div class="va-spectrum">
+        <div class="va-spectrum-bar"></div>
+        <div class="va-spectrum-markers">
+        <div class="va-spectrum-marker">
+        <div class="va-spectrum-marker-label">Small</div>
+        <div class="va-spectrum-marker-desc">Cohen's d = 0.2 &mdash; η² = .01</div>
+        </div>
+        <div class="va-spectrum-marker">
+        <div class="va-spectrum-marker-label">Medium</div>
+        <div class="va-spectrum-marker-desc">Cohen's d = 0.5 &mdash; η² = .06</div>
+        </div>
+        <div class="va-spectrum-marker">
+        <div class="va-spectrum-marker-label">Large</div>
+        <div class="va-spectrum-marker-desc">Cohen's d = 0.8 &mdash; η² = .14</div>
+        </div>
+        </div>
+        </div>
+        <div class="va-compare">
+        <div class="va-compare-col">
+        <h5>Cohen's d</h5>
+        <ul>
+        <li>Standardized mean difference</li>
+        <li>Expressed in SD units</li>
+        <li>Used with t-tests</li>
+        <li>Formula: (M1 &mdash; M2) / SD</li>
+        </ul>
+        </div>
+        <div class="va-compare-col">
+        <h5>Eta-Squared (η²)</h5>
+        <ul>
+        <li>Proportion of variance explained</li>
+        <li>Ranges from 0 to 1</li>
+        <li>Used with ANOVA</li>
+        <li>Partial η² controls for other IVs</li>
+        </ul>
+        </div>
+        <div class="va-compare-col">
+        <h5>Other Measures</h5>
+        <ul>
+        <li>Omega-squared (ω²): less biased than η²</li>
+        <li>Odds ratio: categorical outcomes</li>
+        <li>r: correlation as effect size</li>
+        <li>RCI: individual change reliability</li>
+        </ul>
+        </div>
+        </div>
+        </div>
+        <!-- /visual-aid:va-PMET-anova-nonparametric-003 -->
+
+
         <h3>Cohen's d</h3>
 
-        <p><span class="key-term">Cohen's d</span> measures the standardized difference between two means, expressed in standard deviation units. It is commonly used with t-tests.</p>
-
-        <table>
-          <tr>
-            <th>Cohen's d</th>
-            <th>Interpretation</th>
-          </tr>
-          <tr>
-            <td>0.2</td>
-            <td>Small effect</td>
-          </tr>
-          <tr>
-            <td>0.5</td>
-            <td>Medium effect</td>
-          </tr>
-          <tr>
-            <td>0.8</td>
-            <td>Large effect</td>
-          </tr>
-        </table>
-
-        <h3>Eta-Squared (η²)</h3>
-
-        <p><span class="key-term">Eta-squared</span> represents the proportion of variance in the dependent variable explained by the independent variable(s). It is commonly used with ANOVA.</p>
-
-        <table>
-          <tr>
-            <th>η²</th>
-            <th>Interpretation</th>
-          </tr>
-          <tr>
-            <td>.01</td>
-            <td>Small effect</td>
-          </tr>
-          <tr>
-            <td>.06</td>
-            <td>Medium effect</td>
-          </tr>
-          <tr>
-            <td>.14</td>
-            <td>Large effect</td>
-          </tr>
-        </table>
-
-        <h3>Other Effect Size Measures</h3>
-
-        <ul>
-          <li><strong>Partial eta-squared (η²ₚ):</strong> Variance explained by one IV while controlling for other IVs; used in factorial ANOVA</li>
-          <li><strong>Omega-squared (ω²):</strong> Less biased estimate of population effect size than η²</li>
-          <li><strong>Odds ratio:</strong> Used with categorical outcomes; commonly reported in logistic regression</li>
-          <li><strong>r:</strong> Correlation coefficient itself is an effect size measure</li>
-        </ul>
+        <p><span class="key-term">Cohen's d</span> measures the standardized difference between two means in standard deviation units and is the default effect size for t-tests. <span class="key-term">Eta-squared (eta-sq)</span> represents the proportion of variance in the dependent variable explained by the independent variable(s) and is the default for ANOVA. The spectrum and comparison columns above display their benchmark thresholds (Cohen, 1988). For factorial designs, <span class="key-term">partial eta-squared</span> isolates the variance attributable to one IV while controlling for others — a distinction the EPPP frequently tests.</p>
 
         <div class="clinical-note">
           <h4>Statistical vs. Clinical Significance</h4>
