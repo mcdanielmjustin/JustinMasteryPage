@@ -18,7 +18,7 @@ from collections import Counter
 SCRIPTS_DIR = pathlib.Path(__file__).resolve().parent
 DATA_DIR = SCRIPTS_DIR / "data"
 INPUT_FILE = DATA_DIR / "visual_aids_generated.json"
-DEFAULT_CONTENT_DIR = pathlib.Path("C:/Users/mcdan/PassEPPP-website/content")
+DEFAULT_CONTENT_DIR = pathlib.Path("C:/Users/Admin/JustinMasteryPage/content")
 BACKUP_DIR = DATA_DIR / "backup_va"
 
 

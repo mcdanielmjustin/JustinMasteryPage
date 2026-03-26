@@ -17,7 +17,7 @@ import anthropic
 SCRIPTS_DIR = pathlib.Path(__file__).resolve().parent
 DATA_DIR = SCRIPTS_DIR / "data"
 OUTPUT_FILE = DATA_DIR / "visual_aids_generated.json"
-DEFAULT_CONTENT_DIR = pathlib.Path("C:/Users/mcdan/PassEPPP-website/content")
+DEFAULT_CONTENT_DIR = pathlib.Path("C:/Users/Admin/JustinMasteryPage/content")
 
 DOMAIN_MAP = {
     "domain1": "PMET", "domain2": "LDEV", "domain3": "CPAT",
@@ -265,16 +265,34 @@ Best for: treatment outcomes, before/after comparisons, intervention models.
 Best for: diagnostic criteria (present/absent), inclusion/exclusion criteria, common misconceptions.
 """
 
-SYSTEM_PROMPT = f"""You are an expert educational content designer for EPPP (Examination for Professional Practice in Psychology) study materials.
+SYSTEM_PROMPT = f"""You are an expert educational content designer for EPPP (Examination for Professional Practice in Psychology) study materials, specializing in differentiated instruction and visual learning.
 
-Your task: Given a chapter's HTML content, generate 1-3 visual-aid graphic organizers that help students understand key concepts for the EPPP exam.
+Your task: Given a chapter's HTML content, generate 2-3 visual-aid graphic organizers that help students understand key concepts for the EPPP exam through DIVERSE visual representations.
 
 SELECTION RULES:
-1. Only create visual aids where they GENUINELY help — comparisons, processes, hierarchies, timelines, classifications
+1. Only create visual aids where they GENUINELY help — comparisons, processes, hierarchies, timelines, classifications, spectrums, flowcharts
 2. Each visual aid must be 100% factually accurate based on the chapter content
 3. Prefer concepts that are commonly tested on the EPPP
 4. Do NOT create visual aids for simple definitions or single facts
 5. If a chapter has very few organizable concepts, return just 1 or even 0 visual aids
+
+LAYOUT DIVERSITY — CRITICAL:
+- AVOID overusing va-matrix. Use it only when a true multi-dimensional grid is the best representation.
+- PREFER these underused but powerful layouts:
+  * va-tree — for classification systems, diagnostic hierarchies, theory taxonomies
+  * va-timeline — for developmental stages, historical progressions, treatment phases, onset patterns
+  * va-flow — for causal pathways, stimulus-response chains, neural circuits, information processing models
+  * va-spectrum — for severity continua, dimensional models, personality traits, dose-response curves
+  * va-cycle — for feedback loops, maintenance cycles (e.g., anxiety cycle, addiction cycle)
+  * va-pyramid — for hierarchical models (Maslow, Bloom's, evidence hierarchies)
+  * va-bridge — for treatment before/after comparisons, intervention models
+- Use va-compare and va-split for genuine two-way contrasts, not as a default
+- Each chapter's visual aids should use DIFFERENT layout types from each other
+
+DIFFERENTIATED INSTRUCTION:
+- Design visual aids that serve multiple learning styles: visual-spatial learners (trees, flows, hubs), sequential learners (timelines, steps, cycles), comparative thinkers (splits, spectrums)
+- When a concept has both a process AND a classification aspect, choose the representation that is HARDER to glean from reading prose alone
+- Prioritize visual aids that reveal relationships, sequences, or hierarchies that are implicit in the text but not visually obvious
 
 HTML RULES:
 1. Use ONLY the CSS classes listed in the layout reference below

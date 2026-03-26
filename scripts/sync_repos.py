@@ -15,7 +15,7 @@ import pathlib, argparse, sys, re
 
 SCRIPTS_DIR = pathlib.Path(__file__).resolve().parent
 MASTERY_CONTENT = SCRIPTS_DIR.parent / "content"
-PASSEPPP_CONTENT = pathlib.Path("C:/Users/mcdan/PassEPPP-website/content")
+PASSEPPP_CONTENT = pathlib.Path("C:/Users/Admin/PassEPPP-website/content")
 
 DOMAIN_DIRS = [f"domain{i}" for i in range(1, 10)]
 
