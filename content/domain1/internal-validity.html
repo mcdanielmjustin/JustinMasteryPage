@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threats from Within — Internal Validity | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; color: var(--text-primary); }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .definition-box h4 { margin: 0 0 12px; color: var(--accent); font-size: 1rem; }
+    .definition-box p { margin: 0; color: var(--text-secondary); }
+    .definition-box ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .definition-box li { margin-bottom: 8px; }
+
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .example-box h4 { margin: 0 0 12px; color: #60a5fa; font-size: 1rem; }
+    .example-box p { margin: 0; color: var(--text-secondary); }
+
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .clinical-note h4 { margin: 0 0 12px; color: #4ade80; font-size: 1rem; }
+    .clinical-note p { margin: 0; color: var(--text-secondary); }
+    .clinical-note ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .clinical-note li { margin-bottom: 8px; }
+
+    .citation { border-left: 3px solid var(--accent); padding-left: 16px; margin: 24px 0; font-style: italic; color: var(--text-muted); }
+
+    .exam-focus { background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 28px; margin: 40px 0; }
+    .exam-focus h3 { color: var(--accent); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    .exam-focus ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .exam-focus li { margin-bottom: 10px; }
+
+    .references { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .references h3 { margin-bottom: 20px; }
+    .reference-list { list-style: none; }
+    .reference-list li { margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; padding-left: 32px; text-indent: -32px; }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Threats from Within — Internal Validity</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 1</div>
+        <div class="domain-title">Psychometrics & Research Methods</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>The Language of Science — Variables, Scales & Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Associations Form — Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="reinforcement-punishment.html" class="chapter-link"><span class="chapter-number">3</span>Consequences That Shape Behavior — Reinforcement & Punishment</a></li>
+        <li class="chapter-item"><a href="schedules-applications.html" class="chapter-link"><span class="chapter-number">4</span>Schedules, Shaping & Clinical Applications of Operant Principles</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">5</span>Relationships in Data — Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="hypothesis-testing.html" class="chapter-link"><span class="chapter-number">6</span>Testing Ideas — Hypotheses, t-Tests & Statistical Power</a></li>
+        <li class="chapter-item"><a href="anova-nonparametric.html" class="chapter-link"><span class="chapter-number">7</span>ANOVA, Nonparametric Tests & Effect Sizes</a></li>
+        <li class="chapter-item"><a href="experimental-designs.html" class="chapter-link"><span class="chapter-number">8</span>Blueprints for Discovery — Experimental & Quasi-Experimental Designs</a></li>
+        <li class="chapter-item"><a href="qualitative-program-eval.html" class="chapter-link"><span class="chapter-number">9</span>One at a Time — Single-Subject, Qualitative & Program Evaluation</a></li>
+        <li class="chapter-item"><a href="internal-validity.html" class="chapter-link active"><span class="chapter-number">10</span>Threats from Within — Internal Validity</a></li>
+        <li class="chapter-item"><a href="external-validity.html" class="chapter-link"><span class="chapter-number">11</span>Threats from Without — External & Statistical Conclusion Validity</a></li>
+        <li class="chapter-item"><a href="classical-test-theory.html" class="chapter-link"><span class="chapter-number">12</span>Consistency of Measurement — Classical Test Theory & IRT</a></li>
+        <li class="chapter-item"><a href="reliability-practice.html" class="chapter-link"><span class="chapter-number">13</span>Reliability in Practice — Types, SEM & Factors</a></li>
+        <li class="chapter-item"><a href="validity-evidence.html" class="chapter-link"><span class="chapter-number">14</span>Measuring What Matters — Sources of Validity Evidence</a></li>
+        <li class="chapter-item"><a href="construct-validity.html" class="chapter-link"><span class="chapter-number">15</span>Construct Validity, Generalization & Test Fairness</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">16</span>Predicting Outcomes — Criterion-Related Validity</a></li>
+        <li class="chapter-item"><a href="decision-accuracy.html" class="chapter-link"><span class="chapter-number">17</span>Making Decisions — Base Rates, Sensitivity & Utility</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 10 of 17</div>
+        <h1>Threats from Within — Internal Validity</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Research Validity</h2>
+
+        <p>The previous chapter introduced qualitative methods and program evaluation — approaches that prioritize depth, context, and practical decision-making. But whether a study uses experimental, quasi-experimental, qualitative, or evaluative methods, a fundamental question remains: can we trust its conclusions? Imagine a clinical psychologist publishes a study claiming that a new eight-week group therapy protocol significantly reduces symptoms of social anxiety. The findings make headlines, clinics begin adopting the protocol, and insurance companies consider adding it to their approved treatments. But what if the participants were simultaneously taking SSRIs that the researchers failed to account for? What if the outcome measure — a self-report questionnaire — actually captured general distress rather than social anxiety specifically? What if the statistical test was underpowered and the "significant" result was a fluke? Each of these problems represents a different crack in the foundation of the study's validity, and each would lead a careful reader to a very different conclusion about what the research actually demonstrated.</p>
+
+        <p><span class="key-term">Research validity</span> refers to the accuracy and trustworthiness of research conclusions — the degree to which a study truly measures what it claims to measure and whether its conclusions are justified. It is not a single property that a study either has or lacks. Rather, validity is multidimensional: a study can be strong in one respect and fatally flawed in another. A tightly controlled laboratory experiment might establish with near-certainty that Variable A caused Variable B, yet tell us nothing about whether those findings hold outside the lab. Conversely, a large-scale survey conducted across diverse settings might generalize beautifully but leave us unable to determine which variables are actually driving the observed relationships. Understanding the different types of validity — and the specific threats to each — is essential for evaluating psychological research, designing rigorous studies, and making evidence-based clinical decisions (Shadish et al., 2002).</p>
+
+        <p>The framework most widely used to organize these concerns traces back to the pioneering work of Donald Campbell and his colleagues, who distinguished four major types of validity in research: <span class="key-term">internal validity</span>, <span class="key-term">external validity</span>, <span class="key-term">construct validity</span>, and <span class="key-term">statistical conclusion validity</span>. Think of these four types as four critical questions that every study must answer. A study's overall quality depends on how well it addresses each one, though in practice, strengthening one type of validity sometimes comes at the cost of another — a tension that researchers must navigate thoughtfully. These distinctions are heavily tested on the EPPP, and mastering them will equip you not only for the exam but for a career of critically appraising the evidence base that informs clinical practice.</p>
+
+        <div class="definition-box">
+        <h4>Four Types of Research Validity</h4>
+        <p><strong>Internal Validity:</strong> Did the treatment (IV) actually cause the observed effect (DV)? This is the "cause-and-effect" question — can we rule out alternative explanations for the results?</p>
+        <p><strong>External Validity:</strong> Can the findings be generalized to other people, settings, and times? A study with strong external validity produces results that hold beyond the specific sample and context in which they were obtained.</p>
+        <p><strong>Construct Validity:</strong> Are we measuring the constructs we think we're measuring? This concerns whether the operational definitions (tests, manipulations, measures) truly capture the theoretical variables of interest.</p>
+        <p><strong>Statistical Conclusion Validity:</strong> Are our statistical conclusions accurate? This addresses whether the study had adequate power, used appropriate tests, and reached defensible conclusions about the presence or absence of a relationship between variables.</p>
+        </div>
+
+        <p>To make these distinctions concrete, return to the social anxiety therapy study. If participants improved because of their medications rather than the group therapy, the study has an <em>internal validity</em> problem — the wrong variable is getting credit for the change. If the study was conducted only with college students at a single university and the results don't hold for older adults or community populations, the study has an <em>external validity</em> problem. If the self-report measure actually tapped general distress rather than social anxiety per se, the study has a <em>construct validity</em> problem. And if the researchers used a sample of only 12 participants and their statistical test lacked the power to detect a real effect — or falsely detected one that wasn't there — the study has a <em>statistical conclusion validity</em> problem. In the sections that follow, we will examine each type of validity in depth, cataloging the specific threats that can undermine it and the design safeguards that protect against those threats. We begin with what is often considered the most fundamental question in experimental research: internal validity.</p>
+
+        <div class="citation">
+        Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). <em>Experimental and quasi-experimental designs for generalized causal inference</em>. Houghton Mifflin. - This foundational text comprehensively covers threats to validity and methods for addressing them.
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Internal Validity</h2>
+
+        <p>In the preceding section, we introduced the four pillars of research validity and noted that statistical conclusion validity asks whether our statistical conclusions are accurate. But even a perfectly executed statistical analysis is meaningless if we cannot be sure about what actually caused the observed changes. Imagine a clinical researcher who develops a promising new cognitive-behavioral protocol for insomnia. After eight weeks, participants report better sleep. The statistical tests look convincing — but then she realizes a popular sleep-hygiene app went viral during the study period, and many participants downloaded it. Did her protocol work, or was it the app? This is the fundamental question that internal validity asks: Can we trust that the independent variable — and not something else — caused the change in the dependent variable?</p>
+
+        <p><span class="key-term">Internal validity</span> refers to the degree to which a study establishes a causal relationship between the independent and dependent variables. A study possesses high internal validity when we can confidently conclude that changes in the DV were caused by the IV, not by extraneous factors, coincidence, or methodological artifacts. This is why true experiments — those employing random assignment to conditions, manipulation of the IV, and careful control of confounds — sit at the top of the hierarchy when it comes to internal validity. Random assignment does not guarantee perfection, but it is the single most powerful tool for equating groups at the outset, which dramatically reduces the number of alternative explanations a skeptical reader can raise.</p>
+
+        <!-- anchor:014 coverage:partial -->
+        <p>One particularly elegant method for evaluating whether pretesting itself influences treatment outcomes is the <span class="key-term">Solomon four-group design</span>. Consider a clinical trial testing a new grief-counseling intervention. Before treatment begins, all participants in a standard pretest-posttest design complete a bereavement inventory. But what if the very act of reflecting on their grief symptoms primes participants to engage more deeply with the counseling? The Solomon design was created to detect exactly this kind of confound. It combines a standard pretest-posttest control group experiment with a posttest-only control group experiment, yielding four conditions: (1) pretest + treatment + posttest, (2) pretest + no treatment + posttest, (3) treatment + posttest only, and (4) no treatment + posttest only. By comparing Groups 1 and 3, the researcher can determine whether exposure to the pretest altered participants' responsiveness to the intervention—a phenomenon known as <span class="key-term">pretest sensitization</span> (also called the reactive effects of testing). If the treatment effect is the same magnitude regardless of whether a pretest was administered, the researcher can rule out sensitization as a confound. The Solomon design also strengthens external validity: because two groups never receive a pretest, the findings are more likely to generalize to real-world populations who are not pretested. The primary drawback is practical—the design requires twice as many groups (and participants) as a simple pretest-posttest experiment, making it resource-intensive.</p>
+
+        <div class="clinical-note"><h4>Clinical Note</h4><p>Pretest sensitization is especially relevant in psychotherapy research. Administering a depression inventory before treatment may heighten participants' awareness of their symptoms, potentially amplifying their engagement with the intervention — or, conversely, triggering defensive minimization. When the Solomon design is not feasible, researchers sometimes opt for a posttest-only control group design with random assignment, which avoids sensitization altogether while still maintaining strong internal validity. For the EPPP, remember that the Solomon design is the gold standard for detecting testing × treatment interactions, but the posttest-only control group design is the practical alternative.</p></div>
+        <!-- /anchor:014 -->
+
+
+        <h3>Threats to Internal Validity</h3>
+
+        <p>If internal validity is about ruling out alternative explanations, then threats to internal validity are precisely those alternative explanations — rival hypotheses that could account for the observed results without invoking the independent variable at all. Campbell and Stanley (1963) and later Cook and Campbell (1979) identified numerous threats to internal validity, and these remain foundational concepts in research methodology. Think of each threat as a clever defense attorney arguing that something other than your treatment could have produced the outcome. Your job as a researcher is to design studies that silence each of these arguments, and your job as an exam-taker is to recognize them instantly. Let us walk through each one with concrete examples that will make them stick.</p>
+
+        <h4>History</h4>
+        <p><span class="key-term">History</span> refers to external events occurring during the study that may affect the dependent variable. These events are not part of the planned treatment but happen between pretest and posttest measurements, contaminating the causal picture. The longer a study runs, the more opportunity history has to intrude — which is one reason longitudinal studies must be especially vigilant about this threat. History is sometimes confused with maturation, but the distinction is straightforward: history comes from outside the participant (an event in the world), while maturation comes from inside the participant (natural biological or psychological change).</p>
+
+        <div class="example-box">
+        <h4>Example: History Threat</h4>
+        <p>A researcher studies the effect of a new anxiety treatment over 8 weeks. During the study, a major national crisis occurs, elevating anxiety in the population. Any observed changes in anxiety might be due to the treatment, the crisis, or both. The external event (crisis) is a history threat. A well-designed study with a concurrent control group helps address this: if both groups experience the same external event, its impact should affect both groups equally, allowing the treatment effect to be isolated.</p>
+        </div>
+
+        <h4>Maturation</h4>
+        <p><span class="key-term">Maturation</span> refers to natural changes in participants over time, such as growing older, becoming tired, becoming hungry during a long testing session, or simply gaining life experience. These changes occur regardless of any treatment and may be mistaken for treatment effects. Maturation is an especially potent threat in developmental research. Imagine a study claiming that an enrichment program improved toddlers' vocabulary over six months — without a control group, it is impossible to separate program effects from the dramatic vocabulary growth that two-year-olds undergo naturally. Even in shorter studies, fatigue and boredom represent forms of within-session maturation that can systematically influence performance on later measures.</p>
+
+        <h4>Testing</h4>
+        <p><span class="key-term">Testing</span> (also called practice effects) occurs when taking a pretest affects performance on a posttest. Participants may remember specific items, develop test-taking strategies, become more comfortable with the assessment format, or become sensitized to what the researcher is measuring. This is distinct from pretest sensitization discussed in the Solomon design section: testing effects refer to direct improvement on the measure itself (e.g., scoring higher simply because you have seen the questions before), while pretest sensitization refers to the pretest altering the participant's responsiveness to the treatment. Both are important to recognize, and the EPPP may test your ability to distinguish between them.</p>
+
+        <h4>Instrumentation</h4>
+        <p><span class="key-term">Instrumentation</span> refers to changes in the measuring instrument or procedure during the study, rather than genuine changes in the construct being measured. This threat comes in many forms: observer drift (observers gradually shifting their rating criteria over time, often becoming more lenient or more strict), equipment recalibration, software updates to an assessment platform, or modified administration procedures partway through data collection. A classic example occurs in behavioral observation studies — after coding hundreds of hours of footage, research assistants may unconsciously relax their criteria for what counts as "aggressive behavior," producing apparent decreases in aggression that have nothing to do with the intervention.</p>
+
+        <h4>Statistical Regression</h4>
+        <p><span class="key-term">Statistical regression</span> (regression to the mean) occurs when participants are selected based on extreme scores. This threat is subtle and often misunderstood, so it merits careful attention. Any measurement contains some degree of error, meaning that an extremely high or extremely low score is likely a combination of the person's true ability plus some unusually favorable or unfavorable error. On retesting, that error component is unlikely to be as extreme in the same direction, so scores naturally drift toward the group mean — not because anything has changed about the person, but because of the mathematics of measurement error. This threat is most dangerous when researchers select participants specifically because of their extreme scores and then interpret any movement toward average as evidence of treatment effectiveness.</p>
+
+        <div class="example-box">
+        <h4>Example: Regression Threat</h4>
+        <p>A school identifies students with the lowest reading scores for a remedial program. Even without any intervention, these students would likely score somewhat higher on a second test simply because their extreme scores were partly due to measurement error (a bad day, unlucky guesses, or a temporary illness during the first testing). Any improvement might be regression to the mean, not program effects. This is why a randomly assigned control group — also selected from extreme scorers — is essential: both groups should regress equally, making it possible to detect any additional improvement attributable to the intervention.</p>
+        </div>
+
+        <h4>Selection</h4>
+        <p><span class="key-term">Selection</span> occurs when groups differ systematically before treatment begins. This is a major threat in non-randomized studies, such as quasi-experiments and observational designs. If the treatment group differs from the comparison group on relevant characteristics — motivation, severity of symptoms, socioeconomic status, or any other variable related to the outcome — any observed post-treatment differences could reflect these pre-existing differences rather than the treatment itself. For example, if patients who voluntarily seek out a new psychotherapy technique are compared with those receiving treatment-as-usual, the self-selected group may already be more motivated and therefore more likely to improve. Random assignment is the most effective safeguard against selection bias because it distributes both known and unknown participant characteristics approximately equally across conditions.</p>
+
+        <h4>Mortality (Attrition)</h4>
+        <p><span class="key-term">Mortality</span> (or attrition) refers to differential dropout from groups during the study. The key word is "differential" — some participant loss is inevitable in any longitudinal study, but the threat to internal validity arises when the reasons for dropping out are systematically related to the condition. Consider a rigorous exercise intervention for depression: participants in the treatment group who find the exercise regimen too demanding may quit, leaving only the most motivated (and perhaps least depressed) individuals. Meanwhile, the control group — which demands little effort — retains a broader range of participants. The remaining treatment group now looks better not because the exercise worked, but because the most difficult-to-treat individuals removed themselves from the analysis.</p>
+
+        <h4>Selection Interactions</h4>
+        <p>Selection can interact with other threats, producing compound confounds that are particularly tricky to detect. <span class="key-term">Selection-maturation</span> occurs when groups mature at different rates — for instance, comparing a younger treatment group with an older control group means that biological development may proceed differently in the two groups over the course of the study. <span class="key-term">Selection-history</span> occurs when groups are differentially affected by external events, as when treatment and control conditions are run at different sites that experience different local events during the study period. These interaction effects underscore why random assignment and concurrent data collection are so valuable: they minimize the chance that groups will be differentially exposed to maturational or historical influences.</p>
+
+        <div class="definition-box">
+        <h4>Additional Internal Validity Threats</h4>
+        <p><strong>Diffusion of Treatment:</strong> Control group participants learn about or receive aspects of the treatment. This often occurs when treatment and control participants interact — for example, in a school-based study where students in different conditions share the same hallways and inevitably talk about what they are learning. When control participants adopt treatment strategies, the difference between groups shrinks, obscuring a real treatment effect.</p>
+        <p><strong>Compensatory Equalization:</strong> Administrators provide extra services to the control group to compensate for not receiving treatment. A well-intentioned school principal, uncomfortable that some students are "missing out," might offer additional tutoring to control-group students, effectively creating a second intervention that was never part of the research design.</p>
+        <p><strong>Compensatory Rivalry:</strong> Control group participants work harder to compete with the treatment group (John Henry effect). Named after the legendary steel driver who allegedly worked himself to exhaustion competing against a machine, this threat arises when control participants are aware they are in the "no treatment" condition and become extra motivated to prove they can perform just as well — or better — without help.</p>
+        <p><strong>Resentful Demoralization:</strong> Control group participants become demoralized and perform worse than they otherwise would. This is essentially the opposite of compensatory rivalry: rather than rising to the challenge, control participants give up or disengage because they feel disadvantaged by their assignment, artificially inflating the apparent superiority of the treatment group.</p>
+        </div>
+      </section>
+
+      <div class="exam-focus">
+        <h3>EPPP Exam Focus Points</h3>
+        <ul>
+          <li><strong>Internal validity</strong> asks whether the IV caused changes in the DV — it is the "cause and effect" question and the primary strength of true experiments</li>
+          <li><strong>Random assignment</strong> is the single most powerful safeguard against threats to internal validity because it equates groups on both known and unknown confounds</li>
+          <li><strong>History vs. maturation:</strong> History threats come from outside the participant (external events); maturation threats come from within the participant (natural changes over time)</li>
+          <li><strong>Testing vs. pretest sensitization:</strong> Testing effects improve scores because participants have seen the items before; pretest sensitization changes how participants respond to the treatment itself</li>
+          <li>The <strong>Solomon four-group design</strong> is the gold standard for detecting pretest sensitization — it combines a pretest-posttest control group design with a posttest-only control group design</li>
+          <li><strong>Statistical regression</strong> is a threat whenever participants are selected based on extreme scores — scores naturally drift toward the mean on retesting due to measurement error</li>
+          <li><strong>Selection</strong> is the primary threat in quasi-experimental designs because groups may differ systematically before treatment begins</li>
+          <li><strong>Differential attrition</strong> (mortality) threatens internal validity when participants drop out of conditions for reasons related to the treatment itself</li>
+          <li>Know the four types of research validity: <strong>internal</strong> (causal inference), <strong>external</strong> (generalizability), <strong>construct</strong> (measurement accuracy), and <strong>statistical conclusion</strong> (power and error)</li>
+          <li><strong>Diffusion of treatment</strong> occurs when control participants learn about the treatment; <strong>compensatory rivalry</strong> (John Henry effect) occurs when control participants try harder to compete</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="qualitative-program-eval.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">One at a Time — Single-Subject, Qualitative & Program Evaluation</div>
+          </div>
+        </a>
+        <a href="external-validity.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Threats from Without — External & Statistical Conclusion Validity</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evidence-Based Treatment — Trauma, PTSD & EMDR | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Evidence-Based Treatment — Trauma, PTSD & EMDR</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment & Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="intelligence-wechsler.html" class="chapter-link"><span class="chapter-number">1</span>Measuring Intelligence — Wechsler Scales, Stanford-Binet & IQ History</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Beyond IQ — Kaufman, Bayley, Adaptive Behavior & Achievement Tests</a></li>
+        <li class="chapter-item"><a href="objective-personality.html" class="chapter-link"><span class="chapter-number">3</span>Objective Personality — MMPI, PAI & Self-Report Measures</a></li>
+        <li class="chapter-item"><a href="projective-behavioral.html" class="chapter-link"><span class="chapter-number">4</span>Projective & Behavioral Assessment — Rorschach, TAT, Interviews & Observation</a></li>
+        <li class="chapter-item"><a href="clinical-neuropsych.html" class="chapter-link"><span class="chapter-number">5</span>Neuropsychological Screening — Halstead-Reitan, Luria & Clinical Batteries</a></li>
+        <li class="chapter-item"><a href="vocational-assessment.html" class="chapter-link"><span class="chapter-number">6</span>Vocational Assessment — Holland, Interest Inventories & Career Measures</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Test Score Interpretation — Norms, Derived Scores, SEM & Confidence Intervals</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics — Fairness, Bias, Security & APA Standard 9</a></li>
+        <li class="chapter-item"><a href="therapeutic-relationship.html" class="chapter-link"><span class="chapter-number">9</span>The Therapeutic Relationship — Alliance, Boundaries & Transference</a></li>
+        <li class="chapter-item"><a href="legal-forensic.html" class="chapter-link"><span class="chapter-number">10</span>Forensic Psychology — Competency, Insanity, Duty to Warn & Expert Testimony</a></li>
+        <li class="chapter-item"><a href="supervision-training.html" class="chapter-link"><span class="chapter-number">11</span>Clinical Supervision — Models, Process, Gatekeeping & Ethics</a></li>
+        <li class="chapter-item"><a href="ebt-anxiety-ocd.html" class="chapter-link"><span class="chapter-number">12</span>Evidence-Based Treatment — Anxiety, OCD & Exposure Therapies</a></li>
+        <li class="chapter-item"><a href="ebt-trauma-ptsd.html" class="chapter-link active"><span class="chapter-number">13</span>Evidence-Based Treatment — Trauma, PTSD & EMDR</a></li>
+        <li class="chapter-item"><a href="ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">14</span>Evidence-Based Treatment — Depression, Bipolar, BPD & Eating Disorders</a></li>
+        <li class="chapter-item"><a href="ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">15</span>Evidence-Based Treatment — Substance Use, Autism & Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 13 of 15</div>
+        <h1>Evidence-Based Treatment — Trauma, PTSD & EMDR</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Trauma-Focused Evidence-Based Treatments</h2>
+        <p>When a combat veteran cannot stop reliving the explosion that killed his closest friend, or a sexual assault survivor avoids any situation that remotely resembles the context of her attack, the clinician faces a core therapeutic challenge: how do you help someone process an event that their entire nervous system is organized around avoiding? The answer has crystallized over three decades of rigorous clinical research into three front-line treatments — Cognitive Processing Therapy, Prolonged Exposure, and EMDR — each approaching trauma recovery through a distinct but complementary mechanism. Understanding when to use each, what distinguishes their active ingredients, and where their evidence bases converge and diverge is essential for both clinical practice and the EPPP.</p>
+
+        <h3>Cognitive Processing Therapy (CPT)</h3>
+        <p><span class="key-term">Cognitive Processing Therapy</span> (Resick, Monson, & Chard, 2017) is a 12-session, manualized treatment for PTSD that targets the meaning a person has made of their traumatic experience rather than the sensory details of the trauma memory itself. CPT rests on the premise that PTSD is maintained by distorted beliefs — called <span class="key-term">stuck points</span> — that develop when survivors attempt to reconcile the trauma with their pre-existing worldview. These stuck points fall into two broad categories: <span class="key-term">assimilated beliefs</span>, in which the person distorts the trauma to fit prior beliefs ("It must have been my fault, because the world is just"), and <span class="key-term">over-accommodated beliefs</span>, in which the person distorts their worldview to fit the trauma ("No one can be trusted, ever").</p>
+        <p>Treatment proceeds through a structured sequence. Clients first write an <span class="key-term">impact statement</span> describing their understanding of why the trauma occurred and how it has changed their beliefs. The therapist uses Socratic questioning to identify stuck points across five thematic domains — <span class="key-term">safety, trust, power/control, esteem, and intimacy</span> — and teaches clients to challenge these beliefs using ABC worksheets and the Challenging Beliefs Worksheet. In the final sessions, clients write a revised impact statement reflecting their updated beliefs. CPT can be delivered with or without a written trauma account; the CPT-C (cognitive-only) variant omits the written narrative and achieves comparable outcomes (Resick et al., 2008).</p>
+
+        <h3>Prolonged Exposure (PE)</h3>
+        <p><span class="key-term">Prolonged Exposure</span> (Foa, Hembree, & Rothbaum, 2007) is grounded in Foa's <span class="key-term">emotional processing theory</span>, which posits that PTSD is maintained by a pathological fear structure in memory — a network of stimulus, response, and meaning elements that is activated by trauma reminders and sustained by avoidance. PE targets this fear structure through two complementary mechanisms: <span class="key-term">imaginal exposure</span>, in which the client repeatedly recounts the trauma memory aloud in vivid sensory detail during session (typically 45-60 minutes), and <span class="key-term">in vivo exposure</span>, in which the client systematically approaches real-world situations they have been avoiding since the trauma.</p>
+        <p>A standard PE protocol spans 8-15 sessions of 90 minutes each. Early sessions focus on psychoeducation about PTSD, rationale for exposure, and construction of an in vivo exposure hierarchy. From session three onward, imaginal exposure occupies the bulk of each session: the client revisits the trauma memory repeatedly while the therapist provides gentle prompts and monitors SUDS ratings. Between sessions, clients listen to audio recordings of their imaginal exposure daily. Over successive retellings, the emotional charge of the memory typically decreases (habituation) and the client develops a more coherent, contextualized narrative. The in vivo assignments proceed in parallel, gradually expanding the client's behavioral repertoire in the real world.</p>
+
+        <h3>Eye Movement Desensitization and Reprocessing (EMDR)</h3>
+        <p><span class="key-term">EMDR</span> (Shapiro, 2001) is built on the <span class="key-term">Adaptive Information Processing (AIP) model</span>, which proposes that traumatic memories are stored in an unprocessed, state-specific form — disconnected from the adaptive memory networks that normally integrate new experiences with existing knowledge. EMDR aims to reprocess these maladaptively stored memories by pairing trauma-focused attention with bilateral stimulation (typically guided eye movements, though auditory tones and tactile taps are also used), thereby facilitating the integration of traumatic material into adaptive memory networks.</p>
+        <p>The protocol follows an <span class="key-term">eight-phase structure</span>: (1) history-taking and treatment planning, (2) preparation (establishing safety, explaining the procedure), (3) assessment (identifying the target memory, negative cognition, desired positive cognition, and baseline SUDS/VOC ratings), (4) desensitization (bilateral stimulation while the client holds the target memory in mind), (5) installation (strengthening the positive cognition), (6) body scan (checking for residual somatic disturbance), (7) closure (stabilization at end of session), and (8) reevaluation (reviewing progress at the next session). Meta-analyses confirm that EMDR is effective for PTSD, though the mechanism of bilateral stimulation remains debated — dismantling studies suggest that the exposure and cognitive reprocessing components may account for much of the therapeutic effect independent of eye movements (Davidson & Parker, 2001).</p>
+
+        <table>
+          <tr><th>Feature</th><th>CPT</th><th>PE</th><th>EMDR</th></tr>
+          <tr><td>Primary Mechanism</td><td>Cognitive restructuring of stuck points</td><td>Emotional processing via exposure/habituation</td><td>Reprocessing via bilateral stimulation + AIP</td></tr>
+          <tr><td>Session Format</td><td>12 sessions, 50 min each</td><td>8-15 sessions, 90 min each</td><td>8-12 sessions, 60-90 min each</td></tr>
+          <tr><td>Homework</td><td>Worksheets challenging beliefs</td><td>Daily listening to imaginal recording; in vivo hierarchy</td><td>Minimal between-session assignments</td></tr>
+          <tr><td>Best Suited For</td><td>Clients with prominent guilt, shame, or distorted beliefs about the trauma</td><td>Clients who can tolerate sustained emotional activation; avoidance-dominant presentations</td><td>Clients who prefer less verbal processing; those with limited literacy</td></tr>
+          <tr><td>Contraindications</td><td>Active psychosis; acute suicidality without stabilization</td><td>Same; premature termination risk if sessions too short for habituation</td><td>Same; uncontrolled dissociation</td></tr>
+          <tr><td>Evidence Level</td><td>Strongly recommended (APA, VA/DoD)</td><td>Strongly recommended (APA, VA/DoD)</td><td>Conditionally recommended (APA); strongly recommended (VA/DoD, WHO)</td></tr>
+        </table>
+
+        <h3>Complex PTSD and ICD-11</h3>
+        <p>The <span class="key-term">ICD-11</span> (WHO, 2019) introduced <span class="key-term">Complex PTSD</span> as a distinct diagnosis for individuals exposed to prolonged, repeated, inescapable trauma — such as childhood abuse, prolonged domestic violence, or captivity. Complex PTSD includes all the core PTSD symptoms (re-experiencing, avoidance, hyperarousal) plus three additional features collectively termed <span class="key-term">disturbances in self-organization (DSO)</span>: (1) <span class="key-term">affect dysregulation</span> — difficulty modulating emotions, including explosive anger or emotional numbing; (2) <span class="key-term">negative self-concept</span> — persistent feelings of worthlessness, shame, or being permanently damaged; and (3) <span class="key-term">disturbances in relationships</span> — difficulty sustaining close relationships, oscillating between avoidance and intense, chaotic attachment. Treatment for complex PTSD typically requires a <span class="key-term">phase-based approach</span>: Phase 1 focuses on safety, stabilization, and affect regulation skills before any trauma processing begins; Phase 2 introduces trauma-focused work (CPT, PE, or EMDR); Phase 3 addresses reconnection with others and consolidation of identity.</p>
+
+        <h3>Pharmacological Adjuncts for PTSD</h3>
+        <p>While psychotherapy remains the first-line treatment for PTSD, pharmacotherapy plays an important adjunctive role. The <span class="key-term">SSRIs sertraline (Zoloft) and paroxetine (Paxil)</span> are the only two FDA-approved medications for PTSD and serve as first-line pharmacological options. Venlafaxine (an SNRI) also has strong evidence. Prazosin, an alpha-1 adrenergic antagonist, is used off-label for trauma-related nightmares, though recent large trials have yielded mixed results. Benzodiazepines are generally contraindicated for PTSD because they interfere with extinction learning and may worsen outcomes. For the EPPP, the key pharmacological distinction is that SSRIs address the full symptom cluster (re-experiencing, avoidance, and hyperarousal), whereas prazosin specifically targets nocturnal symptoms.</p>
+
+        <div class="clinical-note">
+          <strong>Choosing Among CPT, PE, and EMDR:</strong>
+          <p>All three front-line PTSD treatments produce comparable overall effect sizes in head-to-head comparisons, so the choice often depends on patient characteristics and preference. CPT may be preferred when guilt, shame, or distorted beliefs about the trauma dominate the clinical picture, because its cognitive restructuring directly targets these meaning-level distortions. PE may be preferred when avoidance is the central maintaining factor, because imaginal and in vivo exposure directly counteract the behavioral and emotional avoidance that sustains PTSD. EMDR may be preferred for clients who struggle with extended verbal narration or who find the homework demands of CPT and PE prohibitive. In all cases, the clinician should conduct a thorough functional assessment and incorporate the client's treatment preferences, as motivation and engagement predict outcome across all three approaches (Resick et al., 2017; Foa et al., 2007; Shapiro, 2001).</p>
+        </div>
+
+        <div class="citation">Resick, P. A., Monson, C. M., & Chard, K. M. (2017). <em>Cognitive processing therapy for PTSD: A comprehensive manual.</em> Guilford Press.</div>
+        <div class="citation">Foa, E. B., Hembree, E. A., & Rothbaum, B. O. (2007). <em>Prolonged exposure therapy for PTSD.</em> Oxford University Press.</div>
+        <div class="citation">Shapiro, F. (2001). <em>Eye movement desensitization and reprocessing: Basic principles, protocols, and procedures</em> (2nd ed.). Guilford Press.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>ACT and Third-Wave Approaches for Anxiety</h2>
+        <p><span class="key-term">Acceptance and Commitment Therapy (ACT)</span> (Hayes, Strosahl, & Wilson, 1999) approaches anxiety from a fundamentally different stance than traditional CBT. Rather than attempting to reduce or control anxiety, ACT aims to increase <span class="key-term">psychological flexibility</span> — the ability to contact the present moment fully and engage in values-driven behavior even in the presence of difficult thoughts and emotions. ACT is rooted in <span class="key-term">Relational Frame Theory (RFT)</span>, a behavioral account of human language and cognition that explains how verbal processes create psychological suffering through cognitive fusion and experiential avoidance.</p>
+        <p>ACT distinguishes between "clean" pain (natural suffering inherent in life) and "dirty" pain (suffering caused by attempts to avoid or control clean pain). The treatment motto is sometimes summarized as: "The solution is the problem" — efforts to control internal experiences paradoxically increase suffering. Instead, ACT teaches clients to hold difficult experiences lightly while pursuing meaningful action.</p>
+        <p>The six core ACT processes — often depicted as the <span class="key-term">hexaflex model</span> — are: acceptance, cognitive defusion, being present (contact with the present moment), self-as-context (the observing self), values clarification, and committed action. Together, these processes promote psychological flexibility, which is the central therapeutic target. ACT has growing empirical support for mixed anxiety disorders, social anxiety, GAD, and OCD, and is particularly useful when avoidance of internal experiences (<span class="key-term">experiential avoidance</span>) is a central maintaining factor.</p>
+
+        <!-- anchor:25 coverage:missing -->
+        <p>Research has examined whether integrating <span class="key-term">motivational interviewing (MI)</span> with CBT can enhance outcomes for generalized anxiety disorder, particularly among individuals who present with high levels of worry. GAD is often characterized by ambivalence about change — many clients hold positive beliefs about worry (e.g., that worrying prevents bad outcomes or demonstrates caring), which can undermine engagement with treatment strategies designed to reduce worry. MI, with its emphasis on exploring ambivalence, eliciting change talk, and strengthening intrinsic motivation, is well-suited to address this barrier.</p>
+        <p>Studies comparing MI-enhanced CBT to standard CBT for GAD have found that the combined approach yields superior reductions in worry severity. This advantage is particularly pronounced among clients whose baseline worry is severe, a subgroup that often responds less robustly to CBT alone. The MI component appears to help highly worried clients resolve their ambivalence about relinquishing worry, thereby increasing their readiness to engage fully with cognitive restructuring, behavioral experiments, and worry exposure exercises.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>When working with GAD clients who express beliefs that worry is helpful or protective, beginning treatment with MI techniques — such as a decisional balance exercise exploring the costs and benefits of worry — can facilitate a stronger therapeutic alliance and greater buy-in for subsequent CBT interventions. Clinicians should consider incorporating MI as a prelude or adjunct to standard CBT when clients present with severe worry or show resistance to engaging with worry reduction strategies.</p></div>
+        <!-- /anchor:25 -->
+
+
+        <div class="definition-box">
+          <strong>Key ACT Concepts:</strong>
+          <p><span class="key-term">Cognitive defusion</span> involves changing the relationship to thoughts rather than changing thought content (e.g., "I'm having the thought that I'm going to fail" rather than "I'm going to fail"). <span class="key-term">Self-as-context</span> refers to the transcendent sense of self that observes experience without being defined by it. <span class="key-term">Values</span> in ACT are freely chosen life directions (not goals) that give meaning to behavior. ACT explicitly rejects symptom reduction as a treatment goal, instead focusing on living a valued life even in the presence of difficult internal experiences.</p>
+        </div>
+
+        <h3>Applied Relaxation (Ost)</h3>
+        <p><span class="key-term">Applied relaxation</span> (Ost, 1987) is a structured behavioral treatment primarily for GAD that progresses through several stages: progressive muscle relaxation, release-only relaxation, cue-controlled relaxation (pairing relaxation with a cue word), differential relaxation (relaxing in non-demanding situations), rapid relaxation (achieving relaxation in 20-30 seconds), and application training (using the skill in naturally anxiety-provoking situations). It is considered an empirically supported treatment for GAD and panic disorder.</p>
+
+        <div class="example-box">
+          <strong>CBT for GAD:</strong>
+          <p>Treatment for <span class="key-term">Generalized Anxiety Disorder</span> typically combines cognitive restructuring of worry-related beliefs (e.g., "worrying helps me prepare"), behavioral experiments to test catastrophic predictions, and worry exposure (deliberately imagining the worst-case scenario without engaging avoidance). Borkovec's model emphasizes that worry serves as cognitive avoidance of emotional processing — the verbal-linguistic nature of worry dampens emotional imagery and prevents full emotional processing of feared outcomes. Intolerance of uncertainty is a key cognitive target in Dugas's model of GAD treatment.</p>
+        </div>
+      </div>
+
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Exposure types:</strong> In vivo (real), imaginal (visualization), interoceptive (bodily sensations), VR (virtual). Know which is used for which disorder.</li>
+          <li><strong>Systematic desensitization:</strong> Wolpe. Graduated exposure + relaxation. Based on reciprocal inhibition.</li>
+          <li><strong>Flooding:</strong> Prolonged exposure to most feared stimulus. No relaxation component. Relies on habituation.</li>
+          <li><strong>ERP for OCD:</strong> Exposure to obsessional triggers + prevention of compulsive rituals. First-line psychotherapy for OCD. 60-80% response rate.</li>
+          <li><strong>Prolonged Exposure (PE):</strong> Foa. Emotional processing theory. Imaginal + in vivo exposure for PTSD.</li>
+          <li><strong>CPT:</strong> Resick. Targets "stuck points" — maladaptive trauma cognitions. Themes: safety, trust, power, esteem, intimacy.</li>
+          <li><strong>EMDR:</strong> Shapiro. Adaptive Information Processing model. 8-phase protocol with bilateral stimulation. Effective but mechanism debated.</li>
+          <li><strong>TF-CBT:</strong> Treatment of choice for children/adolescents with PTSD. PRACTICE acronym. Includes caregiver component and trauma narrative.</li>
+          <li><strong>Interoceptive exposure:</strong> Deliberately inducing feared bodily sensations. Key component of panic disorder CBT. Exercises include hyperventilation, spinning, straw breathing.</li>
+          <li><strong>Inhibitory learning model:</strong> Craske. Exposure creates new competing memory rather than erasing old one. Emphasizes expectancy violation, variability, and deepened extinction.</li>
+          <li><strong>Habituation vs. inhibitory learning:</strong> Older model = fear decreases through extinction/habituation. Newer model = original fear memory persists but a new inhibitory memory competes with it.</li>
+          <li><strong>ACT:</strong> Hayes. Psychological flexibility (not symptom reduction) is the goal. Six core processes in hexaflex model. Third-wave CBT approach.</li>
+          <li><strong>Cognitive defusion:</strong> ACT technique — changing the relationship to thoughts rather than changing thought content.</li>
+          <li><strong>Implosive therapy:</strong> Stampfl. Imaginal flooding with psychodynamic content. Distinguished from standard flooding by inclusion of hypothesized unconscious themes.</li>
+          <li><strong>CBT for social anxiety:</strong> Heimberg's CBGT uses cognitive restructuring + in-session exposures in group format. Clark and Wells model targets self-focused attention and safety behaviors.</li>
+          <li><strong>GAD treatment:</strong> Borkovec — worry as cognitive avoidance. Dugas — intolerance of uncertainty. Applied relaxation (Ost) — progressive stages from PMR to application in real situations.</li>
+          <li><strong>BII phobia:</strong> Unique diphasic response (sympathetic then parasympathetic/vasovagal). Treatment = applied tension (Ost). Relaxation training is CONTRAINDICATED.</li>
+          <li><strong>One-session treatment:</strong> Ost. Single 2-3 hour session with participant modeling and in vivo exposure for specific phobias. Large effect sizes.</li>
+          <li><strong>SSRIs for anxiety:</strong> First-line pharmacotherapy for most anxiety disorders (GAD, SAD, panic, OCD, PTSD). OCD requires higher doses than depression.</li>
+          <li><strong>Benzodiazepines and exposure:</strong> Generally discouraged during exposure therapy due to state-dependent learning interference.</li>
+          <li><strong>D-cycloserine (DCS):</strong> NMDA partial agonist that may enhance extinction learning when taken before exposure sessions.</li>
+          <li><strong>Buspirone:</strong> 5-HT1A partial agonist for GAD. Non-sedating, no dependence potential, but slow onset (2-4 weeks). NOT effective for panic disorder.</li>
+          <li><strong>CPT stuck points:</strong> Assimilated (distort trauma to fit beliefs) vs. over-accommodated (distort beliefs to fit trauma). Five themes: safety, trust, power, esteem, intimacy.</li>
+          <li><strong>PE vs. CPT:</strong> PE emphasizes exposure to the trauma memory; CPT emphasizes cognitive restructuring of trauma-related beliefs. Both are first-line for PTSD.</li>
+          <li><strong>EMDR mechanism debate:</strong> Bilateral stimulation may not be the active ingredient. Exposure and cognitive reprocessing elements may account for efficacy.</li>
+          <li><strong>Incubation:</strong> Premature termination of flooding while anxiety is still high can worsen fear. Sessions must be long enough for habituation to occur.</li>
+          <li><strong>Reciprocal inhibition:</strong> Wolpe's principle underlying systematic desensitization — anxiety and relaxation are mutually exclusive states. A relaxation response inhibits the anxiety response.</li>
+          <li><strong>SUDS:</strong> Subjective Units of Distress Scale (0-100). Used to rate anxiety during exposure. Fear hierarchies are constructed using SUDS ratings.</li>
+          <li><strong>RFT:</strong> Relational Frame Theory — ACT's theoretical foundation. A behavioral account of how language creates suffering through cognitive fusion.</li>
+          <li><strong>Experiential avoidance:</strong> Central target in ACT. The attempt to avoid or control unwanted internal experiences (thoughts, feelings, sensations) that paradoxically increases suffering.</li>
+          <li><strong>Clark's cognitive model of panic:</strong> Catastrophic misinterpretation of bodily sensations creates a vicious cycle — sensation leads to catastrophic thought leads to anxiety leads to more sensations.</li>
+          <li><strong>Safety behaviors:</strong> Actions taken to prevent feared outcomes (e.g., always carrying medication, sitting near exits). Eliminating safety behaviors is essential for effective exposure because they prevent disconfirmation of feared consequences.</li>
+        </ul>
+      </div>
+
+
+      <div class="content-section">
+        <h2>Summary Table: Anxiety Disorder Treatments by Diagnosis</h2>
+        <table>
+          <tr><th>Disorder</th><th>First-Line Psychotherapy</th><th>Key Components</th></tr>
+          <tr><td>Specific Phobia</td><td>In vivo exposure / One-session treatment</td><td>Graduated or intensive exposure; applied tension for BII</td></tr>
+          <tr><td>Social Anxiety Disorder</td><td>CBT (CBGT) / Exposure + cognitive restructuring</td><td>Behavioral experiments, video feedback, reducing safety behaviors</td></tr>
+          <tr><td>Panic Disorder</td><td>CBT (Barlow/Clark)</td><td>Interoceptive exposure, cognitive restructuring of catastrophic misinterpretations</td></tr>
+          <tr><td>Agoraphobia</td><td>In vivo exposure + cognitive restructuring</td><td>Graduated approach to avoided situations; address safety behaviors</td></tr>
+          <tr><td>GAD</td><td>CBT / Applied relaxation</td><td>Worry exposure, cognitive restructuring, intolerance of uncertainty, relaxation</td></tr>
+          <tr><td>OCD</td><td>ERP</td><td>Exposure to obsessional triggers + prevention of compulsive rituals</td></tr>
+          <tr><td>PTSD (adults)</td><td>PE / CPT / EMDR</td><td>Imaginal + in vivo exposure; cognitive processing; bilateral stimulation</td></tr>
+          <tr><td>PTSD (children)</td><td>TF-CBT</td><td>PRACTICE components; includes caregiver sessions and trauma narrative</td></tr>
+        </table>
+      </div>
+
+
+
+      <div class="nav-buttons">
+        <a href="ebt-anxiety-ocd.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Evidence-Based Treatment — Anxiety, OCD & Exposure Therapies</div>
+          </div>
+        </a>
+        <a href="ebt-mood-personality.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Evidence-Based Treatment — Depression, Bipolar, BPD & Eating Disorders</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

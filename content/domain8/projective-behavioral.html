@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projective & Behavioral Assessment — Rorschach, TAT, Interviews & Observation | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Projective & Behavioral Assessment — Rorschach, TAT, Interviews & Observation</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment & Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="intelligence-wechsler.html" class="chapter-link"><span class="chapter-number">1</span>Measuring Intelligence — Wechsler Scales, Stanford-Binet & IQ History</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Beyond IQ — Kaufman, Bayley, Adaptive Behavior & Achievement Tests</a></li>
+        <li class="chapter-item"><a href="objective-personality.html" class="chapter-link"><span class="chapter-number">3</span>Objective Personality — MMPI, PAI & Self-Report Measures</a></li>
+        <li class="chapter-item"><a href="projective-behavioral.html" class="chapter-link active"><span class="chapter-number">4</span>Projective & Behavioral Assessment — Rorschach, TAT, Interviews & Observation</a></li>
+        <li class="chapter-item"><a href="clinical-neuropsych.html" class="chapter-link"><span class="chapter-number">5</span>Neuropsychological Screening — Halstead-Reitan, Luria & Clinical Batteries</a></li>
+        <li class="chapter-item"><a href="vocational-assessment.html" class="chapter-link"><span class="chapter-number">6</span>Vocational Assessment — Holland, Interest Inventories & Career Measures</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Test Score Interpretation — Norms, Derived Scores, SEM & Confidence Intervals</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics — Fairness, Bias, Security & APA Standard 9</a></li>
+        <li class="chapter-item"><a href="therapeutic-relationship.html" class="chapter-link"><span class="chapter-number">9</span>The Therapeutic Relationship — Alliance, Boundaries & Transference</a></li>
+        <li class="chapter-item"><a href="legal-forensic.html" class="chapter-link"><span class="chapter-number">10</span>Forensic Psychology — Competency, Insanity, Duty to Warn & Expert Testimony</a></li>
+        <li class="chapter-item"><a href="supervision-training.html" class="chapter-link"><span class="chapter-number">11</span>Clinical Supervision — Models, Process, Gatekeeping & Ethics</a></li>
+        <li class="chapter-item"><a href="ebt-anxiety-ocd.html" class="chapter-link"><span class="chapter-number">12</span>Evidence-Based Treatment — Anxiety, OCD & Exposure Therapies</a></li>
+        <li class="chapter-item"><a href="ebt-trauma-ptsd.html" class="chapter-link"><span class="chapter-number">13</span>Evidence-Based Treatment — Trauma, PTSD & EMDR</a></li>
+        <li class="chapter-item"><a href="ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">14</span>Evidence-Based Treatment — Depression, Bipolar, BPD & Eating Disorders</a></li>
+        <li class="chapter-item"><a href="ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">15</span>Evidence-Based Treatment — Substance Use, Autism & Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 15</div>
+        <h1>Projective & Behavioral Assessment — Rorschach, TAT, Interviews & Observation</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Structured and Semi-Structured Diagnostic Interviews</h2>
+        <p>A clinician sits across from a new patient who describes months of depressed mood, poor sleep, and passive suicidal ideation. An unstructured clinical interview might explore these complaints in depth — but what about the panic attacks the patient forgot to mention, or the binge drinking that only surfaces when asked directly? Research consistently shows that unstructured interviews miss comorbid diagnoses at alarming rates, producing kappa coefficients for diagnostic agreement that hover around 0.40 for many disorders. Structured and semi-structured diagnostic interviews were developed precisely to close this gap, providing systematic procedures for assessing psychiatric diagnoses based on specific diagnostic criteria while improving both the reliability and the comprehensiveness of the diagnostic process.</p>
+
+        <h3>SCID-5-CV and SCID-5-RV</h3>
+        <p>The <span class="key-term">Structured Clinical Interview for DSM-5 (SCID-5)</span> is the gold standard semi-structured diagnostic interview for adults. Two versions are available: the <span class="key-term">Clinician Version (SCID-5-CV)</span> for routine clinical use and the <span class="key-term">Research Version (SCID-5-RV)</span> for research studies requiring more detailed diagnostic assessment. The SCID-5 is organized into diagnostic modules covering mood disorders, psychotic disorders, substance use disorders, anxiety disorders, obsessive-compulsive disorders, trauma- and stressor-related disorders, somatic symptom disorders, eating disorders, and personality disorders (a separate SCID-5-PD). Administration requires <span class="key-term">clinical training and expertise</span>, as interviewers must make clinical judgments about symptom severity, differential diagnosis, and the credibility of patient reports. The SCID-5 is considered the <span class="key-term">gold standard for diagnostic reliability in research</span> settings.</p>
+
+        <h3>MINI (Mini International Neuropsychiatric Interview)</h3>
+        <p>The <span class="key-term">MINI</span> (Sheehan et al., 1998) is a brief, <span class="key-term">fully structured</span> diagnostic interview designed for use in primary care and clinical trials. It can be administered in approximately <span class="key-term">15-20 minutes</span>, making it substantially briefer than the SCID. The MINI uses a branching logic format with yes/no questions that map directly onto DSM-5 and ICD diagnostic criteria. It covers major depressive episode, dysthymia, suicidality, manic/hypomanic episodes, panic disorder, agoraphobia, social anxiety disorder, OCD, PTSD, alcohol and substance use disorders, psychotic disorders, anorexia and bulimia, GAD, and antisocial personality disorder. The MINI demonstrates good <span class="key-term">sensitivity</span> (ability to identify true cases) and is well-suited for screening in busy clinical settings, though its brevity may sacrifice some diagnostic precision compared to the SCID.</p>
+
+        <h3>K-SADS (Kiddie Schedule for Affective Disorders and Schizophrenia)</h3>
+        <p>The <span class="key-term">K-SADS</span> (Kaufman et al., 1997) is a <span class="key-term">semi-structured diagnostic interview</span> designed for children and adolescents ages 6-18. A key feature is that the interviewer conducts separate interviews with both the <span class="key-term">child and parent</span>, then integrates information from both sources to generate summary ratings. This multi-informant approach addresses the well-documented finding that children and parents often provide discrepant reports of symptoms, particularly for internalizing disorders. The K-SADS covers mood disorders, psychotic disorders, anxiety disorders, behavioral disorders, substance abuse, eating disorders, and tic disorders. <span class="key-term">Present and lifetime versions</span> allow assessment of both current and past episodes. Like the SCID, the K-SADS requires administration by a trained clinician who can make clinical judgments about symptom presence and severity.</p>
+
+        <h3>DISC (Diagnostic Interview Schedule for Children)</h3>
+        <p>The <span class="key-term">DISC</span> (Shaffer et al., 2000) is a <span class="key-term">fully structured</span> diagnostic interview for children and adolescents. Unlike the K-SADS, the DISC is designed to be administered by <span class="key-term">lay interviewers</span> (i.e., individuals without clinical training), making it practical for large-scale epidemiological studies. It includes parallel <span class="key-term">youth and parent versions</span>. The fully structured format means that questions are read exactly as written with no clinical judgment required during administration, though the trade-off is less flexibility to probe or clarify ambiguous responses. The DISC covers anxiety disorders, mood disorders, disruptive behavior disorders, substance use disorders, and other conditions.</p>
+
+        <div class="definition-box">
+          <strong>Structured vs. Semi-Structured Interviews:</strong>
+          <p>In a <span class="key-term">fully structured interview</span> (e.g., MINI, DISC), questions are read verbatim in a fixed order, and the interviewer does not deviate from the script — no clinical judgment is required during administration, and lay interviewers can administer them. In a <span class="key-term">semi-structured interview</span> (e.g., SCID-5, K-SADS), the interviewer follows a general framework and specific probes but has the flexibility to ask follow-up questions, rephrase items, and use clinical judgment to rate responses. Semi-structured interviews require clinician administration but allow for greater nuance and clinical contextualization.</p>
+        </div>
+
+        <h3>Advantages of Structured and Semi-Structured Interviews</h3>
+        <ul>
+          <li><strong>Increased reliability:</strong> Standardized questions and scoring procedures improve diagnostic agreement across clinicians. Inter-rater reliability (measured by <span class="key-term">kappa coefficients</span>) is substantially higher for structured interviews than for unstructured clinical interviews.</li>
+          <li><strong>Reduced clinician bias:</strong> Structured formats minimize the impact of confirmation bias, anchoring, and other cognitive heuristics that can distort unstructured clinical judgment.</li>
+          <li><strong>Standardized coverage:</strong> All relevant diagnostic categories are systematically assessed, reducing the likelihood of overlooking comorbid conditions or less salient diagnoses.</li>
+          <li><strong>Research utility:</strong> Essential for ensuring diagnostic consistency across sites in multi-site research studies and clinical trials.</li>
+        </ul>
+
+        <h3>Disadvantages of Structured and Semi-Structured Interviews</h3>
+        <ul>
+          <li><strong>Time-consuming:</strong> Full administration of the SCID-5 can take 45-90 minutes or longer, which may be impractical in busy clinical settings.</li>
+          <li><strong>May feel impersonal:</strong> The structured format may disrupt rapport-building, particularly if the interviewer rigidly adheres to the script without attending to the patient's emotional state.</li>
+          <li><strong>Less flexibility for clinical judgment:</strong> Fully structured interviews (DISC, MINI) do not allow the interviewer to probe ambiguous responses, contextualize symptoms, or exercise clinical judgment — potentially leading to false positives or false negatives.</li>
+          <li><strong>Training requirements:</strong> Semi-structured interviews (SCID-5, K-SADS) require substantial training to administer reliably, limiting their accessibility in some settings.</li>
+          <li><strong>Cultural considerations:</strong> Structured interviews may not fully account for cultural variation in symptom expression, idioms of distress, or culturally normative behaviors that could be misinterpreted as pathological.</li>
+        </ul>
+
+        <table>
+          <tr><th>Interview</th><th>Type</th><th>Population</th><th>Administrator</th><th>Duration</th><th>Key Feature</th></tr>
+          <tr><td>SCID-5</td><td>Semi-structured</td><td>Adults</td><td>Clinician</td><td>45-90 min</td><td>Gold standard for research; DSM-5 modules</td></tr>
+          <tr><td>MINI</td><td>Fully structured</td><td>Adults</td><td>Clinician or trained interviewer</td><td>15-20 min</td><td>Brief; good sensitivity; primary care use</td></tr>
+          <tr><td>K-SADS</td><td>Semi-structured</td><td>Ages 6-18</td><td>Clinician</td><td>45-75 min</td><td>Interviews child AND parent; present &amp; lifetime</td></tr>
+          <tr><td>DISC</td><td>Fully structured</td><td>Children/Adolescents</td><td>Lay interviewer</td><td>60-120 min</td><td>No clinical training needed; epidemiological use</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Clinical Integration of Diagnostic Interviews:</strong>
+          <p>Structured and semi-structured interviews are best used as part of a comprehensive assessment battery rather than as standalone diagnostic tools. Interview findings should be integrated with behavioral observations, self-report measures, collateral information, and clinical history. When interview results conflict with other data sources, the clinician must use professional judgment to reconcile discrepancies and arrive at the most accurate diagnostic formulation.</p>
+        </div>
+      </div>
+
+        <div class="example-box">
+          <strong>Choosing the Right Diagnostic Interview:</strong>
+          <p>A research team designing a multi-site clinical trial for major depression needs to ensure diagnostic consistency across five different hospitals. They select the SCID-5-RV because its semi-structured format allows trained clinicians to probe ambiguous responses while maintaining standardized diagnostic criteria, yielding the high inter-rater reliability essential for research. In contrast, a primary care clinic screening patients for psychiatric comorbidities during routine visits selects the MINI because its fully structured format can be completed in 15-20 minutes without requiring doctoral-level clinical judgment — making it practical for busy medical settings where comprehensive diagnostic workups are impractical.</p>
+        </div>
+
+      <!-- Section 7: EPPP Focus -->
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>MMPI-2 validity scales:</strong> L = naive faking good; F = faking bad, random responding, or severe pathology; K = sophisticated defensiveness. K corrections are added to 5 clinical scales.</li>
+          <li><strong>MMPI T-scores:</strong> Clinical significance at T = 65 or above. Remember the metric: M = 50, SD = 10.</li>
+          <li><strong>Code types:</strong> Know the most common (2-7/7-2 = anxious depression; 4-9/9-4 = antisocial impulsivity; 1-3/3-1 = conversion V).</li>
+          <li><strong>MMPI-2-RF vs. MMPI-2:</strong> RF uses Restructured Clinical scales that separate demoralization from specific psychopathology constructs.</li>
+          <li><strong>MCMI uses Base Rate scores</strong> (BR 75 = presence, BR 85 = prominence), NOT T-scores. This is a frequently tested distinction.</li>
+          <li><strong>NEO-PI-R:</strong> Measures Big Five (OCEAN). Used more in research and non-clinical settings. Not a diagnostic tool.</li>
+          <li><strong>PAI features:</strong> 4-point Likert scale; non-overlapping items; includes treatment planning scales (Suicidal Ideation, Treatment Rejection, Aggression).</li>
+          <li><strong>Rorschach:</strong> Know determinants (form, color, movement, shading), the distinction between Exner CS and R-PAS, and that R-PAS uses optimized administration.</li>
+          <li><strong>TAT:</strong> Murray's need-press theory. Lacks standardized scoring, which limits psychometric evidence.</li>
+          <li><strong>Projective hypothesis:</strong> Ambiguous stimuli elicit projection of unconscious material. Less susceptible to deliberate faking than self-report measures.</li>
+          <li><strong>Incremental validity:</strong> The key question for projective tests — do they add predictive value beyond objective measures?</li>
+          <li><strong>VRIN/TRIN:</strong> VRIN = random/careless responding. TRIN = acquiescence (all true) or nay-saying (all false). Both must be valid before interpreting clinical scales.</li>
+          <li><strong>Faking good pattern:</strong> High L, High K, Low F. Common in custody evaluations and employment screening.</li>
+          <li><strong>Faking bad pattern:</strong> Low L, Low K, High F. May indicate malingering, cry for help, or genuine severe psychopathology.</li>
+          <li><strong>BDI-II:</strong> 21 items, severity measure (not diagnostic). Cutoffs: minimal (0-13), mild (14-19), moderate (20-28), severe (29-63).</li>
+          <li><strong>SCL-90-R:</strong> 90 items, nine symptom dimensions, Global Severity Index (GSI) for overall distress. Self-report.</li>
+          <li><strong>CAT:</strong> Bellak's projective test for children ages 3-10 with animal figures. Based on assumption that young children identify more readily with animals.</li>
+          <li><strong>Roberts-2:</strong> Apperception test for children with standardized scoring (T-scores) — stronger psychometric support than TAT. Depicts everyday situations.</li>
+          <li><strong>Response style:</strong> Social desirability, malingering, acquiescence, random responding. All objective tests include validity scales to detect these. Projective tests assess through behavioral observation and protocol variables.</li>
+          <li><strong>Test construction methods:</strong> Empirical/criterion keying (MMPI), factor analytic (NEO-PI-R, 16PF), rational/theoretical (PAI), sequential system (MCMI).</li>
+          <li><strong>Conversion V (1-3/3-1):</strong> MMPI code type with elevated Hs and Hy with lower D. Classic pattern for conversion disorder/somatic symptom concerns.</li>
+          <li><strong>Rorschach Lambda:</strong> High Lambda (>0.99) suggests overly simplistic, avoidant, or constricted approach to the inkblots. Important for assessing response style on projective measures.</li>
+          <li><strong>16PF (Cattell):</strong> Measures 16 primary personality factors identified through factor analysis. Yields five global factors similar to the Big Five. Used in both clinical and occupational settings.</li>
+          <li><strong>MMPI-3:</strong> The newest version (2020) features 335 items, updated norms, and restructured scales. Maintains the empirical keying tradition while incorporating contemporary psychometric advances.</li>
+          <li><strong>Malingering detection:</strong> MMPI patterns (high F, low K, high Fp), Structured Interview of Reported Symptoms (SIRS-2), and inconsistency within/between test results. Critical in forensic and disability evaluations.</li>
+          <li><strong>SIRS-2:</strong> Gold standard for detecting malingered mental disorders. Uses 8 detection strategies: rare symptoms, symptom combinations, improbable symptoms, blatant symptoms, subtle symptoms, severity, selectivity, reported vs. observed. Classifies as Genuine, Indeterminate, or Feigning.</li>
+          <li><strong>M-FAST:</strong> 25-item brief screening tool for malingered psychopathology. Cutoff = 6. Positive screens should be followed by the SIRS-2. Administered in 5-10 minutes.</li>
+          <li><strong>TOMM:</strong> 50-item visual recognition PVT. Below-chance performance (below 45/50 on Trial 2) indicates malingering. Even patients with documented dementia typically score well above chance.</li>
+          <li><strong>PVTs vs. SVTs:</strong> Performance Validity Tests assess effort on cognitive tasks (TOMM, VSVT). Symptom Validity Tests assess accuracy of symptom reporting (MMPI validity scales, SIRS-2). Both are needed in forensic evaluations.</li>
+          <li><strong>MMPI-3 Fp scale:</strong> Infrequent Psychopathology — strongest single MMPI indicator of malingering because items are rarely endorsed even by genuine psychiatric patients. Differentiates faking from true severe pathology.</li>
+          <li><strong>Base rates of malingering:</strong> Forensic settings approximately 30-40% for neurocognitive feigning; clinical settings approximately 5-10%. Base rates affect positive predictive value of validity indicators.</li>
+          <li><strong>Sentence completion tests:</strong> RISB yields an overall adjustment score. Semi-structured format is less susceptible to faking than forced-choice but more standardized than fully open-ended projectives.</li>
+          <li><strong>FBA and ABC analysis:</strong> Antecedent-Behavior-Consequence. Four functions of behavior: attention, escape, tangible, automatic/sensory. Direct (observation) vs. indirect (informant report) methods.</li>
+          <li><strong>Interval recording bias:</strong> Whole interval = underestimates; partial interval = overestimates; momentary time sampling = most accurate estimate of duration.</li>
+          <li><strong>IOA:</strong> Inter-observer agreement. Agreements / (agreements + disagreements) x 100. 80% or higher is acceptable.</li>
+          <li><strong>ASEBA (CBCL/TRF/YSR):</strong> Empirically derived. Broadband scales: Internalizing and Externalizing. Narrowband syndrome scales. Multi-informant. T-scores with T = 70+ clinical range.</li>
+          <li><strong>BASC-3:</strong> Clinical scales AND adaptive scales (unlike ASEBA which focuses on problems). Includes validity indices (F, L, V). Parent, Teacher, and Self-Report forms. Rational-empirical construction.</li>
+          <li><strong>Conners-4:</strong> ADHD-focused rating scale. Parent, teacher, self-report. DSM-5 aligned. Probability scores for ADHD presentations.</li>
+          <li><strong>Vineland-3:</strong> Adaptive behavior (Communication, Daily Living Skills, Socialization, Motor). Semi-structured interview format. Essential for intellectual disability diagnosis. M = 100, SD = 15.</li>
+          <li><strong>Bergan's behavioral consultation model:</strong> Four stages — Problem Identification, Problem Analysis, Treatment Implementation, Treatment Evaluation.</li>
+          <li><strong>Self-monitoring reactivity:</strong> The act of self-monitoring changes the behavior being monitored, typically in a therapeutic direction. Useful for intervention, problematic for assessment accuracy.</li>
+          <li><strong>SCID-5:</strong> Semi-structured; gold standard for research; clinician-administered; DSM-5 modules. CV = Clinician Version, RV = Research Version.</li>
+          <li><strong>MINI:</strong> Fully structured; 15-20 minutes; good sensitivity; designed for primary care and clinical trials. Substantially briefer than SCID.</li>
+          <li><strong>K-SADS:</strong> Semi-structured; ages 6-18; interviews BOTH child and parent; present and lifetime versions. Clinician-administered.</li>
+          <li><strong>DISC:</strong> Fully structured; lay interviewers can administer; youth and parent versions. Used in epidemiological research.</li>
+          <li><strong>Structured vs. semi-structured interviews:</strong> Structured = verbatim questions, no clinical judgment, lay interviewers okay (MINI, DISC). Semi-structured = flexible probing, requires clinician (SCID-5, K-SADS). Both improve reliability (kappa) over unstructured interviews.</li>
+        </ul>
+      </div>
+
+
+
+      <div class="nav-buttons">
+        <a href="objective-personality.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Objective Personality — MMPI, PAI & Self-Report Measures</div>
+          </div>
+        </a>
+        <a href="clinical-neuropsych.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Neuropsychological Screening — Halstead-Reitan, Luria & Clinical Batteries</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When Darkness Descends — MDD, Dysthymia & Grief | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>When Darkness Descends — MDD, Dysthymia & Grief</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">1</span>Early-Onset Conditions — ADHD, ASD & Intellectual Disability</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">2</span>Fractured Reality — Schizophrenia & the Psychotic Spectrum</a></li>
+        <li class="chapter-item"><a href="depressive-disorders.html" class="chapter-link active"><span class="chapter-number">3</span>When Darkness Descends — MDD, Dysthymia & Grief</a></li>
+        <li class="chapter-item"><a href="bipolar-spectrum.html" class="chapter-link"><span class="chapter-number">4</span>The Pendulum Swings — Bipolar I, II & Cyclothymia</a></li>
+        <li class="chapter-item"><a href="anxiety-disorders.html" class="chapter-link"><span class="chapter-number">5</span>Fear Without Cause — GAD, Phobias, Panic & Social Anxiety</a></li>
+        <li class="chapter-item"><a href="ocd-spectrum.html" class="chapter-link"><span class="chapter-number">6</span>Rituals & Repetition — OCD, BDD, Hoarding & Related Conditions</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">7</span>When the World Breaks In — PTSD, Dissociation & Somatic Responses</a></li>
+        <li class="chapter-item"><a href="eating-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Feeding & Eating Disorders — Anorexia, Bulimia & BED</a></li>
+        <li class="chapter-item"><a href="sleep-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Sleep-Wake Disturbances — Insomnia, Narcolepsy & Circadian Disruption</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">10</span>Sexual Dysfunctions, Gender Dysphoria & Paraphilias</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">11</span>Defiance & Aggression — ODD, Conduct Disorder & Antisocial Trajectories</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">12</span>Substance Use & Behavioral Addictions — From Use to Dependence</a></li>
+        <li class="chapter-item"><a href="personality-clusters-ab.html" class="chapter-link"><span class="chapter-number">13</span>Personality Pathology Part 1 — Clusters A & B</a></li>
+        <li class="chapter-item"><a href="personality-cluster-c.html" class="chapter-link"><span class="chapter-number">14</span>Personality Pathology Part 2 — Cluster C, the AMPD & Treatment</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 14</div>
+        <h1>When Darkness Descends — MDD, Dysthymia & Grief</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Overview of Depressive and Bipolar Disorders</h2>
+        <p>Consider a physician who once loved her work but now sits in her car for twenty minutes each morning, unable to summon the energy to walk into the hospital. She sleeps eleven hours a night yet wakes exhausted, has lost fifteen pounds without trying, and finds herself unable to concentrate well enough to read a patient chart. She tells herself this is just burnout — but it has persisted for three months and is getting worse, not better. Her experience illustrates why clinicians must understand the full landscape of mood disorders: what looks like fatigue or stress may be the leading edge of a condition that, left untreated, carries devastating personal, occupational, and even lethal consequences.</p>
+        <p>The DSM-5 separates mood disorders into two distinct chapters: <span class="key-term">Depressive Disorders</span> and <span class="key-term">Bipolar and Related Disorders</span>. This reorganization reflects growing evidence that bipolar disorders are more closely related to schizophrenia spectrum disorders in terms of genetics, symptomatology, and neurobiology. Mood disorders collectively represent one of the leading causes of disability worldwide (WHO, 2017).</p>
+        <div class="definition-box">
+
+        <!-- anchor:121 coverage:missing -->
+        <div class="definition-box">
+        <h4>Disruptive Mood Dysregulation Disorder (DMDD)</h4>
+        <p><span class="key-term">Disruptive Mood Dysregulation Disorder (DMDD)</span> is a depressive disorder introduced in the DSM-5 to address concerns about the overdiagnosis of pediatric bipolar disorder. DMDD is characterized by severe, recurrent temper outbursts — verbal rages or physical aggression — that are grossly out of proportion to the situation in intensity or duration. These outbursts occur, on average, three or more times per week. Crucially, between outbursts, the child's baseline mood is persistently irritable or angry for most of the day, nearly every day, and this mood is observable by others (e.g., parents, teachers, peers).</p>
+        </div>
+        <p>To receive a DMDD diagnosis, the pattern of chronic irritability and temper outbursts must have been present for 12 or more months, with no period of 3 or more consecutive months without all symptoms. The outbursts must occur in at least two of three settings (home, school, with peers) and must be severe in at least one setting. The diagnosis is reserved for children between ages 6 and 18, with onset before age 10. DMDD cannot be diagnosed concurrently with oppositional defiant disorder (ODD), intermittent explosive disorder, or bipolar disorder. When a child meets criteria for both ODD and DMDD, only the DMDD diagnosis should be assigned.</p>
+        <p>The creation of DMDD reflects research demonstrating that children with chronic, non-episodic irritability are at elevated risk for developing unipolar depressive and anxiety disorders in adulthood — not bipolar disorder. This distinguishes DMDD from pediatric bipolar disorder, in which mood disturbance is episodic rather than chronic and persistent.</p>
+        <div class="clinical-note">
+        <h4>Clinical Note</h4>
+        <p>DMDD was developed specifically to reduce the rate at which chronically irritable children were being diagnosed with bipolar disorder and consequently treated with mood stabilizers or atypical antipsychotics. On the EPPP, remember that DMDD emphasizes <em>chronic</em> irritability between outbursts — this persistent negative mood baseline is what differentiates it from bipolar disorder, where mood elevation or irritability occurs in discrete episodes.</p>
+        </div>
+        <!-- /anchor:121 -->
+
+          <h4>Mood Episode Types</h4>
+          <p>A <strong>major depressive episode</strong> involves at least 5 of 9 symptoms lasting 2 or more weeks, with depressed mood or anhedonia required. A <strong>manic episode</strong> involves abnormally elevated, expansive, or irritable mood with increased energy lasting at least 7 days (or any duration if hospitalization is required). A <strong>hypomanic episode</strong> meets the same symptom criteria as mania but lasts at least 4 consecutive days and does not cause marked impairment or psychotic features.</p>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+        <h2>Major Depressive Disorder (MDD)</h2>
+
+        <!-- anchor:182 coverage:missing -->
+        <p>The relationship between depression and medical illness is well established, but certain medical populations carry especially elevated psychiatric comorbidity. Research on patients with <span class="key-term">coronary heart disease (CHD)</span> has consistently demonstrated a high prevalence of co-occurring psychiatric conditions, with major depressive disorder representing the most frequently identified comorbid psychiatric diagnosis in this population. Estimates suggest that approximately 20-30% of CHD patients meet diagnostic criteria for MDD at some point during their illness course—a rate roughly three times higher than in the general population.</p>
+        <p>The co-occurrence of MDD and coronary heart disease is not merely coincidental. The relationship appears to be bidirectional: depression serves as an independent risk factor for the development and progression of cardiovascular disease, while the physiological and psychosocial burden of heart disease predisposes individuals to depressive episodes. Shared pathophysiological mechanisms include elevated inflammatory markers (e.g., C-reactive protein, interleukin-6), <span class="key-term">HPA axis dysregulation</span> with chronic cortisol elevation, autonomic nervous system dysfunction characterized by reduced heart rate variability, and platelet hyperactivation. Behavioral factors also mediate the relationship: depressed cardiac patients show lower rates of medication adherence, exercise participation, dietary modification, and cardiac rehabilitation attendance.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>Depression screening in cardiac patients is now recommended by the American Heart Association as part of standard cardiovascular care. Untreated depression in CHD patients is associated with a 2- to 2.5-fold increased risk of subsequent cardiac events and mortality. SSRIs (particularly sertraline) and CBT have demonstrated both safety and efficacy in treating depression among cardiac patients, making early identification and intervention a critical component of comprehensive cardiovascular care.</p></div>
+        <!-- /anchor:182 -->
+
+
+        <!-- anchor:200 coverage:missing -->
+        <div class="definition-box"><h4>Comorbidity of MDD and Substance Use Disorders</h4><p>Major depressive disorder frequently co-occurs with substance use disorders, and understanding patterns of comorbidity is essential for accurate diagnosis and treatment planning. Large-scale epidemiological surveys have consistently demonstrated that individuals who meet criteria for MDD have elevated lifetime rates of co-occurring substance use disorders.</p></div>
+        <p>Among the various substances associated with comorbid use disorders in individuals with MDD, <span class="key-term">alcohol use disorder</span> accounts for the largest proportion of lifetime co-occurrence. In nationally representative samples, respondents diagnosed with major depression reported alcohol use disorder as their most common lifetime comorbid substance-related diagnosis, exceeding rates of cannabis, opioid, and other drug use disorders. This pattern reflects both the high base rate of alcohol use in the general population and the bidirectional relationship between depressive symptoms and alcohol consumption. Many individuals use alcohol as a form of self-medication for negative affect, while chronic heavy drinking disrupts serotonergic and GABAergic neurotransmission in ways that promote depressive episodes.</p>
+        <p>This comorbidity has significant clinical implications. Co-occurring alcohol use disorder worsens the course of depression, reduces treatment response, and substantially elevates suicide risk. Screening for alcohol misuse should be routine in any evaluation of depressive symptoms, and integrated treatment approaches addressing both conditions simultaneously yield better outcomes than sequential treatment of each disorder in isolation.</p>
+        <div class="example-box"><h4>Example</h4><p>A 42-year-old man presents with a 6-month history of depressed mood, anhedonia, insomnia, and difficulty concentrating. Further assessment reveals he has been drinking 4-5 alcoholic beverages nightly "to help him sleep" and previously met criteria for alcohol use disorder in his late 20s. This pattern—where alcohol use disorder represents the most frequently co-occurring substance-related condition among those with MDD—requires integrated treatment addressing both the depression and the problematic alcohol use to optimize outcomes.</p></div>
+        <!-- /anchor:200 -->
+
+
+        <!-- anchor:003 coverage:partial -->
+        <p>The gender distribution of MDD shifts markedly across development. Prior to puberty, rates of depression are roughly equivalent in boys and girls, with some studies suggesting slightly higher rates in prepubertal boys. However, during adolescence — particularly between ages 13 and 15 — there is a substantial increase in depression prevalence among girls, and the gender gap begins to approach the approximately <span class="key-term">2:1 female-to-male ratio</span> that characterizes adult MDD. Multiple factors contribute to this divergence, including hormonal changes associated with puberty (particularly fluctuations in estrogen and progesterone), increased interpersonal stress sensitivity, higher rates of rumination in adolescent girls, and greater exposure to risk factors such as sexual harassment and body image dissatisfaction. This sex difference in depression prevalence persists throughout the reproductive years and narrows somewhat after menopause.</p>
+        <!-- /anchor:003 -->
+
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <p>Five or more of the following symptoms present during the same 2-week period, representing a change from previous functioning. At least one must be (1) depressed mood or (2) loss of interest or pleasure (<span class="key-term">anhedonia</span>):</p>
+        <ol>
+          <li><strong>Depressed mood</strong> most of the day, nearly every day (in children/adolescents, can be irritable mood)</li>
+          <li><strong>Anhedonia</strong> -- markedly diminished interest or pleasure in all or almost all activities</li>
+          <li><strong>Significant weight change</strong> (more than 5% in a month) or appetite change</li>
+          <li><strong>Insomnia or hypersomnia</strong> nearly every day</li>
+          <li><strong>Psychomotor agitation or retardation</strong> observable by others</li>
+          <li><strong>Fatigue</strong> or loss of energy</li>
+          <li><strong>Feelings of worthlessness</strong> or excessive/inappropriate guilt</li>
+          <li><strong>Diminished ability to think or concentrate,</strong> or indecisiveness</li>
+          <li><strong>Recurrent thoughts of death,</strong> suicidal ideation, or a suicide attempt</li>
+        </ol>
+        <p>The mnemonic <span class="key-term">SIG E CAPS</span> (Sleep, Interest, Guilt, Energy, Concentration, Appetite, Psychomotor changes, Suicidality) is commonly used to remember these criteria.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>DSM-5 removed the <strong>bereavement exclusion</strong> that was present in DSM-IV. Previously, depressive symptoms within 2 months of losing a loved one were excluded from an MDD diagnosis. The DSM-5 now allows MDD to be diagnosed even in the context of bereavement, recognizing that bereavement can trigger a full depressive episode.</p>
+        </div>
+        <h3>Neurotransmitter Theories</h3>
+
+        <!-- anchor:09-1 coverage:missing -->
+        <h3>Sleep Architecture Abnormalities in Depression</h3>
+        <p>Beyond neurochemical alterations, major depressive disorder is associated with well-documented disruptions in <span class="key-term">sleep architecture</span> as measured by polysomnography. These disturbances are among the most reliable biological markers of depression and have been extensively studied:</p>
+        <table>
+        <thead>
+        <tr>
+        <th>Sleep Parameter</th>
+        <th>Change in MDD</th>
+        <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><span class="key-term">REM latency</span></td>
+        <td>Decreased</td>
+        <td>The interval from sleep onset to the first REM period is shortened, meaning individuals with depression enter REM sleep more quickly than healthy controls</td>
+        </tr>
+        <tr>
+        <td><span class="key-term">REM density</span></td>
+        <td>Increased</td>
+        <td>Greater frequency of rapid eye movements during REM periods, reflecting more intense REM activity</td>
+        </tr>
+        <tr>
+        <td>Slow-wave sleep (Stages 3 &amp; 4)</td>
+        <td>Decreased</td>
+        <td>Reduced deep, restorative sleep contributes to feelings of unrefreshing sleep and daytime fatigue</td>
+        </tr>
+        <tr>
+        <td><span class="key-term">Sleep latency</span></td>
+        <td>Prolonged</td>
+        <td>Increased time needed to initially fall asleep, consistent with the insomnia commonly reported by depressed patients</td>
+        </tr>
+        </tbody>
+        </table>
+        <p>Decreased REM latency is considered one of the hallmark biological findings in depression and has been proposed as a potential endophenotype for the disorder. The shift toward earlier and more intense REM sleep may reflect underlying cholinergic-aminergic imbalance. These findings also inform the rationale for <span class="key-term">sleep deprivation therapy</span>, in which total or selective REM sleep deprivation can produce rapid but temporary improvement in depressive symptoms. Many antidepressant medications — particularly SSRIs and TCAs — suppress REM sleep and increase REM latency, which may partially mediate their therapeutic effects.</p>
+        <div class="clinical-note">
+        <h4>Clinical Note</h4>
+        <p>For the EPPP, remember that depression is associated with <em>decreased</em> REM latency (faster onset of REM) and <em>increased</em> REM density — not the reverse. A common exam distractor is "increased REM latency," which is incorrect. Depressed individuals enter REM sleep sooner and experience more active REM periods than non-depressed individuals.</p>
+        </div>
+        <!-- /anchor:09-1 -->
+
+        <ul>
+          <li><strong>Monoamine hypothesis:</strong> Depression results from deficits in serotonin (5-HT), norepinephrine (NE), and/or dopamine (DA). Supported by the mechanism of action of SSRIs, SNRIs, and MAOIs.</li>
+          <li><strong>HPA axis dysregulation:</strong> Chronic stress leads to elevated cortisol via the hypothalamic-pituitary-adrenal axis. Non-suppression on the <span class="key-term">dexamethasone suppression test</span> is associated with depression, though it lacks diagnostic specificity.</li>
+          <li><strong>Neuroplasticity model:</strong> Reduced brain-derived neurotrophic factor (BDNF) and hippocampal volume reductions are observed in chronic depression (Duman & Monteggia, 2006).</li>
+        </ul>
+        <div class="example-box">
+          <h4>Beck's Cognitive Triad in Practice</h4>
+          <p>A 35-year-old accountant presents with a six-week history of depressed mood and anhedonia following a negative performance review. In session, he states: "I'm terrible at my job — I've always been a failure" (<strong>negative view of self</strong>). When the therapist points out that he received positive reviews in prior years, he responds: "That was just luck. The reality is that nobody at the firm respects me" (<strong>negative view of the world</strong>). Asked about his career plans, he shrugs: "What's the point? Nothing I do will change things" (<strong>negative view of the future</strong>). This triad of self-deprecation, environmental pessimism, and hopelessness illustrates Beck's (1967) cognitive model and represents a high-yield EPPP target. The therapist's task in cognitive therapy is to collaboratively identify these automatic thoughts, examine the evidence for and against them, and help the client develop more balanced appraisals — a process known as <span class="key-term">cognitive restructuring</span>.</p>
+        </div>
+        <h3>Specifiers</h3>
+        <table>
+          <tr><th>Specifier</th><th>Key Features</th></tr>
+          <tr><td>With anxious distress</td><td>Feeling tense, restless, difficulty concentrating due to worry, fear of something awful</td></tr>
+          <tr><td>With melancholic features</td><td>Profound anhedonia, worse in morning, early morning awakening, psychomotor changes, excessive guilt</td></tr>
+          <tr><td>With atypical features</td><td>Mood reactivity, hypersomnia, leaden paralysis, interpersonal rejection sensitivity, weight gain</td></tr>
+          <tr><td>With psychotic features</td><td>Delusions or hallucinations (mood-congruent or mood-incongruent)</td></tr>
+          <tr><td>With peripartum onset</td><td>Onset during pregnancy or within 4 weeks of delivery</td></tr>
+          <tr><td>With seasonal pattern</td><td>Regular temporal relationship between episode onset and time of year</td></tr>
+        </table>
+      </section>
+
+
+      <section class="content-section">
+
+        <!-- anchor:08-1 coverage:partial -->
+        <p>The <span class="key-term">seasonal pattern specifier</span> — commonly referred to as seasonal affective disorder (SAD) — has been associated with dysregulation of <span class="key-term">melatonin</span>, a hormone produced by the pineal gland that helps regulate circadian rhythms and sleep-wake cycles. During shorter daylight periods in fall and winter, melatonin secretion increases and its normal diurnal rhythm may become disrupted, contributing to the onset of depressive symptoms such as hypersomnia, carbohydrate craving, and low energy. This photobiological mechanism provides the rationale for <span class="key-term">bright light therapy</span> (phototherapy), which is considered a first-line treatment for winter-pattern SAD. Typically administered at 10,000 lux for 20–30 minutes each morning, light therapy suppresses excess melatonin production, shifts circadian phase, and has demonstrated efficacy comparable to antidepressant medication in mild-to-moderate seasonal depression.</p>
+        <!-- /anchor:08-1 -->
+
+        <h2>Persistent Depressive Disorder (Dysthymia)</h2>
+        <p>Having explored the episodic nature of major depressive disorder — with its distinct episodes, specifiers, and seasonal patterns — we now turn to a form of depression that is defined not by its intensity but by its sheer persistence. Imagine a client who, when asked how long they've felt depressed, pauses and says, "I honestly can't remember a time when I didn't feel this way." They don't describe the dramatic plunge into darkness that characterizes a major depressive episode; instead, they describe a low-grade, ever-present gray fog that has hung over their life for years. They still go to work, still manage their responsibilities — but with a chronic sense of heaviness, self-doubt, and joylessness that has become so familiar they wonder if it's simply their personality. This is the clinical portrait of <span class="key-term">Persistent depressive disorder</span> (PDD).</p>
+        <p>PDD consolidates two previously separate diagnoses from DSM-IV — dysthymic disorder and chronic major depressive disorder — into a single diagnostic category. The core diagnostic requirement is depressed mood for most of the day, for more days than not, persisting for at least <strong>2 years</strong> in adults (or 1 year in children and adolescents). During that two-year window, the person must never have been symptom-free for more than two consecutive months. In addition to the chronic depressed mood, the individual must exhibit two or more of the following symptoms:</p>
+        <ul>
+        <li>Poor appetite or overeating</li>
+        <li>Insomnia or hypersomnia</li>
+        <li>Low energy or fatigue</li>
+        <li>Low self-esteem</li>
+        <li>Poor concentration or difficulty making decisions</li>
+        <li>Feelings of hopelessness</li>
+        </ul>
+        <p>Notice that the symptom list for PDD is shorter and somewhat different from the nine-symptom criterion set for MDD. You won't find psychomotor changes, suicidal ideation, or anhedonia listed among the PDD criteria — though the individual may certainly experience these. The threshold for diagnosis is deliberately lower in terms of symptom count (two additional symptoms rather than four), reflecting the fact that PDD captures a chronic, lower-intensity form of depression. What it lacks in acute severity, it makes up for in duration and cumulative burden. Research consistently shows that PDD is associated with significant functional impairment, reduced quality of life, and substantial economic costs — in some studies rivaling or exceeding the impairment seen in episodic MDD, precisely because the suffering is so unrelenting.</p>
+        <p>A critical clinical consideration is that PDD can coexist with major depressive episodes. Because PDD is defined by chronicity rather than a specific severity level, individuals with PDD may periodically dip into episodes that meet full MDD criteria, layering acute severity onto an already chronic baseline. When this happens, the distinction between the disorders blurs — but DSM-5 handles this through specifiers rather than separate diagnoses. The clinician can note whether PDD occurs "with persistent major depressive episode," "with intermittent major depressive episodes, with current episode," or "with intermittent major depressive episodes, without current episode." Additional specifiers — such as anxious distress, atypical features, and early or late onset — can further characterize the presentation, helping clinicians tailor treatment planning to the individual's specific symptom profile.</p>
+        <p>From a treatment perspective, the chronicity of PDD poses unique challenges. Many clients with PDD have lived with their symptoms for so long that they have developed deeply ingrained cognitive patterns — pervasive schemas of inadequacy, helplessness, and pessimism — that are resistant to brief interventions. This is one reason why the Cognitive Behavioral Analysis System of Psychotherapy (CBASP), developed by James McCullough specifically for chronic depression, has shown particular promise for this population. Pharmacotherapy, especially with SSRIs or SNRIs, is also commonly used, and combination treatment (medication plus psychotherapy) tends to yield the best outcomes for chronic depression.</p>
+        <div class="example-box">
+        <h4>EPPP Example</h4>
+        <p>When a patient has PDD and also meets criteria for a major depressive episode, this is termed <span class="key-term">"double depression."</span> The concept of double depression is clinically important and frequently tested on the EPPP. Picture a client who has experienced a persistent low mood and low self-esteem for three years — meeting PDD criteria — and then develops a superimposed episode with markedly worsened sleep, appetite loss, suicidal ideation, and inability to function at work. This individual now carries both diagnoses simultaneously. The prognosis for double depression is worse than for MDD alone, with higher relapse rates, greater functional impairment, and a more treatment-resistant course (Klein et al., 2006). For exam purposes, remember that the key distinguishing feature is the chronic depressive baseline: the major depressive episode emerges against a backdrop of long-standing, lower-grade depressive symptoms, rather than arising from a period of normal mood.</p>
+        </div>
+        <p>As you prepare for the EPPP, keep the essential contrasts clear in your mind: MDD is defined by discrete episodes lasting at least two weeks with five or more symptoms; PDD is defined by chronic depressed mood lasting at least two years with two or more additional symptoms. MDD captures the acute peaks of depression; PDD captures the relentless undertow. And when both coexist — double depression — the clinical picture is more severe, more impairing, and more difficult to treat than either condition alone. With this understanding of the full spectrum of unipolar depressive disorders, we are now ready to explore what happens when depression alternates with its polar opposite — the elevated, expansive, or irritable mood states that define the bipolar disorders.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>MDD requires <strong>5 of 9 symptoms for 2 weeks</strong>; must include depressed mood or anhedonia</li>
+          <li>DSM-5 <strong>removed the bereavement exclusion</strong> — MDD can now be diagnosed during grief</li>
+          <li>PDD (dysthymia) requires depressed mood for <strong>2+ years</strong> (1 year in children/adolescents) plus <strong>2+ symptoms</strong></li>
+          <li><strong>Double depression</strong>: MDD superimposed on PDD; worse prognosis than MDD alone</li>
+          <li><strong>DMDD</strong> was created to reduce overdiagnosis of pediatric bipolar disorder; emphasizes chronic irritability</li>
+          <li>Beck's cognitive triad: negative views of <strong>self, world, and future</strong></li>
+          <li>Depression sleep findings: <strong>decreased REM latency</strong>, increased REM density, decreased slow-wave sleep</li>
+          <li>The <strong>2:1 female-to-male ratio</strong> in MDD emerges during adolescence (ages 13-15)</li>
+          <li>Melancholic features: profound anhedonia, <strong>worse in the morning</strong>, early morning awakening</li>
+          <li>Atypical features: <strong>mood reactivity</strong>, hypersomnia, leaden paralysis, rejection sensitivity</li>
+        </ul>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="schizophrenia.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Fractured Reality — Schizophrenia & the Psychotic Spectrum</div>
+          </div>
+        </a>
+        <a href="bipolar-spectrum.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">The Pendulum Swings — Bipolar I, II & Cyclothymia</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

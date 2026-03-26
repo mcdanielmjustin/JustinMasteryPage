@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adulthood Begins — Intimacy, Career & Generativity | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Adulthood Begins — Intimacy, Career & Generativity</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 2</div>
+        <div class="domain-title">Lifespan & Developmental Stages</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="architecture-development.html" class="chapter-link"><span class="chapter-number">1</span>The Architecture of Development — Nature, Nurture & Grand Theories</a></li>
+        <li class="chapter-item"><a href="conception-prenatal.html" class="chapter-link"><span class="chapter-number">2</span>From Conception to First Breath — Genetics & Prenatal Development</a></li>
+        <li class="chapter-item"><a href="cognitive-awakening.html" class="chapter-link"><span class="chapter-number">3</span>Cognitive Awakening — Piaget's Sensorimotor World & Early Thought</a></li>
+        <li class="chapter-item"><a href="bonds-temperament.html" class="chapter-link"><span class="chapter-number">4</span>Bonds That Shape Us — Attachment, Temperament & Early Emotion</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">5</span>Finding Words — Language Acquisition, Theories & Milestones</a></li>
+        <li class="chapter-item"><a href="early-childhood.html" class="chapter-link"><span class="chapter-number">6</span>Discovering the World — Preoperational Thought, Play & Parenting</a></li>
+        <li class="chapter-item"><a href="middle-childhood.html" class="chapter-link"><span class="chapter-number">7</span>Building Competence — Concrete Operations, Peers & Moral Reasoning</a></li>
+        <li class="chapter-item"><a href="adolescence.html" class="chapter-link"><span class="chapter-number">8</span>Transformation — Puberty, Identity & the Adolescent Brain</a></li>
+        <li class="chapter-item"><a href="early-adulthood.html" class="chapter-link active"><span class="chapter-number">9</span>Adulthood Begins — Intimacy, Career & Generativity</a></li>
+        <li class="chapter-item"><a href="middle-late-adulthood.html" class="chapter-link"><span class="chapter-number">10</span>The Long Horizon — Cognitive Aging, Wisdom & Successful Aging</a></li>
+        <li class="chapter-item"><a href="death-dying.html" class="chapter-link"><span class="chapter-number">11</span>The Final Chapter — Death, Grief & End-of-Life Psychology</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 11</div>
+        <h1>Adulthood Begins — Intimacy, Career & Generativity</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Emerging Adulthood and Psychosocial Development</h2>
+        <p>The study of adult development has expanded dramatically since the mid-20th century, reflecting both increased life expectancy and the recognition that psychological growth does not end at adolescence. This chapter covers the vast terrain from the late teens through the end of life.</p>
+
+        <h3>Arnett's Emerging Adulthood</h3>
+        <div class="definition-box">
+          <strong>Emerging Adulthood</strong>
+          <p><span class="key-term">Jeffrey Jensen Arnett</span> (2000) proposed that the period from approximately ages 18&ndash;25 constitutes a distinct developmental stage in industrialized societies called <span class="key-term">emerging adulthood</span>. This phase is characterized by five features: (1) identity exploration (especially in love, work, and worldviews), (2) instability (frequent changes in residence, relationships, and employment), (3) self-focus, (4) feeling "in between" adolescence and adulthood, and (5) a sense of possibilities and optimism about the future.</p>
+        </div>
+
+        <p>Arnett's concept has been debated&mdash;critics note that it may apply primarily to privileged populations in Western, industrialized nations and may not describe the experiences of those who take on adult responsibilities (parenthood, full-time work) early due to economic necessity. Nevertheless, the concept has been influential in framing the transitional nature of the late teens to mid-20s.</p>
+
+        <h3>Erikson's Adult Psychosocial Stages</h3>
+        <p>Erikson's final three stages span the decades of adulthood:</p>
+
+        <table>
+          <tr><th>Stage</th><th>Age Range</th><th>Crisis</th><th>Virtue</th><th>Key Theme</th></tr>
+          <tr><td>6</td><td>Young Adulthood (18&ndash;40)</td><td>Intimacy vs. Isolation</td><td>Love</td><td>Forming close, committed relationships; capacity for intimacy requires a firm sense of identity</td></tr>
+          <tr><td>7</td><td>Middle Adulthood (40&ndash;65)</td><td>Generativity vs. Stagnation</td><td>Care</td><td>Contributing to the next generation through parenting, mentoring, creative work, or community involvement</td></tr>
+          <tr><td>8</td><td>Late Adulthood (65+)</td><td>Ego Integrity vs. Despair</td><td>Wisdom</td><td>Reflecting on one's life with acceptance; viewing it as meaningful and well-lived vs. filled with regret</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Exam Example</strong>
+          <p>A 70-year-old retired professor reflects on his career and family life with a sense of satisfaction and acceptance, acknowledging both accomplishments and mistakes. He tells his grandchildren, "I wouldn't change the big choices I made." This reflects successful resolution of Erikson's ego integrity crisis.</p>
+        </div>
+
+        <p class="citation">Arnett, J. J. (2000). Emerging adulthood: A theory of development from the late teens through the twenties. American Psychologist, 55(5), 469&ndash;480.</p>
+      </div>
+
+      <div class="content-section">
+        <h2>Intimacy, Relationships, and Love</h2>
+        <p>Arnett's emerging adulthood captures the structural features of the transition to adult life -- the instability, the identity exploration, the sense of possibility. But the emotional heart of young adulthood, according to Erikson, centers on a single, defining challenge: the capacity for genuine intimacy. Having forged a reasonably coherent identity in adolescence, the young adult now faces the question of whether they can share that identity with another person -- merging their life with someone else's without losing themselves in the process.</p>
+
+        <h3>Erikson's Intimacy vs. Isolation</h3>
+        <p>In Erikson's sixth stage, <span class="key-term">Intimacy vs. Isolation</span>, the young adult (approximately ages 18&ndash;40) must develop the capacity for deep, committed, reciprocal relationships. Erikson was careful to distinguish intimacy from mere sexual contact or social popularity. True intimacy requires the willingness to be vulnerable, to compromise, and to commit to another person even when doing so involves sacrifice. The virtue that emerges from successful resolution is <strong>love</strong> -- not romantic infatuation, but a mature capacity for mutual devotion.</p>
+
+        <p>Crucially, Erikson argued that intimacy is possible only when identity is reasonably secure. A person who enters a relationship without a clear sense of self risks either losing themselves in the partner (fusion) or keeping emotional distance to protect an unstable identity (isolation). This insight has direct clinical relevance: young adults who present with chronic relationship difficulties may be struggling not with intimacy per se but with unresolved identity issues from the previous developmental stage.</p>
+
+        <div class="example-box">
+          <strong>Clinical Scenario: Intimacy vs. Isolation</strong>
+          <p>A 27-year-old woman enters therapy reporting a pattern of intense but short-lived romantic relationships. She describes falling deeply in love within weeks, reorganizing her entire life around each new partner, and then feeling "suffocated" and pulling away abruptly. Exploration reveals that she has not yet established a clear sense of her own values, career direction, or independent identity. In Eriksonian terms, she is attempting to resolve the intimacy crisis without having adequately resolved the identity crisis -- leading to a cycle of fusion and withdrawal that prevents genuine mutual commitment.</p>
+        </div>
+
+        <h3>Sternberg's Triangular Theory of Love</h3>
+        <p>While Erikson described the broad psychosocial challenge of intimacy, <span class="key-term">Robert Sternberg</span> (1986) offered a more differentiated framework for understanding the varieties of love. His <span class="key-term">triangular theory</span> proposes that love consists of three components: <span class="key-term">intimacy</span> (emotional closeness, warmth, sharing), <span class="key-term">passion</span> (physical attraction, sexual desire, arousal), and <span class="key-term">commitment</span> (the decision to maintain the relationship). Different combinations of these three components produce different kinds of love:</p>
+
+        <table>
+          <tr><th>Love Type</th><th>Intimacy</th><th>Passion</th><th>Commitment</th><th>Description</th></tr>
+          <tr><td>Liking</td><td>Yes</td><td>No</td><td>No</td><td>True friendship; emotional closeness without passion or long-term commitment</td></tr>
+          <tr><td>Infatuation</td><td>No</td><td>Yes</td><td>No</td><td>"Love at first sight"; intense passion without emotional depth or commitment</td></tr>
+          <tr><td>Empty love</td><td>No</td><td>No</td><td>Yes</td><td>Commitment without intimacy or passion; may describe stagnant long-term relationships</td></tr>
+          <tr><td>Romantic love</td><td>Yes</td><td>Yes</td><td>No</td><td>Passionate and emotionally close but without long-term commitment</td></tr>
+          <tr><td>Companionate love</td><td>Yes</td><td>No</td><td>Yes</td><td>Deep friendship with commitment; common in long-term marriages where passion has faded</td></tr>
+          <tr><td>Fatuous love</td><td>No</td><td>Yes</td><td>Yes</td><td>Passionate commitment without true emotional intimacy; "whirlwind" relationships</td></tr>
+          <tr><td>Consummate love</td><td>Yes</td><td>Yes</td><td>Yes</td><td>The "complete" love; difficult to achieve and maintain but represents the ideal</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <strong>Consummate Love</strong>
+          <p>According to Sternberg's triangular theory, <span class="key-term">consummate love</span> involves the simultaneous presence of all three components: intimacy, passion, and commitment. Sternberg argued that while consummate love is achievable, maintaining it requires deliberate effort, as each component can fluctuate independently over the course of a relationship. Passion tends to peak early and decline, while intimacy and commitment may deepen over time.</p>
+        </div>
+
+        <p class="citation">Sternberg, R. J. (1986). A triangular theory of love. Psychological Review, 93(2), 119&ndash;135.</p>
+        <p class="citation">Erikson, E. H. (1968). Identity: Youth and crisis. W. W. Norton.</p>
+      </div>
+
+      <div class="content-section">
+        <h2>Career Development and Generativity</h2>
+        <p>While intimate relationships anchor the emotional life of early adulthood, career development shapes its public identity. The question "What do you do?" is arguably the most common conversation opener in Western culture, and the answer carries enormous psychological weight. For many young adults, career choice becomes a primary vehicle for expressing identity, achieving financial independence, and establishing a sense of purpose that will later flower into generativity.</p>
+
+        <h3>Super's Career Development Theory</h3>
+        <p><span class="key-term">Donald Super</span> (1957, 1990) proposed that career development unfolds across a series of stages spanning the lifespan, with the <span class="key-term">exploration stage</span> (approximately ages 15&ndash;24) being most relevant to emerging and early adulthood. During this stage, young people try out different roles through part-time jobs, internships, coursework, and volunteer experiences, gradually narrowing their options and crystallizing a vocational identity. Super emphasized that career development is not a single decision point but a lifelong process of growth, exploration, establishment, maintenance, and eventually disengagement.</p>
+
+        <p>The <span class="key-term">establishment stage</span> (approximately ages 25&ndash;44) follows, during which the young adult settles into a career path, develops competence, and works to advance. Super's concept of <span class="key-term">vocational self-concept</span> -- the part of one's overall identity that relates to career and work role -- develops through the interaction of abilities, personality, and opportunities. Clinically, career counseling in early adulthood often involves helping clients align their vocational self-concept with available opportunities, navigating the tension between idealistic aspirations and practical realities.</p>
+
+        <h3>Beginnings of Generativity</h3>
+        <p>Although Erikson placed the generativity crisis squarely in middle adulthood (stage 7), contemporary research recognizes that generative concerns begin to emerge in the late twenties and early thirties, particularly through parenthood and mentoring. Young adults who become parents face the profound psychological transition of shifting from self-focused concerns to responsibility for a completely dependent being -- a shift that challenges narcissistic tendencies and demands the capacity for sacrifice, patience, and long-term planning that generativity requires.</p>
+
+        <p>Mentoring relationships -- whether formal (supervising a trainee) or informal (guiding a younger colleague) -- represent another early expression of generativity. Research by <span class="key-term">Dan McAdams</span> has shown that adults with strong generative commitments tend to construct "redemption narratives" about their lives -- stories in which difficult experiences are transformed into positive outcomes that benefit others. This narrative pattern is associated with greater psychological well-being, life satisfaction, and civic engagement.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Note: Generativity and Psychological Health</strong>
+          <p>Clinicians working with young adults who present with a sense of emptiness, lack of purpose, or existential questioning may find it useful to explore generative concerns. Even in the twenties and thirties, the question "What am I contributing to the world beyond myself?" can be a powerful therapeutic lever. Young adults who feel they are making meaningful contributions -- through parenting, mentoring, creative work, or community involvement -- tend to report greater life satisfaction and lower rates of depression than those whose lives remain exclusively self-focused. This does not mean that self-care is unimportant, but rather that purpose and self-transcendence are essential ingredients of adult well-being.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Exam Example: Career Development</strong>
+          <p>A 22-year-old college senior has completed internships in marketing, nonprofit management, and journalism, and is now narrowing her career focus based on these experiences. According to Super's theory, she is in the exploration stage -- trying out different vocational roles and using those experiences to crystallize her vocational self-concept. She is not "indecisive" but is engaged in a developmentally appropriate process of career identity formation.</p>
+        </div>
+
+        <p class="citation">Super, D. E. (1990). A life-span, life-space approach to career development. In D. Brown &amp; L. Brooks (Eds.), Career choice and development (2nd ed., pp. 197&ndash;261). Jossey-Bass.</p>
+        <p class="citation">McAdams, D. P. (2001). The psychology of life stories. Review of General Psychology, 5(2), 100&ndash;122.</p>
+      </div>
+
+      <div class="content-section">
+        <h2>Levinson's Seasons of Life and the Midlife Transition</h2>
+        <p><span class="key-term">Daniel Levinson</span> (1978) proposed that adult development follows a sequence of eras, each lasting approximately 20&ndash;25 years, with transitional periods between them. His model, based on intensive biographical interviews (initially with men, later extended to women), describes the construction, modification, and rebuilding of <span class="key-term">life structures</span>&mdash;the underlying patterns of a person's life at any given time, encompassing relationships, work, and other central commitments.</p>
+
+        <h3>Key Eras and Transitions</h3>
+        <ul>
+          <li><strong>Early Adult Transition (17&ndash;22):</strong> Moving from the preadult world into early adulthood; forming initial adult life structure.</li>
+          <li><strong>Entering the Adult World (22&ndash;28):</strong> Building a first adult life structure; exploring possibilities while seeking stability.</li>
+          <li><strong>Age-30 Transition (28&ndash;33):</strong> Reassessing and potentially modifying the first life structure.</li>
+          <li><strong>Midlife Transition (40&ndash;45):</strong> A critical turning point; questioning earlier choices and confronting mortality, aging, and unfulfilled dreams.</li>
+          <li><strong>Late Adult Transition (60&ndash;65):</strong> Preparing for late adulthood; adjusting to retirement, physical decline, and legacy concerns.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Midlife Crisis</strong>
+          <p>Levinson proposed that the midlife transition (ages 40&ndash;45) often involves a period of questioning and potential turmoil as individuals confront the gap between youthful dreams and reality. However, subsequent research suggests that a full-blown "midlife crisis" is not universal&mdash;only about 10&ndash;25% of adults report a crisis in middle adulthood. Most experience a more gradual midlife transition rather than a dramatic upheaval.</p>
+        </div>
+
+        <h3>Menopause</h3>
+        <p><span class="key-term">Menopause</span> refers to the cessation of menstruation and reproductive capacity, typically occurring between ages 45 and 55 (average age ~51). The <span class="key-term">perimenopause</span> transition involves fluctuating hormone levels (estrogen and progesterone decline) and can span several years. Physical symptoms may include hot flashes, sleep disturbances, and vaginal dryness. Psychological responses to menopause vary widely and are influenced by cultural attitudes, personal expectations, and individual health. Cross-cultural research has shown that women in cultures that value postmenopausal women (e.g., certain South Asian cultures) report fewer negative symptoms.</p>
+
+        <div class="clinical-note">
+          <strong>Clinical Note</strong>
+          <p>While menopause is a normal biological transition, the hormonal changes associated with perimenopause can exacerbate or precipitate depressive episodes in vulnerable women. Clinicians should assess for mood changes during this period and be aware that the relationship between menopause and depression is not deterministic but reflects a complex interaction of biological, psychological, and social factors.</p>
+        </div>
+
+        <p class="citation">Levinson, D. J. (1978). The seasons of a man's life. Knopf.</p>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Emerging adulthood (Arnett):</strong> Ages 18&ndash;25; five features: identity exploration, instability, self-focus, feeling in-between, sense of possibilities. Primarily applies to industrialized societies; debated for cultural specificity.</li>
+          <li><strong>Erikson's Intimacy vs. Isolation:</strong> Stage 6 (young adulthood); virtue = love. True intimacy requires a secure identity. Without it, the person risks fusion (losing the self in the partner) or isolation (emotional withdrawal to protect an unstable identity).</li>
+          <li><strong>Sternberg's triangular theory:</strong> Love = intimacy + passion + commitment. Consummate love has all three. Know the seven types (liking, infatuation, empty, romantic, companionate, fatuous, consummate). Passion peaks early and declines; intimacy and commitment may deepen over time.</li>
+          <li><strong>Super's career stages:</strong> Exploration (15&ndash;24), Establishment (25&ndash;44), Maintenance (45&ndash;64), Disengagement (65+). Vocational self-concept develops through interaction of abilities, personality, and experience.</li>
+          <li><strong>Generativity beginnings:</strong> Although Erikson placed generativity in middle adulthood, generative concerns (parenting, mentoring, community contribution) begin emerging in the late twenties and early thirties.</li>
+          <li><strong>Levinson's seasons:</strong> Adult development follows a sequence of eras with transitions. The midlife transition (40&ndash;45) may involve a "crisis" but a full-blown crisis occurs in only 10&ndash;25% of adults.</li>
+          <li><strong>Erikson's adult stages:</strong> Intimacy vs. Isolation (young adulthood, virtue = love), Generativity vs. Stagnation (middle adulthood, virtue = care), Ego Integrity vs. Despair (late adulthood, virtue = wisdom).</li>
+          <li><strong>Menopause:</strong> Average age ~51; perimenopause involves fluctuating hormones. Psychological response varies widely and is influenced by cultural attitudes. Can exacerbate or precipitate depression in vulnerable women.</li>
+          <li><strong>Midlife crisis:</strong> Levinson's concept, but empirical research shows only a minority of adults experience a dramatic crisis; most undergo a gradual transition.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="adolescence.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Transformation — Puberty, Identity & the Adolescent Brain</div>
+          </div>
+        </a>
+        <a href="middle-late-adulthood.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">The Long Horizon — Cognitive Aging, Wisdom & Successful Aging</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

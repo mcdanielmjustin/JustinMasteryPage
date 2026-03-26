@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensation — Transduction, Thresholds & Psychophysics | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Sensation — Transduction, Thresholds & Psychophysics</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 7</div>
+        <div class="domain-title">Biopsychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">1</span>The Cerebral Cortex — Lobes, Lateralization & Higher Functions</a></li>
+        <li class="chapter-item"><a href="subcortical-brainstem.html" class="chapter-link"><span class="chapter-number">2</span>Below the Cortex — Thalamus, Limbic System, Brainstem & Cerebellum</a></li>
+        <li class="chapter-item"><a href="learning-encoding.html" class="chapter-link"><span class="chapter-number">3</span>How We Learn — Encoding Strategies & Levels of Processing</a></li>
+        <li class="chapter-item"><a href="memory-architecture.html" class="chapter-link"><span class="chapter-number">4</span>Memory Architecture — Multi-Store Model, Working Memory & LTM</a></li>
+        <li class="chapter-item"><a href="forgetting-amnesia.html" class="chapter-link"><span class="chapter-number">5</span>How Memory Fails — Forgetting, Interference & Amnesia Syndromes</a></li>
+        <li class="chapter-item"><a href="sleep-dreaming.html" class="chapter-link"><span class="chapter-number">6</span>Sleep Architecture — Stages, Circadian Rhythm, Disorders & Dreams</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">7</span>Neurons, Neurotransmitters & Neural Signaling</a></li>
+        <li class="chapter-item"><a href="emotion-arousal.html" class="chapter-link"><span class="chapter-number">8</span>Emotion, Arousal & the Autonomic Nervous System</a></li>
+        <li class="chapter-item"><a href="sensation-psychophysics.html" class="chapter-link active"><span class="chapter-number">9</span>Sensation — Transduction, Thresholds & Psychophysics</a></li>
+        <li class="chapter-item"><a href="perception-attention.html" class="chapter-link"><span class="chapter-number">10</span>Perception & Attention — Gestalt, Depth Cues & Selective Processing</a></li>
+        <li class="chapter-item"><a href="neurodegenerative.html" class="chapter-link"><span class="chapter-number">11</span>When the Brain Breaks — Parkinson's, Huntington's, Stroke & Injury</a></li>
+        <li class="chapter-item"><a href="endocrine-neuroimaging.html" class="chapter-link"><span class="chapter-number">12</span>Endocrine Conditions, Neuroimaging & Diagnostics</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">13</span>Neurocognitive Disorders — Alzheimer's, Vascular & Frontotemporal</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 13</div>
+        <h1>Sensation — Transduction, Thresholds & Psychophysics</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Psychophysics: Thresholds &amp; Signal Detection</h2>
+        <p>A radiologist squints at a mammogram, searching for a faint shadow that could be an early tumor — or just an artifact of tissue density. She knows the stakes: miss the shadow and a cancer goes undetected; call it a tumor when it is not and a healthy woman undergoes an unnecessary biopsy. This everyday clinical dilemma — how sensitive are we to faint signals, and how do our expectations and motivations shape what we perceive? — lies at the heart of psychophysics, the oldest quantitative tradition in psychology. The concepts developed by Weber, Fechner, and modern signal detection theorists do far more than describe laboratory thresholds; they provide the mathematical language for understanding clinical judgment, diagnostic sensitivity, and the perceptual limits that constrain everything from hearing tests to forensic identification.</p>
+        <p>Psychophysics is the study of the relationship between physical stimuli and the psychological sensations they produce. Several foundational concepts from psychophysics are heavily tested on the EPPP.</p>
+
+        <div class="definition-box">
+          <strong>Absolute Threshold:</strong>
+          <p>The <span class="key-term">absolute threshold</span> is the minimum intensity of a stimulus that can be detected 50% of the time. For example, the absolute threshold for vision is roughly the equivalent of a candle flame visible from 30 miles on a clear dark night. Note that the 50% criterion is key — detection is probabilistic, not all-or-none.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Difference Threshold (JND):</strong>
+          <p>The <span class="key-term">difference threshold</span>, or <span class="key-term">just noticeable difference (JND)</span>, is the minimum difference between two stimuli that can be detected 50% of the time. <span class="key-term">Weber's Law</span> states that the JND is a constant proportion of the original stimulus intensity (delta I / I = k). For example, if you can just barely notice the difference between a 100g weight and a 102g weight (2% difference), you would need a 4g difference to detect a change from 200g. The Weber fraction (k) is smaller for more sensitive modalities.</p>
+        </div>
+
+        <h3>Signal Detection Theory (SDT)</h3>
+        <p><span class="key-term">Signal detection theory</span> provides a framework for understanding how decisions are made under conditions of uncertainty, going beyond simple threshold concepts by acknowledging that detection depends on both the sensitivity of the observer and their response criterion (decision bias).</p>
+
+        <table>
+          <tr><th></th><th>Signal Present</th><th>Signal Absent</th></tr>
+          <tr><td><strong>Respond "Yes"</strong></td><td>Hit (correct detection)</td><td>False Alarm (Type I error)</td></tr>
+          <tr><td><strong>Respond "No"</strong></td><td>Miss (Type II error)</td><td>Correct Rejection</td></tr>
+        </table>
+
+        <p>The observer's <span class="key-term">sensitivity (d-prime)</span> reflects their ability to discriminate signal from noise, independent of response bias. The <span class="key-term">response criterion (beta)</span> reflects the observer's willingness to say "yes" — a liberal criterion produces more hits but also more false alarms, while a conservative criterion produces fewer false alarms but also more misses. Response criterion shifts depending on the payoff matrix (e.g., a radiologist screening for cancer should adopt a liberal criterion because missing a tumor [miss] is more costly than a false alarm).</p>
+
+        <div class="example-box">
+          <strong>Clinical Application:</strong>
+          <p>Signal detection theory applies directly to clinical decision-making. A psychologist conducting a risk assessment must balance the cost of false positives (incorrectly identifying someone as dangerous, leading to unnecessary restriction) against the cost of false negatives (failing to identify a truly dangerous individual). The base rate of the behavior, the severity of consequences, and the clinician's threshold for action all influence the decision criterion.</p>
+        </div>
+
+        <!-- anchor:071 coverage:partial -->
+        <p>More precisely, <span class="key-term">d-prime (d')</span> is computed as the difference between two z-transformed probabilities: the z-score corresponding to the <span class="key-term">hit rate</span> (proportion of signal-present trials on which the observer responds "yes") minus the z-score corresponding to the <span class="key-term">false alarm rate</span> (proportion of signal-absent trials on which the observer responds "yes"). Formally, <strong>d' = z(Hit Rate) − z(False Alarm Rate)</strong>. A d' of zero indicates an inability to distinguish signal from noise (performance at chance), while higher d' values reflect greater discriminability. Because d' is derived from the separation between the signal and noise distributions in standard score units, it remains independent of the observer's response criterion — a liberal responder and a conservative responder with identical perceptual sensitivity will yield the same d' despite having very different hit and false alarm rates. This mathematical property makes d' a pure measure of sensory discrimination, uncontaminated by motivational or decision-making factors.</p>
+        <!-- /anchor:071 -->
+
+
+        <h3>Sensory Adaptation</h3>
+        <p><span class="key-term">Sensory adaptation</span> is the diminished sensitivity to an unchanging stimulus over time. When you first enter a room with a strong odor, the smell is noticeable, but after several minutes, you barely detect it. This occurs because sensory receptors reduce their firing rate in response to constant stimulation. Importantly, pain receptors show minimal adaptation — a biologically adaptive feature that ensures continued attention to potentially harmful stimuli.</p>
+      </div>
+
+        <!-- anchor:130 coverage:missing -->
+        <h4>Synesthesia</h4>
+        <p><span class="key-term">Synesthesia</span> is a neurological phenomenon in which stimulation of one sensory or cognitive pathway automatically and involuntarily triggers a concurrent experience in a second pathway. The most common form is <span class="key-term">grapheme-color synesthesia</span>, in which letters or numbers evoke specific color percepts. However, many other variants exist, including <span class="key-term">chromesthesia</span> (sound-to-color synesthesia), in which auditory stimuli such as musical notes, tones, or environmental sounds automatically produce vivid color experiences. A person with chromesthesia might perceive a trumpet blast as bright orange or a violin note as deep purple, with these pairings remaining highly consistent over time.</p>
+        <p>Synesthesia is estimated to occur in roughly 2–4% of the population and tends to run in families, suggesting a genetic component. Neuroimaging research has revealed increased structural and functional connectivity between brain regions that correspond to the linked sensory modalities. For example, individuals with grapheme-color synesthesia show cross-activation between areas of the fusiform gyrus involved in letter recognition and color processing regions in V4. Synesthesia is not a disorder or hallucination — synesthetes perform normally on standard perceptual tasks and are fully aware that their cross-modal experiences are atypical. The phenomenon provides compelling evidence that perceptual experience is constructed by the brain and that individual differences in neural architecture can produce qualitatively distinct conscious experiences from identical physical stimuli.</p>
+        <div class="example-box"><h4>Example</h4><p>A synesthete listening to an orchestra consistently reports that the oboe produces a shimmering silver sensation while the cello elicits deep burgundy. These associations are involuntary, automatic, and stable across repeated testing — if retested months later, the same instrument-color pairings emerge with high reliability. This consistency distinguishes genuine synesthesia from mere metaphorical association or learned imagery.</p></div>
+        <!-- /anchor:130 -->
+
+
+
+      <div class="content-section">
+        <h2>Vision: From Retina to Cortex</h2>
+        <p>Light enters the eye through the cornea, passes through the pupil (regulated by the iris), is focused by the lens, and strikes the retina — a thin layer of neural tissue at the back of the eye containing the photoreceptors.</p>
+
+        <h3>Rods and Cones</h3>
+        <ul>
+          <li><span class="key-term">Rods</span> (~120 million): Sensitive to low light levels (scotopic vision); located primarily in the periphery; provide black-and-white vision; no color sensitivity; high convergence onto ganglion cells (many rods feed one ganglion cell), producing high sensitivity but low acuity</li>
+          <li><span class="key-term">Cones</span> (~6 million): Function in bright light (photopic vision); concentrated in the fovea (center of the retina); provide color vision and high visual acuity; low convergence (one-to-one mapping in fovea), producing low sensitivity but high acuity</li>
+        </ul>
+
+        <h3>Color Vision Theories</h3>
+        <div class="definition-box">
+          <strong>Trichromatic Theory (Young-Helmholtz):</strong>
+          <p>The retina contains three types of cones, each maximally sensitive to a different wavelength: short (blue), medium (green), and long (red). All perceived colors result from the combined activation of these three cone types. This theory explains color mixing and certain forms of color blindness (e.g., dichromacy from the absence of one cone type).</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>Opponent-Process Theory (Hering):</strong>
+          <p>Color perception is organized into three opponent channels: red-green, blue-yellow, and black-white. Each channel involves antagonistic neural processing — stimulation of one color inhibits its opponent. This theory explains afterimages (staring at red produces a green afterimage), simultaneous contrast effects, and why certain color combinations (e.g., "reddish-green") are impossible to perceive. Modern understanding holds that trichromatic processing occurs at the retinal level, while opponent processing occurs at the level of retinal ganglion cells and the lateral geniculate nucleus.</p>
+        </div>
+
+        <h3>Feature Detection</h3>
+        <p>Hubel and Wiesel's Nobel Prize-winning research identified <span class="key-term">feature detectors</span> in the primary visual cortex (V1): simple cells respond to lines and edges at specific orientations and locations; complex cells respond to moving lines at specific orientations regardless of exact position; and hypercomplex cells respond to lines of specific length or endpoints. This hierarchical processing demonstrates how the visual cortex builds complex representations from simple features.</p>
+
+        <div class="citation">Hubel, D. H., &amp; Wiesel, T. N. (1962). Receptive fields, binocular interaction and functional architecture in the cat's visual cortex. Journal of Physiology, 160(1), 106-154.</div>
+      </div>
+
+
+      <div class="content-section">
+        <h2>Audition: Hearing Theories</h2>
+
+        <p>Having explored how the visual system constructs complex perceptions from patterns of light, we now turn to the sense that dominates human communication, emotional connection, and threat detection: hearing. Consider a clinician conducting a diagnostic interview — she is simultaneously tracking the client's word content, vocal pitch, speech rate, and emotional tone, all while filtering out the hum of the air conditioner and muffled conversation in the adjacent office. How does the auditory system accomplish this remarkable feat of signal extraction? The answer begins with the physical journey of sound and the elegant neural coding mechanisms that translate vibrations in the air into the rich auditory world we experience.</p>
+
+        <p>Sound waves are converted to neural signals through a chain of mechanical structures that progressively amplify and refine vibrations. Sound first funnels through the outer ear and strikes the <span class="key-term">tympanic membrane</span> (eardrum), which vibrates in response. These vibrations pass through three tiny bones in the middle ear — the <span class="key-term">ossicles</span> (malleus, incus, and stapes) — which amplify the signal roughly 22-fold before transmitting it to the fluid-filled <span class="key-term">cochlea</span> of the inner ear. Inside the cochlea, <span class="key-term">hair cells</span> sitting on the <span class="key-term">basilar membrane</span> perform the critical work of transduction: they convert mechanical vibration into electrical signals that travel via the auditory nerve to the brain. But here is the question that fascinated early researchers and remains central to EPPP preparation: how does the brain know which frequency — which pitch — it is hearing? Three competing (and ultimately complementary) theories emerged to answer this question.</p>
+
+        <table>
+        <tr><th>Theory</th><th>Mechanism</th><th>Frequency Range</th></tr>
+        <tr><td>Place Theory (Helmholtz)</td><td>Different frequencies cause peak vibration at different locations along the basilar membrane (base = high frequency, apex = low frequency)</td><td>Best for high frequencies (above ~1,000 Hz)</td></tr>
+        <tr><td>Frequency Theory (Rutherford)</td><td>The basilar membrane vibrates as a whole at the same frequency as the sound wave; firing rate matches frequency</td><td>Best for low frequencies (below ~500 Hz)</td></tr>
+        <tr><td>Volley Principle</td><td>Groups of neurons fire in alternating volleys, with the combined firing rate matching the stimulus frequency</td><td>Extends frequency theory to ~5,000 Hz</td></tr>
+        </table>
+
+        <p>To make these theories concrete, imagine sitting at a piano. When you strike the highest keys, the resulting high-frequency sound waves cause maximal displacement near the base of the cochlea — the narrow, stiff end of the basilar membrane closest to the oval window. This is <span class="key-term">Place Theory</span> in action: the brain identifies pitch based on where along the basilar membrane the vibration peaks. Hermann von Helmholtz proposed this mechanism in the nineteenth century, and Nobel Prize-winning research by Georg von Békésy later confirmed the traveling wave pattern along the basilar membrane. Place theory works beautifully for high-frequency sounds (above roughly 1,000 Hz), but it struggles to explain how the brain distinguishes very low-frequency tones, where the basilar membrane's spatial resolution is poor.</p>
+
+        <p>Now press one of the lowest keys on the piano. For these deep bass tones, <span class="key-term">Frequency Theory</span> — proposed by Rutherford — offers a better account. Rather than relying on location, the basilar membrane vibrates as a whole unit, and auditory neurons fire at the same rate as the incoming sound frequency. A 200 Hz tone, for example, triggers neurons to fire 200 times per second. The brain reads the firing rate directly as pitch information. The limitation? Individual neurons cannot fire faster than about 1,000 times per second due to refractory periods, which means frequency theory alone cannot explain perception of pitches above roughly 500 Hz.</p>
+
+        <p>This is where the <span class="key-term">Volley Principle</span> enters as an ingenious extension. Rather than relying on a single neuron to keep up with rapid frequencies, groups of neurons take turns firing in coordinated volleys — much like a relay team passing a baton. Neuron A fires on one cycle, neuron B on the next, neuron C on the next, and so on. The combined firing rate of the group accurately represents the stimulus frequency, extending the range of frequency coding up to approximately 5,000 Hz. Think of it like a group of friends clapping in sequence to maintain a rhythm faster than any single person could sustain alone.</p>
+
+        <p>Modern understanding integrates all three mechanisms into a unified account: low frequencies (below ~500 Hz) are coded primarily by firing rate as frequency theory describes; high frequencies (above ~1,000 Hz) are coded by the location of maximal basilar membrane displacement as place theory predicts; and intermediate frequencies (roughly 500–5,000 Hz) rely on both mechanisms, with the volley principle bridging the gap. For the EPPP, this complementary relationship is a high-yield concept — exam questions often present clinical scenarios involving hearing loss and ask you to identify which coding mechanism is compromised. For instance, damage to hair cells at the base of the cochlea would selectively impair high-frequency hearing, consistent with place theory, and is the pattern seen in noise-induced hearing loss from prolonged exposure to loud environments. Understanding these theories not only prepares you for the exam but provides the foundation for appreciating how auditory perception organizes the complex soundscapes of everyday clinical work.</p>
+        </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Absolute threshold</strong>: minimum stimulus intensity detected 50% of the time; the 50% criterion is key</li>
+          <li><strong>Difference threshold (JND)</strong>: minimum detectable difference between two stimuli; <strong>Weber's Law</strong>: JND is a constant proportion (k) of the original stimulus intensity</li>
+          <li><strong>Signal Detection Theory</strong>: detection depends on both sensitivity (d-prime) and response criterion (beta); four outcomes: hit, miss, false alarm, correct rejection</li>
+          <li><strong>d-prime (d')</strong> = z(hit rate) - z(false alarm rate); measures sensory discrimination independent of response bias</li>
+          <li><strong>Sensory adaptation</strong>: diminished sensitivity to constant stimulation; pain receptors show minimal adaptation</li>
+          <li><strong>Rods</strong> (~120 million): peripheral retina, scotopic (low-light) vision, high sensitivity/low acuity; <strong>Cones</strong> (~6 million): fovea, photopic (bright-light) vision, color, high acuity</li>
+          <li><strong>Trichromatic theory</strong> (Young-Helmholtz): 3 cone types (short/medium/long wavelength); explains color mixing and dichromacy</li>
+          <li><strong>Opponent-process theory</strong> (Hering): red-green, blue-yellow, black-white channels; explains afterimages and impossible color combinations</li>
+          <li><strong>Feature detectors</strong> (Hubel &amp; Wiesel): simple, complex, and hypercomplex cells in V1; hierarchical processing of visual features</li>
+          <li><strong>Place theory</strong>: different basilar membrane locations code different frequencies; best for high frequencies (&gt;1,000 Hz)</li>
+          <li><strong>Frequency theory</strong>: firing rate matches sound frequency; best for low frequencies (&lt;500 Hz)</li>
+          <li><strong>Volley principle</strong>: groups of neurons fire in alternation to encode frequencies up to ~5,000 Hz</li>
+          <li><strong>Gate-control theory</strong> (Melzack &amp; Wall): pain signals modulated at the spinal cord; large-diameter fibers (touch) close the gate; small-diameter fibers (pain) open the gate; descending cortical signals also modulate</li>
+          <li><strong>Synesthesia</strong>: cross-modal sensory experience (e.g., letters evoking colors); involuntary, consistent, genetically influenced; ~2-4% prevalence</li>
+        </ul>
+      </div>
+
+<div class="nav-buttons">
+        <a href="emotion-arousal.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Emotion, Arousal & the Autonomic Nervous System</div>
+          </div>
+        </a>
+        <a href="perception-attention.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Perception & Attention — Gestalt, Depth Cues & Selective Processing</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

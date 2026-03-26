@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relationships in Data: Correlation & Regression | Domain 1 | MasteryPage</title>
+  <title>Relationships in Data — Correlation & Regression | Domain 1 | MasteryPage</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+
     :root {
       --bg-primary: #09090b;
       --bg-secondary: #0f0f11;
@@ -21,10 +22,6 @@
       --border: rgba(255, 255, 255, 0.06);
       --border-light: rgba(255, 255, 255, 0.1);
       --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      --success: #22c55e;
-      --success-dim: rgba(34, 197, 94, 0.15);
-      --blue: #3b82f6;
-      --blue-dim: rgba(59, 130, 246, 0.15);
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
@@ -64,41 +61,50 @@
     .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
 
     .content-section { margin-bottom: 48px; }
-    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-    h2:first-of-type { margin-top: 0; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; color: var(--text-primary); }
     h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
     h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
     p { margin-bottom: 16px; color: var(--text-secondary); }
-    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
-    li { margin-bottom: 8px; }
 
     .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
-    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
-    .definition-box h4 { margin-top: 0; color: var(--accent); }
-    .definition-box p:last-child { margin-bottom: 0; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .definition-box h4 { margin: 0 0 12px; color: var(--accent); font-size: 1rem; }
+    .definition-box p { margin: 0; color: var(--text-secondary); }
+    .definition-box ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .definition-box li { margin-bottom: 8px; }
 
-    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
-    .example-box h4 { margin-top: 0; color: var(--blue); display: flex; align-items: center; gap: 8px; }
-    .example-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .example-box h4 { margin: 0 0 12px; color: #60a5fa; font-size: 1rem; }
+    .example-box p { margin: 0; color: var(--text-secondary); }
 
-    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
-    .clinical-note h4 { margin-top: 0; color: var(--success); display: flex; align-items: center; gap: 8px; }
-    .clinical-note p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .clinical-note h4 { margin: 0 0 12px; color: #4ade80; font-size: 1rem; }
+    .clinical-note p { margin: 0; color: var(--text-secondary); }
+    .clinical-note ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .clinical-note li { margin-bottom: 8px; }
 
-    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    .citation { border-left: 3px solid var(--accent); padding-left: 16px; margin: 24px 0; font-style: italic; color: var(--text-muted); }
 
-    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    .exam-focus { background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 28px; margin: 40px 0; }
+    .exam-focus h3 { color: var(--accent); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    .exam-focus ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .exam-focus li { margin-bottom: 10px; }
 
-    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
-    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
-    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
-    td { color: var(--text-secondary); }
+    .references { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .references h3 { margin-bottom: 20px; }
+    .reference-list { list-style: none; }
+    .reference-list li { margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; padding-left: 32px; text-indent: -32px; }
 
     .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
     .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
     .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
     .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
     .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; }
+    td { color: var(--text-secondary); }
 
     @media (max-width: 1024px) {
       .sidebar { display: none; }
@@ -123,6 +129,7 @@
     .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
     .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
     .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
   </style>
 </head>
 <body>
@@ -138,7 +145,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
         <a href="index.html">Domain 1</a>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        <span>Relationships in Data: Correlation & Regression</span>
+        <span>Relationships in Data — Correlation & Regression</span>
       </div>
     </div>
   </nav>
@@ -146,28 +153,35 @@
   <div class="content-wrapper">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-title">Content Area 1</div>
-        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+        <div class="sidebar-title">Domain 1</div>
+        <div class="domain-title">Psychometrics & Research Methods</div>
       </div>
       <ul class="chapter-list">
         <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
-        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
-        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
-        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
-        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link active"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
-        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
-        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
-        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
-        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
-        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
-        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>The Language of Science — Variables, Scales & Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Associations Form — Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="reinforcement-punishment.html" class="chapter-link"><span class="chapter-number">3</span>Consequences That Shape Behavior — Reinforcement & Punishment</a></li>
+        <li class="chapter-item"><a href="schedules-applications.html" class="chapter-link"><span class="chapter-number">4</span>Schedules, Shaping & Clinical Applications of Operant Principles</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link active"><span class="chapter-number">5</span>Relationships in Data — Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="hypothesis-testing.html" class="chapter-link"><span class="chapter-number">6</span>Testing Ideas — Hypotheses, t-Tests & Statistical Power</a></li>
+        <li class="chapter-item"><a href="anova-nonparametric.html" class="chapter-link"><span class="chapter-number">7</span>ANOVA, Nonparametric Tests & Effect Sizes</a></li>
+        <li class="chapter-item"><a href="experimental-designs.html" class="chapter-link"><span class="chapter-number">8</span>Blueprints for Discovery — Experimental & Quasi-Experimental Designs</a></li>
+        <li class="chapter-item"><a href="qualitative-program-eval.html" class="chapter-link"><span class="chapter-number">9</span>One at a Time — Single-Subject, Qualitative & Program Evaluation</a></li>
+        <li class="chapter-item"><a href="internal-validity.html" class="chapter-link"><span class="chapter-number">10</span>Threats from Within — Internal Validity</a></li>
+        <li class="chapter-item"><a href="external-validity.html" class="chapter-link"><span class="chapter-number">11</span>Threats from Without — External & Statistical Conclusion Validity</a></li>
+        <li class="chapter-item"><a href="classical-test-theory.html" class="chapter-link"><span class="chapter-number">12</span>Consistency of Measurement — Classical Test Theory & IRT</a></li>
+        <li class="chapter-item"><a href="reliability-practice.html" class="chapter-link"><span class="chapter-number">13</span>Reliability in Practice — Types, SEM & Factors</a></li>
+        <li class="chapter-item"><a href="validity-evidence.html" class="chapter-link"><span class="chapter-number">14</span>Measuring What Matters — Sources of Validity Evidence</a></li>
+        <li class="chapter-item"><a href="construct-validity.html" class="chapter-link"><span class="chapter-number">15</span>Construct Validity, Generalization & Test Fairness</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">16</span>Predicting Outcomes — Criterion-Related Validity</a></li>
+        <li class="chapter-item"><a href="decision-accuracy.html" class="chapter-link"><span class="chapter-number">17</span>Making Decisions — Base Rates, Sensitivity & Utility</a></li>
       </ul>
     </aside>
 
     <main class="main-content">
       <header class="chapter-header">
-        <div class="chapter-badge">Chapter 4 of 10</div>
-        <h1>Relationships in Data: Correlation & Regression</h1>
+        <div class="chapter-badge">Chapter 5 of 17</div>
+        <h1>Relationships in Data — Correlation & Regression</h1>
         <div class="chapter-meta">
           <span>Fundamental Content</span>
         </div>
@@ -190,7 +204,7 @@
       <section class="content-section">
         <h2>Introduction to Correlation</h2>
 
-        <p>Correlation is a statistical technique used to describe and measure the relationship between two variables. Understanding correlation is essential for psychological research and practice, as it underlies many assessment concepts including test reliability and validity. The <span class="key-term">correlation coefficient</span> quantifies both the strength and direction of the linear relationship between two variables (Cohen et al., 2003).</p>
+        <p>The previous chapters explored how organisms learn through classical and operant conditioning — associating stimuli with responses and behaviors with consequences. Now we turn to a different but equally fundamental question: how do we quantify the relationship between two variables? A school psychologist wonders whether students who score higher on a reading comprehension test also tend to earn higher grades in science. A clinical researcher asks whether the number of therapy sessions a client attends predicts improvement in depression symptoms. In each case, the question is not about cause and effect but about the degree to which two measures move together. The <span class="key-term">correlation coefficient</span> is the statistical tool that quantifies both the strength and direction of these linear relationships (Cohen et al., 2003).</p>
 
         <p>It is critical to understand that correlation does not imply causation. Even a strong correlation between two variables does not establish that one variable causes changes in the other. The relationship could be due to a third variable influencing both, reverse causation, or coincidence.</p>
 
@@ -203,8 +217,11 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>Types of Correlation Coefficients</h2>
+
+        <p>Knowing that a correlation coefficient captures the strength and direction of a relationship is just the beginning — the specific coefficient you choose depends on the type of data you have. Different scales of measurement and different data structures call for different correlational techniques, and selecting the wrong one can produce misleading results.</p>
 
         <h3>Pearson Product-Moment Correlation (r)</h3>
 
@@ -239,8 +256,11 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>Interpreting Correlation Coefficients</h2>
+
+        <p>Once you have computed the appropriate correlation coefficient, the next challenge is determining what the number actually means in practical terms. A Pearson r of .35 might sound modest, but in some contexts it represents a clinically meaningful relationship — while in others it signals a weak finding. Proper interpretation requires attending to both the magnitude of the coefficient and the amount of variance it explains.</p>
 
         <h3>Strength of Correlation</h3>
 
@@ -281,8 +301,11 @@
         <p>The <span class="key-term">coefficient of alienation</span> represents the proportion of variance that is NOT shared between two variables. It is calculated as 1 - r², or equivalently, it indicates the proportion of unexplained variance.</p>
       </section>
 
+
       <section class="content-section">
         <h2>Factors Affecting Correlation</h2>
+
+        <p>Even when you compute the right coefficient and interpret its magnitude correctly, the observed correlation can be misleading if certain methodological factors distort it. Understanding these artifacts is essential both for designing good research and for critically evaluating published findings on the EPPP.</p>
 
         <h3>Restriction of Range</h3>
 
@@ -311,10 +334,11 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>Simple Linear Regression</h2>
 
-        <p><span class="key-term">Regression</span> extends correlation by allowing prediction of one variable from another. While correlation describes the relationship between variables, regression provides a mathematical equation for predicting scores on a criterion variable (Y) from scores on a predictor variable (X).</p>
+        <p>Correlation tells you that two variables are related — but in many practical situations, you need to go further and actually predict one variable from another. A graduate admissions committee wants to estimate how well an applicant will perform in coursework based on her GRE score. A forensic psychologist needs to estimate recidivism risk from a structured assessment tool. This predictive step is where <span class="key-term">regression</span> enters the picture, extending correlation by providing a mathematical equation for predicting scores on a criterion variable (Y) from scores on a predictor variable (X).</p>
 
         <h3>The Regression Equation</h3>
 
@@ -344,10 +368,11 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>Multiple Regression</h2>
 
-        <p><span class="key-term">Multiple regression</span> extends simple regression by using two or more predictor variables to predict a single criterion variable. The multiple regression equation is: Y' = a + b₁X₁ + b₂X₂ + ... + bₖXₖ</p>
+        <p>In practice, outcomes rarely depend on a single predictor. Graduate school performance reflects not just GRE scores but also undergraduate GPA, letters of recommendation, and research experience. Simple regression captures only one piece of that puzzle. <span class="key-term">Multiple regression</span> extends the framework by incorporating two or more predictor variables to predict a single criterion variable. The multiple regression equation is: Y' = a + b₁X₁ + b₂X₂ + ... + bₖXₖ</p>
 
         <p>Each predictor variable has its own regression coefficient (b) indicating its unique contribution to predicting Y while controlling for other predictors.</p>
 
@@ -408,6 +433,7 @@
         </div>
       </section>
 
+
       <section class="content-section">
 
         <!-- anchor:127 coverage:partial -->
@@ -418,7 +444,7 @@
 
         <h2>Regression to the Mean</h2>
 
-        <p><span class="key-term">Regression to the mean</span> is a statistical phenomenon wherein extreme scores on one measurement tend to be followed by less extreme scores on subsequent measurements. This occurs whenever the correlation between two variables is less than perfect (r &lt; 1.00). The term "regression" was coined by Francis Galton based on this observation (Galton, 1886).</p>
+        <p>Having built the machinery of simple and multiple regression, we now encounter a phenomenon that trips up researchers and clinicians alike — and that takes its name from the very concept of regression itself. Imagine a clinician who selects the most severely depressed patients for a new intervention and then celebrates when their scores improve at follow-up. But how much of that improvement was genuine treatment effect, and how much was simply the statistical tendency for extreme scores to drift back toward the average? <span class="key-term">Regression to the mean</span> is the statistical phenomenon wherein extreme scores on one measurement tend to be followed by less extreme scores on subsequent measurements. This occurs whenever the correlation between two variables is less than perfect (r &lt; 1.00). The term "regression" was coined by Francis Galton based on this observation (Galton, 1886).</p>
 
         <div class="example-box">
           <h4>Example: Regression to the Mean</h4>
@@ -437,8 +463,11 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>Applications in Psychological Assessment</h2>
+
+        <p>The correlational and regression tools explored throughout this chapter are not just abstract statistical exercises — they form the quantitative backbone of psychological testing. Every time you evaluate whether a test measures what it claims to, whether it produces consistent results, or whether combining multiple predictors improves a hiring decision, you are applying the principles covered here.</p>
 
         <h3>Test Reliability</h3>
 
@@ -546,6 +575,7 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>EPPP Exam Focus Points</h2>
 
@@ -572,6 +602,7 @@
         </div>
       </section>
 
+
       <section class="content-section">
         <h2>References</h2>
         <p style="font-size: 0.9rem; line-height: 1.9;">
@@ -586,18 +617,20 @@
         </p>
       </section>
 
+
+
       <div class="nav-buttons">
-        <a href="operant-conditioning.html" class="nav-btn">
+        <a href="schedules-applications.html" class="nav-btn">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
           <div>
             <div class="nav-btn-label">Previous</div>
-            <div class="nav-btn-title">Shaping Behavior: Operant Conditioning</div>
+            <div class="nav-btn-title">Schedules, Shaping & Clinical Applications of Operant Principles</div>
           </div>
         </a>
-        <a href="inferential-statistics.html" class="nav-btn">
+        <a href="hypothesis-testing.html" class="nav-btn">
           <div style="text-align: right;">
             <div class="nav-btn-label">Next</div>
-            <div class="nav-btn-title">From Samples to Populations: Inferential Statistics</div>
+            <div class="nav-btn-title">Testing Ideas — Hypotheses, t-Tests & Statistical Power</div>
           </div>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
         </a>

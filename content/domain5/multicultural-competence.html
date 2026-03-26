@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Across the Divide — Sue's Framework, APA Guidelines & Cultural Formulation | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border-left: 3px solid #22c55e; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Across the Divide — Sue's Framework, APA Guidelines & Cultural Formulation</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cultural-identity.html" class="chapter-link"><span class="chapter-number">1</span>Where You Come From — Cultural Roots, Self-Concept & Social Identity</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">2</span>How We Judge — Attribution Theory & Causal Explanations</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">3</span>The Shortcuts We Take — Cognitive Biases, Heuristics & Impression Formation</a></li>
+        <li class="chapter-item"><a href="attitudes-dissonance.html" class="chapter-link"><span class="chapter-number">4</span>What We Believe — Attitudes, Dissonance & Self-Perception</a></li>
+        <li class="chapter-item"><a href="persuasion-influence.html" class="chapter-link"><span class="chapter-number">5</span>How We're Moved — Persuasion, ELM & Cialdini's Principles</a></li>
+        <li class="chapter-item"><a href="conformity-obedience.html" class="chapter-link"><span class="chapter-number">6</span>The Power of the Situation — Conformity, Obedience & Compliance</a></li>
+        <li class="chapter-item"><a href="attraction-prosocial.html" class="chapter-link"><span class="chapter-number">7</span>Why We Connect — Attraction, Love, Altruism & Helping</a></li>
+        <li class="chapter-item"><a href="prejudice-discrimination.html" class="chapter-link"><span class="chapter-number">8</span>Where We Break — Prejudice, Stereotypes & Discrimination</a></li>
+        <li class="chapter-item"><a href="group-dynamics.html" class="chapter-link"><span class="chapter-number">9</span>When We're Together — Group Performance, Decisions & Social Roles</a></li>
+        <li class="chapter-item"><a href="acculturation-models.html" class="chapter-link"><span class="chapter-number">10</span>Between Two Worlds — Berry, Cross, Helms & Racial Identity Development</a></li>
+        <li class="chapter-item"><a href="multicultural-competence.html" class="chapter-link active"><span class="chapter-number">11</span>Across the Divide — Sue's Framework, APA Guidelines & Cultural Formulation</a></li>
+        <li class="chapter-item"><a href="health-disparities.html" class="chapter-link"><span class="chapter-number">12</span>Barriers to Treatment — Health Disparities, Microaggressions & Social Justice</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 11 of 12</div>
+        <h1>Across the Divide — Sue's Framework, APA Guidelines & Cultural Formulation</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Sue's Multicultural Competencies</h2>
+        <p>Imagine a well-meaning psychologist who genuinely wants to provide effective therapy to clients from all backgrounds. She has examined her own biases through personal therapy, she has read extensively about the cultural histories of her diverse client population, and yet — when she sits down in session — she finds herself defaulting to the same CBT worksheets and Socratic questioning techniques she uses with everyone, regardless of cultural context. Something is missing. But what, exactly? And how would we even organize the different facets of cultural competence so that gaps like this become visible? These are the questions that <span class="key-term">Derald Wing Sue</span> and his colleagues set out to answer in what became one of the most influential frameworks in the history of multicultural psychology.</p>
+        <p>In the early 1990s, the field of counseling psychology was grappling with a growing recognition that traditional therapeutic approaches — largely developed by and for White, Western, middle-class populations — were not serving an increasingly diverse client base. Clinicians needed more than good intentions; they needed a systematic way to think about what multicultural competence actually looked like in practice. Sue, Arredondo, and McDavis (1992) responded with a framework that was elegantly simple yet remarkably comprehensive: a model organized around three core domains, each applied across three dimensions, creating a 3 × 3 matrix of nine competency areas that has since shaped training programs, ethical guidelines, and licensing exams alike.</p>
+        <div class="definition-box">
+        <strong>Three Domains of Multicultural Competence (Sue et al., 1992)</strong>
+        <p><strong>1. Awareness:</strong> Understanding of one's own cultural values, biases, and assumptions, and how these may affect the therapeutic relationship. This domain asks clinicians to turn the lens inward — to recognize that they are not culturally neutral beings but products of particular cultural contexts that shape how they perceive clients, formulate diagnoses, and conceptualize "health."<br>
+        <strong>2. Knowledge:</strong> Understanding of the worldviews, cultural practices, and historical experiences of culturally different clients. This goes beyond surface-level familiarity with cultural customs; it includes understanding systemic oppression, immigration experiences, acculturation stress, and the ways that social identity shapes a client's relationship to help-seeking itself.<br>
+        <strong>3. Skills:</strong> The ability to develop and implement culturally appropriate intervention strategies and techniques. Skills represent the "doing" component — translating awareness and knowledge into concrete clinical actions such as adapting assessment tools, modifying therapeutic techniques, or advocating for clients within systems that may be structurally biased against them.</p>
+        </div>
+        <p>What makes Sue's model especially powerful — and especially testable on the EPPP — is the way these three domains interact with three cross-cutting dimensions: (a) <span class="key-term">attitudes and beliefs</span>, (b) <span class="key-term">knowledge</span>, and (c) <span class="key-term">skills</span>, creating a 3 × 3 matrix of nine competency areas. For example, within the Awareness domain, a clinician must examine her attitudes and beliefs about her own cultural heritage, acquire knowledge about how her background influences her clinical work, and develop skills for ongoing self-monitoring. The matrix structure ensures that competence is not treated as a single trait you either have or lack — it is multidimensional, and a clinician can be strong in some cells while needing growth in others.</p>
+        <p>Think of it this way: awareness without knowledge is navel-gazing; knowledge without skills is academic exercise; and skills without awareness risk becoming a culturally tone-deaf application of techniques that may do more harm than good. The framework insists that all three domains develop in concert. A therapist who has deep awareness of her own privilege and extensive knowledge of intergenerational trauma in Indigenous communities but who cannot translate that understanding into a culturally grounded treatment plan remains, by this model's standards, incomplete in her competence.</p>
+        <div class="clinical-note">
+        <strong>Clinical Application</strong>
+        <p>A psychologist who is aware of their own cultural biases (awareness) and understands the historical trauma experienced by Native American communities (knowledge) but lacks skills in culturally adapted interventions is not yet fully competent. All three domains must be developed. Consider a concrete example: a clinician working with a Lakota client experiencing grief after a family loss might recognize that her own Euro-American assumptions about "healthy" grief timelines could be limiting (awareness), understand that communal mourning rituals and spiritual practices hold deep significance in Lakota culture (knowledge), and then actively collaborate with the client and community elders to integrate traditional healing practices alongside evidence-based approaches (skills). Only when all three domains are engaged does the clinician meet the standard Sue and colleagues envisioned. The EPPP tests this framework frequently — expect questions that present a clinician demonstrating strength in one or two domains and ask you to identify the missing competency area.</p>
+        </div>
+        <p>As we turn next to the APA Multicultural Guidelines, you will see how Sue's foundational competency framework was taken up and expanded by the American Psychological Association into a broader set of aspirational principles — moving from individual clinician competence to institutional and systemic considerations. Sue's 3 × 3 matrix provided the scaffolding upon which much of that later work was built.</p>
+        <p class="citation">Sue, D. W., Arredondo, P., &amp; McDavis, R. J. (1992). Multicultural counseling competencies and standards: A call to the profession. Journal of Counseling &amp; Development, 70(4), 477&ndash;486.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>APA Multicultural Guidelines</h2>
+        <p>Having explored Sue's foundational multicultural competencies — the tripartite framework of awareness, knowledge, and skills — we now turn to how the profession's largest governing body translated those aspirations into institutional guidance. If Sue and colleagues issued a "call to the profession," the American Psychological Association answered with a set of formal guidelines designed to embed cultural responsiveness into every corner of psychological work, not just clinical practice but also research, education, training, and organizational policy.</p>
+        <p>Consider a psychologist who has spent years mastering evidence-based treatments for depression. She knows cognitive-behavioral protocols inside and out, can recite the diagnostic criteria effortlessly, and has strong therapeutic outcomes with many clients. Yet when she begins working with a first-generation Hmong American family, she discovers that the family's understanding of emotional suffering is organized around spiritual and somatic frameworks that do not map neatly onto Western diagnostic categories. Her clinical tools are not wrong — they are simply incomplete without a cultural lens. This is precisely the gap the APA's guidelines were designed to address: the recognition that no psychological act — whether assessment, therapy, research design, or policy recommendation — occurs outside of culture.</p>
+        <p>The APA has published <span class="key-term">Multicultural Guidelines</span> that emphasize a deceptively simple but transformative premise: <em>all</em> psychology is embedded in culture. Culture is not a special-topics add-on or a sidebar reserved for "diverse populations." It is the water in which every psychological process swims. Accordingly, the guidelines call on psychologists to weave cultural consideration into all aspects of practice, education, and research. Rather than offering rigid rules, the guidelines articulate aspirational principles — benchmarks that orient the profession toward deeper cultural humility and competence over time. Key principles include:</p>
+        <ul>
+        <li>Psychologists are encouraged to recognize that they themselves are cultural beings with attitudes and beliefs that can influence their practice</li>
+        <li>Psychologists aspire to recognize the importance of multicultural sensitivity, responsiveness, knowledge, and understanding about diverse individuals and communities</li>
+        <li>Psychologists are encouraged to apply culturally appropriate skills in clinical and other applied psychological practices</li>
+        <li>Psychologists strive to use organizational change processes to support culturally informed policy development and practices</li>
+        </ul>
+        <p>Notice the deliberate progression embedded in these principles. The first principle mirrors the "awareness" dimension from Sue's model — before you can work effectively across cultures, you must understand your own cultural positioning, biases, and assumptions. A White, middle-class psychologist who has never interrogated how her cultural background shapes her definitions of "healthy family functioning" or "appropriate emotional expression" may inadvertently pathologize culturally normative behavior. Self-awareness is the necessary starting point because, without it, cultural knowledge and skills rest on an unstable foundation.</p>
+        <p>The second principle broadens the lens outward: once you know yourself as a cultural being, you must actively build knowledge about the communities you serve. This is not about memorizing cultural "facts" — for example, that Latino families tend to be collectivistic — but about developing genuine responsiveness to the lived realities, strengths, histories of oppression, and within-group diversity that characterize any cultural community. A clinician working with Native American clients, for instance, would need to appreciate not just broad cultural values but also the specific tribal context, the intergenerational impact of forced assimilation policies, and the tremendous diversity that exists among the over 570 federally recognized tribes.</p>
+        <p>The third principle addresses the application of culturally appropriate skills — the "how" of culturally responsive practice. In a clinical setting, this might mean adapting assessment tools for linguistic equivalence, incorporating traditional healing practices alongside empirically supported treatments, or simply knowing when to ask about cultural explanations of distress rather than assuming a biomedical framework. For a school psychologist, it might mean recognizing that a bilingual child's code-switching is a cognitive strength, not a sign of language disorder.</p>
+        <p>The fourth principle is especially noteworthy because it extends beyond the individual practitioner to the systems and organizations in which psychologists operate. Even the most culturally competent clinician will struggle to provide equitable care within an organization whose intake forms offer only "Male" and "Female," whose waiting room magazines feature only White families, or whose leadership has never examined disparities in service delivery. This principle calls psychologists to be agents of institutional change — advocating for policies, hiring practices, and organizational cultures that reflect the diversity of the populations served.</p>
+        <p>For the EPPP, remember that the APA Multicultural Guidelines differ from Sue's competencies in scope and institutional weight: they represent the profession's formal aspirational standards, apply broadly across all domains of psychological work (not only counseling), and explicitly frame culture as foundational to — rather than separate from — all psychological endeavors. Together with Sue's competency framework, they form the conceptual backbone for culturally responsive practice that the DSM-5's Cultural Formulation tools, discussed next, translate into structured clinical application.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>DSM-5 Cultural Formulation</h2>
+        <p>Having explored the APA Multicultural Guidelines and their call to embed cultural awareness into every aspect of psychological practice, a natural next question arises: How does a clinician actually do this in the therapy room — especially during that critical first encounter with a new client? Imagine sitting across from a middle-aged woman who has recently immigrated from Cambodia. She describes persistent headaches, dizziness, and a feeling of pressure in her chest. She does not use the word "depression." She does not mention sadness. If you rely solely on standard diagnostic interviewing, you might pursue a medical referral and miss the psychological suffering altogether. The developers of the DSM-5 recognized this gap and created a structured tool specifically designed to bridge the divide between a clinician's diagnostic framework and the client's own cultural understanding of what is wrong.</p>
+        <div class="definition-box">
+        <strong>Cultural Formulation Interview (CFI)</strong>
+        <p>The DSM-5 includes a <span class="key-term">Cultural Formulation Interview</span> — a structured set of 16 questions designed to help clinicians understand the impact of culture on a client's presentation. Rather than imposing Western diagnostic categories from the outset, the CFI invites clients to describe their experience in their own words and within their own cultural framework. It covers four domains: (1) cultural definition of the problem — how the client understands and names what is happening; (2) cultural perceptions of cause, context, and support — what the client believes is causing their distress and who in their life provides help; (3) cultural factors affecting self-coping and past help-seeking — what the client has already tried, including traditional or indigenous healing practices; and (4) cultural factors affecting current help-seeking — what barriers or expectations shape the client's engagement with the clinician right now.</p>
+        </div>
+        <p>What makes the CFI so valuable is that it shifts the power dynamic. Instead of the clinician serving as the sole expert who categorizes symptoms into a diagnostic box, the CFI positions the client as the expert on their own experience. The clinician becomes a curious, respectful learner — and the information that emerges often transforms the entire case conceptualization. Questions are open-ended and nonjudgmental: "What do you think is causing your problem?" "Are there any kinds of support that make your problem better, such as support from family, friends, or others?" These questions communicate genuine interest and can dramatically strengthen the therapeutic alliance, particularly with clients who may be wary of Western mental health systems.</p>
+        <div class="example-box">
+        <strong>Example</strong>
+        <p>A Cambodian refugee presents with somatic complaints (headaches, dizziness) rather than reporting depressed mood. Using the CFI, the clinician learns that the client conceptualizes their suffering as "thinking too much" (a culturally recognized idiom of distress in Cambodian culture) and that they have consulted a traditional healer before seeking Western treatment. This information fundamentally shapes the treatment plan. Rather than dismissing the client's somatic focus or insisting on a mood-disorder framework, the clinician can integrate the client's explanatory model, potentially collaborating with the traditional healer and framing interventions in language that resonates — for instance, describing cognitive-behavioral strategies as ways to "quiet the thinking" rather than as treatments for "depression."</p>
+        </div>
+        <p>Beyond the CFI itself, the DSM-5 took another important step toward cultural competence by including a <span class="key-term">Glossary of Cultural Concepts of Distress</span>. This glossary describes culturally specific syndromes — patterns of suffering that are widely recognized within particular cultural groups but may be unfamiliar to clinicians trained exclusively in Western diagnostic traditions. For example, <em>ataque de nervios</em>, common in Latin American communities, involves intense emotional episodes with features such as uncontrollable crying, trembling, and a sense of losing control — sometimes triggered by a stressful family event. <em>Susto</em>, also found in Latin American cultures, refers to a condition attributed to a frightening event that causes the soul to leave the body, resulting in unhappiness, sickness, and difficulty functioning. <em>Taijin kyofusho</em>, recognized in Japanese culture, involves an intense fear that one's body or bodily functions are offensive to others — a presentation that overlaps with but is distinct from social anxiety disorder. And <em>khyol cap</em>, described in Cambodian communities, involves a fear of "wind attacks" in which khyol (wind) rises in the body and causes dizziness, blurred vision, and other distressing symptoms. Understanding these cultural concepts of distress allows the clinician to recognize that what might initially appear puzzling or atypical through a Western lens may in fact represent a well-understood pattern of suffering within the client's cultural world.</p>
+        <p>For the EPPP, remember that the Cultural Formulation Interview consists of 16 questions organized into four domains, and that it was introduced in the DSM-5 as a tool for systematic cultural assessment. Also be prepared to recognize specific cultural concepts of distress from the glossary and to understand that these syndromes are not exotic curiosities &mdash; they are clinically meaningful presentations that require culturally informed assessment and treatment. This structured approach to culture in diagnosis reflects the broader principle from the APA Multicultural Guidelines: that culture is not an afterthought in clinical work but a central feature of every client's experience.</p>
+      </section>
+
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Sue's multicultural competencies</strong> (1992): Three domains &mdash; Awareness (self-examination of biases), Knowledge (understanding clients' cultural worlds), Skills (culturally adapted interventions). All three must be developed; strength in one does not compensate for weakness in another.</li>
+          <li><strong>APA Multicultural Guidelines</strong>: Aspirational principles, not rigid rules. Key premise: all psychology is embedded in culture. Apply across clinical work, research, education, and organizational policy.</li>
+          <li><strong>DSM-5 Cultural Formulation Interview</strong>: 16 structured questions across four domains &mdash; cultural definition of the problem, cultural perceptions of cause and support, cultural factors in coping and past help-seeking, cultural factors in current help-seeking. Positions the client as expert on their own experience.</li>
+          <li>Know <strong>cultural concepts of distress</strong>: <em>ataque de nervios</em> (Latin American), <em>susto</em> (Latin American), <em>taijin kyofusho</em> (Japanese), <em>khyol cap</em> (Cambodian). These are not exotic curiosities but clinically meaningful presentations.</li>
+          <li>Distinguish Sue's <strong>competency model</strong> (individual clinician skills) from the APA Guidelines (institutional/systemic scope) from the CFI (structured clinical tool).</li>
+        </ul>
+      </section>
+
+
+      <div class="nav-buttons">
+        <a href="acculturation-models.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Between Two Worlds — Berry, Cross, Helms & Racial Identity Development</div>
+          </div>
+        </a>
+        <a href="health-disparities.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Barriers to Treatment — Health Disparities, Microaggressions & Social Justice</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One at a Time — Single-Subject, Qualitative & Program Evaluation | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; color: var(--text-primary); }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .definition-box h4 { margin: 0 0 12px; color: var(--accent); font-size: 1rem; }
+    .definition-box p { margin: 0; color: var(--text-secondary); }
+    .definition-box ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .definition-box li { margin-bottom: 8px; }
+
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .example-box h4 { margin: 0 0 12px; color: #60a5fa; font-size: 1rem; }
+    .example-box p { margin: 0; color: var(--text-secondary); }
+
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .clinical-note h4 { margin: 0 0 12px; color: #4ade80; font-size: 1rem; }
+    .clinical-note p { margin: 0; color: var(--text-secondary); }
+    .clinical-note ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .clinical-note li { margin-bottom: 8px; }
+
+    .citation { border-left: 3px solid var(--accent); padding-left: 16px; margin: 24px 0; font-style: italic; color: var(--text-muted); }
+
+    .exam-focus { background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 28px; margin: 40px 0; }
+    .exam-focus h3 { color: var(--accent); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    .exam-focus ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .exam-focus li { margin-bottom: 10px; }
+
+    .references { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .references h3 { margin-bottom: 20px; }
+    .reference-list { list-style: none; }
+    .reference-list li { margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; padding-left: 32px; text-indent: -32px; }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>One at a Time — Single-Subject, Qualitative & Program Evaluation</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 1</div>
+        <div class="domain-title">Psychometrics & Research Methods</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>The Language of Science — Variables, Scales & Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Associations Form — Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="reinforcement-punishment.html" class="chapter-link"><span class="chapter-number">3</span>Consequences That Shape Behavior — Reinforcement & Punishment</a></li>
+        <li class="chapter-item"><a href="schedules-applications.html" class="chapter-link"><span class="chapter-number">4</span>Schedules, Shaping & Clinical Applications of Operant Principles</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">5</span>Relationships in Data — Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="hypothesis-testing.html" class="chapter-link"><span class="chapter-number">6</span>Testing Ideas — Hypotheses, t-Tests & Statistical Power</a></li>
+        <li class="chapter-item"><a href="anova-nonparametric.html" class="chapter-link"><span class="chapter-number">7</span>ANOVA, Nonparametric Tests & Effect Sizes</a></li>
+        <li class="chapter-item"><a href="experimental-designs.html" class="chapter-link"><span class="chapter-number">8</span>Blueprints for Discovery — Experimental & Quasi-Experimental Designs</a></li>
+        <li class="chapter-item"><a href="qualitative-program-eval.html" class="chapter-link active"><span class="chapter-number">9</span>One at a Time — Single-Subject, Qualitative & Program Evaluation</a></li>
+        <li class="chapter-item"><a href="internal-validity.html" class="chapter-link"><span class="chapter-number">10</span>Threats from Within — Internal Validity</a></li>
+        <li class="chapter-item"><a href="external-validity.html" class="chapter-link"><span class="chapter-number">11</span>Threats from Without — External & Statistical Conclusion Validity</a></li>
+        <li class="chapter-item"><a href="classical-test-theory.html" class="chapter-link"><span class="chapter-number">12</span>Consistency of Measurement — Classical Test Theory & IRT</a></li>
+        <li class="chapter-item"><a href="reliability-practice.html" class="chapter-link"><span class="chapter-number">13</span>Reliability in Practice — Types, SEM & Factors</a></li>
+        <li class="chapter-item"><a href="validity-evidence.html" class="chapter-link"><span class="chapter-number">14</span>Measuring What Matters — Sources of Validity Evidence</a></li>
+        <li class="chapter-item"><a href="construct-validity.html" class="chapter-link"><span class="chapter-number">15</span>Construct Validity, Generalization & Test Fairness</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">16</span>Predicting Outcomes — Criterion-Related Validity</a></li>
+        <li class="chapter-item"><a href="decision-accuracy.html" class="chapter-link"><span class="chapter-number">17</span>Making Decisions — Base Rates, Sensitivity & Utility</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 17</div>
+        <h1>One at a Time — Single-Subject, Qualitative & Program Evaluation</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Qualitative Research Methods</h2>
+        <p>The previous chapter surveyed the full landscape of research designs — from true experiments that establish causation to observational designs that describe naturally occurring patterns. All of those approaches share a common thread: they rely on numerical data and statistical analysis to answer research questions. But some of the most important questions in psychology resist quantification. What does it feel like to live with chronic schizophrenia in a rural community with no mental health services? How do immigrant families make sense of the acculturation process across generations? When the research question asks "how" or "why" rather than "how much," psychologists turn to <span class="key-term">qualitative research</span> — methods that seek to understand phenomena through rich, in-depth description rather than numerical measurement (Creswell & Poth, 2018).</p>
+
+        <h3>Major Qualitative Traditions</h3>
+
+
+        <p>Qualitative research encompasses several distinct methodological traditions, each offering a unique lens for exploring human experience, meaning, and social phenomena. Understanding these traditions is essential for selecting the approach best suited to a given research question.</p>
+        <h4>Grounded Theory (Glaser & Strauss)</h4>
+        <p><span class="key-term">Grounded theory</span> aims to generate theory from data rather than testing pre-existing hypotheses. Researchers collect data (typically through interviews and observations), code it systematically, and develop theoretical concepts that are "grounded" in the data. The process involves open coding (identifying initial categories), axial coding (relating categories), and selective coding (integrating into a coherent theory). Data collection and analysis occur simultaneously, and <span class="key-term">theoretical sampling</span> guides recruitment—new participants are selected to refine emerging theory (Glaser & Strauss, 1967).</p>
+
+        <h4>Phenomenology</h4>
+        <p><span class="key-term">Phenomenology</span> seeks to describe the essence of lived experience as perceived by participants. Researchers conduct in-depth interviews to understand how individuals experience a particular phenomenon (e.g., living with chronic pain, experiencing grief). The analyst identifies themes and structures that capture the core meaning of the experience. The researcher engages in <span class="key-term">bracketing</span> (also called epoché)—setting aside personal preconceptions to focus on participants' subjective experiences.</p>
+
+        <h4>Ethnography</h4>
+        <p><span class="key-term">Ethnography</span> involves prolonged immersion in a cultural group or community to understand its practices, beliefs, and social dynamics from an insider perspective. The researcher engages in <span class="key-term">participant observation</span>—simultaneously participating in and observing the culture. Ethnographic studies produce <span class="key-term">thick description</span> (Geertz, 1973), which captures not just behaviors but their context and meaning.</p>
+
+        <h4>Case Study</h4>
+        <p>The <span class="key-term">case study</span> approach involves in-depth examination of a single case or a small number of cases. A "case" can be an individual, a program, an organization, or an event. Case studies use multiple data sources (interviews, documents, observations) and are valuable for exploring complex phenomena in real-world contexts. They provide rich detail but have limited generalizability.</p>
+
+        <h4>Narrative Analysis</h4>
+        <p><span class="key-term">Narrative analysis</span> examines the stories people tell about their lives and experiences. Researchers analyze how individuals construct meaning through narrative structure, plot, characters, and sequencing. This approach recognizes that people organize their understanding of the world through stories and that narratives reveal identity, culture, and values.</p>
+
+        <h3>Quality and Rigor in Qualitative Research</h3>
+
+
+        <!-- anchor:163 coverage:missing -->
+        <p><span class="key-term">Community-Based Participatory Research (CBPR)</span> is a collaborative research approach that fundamentally shifts the relationship between researchers and the communities they study. Rather than treating community members as passive subjects from whom data are extracted, CBPR positions them as co-investigators who share power and decision-making authority throughout the entire research process. This includes jointly identifying the research question, designing the study methodology, collecting and analyzing data, interpreting findings, and disseminating results. The approach emerged from recognition that traditional research models often failed to address the priorities of marginalized communities and that findings frequently went unused because communities had no ownership of the work.</p>
+        <p>CBPR is guided by several core principles: the community is recognized as possessing unique strengths and knowledge; the research builds on those strengths rather than focusing exclusively on deficits; all partners contribute equitably and share control; knowledge generation and capacity building are bidirectional; findings are translated into action that benefits the community; and the process involves long-term commitment to sustaining partnerships beyond any single project (Israel et al., 1998). Because community members help shape every phase, the research tends to produce more culturally relevant questions, more ecologically valid measures, higher participant trust and recruitment, and greater likelihood that results will be applied in practice.</p>
+        <div class="example-box"><h4>Example</h4><p>A university research team partners with leaders of a rural Native American community to study diabetes prevention. Community elders help define what "wellness" means within their cultural framework, tribal health workers co-develop survey instruments in the community's language, local volunteers assist with data collection, and findings are jointly presented at both academic conferences and tribal council meetings. The resulting intervention reflects community values and is sustained by tribal health infrastructure long after the university partnership ends.</p></div>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>On the EPPP, the hallmark feature that distinguishes CBPR from other research approaches is the equal partnership with community members across all stages of inquiry. This differentiates it from consultation models (where researchers seek community input but retain control) and from empowerment evaluation (which focuses on program stakeholders conducting self-evaluation). CBPR is most closely associated with qualitative and mixed-methods traditions but can employ any methodology the partnership selects.</p></div>
+        <!-- /anchor:163 -->
+
+
+        <!-- anchor:008 coverage:missing -->
+        <div class="definition-box"><h4>Community-Based Participatory Research (CBPR)</h4><p>A collaborative form of action research in which community members are engaged as equal partners throughout every stage of the research process, from identifying the research question and designing the study to collecting data, analyzing results, and disseminating findings.</p></div>
+        <p><span class="key-term">Community-based participatory research (CBPR)</span> represents a fundamental shift from traditional researcher-driven inquiry to a fully collaborative model. Rooted in the broader tradition of <span class="key-term">action research</span>—which seeks not only to study social problems but to actively address them—CBPR recognizes that community members possess essential knowledge about local needs, cultural contexts, and systemic barriers that outside researchers may lack. In CBPR, academic investigators and community partners share decision-making authority and jointly determine research priorities, methods, and how results will be used to promote change.</p>
+        <p>Key principles of CBPR include: (1) the community is recognized as a unit of identity with shared values and norms; (2) the research builds on community strengths and resources rather than focusing exclusively on deficits; (3) knowledge generation and intervention are integrated so that findings translate directly into action; and (4) all partners benefit from the process, with results disseminated back to the community in accessible forms. CBPR is especially well suited for research with historically marginalized populations who may distrust conventional research due to past exploitation. By centering community voice and ownership, CBPR enhances both the cultural relevance of the research and the likelihood that findings will be adopted and sustained.</p>
+        <div class="example-box"><h4>Example</h4><p>A university research team partners with leaders from a rural Indigenous community to study barriers to mental health service utilization. Community elders help frame the research questions in culturally meaningful terms, local health workers assist with data collection using interview protocols co-developed with the research team, and findings are presented at a community forum before publication. The community then uses the results to advocate for culturally adapted telehealth services—demonstrating how CBPR integrates research with direct social action.</p></div>
+        <table>
+        <thead>
+        <tr>
+        <th>Feature</th>
+        <th>Traditional Research</th>
+        <th>CBPR</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Who defines the question</td>
+        <td>Researchers</td>
+        <td>Researchers and community jointly</td>
+        </tr>
+        <tr>
+        <td>Role of community</td>
+        <td>Participants (subjects)</td>
+        <td>Equal partners in all phases</td>
+        </tr>
+        <tr>
+        <td>Primary goal</td>
+        <td>Generalizable knowledge</td>
+        <td>Knowledge generation plus social change</td>
+        </tr>
+        <tr>
+        <td>Dissemination</td>
+        <td>Academic journals</td>
+        <td>Community forums and academic outlets</td>
+        </tr>
+        <tr>
+        <td>Ownership of findings</td>
+        <td>Researchers/institution</td>
+        <td>Shared between researchers and community</td>
+        </tr>
+        </tbody>
+        </table>
+        <!-- /anchor:008 -->
+
+        <div class="definition-box">
+          <h4>Ensuring Trustworthiness</h4>
+          <ul>
+            <li><strong>Coding:</strong> The systematic process of labeling and categorizing segments of data (text, observations) to identify patterns and themes. Coding may be descriptive, interpretive, or theoretical</li>
+            <li><strong>Themes:</strong> Recurring patterns of meaning across participants or data sources that capture important aspects of the phenomenon</li>
+            <li><strong>Saturation:</strong> The point at which no new themes or information emerge from additional data collection. Saturation signals that data collection is sufficient</li>
+            <li><strong>Triangulation:</strong> Using multiple data sources, methods, investigators, or theoretical perspectives to corroborate findings and increase credibility</li>
+            <li><strong>Member checking:</strong> Sharing findings or interpretations with participants to verify accuracy and ensure the researcher's account reflects participants' perspectives</li>
+            <li><strong>Thick description:</strong> Richly detailed accounts that include context, meaning, and intention—allowing readers to judge transferability to other settings</li>
+            <li><strong>Reflexivity:</strong> The researcher's ongoing self-examination of how their own background, assumptions, and position may influence the research process and interpretation</li>
+          </ul>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Qualitative vs. Quantitative: Complementary Approaches</h4>
+          <ul>
+            <li><strong>Quantitative:</strong> Tests hypotheses, measures variables, uses statistics, seeks generalizable findings, large samples</li>
+            <li><strong>Qualitative:</strong> Explores meaning, describes experiences, uses thematic analysis, seeks depth and context, smaller samples</li>
+            <li><strong>Mixed methods:</strong> Combines both approaches in a single study to leverage the strengths of each. Sequential designs use one method to inform the other; concurrent designs collect both types of data simultaneously</li>
+          </ul>
+        </div>
+      </section>
+
+
+      <section class="content-section">
+
+        <!-- anchor:009 coverage:partial -->
+        <p>Triangulation can take several distinct forms, each strengthening the credibility of findings in a different way. <span class="key-term">Between-methods triangulation</span> is a particularly powerful strategy that involves combining qualitative and quantitative data collection within the same investigation. For example, a researcher studying burnout among clinicians might administer a standardized burnout inventory (quantitative) and conduct semi-structured interviews exploring the lived experience of burnout (qualitative). When findings from these different methodological traditions converge, confidence in the results is substantially enhanced because the weaknesses of one approach are offset by the strengths of the other. Other forms of triangulation include <em>data triangulation</em> (collecting data at different times, places, or from different people), <em>investigator triangulation</em> (using multiple researchers to reduce individual bias), and <em>theory triangulation</em> (interpreting data through more than one theoretical lens). Recognizing which type of triangulation is being employed—and distinguishing between-methods triangulation from within-method approaches—is essential for evaluating the rigor of qualitative and mixed-methods studies.</p>
+        <!-- /anchor:009 -->
+
+        <h2>Program Evaluation</h2>
+        <p>Qualitative methods give voice to individual experience — but decision-makers often need a different kind of answer. A state legislature funding a suicide prevention hotline wants to know: Is this program working? Should we expand it, redesign it, or shut it down? These practical, stakeholder-driven questions are the province of <span class="key-term">program evaluation</span>, the systematic collection and analysis of information to make judgments about programs, policies, or interventions. Unlike basic research, which aims to generate new knowledge, program evaluation is applied — it informs concrete decisions about whether to continue, modify, expand, or terminate a program (Rossi et al., 2004). Program evaluation draws on the research design principles covered throughout this domain but prioritizes practical utility and stakeholder needs above theoretical contribution.</p>
+
+        <h3>Formative vs. Summative Evaluation</h3>
+
+        <div class="definition-box">
+          <h4>Two Fundamental Types</h4>
+          <ul>
+            <li><strong>Formative evaluation:</strong> Conducted <em>during</em> program development and implementation. Its purpose is to improve the program while it is still being shaped. Formative evaluation identifies problems in delivery, monitors progress, and provides feedback for mid-course corrections. Think: "forming" the program.</li>
+            <li><strong>Summative evaluation:</strong> Conducted <em>after</em> program completion (or at the end of a cycle). Its purpose is to judge the overall merit, worth, or effectiveness of the program. Summative evaluation determines whether program goals were achieved and informs decisions about continuation or funding. Think: "summing up" the program.</li>
+          </ul>
+        </div>
+
+        <h3>Types of Program Evaluation</h3>
+
+
+        <p>Program evaluation encompasses several distinct approaches, each addressing a different question about a program's design, implementation, and effectiveness. These evaluation types range from assessing whether a program is warranted to determining its broader societal effects.</p>
+        <h4>Needs Assessment</h4>
+        <p>A <span class="key-term">needs assessment</span> is conducted before program design to identify the needs of the target population and determine whether a program is warranted. It answers the question: "What problems exist and what services are needed?" Methods include surveys, interviews, focus groups, and analysis of existing data (e.g., community health statistics).</p>
+
+        <h4>Process Evaluation</h4>
+        <p><span class="key-term">Process evaluation</span> (also called implementation evaluation) monitors whether the program is being delivered as intended. It assesses <span class="key-term">implementation fidelity</span>—the degree to which the program follows its designed protocol. Process evaluation answers: "Is the program being carried out as planned? Are participants being reached? Are services being delivered correctly?"</p>
+
+        <h4>Outcome Evaluation</h4>
+        <p><span class="key-term">Outcome evaluation</span> measures whether program goals and objectives were achieved. It examines the direct, intended effects of the program on participants. For example, did a smoking cessation program lead to reduced smoking rates among participants? Outcome evaluations typically use pre-post designs or comparison groups.</p>
+
+        <h4>Impact Evaluation</h4>
+        <p><span class="key-term">Impact evaluation</span> examines the broader, long-term effects of a program on the community or population beyond the immediate participants. It assesses whether the program produced lasting change and whether effects generalized beyond the target group. Impact evaluations are more comprehensive than outcome evaluations and often examine unintended consequences as well.</p>
+
+        <div class="example-box">
+          <h4>Evaluation Types in Action</h4>
+          <p>A community mental health agency develops a depression prevention program for at-risk adolescents:</p>
+          <p><strong>Needs assessment:</strong> Surveys local schools and clinics to document teen depression rates and identify service gaps</p>
+          <p><strong>Process evaluation:</strong> During the program, monitors session attendance, facilitator adherence to the manual, and participant engagement</p>
+          <p><strong>Outcome evaluation:</strong> Compares pre- and post-program depression scores to determine if symptoms decreased</p>
+          <p><strong>Impact evaluation:</strong> Two years later, examines whether reduced depression translated into improved academic performance, fewer hospitalizations, and lower community-wide teen suicide rates</p>
+        </div>
+
+        <h3>Major Evaluation Models</h3>
+
+
+        <p>Several influential models guide how evaluators design, conduct, and apply program evaluations, each emphasizing different priorities such as stakeholder empowerment, decision-making utility, or contextual responsiveness. Understanding these models clarifies how program evaluation differs from traditional research in its purposes and methods.</p>
+        <h4>Empowerment Evaluation (Fetterman)</h4>
+        <p><span class="key-term">Empowerment evaluation</span>, developed by David Fetterman, is a participatory approach in which program stakeholders (staff, participants, community members) are trained to conduct their own evaluations. The evaluator serves as a facilitator or coach rather than an external judge. The goal is to build the program's internal capacity for self-evaluation and continuous improvement (Fetterman, 2001).</p>
+
+        <h4>CIPP Model (Stufflebeam)</h4>
+        <p>Daniel Stufflebeam's <span class="key-term">CIPP Model</span> is a comprehensive framework with four components:</p>
+        <ul>
+          <li><strong>Context evaluation:</strong> Assesses needs, problems, and opportunities in the program environment to guide planning decisions</li>
+          <li><strong>Input evaluation:</strong> Evaluates resources, strategies, and alternative approaches to guide structuring decisions</li>
+          <li><strong>Process evaluation:</strong> Monitors program implementation to guide implementation decisions</li>
+          <li><strong>Product evaluation:</strong> Measures outcomes and impact to guide recycling (continuation, modification, or termination) decisions</li>
+        </ul>
+
+        <h4>Utilization-Focused Evaluation (Patton)</h4>
+        <p>Michael Quinn Patton's <span class="key-term">utilization-focused evaluation</span> is designed from the outset to be useful to its intended users. Rather than prescribing a specific methodology, this approach begins by identifying the primary intended users and their information needs, then tailors the evaluation design to ensure findings will actually be used for decision-making (Patton, 2008).</p>
+
+        <div class="clinical-note">
+          <h4>Program Evaluation vs. Research</h4>
+          <ul>
+            <li><strong>Purpose:</strong> Research seeks generalizable knowledge; evaluation informs specific program decisions</li>
+            <li><strong>Audience:</strong> Research targets the scientific community; evaluation targets stakeholders and decision-makers</li>
+            <li><strong>Design priority:</strong> Research emphasizes internal validity; evaluation balances rigor with practical constraints</li>
+            <li><strong>IRB review:</strong> Both may require IRB approval, but program evaluation that is purely for quality improvement (not generalizable) may be exempt</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="exam-focus">
+        <h3>EPPP Exam Focus Points</h3>
+        <ul>
+          <li><strong>Random assignment</strong> is what distinguishes true experiments from quasi-experiments—it is the key to establishing causation</li>
+          <li>The <strong>Solomon four-group design</strong> controls for testing effects and pretest sensitization</li>
+          <li><strong>ABAB designs</strong> demonstrate experimental control through withdrawal and reintroduction of treatment</li>
+          <li><strong>Multiple baseline designs</strong> provide experimental control without treatment withdrawal—important when withdrawal is unethical</li>
+          <li>Know the difference between <strong>cross-sectional</strong> (one time point, different groups) and <strong>longitudinal</strong> (multiple time points, same participants) designs</li>
+          <li><strong>Counterbalancing</strong> controls for order effects in within-subjects designs</li>
+          <li><strong>Quasi-experiments</strong> are vulnerable to selection bias and regression to the mean because groups may differ systematically before treatment</li>
+          <li>The <strong>regression discontinuity design</strong> has stronger internal validity than other quasi-experimental designs</li>
+          <li><strong>Stratified random sampling</strong> ensures representation of important subgroups in the sample</li>
+          <li>Factorial designs allow examination of <strong>main effects</strong> and <strong>interaction effects</strong></li>
+          <li><strong>Grounded theory</strong> generates theory from data (Glaser & Strauss); uses open, axial, and selective coding; theoretical sampling</li>
+          <li><strong>Phenomenology</strong> describes the essence of lived experience; uses bracketing to set aside researcher preconceptions</li>
+          <li><strong>Ethnography</strong> involves participant observation in cultural settings; produces thick description</li>
+          <li><strong>Saturation</strong> = no new themes emerge; <strong>triangulation</strong> = multiple sources to corroborate findings; <strong>member checking</strong> = participants verify accuracy</li>
+          <li><strong>Formative evaluation</strong> improves a program during development; <strong>summative evaluation</strong> judges outcomes after completion</li>
+          <li><strong>Needs assessment</strong> identifies target population needs before program design</li>
+          <li><strong>Process evaluation</strong> monitors implementation fidelity; <strong>outcome evaluation</strong> measures goal achievement; <strong>impact evaluation</strong> examines long-term, broader effects</li>
+          <li><strong>Empowerment evaluation (Fetterman):</strong> Stakeholders conduct their own evaluation with facilitator support</li>
+          <li><strong>CIPP Model (Stufflebeam):</strong> Context, Input, Process, Product—a comprehensive evaluation framework</li>
+          <li><strong>Utilization-focused evaluation (Patton):</strong> Designed for intended users; prioritizes practical use of findings</li>
+        </ul>
+      </div>
+
+      <section class="references">
+        <h3>References</h3>
+        <ul class="reference-list">
+          <li>Barlow, D. H., Nock, M. K., & Hersen, M. (2009). <em>Single case experimental designs: Strategies for studying behavior change</em> (3rd ed.). Pearson.</li>
+          <li>Biglan, A., Ary, D., & Wagenaar, A. C. (2000). The value of interrupted time-series experiments for community intervention research. <em>Prevention Science, 1</em>(1), 31-49.</li>
+          <li>Cook, T. D., & Campbell, D. T. (1979). <em>Quasi-experimentation: Design and analysis issues for field settings</em>. Houghton Mifflin.</li>
+          <li>Creswell, J. W., & Poth, C. N. (2018). <em>Qualitative inquiry and research design: Choosing among five approaches</em> (4th ed.). Sage.</li>
+          <li>Fetterman, D. M. (2001). <em>Foundations of empowerment evaluation</em>. Sage.</li>
+          <li>Geertz, C. (1973). <em>The interpretation of cultures</em>. Basic Books.</li>
+          <li>Glaser, B. G., & Strauss, A. L. (1967). <em>The discovery of grounded theory: Strategies for qualitative research</em>. Aldine.</li>
+          <li>Hartmann, D. P., & Hall, R. V. (1976). The changing criterion design. <em>Journal of Applied Behavior Analysis, 9</em>(4), 527-532.</li>
+          <li>Kazdin, A. E. (2017). <em>Research design in clinical psychology</em> (5th ed.). Pearson.</li>
+          <li>Patton, M. Q. (2008). <em>Utilization-focused evaluation</em> (4th ed.). Sage.</li>
+          <li>Rossi, P. H., Lipsey, M. W., & Freeman, H. E. (2004). <em>Evaluation: A systematic approach</em> (7th ed.). Sage.</li>
+          <li>Kline, R. B. (2015). <em>Principles and practice of structural equation modeling</em> (4th ed.). Guilford Press.</li>
+          <li>Schaie, K. W. (1965). A general model for the study of developmental problems. <em>Psychological Bulletin, 64</em>(2), 92-107.</li>
+          <li>Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). <em>Experimental and quasi-experimental designs for generalized causal inference</em>. Houghton Mifflin.</li>
+          <li>Solomon, R. L. (1949). An extension of control group design. <em>Psychological Bulletin, 46</em>(2), 137-150.</li>
+          <li>Trochim, W. M. (1984). <em>Research design for program evaluation: The regression-discontinuity approach</em>. Sage.</li>
+        </ul>
+      </section>
+
+
+
+      <div class="nav-buttons">
+        <a href="experimental-designs.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Blueprints for Discovery — Experimental & Quasi-Experimental Designs</div>
+          </div>
+        </a>
+        <a href="internal-validity.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Threats from Within — Internal Validity</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

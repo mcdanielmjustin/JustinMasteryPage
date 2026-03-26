@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perception & Attention — Gestalt, Depth Cues & Selective Processing | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Perception & Attention — Gestalt, Depth Cues & Selective Processing</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 7</div>
+        <div class="domain-title">Biopsychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link"><span class="chapter-number">1</span>The Cerebral Cortex — Lobes, Lateralization & Higher Functions</a></li>
+        <li class="chapter-item"><a href="subcortical-brainstem.html" class="chapter-link"><span class="chapter-number">2</span>Below the Cortex — Thalamus, Limbic System, Brainstem & Cerebellum</a></li>
+        <li class="chapter-item"><a href="learning-encoding.html" class="chapter-link"><span class="chapter-number">3</span>How We Learn — Encoding Strategies & Levels of Processing</a></li>
+        <li class="chapter-item"><a href="memory-architecture.html" class="chapter-link"><span class="chapter-number">4</span>Memory Architecture — Multi-Store Model, Working Memory & LTM</a></li>
+        <li class="chapter-item"><a href="forgetting-amnesia.html" class="chapter-link"><span class="chapter-number">5</span>How Memory Fails — Forgetting, Interference & Amnesia Syndromes</a></li>
+        <li class="chapter-item"><a href="sleep-dreaming.html" class="chapter-link"><span class="chapter-number">6</span>Sleep Architecture — Stages, Circadian Rhythm, Disorders & Dreams</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">7</span>Neurons, Neurotransmitters & Neural Signaling</a></li>
+        <li class="chapter-item"><a href="emotion-arousal.html" class="chapter-link"><span class="chapter-number">8</span>Emotion, Arousal & the Autonomic Nervous System</a></li>
+        <li class="chapter-item"><a href="sensation-psychophysics.html" class="chapter-link"><span class="chapter-number">9</span>Sensation — Transduction, Thresholds & Psychophysics</a></li>
+        <li class="chapter-item"><a href="perception-attention.html" class="chapter-link active"><span class="chapter-number">10</span>Perception & Attention — Gestalt, Depth Cues & Selective Processing</a></li>
+        <li class="chapter-item"><a href="neurodegenerative.html" class="chapter-link"><span class="chapter-number">11</span>When the Brain Breaks — Parkinson's, Huntington's, Stroke & Injury</a></li>
+        <li class="chapter-item"><a href="endocrine-neuroimaging.html" class="chapter-link"><span class="chapter-number">12</span>Endocrine Conditions, Neuroimaging & Diagnostics</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">13</span>Neurocognitive Disorders — Alzheimer's, Vascular & Frontotemporal</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 10 of 13</div>
+        <h1>Perception & Attention — Gestalt, Depth Cues & Selective Processing</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <div class="content-section">
+        <h2>Gestalt Principles &amp; Perceptual Organization</h2>
+        <p>Having explored how the auditory system transforms sound waves into neural signals — and how complementary theories explain frequency coding across the hearing range — we now turn to a fundamental question about perception itself: How does the brain take raw sensory data and organize it into the meaningful scenes, objects, and patterns we experience every moment? Consider a simple example. You glance at a night sky and immediately see constellations — coherent shapes formed by stars that are, in reality, light-years apart and entirely unrelated. Your brain has imposed structure on scattered points of light, grouping them into patterns that feel as natural as the stars themselves. This remarkable organizational capacity is precisely what a group of early twentieth-century German psychologists sought to explain.</p>
+
+        <p>The <span class="key-term">Gestalt principles</span> describe how the visual system organizes individual elements into coherent wholes. The famous Gestalt motto — "the whole is different from the sum of its parts" — captures a profound insight: perception is not a passive recording of individual stimulus features but an active process of construction. Your brain doesn't simply register dots, lines, and patches of color; it assembles them into objects, scenes, and meaningful relationships according to a set of organizing rules that operate automatically and largely outside conscious awareness. These principles remain foundational in perceptual psychology and appear regularly on the EPPP because they illustrate how even the most basic visual experience depends on neural interpretation rather than raw input.</p>
+
+        <ul>
+        <li><span class="key-term">Proximity</span>: Elements that are close together are perceived as belonging to the same group. For instance, in a waiting room, three chairs placed near each other are perceived as a set, separate from two chairs across the room — even if all five chairs are identical.</li>
+        <li><span class="key-term">Similarity</span>: Elements that share features (color, shape, size) are grouped together. When you look at a parking lot, red cars seem to "pop out" as a category, even though they're scattered among vehicles of other colors.</li>
+        <li><span class="key-term">Closure</span>: Incomplete figures are perceived as complete; the brain fills in gaps. Think of a company logo made of partial circles arranged to suggest a triangle — you see the triangle clearly, even though it isn't actually drawn.</li>
+        <li><span class="key-term">Continuity (good continuation)</span>: Elements arranged along a line or curve are perceived as related. When two winding roads cross, you perceive each road as continuing smoothly through the intersection rather than abruptly turning at a right angle.</li>
+        <li><span class="key-term">Figure-ground</span>: The visual field is automatically organized into a figure (the object of focus) and a ground (the background). The classic Rubin vase illusion — where you alternately perceive two faces or a vase — demonstrates that your brain must choose which region is the figure and which is the ground; it cannot see both simultaneously.</li>
+        <li><span class="key-term">Common fate</span>: Elements moving in the same direction are perceived as a group. A flock of birds wheeling together across the sky is instantly perceived as a unified group, distinct from a lone bird flying in the opposite direction.</li>
+        </ul>
+
+        <p>Clinically, the Gestalt principles help explain why certain brain injuries or neurological conditions disrupt perceptual organization. A patient with simultanagnosia, for example, can perceive individual elements but fails to integrate them into a coherent whole — essentially losing the "Gestalt" that healthy perception provides effortlessly. Understanding these principles also informs therapeutic work: a cluttered, visually chaotic therapy environment may subtly tax a client's organizational processing, while a well-arranged space leverages proximity, similarity, and figure-ground relationships to create a sense of calm and coherence.</p>
+
+        <h3>Depth Perception</h3>
+        <p>Perceiving the world as three-dimensional is so automatic that it's easy to forget how remarkable it is — after all, the retinal image is flat, a two-dimensional projection of a three-dimensional world. How does the brain recover depth from this flat image? The answer lies in a rich set of cues that fall into two broad categories, and the distinction between them is clinically meaningful. Imagine a child who has lost vision in one eye due to retinoblastoma. That child loses access to one category of depth cues entirely but can still judge distance and navigate space using the other. Understanding the difference helps clinicians predict functional impacts and guide rehabilitation.</p>
+
+        <p><span class="key-term">Binocular cues</span> require input from both eyes. The most important is retinal disparity — because your two eyes are separated by roughly six centimeters, each receives a slightly different image of the same scene. The brain computes the difference between these two images, and greater disparity signals a closer object. This is the principle behind 3D movies and stereoscopic viewers. A second binocular cue is convergence: for very near objects, the eyes rotate inward, and the degree of muscular tension in the extraocular muscles provides information about distance. <span class="key-term">Monocular cues</span>, available from a single eye, are equally important and explain why people with monocular vision can still perceive depth effectively. These cues include relative size (farther objects appear smaller), interposition or overlap (a nearer object partially blocks a farther one), linear perspective (parallel lines converge in the distance), texture gradient (surface texture becomes finer and more densely packed with distance), aerial perspective (distant objects appear hazier and more blue due to atmospheric particles), and motion parallax (when you move, nearby objects appear to shift quickly while distant objects shift slowly — the visual experience you have when gazing out a car window).</p>
+
+        <h3>Gate-Control Theory of Pain</h3>
+        <p>Why does rubbing your shin after bumping it into a coffee table actually make the pain feel better? And why can a soldier sustain a serious wound in combat yet report feeling no pain until hours later, while a patient anticipating a minor medical procedure experiences excruciating discomfort? For centuries, pain was understood as a simple, direct relay — tissue damage sends a signal straight up to the brain, and the brain registers pain. But this model couldn't explain these everyday and clinical observations. In 1965, Ronald Melzack and Patrick Wall proposed a revolutionary framework that transformed our understanding of pain.</p>
+
+        <p>Melzack and Wall's <span class="key-term">gate-control theory</span> proposes that pain signals can be modulated at the spinal cord level by a neural "gate" mechanism located in the substantia gelatinosa of the dorsal horn. This gate determines how much pain information gets transmitted upward to the brain. Large-diameter (A-beta) fibers carrying touch and pressure information can close the gate, effectively inhibiting pain transmission. This is exactly why rubbing an injury helps — the tactile stimulation activates A-beta fibers that shut the gate before the pain signal can pass through. In contrast, small-diameter fibers (C fibers and A-delta fibers) open the gate, facilitating the transmission of pain signals to higher brain centers. Critically, descending signals from the brain itself can also close the gate, which explains why psychological factors — attention, expectation, emotional state, and cognitive appraisal — profoundly influence pain perception. A soldier in combat, flooded with adrenaline and focused on survival, may experience gate closure via descending cortical signals, while an anxious patient's heightened vigilance may keep the gate wide open.</p>
+
+        <p>The clinical implications of gate-control theory are enormous. It provides the theoretical foundation for interventions such as transcutaneous electrical nerve stimulation (TENS), which activates large-diameter fibers to close the gate, as well as cognitive-behavioral approaches to pain management that target the descending modulatory pathways. For the EPPP, remember that this theory accounts for both the physical and psychological modulation of pain — it bridges biology and psychology in a way that few other theories do so elegantly.</p>
+
+        <!-- anchor:110 coverage:missing -->
+        <h4>Prosopagnosia and the Role of Top-Down Processing</h4>
+        <p>Imagine meeting a close friend for coffee, sitting down across from them, clearly seeing every detail of their face — the curve of their eyebrows, the color of their eyes, the shape of their smile — and yet having absolutely no idea who they are. This is the lived experience of people with <span class="key-term">prosopagnosia</span>, commonly referred to as face blindness, a condition in which individuals cannot recognize familiar faces despite having otherwise normal visual abilities. People with prosopagnosia can see facial features clearly — they can describe the shape of a nose, the color of eyes, and the contour of a jawline. What they cannot do is integrate these features into a holistic facial identity or match a perceived face to stored representations of known individuals. This dissociation illustrates the distinction between bottom-up and top-down processing in a clinically compelling way.</p>
+        <p>In prosopagnosia, <span class="key-term">bottom-up processing</span> remains largely intact: sensory receptors transduce visual information normally, and basic feature analysis proceeds without impairment. The deficit lies in <span class="key-term">top-down processing</span> — the ability to apply stored knowledge, prior experience, and memory-based templates to interpret the incoming sensory data as a recognized face. The condition is most commonly associated with damage to the <span class="key-term">fusiform face area (FFA)</span> in the inferior temporal cortex, a region specialized for holistic face perception. This area doesn't process faces feature-by-feature the way you might read a parts list; instead, it processes the spatial configuration of features as an integrated whole — which is why turning a photograph upside down dramatically impairs face recognition even in healthy individuals (the so-called inversion effect). Prosopagnosia can be acquired through brain injury or stroke, or it can be developmental (present from birth without detectable lesions), affecting an estimated 2–2.5% of the general population.</p>
+        <p>Individuals with prosopagnosia often develop remarkably creative compensatory strategies, relying on non-facial cues such as voice, gait, hairstyle, or clothing to identify people. One patient described recognizing her husband at a restaurant only by the distinctive way he held his coffee cup. The condition underscores that conscious recognition requires more than accurate sensory encoding — it demands the successful application of stored conceptual knowledge to perceptual input. For clinicians, understanding prosopagnosia is essential because it can be misdiagnosed as a memory disorder, social anxiety, or even autism spectrum disorder, when in fact the underlying problem is perceptual rather than mnemonic or social.</p>
+        <div class="clinical-note"><h4>Clinical Note</h4><p>Prosopagnosia should be distinguished from the broader agnosias. Visual agnosia involves a general failure to recognize objects despite intact vision, whereas prosopagnosia is category-specific to faces. Interestingly, some individuals with prosopagnosia show covert recognition — galvanic skin responses differ when viewing familiar versus unfamiliar faces even though conscious identification fails. This suggests that some face-processing pathways remain functional below the threshold of awareness, further demonstrating the multilayered nature of perceptual processing. On the EPPP, remember this key distinction: prosopagnosia demonstrates that perception can succeed at the sensory level while failing at the recognition level, making it a powerful illustration of the bottom-up versus top-down processing framework.</p></div>
+        <!-- /anchor:110 -->
+
+
+        <div class="clinical-note">
+        <strong>Bottom-Up vs. Top-Down Processing:</strong>
+        <p><span class="key-term">Bottom-up processing</span> (data-driven) begins with sensory input and builds up to perception without influence from prior knowledge — it's the pure registration of what's physically present. <span class="key-term">Top-down processing</span> (concept-driven) uses prior knowledge, expectations, and context to interpret sensory input, shaping what you perceive before the sensory data is even fully analyzed. Most perception involves a dynamic interaction of both. Top-down processing explains why context allows you to read words with missing letters (you can easily read "th_ c_t s_t on th_ m_t"), why ambiguous stimuli are perceived differently depending on expectations (the same sketch looks like a rabbit or a duck depending on what you were told to look for), and why cultural background influences perception. In clinical practice, top-down processing is relevant to understanding phenomena such as placebo effects, hypnotic analgesia, and the way anxious patients may perceive neutral facial expressions as threatening — their expectations literally reshape what they see.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Attention Models &amp; Selective Processing</h2>
+        <p>In the preceding section, we explored how the brain organizes sensory input into coherent perceptions — grouping elements, separating figure from ground, and drawing on both bottom-up data and top-down expectations. But here's a question that cuts even deeper: of all the sensory information flooding your nervous system right now — the hum of an air conditioner, the pressure of your chair against your back, dozens of objects in your peripheral vision — why do you consciously experience only a tiny fraction of it? The answer lies in attention, the cognitive gatekeeper that determines which streams of incoming information reach awareness and receive deeper processing.</p>
+
+        <p>Consider a clinician conducting an intake interview. The client is describing a traumatic experience, and the clinician is focused intently on the narrative — the words, the affect, the body language. Meanwhile, phones ring down the hall, traffic sounds drift through the window, and a colleague walks past the office door. The clinician registers almost none of these competing inputs. How does the brain accomplish this remarkable feat of selective processing? And at what point in the processing stream does it decide what gets through and what gets filtered out? These questions have driven one of the most productive debates in cognitive psychology, and the resulting models appear frequently on the EPPP.</p>
+
+        <p>Attention determines which of the vast amount of incoming sensory information reaches conscious awareness and receives further processing. A central debate in cognitive psychology concerns <em>where</em> in the processing stream selection occurs — early (before the brain extracts meaning) or late (after full semantic analysis). The major models of attention each offer a different answer, and understanding the distinctions among them is essential for both exam success and clinical reasoning.</p>
+
+        <h3>Broadbent's Filter Model (Early Selection)</h3>
+        <p>Imagine you are wearing headphones, and two different messages play simultaneously — one in each ear. Your task is to repeat aloud everything you hear in the right ear while ignoring the left. Afterward, you can recall the right-ear message in detail, but you remember almost nothing from the left ear — not even whether the speaker switched from English to German. This is the classic dichotic listening paradigm, and the striking inability to report unattended content inspired the first formal theory of selective attention.</p>
+
+        <div class="definition-box">
+        <strong>Broadbent's Filter Model (1958):</strong>
+        <p>Donald Broadbent proposed the first formal model of selective attention. In this <span class="key-term">early selection</span> model, all sensory information enters a <strong>sensory buffer</strong> where the brain briefly holds it. A selective filter then permits only one channel of information — selected based on physical characteristics such as location, pitch, or loudness — to pass through to higher-level semantic processing. The filter completely blocks unattended information, which never reaches awareness or meaning extraction. Broadbent's model drew strong support from dichotic listening experiments in which participants could report the content of an attended ear but recalled almost nothing from the unattended ear. Think of the filter as a locked door: only the channel with the right physical "key" gets through; everything else stays outside.</p>
+        </div>
+
+        <p>Broadbent's model offered an elegant explanation for our limited processing capacity, and it dominated attention research for years. However, researchers soon discovered cracks in the filter. Participants in dichotic listening tasks occasionally <em>did</em> notice meaningful information in the unattended ear — particularly their own name. If the filter truly blocked all unattended content before meaning extraction, this should be impossible. Something more nuanced had to be happening.</p>
+
+        <h3>Treisman's Attenuation Model</h3>
+        <p>Picture yourself at a crowded party, deeply engaged in a conversation with a friend. Dozens of other conversations are happening around you, and you process none of them — until someone across the room says your name. Suddenly, your attention snaps toward that voice. How can your brain detect the significance of a stimulus it supposedly wasn't processing? This everyday experience — known as the cocktail party effect — demanded a revision of Broadbent's strict filter.</p>
+
+        <div class="definition-box">
+        <strong>Treisman's Attenuation Model (1964):</strong>
+        <p>Anne Treisman modified Broadbent's model to account for findings that some unattended information <em>does</em> get through. In Treisman's <span class="key-term">attenuation model</span>, the filter does not completely block unattended information but instead <strong>attenuates</strong> (turns down) it — like lowering the volume on a radio rather than switching it off entirely. Most attenuated signals remain too weak to reach conscious detection. However, highly relevant stimuli — such as one's own name, a baby's cry for a new parent, or a fire alarm — have permanently lowered activation thresholds and can break through even when attenuated. This mechanism elegantly explains the <span class="key-term">cocktail party effect</span> — the ability to detect your own name spoken in an unattended conversation at a noisy party, even though you were not consciously monitoring that conversation. The critical distinction from Broadbent's model is this: unattended information is weakened, not eliminated.</p>
+        </div>
+
+        <p>Treisman's model preserved the core architecture of Broadbent's approach — selection still occurs relatively early in processing — but introduced a crucial degree of flexibility. It explains why a sleeping parent can ignore loud traffic noise yet wake instantly when their infant whimpers softly: the biologically significant stimulus has a low enough threshold to penetrate the attenuation. For the EPPP, the key takeaway is that Treisman's model is the best explanation for situations where meaningful but unattended information still reaches awareness.</p>
+
+        <h3>Deutsch-Norman Late Selection Model</h3>
+        <p>Treisman's attenuation model moved the field forward, but some researchers argued that even it didn't go far enough. What if the brain doesn't filter incoming information early at all? What if every sensory channel receives full semantic analysis, and the bottleneck occurs only when you decide what to act on, remember, or report?</p>
+
+        <p>Deutsch and Deutsch (1963), later refined by Norman (1968), proposed a <span class="key-term">late selection model</span> in which <em>all</em> incoming information undergoes full processing for meaning (semantic analysis), and selection occurs only at the response or awareness stage. According to this framework, the bottleneck lies not in perception but in the decision about what to act on or commit to memory. This model explains a puzzling finding: people can show measurable behavioral and physiological responses to the meaning of unattended messages — such as a galvanic skin response to a threatening word played in the unattended ear — without ever becoming consciously aware of those messages. The brain, in effect, "understands" everything but only lets you "know" about a small portion.</p>
+
+        <p>The late selection model initially seemed extravagant — why would the brain invest resources in fully analyzing information it would ultimately discard? Yet research on priming and implicit processing provided mounting evidence that unattended stimuli can influence behavior. The debate between early and late selection persisted for decades, until a more integrative framework emerged.</p>
+
+        <h3>Lavie's Perceptual Load Theory</h3>
+        <p>What if both sides of the early-versus-late debate are correct — but under different conditions? Consider two scenarios: In the first, a radiologist scans a complex, dense mammogram for a tiny calcification (a highly demanding visual task). In the second, a security guard watches a nearly empty hallway on a surveillance monitor (a simple, low-demand task). Would a peripheral distractor — say, an unexpected figure entering the visual field — affect each person the same way? Nilli Lavie argued that it would not, and her answer elegantly reconciled decades of conflicting findings.</p>
+
+        <div class="definition-box">
+        <strong>Lavie's Perceptual Load Theory (1995):</strong>
+        <p>Nilli Lavie proposed an integrative framework that resolves the early-vs.-late selection debate. According to <span class="key-term">perceptual load theory</span>, whether selection occurs early or late depends on the <strong>perceptual load</strong> (processing demands) of the attended task. Under <strong>high perceptual load</strong> (complex, demanding tasks that consume all available processing capacity), selection occurs early — the brain has no spare capacity to process distractors, so it filters them out before they reach semantic analysis. Under <strong>low perceptual load</strong> (simple tasks with spare capacity), the brain automatically processes unattended information because leftover capacity "spills over" to distractors, and selection occurs late. This theory draws support from neuroimaging studies showing reduced neural responses to distractors during high-load tasks — the brain literally responds less to irrelevant stimuli when the primary task is demanding enough.</p>
+        </div>
+
+        <p>Lavie's theory carries practical implications. It helps explain why a student studying in a quiet room (low perceptual load) is easily distracted by background television, while that same student working on a challenging statistics problem (high perceptual load) may not even notice the TV is on. For the EPPP, Lavie's framework is the modern, integrative answer to the question "Does selection occur early or late?" — and the correct answer is "It depends on perceptual load."</p>
+
+        <h3>Posner's Spotlight Model</h3>
+        <p>The models discussed so far address <em>what</em> gets selected and <em>when</em> in the processing stream. Michael Posner (1980) shifted the focus to a different question: <em>where</em> does attention go in physical space, and how does the brain move it around? His answer introduced one of the field's most enduring metaphors.</p>
+
+        <p>Michael Posner (1980) proposed that <span class="key-term">spatial attention</span> operates like a spotlight that can be directed to different regions of the visual field. Just as a spotlight illuminates one part of a dark stage while leaving the rest in shadow, spatial attention enhances processing at one location while reducing it elsewhere. Critically, you can shift this spotlight overtly (by moving your eyes to a new location) or covertly (by redirecting attention without moving your eyes — as when you monitor someone in your peripheral vision while pretending to look straight ahead). Posner identified three component operations of spatial attention: <strong>disengaging</strong> from the current focus, <strong>shifting</strong> to the new location, and <strong>engaging</strong> at the new location. Each operation involves distinct brain regions: the posterior parietal cortex handles disengaging, the superior colliculus directs the shift, and the pulvinar nucleus of the thalamus manages engagement at the new location.</p>
+
+        <p>The clinical significance of Posner's model becomes vivid in patients with right parietal lobe damage. These patients develop <span class="key-term">hemispatial neglect</span>, a dramatic neurological condition in which they fail to attend to stimuli on the left side of space — they may eat food only from the right side of their plate, shave only the right half of their face, or draw a clock with all the numbers crowded onto the right side. Posner's framework explains this as a specific failure of the disengage operation: the damaged parietal cortex cannot release attention from the right (ipsilesional) side of space, leaving the patient unable to shift attention leftward. This is one of the most clinically important examples of attention failure tested on the EPPP.</p>
+
+        <h3>Feature Integration Theory</h3>
+        <p>Now consider a different challenge of attention: not selecting which conversation to listen to or where to look in space, but how the brain assembles individual visual features — colors, shapes, orientations — into the coherent objects we perceive. Look at the room around you. You don't see "floating redness" and "detached squareness" — you see a red book, a blue mug, a round clock. How does the brain bind the right features to the right objects? Anne Treisman returned to the attention literature with a groundbreaking answer.</p>
+
+        <div class="definition-box">
+        <strong>Feature Integration Theory (Treisman &amp; Gelade, 1980):</strong>
+        <p>This influential theory proposes two stages of visual processing. In the <span class="key-term">preattentive stage</span>, basic visual features (color, shape, orientation, size, motion) are processed automatically, in parallel, and without conscious effort across the entire visual field. In the <span class="key-term">focused attention stage</span>, attention is required to bind these individual features together into coherent object representations. Without focused attention, features from different objects can be incorrectly combined, producing <span class="key-term">illusory conjunctions</span> — for example, incorrectly perceiving a red circle and a blue square as a "red square." This theory explains why a unique feature (e.g., a red item among green items) "pops out" effortlessly in visual search, but searching for a conjunction of features (e.g., a red circle among red squares and green circles) requires slow, serial, attention-demanding search.</p>
+        </div>
+
+        <p>Feature Integration Theory provides an elegant demonstration of why attention matters beyond simply filtering channels of information. Attention serves as the "glue" that binds features into unified percepts. Without it, your visual world would dissolve into a soup of unattached colors, shapes, and motions. The theory also generates a memorable test-taking heuristic: if an EPPP question describes a fast, effortless search for a single distinguishing feature, think "pop-out" and parallel preattentive processing; if the search is slow and effortful, requiring scrutiny of individual items, think "conjunction search" and the focused attention stage.</p>
+
+        <h3>Change Blindness &amp; Inattentional Blindness</h3>
+        <p>The models above explain how attention selects, filters, and binds information. But perhaps the most striking lesson from attention research is just how much we <em>miss</em> — even when it's right in front of us. Two phenomena vividly reveal the boundaries of conscious awareness, and both carry important implications for clinical practice and everyday life.</p>
+
+        <ul>
+        <li><span class="key-term">Inattentional blindness</span> (Mack &amp; Rock, 1998; Simons &amp; Chabris, 1999): The failure to perceive a clearly visible stimulus when attention is directed elsewhere. In the famous "invisible gorilla" experiment, approximately 50% of observers failed to notice a person in a gorilla suit walking through a basketball game when they were counting passes. The gorilla was plainly visible for nine seconds, yet half the participants had no idea it was there. This powerfully demonstrates that attention — not merely visual acuity — is necessary for conscious perception. A stimulus can land squarely on your retina and still never reach your awareness if your attentional resources are occupied elsewhere.</li>
+        <li><span class="key-term">Change blindness</span> (Rensink, O'Regan, &amp; Clark, 1997): The failure to detect large changes in a visual scene when the change coincides with a brief visual disruption (e.g., a flicker, a saccade, or a cut in a film). In one striking demonstration, an experimenter behind a counter was briefly hidden by a passing door, and a completely different person stood up in their place — yet many participants continued the conversation without noticing the switch. Change blindness reveals that we do not maintain a detailed, moment-to-moment representation of the entire visual scene — our sense of a rich, complete visual world is, in part, an illusion constructed by the brain.</li>
+        </ul>
+
+        <p>Together, inattentional blindness and change blindness carry real-world consequences. They help explain why eyewitness testimony can be unreliable (a witness focused on a weapon may fail to encode the perpetrator's face), why drivers can "look but fail to see" a motorcyclist at an intersection, and why even trained professionals can miss unexpected findings if they are searching for something specific. For clinicians, these phenomena underscore the importance of structured assessment protocols — relying on unstructured observation alone risks missing critical information that falls outside the current focus of attention.</p>
+
+        <div class="clinical-note">
+        <strong>Clinical Relevance:</strong>
+        <p>Attentional deficits are a core feature of many psychological disorders tested on the EPPP, and the theoretical models discussed in this section provide the conceptual scaffolding for understanding these clinical presentations. ADHD involves impairments in sustained attention and executive control of attention — children with ADHD struggle not because they cannot perceive stimuli, but because they cannot maintain selective focus and inhibit responses to distractors. Hemispatial neglect following right parietal stroke represents a dramatic failure of spatial attention, specifically a breakdown of Posner's disengage operation, leaving patients unable to shift attention to the contralesional side of space. Anxiety disorders involve an attentional bias toward threat-related stimuli — anxious individuals selectively attend to angry faces, threatening words, and ambiguous cues, a phenomenon measurable with the dot-probe task. Depression, similarly, involves attentional bias toward negative self-referential information. Understanding these models equips clinicians to conceptualize attentional dysfunction across diagnostic categories and to appreciate the mechanisms targeted by attention-based interventions such as Attention Bias Modification Training (ABMT).</p>
+        </div>
+
+        <div class="example-box">
+        <strong>EPPP Application:</strong>
+        <p>A question might describe a dichotic listening task where a participant shadows (repeats) a message in one ear but still notices their own name in the unattended ear. The best explanation is Treisman's attenuation model — not Broadbent's filter model, which predicts the name would be completely blocked before any semantic analysis. If the question describes a participant who fails to notice a large, clearly visible stimulus because they were focused on a demanding task, the answer involves inattentional blindness. If the question asks why detection of distractors depends on the difficulty of the primary task, think of Lavie's perceptual load theory. And if the question asks why a simple visual search is fast but a conjunction search is slow, the answer is Feature Integration Theory — the preattentive stage handles single features in parallel, but binding multiple features into a conjunction requires the slower, serial focused attention stage.</p>
+        </div>
+
+        <div class="citation">Broadbent, D. E. (1958). Perception and Communication. London: Pergamon Press.</div>
+        <div class="citation">Treisman, A. M. (1964). Selective attention in man. British Medical Bulletin, 20(1), 12-16.</div>
+        <div class="citation">Treisman, A. M., &amp; Gelade, G. (1980). A feature-integration theory of attention. Cognitive Psychology, 12(1), 97-136.</div>
+        <div class="citation">Lavie, N. (1995). Perceptual load as a necessary condition for selective attention. Journal of Experimental Psychology: Human Perception and Performance, 21(3), 451-468.</div>
+        <div class="citation">Simons, D. J., &amp; Chabris, C. F. (1999). Gorillas in our midst: Sustained inattentional blindness for dynamic events. Perception, 28(9), 1059-1074.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Absolute threshold</strong>: minimum stimulus detected 50% of the time; <strong>JND</strong>: minimum detectable difference (50% of the time)</li>
+          <li><strong>Weber's Law</strong>: JND is a constant proportion of the original stimulus (delta I / I = k)</li>
+          <li><strong>Signal detection theory</strong>: performance depends on sensitivity (d-prime) AND response criterion (beta); know the 2x2 matrix (hit, miss, false alarm, correct rejection)</li>
+          <li><strong>Sensory adaptation</strong>: decreased sensitivity to constant stimuli; pain receptors show minimal adaptation</li>
+          <li><strong>Rods</strong>: periphery, low-light, black-and-white, high sensitivity; <strong>Cones</strong>: fovea, bright light, color, high acuity</li>
+          <li><strong>Trichromatic theory</strong>: three cone types (retinal level); <strong>Opponent-process theory</strong>: antagonistic color channels (post-retinal); both are correct at different levels</li>
+          <li><strong>Feature detectors</strong> (Hubel &amp; Wiesel): simple, complex, and hypercomplex cells in V1 respond to edges, orientation, and movement</li>
+          <li><strong>Place theory</strong>: high-frequency sounds; <strong>Frequency theory</strong>: low-frequency sounds; <strong>Volley principle</strong>: extends frequency theory</li>
+          <li><strong>Gestalt principles</strong>: proximity, similarity, closure, continuity, figure-ground, common fate</li>
+          <li><strong>Gate-control theory</strong> (Melzack &amp; Wall): pain signals modulated at spinal cord; large fibers close the gate (reduce pain), small fibers open it</li>
+          <li><strong>Bottom-up processing</strong> = data-driven (stimulus to perception); <strong>Top-down processing</strong> = concept-driven (expectations guide perception)</li>
+          <li><strong>Broadbent's filter model</strong> (early selection): unattended info blocked before semantic processing; <strong>Treisman's attenuation model</strong>: unattended info turned down, not blocked — explains cocktail party effect</li>
+          <li><strong>Deutsch-Norman late selection</strong>: all info processed semantically, selection at response stage; <strong>Lavie's perceptual load theory</strong>: high load = early selection, low load = late selection</li>
+          <li><strong>Feature Integration Theory</strong> (Treisman &amp; Gelade): preattentive parallel feature detection vs. focused attention for feature binding; illusory conjunctions occur without attention</li>
+          <li><strong>Inattentional blindness</strong>: failure to see visible stimulus when attention is elsewhere (invisible gorilla); <strong>Change blindness</strong>: failure to detect large visual changes during disruption</li>
+          <li><strong>Posner's spotlight model</strong>: spatial attention involves disengage (parietal), shift (superior colliculus), engage (pulvinar); right parietal damage produces hemispatial neglect</li>
+        </ul>
+      </div>
+
+<div class="nav-buttons">
+        <a href="sensation-psychophysics.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Sensation — Transduction, Thresholds & Psychophysics</div>
+          </div>
+        </a>
+        <a href="neurodegenerative.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">When the Brain Breaks — Parkinson's, Huntington's, Stroke & Injury</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>
