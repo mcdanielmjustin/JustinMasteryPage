@@ -2,8 +2,8 @@
 import json, re, sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-JDB_FILE  = r'C:\Users\mcdan\JustinQuestionsDatabase\data\brain\brain_pathology_30.json'
-BRAIN_JS  = r'C:\Users\mcdan\mastery-page\data\brain_data.js'
+JDB_FILE  = r'C:\Users\Admin\JustinQuestionsDatabase-2.0\data\brain\brain_pathology_30.json'
+BRAIN_JS  = r'C:\Users\Admin\JustinMasteryPage\data\brain_data.js'
 
 # IDs that need to be added (BRAIN-131 through BRAIN-207)
 NEW_ID_RANGE = range(131, 208)

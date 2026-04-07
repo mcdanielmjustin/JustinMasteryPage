@@ -327,7 +327,7 @@ loader.setDRACOLoader(dracoLoader);
 
 function loadHiresBrain() {
   return new Promise(function(resolve) {
-    // Draco-compressed hires cortex (655k faces, ~2.6MB) — best quality, smallest download
+    // DRACO-compressed full hires cortex (654k faces, 4.0MB download) — maximum sulci detail
     var cortexPath = 'data/brain_meshes/full_brain_draco.glb?v=' + ASSET_VERSION;
 
     // Pre-load normal map + AO map textures in parallel with GLB
@@ -1352,6 +1352,8 @@ function _restorePermanent() {
     mat.opacity = 1.0;
     mat.depthWrite = true;
     mat.needsUpdate = true;
+    var sel = m.userData.selOutline;
+    if (sel) { sel.visible = false; sel.material.opacity = 0.0; }
     m.visible = true;
     // Respect cerebellum and brainstem toggles
     if (m.userData.regionId === 'cerebellum' && !cerebellumVisible) {
@@ -1958,7 +1960,7 @@ canvas.addEventListener('pointermove', function(e) {
   var id  = hit ? hit.userData.regionId : null;
 
   if (id !== hoveredRegionId) {
-    // Restore previous hover
+      // Restore previous hover
     if (hoveredRegionId && hoveredRegionId !== selectedRegionId) {
       regionMeshes.forEach(function(m) {
         if (m.userData.regionId !== hoveredRegionId) return;

@@ -21,7 +21,7 @@ import anthropic
 # ─── Paths ────────────────────────────────────────────────────────────────────
 
 DATA   = pathlib.Path("data")
-JQD    = pathlib.Path("C:/Users/mcdan/JustinQuestionsDatabase/data/domains")
+JQD    = pathlib.Path("C:/Users/Admin/JustinQuestionsDatabase-2.0/data/domains")
 
 # ─── Domain definitions (copied from main generator) ──────────────────────────
 
@@ -325,7 +325,7 @@ def load_api_key(args_key=None) -> str:
     if os.environ.get("ANTHROPIC_API_KEY"):
         return os.environ["ANTHROPIC_API_KEY"]
     for p in [pathlib.Path(".env"), pathlib.Path.home() / ".env",
-              pathlib.Path("C:/Users/mcdan/JustinQuestionsDatabase/api_key.txt")]:
+              pathlib.Path("C:/Users/Admin/JustinQuestionsDatabase-2.0/api_key.txt")]:
         if p.exists():
             text = p.read_text().strip()
             if text.startswith("sk-"):

@@ -8,7 +8,7 @@ over-specialized content, and claims that contradict anchor points.
 
 import re, sys
 
-BRAIN_DATA_JS = r"C:\Users\mcdan\mastery-page\data\brain_data.js"
+BRAIN_DATA_JS = r"C:\Users\Admin\JustinMasteryPage\data\brain_data.js"
 
 # ── Extract questions from brain_data.js ─────────────────────────────────────
 def extract_questions():

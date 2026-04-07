@@ -1,7 +1,7 @@
 """List all region IDs used in brain_data.js (targets + distractors)."""
 import re
 
-with open('C:/Users/mcdan/mastery-page/data/brain_data.js', encoding='utf-8') as f:
+with open('C:/Users/Admin/JustinMasteryPage/data/brain_data.js', encoding='utf-8') as f:
     content = f.read()
 
 all_regions = set()

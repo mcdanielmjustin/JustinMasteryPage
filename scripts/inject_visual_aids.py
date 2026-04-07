@@ -9,7 +9,7 @@ Run:
   python scripts/inject_visual_aids.py --all
   python scripts/inject_visual_aids.py --domain PMET
   python scripts/inject_visual_aids.py --dry-run --all
-  python scripts/inject_visual_aids.py --target-dir C:/Users/mcdan/PassEPPP-website/content --all
+  python scripts/inject_visual_aids.py --target-dir C:/Users/Admin/PassEPPP-website/content --all
 """
 
 import json, pathlib, argparse, re, sys, shutil

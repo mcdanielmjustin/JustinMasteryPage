@@ -30,8 +30,8 @@ Domain mapping (same logic as retag_questions.py):
 
 import json, os, pathlib
 
-SRC = pathlib.Path(r"C:\Users\mcdan\JustinQuestionsDatabase\data\domains")
-DST = pathlib.Path(r"C:\Users\mcdan\mastery-page\data")
+SRC = pathlib.Path(r"C:\Users\Admin\JustinQuestionsDatabase-2.0\data\domains")
+DST = pathlib.Path(r"C:\Users\Admin\JustinMasteryPage\data")
 DST.mkdir(parents=True, exist_ok=True)
 
 NEW_DOMAIN_NAMES = {

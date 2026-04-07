@@ -2,7 +2,7 @@
 import re, sys, collections
 sys.stdout.reconfigure(encoding='utf-8')
 
-BRAIN_DATA_JS = r"C:\Users\mcdan\mastery-page\data\brain_data.js"
+BRAIN_DATA_JS = r"C:\Users\Admin\JustinMasteryPage\data\brain_data.js"
 with open(BRAIN_DATA_JS, encoding='utf-8') as f:
     content = f.read()
 

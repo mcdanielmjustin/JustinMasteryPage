@@ -4,8 +4,8 @@ Sync updated questions from brain_data.js to the canonical JustinQuestionsDataba
 import re
 import json
 
-BRAIN_DATA_JS = r"C:\Users\mcdan\mastery-page\data\brain_data.js"
-CANONICAL_JSON = r"C:\Users\mcdan\JustinQuestionsDatabase\data\brain\brain_pathology_30.json"
+BRAIN_DATA_JS = r"C:\Users\Admin\JustinMasteryPage\data\brain_data.js"
+CANONICAL_JSON = r"C:\Users\Admin\JustinQuestionsDatabase-2.0\data\brain\brain_pathology_30.json"
 TARGETS = ["BRAIN-108", "BRAIN-114", "BRAIN-122"]
 
 with open(BRAIN_DATA_JS, encoding="utf-8") as f:

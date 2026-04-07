@@ -3,7 +3,7 @@ import json, pathlib, sys
 
 SCRIPTS_DIR = pathlib.Path(__file__).resolve().parent
 DATA_FILE = SCRIPTS_DIR / "data" / "visual_aids_generated.json"
-OUTPUT = pathlib.Path("C:/Users/mcdan/AppData/Local/Temp/va_preview.html")
+OUTPUT = pathlib.Path("C:/Users/Admin/AppData/Local/Temp/va_preview.html")
 
 vas = json.loads(DATA_FILE.read_text(encoding="utf-8"))
 data_json = json.dumps(vas, ensure_ascii=False)

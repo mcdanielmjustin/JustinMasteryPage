@@ -20,12 +20,12 @@ Usage:
 import argparse, json, os, random, re, sys
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-API_KEY_FILE   = r"C:\Users\mcdan\JustinQuestionsDatabase\api_key.txt"
-BRAIN_DATA_JS  = r"C:\Users\mcdan\mastery-page\data\brain_data.js"
-CANON_OUT      = r"C:\Users\mcdan\JustinQuestionsDatabase\data\brain\brain_pathology_30.json"
-DOMAINS_DIR    = r"C:\Users\mcdan\JustinQuestionsDatabase\data\domains"
-ANCHOR_D7      = r"C:\Users\mcdan\Desktop\EPPP_Domain_Design\anchor_points_by_domain\Domain_7_Biopsychology.txt"
-ANCHOR_D3      = r"C:\Users\mcdan\Desktop\EPPP_Domain_Design\anchor_points_by_domain\Domain_3_Clinical_Psychopathology.txt"
+API_KEY_FILE   = r"C:\Users\Admin\JustinQuestionsDatabase-2.0\api_key.txt"
+BRAIN_DATA_JS  = r"C:\Users\Admin\JustinMasteryPage\data\brain_data.js"
+CANON_OUT      = r"C:\Users\Admin\JustinQuestionsDatabase-2.0\data\brain\brain_pathology_30.json"
+DOMAINS_DIR    = r"C:\Users\Admin\JustinQuestionsDatabase-2.0\data\domains"
+ANCHOR_D7      = r"C:\Users\Admin\EPPP-Domain-Design\anchor_points_by_domain\Domain_7_Biopsychology.txt"
+ANCHOR_D3      = r"C:\Users\Admin\EPPP-Domain-Design\anchor_points_by_domain\Domain_3_Clinical_Psychopathology.txt"
 MODEL          = "claude-sonnet-4-6"
 
 # ── Valid brain region keys (must match brain_regions_manifest.json) ──────────

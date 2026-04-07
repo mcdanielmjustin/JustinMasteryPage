@@ -24,7 +24,7 @@ DATA_DIR = SCRIPTS_DIR / "data"
 MAP_FILE = DATA_DIR / "anchor_chapter_map.json"
 OUTPUT_FILE = DATA_DIR / "anchors_classified.json"
 BATCH_STATE_FILE = DATA_DIR / "classify_batch_state.json"
-ASPPB_FILE = pathlib.Path("C:/Users/mcdan/PassEPPP-website/js/asppb-subareas.js")
+ASPPB_FILE = pathlib.Path("C:/Users/Admin/PassEPPP-website/js/asppb-subareas.js")
 
 CLASSIFY_BATCH_SIZE = 25  # anchors per API request
 

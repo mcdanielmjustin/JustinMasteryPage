@@ -14,7 +14,7 @@ import json, pathlib, re, sys
 
 SCRIPTS_DIR = pathlib.Path(__file__).resolve().parent
 DATA_DIR = SCRIPTS_DIR / "data"
-ANCHOR_DIR = pathlib.Path("C:/Users/mcdan/EPPP-Domain-Design/anchor_points_by_domain")
+ANCHOR_DIR = pathlib.Path("C:/Users/Admin/EPPP-Domain-Design/anchor_points_by_domain")
 
 DOMAIN_CODE_MAP = {
     1: "PMET", 2: "LDEV", 3: "CPAT", 4: "PTHE",

@@ -760,6 +760,21 @@
 
       chip.onclick = () => {
         if (answered) return;
+
+        // MODE 'one': auto-place into the single blank cell on click
+        if (MODE === 'one' && blanks.length === 1) {
+          const bKey = `${blanks[0].row},${blanks[0].col}`;
+          if (blanks[0].placedText !== null) {
+            returnChip(blanks[0].placedText, blanks[0].placedOrigIdx);
+            blanks[0].placedText = null;
+            blanks[0].placedOrigIdx = null;
+          }
+          chipEls.forEach(c => c.classList.remove('selected'));
+          selectedChip = null;
+          placeChip(bKey, chip.dataset.text, origIdx != null ? origIdx : null, chip);
+          return;
+        }
+
         if (selectedChip === chip) {
           chip.classList.remove('selected');
           dtMap.forEach(td => td.classList.remove('available'));
@@ -824,12 +839,12 @@
         td.classList.remove('drag-over');
         if (answered) return;
         const text    = e.dataTransfer.getData('text');
-        const rawIdx  = e.dataTransfer.getData('origIdx');
         const chipId  = e.dataTransfer.getData('chipId');
-        const origIdx = rawIdx ? parseInt(rawIdx) : null;
         const chipEl  = chipId
           ? chipEls.find(c => c.dataset.chipId === chipId && c.isConnected)
           : chipEls.find(c => c.dataset.text === text && c.isConnected);
+        // Read origIdx from chip element (reliable) instead of dataTransfer (unreliable for custom types)
+        const origIdx = chipEl && chipEl.dataset.origIdx != null ? parseInt(chipEl.dataset.origIdx) : null;
         // Clear any tap-selected chip state — drag completed the placement
         if (selectedChip) {
           chipEls.forEach(c => c.classList.remove('selected'));
@@ -962,11 +977,18 @@
       let anyWrong = false;
       blanks.forEach(b => {
         const td = dtMap.get(`${b.row},${b.col}`);
-        const isCorrect = b.placedText !== null && (
-          MODE === 'one'
-            ? b.placedOrigIdx === q.correct_option_index
-            : b.placedText.trim().toLowerCase() === b.value.trim().toLowerCase()
-        );
+        let isCorrect = false;
+        if (b.placedText !== null) {
+          if (MODE === 'one') {
+            const placedNorm = b.placedText.trim().toLowerCase();
+            const correctNorm = (q.correct_value || '').trim().toLowerCase();
+            const correctOptNorm = (q.options[q.correct_option_index] || '').trim().toLowerCase();
+            isCorrect = placedNorm === correctNorm || placedNorm === correctOptNorm ||
+                        Number(b.placedOrigIdx) === Number(q.correct_option_index);
+          } else {
+            isCorrect = b.placedText.trim().toLowerCase() === b.value.trim().toLowerCase();
+          }
+        }
         if (isCorrect) {
           td.className = 'drop-target drop-correct';
           td.innerHTML = escHtml(b.value);

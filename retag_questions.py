@@ -93,8 +93,8 @@ def assign_new_domain(old_code, subdomain):
 
 
 # ── Process vignette files ───────────────────────────────────────────────────
-VIGNETTE_DIR = 'C:/Users/mcdan/JustinQuestionsDatabase/data/vignettes/'
-OUT_DIR = 'C:/Users/mcdan/mastery-page/data/'
+VIGNETTE_DIR = 'C:/Users/Admin/JustinQuestionsDatabase-2.0/data/vignettes/'
+OUT_DIR = 'C:/Users/Admin/JustinMasteryPage/data/'
 
 print('=== Processing vignettes ===')
 
@@ -146,7 +146,7 @@ print(f'\n  Total out: {total_out}')
 # ── Process contrast (This or That) questions ────────────────────────────────
 print('\n=== Processing contrast questions ===')
 
-CONTRAST_FILE = 'C:/Users/mcdan/JustinQuestionsDatabase/data/contrast_questions/eppp_contrast_questions.json'
+CONTRAST_FILE = 'C:/Users/Admin/JustinQuestionsDatabase-2.0/data/contrast_questions/eppp_contrast_questions.json'
 with open(CONTRAST_FILE, encoding='utf-8') as f:
     contrast_data = json.load(f)
 

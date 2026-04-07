@@ -33,11 +33,11 @@ HO_SUBCORTICAL = {
 # Possible nilearn cache locations for the HO atlas
 _HO_SEARCH_PATHS = [
     Path.home() / "nilearn_data" / "fsl" / "data" / "atlases" / "HarvardOxford",
-    Path("C:/Users/mcdan/nilearn_data/fsl/data/atlases/HarvardOxford"),
+    Path("C:/Users/Admin/nilearn_data/fsl/data/atlases/HarvardOxford"),
 ]
 _HO_XML_PATHS = [
     Path.home() / "nilearn_data" / "fsl" / "data" / "atlases" / "HarvardOxford-Subcortical.xml",
-    Path("C:/Users/mcdan/nilearn_data/fsl/data/atlases/HarvardOxford-Subcortical.xml"),
+    Path("C:/Users/Admin/nilearn_data/fsl/data/atlases/HarvardOxford-Subcortical.xml"),
 ]
 _AAL_SEARCH_PATHS = [
     Path.home() / "nilearn_data" / "aal_3v2",
