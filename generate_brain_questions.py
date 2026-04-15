@@ -136,7 +136,7 @@ def build_prompt(count, start_num, anchor_points, domain_samples, target_counter
     overused        = [r for r, n in target_counter.items() if n >= 5]
     overused_str    = ", ".join(overused) if overused else "none"
 
-    return f"""You are writing HARD brain-pathology quiz questions for psychology doctoral candidates preparing for the EPPP exam.
+    return f"""You are writing HARD brain-pathology quiz questions for psychology doctoral candidates preparing in clinical practice exam.
 
 Each question presents a clinical scenario and the student must identify the specific brain region most responsible. Questions must be genuinely difficult — EPPP mastery-level, not introductory.
 

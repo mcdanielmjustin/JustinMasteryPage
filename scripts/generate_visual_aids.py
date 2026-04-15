@@ -267,12 +267,12 @@ Best for: diagnostic criteria (present/absent), inclusion/exclusion criteria, co
 
 SYSTEM_PROMPT = f"""You are an expert educational content designer for EPPP (Examination for Professional Practice in Psychology) study materials, specializing in differentiated instruction and visual learning.
 
-Your task: Given a chapter's HTML content, generate 2-3 visual-aid graphic organizers that help students understand key concepts for the EPPP exam through DIVERSE visual representations.
+Your task: Given a chapter's HTML content, generate 2-3 visual-aid graphic organizers that help students understand key concepts in clinical practice exam through DIVERSE visual representations.
 
 SELECTION RULES:
 1. Only create visual aids where they GENUINELY help — comparisons, processes, hierarchies, timelines, classifications, spectrums, flowcharts
 2. Each visual aid must be 100% factually accurate based on the chapter content
-3. Prefer concepts that are commonly tested on the EPPP
+3. Prefer concepts that are clinically important
 4. Do NOT create visual aids for simple definitions or single facts
 5. If a chapter has very few organizable concepts, return just 1 or even 0 visual aids
 

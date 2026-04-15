@@ -101,7 +101,7 @@ def build_peth_tables(start_id: int) -> list:
         1,
         "Fluoxetine (Prozac) is distinguished by its exceptionally long half-life of 4-6 days "
         "(with its active metabolite norfluoxetine lasting even longer). This makes it the only "
-        "SSRI where missed doses rarely cause discontinuation syndrome, a commonly tested fact.",
+        "SSRI where missed doses rarely cause discontinuation syndrome, a important fact.",
         n
     )); n += 1
 
@@ -152,7 +152,7 @@ def build_peth_tables(start_id: int) -> list:
         1,
         "Duloxetine (Cymbalta) is uniquely FDA-approved for both depression and pain conditions "
         "including diabetic neuropathic pain and fibromyalgia. This dual indication for mood "
-        "and pain is a key distinguishing feature tested on the EPPP.",
+        "and pain is a key distinguishing feature important in practice.",
         n
     )); n += 1
 
@@ -202,7 +202,7 @@ def build_peth_tables(start_id: int) -> list:
         "Phenelzine (Nardil) is an irreversible, non-selective MAOI that requires strict "
         "avoidance of tyramine-containing foods (aged cheeses, cured meats, fermented foods) "
         "to prevent potentially fatal hypertensive crisis. This dietary restriction is the "
-        "most commonly tested fact about MAOIs on the EPPP.",
+        "most important fact about MAOIs on the EPPP.",
         n
     )); n += 1
 
@@ -228,7 +228,7 @@ def build_peth_tables(start_id: int) -> list:
         2,
         "Among alcoholic beverages, tap/draft beer and red wine (particularly Chianti) carry "
         "the highest tyramine content and risk with MAOIs. Distilled spirits and most white "
-        "wines have lower tyramine. This specific distinction is frequently tested.",
+        "wines have lower tyramine. This specific distinction is clinically important.",
         n
     )); n += 1
 
@@ -281,7 +281,7 @@ def build_peth_tables(start_id: int) -> list:
         1,
         "Clozapine's major risk is agranulocytosis, a potentially fatal drop in white blood cells "
         "occurring in 1-2% of patients. This necessitates mandatory blood monitoring through "
-        "the REMS (Risk Evaluation and Mitigation Strategy) program — the most commonly tested "
+        "the REMS (Risk Evaluation and Mitigation Strategy) program — the most important "
         "clozapine fact on the EPPP.",
         n
     )); n += 1
@@ -333,7 +333,7 @@ def build_peth_tables(start_id: int) -> list:
         "Lithium has a notoriously narrow therapeutic index (0.6-1.2 mEq/L), requiring regular "
         "serum level monitoring. Key side effects include nephrotoxicity and thyroid dysfunction "
         "(hypothyroidism). Lithium toxicity symptoms and the therapeutic range are among the "
-        "most frequently tested pharmacology topics on the EPPP.",
+        "most important pharmacology topics on the EPPP.",
         n
     )); n += 1
 
@@ -410,7 +410,7 @@ def build_peth_tables(start_id: int) -> list:
         "Akathisia is characterized by subjective inner restlessness and an inability to sit "
         "still, often manifesting as pacing or fidgeting. It is frequently confused with "
         "anxiety or agitation. Unlike other EPS, beta-blockers (propranolol) are a first-line "
-        "treatment, which is a commonly tested clinical pearl.",
+        "treatment, which is a important clinical pearl.",
         n
     )); n += 1
 
@@ -466,7 +466,7 @@ def build_peth_tables(start_id: int) -> list:
         "GABA (gamma-aminobutyric acid) is the primary inhibitory neurotransmitter. Deficits in "
         "GABA are associated with anxiety disorders, increased seizure vulnerability, and insomnia. "
         "Benzodiazepines work by enhancing GABA-A receptor activity, which is why they treat "
-        "anxiety and seizures — a core pharmacology concept for the EPPP.",
+        "anxiety and seizures — a core pharmacology concept in clinical practice.",
         n
     )); n += 1
 
@@ -490,7 +490,7 @@ def build_peth_tables(start_id: int) -> list:
         1,
         "CYP2D6 inhibitors (fluoxetine, paroxetine, bupropion) raise serum levels of substrates "
         "like TCAs and block the conversion of codeine to morphine, reducing codeine's analgesic "
-        "effect. This interaction between SSRIs and TCAs or codeine is commonly tested.",
+        "effect. This interaction between SSRIs and TCAs or codeine is clinically important.",
         n
     )); n += 1
 
@@ -516,7 +516,7 @@ def build_peth_tables(start_id: int) -> list:
         "Serotonin syndrome has a rapid onset, typically within 24 hours of a serotonergic "
         "drug change (starting, increasing, or combining serotonergic agents). This rapid onset "
         "distinguishes it from NMS, which develops over days to weeks. The time course is a "
-        "key differentiating feature tested on the EPPP.",
+        "key differentiating feature important in practice.",
         n
     )); n += 1
 
@@ -594,7 +594,7 @@ def build_peth_tables(start_id: int) -> list:
         1,
         "Lithium levels of 1.5-2.0 mEq/L represent mild toxicity characterized by tremor, "
         "nausea, diarrhea, and blurred vision. Knowing the specific level ranges and their "
-        "associated symptoms is essential for the EPPP. The narrow therapeutic window makes "
+        "associated symptoms is essential in clinical practice. The narrow therapeutic window makes "
         "lithium monitoring a critical clinical skill.",
         n
     )); n += 1
@@ -687,7 +687,7 @@ def build_cpat_tables(start_id: int) -> list:
         "Schizoaffective disorder requires that a major mood episode (depressive or manic) be "
         "present for the majority of the total illness duration. The critical distinguishing "
         "criterion is that psychotic symptoms must also occur for 2+ weeks in the ABSENCE of "
-        "a mood episode. This bidirectional requirement is frequently tested.",
+        "a mood episode. This bidirectional requirement is clinically important.",
         n
     )); n += 1
 
@@ -714,7 +714,7 @@ def build_cpat_tables(start_id: int) -> list:
         "A key DSM-5 distinction is that Bipolar II hypomanic episodes do NOT cause marked "
         "functional impairment (though the depressive episodes may). If the elevated mood "
         "episode causes marked impairment or psychosis, it is reclassified as mania and the "
-        "diagnosis becomes Bipolar I. This boundary is heavily tested on the EPPP.",
+        "diagnosis becomes Bipolar I. This boundary is clinically important.",
         n
     )); n += 1
 
@@ -765,7 +765,7 @@ def build_cpat_tables(start_id: int) -> list:
         1,
         "Cluster B personality disorders are the 'dramatic, emotional, erratic' cluster and "
         "include Antisocial, Borderline, Histrionic, and Narcissistic. This grouping is one of "
-        "the most commonly tested personality disorder facts. Cluster A is 'odd/eccentric' and "
+        "the most important personality disorder facts. Cluster A is 'odd/eccentric' and "
         "Cluster C is 'anxious/fearful.'",
         n
     )); n += 1

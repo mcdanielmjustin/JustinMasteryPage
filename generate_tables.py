@@ -72,7 +72,7 @@ Instructions:
 1. Identify the single MOST TESTABLE cell — choose a cell that is:
    - Factually specific (not vague or generic)
    - Likely to be confused with adjacent values in the same column
-   - Clinically or conceptually important for the EPPP exam
+   - Clinically or conceptually important in clinical practice exam
 2. Generate exactly 3 plausible DISTRACTORS. Distractors must:
    - Come from the same column's other values, OR closely related domain content
    - Be distinct from the correct answer and from each other
