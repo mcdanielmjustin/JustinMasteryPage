@@ -363,7 +363,7 @@ Add the same three-tier texture approach as lateral:
 - The fornix should be a recognizable arch — thin, white-matter colored, anatomically
   positioned curving from hippocampus up and forward to mamillary bodies.
 - Mamillary bodies must be small but clearly labeled and clickable — they are one of the
-  highest-yield structures for the EPPP (Korsakoff syndrome).
+  highest-yield structures in clinical practice (Korsakoff syndrome).
 - All 12 regions must be `<g>` elements with `data-region`, `data-label`, `id`, and
   `class="brain-region"` — identical structure to lateral regions.
 - The backdrop ellipse and warm ambient should be added for the medial SVG too.
@@ -373,7 +373,7 @@ Add the same three-tier texture approach as lateral:
 - Do not add a new `<script>` block. The medial SVG is pure markup — the existing JS
   will handle it once the view-switcher is added in Chunk 1D.
 - Do not simplify the structures. Draw all 12. If a structure seems too small to matter
-  (mamillary bodies, fornix), draw it anyway — it is high-yield EPPP content.
+  (mamillary bodies, fornix), draw it anyway — it is High-Yield content.
 
 ---
 
