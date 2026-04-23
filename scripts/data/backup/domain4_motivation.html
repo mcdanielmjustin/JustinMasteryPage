@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through Motivation | Domain 4 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #22c55e; --accent-dim: rgba(34, 197, 94, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 4</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Through Motivation</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 4</div>
+        <div class="domain-title">How Therapy Works</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="insight.html" class="chapter-link"><span class="chapter-number">1</span>Through the Unconscious</a></li>
+        <li class="chapter-item"><a href="cognition.html" class="chapter-link"><span class="chapter-number">2</span>Through Thoughts</a></li>
+        <li class="chapter-item"><a href="conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Through Conditioning</a></li>
+        <li class="chapter-item"><a href="acceptance.html" class="chapter-link"><span class="chapter-number">4</span>Through Acceptance</a></li>
+        <li class="chapter-item"><a href="relationship.html" class="chapter-link"><span class="chapter-number">5</span>Through the Relationship</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link active"><span class="chapter-number">6</span>Through Motivation</a></li>
+        <li class="chapter-item"><a href="systems.html" class="chapter-link"><span class="chapter-number">7</span>Through the System</a></li>
+        <li class="chapter-item"><a href="evidence.html" class="chapter-link"><span class="chapter-number">8</span>Through Evidence</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 6 of 8</div>
+        <h1>Through Motivation</h1>
+        <div class="chapter-meta">
+          <span>Brief, solution-focused &amp; time-limited models</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 4)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 4)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Solution-Focused Brief Therapy (SFBT)</h2>
+        <p>Developed by <span class="key-term">Steve de Shazer</span> and <span class="key-term">Insoo Kim Berg</span> at the Brief Family Therapy Center in Milwaukee, Solution-Focused Brief Therapy represents a radical departure from traditional problem-focused approaches. Rather than exploring the origins or maintenance of problems, SFBT directs attention toward constructing solutions by identifying what clients already do well and amplifying those successes.</p>
+
+        <div class="definition-box">
+          <h4>Core Philosophy</h4>
+          <p>SFBT operates on several key assumptions: (1) if it isn't broken, don't fix it; (2) if something works, do more of it; (3) if something doesn't work, do something different; (4) small steps can lead to large changes; and (5) the solution is not necessarily related to the problem.</p>
+        </div>
+
+        <h3>The Miracle Question</h3>
+        <p>The <span class="key-term">miracle question</span> is the hallmark technique of SFBT. The therapist asks: "Suppose tonight, while you are sleeping, a miracle happens and the problem that brought you here is solved. When you wake up tomorrow morning, what will be different that will tell you a miracle has happened?" This question serves multiple functions:</p>
+        <ul>
+          <li>Bypasses the client's sense of hopelessness by creating a vivid vision of a preferred future</li>
+          <li>Identifies concrete, behavioral goals for therapy in the client's own language</li>
+          <li>Shifts focus from problem-saturated narratives to solution-oriented thinking</li>
+          <li>Reveals what the client truly values and wants, rather than simply what they want to eliminate</li>
+        </ul>
+
+        <h3>Scaling Questions</h3>
+        <p><span class="key-term">Scaling questions</span> ask clients to rate their current experience on a scale of 1 to 10. For example: "On a scale of 1 to 10, where 10 means you are handling your anxiety as well as you ever could, where would you say you are today?" Follow-up questions explore what has helped the client reach their current number and what a one-point improvement would look like.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example</h4>
+          <p>Therapist: "You said you're at a 4 today. What are you doing that has you at a 4 rather than a 1?"</p>
+          <p>Client: "Well, I have been going on walks and calling my sister more."</p>
+          <p>Therapist: "That's impressive. What would be different at a 5?"</p>
+          <p>This questioning identifies existing strengths and generates incremental, achievable goals.</p>
+        </div>
+
+        <h3>Exception Questions and Coping Questions</h3>
+        <p><span class="key-term">Exception questions</span> explore times when the problem could have occurred but did not: "Tell me about a time recently when you expected the panic to happen but it didn't." These questions highlight client competencies and suggest that solutions are already partially in place.</p>
+        <p><span class="key-term">Coping questions</span> are used when clients feel overwhelmed and cannot identify exceptions: "Given how difficult things have been, how have you managed to keep going?" This validates the client's struggle while simultaneously identifying resilience.</p>
+
+        <h3>SFBT Session Structure</h3>
+        <p>A typical SFBT session includes: (1) establishing what the client wants from the session, (2) exploring exceptions and competencies, (3) using the miracle question or scaling, (4) a consultation break where the therapist reflects, and (5) delivering feedback that includes compliments and a therapeutic task. Sessions are typically limited to 5-8 meetings.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Motivational Interviewing (MI)</h2>
+        <p><span class="key-term">Motivational Interviewing</span> was developed by <span class="key-term">William R. Miller</span> and <span class="key-term">Stephen Rollnick</span> as a directive, client-centered counseling style for eliciting behavior change by helping clients explore and resolve <span class="key-term">ambivalence</span>. MI was originally developed for substance use treatment but has since been applied to a wide range of health behaviors.</p>
+
+        <div class="definition-box">
+          <h4>The Spirit of MI</h4>
+          <p>MI is characterized by four interrelated elements: (1) <strong>Partnership</strong> -- MI is done "with" and "for" the client, not "to" or "on" the client; (2) <strong>Acceptance</strong> -- including absolute worth, autonomy support, accurate empathy, and affirmation; (3) <strong>Compassion</strong> -- actively promoting the client's welfare; and (4) <strong>Evocation</strong> -- drawing out the client's own motivations and resources rather than installing them.</p>
+        </div>
+
+        <h3>OARS: Core Skills of MI</h3>
+        <p>The fundamental micro-skills of MI are captured by the acronym <span class="key-term">OARS</span>:</p>
+        <table>
+          <tr><th>Skill</th><th>Description</th><th>Example</th></tr>
+          <tr><td><strong>Open-ended Questions</strong></td><td>Questions that cannot be answered with a simple yes/no</td><td>"What concerns do you have about your drinking?"</td></tr>
+          <tr><td><strong>Affirmations</strong></td><td>Statements recognizing client strengths and efforts</td><td>"It took a lot of courage to come here today."</td></tr>
+          <tr><td><strong>Reflections</strong></td><td>Statements that mirror or rephrase client speech; simple or complex</td><td>"So you're feeling torn between wanting to quit and worrying about losing your social circle."</td></tr>
+          <tr><td><strong>Summaries</strong></td><td>Collecting and linking several client statements together</td><td>"Let me make sure I'm following -- you've mentioned health worries, your wife's concerns, and the expense..."</td></tr>
+        </table>
+
+        <h3>Change Talk and Sustain Talk</h3>
+        <p><span class="key-term">Change talk</span> is any client speech that favors movement toward a target behavior change. It is organized by the mnemonic <span class="key-term">DARN-CAT</span>:</p>
+        <ul>
+          <li><strong>Desire</strong> -- "I want to..." / <strong>Ability</strong> -- "I could..." / <strong>Reasons</strong> -- "Because..." / <strong>Need</strong> -- "I have to..." (Preparatory)</li>
+          <li><strong>Commitment</strong> -- "I will..." / <strong>Activation</strong> -- "I'm ready to..." / <strong>Taking steps</strong> -- "I actually did..." (Mobilizing)</li>
+        </ul>
+        <p><span class="key-term">Sustain talk</span> is client speech favoring the status quo. The MI therapist does not argue against sustain talk but responds with reflections and explores the ambivalence.</p>
+
+        <h3>The Transtheoretical Model (Stages of Change)</h3>
+        <p>MI is closely associated with <span class="key-term">Prochaska and DiClemente's</span> Transtheoretical Model, which proposes that behavior change unfolds through stages:</p>
+        <ol>
+          <li><strong>Precontemplation</strong> -- Not yet considering change; unaware or in denial of the problem</li>
+          <li><strong>Contemplation</strong> -- Aware of the problem but ambivalent; weighing pros and cons</li>
+          <li><strong>Preparation</strong> -- Intending to take action soon; making small preliminary steps</li>
+          <li><strong>Action</strong> -- Actively modifying behavior; requires considerable commitment of time and energy</li>
+          <li><strong>Maintenance</strong> -- Sustaining the change over time; working to prevent relapse</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>EPPP Clinical Application</h4>
+          <p>A key principle of MI is to avoid the <span class="key-term">righting reflex</span> -- the therapist's natural tendency to try to fix the client's problem or persuade them to change. When clinicians argue for change, clients are pushed toward arguing against it (sustain talk). MI posits that the client, not the therapist, should be the one voicing the arguments for change. Rolling with resistance, rather than confronting it, is a core MI strategy.</p>
+        </div>
+
+        <div class="citation">Prochaska, J. O., &amp; DiClemente, C. C. (1983). Stages and processes of self-change of smoking: Toward an integrative model of change. <em>Journal of Consulting and Clinical Psychology, 51</em>(3), 390-395.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Interpersonal Therapy (IPT)</h2>
+        <p><span class="key-term">Interpersonal Therapy</span> was developed by <span class="key-term">Gerald Klerman</span> and <span class="key-term">Myrna Weissman</span> in the 1970s, originally as a time-limited treatment for major depression. IPT focuses on resolving interpersonal problems and improving interpersonal functioning, based on the premise that psychiatric symptoms arise in an interpersonal context and that improving relationships will alleviate symptoms.</p>
+
+        <h3>Four Interpersonal Problem Areas</h3>
+        <p>IPT organizes treatment around one or two of four defined <span class="key-term">problem areas</span>:</p>
+        <table>
+          <tr><th>Problem Area</th><th>Description</th><th>Therapeutic Focus</th></tr>
+          <tr><td><strong>Grief</strong></td><td>Complicated bereavement following the death of a significant other</td><td>Facilitate mourning process, help establish new relationships and interests</td></tr>
+          <tr><td><strong>Role Disputes</strong></td><td>Conflicts with a significant other due to differing expectations</td><td>Identify the dispute, determine the stage (renegotiation, impasse, dissolution), plan strategies</td></tr>
+          <tr><td><strong>Role Transitions</strong></td><td>Difficulty coping with life changes (e.g., divorce, retirement, diagnosis)</td><td>Mourn the loss of the old role, develop a positive view of the new role, build mastery</td></tr>
+          <tr><td><strong>Interpersonal Deficits</strong></td><td>Impoverished social networks, chronic loneliness, or poor social skills</td><td>Reduce social isolation, enhance social skills, form new relationships</td></tr>
+        </table>
+
+        <h3>Phases of IPT</h3>
+        <p>IPT is typically conducted in 12-16 weekly sessions organized into three phases:</p>
+        <ol>
+          <li><strong>Initial Phase (Sessions 1-3):</strong> Assess symptoms, conduct an <span class="key-term">interpersonal inventory</span> (review of significant relationships), identify the primary problem area, assign the "sick role" (legitimizing the patient's need for help), and establish the treatment contract</li>
+          <li><strong>Middle Phase (Sessions 4-12):</strong> Work on the identified problem area using specific strategies; therapist uses techniques such as communication analysis, role playing, and exploring parallels between relationships</li>
+          <li><strong>Termination Phase (Sessions 13-16):</strong> Consolidate gains, anticipate future difficulties, establish the patient's sense of competence, and address feelings about ending therapy</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>Evidence Base for IPT</h4>
+          <p>IPT is one of the most well-researched psychotherapies. It has demonstrated efficacy for major depression (comparable to CBT and medication), bulimia nervosa, and is recommended in treatment guidelines by the American Psychiatric Association. The NIMH Treatment of Depression Collaborative Research Program found IPT and CBT were both effective for mild to moderate depression, with IPT showing particular advantages for patients with severe interpersonal difficulties.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Additional Brief Therapy Concepts</h2>
+        <h3>MI Processes: The Four-Process Model</h3>
+        <p>Miller and Rollnick (2013) organized MI into four overlapping processes that guide the flow of a session:</p>
+        <ol>
+          <li><strong>Engaging</strong> -- Establishing a working relationship and mutual trust; the foundation for everything that follows</li>
+          <li><strong>Focusing</strong> -- Developing and maintaining a specific direction for the conversation about change</li>
+          <li><strong>Evoking</strong> -- Eliciting the client's own motivations for change (change talk); the heart of MI</li>
+          <li><strong>Planning</strong> -- Developing commitment to change and formulating a specific plan of action when the client is ready</li>
+        </ol>
+
+        <h3>SFBT: Compliments and First-Session Tasks</h3>
+        <p>At the end of each SFBT session, the therapist delivers carefully constructed <span class="key-term">compliments</span> that validate the client's existing strengths and coping strategies. Following compliments, the therapist may assign a <span class="key-term">first-session task</span> -- most famously the <span class="key-term">formula first-session task</span>: "Between now and next time we meet, I'd like you to observe what happens in your life that you want to continue to have happen." This observation task shifts attention from problems to strengths.</p>
+
+        <h3>IPT and the Medical Model</h3>
+        <p>IPT is unique among psychotherapies in its deliberate use of a <span class="key-term">medical model</span>. Depression is conceptualized as a medical illness, and the therapist explicitly assigns the patient to a <span class="key-term">sick role</span> during the initial phase. This serves to: (1) reduce guilt and self-blame; (2) legitimize the need for help; and (3) provide temporary relief from overwhelming role expectations. However, the sick role is time-limited -- a key therapeutic goal is helping the patient gradually resume normal role functioning.</p>
+
+        <div class="clinical-note">
+          <h4>Decisional Balance in MI</h4>
+          <p>The <span class="key-term">decisional balance</span> exercise is a technique in which the client explores four quadrants: (1) benefits of the status quo, (2) costs of the status quo, (3) benefits of change, and (4) costs of change. This structured exploration of ambivalence helps the client articulate their own reasons for change without the therapist arguing for it. The decisional balance is particularly useful in the contemplation stage, where the person is actively weighing pros and cons.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Comparing Brief Therapy Approaches</h2>
+        <table>
+          <tr><th>Feature</th><th>SFBT</th><th>MI</th><th>IPT</th></tr>
+          <tr><td>Developer(s)</td><td>de Shazer & Berg</td><td>Miller & Rollnick</td><td>Klerman & Weissman</td></tr>
+          <tr><td>Core Focus</td><td>Solutions and exceptions</td><td>Ambivalence and motivation</td><td>Interpersonal relationships</td></tr>
+          <tr><td>Typical Duration</td><td>5-8 sessions</td><td>1-4 sessions (often adjunctive)</td><td>12-16 sessions</td></tr>
+          <tr><td>Key Technique</td><td>Miracle question</td><td>OARS, eliciting change talk</td><td>Interpersonal inventory</td></tr>
+          <tr><td>Stance</td><td>Curious, complimentary</td><td>Empathic, evocative</td><td>Active, supportive</td></tr>
+          <tr><td>Primary Indications</td><td>Broad -- couples, families, schools</td><td>Substance use, health behaviors</td><td>Depression, bulimia</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Brief Therapy: Common Principles</h2>
+        <p>Despite their different theoretical backgrounds, brief therapies share several principles that distinguish them from longer-term approaches:</p>
+        <ul>
+          <li><strong>Time limitation</strong> -- A defined number of sessions creates urgency and focuses the work; the time limit itself is considered therapeutic</li>
+          <li><strong>Focus</strong> -- A specific, circumscribed problem or theme is identified early and maintained throughout treatment</li>
+          <li><strong>Therapist activity</strong> -- Brief therapy clinicians are generally more active and directive than in long-term approaches</li>
+          <li><strong>Rapid alliance formation</strong> -- The therapeutic relationship must be established quickly, as there is limited time</li>
+          <li><strong>Goal orientation</strong> -- Clear, measurable goals are established collaboratively in early sessions</li>
+          <li><strong>Emphasis on client strengths</strong> -- Identifying and building on existing resources rather than exploring pathology in depth</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Who Is Suitable for Brief Therapy?</h4>
+          <p>Brief therapy tends to be most appropriate for clients who present with: (1) a circumscribed, clearly defined problem; (2) at least one prior experience of a meaningful relationship (suggesting capacity for alliance); (3) adequate ego strength; (4) motivation for change; and (5) the ability to engage quickly with the therapist. Clients with chronic personality disorders, severe trauma histories, or active psychosis may require longer-term treatment, though brief interventions can be useful as part of a stepped-care model.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Commonly Tested Concepts</h2>
+        <ul>
+          <li>The <span class="key-term">miracle question</span> is strongly associated with SFBT and de Shazer/Berg -- know this pairing</li>
+          <li>MI's <span class="key-term">OARS</span> (Open questions, Affirmations, Reflections, Summaries) and the concept of the <span class="key-term">righting reflex</span> are frequently tested</li>
+          <li>Know the five stages of change: <span class="key-term">Precontemplation, Contemplation, Preparation, Action, Maintenance</span></li>
+          <li>IPT focuses on four problem areas: <span class="key-term">grief, role disputes, role transitions, interpersonal deficits</span></li>
+          <li>Distinguish SFBT's <span class="key-term">exception questions</span> (exploring when the problem is absent) from MI's <span class="key-term">change talk</span> (evoking the client's own arguments for change)</li>
+          <li><span class="key-term">Scaling questions</span> are used in SFBT to quantify progress and identify next steps</li>
+          <li>IPT assigns the <span class="key-term">sick role</span> in the initial phase to legitimize the patient's need for treatment and reduce self-blame</li>
+          <li>MI was originally developed for <span class="key-term">substance use disorders</span> but is now applied broadly</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">de Shazer, S. (1985). <em>Keys to solution in brief therapy.</em> W.W. Norton.</div>
+        <div class="citation">Miller, W. R., &amp; Rollnick, S. (2013). <em>Motivational interviewing: Helping people change</em> (3rd ed.). Guilford Press.</div>
+        <div class="citation">Klerman, G. L., Weissman, M. M., Rounsaville, B. J., &amp; Chevron, E. S. (1984). <em>Interpersonal psychotherapy of depression.</em> Basic Books.</div>
+        <div class="citation">Prochaska, J. O., &amp; Norcross, J. C. (2018). <em>Systems of psychotherapy: A transtheoretical analysis</em> (9th ed.). Oxford University Press.</div>
+        <div class="citation">Weissman, M. M., Markowitz, J. C., &amp; Klerman, G. L. (2000). <em>Comprehensive guide to interpersonal psychotherapy.</em> Basic Books.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="relationship.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Through the Relationship</div>
+          </div>
+        </a>
+        <a href="systems.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Through the System</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinical Supervision & Professional Standards – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><span class="logo-text">MasteryPage</span></a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Supervision &amp; Professional Standards</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header"><div class="sidebar-title">Domain 8</div><div class="domain-title">Clinical Assessment &amp; Interpretation</div></div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link active"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 12</div>
+        <h1>Clinical Supervision &amp; Professional Standards</h1>
+        <div class="chapter-meta"><span>Domain 8: Clinical Assessment &amp; Interpretation</span><span>~24 min read</span></div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a>
+      </div>
+
+      <!-- Section 1: Developmental Models -->
+      <div class="content-section">
+        <h2>Models of Clinical Supervision</h2>
+
+        <p>Supervision models can be categorized into three broad types: <span class="key-term">developmental models</span> (which describe supervisee growth through predictable stages), <span class="key-term">process models</span> (which describe the supervisor's roles and focus areas), and <span class="key-term">psychotherapy-based models</span> (which apply a specific therapeutic theory to the supervisory process, e.g., psychodynamic supervision, person-centered supervision, CBT supervision). The EPPP emphasizes developmental and process models.</p>
+
+        <h3>Stoltenberg's Integrated Developmental Model (IDM)</h3>
+        <p>The <span class="key-term">IDM</span> (Stoltenberg & Delworth, 1987; Stoltenberg, McNeill, & Delworth, 1998) is the most widely known developmental model of supervision. It proposes that supervisees progress through predictable developmental levels across eight specific domains of clinical practice (intervention skills competence, assessment techniques, interpersonal assessment, client conceptualization, individual differences, theoretical orientation, treatment plans and goals, and professional ethics). Each level is characterized by distinct patterns of motivation, autonomy, and self-and-other awareness:</p>
+
+        <table>
+          <tr><th>Level</th><th>Motivation</th><th>Autonomy</th><th>Self-/Other-Awareness</th><th>Optimal Supervision</th></tr>
+          <tr><td><strong>Level 1</strong></td><td>High (anxious enthusiasm)</td><td>Low (dependent on supervisor)</td><td>Self-focused, limited awareness</td><td>Structured, directive, supportive; skill-building focus</td></tr>
+          <tr><td><strong>Level 2</strong></td><td>Fluctuating (confusion, frustration)</td><td>Vacillating (dependency-autonomy conflict)</td><td>Oscillating focus between self and client</td><td>Less structure, more autonomy; process exploration</td></tr>
+          <tr><td><strong>Level 3</strong></td><td>Stable, realistic</td><td>Conditional dependency (consults when needed)</td><td>Balanced, empathic, self-aware</td><td>Collegial, consultative; minimal structure</td></tr>
+          <tr><td><strong>Level 3i</strong></td><td>Integrated</td><td>Master practitioner</td><td>Integrated personal and professional identity</td><td>Peer consultation; self-supervision</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Key Insight for EPPP:</strong>
+          <p>The IDM predicts that <span class="key-term">Level 2</span> supervisees experience the most difficulty — they have enough experience to recognize the complexity of clinical work but not yet enough competence to manage it confidently. This level is characterized by a "trial-and-tribulation" phase with fluctuating motivation and the emergence of a dependency-autonomy conflict. Supervisors must resist the urge to become overly directive and instead support the supervisee through this transitional period.</p>
+        </div>
+
+        <h3>Discrimination Model (Bernard)</h3>
+        <p>The <span class="key-term">Discrimination Model</span> (Bernard, 1979) identifies three supervisor roles and three focus areas, creating a flexible 3 x 3 matrix:</p>
+        <ul>
+          <li><strong>Supervisor Roles:</strong> <span class="key-term">Teacher</span> (instructing, providing information), <span class="key-term">Counselor</span> (exploring supervisee's personal reactions and blind spots), <span class="key-term">Consultant</span> (encouraging supervisee's own problem-solving and professional judgment)</li>
+          <li><strong>Focus Areas:</strong> <span class="key-term">Intervention skills</span> (what the supervisee does in session), <span class="key-term">Conceptualization skills</span> (how the supervisee understands the client), <span class="key-term">Personalization skills</span> (how the supervisee's personal characteristics affect clinical work)</li>
+        </ul>
+        <p>The supervisor selects the appropriate role and focus based on the supervisee's needs in each moment. For example, a supervisor might take the teacher role to address intervention skills but shift to the counselor role when exploring personalization issues. The model emphasizes flexibility — the supervisor should avoid becoming "stuck" in any one role and should be responsive to the supervisee's shifting needs within and across sessions.</p>
+
+        <table>
+          <tr><th></th><th>Teacher</th><th>Counselor</th><th>Consultant</th></tr>
+          <tr><td><strong>Intervention</strong></td><td>Instruct on techniques</td><td>Explore personal reactions to techniques</td><td>Brainstorm approach options</td></tr>
+          <tr><td><strong>Conceptualization</strong></td><td>Teach case formulation models</td><td>Explore blind spots in understanding</td><td>Encourage independent formulation</td></tr>
+          <tr><td><strong>Personalization</strong></td><td>Normalize personal reactions</td><td>Process countertransference</td><td>Encourage self-reflection</td></tr>
+        </table>
+
+        <h3>Loganbill, Hardy, and Delworth's Model</h3>
+        <p>An earlier developmental model that proposed three stages: <span class="key-term">stagnation</span> (naivety, rigidity, or unawareness), <span class="key-term">confusion</span> (instability, conflict, disorganization as old patterns break down), and <span class="key-term">integration</span> (flexible, integrated, realistic understanding). This model applies to eight professional issues including competence, emotional awareness, autonomy, identity, respect for individual differences, purpose and direction, personal motivation, and professional ethics.</p>
+
+        <h3>Competency-Based Supervision</h3>
+        <p><span class="key-term">Competency-based supervision</span> represents a paradigm shift from process-oriented supervision to outcome-oriented supervision. It is grounded in the identification of specific, measurable competency benchmarks that supervisees must achieve at each training level. The <span class="key-term">APA Competency Benchmarks</span> framework identifies foundational competencies (professionalism, reflective practice, scientific knowledge, relationships, diversity, ethics) and functional competencies (assessment, intervention, consultation, research, supervision, teaching, management).</p>
+        <p>Supervision is oriented toward documenting progress toward these benchmarks through ongoing formative and summative evaluation and feedback. This approach aligns with the broader <span class="key-term">culture of competence</span> movement in professional psychology and is consistent with accreditation requirements. Competency-based supervision requires the use of direct observation methods (live observation, video review, co-therapy) rather than relying solely on supervisee self-report.</p>
+
+        <div class="example-box">
+          <strong>Methods of Observation in Supervision:</strong>
+          <p>Research consistently shows that supervisors who rely solely on supervisee self-report have limited and potentially distorted access to the supervisee's actual clinical performance. Best practices include: <strong>live observation</strong> (through one-way mirror or sitting in), <strong>video recording review</strong>, <strong>audio recording review</strong>, <strong>co-therapy</strong> (supervisor and supervisee work together with the client), and <strong>live supervision</strong> (real-time guidance via bug-in-ear, phone-in, or monitor). Direct observation is considered essential for competency-based evaluation.</p>
+        </div>
+
+        <div class="citation">Stoltenberg, C. D., McNeill, B., & Delworth, U. (1998). <em>IDM supervision: An integrated developmental model for supervising counselors and therapists.</em> Jossey-Bass.</div>
+      </div>
+
+      <!-- Section 2: Supervisory Processes -->
+      <div class="content-section">
+        <h2>Supervisory Relationship &amp; Processes</h2>
+
+        <h3>Supervisory Working Alliance</h3>
+        <p>Just as the therapeutic alliance predicts therapy outcomes, the <span class="key-term">supervisory working alliance</span> (Bordin, 1983) predicts supervision outcomes including supervisee satisfaction, skill development, and professional growth. Bordin's alliance model identifies three components: <span class="key-term">agreement on tasks</span> (the specific activities that take place in supervision), <span class="key-term">agreement on goals</span> (the desired outcomes of supervision), and <span class="key-term">the emotional bond</span> (mutual trust, respect, and liking between supervisor and supervisee).</p>
+        <p>Ruptures in the supervisory alliance require the same attentive repair as therapeutic alliance ruptures. However, the power differential in supervision makes alliance repair more complex — supervisees may be reluctant to express dissatisfaction for fear of negative evaluation. Supervisors must actively create conditions that allow supervisees to provide honest feedback about the supervisory process. Research shows that unresolved supervisory alliance ruptures are associated with nondisclosure by supervisees, reduced learning, and negative supervisory outcomes.</p>
+
+        <div class="citation">Bernard, J. M., & Goodyear, R. K. (2019). <em>Fundamentals of clinical supervision</em> (6th ed.). Pearson.</div>
+
+        <h3>Parallel Process</h3>
+        <div class="definition-box">
+          <strong>Parallel Process:</strong>
+          <p><span class="key-term">Parallel process</span> occurs when the dynamics of the therapy relationship are unconsciously replicated in the supervision relationship (or vice versa). For example, a supervisee who feels helpless with a dependent, demanding client may become unusually dependent and demanding in supervision. Recognizing and naming parallel process provides valuable clinical insight and is a powerful learning opportunity for the supervisee.</p>
+        </div>
+
+        <h3>Gatekeeping and Remediation</h3>
+        <p><span class="key-term">Gatekeeping</span> is the supervisor's ethical responsibility to protect the public by ensuring that only competent trainees advance in the profession. This includes identifying and addressing supervisee impairment or <span class="key-term">problems of professional competence (PPC)</span> — performance deficits that are not merely developmental but represent significant departures from expected competence levels. PPCs are distinguished from normal developmental struggles by their severity, chronicity, resistance to remediation, and impact on professional functioning.</p>
+        <p>When PPCs are identified, the supervisor should implement a formal <span class="key-term">remediation plan</span> that includes: (1) clear description of the competence concern; (2) specific, measurable benchmarks for remediation; (3) a timeline for achieving benchmarks; (4) additional support and resources to be provided; (5) consequences if benchmarks are not met; and (6) procedures for monitoring progress. If remediation fails, the supervisor must pursue more significant actions, which may include probation, additional training requirements, leave of absence, or dismissal from the training program.</p>
+
+        <div class="definition-box">
+          <strong>Due Process in Gatekeeping:</strong>
+          <p>Ethical gatekeeping requires adherence to due process: (1) clear communication of evaluation criteria and expectations at the outset of supervision; (2) timely notification when concerns arise; (3) opportunity for the supervisee to respond to concerns; (4) documented remediation efforts; (5) appeal procedures; and (6) institutional support for the supervisor's gatekeeping decisions. Failure to follow due process can expose the supervisor and institution to legal action by the dismissed supervisee.</p>
+        </div>
+
+        <h3>Multicultural Supervision Competencies</h3>
+        <p>Effective supervision requires attention to cultural dynamics within the supervisory relationship and the supervisee's clinical work. Supervisors must model multicultural competence, create a safe space for discussing cultural issues, explore how cultural identities (race, ethnicity, gender, sexual orientation, religion, disability) affect the supervisory and therapeutic relationships, and address cultural blind spots in case conceptualization.</p>
+        <p>Key multicultural supervision tasks include: (1) initiating discussions about cultural factors rather than waiting for the supervisee to raise them; (2) exploring the cultural identities of supervisor, supervisee, and client and how these intersect; (3) examining power dynamics related to cultural identity within supervision; (4) addressing supervisee's cultural assumptions and biases in case conceptualization; and (5) helping supervisees develop culturally adapted interventions. Research indicates that supervisors who avoid cultural discussions create supervision environments perceived as less safe and less effective.</p>
+
+        <h3>Evaluation in Supervision</h3>
+        <p>Supervision necessarily involves an evaluative component that distinguishes it from consultation or personal therapy. Effective evaluation includes:</p>
+        <ul>
+          <li><strong>Formative evaluation:</strong> Ongoing feedback during supervision aimed at guiding the supervisee's development; occurs throughout the supervisory relationship</li>
+          <li><strong>Summative evaluation:</strong> Formal assessment of the supervisee's competence at specified intervals (e.g., end of rotation, end of training year); used for grading, advancement, or certification decisions</li>
+          <li><strong>Clear criteria:</strong> Evaluation criteria should be communicated at the outset of supervision as part of informed consent</li>
+          <li><strong>Documentation:</strong> Supervisors should maintain written records of supervision sessions, including topics discussed, recommendations made, and any concerns about supervisee competence</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Supervision vs. Consultation vs. Therapy:</strong>
+          <p><span class="key-term">Supervision</span> involves a formal evaluative relationship with authority and gatekeeping responsibilities; the supervisor is legally responsible for the supervisee's clients. <span class="key-term">Consultation</span> is a voluntary, non-evaluative relationship between professional peers; the consultee retains full responsibility for the client. <span class="key-term">Personal therapy</span> focuses on the clinician's personal issues; it should never be combined with supervision due to conflicting role demands. These distinctions are frequently tested on the EPPP.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Supervision Modalities and Methods -->
+      <div class="content-section">
+        <h2>Supervision Modalities and Methods</h2>
+
+        <h3>Individual vs. Group Supervision</h3>
+        <p><span class="key-term">Individual supervision</span> (one supervisor with one supervisee) provides intensive, personalized attention and a safe space for exploring personal reactions to clinical work. It is the most common format and is typically required for licensure. <span class="key-term">Group supervision</span> (one supervisor with multiple supervisees) offers the advantages of vicarious learning, diverse perspectives, normalization of supervisee experiences, and development of consultation skills. Most training programs use both formats.</p>
+
+        <h3>Peer Supervision and Consultation</h3>
+        <p><span class="key-term">Peer supervision</span> involves colleagues at similar developmental levels meeting regularly to discuss clinical work. While valuable for ongoing professional development, peer supervision does not fulfill licensure requirements because it lacks the hierarchical, evaluative structure of formal supervision. Peer consultation groups are commonly used by licensed practitioners to maintain competence, prevent isolation, and process difficult cases.</p>
+
+        <h3>Triadic Supervision</h3>
+        <p><span class="key-term">Triadic supervision</span> involves one supervisor with two supervisees simultaneously. This format combines elements of individual and group supervision — each supervisee receives individual attention while also benefiting from observing the other's supervision process. Triadic supervision is increasingly used in training programs as a cost-effective alternative to purely individual supervision.</p>
+
+        <table>
+          <tr><th>Supervision Format</th><th>Advantages</th><th>Limitations</th></tr>
+          <tr><td><strong>Individual</strong></td><td>Intensive, personalized, safe for personal exploration</td><td>Limited perspectives, resource-intensive</td></tr>
+          <tr><td><strong>Group</strong></td><td>Multiple perspectives, vicarious learning, cost-effective</td><td>Less individual attention, potential for conformity pressure</td></tr>
+          <tr><td><strong>Triadic</strong></td><td>Blends individual and group benefits, moderately efficient</td><td>Requires balancing attention between two supervisees</td></tr>
+          <tr><td><strong>Peer</strong></td><td>Non-hierarchical, ongoing professional development</td><td>No formal authority, does not count toward licensure</td></tr>
+          <tr><td><strong>Live</strong></td><td>Real-time intervention, direct observation</td><td>May be intrusive, logistically complex</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>Supervision for Supervision:</strong>
+          <p>Supervisors themselves need supervision of their supervisory practice, particularly when first learning to supervise. The APA Guidelines for Clinical Supervision in Health Service Psychology (2014) recommend that supervisors receive training in supervision methods, multicultural competence in supervision, evaluation practices, and the ethical and legal dimensions of the supervisory role. Many states now require specific training in supervision for those who provide it.</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Legal and Ethical Issues -->
+      <div class="content-section">
+        <h2>Legal and Ethical Issues in Supervision</h2>
+
+        <h3>Vicarious Liability and Respondeat Superior</h3>
+        <p>Under the legal doctrine of <span class="key-term">respondeat superior</span> ("let the master answer"), supervisors can be held legally liable for the actions of their supervisees. This <span class="key-term">vicarious liability</span> applies because the supervisor has the authority to direct the supervisee's work and a duty to ensure competent care. Supervisors can also be held liable under <span class="key-term">direct liability</span> for their own negligent supervisory acts, such as failing to provide adequate oversight, failing to obtain informed consent from clients regarding the supervisory arrangement, or failing to act on knowledge of the supervisee's incompetence.</p>
+        <p>To manage liability, supervisors should: maintain clear documentation of supervision sessions (including topics discussed, directives given, and supervisee progress); provide regular and timely oversight; ensure clients are informed that the clinician is a trainee under supervision; review high-risk cases (suicidal, homicidal, child abuse) promptly; and take corrective action when competence problems are identified.</p>
+
+        <div class="example-box">
+          <strong>Liability Scenario:</strong>
+          <p>A supervisee fails to assess suicide risk in a client who subsequently makes a suicide attempt. The supervisor, who did not review the case or inquire about risk assessment, may be held vicariously liable because the supervisor had a duty to oversee the supervisee's clinical work and failed to do so. This underscores the importance of regular, documented case review in supervision.</p>
+        </div>
+
+        <h3>Informed Consent in Supervision</h3>
+        <p>Both the supervisee and the supervisee's clients must provide informed consent. Client informed consent must include: (1) that their clinician is a trainee under supervision, (2) the name and credentials of the supervisor, (3) how the supervisor will access case material (e.g., audio/video recordings, case notes, live observation), (4) any implications for confidentiality (e.g., the supervisor will have access to clinical information), and (5) how to contact the supervisor if needed.</p>
+        <p>Supervisee informed consent must include: (1) goals and methods of supervision, (2) frequency and duration of supervision sessions, (3) evaluation criteria and procedures, (4) expectations for the supervisory relationship, (5) limits of confidentiality within supervision, (6) policies regarding emergency situations, and (7) procedures for addressing concerns or disputes.</p>
+
+        <h3>Dual Relationships in Supervision</h3>
+        <p>The inherent power differential in supervision makes dual relationships particularly concerning. <span class="key-term">Sexual relationships</span> between supervisors and current supervisees are never ethical — this represents one of the clearest ethical prohibitions in the field. Other problematic dual relationships include: supervisor serving as the supervisee's personal therapist (creates conflicting evaluative and therapeutic roles), supervisor having a business relationship with the supervisee, supervisor being the supervisee's close friend or family member, and social relationships that compromise objectivity.</p>
+        <p>When unavoidable dual relationships exist (e.g., in rural or small community settings), the supervisor must take steps to manage potential harm: openly discuss the dual relationship, document its management, seek consultation, and prioritize the supervisee's welfare and the quality of client care.</p>
+      </div>
+
+      <!-- Section 5: Professional Development -->
+      <div class="content-section">
+        <h2>Professional Development &amp; Self-Care</h2>
+
+        <h3>Licensure and Credentialing</h3>
+        <p>Psychology licensure in the United States is regulated at the state level, with each state establishing its own requirements for education, supervised experience, and examination. Common requirements include: a doctoral degree from an APA-accredited program, completion of a predoctoral internship (typically APPIC-matched), a specified number of postdoctoral supervised hours (typically 1,500-2,000), and passing the <span class="key-term">Examination for Professional Practice in Psychology (EPPP)</span>. Some states also require a jurisprudence exam on state-specific laws and regulations.</p>
+        <p>The <span class="key-term">Association of State and Provincial Psychology Boards (ASPPB)</span> administers the EPPP and maintains the <span class="key-term">Psychology Interjurisdictional Compact (PSYPACT)</span>, which allows qualified psychologists to practice telepsychology across state borders without obtaining separate licensure in each state. Board certification through the <span class="key-term">American Board of Professional Psychology (ABPP)</span> represents an advanced credential beyond licensure, available in specialty areas such as clinical, counseling, neuropsychology, forensic, and health psychology.</p>
+
+        <h3>Continuing Education</h3>
+        <p>Most state licensing boards require psychologists to complete <span class="key-term">continuing education (CE)</span> to maintain licensure (typically 20-40 hours per renewal period). CE requirements often include mandatory topics in ethics, cultural competence, evidence-based practice, and suicide prevention. The purpose is to ensure that psychologists maintain and update their professional knowledge and skills throughout their careers. CE credits must typically be obtained from APA-approved sponsors or equivalent providers recognized by the state board.</p>
+
+        <h3>Professional Organizations and Resources</h3>
+        <p>Key professional organizations include the <span class="key-term">American Psychological Association (APA)</span> (the largest scientific and professional organization of psychologists), the <span class="key-term">Association for Behavioral and Cognitive Therapies (ABCT)</span>, the <span class="key-term">American Association for Marriage and Family Therapy (AAMFT)</span>, and various state psychological associations. These organizations provide ethical guidelines, practice standards, continuing education, and advocacy for the profession.</p>
+
+        <h3>Burnout, Compassion Fatigue, and Self-Care</h3>
+        <p><span class="key-term">Burnout</span> (Maslach & Jackson, 1981) is an occupational syndrome characterized by three dimensions: <span class="key-term">emotional exhaustion</span> (depleted emotional resources from the demands of work), <span class="key-term">depersonalization</span> (cynicism, detachment, and negative attitudes toward clients), and <span class="key-term">reduced personal accomplishment</span> (diminished feelings of competence and achievement). Burnout develops gradually in response to chronic workplace stressors including excessive caseloads, organizational demands, lack of autonomy, and insufficient support.</p>
+        <p><span class="key-term">Compassion fatigue</span> (also called secondary traumatic stress or vicarious traumatization) is a related but distinct concept referring to the emotional toll of working with traumatized populations. Unlike burnout, which develops gradually from workplace conditions, compassion fatigue can develop rapidly from exposure to clients' traumatic material. <span class="key-term">Vicarious traumatization</span> (Pearlman & Saakvitne) refers to cumulative changes in the therapist's inner experience resulting from empathic engagement with clients' traumatic material, potentially affecting the therapist's sense of safety, trust, esteem, intimacy, and control.</p>
+        <p>Psychologists have an ethical obligation to monitor their own functioning and to seek appropriate help when personal problems may interfere with professional competence (Standard 2.06). Self-care strategies include maintaining work-life balance, seeking peer support and consultation, engaging in personal therapy when needed, practicing stress management techniques, maintaining clear professional boundaries, and engaging in regular self-assessment.</p>
+
+        <div class="definition-box">
+          <strong>Standard 2.06: Personal Problems and Conflicts:</strong>
+          <p>When psychologists become aware of personal problems that may interfere with their professional duties, they take appropriate measures such as obtaining professional consultation or assistance, and determine whether they should limit, suspend, or terminate their work-related duties. This standard creates an affirmative obligation to self-monitor and act proactively. Failure to address personal problems that impair professional functioning is itself an ethical violation.</p>
+        </div>
+
+        <h3>Impaired Professionals</h3>
+        <p><span class="key-term">Impairment</span> refers to a decline in professional functioning that compromises the quality of care provided to clients. Common sources of impairment include substance abuse, mental health disorders, personal crises (divorce, bereavement), burnout, and age-related cognitive decline. Most state licensing boards have impaired practitioner programs that provide confidential assessment, treatment, and monitoring as an alternative to disciplinary action, provided the psychologist voluntarily seeks help.</p>
+        <p>Colleagues who become aware of another psychologist's impairment face an ethical obligation under Standard 1.04 (Informal Resolution of Ethical Violations) and Standard 1.05 (Reporting Ethical Violations). The preferred approach is to first attempt informal resolution by bringing the concern directly to the psychologist's attention. If informal resolution is inappropriate or unsuccessful, a report to the state licensing board or relevant ethics committee may be necessary.</p>
+
+        <table>
+          <tr><th>Concept</th><th>Definition</th><th>Key Distinction</th></tr>
+          <tr><td><strong>Burnout</strong></td><td>Emotional exhaustion, depersonalization, reduced accomplishment from chronic workplace stress</td><td>Develops gradually; related to organizational factors</td></tr>
+          <tr><td><strong>Compassion Fatigue</strong></td><td>Emotional toll from working with traumatized clients</td><td>Can develop rapidly; related to trauma exposure</td></tr>
+          <tr><td><strong>Vicarious Traumatization</strong></td><td>Changes in therapist's cognitive schemas from empathic engagement with trauma</td><td>Cumulative; affects worldview (safety, trust, control)</td></tr>
+          <tr><td><strong>Countertransference</strong></td><td>Therapist's emotional reactions to the client</td><td>Specific to individual client; can be informative if managed</td></tr>
+          <tr><td><strong>Impairment</strong></td><td>Decline in functioning that compromises client care</td><td>Triggers ethical and legal obligations; may require reporting</td></tr>
+        </table>
+      </div>
+
+      <!-- Section 5: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>IDM levels:</strong> Level 1 = high motivation, low autonomy, self-focused. Level 2 = fluctuating motivation, dependency-autonomy conflict. Level 3 = stable, conditional autonomy, balanced awareness.</li>
+          <li><strong>Discrimination Model:</strong> Three roles (Teacher, Counselor, Consultant) x three focus areas (Intervention, Conceptualization, Personalization). Supervisor flexibly moves among roles.</li>
+          <li><strong>Parallel process:</strong> Therapy dynamics are replicated in supervision. Recognizing it provides a learning opportunity.</li>
+          <li><strong>Vicarious liability / respondeat superior:</strong> Supervisors are legally responsible for supervisees' clinical actions. Requires active oversight and documentation.</li>
+          <li><strong>Gatekeeping:</strong> Ethical obligation to ensure only competent trainees advance. Must be balanced with supportive supervision.</li>
+          <li><strong>Informed consent in supervision:</strong> Both clients and supervisees must be informed. Clients must know the therapist is supervised.</li>
+          <li><strong>Dual relationships:</strong> Sexual relationships with supervisees are never ethical. Supervisor should NOT also serve as supervisee's therapist.</li>
+          <li><strong>Competency benchmarks:</strong> APA framework with foundational and functional competency domains. Supervision tracks progress toward benchmarks.</li>
+          <li><strong>Burnout:</strong> Three components — emotional exhaustion, depersonalization, reduced personal accomplishment (Maslach). Develops gradually from chronic workplace stress.</li>
+          <li><strong>Compassion fatigue vs. burnout:</strong> Compassion fatigue = from exposure to clients' trauma (can develop rapidly). Burnout = from chronic workplace conditions (develops gradually).</li>
+          <li><strong>Vicarious traumatization:</strong> Pearlman & Saakvitne. Cumulative changes in therapist's inner experience from empathic engagement with trauma. Affects schemas about safety, trust, esteem, intimacy, control.</li>
+          <li><strong>Standard 2.06:</strong> Psychologists must self-monitor and take action when personal problems may impair professional functioning.</li>
+          <li><strong>Supervision vs. consultation:</strong> Supervision = evaluative, hierarchical, legally responsible for supervisee's clients. Consultation = voluntary, non-evaluative, peer relationship, consultee retains responsibility.</li>
+          <li><strong>Formative vs. summative evaluation:</strong> Formative = ongoing developmental feedback. Summative = formal competence assessment at defined intervals.</li>
+          <li><strong>Direct observation:</strong> Essential for competency-based supervision. Includes live observation, video/audio review, co-therapy. Self-report alone is insufficient.</li>
+          <li><strong>CE requirements:</strong> Most states require 20-40 hours per renewal period. Often include mandatory ethics and diversity topics.</li>
+          <li><strong>Loganbill model:</strong> Three stages: stagnation, confusion, integration. Applies to eight professional issues.</li>
+          <li><strong>Supervision formats:</strong> Individual (intensive, personalized), group (multiple perspectives, cost-effective), triadic (one supervisor, two supervisees), peer (non-hierarchical, does not count toward licensure).</li>
+          <li><strong>ASPPB:</strong> Administers the EPPP. Maintains PSYPACT for interjurisdictional telepsychology practice.</li>
+          <li><strong>ABPP:</strong> Board certification beyond licensure. Available in specialty areas. Requires peer review of work samples.</li>
+          <li><strong>Direct vs. vicarious liability:</strong> Direct = supervisor's own negligent acts. Vicarious = supervisor liable for supervisee's actions under respondeat superior.</li>
+          <li><strong>APA Supervision Guidelines:</strong> APA Guidelines for Clinical Supervision (2014) address supervisor competence, diversity, legal/ethical issues, and methods.</li>
+          <li><strong>Supervision of supervision:</strong> Supervisors need training and oversight of their supervisory practice, especially when first learning to supervise.</li>
+          <li><strong>Remediation plan:</strong> Must include clear description of concern, measurable benchmarks, timeline, supports, consequences, and monitoring procedures.</li>
+          <li><strong>Standard 1.04/1.05:</strong> Informal resolution first (1.04), then formal reporting if needed (1.05). Applies when a colleague is impaired or acting unethically.</li>
+          <li><strong>PSYPACT:</strong> Allows telepsychology across state lines without separate licensure in each state. Administered by ASPPB.</li>
+          <li><strong>Informed consent in supervision:</strong> Both clients and supervisees must receive informed consent about the supervisory arrangement. Clients must know the supervisee's status, the supervisor's identity, and the supervisor's access to clinical information.</li>
+          <li><strong>Multicultural supervision tasks:</strong> Address supervisee's cultural awareness, examine cultural dynamics in the supervisory relationship itself, integrate cultural factors into case conceptualization, and recognize culture-specific strengths and resilience.</li>
+          <li><strong>Impaired professional vs. professional misconduct:</strong> Impairment involves personal problems (substance use, mental health) that affect functioning. Misconduct involves ethical violations regardless of impairment. Both require intervention but through different pathways.</li>
+          <li><strong>Parallel process:</strong> A phenomenon in which dynamics from the therapeutic relationship are unconsciously replicated in the supervisory relationship. If a supervisee feels controlled by a client, they may enact controlling behavior toward the supervisor (or vice versa). Recognizing parallel process provides valuable clinical insight.</li>
+          <li><strong>Isomorphism:</strong> Similar to parallel process but broader — patterns that emerge at one level of a system (e.g., client-therapist) are mirrored at other levels (therapist-supervisor, supervisor-organization). Used particularly in family therapy supervision models.</li>
+          <li><strong>Developmental supervision models:</strong> Assume supervisees progress through predictable stages (e.g., IDM: dependency, autonomy-conflict, conditional dependency). Supervision style should match the supervisee's developmental level.</li>
+          <li><strong>Nondisclosure in supervision:</strong> Supervisees may withhold clinical information from supervisors due to shame, fear of evaluation, or desire to appear competent. Creating a safe supervisory environment and directly inquiring about difficult cases helps reduce nondisclosure.</li>
+          <li><strong>Supervision modalities:</strong> Live supervision (behind mirror), video review, audio review, co-therapy, and self-report. Direct observation methods are considered more rigorous than self-report alone for assessing supervisee competence.</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch8-legal-forensic.html" class="nav-btn"><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Legal &amp; Forensic Psychology</div></div></a>
+        <a href="ch10-ebt-anxiety-trauma.html" class="nav-btn"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">EBT: Anxiety, Trauma &amp; OCD</div></div></a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

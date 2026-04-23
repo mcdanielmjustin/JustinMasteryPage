@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Relations (Std 3) | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Human Relations</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology &amp; Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="sidebar-section-label">Part A: APA Ethics Code</li>
+        <li class="chapter-item"><a href="ethics-overview.html" class="chapter-link"><span class="chapter-number">A0</span>Overview & Principles</a></li>
+        <li class="chapter-item"><a href="resolving-ethical-issues.html" class="chapter-link"><span class="chapter-number">A1</span>Resolving Ethical Issues</a></li>
+        <li class="chapter-item"><a href="competence.html" class="chapter-link"><span class="chapter-number">A2</span>Competence</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link active"><span class="chapter-number">A3</span>Human Relations</a></li>
+        <li class="chapter-item"><a href="privacy-confidentiality.html" class="chapter-link"><span class="chapter-number">A4</span>Privacy & Confidentiality</a></li>
+        <li class="chapter-item"><a href="advertising.html" class="chapter-link"><span class="chapter-number">A5</span>Advertising</a></li>
+        <li class="chapter-item"><a href="record-keeping-fees.html" class="chapter-link"><span class="chapter-number">A6</span>Record Keeping & Fees</a></li>
+        <li class="chapter-item"><a href="education-training.html" class="chapter-link"><span class="chapter-number">A7</span>Education & Training</a></li>
+        <li class="chapter-item"><a href="research-publication.html" class="chapter-link"><span class="chapter-number">A8</span>Research & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">A9</span>Assessment</a></li>
+        <li class="chapter-item"><a href="therapy-ethics.html" class="chapter-link"><span class="chapter-number">A10</span>Therapy</a></li>
+        <li class="sidebar-section-label">Part B: Psychopharmacology</li>
+        <li class="chapter-item"><a href="pharma-foundations.html" class="chapter-link"><span class="chapter-number">B0</span>Pharmacological Foundations</a></li>
+        <li class="chapter-item"><a href="antidepressants.html" class="chapter-link"><span class="chapter-number">B1</span>Antidepressants</a></li>
+        <li class="chapter-item"><a href="antipsychotics.html" class="chapter-link"><span class="chapter-number">B2</span>Antipsychotics</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">B3</span>Anxiolytics & Sedatives</a></li>
+        <li class="chapter-item"><a href="mood-stabilizers.html" class="chapter-link"><span class="chapter-number">B4</span>Mood Stabilizers</a></li>
+        <li class="chapter-item"><a href="stimulants-adhd.html" class="chapter-link"><span class="chapter-number">B5</span>Stimulants & ADHD Meds</a></li>
+        <li class="sidebar-section-label">Appendix</li>
+        <li class="chapter-item"><a href="professional-issues.html" class="chapter-link"><span class="chapter-number">+</span>Professional Issues</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter A3 of 17</div>
+        <h1>Human Relations (Std 3)</h1>
+        <div class="chapter-meta">
+          <span>Dual relationships, sexual harassment, exploitation</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+<section class="content-section">
+        <h2>Overview of Standard 3: Human Relations</h2>
+        <p>Standard 3 of the APA Ethics Code addresses the complexities of professional relationships, including <span class="key-term">multiple relationships</span>, unfair discrimination, sexual harassment, conflicts of interest, and exploitation. These topics are among the most heavily tested on the EPPP because they arise in nearly every professional context.</p>
+        <p>The standard applies across all professional roles -- therapy, assessment, research, teaching, supervision, and consultation -- and emphasizes that the power differential inherent in psychologists' roles creates special obligations to protect those with whom they work.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.01: Unfair Discrimination</h2>
+        <p>Psychologists do not engage in unfair discrimination based on age, gender, gender identity, race, ethnicity, culture, national origin, religion, sexual orientation, disability, socioeconomic status, or any basis proscribed by law. This applies to all professional activities.</p>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>Note the word "unfair" in this standard. Not all differential treatment constitutes discrimination. For example, using age-appropriate assessment instruments or adapting therapy techniques for clients with disabilities is appropriate differential treatment, not unfair discrimination.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.02: Sexual Harassment</h2>
+        <p>Psychologists do not engage in <span class="key-term">sexual harassment</span>, which consists of sexual solicitation, physical advances, or verbal or nonverbal conduct that is sexual in nature and that either:</p>
+        <ul>
+          <li>Is unwelcome, offensive, or creates a hostile workplace or educational environment, and the psychologist knows or is told this, <strong>or</strong></li>
+          <li>Is sufficiently severe or intense to be abusive to a reasonable person in the context</li>
+        </ul>
+        <p>Sexual harassment can occur between any parties in a professional relationship: psychologist-client, supervisor-supervisee, professor-student, or between colleagues.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.05: Multiple Relationships</h2>
+        <p>A <span class="key-term">multiple relationship</span> (also called a dual relationship) occurs when a psychologist is in a professional role with a person and simultaneously:</p>
+        <ol>
+          <li>Is in another role with the same person, <strong>or</strong></li>
+          <li>Is in a relationship with a person closely associated with or related to the person with whom the psychologist has the professional relationship, <strong>or</strong></li>
+          <li>Promises to enter into another relationship in the future with the person or a person closely associated with the person</li>
+        </ol>
+
+        <h3>When Multiple Relationships Are Prohibited</h3>
+        <p>A psychologist refrains from entering into a multiple relationship if the relationship could reasonably be expected to:</p>
+        <ul>
+          <li>Impair the psychologist's objectivity, competence, or effectiveness, <strong>or</strong></li>
+          <li>Risk exploitation of or harm to the person with whom the professional relationship exists</li>
+        </ul>
+
+        <h3>When Multiple Relationships Are Permissible</h3>
+        <p>The Ethics Code acknowledges that multiple relationships that would not reasonably be expected to cause impairment or risk exploitation or harm are <strong>not unethical</strong>. This is an important nuance for the EPPP.</p>
+        <div class="definition-box">
+          <strong>Key Distinction: Boundary Crossings vs. Boundary Violations</strong>
+          <p>A <span class="key-term">boundary crossing</span> is a deviation from standard clinical practice that is not harmful and may even be therapeutic (e.g., attending a client's graduation, brief self-disclosure, accepting a small culturally appropriate gift). A <span class="key-term">boundary violation</span> is a deviation that exploits or harms the client (e.g., entering a sexual relationship, engaging in a business partnership). Not all boundary crossings become violations.</p>
+        </div>
+
+        <h3>Managing Unavoidable Multiple Relationships</h3>
+        <p>If a potentially harmful multiple relationship has arisen due to unforeseen factors, the psychologist takes reasonable steps to resolve it with due regard for the best interests of the affected person and maximal compliance with the Ethics Code. Strategies include:</p>
+        <ul>
+          <li>Documenting the situation and the steps taken to address it</li>
+          <li>Consulting with colleagues</li>
+          <li>Discussing the situation openly with the client (when appropriate)</li>
+          <li>Referring the client to another provider if the relationship cannot be managed ethically</li>
+          <li>Increasing supervision or oversight</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist in a rural community discovers that a new therapy client is the parent of a child on the psychologist's daughter's sports team. This creates a social-professional overlap. Because the psychologist is the only provider within 100 miles, referral may not be practical. The ethical response is to carefully manage the boundaries, document the decision-making process, and consult with a colleague about how to minimize potential conflicts.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.04: Avoiding Harm</h2>
+        <p>Psychologists take reasonable steps to avoid harming their clients, students, supervisees, research participants, organizational clients, and others with whom they work, and to minimize harm where it is foreseeable and unavoidable.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.06: Conflict of Interest</h2>
+        <p>Psychologists refrain from taking on a professional role when personal, scientific, professional, legal, financial, or other interests or relationships could reasonably be expected to:</p>
+        <ul>
+          <li>Impair their objectivity, competence, or effectiveness, <strong>or</strong></li>
+          <li>Expose the person or organization with whom the professional relationship exists to harm or exploitation</li>
+        </ul>
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A psychologist is hired by a company to conduct fitness-for-duty evaluations. The psychologist also owns stock in a competitor company. If the evaluation results could affect the stock value of the competitor, a conflict of interest exists. The psychologist should disclose the conflict or decline the engagement.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.07: Third-Party Requests for Services</h2>
+        <p>When psychologists agree to provide services at the request of a third party, they clarify at the outset:</p>
+        <ul>
+          <li>The nature of the relationship with each party</li>
+          <li>The role of the psychologist (e.g., therapist vs. evaluator)</li>
+          <li>The probable uses of the services provided or information obtained</li>
+          <li>Limits of confidentiality</li>
+        </ul>
+        <p>This standard commonly applies in forensic, organizational, custody evaluation, and insurance-related contexts.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 3.08: Exploitative Relationships</h2>
+        <p>Psychologists do not exploit persons over whom they have supervisory, evaluative, or other authority, such as clients, students, supervisees, research participants, and employees. Exploitation can be financial, sexual, emotional, or otherwise take advantage of the power differential.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Sexual Relationships: Standards 3.05 and 10.05-10.08</h2>
+        <p>Sexual intimacies with clients and other protected parties receive special attention in the Ethics Code:</p>
+        <table>
+          <tr><th>Situation</th><th>Standard</th><th>Rule</th></tr>
+          <tr><td>Sexual intimacies with current therapy clients</td><td>10.05</td><td>Always prohibited</td></tr>
+          <tr><td>Sexual intimacies with relatives/significant others of current clients</td><td>10.06</td><td>Always prohibited</td></tr>
+          <tr><td>Therapy with former sexual partners</td><td>10.07</td><td>Always prohibited -- psychologists do not accept as therapy clients persons with whom they have engaged in sexual intimacies</td></tr>
+          <tr><td>Sexual intimacies with former therapy clients</td><td>10.08</td><td>Prohibited for at least <strong>two years</strong> after termination, and even after two years only in the most unusual circumstances with the burden on the psychologist to demonstrate no exploitation</td></tr>
+          <tr><td>Sexual relationships with current students/supervisees</td><td>7.07</td><td>Always prohibited</td></tr>
+        </table>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>The two-year rule (10.08) is one of the most tested facts in the Ethics domain. Remember: the two-year clock starts at <em>termination</em>, not at the start of therapy. Even after two years, the burden falls on the psychologist to prove the relationship is not exploitative. Most ethics scholars advise that sexual relationships with former clients should always be avoided.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Informed Consent in Therapy (Standard 10.01)</h2>
+        <p>Psychologists inform clients as early as possible in the therapeutic relationship about:</p>
+        <ul>
+          <li>The nature and anticipated course of therapy</li>
+          <li>Fees, billing practices, and insurance involvement</li>
+          <li>The limits of confidentiality</li>
+          <li>The extent and limits of the therapist's involvement of third parties</li>
+          <li>The client's right to refuse or withdraw from treatment</li>
+          <li>Potential risks and benefits of treatment</li>
+          <li>Available alternatives to the proposed treatment</li>
+        </ul>
+        <p>When the client is legally incapable of giving informed consent (e.g., a minor or an individual adjudicated incompetent), the psychologist provides an appropriate explanation, seeks the individual's assent, considers preferences and best interests, and obtains appropriate permission from a legally authorized person.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li>Multiple relationships are <strong>not automatically unethical</strong> -- they are problematic only when they could reasonably impair objectivity or risk exploitation/harm.</li>
+          <li><strong>Boundary crossings</strong> (e.g., accepting a small gift, attending a public event) differ from <strong>boundary violations</strong> (e.g., sexual relationships, business partnerships with clients).</li>
+          <li>In rural or small communities, multiple relationships may be unavoidable; the ethical response is to manage them carefully with documentation and consultation.</li>
+          <li>Sexual intimacies with current clients, their relatives, or current students/supervisees are <strong>always prohibited</strong>.</li>
+          <li>The <strong>two-year rule</strong> applies to sexual intimacies with former therapy clients (Standard 10.08), with the burden on the psychologist to demonstrate no exploitation even after two years.</li>
+          <li>Psychologists may <strong>never</strong> accept as therapy clients persons with whom they have had sexual relationships (Standard 10.07).</li>
+          <li>Third-party referrals require clarification of roles, relationships, and confidentiality limits at the outset (Standard 3.07).</li>
+          <li>Informed consent must be obtained as early as possible and include information about the nature of therapy, fees, confidentiality limits, and the right to withdraw.</li>
+        </ul>
+      </section>
+      <div class="nav-buttons">
+        <a href="competence.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Competence</div>
+          </div>
+        </a>
+        <a href="privacy-confidentiality.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Privacy & Confidentiality</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

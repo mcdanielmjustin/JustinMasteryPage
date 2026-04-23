@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prosocial Behavior & Prejudice | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Prosocial & Prejudice</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link active"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 8 of 9</div>
+        <h1>Prosocial Behavior & Prejudice</h1>
+        <div class="chapter-meta">
+          <span>Altruism, bystander effect, stereotypes, discrimination</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Prosocial Behavior</h2>
+        <p><span class="key-term">Prosocial behavior</span> encompasses any action intended to benefit others, including helping, sharing, cooperating, and comforting. Understanding why people help (or fail to help) has been a central concern of social psychology since the 1960s.</p>
+
+        <h3>Altruism vs. Egoism</h3>
+        <div class="definition-box">
+          <h4>Altruism</h4>
+          <p>Helping behavior motivated by genuine concern for the welfare of others, without expectation of personal benefit. Batson's (1991) <span class="key-term">empathy-altruism hypothesis</span> proposes that empathic concern for a person in need produces truly altruistic motivation. When we feel empathy, we are motivated to help regardless of whether we can escape the situation.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Egoistic Alternatives</h4>
+          <p>Several theories propose that apparently altruistic behavior is actually motivated by self-interest: (1) <strong>Negative state relief model</strong> (Cialdini): we help to reduce our own distress at witnessing someone's suffering. (2) <strong>Social exchange theory</strong>: we help when the perceived rewards outweigh the costs. (3) <strong>Reciprocal altruism</strong> (Trivers): we help because we expect reciprocation in the future.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Bystander Effect</h2>
+        <p>The <span class="key-term">bystander effect</span> refers to the finding that individuals are less likely to help in an emergency when other bystanders are present. This phenomenon was studied extensively by Latane and Darley following the 1964 murder of Kitty Genovese in New York City.</p>
+
+        <h3>Latane and Darley's Decision Model of Helping</h3>
+        <p>Latane and Darley (1970) proposed a five-step sequential model. Failure at any step results in no helping:</p>
+        <ol>
+          <li><strong>Notice the event:</strong> The bystander must first perceive that something is happening.</li>
+          <li><strong>Interpret as emergency:</strong> The bystander must interpret the situation as one requiring help. <span class="key-term">Pluralistic ignorance</span> -- looking to others for cues and misinterpreting their inaction as evidence that no emergency exists -- can block this step.</li>
+          <li><strong>Assume responsibility:</strong> The bystander must feel personally responsible for helping. <span class="key-term">Diffusion of responsibility</span> -- the assumption that someone else will help -- reduces the sense of personal obligation as the number of bystanders increases.</li>
+          <li><strong>Know how to help:</strong> The bystander must have the knowledge or skills to provide assistance.</li>
+          <li><strong>Decide to help:</strong> The bystander must weigh the costs and benefits of intervening and decide to act.</li>
+        </ol>
+
+        <div class="example-box">
+          <h4>Key Experiment: Seizure Study (Darley &amp; Latane, 1968)</h4>
+          <p>Participants in discussion groups via intercom heard a confederate apparently having a seizure. When participants believed they were the only one who could hear the emergency, 85% helped. When they believed four others were also listening, only 31% helped. This demonstrated diffusion of responsibility directly -- more bystanders led to less individual helping.</p>
+        </div>
+
+        <h3>Factors That Increase Helping</h3>
+        <ul>
+          <li><strong>Clarity of emergency:</strong> Unambiguous emergencies produce more helping.</li>
+          <li><strong>Perceived similarity:</strong> People help more when the victim is perceived as similar to themselves.</li>
+          <li><strong>Being alone:</strong> Lone bystanders help more than those in groups.</li>
+          <li><strong>Feeling competent:</strong> People with relevant skills (e.g., medical training) help more.</li>
+          <li><strong>Good mood:</strong> Positive mood states increase helping (Isen &amp; Levin, 1972).</li>
+          <li><strong>Rural vs. urban:</strong> Helping rates tend to be higher in rural settings, possibly due to less stimulus overload.</li>
+        </ul>
+        <div class="citation">Latane, B., &amp; Darley, J. M. (1970). The unresponsive bystander: Why doesn't he help? Appleton-Century-Crofts.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Stereotypes, Prejudice, and Discrimination</h2>
+        <p>These three concepts are related but distinct, corresponding to the cognitive, affective, and behavioral components of intergroup attitudes.</p>
+
+        <div class="definition-box">
+          <h4>Stereotypes (Cognitive)</h4>
+          <p>Generalized beliefs about the characteristics of members of a social group. Stereotypes are cognitive schemas that simplify the social world. They can be positive or negative and are activated automatically upon encountering a group member. Once activated, stereotypes influence perception, memory, and judgment.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Prejudice (Affective)</h4>
+          <p>A negative attitude toward members of a social group, based solely on their group membership. Prejudice involves an emotional component -- hostility, contempt, fear, or disgust directed toward the outgroup. Allport (1954) defined prejudice as "an antipathy based upon a faulty and inflexible generalization."</p>
+        </div>
+        <div class="definition-box">
+          <h4>Discrimination (Behavioral)</h4>
+          <p>Unjustified negative behavior toward members of a group based on their group membership. Discrimination is the behavioral expression of prejudice. It can be individual (one person's actions) or institutional (policies and practices embedded in social institutions).</p>
+        </div>
+
+        <h3>Theories of Prejudice</h3>
+        <table>
+          <tr><th>Theory</th><th>Key Idea</th></tr>
+          <tr><td><strong>Social Identity Theory (Tajfel &amp; Turner)</strong></td><td>People derive self-esteem from group memberships. They enhance self-esteem by favoring their ingroup over outgroups, even in minimal group paradigm conditions.</td></tr>
+          <tr><td><strong>Realistic Conflict Theory (Sherif)</strong></td><td>Prejudice arises from competition between groups for scarce resources. Demonstrated in the Robbers Cave experiment.</td></tr>
+          <tr><td><strong>Scapegoat Theory (Dollard et al.)</strong></td><td>Frustration-aggression displaced onto weaker, available outgroups. Prejudice increases during economic downturns.</td></tr>
+          <tr><td><strong>Authoritarian Personality (Adorno et al.)</strong></td><td>Certain personality characteristics (rigidity, conventionalism, submission to authority) predispose individuals to prejudice.</td></tr>
+          <tr><td><strong>Social Learning</strong></td><td>Prejudice is learned through modeling, reinforcement, and cultural transmission.</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Contact Hypothesis</h2>
+        <p>Allport's (1954) <span class="key-term">contact hypothesis</span> proposes that intergroup contact can reduce prejudice, but only under specific conditions:</p>
+        <ol>
+          <li><strong>Equal status:</strong> Members of both groups must have equal status in the contact situation.</li>
+          <li><strong>Common goals:</strong> The groups must work toward shared objectives.</li>
+          <li><strong>Intergroup cooperation:</strong> Achieving the goals must require cooperation rather than competition.</li>
+          <li><strong>Support of authorities:</strong> The contact must be endorsed by institutional authorities, laws, or customs.</li>
+        </ol>
+        <p>Pettigrew and Tropp's (2006) meta-analysis of over 500 studies confirmed that intergroup contact generally reduces prejudice, even when all four conditions are not met, though the effect is stronger when conditions are optimal. The mechanism appears to involve increased empathy and reduced anxiety about the outgroup.</p>
+
+        <div class="example-box">
+          <h4>Robbers Cave Experiment (Sherif et al., 1961)</h4>
+          <p>In this classic field experiment, two groups of boys at summer camp developed intense intergroup hostility through competitive activities. Simple contact between the groups did not reduce prejudice. Only when the researchers introduced <span class="key-term">superordinate goals</span> -- goals that required cooperation between both groups -- did prejudice decrease. This supports both realistic conflict theory and the contact hypothesis.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Implicit Bias</h2>
+        <p><span class="key-term">Implicit bias</span> refers to unconscious attitudes and stereotypes that influence judgment and behavior outside of conscious awareness. Unlike explicit prejudice (which is consciously endorsed), implicit biases operate automatically and may conflict with a person's stated egalitarian values.</p>
+
+        <h3>Implicit Association Test (IAT)</h3>
+        <p>The <span class="key-term">IAT</span> (Greenwald, McGhee, &amp; Schwartz, 1998) measures implicit attitudes by assessing the speed of association between concepts (e.g., Black/White faces) and evaluations (good/bad). Faster pairing of one concept with positive evaluations suggests an implicit preference. Research consistently shows that most Americans, regardless of race, show some degree of implicit pro-White bias.</p>
+
+        <h3>Criticisms and Limitations</h3>
+        <ul>
+          <li>Moderate test-retest reliability raises questions about whether the IAT measures a stable trait or fluctuating state.</li>
+          <li>The relationship between IAT scores and discriminatory behavior is modest (meta-analytic r approximately .24).</li>
+          <li>Debate about whether the IAT measures personal attitudes, cultural knowledge, or both.</li>
+          <li>Implicit bias training programs have shown limited long-term effectiveness in changing behavior.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Psychologists should be aware of their own implicit biases that may affect clinical judgment, including diagnosis, treatment planning, and the therapeutic relationship. Research shows that clinicians may inadvertently make different clinical decisions based on patient race. Self-awareness, ongoing education, and structured clinical decision-making can help mitigate the influence of implicit bias.</p>
+        </div>
+        <div class="citation">Greenwald, A. G., McGhee, D. E., &amp; Schwartz, J. L. K. (1998). Measuring individual differences in implicit cognition: The Implicit Association Test. Journal of Personality and Social Psychology, 74(6), 1464-1480.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Reducing Prejudice: Additional Approaches</h2>
+        <p>Beyond the contact hypothesis, several additional strategies for reducing prejudice have received empirical support.</p>
+
+        <h3>Jigsaw Classroom (Aronson et al., 1978)</h3>
+        <div class="definition-box">
+          <h4>Description</h4>
+          <p>The <span class="key-term">jigsaw classroom</span> is a cooperative learning technique that satisfies all four conditions of the contact hypothesis within an educational setting. Each student in a small group is assigned a unique piece of material that they must teach to the other group members. Because every student's contribution is essential for the group to learn the complete material, interdependence and equal status are built into the structure. Research shows that the jigsaw technique reduces prejudice, increases empathy, improves self-esteem, and enhances academic performance among minority students.</p>
+        </div>
+
+        <h3>Recategorization and Common Ingroup Identity</h3>
+        <p>Gaertner and Dovidio's (2000) <span class="key-term">Common Ingroup Identity Model</span> proposes that prejudice can be reduced by encouraging members of different groups to recategorize themselves as members of a single, superordinate group. When former outgroup members are recategorized as ingroup members, they benefit from ingroup favoritism rather than suffering from outgroup derogation.</p>
+
+        <h3>Stereotype Threat</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Stereotype threat</span> (Steele &amp; Aronson, 1995) is the risk of confirming a negative stereotype about one's group, which creates anxiety that impairs performance. African American students performed worse on a verbal test when it was described as diagnostic of intellectual ability (activating the stereotype) than when it was described as a non-diagnostic problem-solving exercise. Stereotype threat has been demonstrated across many groups and domains: women in math, older adults on memory tests, and White men on athletic tasks.</p>
+        </div>
+
+        <h3>Reducing Stereotype Threat</h3>
+        <ul>
+          <li>Reframing the task as non-diagnostic of ability</li>
+          <li>Encouraging a growth mindset (intelligence is malleable)</li>
+          <li>Self-affirmation exercises before the task</li>
+          <li>Emphasizing that the test is fair across groups</li>
+          <li>Providing role models who have succeeded despite stereotypes</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Stereotype threat is a commonly tested EPPP topic. Remember that it affects performance (not actual ability), occurs when a negative stereotype is made salient, and can be mitigated by reframing the situation. Also know the distinction between <strong>stereotype threat</strong> (fear of confirming a stereotype) and <strong>self-fulfilling prophecy</strong> (behaving in ways that confirm others' expectations). Both can impair performance, but through different mechanisms.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Aggression</h2>
+        <p>Although aggression is sometimes covered separately, it is closely related to prejudice and prosocial behavior as it represents the opposite end of the social behavior spectrum.</p>
+
+        <h3>Theories of Aggression</h3>
+        <ul>
+          <li><strong>Frustration-Aggression Hypothesis (Dollard et al., 1939):</strong> Frustration always leads to some form of aggression, and aggression is always preceded by frustration. This original formulation has been revised -- frustration increases the <em>readiness</em> for aggression but does not always produce it.</li>
+          <li><strong>Social Learning Theory (Bandura, 1973):</strong> Aggression is learned through observation and reinforcement. The Bobo doll experiments demonstrated that children imitated aggressive models, especially when the model was rewarded.</li>
+          <li><strong>Excitation Transfer Theory (Zillmann, 1971):</strong> Residual physiological arousal from one source can be misattributed to a new stimulus, intensifying emotional and aggressive responses.</li>
+          <li><strong>Cognitive Neoassociation Theory (Berkowitz, 1989):</strong> Aversive events (not just frustration) produce negative affect, which activates aggressive thoughts, memories, and motor responses through associative networks.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Integration</h4>
+          <p>Understanding prosocial behavior and prejudice is essential for culturally competent practice. Clinicians must recognize how stereotypes, implicit bias, and systemic discrimination affect their clients' mental health and their own clinical judgment. Knowledge of the bystander effect informs community interventions for violence prevention, while understanding prosocial motivations can inform group therapy and community-building strategies.</p>
+        </div>
+        <div class="citation">Steele, C. M., &amp; Aronson, J. (1995). Stereotype threat and the intellectual test performance of African Americans. Journal of Personality and Social Psychology, 69(5), 797-811.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Modern Forms of Prejudice</h2>
+        <p>As overt expressions of prejudice have become less socially acceptable, researchers have identified subtler forms that persist.</p>
+
+        <h3>Aversive Racism (Gaertner &amp; Dovidio)</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Aversive racism</span> characterizes individuals who consciously endorse egalitarian values and believe they are non-prejudiced, but who harbor unconscious negative feelings and stereotypes. These individuals do not discriminate in situations where the normatively correct behavior is clear (helping is obviously appropriate), but they do discriminate in ambiguous situations where bias can be attributed to non-racial factors.</p>
+        </div>
+
+        <h3>Symbolic/Modern Racism</h3>
+        <p><span class="key-term">Symbolic racism</span> (Sears, 1988) combines anti-Black affect with conservative political values. It is expressed through opposition to policies perceived as giving unfair advantages to minorities, belief that discrimination is no longer a significant barrier, and resentment of perceived special treatment. Unlike old-fashioned racism, symbolic racism does not endorse biological inferiority but attributes racial inequality to cultural deficiencies or lack of effort.</p>
+
+        <h3>Ambivalent Sexism (Glick &amp; Fiske, 1996)</h3>
+        <p><span class="key-term">Ambivalent sexism</span> comprises two components: <strong>hostile sexism</strong> (antipathy toward women who challenge traditional gender roles) and <strong>benevolent sexism</strong> (seemingly positive attitudes that idealize women in traditional roles, e.g., "women should be cherished and protected"). Benevolent sexism, despite its positive tone, reinforces gender inequality by rewarding women who conform to traditional roles and undermining their agency and competence.</p>
+
+        <div class="example-box">
+          <h4>EPPP Summary: Prosocial &amp; Prejudice</h4>
+          <p>This chapter covers some of the most frequently tested content in social psychology. Key topics include: Batson's empathy-altruism hypothesis, Latane and Darley's five-step bystander intervention model (with diffusion of responsibility and pluralistic ignorance), the distinction between stereotypes/prejudice/discrimination, Allport's four conditions for the contact hypothesis, the IAT and implicit bias, stereotype threat, and modern forms of prejudice. Be prepared to identify these concepts in clinical vignettes and to explain the mechanisms underlying each phenomenon.</p>
+        </div>
+        <div class="citation">Allport, G. W. (1954). The nature of prejudice. Addison-Wesley.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Empathy and Prosocial Development</h2>
+        <p>Empathy is considered a key motivator of prosocial behavior and an important developmental achievement.</p>
+
+        <h3>Hoffman's Stages of Empathy Development</h3>
+        <p>Martin Hoffman (2000) proposed that empathy develops through a series of stages aligned with cognitive development:</p>
+        <ol>
+          <li><strong>Global empathy (newborn):</strong> Reactive crying in response to another infant's distress. No differentiation between self and other.</li>
+          <li><strong>Egocentric empathy (1 year):</strong> Awareness that another person is in distress, but the child offers comfort that they themselves would find soothing (e.g., bringing their own mother to comfort another child).</li>
+          <li><strong>Empathy for another's feelings (2-3 years):</strong> Growing awareness that others' feelings may differ from one's own. Ability to respond more appropriately to another's specific emotional state.</li>
+          <li><strong>Empathy for another's life condition (late childhood):</strong> Empathy extends beyond immediate situations to encompass another person's general life condition. Can feel empathy for groups of people experiencing chronic hardship.</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>Clinical Integration</h4>
+          <p>Hoffman's model is relevant to developmental assessments and to understanding prosocial deficits in conditions such as conduct disorder and antisocial personality disorder, where empathy development may be impaired. Interventions that build empathy skills (perspective-taking exercises, social-emotional learning programs) draw on this developmental framework. In group therapy, fostering empathy among group members is a key therapeutic mechanism.</p>
+        </div>
+      </section>
+      <div class="nav-buttons">
+        <a href="group-influence.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Group Influence</div>
+          </div>
+        </a>
+        <a href="attraction.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Attraction & Relationships</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

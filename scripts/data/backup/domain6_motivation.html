@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motivation | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Motivation</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link active"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 11</div>
+        <h1>Motivation</h1>
+        <div class="chapter-meta">
+          <span>Need theories, expectancy, equity, goal-setting</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Work Motivation</h2>
+        <p><span class="key-term">Work motivation</span> refers to the psychological forces that determine the direction, intensity, and persistence of work-related behavior. Understanding motivation is essential for the EPPP, as it underpins management practices related to job design, compensation, goal setting, and employee engagement.</p>
+        <p>Motivation theories are broadly categorized as <span class="key-term">content theories</span> (what motivates people -- identifying specific needs or drives) and <span class="key-term">process theories</span> (how motivation occurs -- explaining the cognitive mechanisms of motivation).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Content Theories of Motivation</h2>
+
+        <h3>Maslow's Hierarchy of Needs</h3>
+        <p><span class="key-term">Abraham Maslow</span> (1943, 1954) proposed that human needs are arranged in a hierarchy, with lower-level needs generally requiring satisfaction before higher-level needs become motivating.</p>
+        <div class="definition-box">
+          <h4>Maslow's Five Levels (Bottom to Top)</h4>
+          <ol>
+            <li><strong>Physiological needs:</strong> Basic survival needs (food, water, shelter, sleep) -- in the workplace: adequate salary, comfortable working conditions</li>
+            <li><strong>Safety needs:</strong> Physical and psychological security -- in the workplace: job security, safe working conditions, benefits</li>
+            <li><strong>Belongingness/love needs:</strong> Social connection, affection, acceptance -- in the workplace: positive coworker relationships, team membership, supportive supervision</li>
+            <li><strong>Esteem needs:</strong> Self-respect, achievement, recognition from others -- in the workplace: meaningful titles, awards, promotions, challenging assignments</li>
+            <li><strong>Self-actualization:</strong> Realizing one's full potential, creativity, personal growth -- in the workplace: autonomy, opportunities for creativity, personal development</li>
+          </ol>
+        </div>
+        <p>Key principles include the <span class="key-term">prepotency principle</span> (lower needs must be substantially satisfied before higher needs become active motivators) and the <span class="key-term">deficit principle</span> (a satisfied need is no longer a motivator). Maslow later added <strong>cognitive needs</strong> (knowledge, understanding) and <strong>aesthetic needs</strong> (beauty, order) between esteem and self-actualization, and <strong>transcendence</strong> above self-actualization.</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Despite its intuitive appeal and widespread influence, Maslow's hierarchy has limited empirical support. Research has not consistently supported the strict hierarchical ordering of needs or the prepotency principle (Wahba & Bridwell, 1976). Nevertheless, the theory remains widely taught and tested on the EPPP due to its historical significance.</p>
+        </div>
+
+        <h3>Herzberg's Two-Factor Theory</h3>
+        <p><span class="key-term">Frederick Herzberg</span> (1959, 1966) proposed that job satisfaction and dissatisfaction are not opposite ends of a single continuum but rather are influenced by two separate sets of factors.</p>
+        <div class="definition-box">
+          <h4>Herzberg's Two Factors</h4>
+          <p><strong>Motivator factors (intrinsic):</strong> Related to the content of the work itself. When present, they produce satisfaction and motivation; when absent, they produce a neutral state (not dissatisfaction).</p>
+          <ul>
+            <li>Achievement, recognition, the work itself, responsibility, advancement, growth</li>
+          </ul>
+          <p><strong>Hygiene factors (extrinsic):</strong> Related to the context or environment of work. When inadequate, they produce dissatisfaction; when adequate, they produce a neutral state (not satisfaction).</p>
+          <ul>
+            <li>Company policy, supervision quality, salary, interpersonal relations, working conditions, job security</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Example: Applying Herzberg's Theory</h4>
+          <p>A company improves its cafeteria, parking, and office space (hygiene factors). Employees stop complaining, but they are not more motivated. To actually increase motivation, the company would need to redesign jobs to include more challenging work, greater responsibility, and opportunities for achievement (motivators). This insight led to the concept of <span class="key-term">job enrichment</span>.</p>
+        </div>
+        <p>Herzberg's theory has been criticized for being method-dependent (findings replicate best when using his critical incident technique), and for the assumption that salary is solely a hygiene factor. However, the distinction between intrinsic and extrinsic factors and the concept of job enrichment remain influential.</p>
+
+        <h3>McClelland's Acquired Needs Theory</h3>
+        <p><span class="key-term">David McClelland</span> (1961) proposed that three learned (acquired) needs drive behavior in the workplace, with individuals varying in the relative strength of each:</p>
+        <div class="definition-box">
+          <h4>McClelland's Three Needs</h4>
+          <ul>
+            <li><strong>Need for Achievement (nAch):</strong> Drive to excel, accomplish challenging goals, and meet high standards of success. High-nAch individuals prefer moderate-risk tasks, want personal responsibility, and seek feedback on performance.</li>
+            <li><strong>Need for Power (nPow):</strong> Drive to influence, control, or direct others. <em>Personalized power</em> is self-serving; <em>socialized power</em> benefits the organization.</li>
+            <li><strong>Need for Affiliation (nAff):</strong> Drive for close interpersonal relationships, approval, and social belonging. High-nAff individuals prioritize harmony and may avoid conflict.</li>
+          </ul>
+        </div>
+        <p>McClelland measured these needs using the <span class="key-term">Thematic Apperception Test (TAT)</span>, coding stories for achievement, power, and affiliation themes. His research found that effective leaders typically have high socialized need for power, moderate need for achievement, and lower need for affiliation. High-nAch individuals make good entrepreneurs but not necessarily good managers of large organizations.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Process Theories of Motivation</h2>
+
+        <h3>Vroom's Expectancy Theory</h3>
+        <p><span class="key-term">Victor Vroom</span> (1964) proposed that motivation is a function of three cognitive variables, and that individuals make rational choices about the effort they expend at work:</p>
+        <div class="definition-box">
+          <h4>Expectancy Theory Components</h4>
+          <p><strong>Motivation = Expectancy x Instrumentality x Valence</strong></p>
+          <ul>
+            <li><strong>Expectancy (E):</strong> The belief that effort will lead to acceptable performance (effort-to-performance link). Ranges from 0 to 1.</li>
+            <li><strong>Instrumentality (I):</strong> The belief that performance will lead to a specific outcome or reward (performance-to-outcome link). Ranges from 0 to 1.</li>
+            <li><strong>Valence (V):</strong> The value or attractiveness of the outcome to the individual. Can be positive, negative, or zero.</li>
+          </ul>
+          <p>If any component is zero, motivation will be zero. All three must be positive for motivation to exist.</p>
+        </div>
+        <div class="example-box">
+          <h4>Example: Applying Expectancy Theory</h4>
+          <p>An employee considering whether to work overtime: (1) "Can I actually finish this project on time?" (expectancy), (2) "If I finish, will I get the promised bonus?" (instrumentality), (3) "How much do I value that bonus?" (valence). If the employee doubts any of these, motivation to work overtime decreases.</p>
+        </div>
+
+        <h3>Adams's Equity Theory</h3>
+        <p><span class="key-term">J. Stacy Adams</span> (1963, 1965) proposed that individuals are motivated to maintain a sense of fairness by comparing their input-to-outcome ratio with that of a relevant <span class="key-term">comparison other</span>.</p>
+        <div class="definition-box">
+          <h4>Equity Theory Formula</h4>
+          <p><strong>My Outcomes / My Inputs = Other's Outcomes / Other's Inputs</strong></p>
+          <p><strong>Inputs:</strong> Effort, skills, education, experience, time</p>
+          <p><strong>Outcomes:</strong> Pay, benefits, recognition, promotions, status</p>
+          <p>When the ratios are unequal, individuals experience <span class="key-term">inequity distress</span> and are motivated to restore equity through behavioral or cognitive adjustments.</p>
+        </div>
+        <p>Methods of restoring equity include:</p>
+        <ul>
+          <li>Changing inputs (working harder or less hard)</li>
+          <li>Changing outcomes (requesting a raise)</li>
+          <li>Cognitively distorting inputs or outcomes ("I'm actually less qualified")</li>
+          <li>Choosing a different comparison other</li>
+          <li>Leaving the situation (quitting)</li>
+        </ul>
+        <p>Research generally supports that <span class="key-term">underpayment inequity</span> (being underrewarded) leads to decreased effort or quality. <span class="key-term">Overpayment inequity</span> (being overrewarded) may temporarily increase effort, though people more quickly rationalize overpayment.</p>
+
+        <h3>Locke's Goal-Setting Theory</h3>
+        <p><span class="key-term">Edwin Locke</span> (1968; Locke & Latham, 1990, 2002) developed one of the most empirically supported theories of work motivation. The core finding is that specific, difficult goals lead to higher performance than vague or easy goals.</p>
+        <div class="definition-box">
+          <h4>Key Principles of Goal-Setting Theory</h4>
+          <ul>
+            <li><strong>Specificity:</strong> Specific goals ("increase sales by 10%") outperform vague goals ("do your best")</li>
+            <li><strong>Difficulty:</strong> Difficult but attainable goals lead to higher performance than easy goals, up to the limits of ability</li>
+            <li><strong>Commitment:</strong> Goals must be accepted and committed to -- participation in goal setting can enhance commitment</li>
+            <li><strong>Feedback:</strong> Goals combined with feedback are more effective than goals alone</li>
+            <li><strong>Self-efficacy:</strong> Belief in one's ability to achieve goals mediates the goal-performance relationship</li>
+          </ul>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Goal-setting theory has exceptionally strong empirical support across hundreds of studies. For the EPPP, know that: (1) specific difficult goals produce the highest performance, (2) "do your best" goals are no better than no goals, (3) goals affect performance through four mechanisms -- directing attention, energizing effort, increasing persistence, and prompting strategy development, and (4) assigned goals can be as effective as participatively set goals, provided the person accepts them.</p>
+        </div>
+
+        <h3>Self-Determination Theory</h3>
+        <p><span class="key-term">Self-determination theory (SDT)</span>, developed by Edward Deci and Richard Ryan (1985, 2000), distinguishes between different types of motivation based on the degree to which behavior is self-determined.</p>
+        <div class="definition-box">
+          <h4>SDT Motivation Continuum</h4>
+          <ul>
+            <li><strong>Amotivation:</strong> Complete lack of intention or motivation</li>
+            <li><strong>Extrinsic motivation:</strong> Behavior driven by external contingencies, ranging from:
+              <ul>
+                <li><em>External regulation:</em> Acting to obtain rewards or avoid punishments</li>
+                <li><em>Introjected regulation:</em> Acting to avoid guilt or enhance ego</li>
+                <li><em>Identified regulation:</em> Acting because the activity is personally important</li>
+                <li><em>Integrated regulation:</em> Acting because the activity aligns with core values</li>
+              </ul>
+            </li>
+            <li><strong>Intrinsic motivation:</strong> Engaging in an activity for its inherent interest and enjoyment</li>
+          </ul>
+        </div>
+        <p>SDT proposes three basic psychological needs that must be satisfied for optimal motivation and well-being:</p>
+        <ul>
+          <li><strong>Autonomy:</strong> Feeling volitional and self-directed</li>
+          <li><strong>Competence:</strong> Feeling effective and capable</li>
+          <li><strong>Relatedness:</strong> Feeling connected to and cared for by others</li>
+        </ul>
+        <p>A key finding of SDT research is the <span class="key-term">overjustification effect</span>: providing extrinsic rewards for intrinsically motivated behavior can undermine intrinsic motivation, particularly when rewards are perceived as controlling rather than informational (Deci et al., 1999).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Maslow: hierarchy of needs with prepotency principle; limited empirical support</li>
+            <li>Herzberg: motivators (intrinsic) produce satisfaction; hygiene factors (extrinsic) prevent dissatisfaction -- not opposite ends of one continuum</li>
+            <li>Herzberg's theory led to the concept of job enrichment</li>
+            <li>McClelland: nAch, nPow, nAff measured by TAT; high nAch people prefer moderate-risk tasks</li>
+            <li>McClelland: effective leaders have high socialized power, moderate achievement, low affiliation</li>
+            <li>Vroom: Motivation = Expectancy x Instrumentality x Valence; if any = 0, motivation = 0</li>
+            <li>Adams: equity theory compares own input/outcome ratio to comparison other; underpayment produces more reliable effects than overpayment</li>
+            <li>Locke: specific, difficult goals produce highest performance; "do your best" = no goal</li>
+            <li>Goal-setting theory: one of the most empirically supported motivation theories</li>
+            <li>SDT: autonomy, competence, relatedness; overjustification effect undermines intrinsic motivation</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Adams, J. S. (1965). Inequity in social exchange. In L. Berkowitz (Ed.), <em>Advances in experimental social psychology</em> (Vol. 2, pp. 267-299). Academic Press.</div>
+        <div class="citation">Deci, E. L., Koestner, R., & Ryan, R. M. (1999). A meta-analytic review of experiments examining the effects of extrinsic rewards on intrinsic motivation. <em>Psychological Bulletin, 125</em>(6), 627-668.</div>
+        <div class="citation">Deci, E. L., & Ryan, R. M. (1985). <em>Intrinsic motivation and self-determination in human behavior</em>. Plenum Press.</div>
+        <div class="citation">Herzberg, F. (1966). <em>Work and the nature of man</em>. World Publishing.</div>
+        <div class="citation">Locke, E. A., & Latham, G. P. (2002). Building a practically useful theory of goal setting and task motivation. <em>American Psychologist, 57</em>(9), 705-717.</div>
+        <div class="citation">Maslow, A. H. (1954). <em>Motivation and personality</em>. Harper & Row.</div>
+        <div class="citation">McClelland, D. C. (1961). <em>The achieving society</em>. Van Nostrand.</div>
+        <div class="citation">Vroom, V. H. (1964). <em>Work and motivation</em>. Wiley.</div>
+        <div class="citation">Wahba, M. A., & Bridwell, L. G. (1976). Maslow reconsidered: A review of research on the need hierarchy theory. <em>Organizational Behavior and Human Performance, 15</em>(2), 212-240.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="career-development.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Navigating Career Paths</div>
+          </div>
+        </a>
+        <a href="satisfaction-stress.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Sustaining Engagement</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

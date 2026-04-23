@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schizophrenia Spectrum | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Schizophrenia Spectrum</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link active"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 10</div>
+        <h1>Schizophrenia Spectrum</h1>
+        <div class="chapter-meta">
+          <span>Positive/negative symptoms, dopamine, prognosis</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Schizophrenia Spectrum Disorders</h2>
+        <p>Schizophrenia spectrum and other psychotic disorders are defined by abnormalities in one or more of five domains: delusions, hallucinations, disorganized thinking (speech), grossly disorganized or abnormal motor behavior (including catatonia), and negative symptoms. <span class="key-term">Schizophrenia</span> is the prototypical psychotic disorder, affecting approximately 1% of the population worldwide with a roughly equal gender distribution, though males tend to have earlier onset and worse prognosis.</p>
+        <div class="definition-box">
+          <h4>Spectrum of Psychotic Disorders</h4>
+          <p>The DSM-5 arranges psychotic disorders along a gradient: <strong>Schizotypal PD</strong> (mildest, personality-level), <strong>Delusional Disorder</strong>, <strong>Brief Psychotic Disorder</strong> (less than 1 month), <strong>Schizophreniform Disorder</strong> (1-6 months), <strong>Schizophrenia</strong> (6+ months), and <strong>Schizoaffective Disorder</strong> (schizophrenia with a concurrent mood episode). DSM-5 eliminated the classic subtypes (paranoid, disorganized, catatonic, undifferentiated, residual) due to poor diagnostic stability and limited clinical utility.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>DSM-5 Diagnostic Criteria for Schizophrenia</h2>
+        <p>Two or more of the following symptoms, each present for a significant portion of time during a 1-month period (or less if successfully treated). At least one must be (1), (2), or (3):</p>
+        <ol>
+          <li><strong>Delusions</strong></li>
+          <li><strong>Hallucinations</strong></li>
+          <li><strong>Disorganized speech</strong> (e.g., frequent derailment or incoherence)</li>
+          <li><strong>Grossly disorganized or catatonic behavior</strong></li>
+          <li><strong>Negative symptoms</strong> (diminished emotional expression or avolition)</li>
+        </ol>
+        <p>Additional requirements include continuous signs of disturbance for at least <strong>6 months</strong> (including at least 1 month of active-phase symptoms), significant functional decline, and exclusion of schizoaffective disorder, mood disorders with psychotic features, substance effects, and medical conditions.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>A key DSM-5 change: the special significance previously given to bizarre delusions and Schneiderian first-rank symptoms (e.g., auditory hallucinations of two or more voices conversing) was removed. These no longer allow the single-symptom criterion to be met. Now, at least <strong>two</strong> Criterion A symptoms are always required, and at least one must be delusions, hallucinations, or disorganized speech.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Positive Symptoms</h2>
+        <p><span class="key-term">Positive symptoms</span> represent an excess or distortion of normal functions. They are the hallmark features of psychosis and tend to respond better to antipsychotic medication.</p>
+        <h3>Delusions</h3>
+        <p><span class="key-term">Delusions</span> are fixed beliefs that are not amenable to change in light of conflicting evidence. Common types include:</p>
+        <table>
+          <tr><th>Type</th><th>Content</th></tr>
+          <tr><td>Persecutory</td><td>Belief that one is being harassed, conspired against, or targeted (most common type)</td></tr>
+          <tr><td>Referential</td><td>Belief that gestures, comments, environmental cues are directed at oneself</td></tr>
+          <tr><td>Grandiose</td><td>Belief of having exceptional abilities, wealth, or fame</td></tr>
+          <tr><td>Erotomanic</td><td>Belief that another person is in love with the individual</td></tr>
+          <tr><td>Nihilistic</td><td>Belief that a major catastrophe will occur or that one does not exist</td></tr>
+          <tr><td>Somatic</td><td>Preoccupation with health/organ function</td></tr>
+          <tr><td>Thought insertion/withdrawal/broadcasting</td><td>Belief that thoughts are being placed in, removed from, or broadcast from one's mind</td></tr>
+          <tr><td>Delusions of control</td><td>Belief that one's body or actions are being controlled by an outside force</td></tr>
+        </table>
+        <h3>Hallucinations</h3>
+        <p><span class="key-term">Hallucinations</span> are perception-like experiences that occur without an external stimulus, are vivid and clear, and are not under voluntary control. <strong>Auditory hallucinations</strong> are the most common type in schizophrenia, typically experienced as voices that are perceived as distinct from the person's own thoughts. Visual hallucinations, when present, should prompt consideration of medical/neurological causes or substance use.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Negative Symptoms</h2>
+        <p><span class="key-term">Negative symptoms</span> represent a diminution or loss of normal functions. They are more chronic, more disabling, and less responsive to typical antipsychotic medications than positive symptoms.</p>
+        <ul>
+          <li><strong>Diminished emotional expression (flat/blunted affect):</strong> Reductions in facial expression, eye contact, voice intonation, and hand/body movements</li>
+          <li><strong>Avolition:</strong> Decrease in motivated, self-initiated, purposeful activities (sitting for long periods, showing little interest in work or social activities)</li>
+          <li><strong>Alogia:</strong> Diminished speech output (poverty of speech)</li>
+          <li><strong>Anhedonia:</strong> Decreased ability to experience pleasure</li>
+          <li><strong>Asociality:</strong> Apparent lack of interest in social interactions</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Negative symptoms are the strongest predictors of <strong>long-term functional outcome</strong> in schizophrenia, even more so than positive symptoms. They are associated with structural brain abnormalities (enlarged ventricles, reduced prefrontal cortex volume) and are more characteristic of what was formerly called "Type II" or "deficit" schizophrenia (Crow, 1980). Atypical antipsychotics (e.g., clozapine) may have modest benefits for negative symptoms compared to typical antipsychotics.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cognitive Symptoms</h2>
+        <p>Although not part of the formal diagnostic criteria, <span class="key-term">cognitive deficits</span> are a core feature of schizophrenia and are present in most individuals with the disorder. They include:</p>
+        <ul>
+          <li><strong>Working memory</strong> impairments</li>
+          <li><strong>Attention and processing speed</strong> deficits</li>
+          <li><strong>Executive functioning</strong> difficulties (planning, abstract thinking, cognitive flexibility)</li>
+          <li><strong>Verbal learning and memory</strong> deficits</li>
+          <li><strong>Social cognition</strong> impairments (theory of mind, emotion recognition)</li>
+        </ul>
+        <p>Cognitive deficits are present before the onset of psychosis, are relatively stable over the course of illness, and are the strongest predictor of everyday functional capacity (Green et al., 2000). They are poorly addressed by current antipsychotic medications.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Neurobiological Models</h2>
+        <h3>The Dopamine Hypothesis</h3>
+        <p>The <span class="key-term">dopamine hypothesis</span> is the oldest and most influential neurochemical model of schizophrenia. It has evolved through several versions:</p>
+        <ul>
+          <li><strong>Original version:</strong> Excess dopamine activity causes schizophrenia. Supported by the correlation between antipsychotic efficacy and D2 receptor blockade, and the observation that dopamine agonists (e.g., amphetamines) can induce psychotic symptoms.</li>
+          <li><strong>Revised version (Davis et al., 1991):</strong> <span class="key-term">Mesolimbic dopamine hyperactivity</span> (ventral tegmental area to nucleus accumbens/limbic system) underlies positive symptoms, while <span class="key-term">mesocortical dopamine hypoactivity</span> (VTA to prefrontal cortex) underlies negative and cognitive symptoms.</li>
+        </ul>
+        <div class="definition-box">
+          <h4>Dopamine Pathways</h4>
+          <p><strong>Mesolimbic pathway:</strong> Overactivity produces positive symptoms; blocked by antipsychotics to reduce psychosis.<br>
+          <strong>Mesocortical pathway:</strong> Underactivity produces negative/cognitive symptoms; blocking this pathway worsens these symptoms.<br>
+          <strong>Nigrostriatal pathway:</strong> Blockade produces extrapyramidal side effects (EPS).<br>
+          <strong>Tuberoinfundibular pathway:</strong> Blockade increases prolactin (hyperprolactinemia).</p>
+        </div>
+
+        <h3>The Glutamate Hypothesis</h3>
+        <p>The <span class="key-term">glutamate hypothesis</span> proposes that hypofunction of NMDA glutamate receptors contributes to schizophrenia. This is supported by the observation that NMDA receptor antagonists (e.g., PCP, ketamine) produce both positive and negative symptoms that closely mimic schizophrenia. The glutamate model better accounts for negative and cognitive symptoms than the dopamine hypothesis alone.</p>
+        <div class="citation">The neurodevelopmental hypothesis (Weinberger, 1987) proposes that schizophrenia results from abnormal brain development during prenatal/perinatal periods (e.g., prenatal infections, obstetric complications), which creates a vulnerability that becomes manifest with the synaptic pruning and maturational changes occurring during adolescence and early adulthood.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Other Schizophrenia Spectrum Disorders</h2>
+        <h3>Schizoaffective Disorder</h3>
+        <p><span class="key-term">Schizoaffective disorder</span> requires an uninterrupted period of illness during which there is a major mood episode (depressive or manic) concurrent with Criterion A symptoms of schizophrenia. Additionally, delusions or hallucinations must be present for at least <strong>2 weeks in the absence of a major mood episode</strong> during the lifetime duration of the illness, and mood episodes must be present for the <strong>majority of the total duration</strong> of the illness.</p>
+        <h3>Delusional Disorder</h3>
+        <p><span class="key-term">Delusional disorder</span> involves one or more delusions lasting at least 1 month. Apart from the delusion(s), functioning is not markedly impaired, and behavior is not obviously bizarre. Types include erotomanic, grandiose, jealous, persecutory, somatic, mixed, and unspecified. The key distinction from schizophrenia is the absence of other psychotic symptoms (hallucinations are minimal if present, and there is no disorganized speech, grossly disorganized behavior, or negative symptoms).</p>
+        <h3>Brief Psychotic Disorder</h3>
+        <p><span class="key-term">Brief psychotic disorder</span> involves the sudden onset of at least one psychotic symptom (delusions, hallucinations, disorganized speech, or grossly disorganized/catatonic behavior) lasting at least <strong>1 day but less than 1 month</strong>, with eventual full return to premorbid functioning. It can be specified as with or without marked stressor(s), or with peripartum onset.</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Duration-based differential diagnosis: <strong>Brief Psychotic Disorder</strong> = 1 day to less than 1 month. <strong>Schizophreniform Disorder</strong> = 1 month to less than 6 months. <strong>Schizophrenia</strong> = 6 months or more (including prodromal/residual symptoms, with at least 1 month of active-phase symptoms). This duration hierarchy is a high-frequency EPPP question.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Treatment of Schizophrenia</h2>
+        <h3>Antipsychotic Medications</h3>
+        <p><span class="key-term">First-generation (typical) antipsychotics</span> (FGAs: haloperidol, chlorpromazine, fluphenazine) primarily block D2 receptors. They are effective for positive symptoms but can cause significant extrapyramidal side effects (EPS):</p>
+        <ul>
+          <li><strong>Acute dystonia:</strong> Sustained muscle contractions (onset hours to days)</li>
+          <li><strong>Akathisia:</strong> Subjective restlessness and need to move (onset days to weeks)</li>
+          <li><strong>Parkinsonism:</strong> Tremor, rigidity, bradykinesia (onset weeks to months)</li>
+          <li><strong>Tardive dyskinesia:</strong> Involuntary repetitive movements, especially orofacial (onset months to years; may be irreversible)</li>
+          <li><strong>Neuroleptic malignant syndrome (NMS):</strong> Medical emergency with high fever, muscle rigidity, autonomic instability, altered consciousness; treat with dantrolene and bromocriptine</li>
+        </ul>
+        <p><span class="key-term">Second-generation (atypical) antipsychotics</span> (SGAs: clozapine, risperidone, olanzapine, quetiapine, aripiprazole, ziprasidone) have broader receptor profiles (blocking both D2 and 5-HT2A receptors). They have lower EPS risk but greater metabolic side effects (weight gain, diabetes, dyslipidemia).</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Clozapine</span> is the only antipsychotic with demonstrated superior efficacy for treatment-resistant schizophrenia and is the only medication proven to reduce suicidality in schizophrenia. However, it carries a risk of <span class="key-term">agranulocytosis</span> (potentially fatal drop in white blood cells) in approximately 1-2% of patients, requiring regular blood monitoring. Clozapine also has significant metabolic and sedative effects.</p>
+        </div>
+        <h3>Psychosocial Treatments</h3>
+        <ul>
+          <li><strong>Family psychoeducation:</strong> Reduces relapse by addressing expressed emotion and improving family coping; one of the most effective psychosocial interventions</li>
+          <li><strong>Social skills training:</strong> Structured behavioral approach to improve interpersonal functioning</li>
+          <li><strong>Cognitive remediation therapy:</strong> Targets cognitive deficits through structured exercises</li>
+          <li><strong>Assertive community treatment (ACT):</strong> Intensive, team-based community support for high-need individuals; reduces hospitalization</li>
+          <li><strong>Supported employment:</strong> Individual placement and support (IPS) model has strong evidence</li>
+          <li><strong>CBT for psychosis (CBTp):</strong> Helps patients evaluate and reframe delusional beliefs; reduces distress</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Course and Prognosis</h2>
+        <p>Schizophrenia typically follows a course with distinct phases:</p>
+        <h3>Phases of Illness</h3>
+        <ol>
+          <li><strong>Premorbid phase:</strong> Subtle cognitive, motor, and social deficits may be present in childhood</li>
+          <li><strong>Prodromal phase:</strong> Gradual decline in functioning; attenuated psychotic symptoms; social withdrawal; typically lasts months to years</li>
+          <li><strong>Active (psychotic) phase:</strong> Full diagnostic criteria are met; positive symptoms prominent</li>
+          <li><strong>Residual phase:</strong> Active-phase symptoms diminish; negative symptoms and cognitive deficits persist</li>
+        </ol>
+        <h3>Prognostic Factors</h3>
+        <table>
+          <tr><th>Better Prognosis</th><th>Worse Prognosis</th></tr>
+          <tr><td>Late onset</td><td>Early onset</td></tr>
+          <tr><td>Acute onset</td><td>Insidious/gradual onset</td></tr>
+          <tr><td>Female sex</td><td>Male sex</td></tr>
+          <tr><td>Prominent mood symptoms</td><td>Prominent negative symptoms</td></tr>
+          <tr><td>Good premorbid functioning</td><td>Poor premorbid functioning</td></tr>
+          <tr><td>Family history of mood disorders</td><td>Family history of schizophrenia</td></tr>
+          <tr><td>No substance use</td><td>Comorbid substance use</td></tr>
+          <tr><td>Married</td><td>Single/never married</td></tr>
+          <tr><td>Developing country</td><td>Developed country (WHO finding)</td></tr>
+        </table>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>The <span class="key-term">"rule of thirds"</span> is a rough prognostic guide: approximately one-third of individuals show significant improvement, one-third show moderate but fluctuating course, and one-third show severe chronic illness. The <span class="key-term">expressed emotion (EE)</span> literature (Vaughn & Leff, 1976) demonstrates that families high in criticism, hostility, and emotional over-involvement have significantly higher relapse rates, which is the basis for family psychoeducation interventions.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>Schizophrenia requires <strong>2+ Criterion A symptoms for 1 month</strong> within <strong>6 months of continuous disturbance</strong></li>
+          <li>At least one Criterion A symptom must be <strong>delusions, hallucinations, or disorganized speech</strong></li>
+          <li>DSM-5 <strong>eliminated subtypes</strong> (paranoid, disorganized, catatonic, etc.)</li>
+          <li><strong>Auditory hallucinations</strong> are most common in schizophrenia; visual hallucinations suggest medical etiology</li>
+          <li><strong>Negative symptoms</strong> are the strongest predictor of long-term functional outcome</li>
+          <li>Dopamine hypothesis: <strong>mesolimbic hyperactivity</strong> = positive symptoms; <strong>mesocortical hypoactivity</strong> = negative/cognitive symptoms</li>
+          <li><strong>Glutamate (NMDA) hypofunction</strong> better explains negative and cognitive symptoms; PCP/ketamine model</li>
+          <li>D2 blockade in <strong>nigrostriatal pathway</strong> = EPS; in <strong>tuberoinfundibular pathway</strong> = hyperprolactinemia</li>
+          <li>Better prognosis: <strong>late onset, acute onset, female, good premorbid functioning, mood symptoms</strong></li>
+          <li>High <strong>expressed emotion</strong> (criticism, hostility, overinvolvement) predicts higher relapse rates</li>
+          <li>Cognitive deficits are present <strong>before psychosis onset</strong> and are poorly treated by antipsychotics</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Crow, T. J. (1980). Molecular pathology of schizophrenia: More than one disease process? <em>British Medical Journal, 280</em>(6207), 66-68.</div>
+        <div class="citation">Davis, K. L., Kahn, R. S., Ko, G., & Davidson, M. (1991). Dopamine in schizophrenia: A review and reconceptualization. <em>American Journal of Psychiatry, 148</em>(11), 1474-1486.</div>
+        <div class="citation">Green, M. F., Kern, R. S., Braff, D. L., & Mintz, J. (2000). Neurocognitive deficits and functional outcome in schizophrenia. <em>Schizophrenia Bulletin, 26</em>(1), 119-136.</div>
+        <div class="citation">Javitt, D. C. (2010). Glutamatergic theories of schizophrenia. <em>Israel Journal of Psychiatry and Related Sciences, 47</em>(1), 4-16.</div>
+        <div class="citation">Tandon, R., Gaebel, W., Barch, D. M., et al. (2013). Definition and description of schizophrenia in the DSM-5. <em>Schizophrenia Research, 150</em>(1), 3-10.</div>
+        <div class="citation">Vaughn, C. E., & Leff, J. P. (1976). The influence of family and social factors on the course of psychiatric illness. <em>British Journal of Psychiatry, 129</em>, 125-137.</div>
+        <div class="citation">Weinberger, D. R. (1987). Implications of normal brain development for the pathogenesis of schizophrenia. <em>Archives of General Psychiatry, 44</em>(7), 660-669.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="personality-disorders.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Personality Disorders</div>
+          </div>
+        </a>
+        <a href="sexual-disorders.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Sexual Disorders</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

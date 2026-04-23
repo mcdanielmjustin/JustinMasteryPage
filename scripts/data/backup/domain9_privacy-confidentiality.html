@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy & Confidentiality (Std 4) | Domain 9 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ef4444; --accent-dim: rgba(239, 68, 68, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .sidebar-section-label { padding: 12px 20px 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: rgba(245, 158, 11, 0.06); border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .example-box strong { color: #f59e0b; }
+    .example-box p { margin-bottom: 0; }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #3b82f6; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 10px 14px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 9</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Privacy & Confidentiality</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 9</div>
+        <div class="domain-title">Psychopharmacology &amp; Ethics</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="sidebar-section-label">Part A: APA Ethics Code</li>
+        <li class="chapter-item"><a href="ethics-overview.html" class="chapter-link"><span class="chapter-number">A0</span>Overview & Principles</a></li>
+        <li class="chapter-item"><a href="resolving-ethical-issues.html" class="chapter-link"><span class="chapter-number">A1</span>Resolving Ethical Issues</a></li>
+        <li class="chapter-item"><a href="competence.html" class="chapter-link"><span class="chapter-number">A2</span>Competence</a></li>
+        <li class="chapter-item"><a href="human-relations.html" class="chapter-link"><span class="chapter-number">A3</span>Human Relations</a></li>
+        <li class="chapter-item"><a href="privacy-confidentiality.html" class="chapter-link active"><span class="chapter-number">A4</span>Privacy & Confidentiality</a></li>
+        <li class="chapter-item"><a href="advertising.html" class="chapter-link"><span class="chapter-number">A5</span>Advertising</a></li>
+        <li class="chapter-item"><a href="record-keeping-fees.html" class="chapter-link"><span class="chapter-number">A6</span>Record Keeping & Fees</a></li>
+        <li class="chapter-item"><a href="education-training.html" class="chapter-link"><span class="chapter-number">A7</span>Education & Training</a></li>
+        <li class="chapter-item"><a href="research-publication.html" class="chapter-link"><span class="chapter-number">A8</span>Research & Publication</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">A9</span>Assessment</a></li>
+        <li class="chapter-item"><a href="therapy-ethics.html" class="chapter-link"><span class="chapter-number">A10</span>Therapy</a></li>
+        <li class="sidebar-section-label">Part B: Psychopharmacology</li>
+        <li class="chapter-item"><a href="pharma-foundations.html" class="chapter-link"><span class="chapter-number">B0</span>Pharmacological Foundations</a></li>
+        <li class="chapter-item"><a href="antidepressants.html" class="chapter-link"><span class="chapter-number">B1</span>Antidepressants</a></li>
+        <li class="chapter-item"><a href="antipsychotics.html" class="chapter-link"><span class="chapter-number">B2</span>Antipsychotics</a></li>
+        <li class="chapter-item"><a href="anxiolytics-sedatives.html" class="chapter-link"><span class="chapter-number">B3</span>Anxiolytics & Sedatives</a></li>
+        <li class="chapter-item"><a href="mood-stabilizers.html" class="chapter-link"><span class="chapter-number">B4</span>Mood Stabilizers</a></li>
+        <li class="chapter-item"><a href="stimulants-adhd.html" class="chapter-link"><span class="chapter-number">B5</span>Stimulants & ADHD Meds</a></li>
+        <li class="sidebar-section-label">Appendix</li>
+        <li class="chapter-item"><a href="professional-issues.html" class="chapter-link"><span class="chapter-number">+</span>Professional Issues</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter A4 of 17</div>
+        <h1>Privacy & Confidentiality (Std 4)</h1>
+        <div class="chapter-meta">
+          <span>Limits, Tarasoff, HIPAA, records</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 9)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 9)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+<section class="content-section">
+        <h2>Overview of Standard 4: Privacy and Confidentiality</h2>
+        <p>Standard 4 of the APA Ethics Code addresses one of the most fundamental principles of psychological practice: the obligation to protect <span class="key-term">confidential information</span> obtained through professional work. Confidentiality is central to the therapeutic relationship, as clients must feel safe disclosing sensitive information to benefit from treatment.</p>
+        <p>This standard is one of the most heavily tested on the EPPP. Questions frequently focus on the limits of confidentiality, the duty to warn or protect, HIPAA regulations, and special populations such as minors.</p>
+        <div class="definition-box">
+          <strong>Privacy vs. Confidentiality vs. Privilege</strong>
+          <p><span class="key-term">Privacy</span> is the right of individuals to control access to information about themselves. <span class="key-term">Confidentiality</span> is the ethical obligation of the psychologist not to disclose information obtained in a professional relationship. <span class="key-term">Privilege</span> (or testimonial privilege) is a legal right that protects clients from having their confidential communications disclosed in legal proceedings without their consent. Privilege belongs to the client, not the psychologist.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 4.01: Maintaining Confidentiality</h2>
+        <p>Psychologists have a primary obligation to take reasonable precautions to protect confidential information obtained through or stored in any medium. This includes:</p>
+        <ul>
+          <li>Information obtained in clinical practice, research, teaching, and consultation</li>
+          <li>Data stored electronically, on paper, or in any other format</li>
+          <li>Information shared orally in sessions, consultations, or supervisory contexts</li>
+        </ul>
+        <p>The duty extends beyond active professional relationships. Psychologists must protect confidential information even after the professional relationship has ended and after the client has died (in most jurisdictions).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 4.02: Discussing the Limits of Confidentiality</h2>
+        <p>Psychologists discuss with persons and organizations the relevant limits of confidentiality and the foreseeable uses of information generated through their psychological activities. This discussion should occur:</p>
+        <ul>
+          <li>At the outset of the relationship (preferably during the informed consent process)</li>
+          <li>As new circumstances arise that may affect confidentiality</li>
+          <li>When the psychologist's role changes (e.g., from individual to couples therapy)</li>
+        </ul>
+
+        <h3>Common Limits of Confidentiality</h3>
+        <p>The following situations typically require or permit disclosure of otherwise confidential information:</p>
+        <ol>
+          <li><strong>Danger to self</strong> -- When a client poses an imminent risk of suicide or serious self-harm</li>
+          <li><strong>Danger to others</strong> -- When a client poses a credible threat of violence toward an identifiable third party (Tarasoff duty)</li>
+          <li><strong>Child abuse or neglect</strong> -- All 50 states mandate reporting of suspected child abuse or neglect</li>
+          <li><strong>Elder abuse or abuse of dependent adults</strong> -- Most states mandate reporting</li>
+          <li><strong>Court orders</strong> -- A valid court order may require disclosure; a subpoena alone generally does not</li>
+          <li><strong>Client consent</strong> -- Clients may authorize disclosure through a signed release</li>
+          <li><strong>Insurance and third-party payors</strong> -- Information necessary for reimbursement</li>
+          <li><strong>Consultation</strong> -- Psychologists may disclose limited information for consultation purposes, typically without identifying the client</li>
+        </ol>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>A common EPPP trap: A <strong>subpoena</strong> alone does NOT require disclosure of confidential records. The psychologist should consult an attorney, notify the client, and may assert privilege on the client's behalf. Only a <strong>court order</strong> (signed by a judge) compels disclosure. Know this distinction well.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>The Tarasoff Duty: Duty to Warn and Protect</h2>
+        <p>The landmark case <span class="key-term">Tarasoff v. Regents of the University of California</span> established the legal foundation for the duty to protect third parties from client violence.</p>
+
+        <h3>Tarasoff I (1974) -- Duty to Warn</h3>
+        <p>The California Supreme Court initially ruled that therapists have a <span class="key-term">duty to warn</span> identifiable potential victims when a client communicates a credible threat of violence.</p>
+
+        <h3>Tarasoff II (1976) -- Duty to Protect</h3>
+        <p>On rehearing, the court expanded the ruling to establish a broader <span class="key-term">duty to protect</span>, which may be discharged through various means, not solely by warning the potential victim. Protective actions include:</p>
+        <ul>
+          <li>Warning the intended victim directly</li>
+          <li>Notifying law enforcement</li>
+          <li>Hospitalizing the client (voluntary or involuntary)</li>
+          <li>Increasing the frequency of therapy sessions</li>
+          <li>Modifying the treatment plan to reduce risk</li>
+          <li>Other reasonable steps to protect the identified victim</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Elements Required for Tarasoff Duty</strong>
+          <p>Most jurisdictions require: (1) a <strong>special relationship</strong> exists between the therapist and the dangerous individual (i.e., a treatment relationship); (2) the client makes a <strong>credible, serious threat</strong> of physical violence; and (3) the threat is directed toward an <strong>identifiable potential victim</strong>.</p>
+        </div>
+
+        <h3>Variations Across Jurisdictions</h3>
+        <p>Not all states have adopted the Tarasoff ruling. Some states have enacted statutes that impose a duty to warn or protect, while others have rejected it entirely. On the EPPP, the general principle tested is awareness that such a duty exists and knowing the basic elements required to trigger it.</p>
+
+        <div class="example-box">
+          <strong>Example</strong>
+          <p>A client tells their therapist, "I'm going to kill my ex-wife when she picks up the kids on Friday." This statement involves a serious threat, an identifiable victim, and an apparent timeline. The therapist has a duty to take protective action, which may include warning the ex-wife, contacting police, and potentially seeking involuntary hospitalization for the client.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>HIPAA: Health Insurance Portability and Accountability Act</h2>
+        <p>The <span class="key-term">HIPAA Privacy Rule</span> (2003) established federal standards for protecting individually identifiable health information (Protected Health Information, or PHI). Key provisions for psychologists include:</p>
+
+        <h3>Key HIPAA Concepts</h3>
+        <table>
+          <tr><th>Concept</th><th>Definition</th></tr>
+          <tr><td><strong>Protected Health Information (PHI)</strong></td><td>Any individually identifiable health information transmitted or maintained in any form (electronic, paper, oral)</td></tr>
+          <tr><td><strong>Covered Entity</strong></td><td>Health care providers who transmit health information electronically, health plans, and health care clearinghouses</td></tr>
+          <tr><td><strong>Minimum Necessary Standard</strong></td><td>Covered entities must make reasonable efforts to use, disclose, and request only the minimum amount of PHI needed for the purpose</td></tr>
+          <tr><td><strong>Notice of Privacy Practices</strong></td><td>Covered entities must provide clients with a notice describing how their PHI may be used and disclosed</td></tr>
+          <tr><td><strong>Psychotherapy Notes</strong></td><td>Notes recorded by a mental health professional documenting or analyzing the contents of a therapy session, maintained separately from the medical record. These receive <em>extra protection</em> under HIPAA.</td></tr>
+        </table>
+
+        <h3>Psychotherapy Notes Under HIPAA</h3>
+        <p><span class="key-term">Psychotherapy notes</span> are afforded greater protection than other PHI. Authorization from the client is generally required for disclosure of psychotherapy notes, even to insurance companies. Psychotherapy notes do NOT include:</p>
+        <ul>
+          <li>Medication prescription and monitoring</li>
+          <li>Session start and stop times</li>
+          <li>Treatment modalities and frequencies</li>
+          <li>Results of clinical tests</li>
+          <li>Diagnosis, functional status, treatment plan, symptoms, prognosis, and progress to date</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Tip</strong>
+          <p>HIPAA psychotherapy notes are ONLY the process notes about the content of therapy sessions, kept separately from the medical record. Treatment plans, diagnoses, and progress notes are NOT psychotherapy notes under HIPAA and can be shared for treatment, payment, and healthcare operations without special authorization.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Confidentiality with Minors</h2>
+        <p>Working with minors presents unique confidentiality challenges because the legal right to consent (and access information) typically belongs to the parent or legal guardian, while the therapeutic relationship depends on the minor's trust.</p>
+        <ul>
+          <li>Parents generally have the right to access their minor child's treatment records.</li>
+          <li>However, many practitioners negotiate a <span class="key-term">limited confidentiality agreement</span> at the outset, explaining to both parents and the minor what will and will not be shared.</li>
+          <li>The psychologist should inform the minor about the limits of confidentiality in age-appropriate language.</li>
+          <li>In many states, minors can consent to their own mental health treatment at age 12-16 (depending on the jurisdiction), which may alter confidentiality obligations.</li>
+          <li>Mandatory reporting obligations (e.g., child abuse) always override confidentiality agreements with minors.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Confidentiality in Group Therapy</h2>
+        <p>In group therapy, the psychologist cannot guarantee that other group members will maintain confidentiality. The ethical obligation is to:</p>
+        <ul>
+          <li>Discuss the importance of confidentiality with all group members at the outset</li>
+          <li>Establish group rules regarding confidentiality</li>
+          <li>Inform members that the psychologist cannot guarantee that other group members will not disclose information</li>
+          <li>Address breaches of confidentiality if they occur within the group</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Mandated Reporting</h2>
+        <p>Psychologists are <span class="key-term">mandated reporters</span> in all 50 states for suspected child abuse and neglect. Key points:</p>
+        <ul>
+          <li>Reporting is based on <strong>reasonable suspicion</strong>, not certainty. Psychologists do not need to conduct an investigation before reporting.</li>
+          <li>Most states extend mandated reporting to <strong>elder abuse</strong> and <strong>abuse of dependent adults</strong>.</li>
+          <li>Failure to report when mandated can result in criminal penalties, civil liability, and ethics violations.</li>
+          <li>Good-faith reports are typically protected by <strong>immunity statutes</strong> that shield reporters from liability even if the report proves unfounded.</li>
+          <li>Mandated reporting obligations override both confidentiality and privilege.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard 4.05: Disclosures</h2>
+        <p>Psychologists may disclose confidential information with the appropriate consent of the client or as mandated or permitted by law for valid purposes including:</p>
+        <ul>
+          <li>Providing professional services to the client</li>
+          <li>Obtaining professional consultations</li>
+          <li>Protecting the client, psychologist, or others from harm</li>
+          <li>Obtaining payment for services</li>
+        </ul>
+
+        <h3>Standard 4.06: Consultations</h3>
+        <p>When consulting with colleagues, psychologists do not disclose confidential information that could reasonably lead to the identification of a client unless they have obtained prior consent or the disclosure cannot be avoided. They share only information necessary for the consultation purpose.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Takeaways for the EPPP</h2>
+        <ul>
+          <li><strong>Privilege</strong> belongs to the client, not the therapist. Only the client (or their legal representative) can waive privilege.</li>
+          <li>A <strong>subpoena</strong> alone does not compel disclosure; a <strong>court order</strong> does. When receiving a subpoena, consult an attorney and notify the client.</li>
+          <li>The <strong>Tarasoff duty</strong> requires a special relationship, a credible serious threat, and an identifiable victim. The duty to protect can be fulfilled by means other than warning the victim.</li>
+          <li>Under <strong>HIPAA</strong>, psychotherapy notes (process notes kept separately) receive extra protection and generally require separate authorization for disclosure.</li>
+          <li>With <strong>minors</strong>, parents generally have access to records, but practitioners should negotiate confidentiality limits at the outset.</li>
+          <li>In <strong>group therapy</strong>, the psychologist cannot guarantee other members' confidentiality but must establish clear expectations.</li>
+          <li><strong>Mandated reporting</strong> (child abuse, elder abuse) overrides confidentiality and privilege, and is based on reasonable suspicion, not certainty.</li>
+        </ul>
+      </section>
+      <div class="nav-buttons">
+        <a href="human-relations.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Human Relations</div>
+          </div>
+        </a>
+        <a href="advertising.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Advertising</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

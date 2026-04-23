@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Samples to Populations: Inferential Statistics | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e;
+      --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6;
+      --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: var(--blue); display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: var(--success); display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>From Samples to Populations: Inferential Statistics</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link active"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 10</div>
+        <h1>From Samples to Populations: Inferential Statistics</h1>
+        <div class="chapter-meta">
+          <span>Fundamental Content</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Inferential Statistics</h2>
+
+        <p>Inferential statistics allow researchers to draw conclusions about populations based on data collected from samples. Unlike descriptive statistics, which simply summarize data, inferential statistics enable us to make predictions, test hypotheses, and determine whether observed differences are likely due to chance or reflect true effects in the population (Field, 2018).</p>
+
+        <p>The foundation of inferential statistics rests on probability theory and sampling distributions. Understanding these concepts is essential for interpreting research findings and making evidence-based clinical decisions.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Population:</strong> The entire group to which researchers wish to generalize findings.</p>
+          <p><strong>Sample:</strong> A subset of the population that is actually measured.</p>
+          <p><strong>Parameter:</strong> A characteristic of a population (e.g., population mean μ).</p>
+          <p><strong>Statistic:</strong> A characteristic of a sample used to estimate parameters (e.g., sample mean M or x̄).</p>
+          <p><strong>Sampling Distribution:</strong> The theoretical distribution of a statistic across all possible samples of a given size.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Hypothesis Testing Framework</h2>
+
+        <p>Hypothesis testing is a systematic procedure for evaluating claims about populations based on sample data. The process involves stating hypotheses, selecting a significance level, computing a test statistic, and making a decision about the null hypothesis.</p>
+
+        <h3>Null and Alternative Hypotheses</h3>
+
+        <p>The <span class="key-term">null hypothesis (H₀)</span> states that there is no effect, no difference, or no relationship in the population. It represents the status quo or the assumption of "no change." The null hypothesis is what we attempt to reject through statistical testing.</p>
+
+        <p>The <span class="key-term">alternative hypothesis (H₁ or Hₐ)</span> states that there is an effect, difference, or relationship. It represents what the researcher typically hopes to demonstrate. The alternative hypothesis can be directional (one-tailed) or non-directional (two-tailed).</p>
+
+        <div class="example-box">
+          <h4>Example: Formulating Hypotheses</h4>
+          <p>A researcher wants to test whether a new therapy reduces depression scores compared to a control condition.</p>
+          <p><strong>H₀:</strong> There is no difference in depression scores between the therapy and control groups (μ₁ = μ₂)</p>
+          <p><strong>H₁:</strong> The therapy group has lower depression scores than the control group (μ₁ &lt; μ₂) — directional/one-tailed</p>
+          <p>OR</p>
+          <p><strong>H₁:</strong> There is a difference in depression scores between groups (μ₁ ≠ μ₂) — non-directional/two-tailed</p>
+        </div>
+
+        <h3>Significance Level (Alpha)</h3>
+
+        <p>The <span class="key-term">significance level (α)</span> is the probability of rejecting the null hypothesis when it is actually true. Conventionally, α is set at .05, meaning researchers accept a 5% chance of making a Type I error. More stringent levels (.01, .001) may be used when the consequences of a false positive are serious.</p>
+
+        <h3>p-Values</h3>
+
+        <p>The <span class="key-term">p-value</span> is the probability of obtaining results at least as extreme as those observed, assuming the null hypothesis is true. If p ≤ α, the result is considered statistically significant, and we reject the null hypothesis. If p > α, we fail to reject the null hypothesis.</p>
+
+        <div class="definition-box">
+          <h4>Important Distinction</h4>
+          <p>The p-value is NOT the probability that the null hypothesis is true. It is the probability of the data (or more extreme data) given that the null hypothesis is true. This distinction is commonly misunderstood and frequently tested on the EPPP.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Type I and Type II Errors</h2>
+
+        <p>Hypothesis testing involves the possibility of two types of errors:</p>
+
+        <h3>Type I Error (False Positive)</h3>
+
+        <p>A <span class="key-term">Type I error</span> occurs when we reject the null hypothesis when it is actually true. This is also called a "false positive" or "alpha error." The probability of a Type I error equals the significance level (α). If α = .05, there is a 5% chance of a Type I error when the null hypothesis is true.</p>
+
+        <h3>Type II Error (False Negative)</h3>
+
+        <p>A <span class="key-term">Type II error</span> occurs when we fail to reject the null hypothesis when it is actually false. This is also called a "false negative" or "beta error." The probability of a Type II error is denoted by β (beta).</p>
+
+        <table>
+          <tr>
+            <th></th>
+            <th>H₀ is True</th>
+            <th>H₀ is False</th>
+          </tr>
+          <tr>
+            <td><strong>Reject H₀</strong></td>
+            <td>Type I Error (α)</td>
+            <td>Correct Decision (Power)</td>
+          </tr>
+          <tr>
+            <td><strong>Fail to Reject H₀</strong></td>
+            <td>Correct Decision</td>
+            <td>Type II Error (β)</td>
+          </tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>In clinical contexts, the consequences of Type I and Type II errors differ. A Type I error in treatment research means concluding a treatment works when it doesn't (potentially exposing patients to ineffective treatments). A Type II error means missing a truly effective treatment (denying patients beneficial interventions). Researchers must consider these trade-offs when designing studies.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Statistical Power</h2>
+
+        <p><span class="key-term">Statistical power</span> is the probability of correctly rejecting a false null hypothesis—that is, the probability of detecting a true effect when one exists. Power = 1 - β. By convention, adequate power is typically .80 or higher, meaning an 80% chance of detecting a true effect (Cohen, 1988).</p>
+
+        <h3>Factors Affecting Power</h3>
+
+        <ul>
+          <li><strong>Sample size (n):</strong> Larger samples increase power</li>
+          <li><strong>Effect size:</strong> Larger effects are easier to detect</li>
+          <li><strong>Alpha level:</strong> Higher α (e.g., .10 vs .05) increases power but also increases Type I error risk</li>
+          <li><strong>Variability:</strong> Less variability (smaller SD) increases power</li>
+          <li><strong>One-tailed vs. two-tailed tests:</strong> One-tailed tests have more power but only when the direction is correctly specified</li>
+        </ul>
+
+        <h3>Power Analysis</h3>
+
+        <p><span class="key-term">Power analysis</span> is used to determine the sample size needed to achieve adequate power for detecting an effect of a given size. A priori power analysis (conducted before data collection) helps ensure studies are adequately powered. Post hoc power analysis (conducted after finding non-significant results) is generally discouraged because observed power is a direct function of the obtained p-value.</p>
+
+        <div class="citation">
+          Cohen, J. (1988). <em>Statistical power analysis for the behavioral sciences</em> (2nd ed.). Lawrence Erlbaum Associates. - Cohen's work established the framework for power analysis and effect size interpretation that remains standard in psychological research.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>t-Tests</h2>
+
+        <p>The <span class="key-term">t-test</span> is used to compare means when the population standard deviation is unknown (which is almost always the case). There are three main types of t-tests:</p>
+
+        <h3>Independent Samples t-Test</h3>
+
+        <p>Used to compare means from two different groups (between-subjects design). For example, comparing depression scores between a treatment group and a control group. Assumptions include:</p>
+        <ul>
+          <li>Independent observations</li>
+          <li>Normally distributed populations (or large samples)</li>
+          <li>Homogeneity of variance (equal variances in both groups)</li>
+        </ul>
+
+        <h3>Paired Samples t-Test</h3>
+
+        <p>Used to compare means from the same group at two different times or under two different conditions (within-subjects design). Also called the dependent samples t-test or repeated measures t-test. For example, comparing pre-treatment and post-treatment scores in the same participants.</p>
+
+        <h3>One-Sample t-Test</h3>
+
+        <p>Used to compare a sample mean to a known or hypothesized population value. For example, testing whether a sample's IQ differs from the population mean of 100.</p>
+
+        <div class="example-box">
+          <h4>Example: Choosing a t-Test</h4>
+          <p><strong>Scenario:</strong> A researcher measures anxiety before and after a relaxation intervention in the same 30 participants.</p>
+          <p><strong>Appropriate test:</strong> Paired samples t-test, because the same participants are measured twice (within-subjects design).</p>
+          <p><strong>Scenario:</strong> A researcher compares anxiety scores between 30 participants who received treatment and 30 different participants who received placebo.</p>
+          <p><strong>Appropriate test:</strong> Independent samples t-test, because different participants are in each group (between-subjects design).</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Analysis of Variance (ANOVA)</h2>
+
+        <p><span class="key-term">Analysis of Variance (ANOVA)</span> is used to compare means across three or more groups or conditions. ANOVA tests whether at least one group mean differs significantly from the others. The test statistic is the F-ratio, which compares between-group variance to within-group variance.</p>
+
+        <h3>One-Way ANOVA</h3>
+
+        <p>Used when there is one independent variable with three or more levels. For example, comparing therapy outcomes across three treatment conditions (CBT, psychodynamic, medication).</p>
+
+        <h3>Factorial ANOVA</h3>
+
+        <p>Used when there are two or more independent variables. A 2×3 factorial ANOVA, for example, examines two IVs—one with 2 levels and one with 3 levels. Factorial ANOVA can detect:</p>
+        <ul>
+          <li><strong>Main effects:</strong> The effect of each independent variable separately</li>
+          <li><strong>Interaction effects:</strong> Whether the effect of one IV depends on the level of another IV</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Understanding Interactions</h4>
+          <p>An <span class="key-term">interaction</span> occurs when the effect of one independent variable differs depending on the level of another independent variable. For example, a medication might be more effective for women than for men—the effect of medication (IV1) depends on sex (IV2). Interactions are often depicted as non-parallel lines in a graph of means.</p>
+        </div>
+
+        <h3>Repeated Measures ANOVA</h3>
+
+        <p>Used when the same participants are measured under multiple conditions or at multiple time points. This is the extension of the paired t-test to three or more measurements. Also called within-subjects ANOVA.</p>
+
+        <h3>Post Hoc Tests</h3>
+
+        <p>When ANOVA indicates significant differences, <span class="key-term">post hoc tests</span> are used to determine which specific groups differ. Common post hoc tests include:</p>
+        <ul>
+          <li><strong>Tukey's HSD:</strong> Controls familywise error rate; most commonly used</li>
+          <li><strong>Bonferroni:</strong> Conservative; divides α by number of comparisons</li>
+          <li><strong>Scheffé:</strong> Most conservative; appropriate for complex comparisons</li>
+          <li><strong>Fisher's LSD:</strong> Least conservative; does not control familywise error well</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Extensions of ANOVA: ANCOVA, MANOVA, and MANCOVA</h2>
+
+        <p>Several important extensions of ANOVA address common research situations where the basic ANOVA framework is insufficient. These extensions either add covariates, accommodate multiple dependent variables, or both (Tabachnick & Fidell, 2019).</p>
+
+        <h3>Analysis of Covariance (ANCOVA)</h3>
+
+        <p><span class="key-term">ANCOVA</span> combines ANOVA with regression by including one or more <span class="key-term">covariates</span>—continuous variables that are statistically controlled to reduce error variance and remove the influence of confounding variables. ANCOVA adjusts group means on the DV to account for pre-existing differences on the covariate.</p>
+
+        <div class="definition-box">
+          <h4>ANCOVA Key Points</h4>
+          <ul>
+            <li><strong>Purpose:</strong> Statistically control for confounding variables that cannot be controlled experimentally</li>
+            <li><strong>Covariate requirement:</strong> The covariate must be measured before treatment (pre-treatment) so it is not affected by the independent variable</li>
+            <li><strong>Effect:</strong> Reduces within-group error variance, increasing statistical power</li>
+            <li><strong>Assumption:</strong> Homogeneity of regression slopes—the relationship between the covariate and the DV must be similar across groups</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h4>ANCOVA Example</h4>
+          <p>A researcher compares the effectiveness of three therapy approaches on post-treatment anxiety scores. Because groups may differ in pre-treatment anxiety, the researcher uses <strong>pre-treatment anxiety as a covariate</strong> in an ANCOVA. This statistically adjusts post-treatment means to reflect what they would be if all groups had started with equal pre-treatment anxiety levels.</p>
+        </div>
+
+        <h3>Multivariate Analysis of Variance (MANOVA)</h3>
+
+        <p><span class="key-term">MANOVA</span> extends ANOVA to situations with <strong>multiple dependent variables</strong> measured simultaneously. Rather than running separate ANOVAs for each DV (which inflates Type I error), MANOVA tests whether groups differ on a linear combination of the DVs in a single omnibus test.</p>
+
+        <div class="definition-box">
+          <h4>MANOVA Key Points</h4>
+          <ul>
+            <li><strong>Purpose:</strong> Compare groups on multiple DVs simultaneously while controlling familywise Type I error rate</li>
+            <li><strong>Test statistics:</strong> <span class="key-term">Wilks' Lambda</span> (most commonly reported; based on ratio of determinants), <span class="key-term">Pillai's Trace</span> (most robust to violations of assumptions), Hotelling's Trace, Roy's Largest Root</li>
+            <li><strong>Assumptions:</strong> Multivariate normality, homogeneity of variance-covariance matrices (Box's M test), independence of observations</li>
+            <li><strong>Follow-up analyses:</strong> If the omnibus MANOVA is significant, follow up with <strong>discriminant function analysis</strong> (preferred, as it accounts for DV intercorrelations) or individual ANOVAs on each DV with Bonferroni correction</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h4>MANOVA Example</h4>
+          <p>A researcher compares two therapy groups on three outcome measures simultaneously: depression, anxiety, and quality of life. Running three separate ANOVAs would inflate the Type I error rate (approximately 1 - .95^3 = .14 rather than .05). MANOVA tests all three DVs in one analysis, maintaining the overall alpha at .05. The researcher reports Wilks' Lambda and, if significant, conducts follow-up analyses to determine which DVs contribute to the group difference.</p>
+        </div>
+
+        <h3>Multivariate Analysis of Covariance (MANCOVA)</h3>
+
+        <p><span class="key-term">MANCOVA</span> combines the features of both MANOVA and ANCOVA—it analyzes multiple dependent variables simultaneously while statistically controlling for one or more covariates. This is used when a researcher has both multiple outcome measures and pre-existing differences that need to be adjusted for.</p>
+
+        <div class="clinical-note">
+          <h4>When to Use Each Extension</h4>
+          <ul>
+            <li><strong>ANCOVA:</strong> One DV + need to control for a covariate (e.g., comparing treatment groups on post-test scores while controlling for pre-test)</li>
+            <li><strong>MANOVA:</strong> Multiple DVs + no covariates needed (e.g., comparing treatment groups on depression, anxiety, and functioning simultaneously)</li>
+            <li><strong>MANCOVA:</strong> Multiple DVs + need to control for a covariate (e.g., comparing treatment groups on multiple outcomes while controlling for baseline severity)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Non-Parametric Tests</h2>
+
+        <p><span class="key-term">Non-parametric tests</span> (also called distribution-free tests) are alternatives to parametric tests when assumptions are violated, particularly when data are ordinal or distributions are severely non-normal.</p>
+
+        <table>
+          <tr>
+            <th>Parametric Test</th>
+            <th>Non-Parametric Alternative</th>
+            <th>Use Case</th>
+          </tr>
+          <tr>
+            <td>Independent t-test</td>
+            <td>Mann-Whitney U</td>
+            <td>Compare two independent groups</td>
+          </tr>
+          <tr>
+            <td>Paired t-test</td>
+            <td>Wilcoxon Signed-Rank</td>
+            <td>Compare two related samples</td>
+          </tr>
+          <tr>
+            <td>One-way ANOVA</td>
+            <td>Kruskal-Wallis H</td>
+            <td>Compare three+ independent groups</td>
+          </tr>
+          <tr>
+            <td>Repeated measures ANOVA</td>
+            <td>Friedman Test</td>
+            <td>Compare three+ related samples</td>
+          </tr>
+        </table>
+
+        <h3>Chi-Square Tests</h3>
+
+        <p>The <span class="key-term">chi-square (χ²) test</span> is used for categorical data:</p>
+        <ul>
+          <li><strong>Chi-square goodness of fit:</strong> Tests whether observed frequencies match expected frequencies in a single categorical variable</li>
+          <li><strong>Chi-square test of independence:</strong> Tests whether two categorical variables are related (using a contingency table)</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Effect Sizes</h2>
+
+        <p><span class="key-term">Effect size</span> quantifies the magnitude of a difference or relationship, independent of sample size. While statistical significance tells us whether an effect exists, effect size tells us how large the effect is. This distinction is crucial because even trivial effects can be statistically significant with large samples.</p>
+
+        <h3>Cohen's d</h3>
+
+        <p><span class="key-term">Cohen's d</span> measures the standardized difference between two means, expressed in standard deviation units. It is commonly used with t-tests.</p>
+
+        <table>
+          <tr>
+            <th>Cohen's d</th>
+            <th>Interpretation</th>
+          </tr>
+          <tr>
+            <td>0.2</td>
+            <td>Small effect</td>
+          </tr>
+          <tr>
+            <td>0.5</td>
+            <td>Medium effect</td>
+          </tr>
+          <tr>
+            <td>0.8</td>
+            <td>Large effect</td>
+          </tr>
+        </table>
+
+        <h3>Eta-Squared (η²)</h3>
+
+        <p><span class="key-term">Eta-squared</span> represents the proportion of variance in the dependent variable explained by the independent variable(s). It is commonly used with ANOVA.</p>
+
+        <table>
+          <tr>
+            <th>η²</th>
+            <th>Interpretation</th>
+          </tr>
+          <tr>
+            <td>.01</td>
+            <td>Small effect</td>
+          </tr>
+          <tr>
+            <td>.06</td>
+            <td>Medium effect</td>
+          </tr>
+          <tr>
+            <td>.14</td>
+            <td>Large effect</td>
+          </tr>
+        </table>
+
+        <h3>Other Effect Size Measures</h3>
+
+        <ul>
+          <li><strong>Partial eta-squared (η²ₚ):</strong> Variance explained by one IV while controlling for other IVs; used in factorial ANOVA</li>
+          <li><strong>Omega-squared (ω²):</strong> Less biased estimate of population effect size than η²</li>
+          <li><strong>Odds ratio:</strong> Used with categorical outcomes; commonly reported in logistic regression</li>
+          <li><strong>r:</strong> Correlation coefficient itself is an effect size measure</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Statistical vs. Clinical Significance</h4>
+          <p><span class="key-term">Clinical significance</span> refers to whether a treatment effect is meaningful in practice. A treatment might produce a statistically significant reduction in symptoms that is too small to matter clinically. Effect sizes, confidence intervals, and measures like the Reliable Change Index (RCI) help determine whether changes are clinically meaningful, not just statistically detectable.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Confidence Intervals</h2>
+
+        <p>A <span class="key-term">confidence interval (CI)</span> provides a range of values within which the population parameter is likely to fall. A 95% CI means that if we repeated the study many times, 95% of the calculated intervals would contain the true population parameter.</p>
+
+        <p>Confidence intervals provide more information than p-values alone because they indicate both the precision of the estimate (width of the interval) and the direction and magnitude of effects. Narrow intervals indicate precise estimates; wide intervals indicate imprecise estimates.</p>
+
+        <div class="example-box">
+          <h4>Interpreting Confidence Intervals</h4>
+          <p>A study finds that the mean difference in depression scores between treatment and control is 5 points, with a 95% CI of [2.3, 7.7].</p>
+          <p><strong>Interpretation:</strong> We are 95% confident that the true population difference lies between 2.3 and 7.7 points. Because the interval does not include zero, the effect is statistically significant at α = .05.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+
+        <div class="key-concepts" style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h4 style="color: var(--accent); margin-top: 0;">Commonly Tested Topics for the EPPP</h4>
+          <ul style="color: var(--text-secondary);">
+            <li><strong>Type I Error:</strong> Rejecting a true null hypothesis (false positive); probability = α</li>
+            <li><strong>Type II Error:</strong> Failing to reject a false null hypothesis (false negative); probability = β</li>
+            <li><strong>Power:</strong> 1 - β; probability of correctly rejecting false H₀; typically .80 desired</li>
+            <li><strong>Increasing Power:</strong> Larger n, larger effect, higher α, lower variability, one-tailed test</li>
+            <li><strong>p-value:</strong> Probability of data given H₀ is true; NOT probability H₀ is true</li>
+            <li><strong>Independent t-test:</strong> Between-subjects, two groups</li>
+            <li><strong>Paired t-test:</strong> Within-subjects, same participants measured twice</li>
+            <li><strong>ANOVA:</strong> Compare 3+ groups; F-ratio = between variance / within variance</li>
+            <li><strong>Interaction:</strong> Effect of one IV depends on level of another IV</li>
+            <li><strong>Post hoc tests:</strong> Determine which groups differ after significant ANOVA</li>
+            <li><strong>Cohen's d:</strong> Small = .2, Medium = .5, Large = .8</li>
+            <li><strong>Eta-squared:</strong> Small = .01, Medium = .06, Large = .14</li>
+            <li><strong>ANCOVA:</strong> ANOVA + covariate; statistically controls confounds; covariate must be measured before treatment; assumes homogeneity of regression slopes</li>
+            <li><strong>MANOVA:</strong> ANOVA with multiple DVs; controls Type I error inflation; key statistics are Wilks' Lambda and Pillai's Trace; follow up with discriminant function analysis</li>
+            <li><strong>MANCOVA:</strong> Multiple DVs + covariate(s); combines MANOVA and ANCOVA</li>
+            <li><strong>Statistical vs. Clinical Significance:</strong> Statistical significance doesn't guarantee practical importance</li>
+            <li><strong>Non-parametric alternatives:</strong> Mann-Whitney U, Wilcoxon, Kruskal-Wallis, Friedman</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <p style="font-size: 0.9rem; line-height: 1.9;">
+          Cohen, J. (1988). <em>Statistical power analysis for the behavioral sciences</em> (2nd ed.). Lawrence Erlbaum Associates.<br><br>
+          Field, A. (2018). <em>Discovering statistics using IBM SPSS statistics</em> (5th ed.). Sage Publications.<br><br>
+          Howell, D. C. (2013). <em>Statistical methods for psychology</em> (8th ed.). Cengage Learning.<br><br>
+          Tabachnick, B. G., & Fidell, L. S. (2019). <em>Using multivariate statistics</em> (7th ed.). Pearson.
+        </p>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="correlation-regression.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Relationships in Data: Correlation & Regression</div>
+          </div>
+        </a>
+        <a href="research-designs.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Blueprints for Discovery: Research Designs</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

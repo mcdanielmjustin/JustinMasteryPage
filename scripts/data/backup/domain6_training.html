@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Training | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Training</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link active"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 11</div>
+        <h1>Training</h1>
+        <div class="chapter-meta">
+          <span>Needs assessment, training methods, transfer of training</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Training and Development</h2>
+        <p><span class="key-term">Training</span> refers to the systematic acquisition of knowledge, skills, and attitudes that result in improved performance in a specific job or role. Effective training programs follow a systematic process: needs assessment, design and delivery, and evaluation.</p>
+        <p>For the EPPP, you must understand the three levels of needs assessment, the major training methods, Kirkpatrick's evaluation model, and the factors that influence transfer of training.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Training Needs Assessment</h2>
+        <p>A <span class="key-term">training needs assessment</span> is the systematic process of determining what training is needed, who needs it, and what conditions are necessary for effective training. It involves three levels of analysis:</p>
+
+        <h3>Organizational Analysis</h3>
+        <p><span class="key-term">Organizational analysis</span> examines the broader context to determine where training is needed within the organization and whether conditions support training effectiveness. Key considerations include:</p>
+        <ul>
+          <li>Strategic goals and objectives that require new competencies</li>
+          <li>Available resources (budget, time, facilities) for training</li>
+          <li>Organizational climate and support for training (supervisor support, opportunity to practice)</li>
+          <li>Environmental constraints or changes (new technology, regulations, restructuring)</li>
+        </ul>
+
+        <h3>Task Analysis</h3>
+        <p><span class="key-term">Task analysis</span> (also called operations analysis) identifies the specific tasks, knowledge, skills, and abilities (KSAs) required for successful job performance. It determines what the content of training should be.</p>
+        <div class="definition-box">
+          <h4>Steps in Task Analysis</h4>
+          <ol>
+            <li>Identify the job and its component tasks (using job analysis data)</li>
+            <li>Determine the KSAs required for each task</li>
+            <li>Identify the performance standards and conditions under which tasks are performed</li>
+            <li>Prioritize training content based on task importance, frequency, and difficulty</li>
+          </ol>
+        </div>
+
+        <h3>Person Analysis</h3>
+        <p><span class="key-term">Person analysis</span> determines which specific employees need training and what kind of training they need. It identifies discrepancies between current and required performance levels.</p>
+        <div class="example-box">
+          <h4>Example: Three-Level Needs Assessment</h4>
+          <p>A hospital implements a new electronic health records system. <strong>Organizational analysis:</strong> Strategic goal of digitization requires staff retraining; budget allocated. <strong>Task analysis:</strong> Identifies specific EHR functions staff must perform (entering patient data, ordering labs, documenting notes). <strong>Person analysis:</strong> Performance data shows that nurses over 55 have the lowest proficiency on the new system and need the most intensive training.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Training Methods</h2>
+
+        <h3>On-the-Job Training Methods</h3>
+        <div class="definition-box">
+          <h4>Common On-the-Job Approaches</h4>
+          <ul>
+            <li><strong>Job rotation:</strong> Moving employees through different positions to broaden skills and understanding. Effective for management development and succession planning.</li>
+            <li><strong>Apprenticeship:</strong> Structured combination of on-the-job training under a skilled worker and classroom instruction. Common in trades.</li>
+            <li><strong>Coaching/mentoring:</strong> One-on-one developmental relationship with a more experienced person. Mentoring is broader and career-focused; coaching is more task-specific.</li>
+            <li><strong>Job instruction training (JIT):</strong> A structured four-step method: (1) prepare the trainee, (2) present the task, (3) have the trainee perform, (4) follow up and provide feedback.</li>
+          </ul>
+        </div>
+
+        <h3>Simulation-Based Training</h3>
+        <p><span class="key-term">Simulation training</span> creates realistic replicas of work situations for practice without real-world consequences:</p>
+        <ul>
+          <li><strong>Role playing:</strong> Trainees act out scenarios to practice interpersonal skills (conflict resolution, customer service, counseling)</li>
+          <li><strong>Business simulations/games:</strong> Participants make decisions in a simulated business environment and see the consequences</li>
+          <li><strong>Virtual reality/computer simulations:</strong> Technology-based recreations of work environments for high-fidelity practice (surgical simulators, flight simulators)</li>
+          <li><strong>Case studies:</strong> Detailed analysis of real or hypothetical situations to develop analytical and decision-making skills</li>
+        </ul>
+
+        <h3>E-Learning and Technology-Based Training</h3>
+        <p><span class="key-term">E-learning</span> encompasses training delivered via electronic media, including computer-based training, web-based courses, and mobile learning. Research shows e-learning is generally as effective as classroom instruction for knowledge acquisition, with advantages in cost-efficiency, flexibility, and standardization of content (Sitzmann et al., 2006).</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>The most effective e-learning incorporates learner control, practice opportunities, and feedback -- consistent with principles from learning theory. <span class="key-term">Blended learning</span>, which combines online and face-to-face components, often produces the best outcomes by leveraging the advantages of both approaches.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Kirkpatrick's Training Evaluation Model</h2>
+        <p><span class="key-term">Donald Kirkpatrick</span> (1959, 1994) developed the most widely used framework for evaluating training effectiveness. It consists of four levels, each building on the previous:</p>
+        <div class="definition-box">
+          <h4>Kirkpatrick's Four Levels</h4>
+          <table>
+            <tr><th>Level</th><th>What It Measures</th><th>How It Is Measured</th></tr>
+            <tr><td><strong>1. Reaction</strong></td><td>Trainees' satisfaction with and attitudes toward the training</td><td>Post-training surveys, "smile sheets," satisfaction ratings</td></tr>
+            <tr><td><strong>2. Learning</strong></td><td>Knowledge, skills, or attitudes acquired during training</td><td>Pre/post tests, skill demonstrations, written exams</td></tr>
+            <tr><td><strong>3. Behavior</strong></td><td>Transfer of training to actual job performance</td><td>Supervisor ratings, on-the-job observation, performance data</td></tr>
+            <tr><td><strong>4. Results</strong></td><td>Organizational impact (productivity, quality, profits, turnover)</td><td>Organizational records, ROI analysis, business metrics</td></tr>
+          </table>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Most organizations evaluate only at Level 1 (reaction), even though higher levels provide more meaningful information. Importantly, the levels are not strongly correlated: positive reactions (Level 1) do not guarantee learning (Level 2), and learning does not guarantee behavioral change on the job (Level 3). The most critical and least measured level is Level 4 (results). A <span class="key-term">fifth level</span> has been proposed -- return on investment (ROI) -- which calculates the monetary value of training results compared to training costs.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Transfer of Training</h2>
+        <p><span class="key-term">Transfer of training</span> refers to the degree to which knowledge, skills, and abilities learned in training are applied on the job and maintained over time. Transfer is the ultimate goal of training.</p>
+
+        <h3>Types of Transfer</h3>
+        <ul>
+          <li><strong>Positive transfer:</strong> Training improves job performance (the goal)</li>
+          <li><strong>Negative transfer:</strong> Training interferes with job performance (e.g., learning to drive on the right after years of driving on the left)</li>
+          <li><strong>Zero transfer:</strong> Training has no effect on job performance</li>
+          <li><strong>Near transfer:</strong> Applying learned skills to situations very similar to the training context</li>
+          <li><strong>Far transfer:</strong> Applying learned skills to situations quite different from the training context (more difficult to achieve)</li>
+        </ul>
+
+        <h3>Factors Affecting Transfer</h3>
+        <div class="definition-box">
+          <h4>Baldwin and Ford's (1988) Transfer Model</h4>
+          <p>Transfer of training depends on three categories of factors:</p>
+          <ul>
+            <li><strong>Training design:</strong> Identical elements (Thorndike), general principles, stimulus variability, practice and overlearning, feedback</li>
+            <li><strong>Trainee characteristics:</strong> Ability, personality (self-efficacy, motivation to learn, locus of control), perceived utility of training</li>
+            <li><strong>Work environment:</strong> Supervisor support, peer support, opportunity to perform, organizational climate for transfer</li>
+          </ul>
+        </div>
+        <p><span class="key-term">Identical elements theory</span> (Thorndike & Woodworth, 1901) predicts that transfer is maximized when the training environment closely matches the job environment. This is the theoretical basis for simulation training and high-fidelity practice environments.</p>
+        <div class="example-box">
+          <h4>Example: Enhancing Transfer</h4>
+          <p>A therapy training program maximizes transfer by: (1) using role-plays with realistic client scenarios (identical elements), (2) screening trainees for motivation and readiness (trainee characteristics), (3) arranging post-training supervision and case consultation (work environment support), and (4) requiring trainees to set specific goals for applying new techniques (relapse prevention).</p>
+        </div>
+        <p><span class="key-term">Relapse prevention</span>, adapted from Marlatt and Gordon's addiction model by Marx (1982), teaches trainees to anticipate situations where they might revert to old behaviors, develop coping strategies, and maintain new skills. This approach has been shown to improve long-term transfer.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Three levels of needs assessment: organizational, task, person</li>
+            <li>Organizational analysis determines where training is needed and if conditions support it</li>
+            <li>Task analysis identifies what should be trained; person analysis identifies who needs training</li>
+            <li>Kirkpatrick's four levels: reaction, learning, behavior, results</li>
+            <li>Levels are not strongly correlated -- satisfaction does not ensure learning or transfer</li>
+            <li>Most organizations only measure Level 1 (reaction); Level 4 (results) is most meaningful but least measured</li>
+            <li>Transfer of training: positive, negative, zero, near, far</li>
+            <li>Identical elements theory: transfer improves as training-job similarity increases</li>
+            <li>Baldwin and Ford model: training design + trainee characteristics + work environment = transfer</li>
+            <li>Supervisor support is one of the strongest work environment predictors of transfer</li>
+            <li>Overlearning (practicing beyond mastery) enhances retention and transfer</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Baldwin, T. T., & Ford, J. K. (1988). Transfer of training: A review and directions for future research. <em>Personnel Psychology, 41</em>(1), 63-105.</div>
+        <div class="citation">Kirkpatrick, D. L. (1994). <em>Evaluating training programs: The four levels</em>. Berrett-Koehler.</div>
+        <div class="citation">Marx, R. D. (1982). Relapse prevention for managerial training. <em>Academy of Management Review, 7</em>(3), 433-441.</div>
+        <div class="citation">Sitzmann, T., Kraiger, K., Stewart, D., & Wisher, R. (2006). The comparative effectiveness of web-based and classroom instruction. <em>Personnel Psychology, 59</em>(3), 623-664.</div>
+        <div class="citation">Thorndike, E. L., & Woodworth, R. S. (1901). The influence of improvement in one mental function upon the efficiency of other functions. <em>Psychological Review, 8</em>, 247-261.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="selection-evaluation.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Evaluating Selection Decisions</div>
+          </div>
+        </a>
+        <a href="career-development.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Navigating Career Paths</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

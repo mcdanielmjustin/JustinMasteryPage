@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biases & Heuristics | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Biases & Heuristics</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link active"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 9</div>
+        <h1>Biases & Heuristics</h1>
+        <div class="chapter-meta">
+          <span>Availability, representativeness, anchoring, confirmation bias</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Judgment Under Uncertainty</h2>
+        <p>The pioneering work of Daniel Kahneman and Amos Tversky demonstrated that human judgment under uncertainty relies on a limited number of <span class="key-term">heuristics</span> -- mental shortcuts that simplify complex problems. While heuristics are often efficient, they can lead to systematic and predictable errors known as <span class="key-term">cognitive biases</span>.</p>
+        <p>This dual-process framework distinguishes between <strong>System 1</strong> (fast, automatic, intuitive) and <strong>System 2</strong> (slow, deliberate, analytical) thinking. Heuristics are products of System 1. Biases occur when System 1 shortcuts lead to errors that System 2 fails to correct.</p>
+        <p>For the EPPP, understanding biases and heuristics is important because they affect clinical judgment, risk assessment, diagnostic decision-making, and the reasoning of both clinicians and clients.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Availability Heuristic</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p>The <span class="key-term">availability heuristic</span> is the tendency to judge the frequency or probability of an event based on how easily examples come to mind (Tversky &amp; Kahneman, 1973). Events that are vivid, recent, or emotionally salient are more "available" in memory and therefore judged as more common or likely.</p>
+        </div>
+
+        <h3>Key Demonstrations</h3>
+        <ul>
+          <li><strong>Letter frequency:</strong> People estimate that more English words begin with the letter "R" than have "R" as the third letter, because it is easier to think of words by their first letter. In fact, "R" is more common in the third position.</li>
+          <li><strong>Cause of death:</strong> People overestimate the frequency of dramatic causes of death (airplane crashes, shark attacks) and underestimate mundane ones (diabetes, asthma), because dramatic events receive more media coverage and are more memorable.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Clinicians may overestimate the prevalence of conditions they have recently encountered or that made a strong impression. For example, after treating a client who attempted suicide, a clinician may temporarily overestimate suicide risk in other clients. The availability heuristic also affects risk communication with clients -- dramatic risks may be overweighted in treatment decisions.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Representativeness Heuristic</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p>The <span class="key-term">representativeness heuristic</span> involves judging the probability that an object or event belongs to a category based on how much it resembles the typical member of that category (Tversky &amp; Kahneman, 1974). People judge probability by similarity rather than by base rates or statistical reasoning.</p>
+        </div>
+
+        <h3>Errors Produced</h3>
+        <div class="definition-box">
+          <h4>Base Rate Neglect</h4>
+          <p>Ignoring the prior probability (base rate) of an event when making judgments. In the classic "Tom W." problem, participants judged a shy, detail-oriented person as more likely to be a librarian than a salesperson, ignoring the fact that salespeople vastly outnumber librarians in the population.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Conjunction Fallacy (Linda Problem)</h4>
+          <p>Judging the conjunction of two events as more probable than either event alone. In Tversky and Kahneman's (1983) famous "Linda problem," participants rated "Linda is a bank teller AND active in the feminist movement" as more likely than "Linda is a bank teller," violating basic probability rules. The detailed description made the conjunction seem more "representative."</p>
+        </div>
+        <div class="definition-box">
+          <h4>Insensitivity to Sample Size</h4>
+          <p>Failing to recognize that small samples are more variable than large samples. People expect even small samples to be representative of the population -- the <span class="key-term">law of small numbers</span> fallacy.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Gambler's Fallacy</h4>
+          <p>Expecting random sequences to be self-correcting. After a series of coin flips landing heads, people expect tails to be "due," even though each flip is independent. This reflects the belief that short sequences should be representative of the overall probability.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>When an EPPP question describes a judgment error involving similarity or category membership, think representativeness. When it describes a judgment error involving ease of recall or vividness, think availability. These two heuristics are frequently tested and easily confused.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Anchoring and Adjustment</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p>The <span class="key-term">anchoring and adjustment heuristic</span> occurs when people make estimates by starting from an initial value (the anchor) and then adjusting from it. The adjustment is typically insufficient, meaning the final estimate remains biased toward the anchor (Tversky &amp; Kahneman, 1974).</p>
+        </div>
+
+        <h3>Key Findings</h3>
+        <ul>
+          <li>Anchoring effects occur even when the anchor is obviously arbitrary. In one study, spinning a wheel of fortune that landed on either 10 or 65 influenced participants' estimates of the percentage of African countries in the United Nations.</li>
+          <li>Anchoring affects professionals: real estate agents' appraisals are influenced by the listed price; judges' sentencing decisions are affected by the prosecutor's recommended sentence.</li>
+          <li>Anchoring is remarkably resistant to debiasing -- merely telling people about the bias does not eliminate it.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>In clinical settings, anchoring can affect diagnosis. The initial diagnostic impression (anchor) may disproportionately influence the final diagnosis, even as new information emerges. Clinicians may insufficiently adjust away from their first impression, leading to confirmation of the initial hypothesis. Structured diagnostic procedures can help mitigate this effect.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Confirmation Bias</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Confirmation bias</span> is the tendency to search for, interpret, and remember information in a way that confirms one's preexisting beliefs or hypotheses, while giving disproportionately less attention to information that contradicts them (Wason, 1960; Nickerson, 1998).</p>
+        </div>
+
+        <h3>Manifestations</h3>
+        <ul>
+          <li><strong>Selective information seeking:</strong> Seeking out information that supports one's hypothesis rather than testing the hypothesis by looking for disconfirming evidence.</li>
+          <li><strong>Biased interpretation:</strong> Interpreting ambiguous information as supporting one's existing beliefs. Both sides of a debate may view the same evidence as supporting their position.</li>
+          <li><strong>Selective recall:</strong> Preferentially remembering information that confirms one's beliefs.</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Wason Selection Task (1966)</h4>
+          <p>Participants were given the rule "If a card has a vowel on one side, it has an even number on the other." They were shown four cards (A, K, 4, 7) and asked which cards to flip to test the rule. Most correctly chose "A" (potentially confirming) but failed to choose "7" (potentially disconfirming). People seek confirming evidence and neglect the logically necessary disconfirming test.</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Impact on Clinical Practice</h4>
+          <p>Confirmation bias is one of the most significant threats to accurate clinical judgment. Once a clinician forms a diagnostic hypothesis, they may selectively attend to symptoms that confirm the diagnosis while overlooking or dismissing symptoms that suggest an alternative. Structured diagnostic interviews and the practice of actively generating and testing alternative hypotheses can help counteract this bias.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Hindsight Bias</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Hindsight bias</span> (the "knew-it-all-along" effect) is the tendency, after learning the outcome of an event, to believe that one would have predicted that outcome beforehand (Fischhoff, 1975). People reconstruct their prior beliefs to be more consistent with the known outcome than they actually were.</p>
+        </div>
+
+        <h3>Consequences</h3>
+        <ul>
+          <li><strong>Overconfidence:</strong> Hindsight bias inflates people's confidence in their ability to predict events, leading to overconfidence in future predictions.</li>
+          <li><strong>Blame:</strong> After a negative outcome (e.g., client suicide), hindsight bias may lead colleagues, families, or juries to believe that the outcome was foreseeable and that the clinician should have predicted it.</li>
+          <li><strong>Impaired learning:</strong> If outcomes always seem predictable in hindsight, there is less motivation to analyze what actually happened and learn from surprises.</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Framing Effects</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Framing effects</span> occur when people's decisions are influenced by how information is presented (framed) rather than by the objective content of the information itself (Tversky &amp; Kahneman, 1981).</p>
+        </div>
+
+        <h3>Asian Disease Problem</h3>
+        <p>In the classic demonstration, participants were told that 600 people were expected to die from a disease and had to choose between two programs:</p>
+        <ul>
+          <li><strong>Gain frame:</strong> Program A saves 200 people (certain outcome) vs. Program B has a 1/3 chance of saving all 600 and a 2/3 chance of saving no one. Most people chose A (risk-averse in the gain frame).</li>
+          <li><strong>Loss frame:</strong> Program C results in 400 people dying (certain outcome) vs. Program D has a 1/3 chance that nobody dies and a 2/3 chance that all 600 die. Most people chose D (risk-seeking in the loss frame).</li>
+        </ul>
+        <p>Programs A and C are identical, as are Programs B and D. The shift in preference demonstrates that people are <span class="key-term">risk-averse</span> when outcomes are framed as gains and <span class="key-term">risk-seeking</span> when outcomes are framed as losses.</p>
+
+        <h3>Summary Table: Biases and Heuristics</h3>
+        <table>
+          <tr><th>Bias/Heuristic</th><th>Core Mechanism</th><th>Example Error</th></tr>
+          <tr><td>Availability</td><td>Ease of recall</td><td>Overestimating plane crash frequency</td></tr>
+          <tr><td>Representativeness</td><td>Similarity to prototype</td><td>Ignoring base rates in diagnosis</td></tr>
+          <tr><td>Anchoring</td><td>Insufficient adjustment from starting point</td><td>Initial diagnosis biasing final judgment</td></tr>
+          <tr><td>Confirmation</td><td>Seeking confirming evidence</td><td>Only asking questions that support a hypothesis</td></tr>
+          <tr><td>Hindsight</td><td>Outcome knowledge distorts recall</td><td>"I knew the client would drop out"</td></tr>
+          <tr><td>Framing</td><td>Presentation format changes choice</td><td>Choosing different treatments based on how risks are described</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Debiasing Strategies</h4>
+          <p>While completely eliminating biases is unlikely, several strategies can reduce their impact: (1) Use structured clinical decision-making tools (e.g., actuarial instruments) rather than relying solely on clinical judgment. (2) Actively generate and test alternative hypotheses. (3) Seek out disconfirming evidence. (4) Consult with colleagues to get outside perspectives. (5) Be aware of base rates when making probability judgments.</p>
+        </div>
+        <div class="citation">Tversky, A., &amp; Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. Science, 185(4157), 1124-1131.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Additional Biases Relevant to the EPPP</h2>
+
+        <h3>Overconfidence Bias</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p>The <span class="key-term">overconfidence bias</span> is the tendency for people to be more confident in their judgments than is warranted by their actual accuracy. When people say they are 90% confident in an answer, they are correct only about 75% of the time. Clinicians are not immune: research shows that clinical experience often increases confidence in diagnostic judgments more than it increases accuracy.</p>
+        </div>
+
+        <h3>Sunk Cost Fallacy</h3>
+        <p>The <span class="key-term">sunk cost fallacy</span> is the tendency to continue an endeavor once an investment of money, effort, or time has been made, even when the future costs outweigh the benefits. The rational approach is to base decisions only on future costs and benefits, ignoring past investments. In clinical settings, this can manifest as continuing a treatment approach that is not working because "we've already invested so much time in it."</p>
+
+        <h3>Illusory Correlation</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Illusory correlation</span> (Chapman &amp; Chapman, 1967) is the perception of a relationship between two variables when no such relationship exists (or when the relationship is much weaker than perceived). This bias is particularly relevant to clinical assessment: clinicians may perceive associations between certain projective test responses and diagnoses that are not supported by empirical evidence, simply because the associations seem intuitively plausible.</p>
+        </div>
+
+        <h3>Dunning-Kruger Effect</h3>
+        <p>The <span class="key-term">Dunning-Kruger effect</span> (Kruger &amp; Dunning, 1999) describes the tendency for people with low ability or knowledge in a domain to overestimate their competence. Conversely, those with high ability tend to slightly underestimate their competence. The least skilled individuals lack the metacognitive ability to recognize their own incompetence, leading to inflated self-assessments.</p>
+
+        <h3>Optimism Bias</h3>
+        <p>The <span class="key-term">optimism bias</span> (Weinstein, 1980) is the tendency to overestimate the likelihood of positive events and underestimate the likelihood of negative events happening to oneself. People believe they are less likely than average to experience health problems, accidents, or other misfortunes. While generally adaptive for mental health, optimism bias can lead to inadequate risk precautions.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Biases in Clinical Decision-Making</h2>
+        <p>Understanding cognitive biases has direct implications for clinical practice. Several biases are particularly relevant to psychological assessment and diagnosis.</p>
+
+        <h3>Diagnostic Overshadowing</h3>
+        <p><span class="key-term">Diagnostic overshadowing</span> occurs when the presence of one condition (e.g., intellectual disability) leads clinicians to attribute additional symptoms to that condition rather than recognizing a comorbid diagnosis (e.g., depression). This leads to underdiagnosis of comorbid conditions in individuals with salient primary diagnoses.</p>
+
+        <h3>Base Rate Neglect in Diagnosis</h3>
+        <p>Clinicians may rely on the representativeness of symptoms (how closely they match a prototypical case) while ignoring the base rate of the condition in the population. For rare conditions, even a test with high sensitivity and specificity will produce many false positives when the base rate is low -- a concept related to <span class="key-term">Bayesian reasoning</span> that clinicians often underutilize.</p>
+
+        <div class="clinical-note">
+          <h4>Practical Recommendations</h4>
+          <p>To improve clinical decision-making: (1) Use evidence-based assessment instruments with known psychometric properties. (2) Consider base rates when interpreting test results. (3) Generate multiple diagnostic hypotheses and actively seek disconfirming evidence for each. (4) Use structured professional judgment rather than unstructured clinical judgment when possible. (5) Seek consultation when cases are complex or when you notice strong initial impressions forming. (6) Be aware that expertise does not automatically immunize against cognitive biases.</p>
+        </div>
+        <div class="citation">Kahneman, D. (2011). Thinking, fast and slow. Farrar, Straus and Giroux.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Prospect Theory and Loss Aversion</h2>
+        <p>Kahneman and Tversky's (1979) <span class="key-term">prospect theory</span> is a descriptive model of decision-making under risk that challenges the classical economic assumption of rational utility maximization. Two key findings from prospect theory are particularly relevant for the EPPP:</p>
+
+        <h3>Loss Aversion</h3>
+        <p><span class="key-term">Loss aversion</span> refers to the finding that losses loom larger than equivalent gains. The psychological impact of losing $100 is approximately twice as strong as the impact of gaining $100. This asymmetry drives many real-world decisions and risk behaviors. Loss aversion helps explain why people maintain the status quo (endowment effect), why they hold losing investments too long (disposition effect), and why fear-based health messages can be particularly potent.</p>
+
+        <h3>The Value Function</h3>
+        <p>Prospect theory's value function is defined over gains and losses relative to a reference point (rather than absolute wealth). It is concave for gains (risk aversion) and convex for losses (risk seeking), and steeper for losses than for gains. This explains why the same outcome can produce different decisions depending on how the reference point is set -- the essence of framing effects.</p>
+
+        <div class="example-box">
+          <h4>Clinical Relevance of Decision-Making Research</h4>
+          <p>Understanding biases and heuristics is not just an academic exercise for the EPPP. These concepts have direct clinical applications: informed consent requires presenting risks and benefits in ways that minimize framing bias; risk assessment requires awareness of base rate neglect and availability bias; treatment planning requires guarding against confirmation bias and anchoring; and psychoeducation about cognitive biases can be a therapeutic tool in cognitive-behavioral therapy, helping clients recognize their own distorted thinking patterns as natural (but correctable) features of human cognition.</p>
+        </div>
+        <div class="citation">Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. Econometrica, 47(2), 263-292.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="attribution.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Attribution Theory</div>
+          </div>
+        </a>
+        <a href="attitudes.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Attitudes</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

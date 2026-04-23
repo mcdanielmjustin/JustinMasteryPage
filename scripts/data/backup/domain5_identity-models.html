@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identity Development Models | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Identity Development Models</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link active"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 9</div>
+        <h1>Identity Development Models</h1>
+        <div class="chapter-meta">
+          <span>Racial/ethnic identity, acculturation, multicultural models</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Identity Development Models</h2>
+        <p>Identity development models describe the psychological processes through which individuals come to understand and integrate their racial, ethnic, and cultural identities. These models are essential for the EPPP because they inform culturally competent assessment and treatment. Understanding where a client falls within an identity development process can profoundly shape therapeutic alliance, treatment planning, and outcomes.</p>
+        <p>Most identity models share a common structure: individuals move from a state of limited awareness of their group membership through stages of exploration, conflict, and ultimately toward an integrated sense of self. The progression is not strictly linear; individuals may recycle through stages in response to new experiences or environmental changes.</p>
+        <div class="clinical-note">
+          <h4>Clinical Relevance</h4>
+          <p>A client's stage of identity development can influence their openness to discussing race or culture in therapy, their preference for a therapist of the same or different background, and their presenting concerns. Mismatching therapeutic approach to identity stage is a common source of premature termination.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cross's Nigrescence Model</h2>
+        <p>William Cross's <span class="key-term">nigrescence model</span> (1971, revised 1991) describes the process of "becoming Black" -- the psychological transformation from a non-Afrocentric to an Afrocentric identity. It was one of the first and most influential racial identity models in psychology.</p>
+
+        <h3>Original Five Stages</h3>
+        <div class="definition-box">
+          <h4>Stage 1: Pre-Encounter</h4>
+          <p>The individual holds attitudes that range from low salience of race (race is not important to self-concept) to anti-Black attitudes. The person may idealize the dominant White culture and devalue Black culture. Self-concept is not organized around racial group membership.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Stage 2: Encounter</h4>
+          <p>A significant event or series of events disrupts the individual's existing worldview and forces a reexamination of their racial identity. This could be a personal experience of racism, a major sociopolitical event, or exposure to new information about one's racial heritage.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Stage 3: Immersion-Emersion</h4>
+          <p><strong>Immersion:</strong> The person immerses in Black culture, idealizing everything Black and demonizing everything White. Identity is often externally defined through symbols, clothing, and language. <strong>Emersion:</strong> The intense emotionality begins to level off. The person moves from an externally defined identity toward a more internalized, personally meaningful connection to Blackness.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Stage 4: Internalization</h4>
+          <p>The individual achieves a secure, internally defined Black identity. Anti-White attitudes decline. The person can appreciate aspects of other cultures while maintaining a strong sense of Black identity. There is increased openness to building coalitions across racial groups.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Stage 5: Internalization-Commitment</h4>
+          <p>The individual translates their internalized identity into sustained activism and commitment to the concerns of Black people as a group. This stage reflects long-term engagement rather than a qualitatively different identity structure from Stage 4.</p>
+        </div>
+
+        <h3>Revised Model (1991)</h3>
+        <p>In his revision, Cross emphasized that Pre-Encounter is not a single attitude but a cluster of attitudes varying in the degree to which race is salient. He also collapsed Stages 4 and 5 into a single Internalization stage with varying levels of commitment. The revised model places greater emphasis on the <span class="key-term">functions</span> of identity (buffering, bonding, bridging, code-switching) rather than stages alone.</p>
+        <div class="citation">Cross, W. E. (1991). Shades of Black: Diversity in African-American identity. Temple University Press.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Helms's White Racial Identity Development Model</h2>
+        <p>Janet Helms (1984, 1990, 1995) proposed that White individuals also undergo a racial identity development process. Rather than stages, Helms uses the term <span class="key-term">statuses</span> to emphasize that these are information-processing strategies that can coexist, with one typically dominant at any given time.</p>
+
+        <h3>Phase I: Abandonment of Racism</h3>
+        <table>
+          <tr><th>Status</th><th>Description</th></tr>
+          <tr><td><strong>Contact</strong></td><td>Obliviousness to one's own racial identity and to the significance of race. Naive curiosity about or fear of people of color. Satisfaction with the racial status quo.</td></tr>
+          <tr><td><strong>Disintegration</strong></td><td>First acknowledgment of White privilege. Moral dilemma between loyalty to one's White group and a desire for non-racist ideals. Feelings of guilt, shame, and anxiety.</td></tr>
+          <tr><td><strong>Reintegration</strong></td><td>Resolution of Disintegration anxiety through idealization of one's own group and intolerance of other groups. Belief that White superiority is justified. May be triggered by a negative interracial encounter.</td></tr>
+        </table>
+
+        <h3>Phase II: Defining a Non-Racist White Identity</h3>
+        <table>
+          <tr><th>Status</th><th>Description</th></tr>
+          <tr><td><strong>Pseudo-Independence</strong></td><td>First status of positive White identity. Intellectual acceptance of racial differences. May attempt to "help" people of color assimilate to White standards. Understanding remains largely cognitive rather than affective.</td></tr>
+          <tr><td><strong>Immersion-Emersion</strong></td><td>Active search for an accurate understanding of racism and Whiteness. Seeks to replace myths and stereotypes with accurate information. Emotional processing of what it means to be White.</td></tr>
+          <tr><td><strong>Autonomy</strong></td><td>Informed, positive White identity that is non-racist. Values diversity, actively seeks cross-racial interactions, and works against oppression. Ongoing process of refinement rather than a fixed endpoint.</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>The EPPP frequently tests the distinction between Helms's use of "statuses" versus "stages." Remember that statuses can coexist and individuals may use multiple information-processing strategies simultaneously. Also note that the Reintegration status involves a retreat into White superiority beliefs as a way to manage the anxiety of Disintegration.</p>
+        </div>
+        <div class="citation">Helms, J. E. (1995). An update of Helms's White and people of color racial identity models. In J. G. Ponterotto et al. (Eds.), Handbook of multicultural counseling. Sage.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Sue and Sue's Racial/Cultural Identity Development Model (R/CID)</h2>
+        <p>Derald Wing Sue and David Sue (1990) proposed a broader model intended to apply to <span class="key-term">all minority groups</span>, not only African Americans. The R/CID model describes five stages of identity development that people of color may experience in response to living in a society where their group is marginalized.</p>
+        <ol>
+          <li><strong>Conformity:</strong> Preference for dominant culture values. Depreciation of own group. Self-deprecating attitudes. Desire to assimilate.</li>
+          <li><strong>Dissonance:</strong> Growing awareness of racism and cultural conflicts. Confusion between self-deprecating and group-appreciating attitudes. Questioning of previously held conformist views.</li>
+          <li><strong>Resistance and Immersion:</strong> Active rejection of dominant culture. Complete endorsement of minority-held views. Desire to combat oppression. Feelings of anger and guilt.</li>
+          <li><strong>Introspection:</strong> Discomfort with rigidly held views from the previous stage. Recognition that not all aspects of the dominant culture are negative. Desire for greater individual autonomy.</li>
+          <li><strong>Integrative Awareness:</strong> Secure sense of racial/cultural identity. Appreciation of other cultural groups. Selective trust and distrust based on individual qualities rather than group membership. Commitment to eliminating all forms of oppression.</li>
+        </ol>
+        <div class="clinical-note">
+          <h4>Therapeutic Implications of R/CID</h4>
+          <p>Clients in the Conformity stage may prefer a White therapist, while clients in Resistance and Immersion may strongly prefer a therapist of their own racial/ethnic group. Clients in Integrative Awareness are typically open to working with therapists of any background, provided the therapist demonstrates cultural competence.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Berry's Acculturation Model</h2>
+        <p>John Berry's (1997) <span class="key-term">acculturation model</span> examines how individuals navigate the process of adapting to a new cultural environment. Rather than a stage model, Berry proposes a two-dimensional framework based on two independent questions:</p>
+        <ol>
+          <li>Is it valuable to maintain one's cultural identity and characteristics?</li>
+          <li>Is it valuable to maintain relationships with the larger society?</li>
+        </ol>
+
+        <h3>Four Acculturation Strategies</h3>
+        <table>
+          <tr><th>Strategy</th><th>Maintain Heritage Culture?</th><th>Adopt Host Culture?</th><th>Description</th></tr>
+          <tr><td><strong>Integration</strong></td><td>Yes</td><td>Yes</td><td>Maintaining one's heritage culture while also participating in the larger society. Generally associated with the best psychological outcomes and lowest acculturative stress.</td></tr>
+          <tr><td><strong>Assimilation</strong></td><td>No</td><td>Yes</td><td>Relinquishing one's heritage culture in favor of adopting the host culture. The individual seeks daily interaction with other cultures and does not wish to maintain their cultural identity.</td></tr>
+          <tr><td><strong>Separation</strong></td><td>Yes</td><td>No</td><td>Maintaining one's heritage culture while avoiding interaction with the larger society. When imposed by the dominant group, this is called <span class="key-term">segregation</span>.</td></tr>
+          <tr><td><strong>Marginalization</strong></td><td>No</td><td>No</td><td>Neither maintaining one's heritage culture nor adopting the host culture. Often associated with the highest levels of acculturative stress and poorest psychological adjustment.</td></tr>
+        </table>
+
+        <div class="definition-box">
+          <h4>Acculturative Stress</h4>
+          <p>A specific type of stress resulting from the acculturation process. It can manifest as anxiety, depression, identity confusion, and psychosomatic symptoms. Research consistently shows that the integration strategy is associated with the lowest acculturative stress, while marginalization is associated with the highest.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Berry's model is frequently tested. Remember that it is a <strong>two-dimensional</strong> model (not a stage model), and the key distinction is between the individual's orientation toward their heritage culture and their orientation toward the host culture. Also remember that "separation" chosen by the individual differs from "segregation" imposed by the dominant group.</p>
+        </div>
+        <div class="citation">Berry, J. W. (1997). Immigration, acculturation, and adaptation. Applied Psychology: An International Review, 46(1), 5-34.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Multicultural Counseling Competencies</h2>
+        <p>Sue, Arredondo, and McDavis (1992) proposed a tripartite framework for <span class="key-term">multicultural counseling competencies</span> that has become the foundation for cultural competence standards in psychology. The framework identifies three domains, each with three dimensions.</p>
+
+        <h3>Three Domains</h3>
+        <ol>
+          <li><strong>Counselor Awareness of Own Cultural Values and Biases:</strong> Understanding one's own cultural heritage, recognizing how one's background influences perceptions, and being aware of one's own biases and stereotypes.</li>
+          <li><strong>Counselor Awareness of Client's Worldview:</strong> Understanding the worldview of culturally diverse clients without judgment. This includes knowledge of the client's cultural group, awareness of sociopolitical influences, and understanding institutional barriers.</li>
+          <li><strong>Culturally Appropriate Intervention Strategies:</strong> Ability to use and develop culturally appropriate interventions. This includes adapting traditional approaches, using culturally specific techniques, and engaging in advocacy when appropriate.</li>
+        </ol>
+
+        <h3>Three Dimensions Within Each Domain</h3>
+        <ul>
+          <li><strong>Beliefs and Attitudes:</strong> The affective component -- one's personal values, assumptions, and emotional reactions.</li>
+          <li><strong>Knowledge:</strong> The cognitive component -- factual understanding of cultural groups, identity development, and the impact of oppression.</li>
+          <li><strong>Skills:</strong> The behavioral component -- the ability to translate awareness and knowledge into effective therapeutic actions.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Applying Competencies in Practice</h4>
+          <p>Cultural competence is not a destination but an ongoing process. Psychologists are expected to engage in continuous self-assessment, seek education about the cultures of their clients, and actively develop intervention strategies that are responsive to cultural context. The APA Multicultural Guidelines (2017) further emphasize intersectionality, recognizing that individuals hold multiple identities that interact in complex ways.</p>
+        </div>
+
+        <h3>Summary Table: Key Identity Models Compared</h3>
+        <table>
+          <tr><th>Model</th><th>Focus Population</th><th>Type</th><th>Key Feature</th></tr>
+          <tr><td>Cross Nigrescence</td><td>African Americans</td><td>Stage model</td><td>Pre-Encounter through Internalization; "becoming Black"</td></tr>
+          <tr><td>Helms White Identity</td><td>White individuals</td><td>Status model</td><td>Abandonment of racism; defining non-racist White identity</td></tr>
+          <tr><td>Sue &amp; Sue R/CID</td><td>All minority groups</td><td>Stage model</td><td>Conformity through Integrative Awareness</td></tr>
+          <tr><td>Berry Acculturation</td><td>Immigrants/minorities</td><td>Two-dimensional</td><td>Integration, assimilation, separation, marginalization</td></tr>
+        </table>
+        <div class="citation">Sue, D. W., Arredondo, P., &amp; McDavis, R. J. (1992). Multicultural counseling competencies and standards: A call to the profession. Journal of Counseling &amp; Development, 70(4), 477-486.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Additional Identity Models</h2>
+
+        <h3>Phinney's Model of Ethnic Identity Development</h3>
+        <p>Jean Phinney (1989, 1992) developed a model of ethnic identity development applicable to <span class="key-term">all ethnic groups</span>, drawing on Erikson's concept of identity formation and Marcia's identity status model. Phinney's model describes three stages:</p>
+        <ol>
+          <li><strong>Unexamined Ethnic Identity:</strong> Similar to Marcia's diffusion or foreclosure statuses. The individual has not actively explored their ethnicity. Attitudes may be positive (absorbed from family) or negative (internalized from dominant culture).</li>
+          <li><strong>Ethnic Identity Search/Moratorium:</strong> Triggered by a significant experience that increases awareness of ethnicity. Active exploration of one's ethnic heritage, involvement in ethnic cultural activities, and emotional engagement with identity questions.</li>
+          <li><strong>Achieved Ethnic Identity:</strong> Resolution of identity questions resulting in a clear, confident sense of one's ethnicity. Positive ethnic identity that is secure enough to allow appreciation of other groups.</li>
+        </ol>
+        <p>Phinney's Multigroup Ethnic Identity Measure (MEIM) is a widely used assessment tool that measures two components: ethnic identity search (exploration) and affirmation/belonging/commitment.</p>
+
+        <h3>Cass's Model of Homosexual Identity Formation</h3>
+        <p>Vivienne Cass (1979) proposed a six-stage model of <span class="key-term">homosexual identity formation</span> that describes the process of developing and integrating a gay or lesbian identity:</p>
+        <ol>
+          <li><strong>Identity Confusion:</strong> Awareness that homosexuality is personally relevant. Confusion about sexual orientation.</li>
+          <li><strong>Identity Comparison:</strong> Tentative acceptance of possible homosexual identity. Feelings of alienation from heterosexual peers.</li>
+          <li><strong>Identity Tolerance:</strong> Increasing commitment to a homosexual self-image. Seeking out the gay/lesbian community.</li>
+          <li><strong>Identity Acceptance:</strong> Selective disclosure. Accepting rather than merely tolerating a homosexual identity.</li>
+          <li><strong>Identity Pride:</strong> Immersion in gay/lesbian culture. Anger at heterosexism. "Us vs. them" mentality.</li>
+          <li><strong>Identity Synthesis:</strong> Integration of sexual identity with other aspects of self. Reduced anger and dichotomous thinking. Sexual identity becomes one important aspect of a complex, multifaceted self.</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>Modern Perspectives</h4>
+          <p>While Cass's model was groundbreaking, contemporary approaches recognize that LGBTQ+ identity development is more fluid and less linear than stage models suggest. Intersectional approaches consider how sexual orientation identity interacts with race, gender, class, and other identities. The <span class="key-term">minority stress model</span> (Meyer, 2003) provides a framework for understanding the mental health impact of prejudice and discrimination on sexual minorities, including internalized homophobia, anticipated stigma, and concealment stress.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Intersectionality and Multiple Identities</h2>
+        <p><span class="key-term">Intersectionality</span>, a concept originally articulated by Kimberle Crenshaw (1989), recognizes that individuals simultaneously hold multiple social identities (race, gender, sexual orientation, class, disability, religion) that intersect to create unique experiences of privilege and oppression. An intersectional approach moves beyond examining single identity categories in isolation.</p>
+
+        <div class="definition-box">
+          <h4>Key Principles of Intersectionality</h4>
+          <p>Identities are not additive (the experience of a Black woman is not simply the sum of "being Black" + "being a woman"). Rather, identities interact to create qualitatively distinct experiences. Power and privilege operate at individual, interpersonal, institutional, and structural levels simultaneously. The same individual may experience privilege along some dimensions (e.g., being male) and oppression along others (e.g., being a person of color).</p>
+        </div>
+
+        <div class="example-box">
+          <h4>EPPP Integration</h4>
+          <p>For the EPPP, remember that no single identity model captures the full complexity of a client's experience. Effective multicultural practice requires: (1) familiarity with specific identity models (Cross, Helms, Sue &amp; Sue, Berry, Cass, Phinney), (2) understanding that clients hold multiple intersecting identities, (3) assessing each client's unique cultural context rather than applying group-level generalizations, and (4) recognizing that identity development is an ongoing, nonlinear process influenced by social context.</p>
+        </div>
+        <div class="citation">Crenshaw, K. (1989). Demarginalizing the intersection of race and sex. University of Chicago Legal Forum, 1989(1), 139-167.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Disability Identity Development</h2>
+        <p>Gill (1997) proposed a model of <span class="key-term">disability identity integration</span> describing how people with disabilities come to integrate disability into their sense of self. The model includes four types of integration:</p>
+        <ol>
+          <li><strong>Coming to feel we belong ("integrating into society"):</strong> Feeling at home in the broader society, overcoming experiences of marginalization.</li>
+          <li><strong>Coming home ("integrating with the disability community"):</strong> Connecting with other people who share the disability experience and finding solidarity.</li>
+          <li><strong>Coming together ("internally integrating"):</strong> Reconciling the various aspects of one's identity, including disability, into a coherent whole.</li>
+          <li><strong>Coming out ("integrating how we feel with how we present"):</strong> Publicly identifying as a person with a disability and challenging stigma.</li>
+        </ol>
+        <p>This model reflects the broader shift in disability studies from a <span class="key-term">medical model</span> (disability as individual deficit) to a <span class="key-term">social model</span> (disability as a product of environmental barriers and social attitudes). The social model is consistent with the APA's emphasis on contextual factors in understanding psychological functioning.</p>
+
+        <div class="example-box">
+          <h4>EPPP Integration: Identity Models</h4>
+          <p>Identity development models are tested frequently on the EPPP, particularly Cross's nigrescence model, Helms's White racial identity statuses, Berry's acculturation strategies, and the multicultural counseling competencies framework. Key points to remember: (1) Most models are not strictly linear. (2) Helms uses "statuses," not "stages." (3) Berry's model is two-dimensional, not sequential. (4) Sue and Sue's R/CID applies to all minority groups. (5) The therapeutic implications of identity stage/status are clinically significant -- especially for understanding client preferences about therapist background and openness to discussing cultural issues.</p>
+        </div>
+        <div class="citation">Gill, C. J. (1997). Four types of integration in disability identity development. Journal of Vocational Rehabilitation, 9(1), 39-46.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+        </a>
+        <a href="cultural-concepts.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Cultural Concepts</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

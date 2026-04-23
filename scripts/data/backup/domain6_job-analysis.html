@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Analysis | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Job Analysis</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link active"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 11</div>
+        <h1>Job Analysis</h1>
+        <div class="chapter-meta">
+          <span>Task analysis, KSAOs, job descriptions, competency modeling</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Job Analysis</h2>
+        <p><span class="key-term">Job analysis</span> is the systematic process of collecting and analyzing information about the content, context, and requirements of a job. It serves as the foundation for virtually all human resource functions, including selection, training, performance appraisal, compensation, and legal compliance.</p>
+        <p>For the EPPP, you must understand the distinction between different approaches to job analysis, the concept of KSAOs, and how job analysis information feeds into performance appraisal systems.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Approaches to Job Analysis</h2>
+
+        <h3>Task-Oriented Job Analysis</h3>
+        <p><span class="key-term">Task-oriented analysis</span> focuses on what the worker does -- the specific tasks, duties, and responsibilities that comprise the job. This approach produces detailed descriptions of work activities.</p>
+        <div class="definition-box">
+          <h4>Functional Job Analysis (FJA)</h4>
+          <p>Developed by Sidney Fine, FJA classifies jobs based on the level of complexity in three domains:</p>
+          <ul>
+            <li><strong>Data:</strong> How workers interact with information (synthesizing, coordinating, analyzing, compiling, computing, copying, comparing)</li>
+            <li><strong>People:</strong> How workers interact with others (mentoring, negotiating, instructing, supervising, diverting, persuading, speaking-signaling, serving, taking instructions)</li>
+            <li><strong>Things:</strong> How workers interact with objects and equipment (setting up, precision working, operating-controlling, driving-operating, manipulating, tending, feeding-offbearing, handling)</li>
+          </ul>
+          <p>Each domain is arranged hierarchically, with higher levels subsuming lower levels. FJA was used to develop the <em>Dictionary of Occupational Titles</em> (DOT).</p>
+        </div>
+
+        <h3>Worker-Oriented Job Analysis</h3>
+        <p><span class="key-term">Worker-oriented analysis</span> focuses on the human attributes and behaviors needed to perform the job, rather than the tasks themselves. This approach emphasizes what the worker brings to the job.</p>
+        <div class="definition-box">
+          <h4>Position Analysis Questionnaire (PAQ)</h4>
+          <p>Developed by McCormick, Jeanneret, and Mecham (1972), the PAQ is the most well-known worker-oriented instrument. It contains 194 job elements organized into six divisions:</p>
+          <ol>
+            <li><strong>Information input:</strong> How the worker obtains information (visual, non-visual sources)</li>
+            <li><strong>Mental processes:</strong> Reasoning, decision-making, planning, information processing</li>
+            <li><strong>Work output:</strong> Physical activities and tools used</li>
+            <li><strong>Relationships with others:</strong> Interpersonal requirements</li>
+            <li><strong>Job context:</strong> Physical and social work environment</li>
+            <li><strong>Other characteristics:</strong> Schedules, demands, responsibilities</li>
+          </ol>
+          <p>A major advantage of the PAQ is that it allows quantitative comparison across jobs, making it useful for compensation systems. A limitation is that it requires a college reading level and may be too abstract for some applications.</p>
+        </div>
+
+        <h3>KSAOs</h3>
+        <p>Job analysis identifies the <span class="key-term">KSAOs</span> required for successful job performance:</p>
+        <table>
+          <tr><th>Component</th><th>Definition</th><th>Example (Psychologist)</th></tr>
+          <tr><td><strong>Knowledge</strong></td><td>Body of factual or procedural information</td><td>Knowledge of DSM diagnostic criteria</td></tr>
+          <tr><td><strong>Skills</strong></td><td>Proficiency in performing specific tasks</td><td>Skill in administering psychological tests</td></tr>
+          <tr><td><strong>Abilities</strong></td><td>Enduring, general capacities</td><td>Verbal reasoning ability, empathy</td></tr>
+          <tr><td><strong>Other characteristics</strong></td><td>Personality traits, motivation, certifications</td><td>Licensed psychologist, ethical judgment</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Job Descriptions and Job Specifications</h2>
+        <p>Job analysis produces two primary documents:</p>
+        <div class="definition-box">
+          <h4>Job Description vs. Job Specification</h4>
+          <ul>
+            <li><strong>Job description:</strong> A written summary of the tasks, duties, responsibilities, and working conditions of a job. It describes <em>what</em> is done. Used for recruitment, orientation, and defining role expectations.</li>
+            <li><strong>Job specification:</strong> A written summary of the minimum qualifications (KSAOs) a person must possess to perform the job successfully. It describes <em>who</em> can do the job. Used for selection and placement decisions.</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Example: Distinguishing Description from Specification</h4>
+          <p><strong>Job description excerpt (Clinical Psychologist):</strong> "Conducts psychological assessments, provides individual and group psychotherapy, develops treatment plans, and participates in multidisciplinary treatment team meetings."</p>
+          <p><strong>Job specification excerpt:</strong> "Doctoral degree in clinical psychology from an APA-accredited program, state licensure as a psychologist, minimum 2 years post-licensure clinical experience, knowledge of evidence-based treatments."</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>O*NET and Modern Job Analysis</h2>
+        <p>The <span class="key-term">Occupational Information Network (O*NET)</span> is the U.S. Department of Labor's comprehensive online database that replaced the Dictionary of Occupational Titles (DOT). O*NET uses a content model organized around six domains:</p>
+        <ul>
+          <li><strong>Worker characteristics:</strong> Abilities, occupational interests, work values, work styles</li>
+          <li><strong>Worker requirements:</strong> Skills, knowledge, education</li>
+          <li><strong>Experience requirements:</strong> Training, experience, licensure</li>
+          <li><strong>Occupational requirements:</strong> Generalized work activities, organizational context, work context</li>
+          <li><strong>Workforce characteristics:</strong> Labor market information, occupational outlook</li>
+          <li><strong>Occupation-specific information:</strong> Tasks, tools, and technologies</li>
+        </ul>
+
+        <h3>Competency Modeling</h3>
+        <p><span class="key-term">Competency modeling</span> is a newer, more strategic approach that identifies the broader competencies (integrated sets of knowledge, skills, abilities, and personal attributes) needed for effective performance across a role, job family, or entire organization. Unlike traditional job analysis, which focuses on specific tasks, competency modeling emphasizes organizational strategy and culture.</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Distinction</h4>
+          <p>Traditional job analysis is more detailed, legally defensible, and task-specific. Competency modeling is broader, more future-oriented, and aligned with organizational strategy. Both approaches have value, but for legal defensibility in selection contexts, traditional job analysis is preferred because of its specificity and established methodology.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Performance Appraisal Methods</h2>
+        <p><span class="key-term">Performance appraisal</span> is the systematic evaluation of employee job performance. Job analysis directly informs the development of performance criteria. Methods vary in their focus on traits, behaviors, or results.</p>
+
+        <h3>Rating Scale Methods</h3>
+        <div class="definition-box">
+          <h4>Behaviorally Anchored Rating Scales (BARS)</h4>
+          <p>Developed by Smith and Kendall (1963), BARS use specific behavioral examples (critical incidents) as anchors for each point on the rating scale. Each performance dimension has its own scale with behavioral descriptions at different effectiveness levels.</p>
+          <p><strong>Advantages:</strong> Reduces ambiguity, provides clear behavioral standards, involves employees in development</p>
+          <p><strong>Disadvantages:</strong> Time-consuming and expensive to develop, specific to each job</p>
+        </div>
+        <div class="definition-box">
+          <h4>Behavioral Observation Scales (BOS)</h4>
+          <p>Developed by Latham and Wexley (1977), BOS ask raters to indicate the frequency with which an employee exhibits specific behaviors, using a 5-point frequency scale (Almost Never to Almost Always). Unlike BARS, which rates typical performance level, BOS measures the frequency of desired behaviors.</p>
+        </div>
+
+        <h3>360-Degree Feedback</h3>
+        <p><span class="key-term">360-degree feedback</span> (multi-source assessment) collects performance evaluations from multiple perspectives: supervisors, peers, subordinates, and sometimes customers and the employee themselves. This comprehensive approach provides a more complete picture of performance.</p>
+        <div class="example-box">
+          <h4>Example: 360-Degree Feedback Sources</h4>
+          <p>A manager receives feedback from: (1) their supervisor on strategic thinking, (2) peers on collaboration, (3) direct reports on coaching and communication, (4) customers on responsiveness, and (5) self-assessment on all dimensions. Discrepancies between self and others' ratings can highlight blind spots.</p>
+        </div>
+
+        <h3>Common Rating Errors</h3>
+        <table>
+          <tr><th>Error Type</th><th>Description</th></tr>
+          <tr><td><span class="key-term">Halo effect</span></td><td>Rating an employee the same across all dimensions based on a general impression</td></tr>
+          <tr><td><span class="key-term">Leniency/severity</span></td><td>Consistently rating all employees too high (leniency) or too low (severity)</td></tr>
+          <tr><td><span class="key-term">Central tendency</span></td><td>Rating all employees near the middle of the scale</td></tr>
+          <tr><td><span class="key-term">Recency effect</span></td><td>Overweighting recent events in the appraisal period</td></tr>
+          <tr><td><span class="key-term">Contrast effect</span></td><td>Rating influenced by comparison with the previously rated employee</td></tr>
+          <tr><td><span class="key-term">Similar-to-me effect</span></td><td>Rating employees more favorably who are similar to the rater</td></tr>
+          <tr><td><span class="key-term">First impression error</span></td><td>Allowing initial impressions to bias later ratings (primacy effect)</td></tr>
+        </table>
+        <p><span class="key-term">Frame-of-reference (FOR) training</span> has been shown to be one of the most effective methods for reducing rating errors. FOR training teaches raters to use common standards and behavioral examples when evaluating performance.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Task-oriented analysis focuses on what is done; worker-oriented analysis focuses on who can do it</li>
+            <li>PAQ: 194 items, six divisions, allows quantitative job comparison, requires college reading level</li>
+            <li>Functional Job Analysis: classifies jobs by Data, People, Things complexity</li>
+            <li>KSAOs: Knowledge, Skills, Abilities, Other characteristics</li>
+            <li>Job description = what is done; job specification = who can do it (minimum qualifications)</li>
+            <li>O*NET replaced the DOT as the primary occupational classification system</li>
+            <li>BARS uses behavioral anchors; BOS uses frequency of observed behaviors</li>
+            <li>360-degree feedback collects ratings from supervisors, peers, subordinates, and self</li>
+            <li>Halo, leniency, central tendency, recency, and contrast effects are common rating errors</li>
+            <li>Frame-of-reference training is most effective for reducing rating errors</li>
+            <li>Competency modeling is broader and more strategic than traditional job analysis</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Latham, G. P., & Wexley, K. N. (1977). Behavioral observation scales for performance appraisal purposes. <em>Personnel Psychology, 30</em>(2), 255-268.</div>
+        <div class="citation">McCormick, E. J., Jeanneret, P. R., & Mecham, R. C. (1972). A study of job characteristics and job dimensions as based on the Position Analysis Questionnaire. <em>Journal of Applied Psychology, 56</em>(4), 347-368.</div>
+        <div class="citation">Smith, P. C., & Kendall, L. M. (1963). Retranslation of expectations. <em>Journal of Applied Psychology, 47</em>(2), 149-155.</div>
+        <div class="citation">U.S. Department of Labor. (n.d.). O*NET Online. Retrieved from https://www.onetonline.org/</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="organizational-theories.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Understanding Organizations</div>
+          </div>
+        </a>
+        <a href="selection-techniques.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Finding the Right People</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

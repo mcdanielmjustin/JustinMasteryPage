@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leadership | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Leadership</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link active"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 9 of 11</div>
+        <h1>Leadership</h1>
+        <div class="chapter-meta">
+          <span>Trait, behavioral, contingency, transformational theories</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Leadership Theories</h2>
+        <p>Leadership is one of the most extensively studied topics in organizational psychology. The EPPP tests knowledge of the major theoretical approaches to understanding leadership effectiveness, from early trait-based perspectives to contemporary models emphasizing situational factors and transformational processes.</p>
+        <p>The evolution of leadership theory reflects a progression from asking "Who are leaders?" (trait theories) to "What do leaders do?" (behavioral theories) to "When does a particular style work best?" (contingency theories) to "How do leaders transform organizations?" (transformational theories).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Trait Theories of Leadership</h2>
+        <p><span class="key-term">Trait theories</span> represent the earliest systematic approach to studying leadership, based on the assumption that effective leaders possess certain innate personal characteristics that distinguish them from non-leaders. This "Great Man" approach dominated leadership research through the 1940s.</p>
+        <div class="definition-box">
+          <h4>Key Leadership Traits Identified in Research</h4>
+          <ul>
+            <li><strong>Intelligence:</strong> Effective leaders tend to be somewhat more intelligent than their followers, but not excessively so (Stogdill, 1948)</li>
+            <li><strong>Self-confidence:</strong> Belief in one's own abilities and judgments</li>
+            <li><strong>Determination:</strong> Drive, persistence, and initiative</li>
+            <li><strong>Integrity:</strong> Honesty and trustworthiness</li>
+            <li><strong>Sociability:</strong> Tendency to seek pleasant social relationships</li>
+          </ul>
+        </div>
+        <p>Ralph Stogdill's (1948) influential review concluded that no single trait or set of traits consistently predicted leadership across situations. However, his later review (1974) was more positive, finding that traits combined with situational factors could predict leadership emergence and effectiveness.</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Modern meta-analyses (Judge et al., 2002) have found that Big Five personality traits do predict leadership: Extraversion is the strongest correlate of leadership emergence, followed by Conscientiousness and Openness to Experience. Neuroticism is negatively related, while Agreeableness shows the weakest relationship. Know that trait approaches are not "dead" but are now seen as one piece of the leadership puzzle.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Behavioral Theories of Leadership</h2>
+        <p>Behavioral theories shifted focus from who leaders are to what leaders do, attempting to identify specific behaviors associated with effective leadership. Two major research programs dominated this era.</p>
+
+        <h3>Ohio State Leadership Studies</h3>
+        <p>Researchers at Ohio State University (Fleishman, 1953; Halpin & Winer, 1957) used factor analysis of the <span class="key-term">Leader Behavior Description Questionnaire (LBDQ)</span> to identify two independent dimensions of leadership behavior:</p>
+        <div class="definition-box">
+          <h4>Ohio State Leadership Dimensions</h4>
+          <ul>
+            <li><strong>Initiating structure:</strong> The degree to which a leader defines roles, establishes goals, organizes tasks, and establishes communication channels. This is task-oriented behavior focused on getting the job done.</li>
+            <li><strong>Consideration:</strong> The degree to which a leader shows concern for followers' welfare, builds mutual trust, respects followers' ideas, and maintains warm interpersonal relationships. This is relationship-oriented behavior.</li>
+          </ul>
+        </div>
+        <p>A critical finding was that these two dimensions are <span class="key-term">independent</span>, meaning a leader can be high on both, low on both, or high on one and low on the other. Research generally found that leaders high on both dimensions were most effective.</p>
+
+        <h3>University of Michigan Leadership Studies</h3>
+        <p>Concurrently, researchers at the University of Michigan (Likert, 1961) identified two similar leadership styles:</p>
+        <ul>
+          <li><strong>Production-oriented leaders:</strong> Emphasize technical aspects of work and view employees as means to accomplish tasks (similar to initiating structure)</li>
+          <li><strong>Employee-oriented leaders:</strong> Emphasize interpersonal relationships, take a personal interest in employees' needs, and accept individual differences (similar to consideration)</li>
+        </ul>
+        <p>Unlike the Ohio State studies, the Michigan researchers initially conceptualized these as opposite ends of a single continuum, though later research supported the two-factor model. Michigan studies generally found that employee-oriented leadership was associated with higher group productivity and job satisfaction.</p>
+
+        <h3>Blake and Mouton's Managerial Grid</h3>
+        <p>Robert Blake and Jane Mouton (1964) extended the behavioral approach with their <span class="key-term">Managerial Grid</span> (later called the Leadership Grid), plotting concern for production (x-axis) against concern for people (y-axis), each rated from 1-9:</p>
+        <table>
+          <tr><th>Grid Position</th><th>Style Name</th><th>Description</th></tr>
+          <tr><td>1,1</td><td>Impoverished Management</td><td>Low concern for both people and production</td></tr>
+          <tr><td>9,1</td><td>Authority-Compliance</td><td>High production concern, low people concern</td></tr>
+          <tr><td>1,9</td><td>Country Club Management</td><td>High people concern, low production concern</td></tr>
+          <tr><td>5,5</td><td>Middle-of-the-Road</td><td>Moderate concern for both</td></tr>
+          <tr><td>9,9</td><td>Team Management</td><td>High concern for both -- considered the ideal</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Contingency Theories of Leadership</h2>
+        <p>Contingency theories propose that leadership effectiveness depends on the interaction between leader characteristics and situational factors. No single leadership style is universally best.</p>
+
+        <h3>Fiedler's Contingency Model</h3>
+        <p><span class="key-term">Fred Fiedler</span> (1967) developed the first comprehensive contingency model of leadership. His model measures leader style using the <span class="key-term">Least Preferred Coworker (LPC) scale</span>, which asks leaders to describe the person they have worked with least effectively.</p>
+        <div class="definition-box">
+          <h4>Fiedler's Key Components</h4>
+          <ul>
+            <li><strong>High-LPC leaders:</strong> Describe their least preferred coworker in relatively positive terms -- these leaders are relationship-motivated</li>
+            <li><strong>Low-LPC leaders:</strong> Describe their least preferred coworker in negative terms -- these leaders are task-motivated</li>
+          </ul>
+          <p>Situational control (favorableness) is determined by three factors in order of importance:</p>
+          <ol>
+            <li><strong>Leader-member relations:</strong> Degree of trust and loyalty between leader and group (most important)</li>
+            <li><strong>Task structure:</strong> Degree to which tasks are clearly defined with specific procedures</li>
+            <li><strong>Position power:</strong> Leader's formal authority to reward and punish (least important)</li>
+          </ol>
+        </div>
+        <div class="example-box">
+          <h4>Fiedler's Central Prediction</h4>
+          <p><strong>Task-motivated (low-LPC) leaders</strong> are most effective in situations of very high or very low situational control. <strong>Relationship-motivated (high-LPC) leaders</strong> are most effective in situations of moderate situational control. Crucially, Fiedler argued that leadership style is relatively fixed -- rather than trying to change the leader, organizations should change the situation to match the leader (called "job engineering").</p>
+        </div>
+
+        <h3>Hersey-Blanchard Situational Leadership Theory</h3>
+        <p><span class="key-term">Paul Hersey and Kenneth Blanchard</span> (1969, 1977) developed the <span class="key-term">Situational Leadership Theory</span> (originally called the "Life Cycle Theory of Leadership"), which proposes that effective leaders adapt their style to the <span class="key-term">readiness level</span> (also called maturity) of their followers for a given task.</p>
+        <div class="definition-box">
+          <h4>Four Leadership Styles</h4>
+          <table>
+            <tr><th>Style</th><th>Behavior</th><th>Task Orientation</th><th>Relationship Orientation</th></tr>
+            <tr><td><strong>S1: Telling/Directing</strong></td><td>Leader provides specific instructions and closely supervises</td><td>High</td><td>Low</td></tr>
+            <tr><td><strong>S2: Selling/Coaching</strong></td><td>Leader explains decisions and provides opportunity for clarification</td><td>High</td><td>High</td></tr>
+            <tr><td><strong>S3: Participating/Supporting</strong></td><td>Leader shares ideas and facilitates follower decision making</td><td>Low</td><td>High</td></tr>
+            <tr><td><strong>S4: Delegating</strong></td><td>Leader turns over responsibility for decisions and implementation</td><td>Low</td><td>Low</td></tr>
+          </table>
+        </div>
+        <div class="definition-box">
+          <h4>Four Follower Readiness/Maturity Levels</h4>
+          <table>
+            <tr><th>Level</th><th>Ability</th><th>Willingness/Confidence</th><th>Matched Style</th></tr>
+            <tr><td><strong>R1</strong></td><td>Unable</td><td>Unwilling or insecure</td><td>S1 (Telling)</td></tr>
+            <tr><td><strong>R2</strong></td><td>Unable</td><td>Willing or confident</td><td>S2 (Selling)</td></tr>
+            <tr><td><strong>R3</strong></td><td>Able</td><td>Unwilling or insecure</td><td>S3 (Participating)</td></tr>
+            <tr><td><strong>R4</strong></td><td>Able</td><td>Willing and confident</td><td>S4 (Delegating)</td></tr>
+          </table>
+        </div>
+        <div class="example-box">
+          <h4>Key Insight</h4>
+          <p>The central proposition is that effective leaders <strong>adapt their style to match the follower's developmental level</strong> on a specific task. As followers develop from R1 to R4, the leader should shift from telling to selling to participating to delegating. Unlike Fiedler, Hersey and Blanchard assumed leaders <em>can</em> and should flexibly change their style.</p>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Despite its widespread popularity in leadership training programs, the Hersey-Blanchard model has received <strong>limited empirical support</strong>. Critics note that the readiness construct is ambiguously defined (combining ability and willingness into a single dimension is problematic) and that the prescribed style-readiness matches have not been consistently validated by research. However, the theory's intuitive appeal makes it one of the most widely used leadership training models in organizations.</p>
+        </div>
+
+        <h3>House's Path-Goal Theory</h3>
+        <p><span class="key-term">Robert House</span> (1971, 1996) developed path-goal theory, which draws on expectancy theory of motivation. The leader's job is to help followers achieve their goals by clarifying the path to rewards and removing obstacles.</p>
+        <div class="definition-box">
+          <h4>Four Leadership Behaviors in Path-Goal Theory</h4>
+          <ul>
+            <li><strong>Directive leadership:</strong> Providing specific guidance, standards, and schedules (effective when tasks are ambiguous)</li>
+            <li><strong>Supportive leadership:</strong> Showing concern for followers' well-being and creating a friendly climate (effective when tasks are stressful, boring, or hazardous)</li>
+            <li><strong>Participative leadership:</strong> Consulting followers and using their input in decisions (effective when followers are autonomous and have internal locus of control)</li>
+            <li><strong>Achievement-oriented leadership:</strong> Setting challenging goals and expressing confidence in followers' abilities (effective when tasks are complex and followers need encouragement)</li>
+          </ul>
+        </div>
+        <p>Unlike Fiedler, House assumed leaders can flexibly adapt their style. The optimal style depends on two contingency factors: <strong>subordinate characteristics</strong> (ability, locus of control, needs) and <strong>task/environmental characteristics</strong> (task structure, formal authority, work group).</p>
+
+        <h3>Leader-Member Exchange (LMX) Theory</h3>
+        <p><span class="key-term">LMX theory</span> (Graen & Uhl-Bien, 1995) focuses on the dyadic relationship between a leader and each individual follower, rather than treating all followers the same.</p>
+        <div class="definition-box">
+          <h4>LMX Key Concepts</h4>
+          <ul>
+            <li><strong>In-group:</strong> Followers who have high-quality exchange relationships with the leader, characterized by trust, loyalty, and mutual obligation. They receive more attention, resources, and opportunities.</li>
+            <li><strong>Out-group:</strong> Followers who have low-quality exchange relationships, limited to the formal employment contract. Interactions are more transactional.</li>
+          </ul>
+          <p>Research shows that high-quality LMX relationships are associated with greater job satisfaction, organizational commitment, and performance for followers.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Transformational and Transactional Leadership</h2>
+        <p>The distinction between <span class="key-term">transformational</span> and <span class="key-term">transactional</span> leadership, first proposed by James MacGregor Burns (1978) and elaborated by Bernard Bass (1985), has become one of the most influential frameworks in contemporary leadership research.</p>
+
+        <h3>Transactional Leadership</h3>
+        <p>Transactional leaders focus on exchanges between leader and follower -- rewards for compliance, punishment for deviation:</p>
+        <ul>
+          <li><strong>Contingent reward:</strong> Setting clear expectations and providing rewards when goals are met</li>
+          <li><strong>Management by exception (active):</strong> Monitoring performance and taking corrective action when standards are not met</li>
+          <li><strong>Management by exception (passive):</strong> Intervening only when problems become serious</li>
+          <li><strong>Laissez-faire:</strong> Abdicating responsibility and avoiding decisions (considered non-leadership)</li>
+        </ul>
+
+        <h3>Transformational Leadership (Bass's Four I's)</h3>
+        <p>Transformational leaders inspire followers to transcend their self-interest for the good of the organization. Bass identified four components, known as the <span class="key-term">Four I's</span>:</p>
+        <div class="definition-box">
+          <h4>The Four I's of Transformational Leadership</h4>
+          <ol>
+            <li><strong>Idealized influence (charisma):</strong> The leader serves as a role model, demonstrating high ethical standards and earning trust and respect</li>
+            <li><strong>Inspirational motivation:</strong> The leader articulates a compelling vision, communicates optimism, and provides meaning and challenge</li>
+            <li><strong>Intellectual stimulation:</strong> The leader encourages creativity, challenges assumptions, and reframes problems</li>
+            <li><strong>Individualized consideration:</strong> The leader attends to each follower's unique needs, acts as a mentor, and promotes development</li>
+          </ol>
+        </div>
+        <p>These components are measured by the <span class="key-term">Multifactor Leadership Questionnaire (MLQ)</span> (Bass & Avolio, 1995). Meta-analyses consistently show that transformational leadership is positively associated with follower satisfaction, motivation, and performance across cultures and organizational types (Judge & Piccolo, 2004).</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Distinction</h4>
+          <p>Burns (1978) originally conceptualized transformational and transactional leadership as opposite ends of a continuum. Bass (1985) reconceptualized them as <strong>separate but complementary dimensions</strong> -- effective leaders use both, but transformational leadership "augments" the effects of transactional leadership (the <span class="key-term">augmentation effect</span>). The EPPP may test this distinction.</p>
+        </div>
+
+        <h3>Servant Leadership</h3>
+        <p><span class="key-term">Servant leadership</span> (Greenleaf, 1970) inverts the traditional hierarchy: the leader's primary role is to serve followers. Key characteristics include listening, empathy, healing, awareness, persuasion (rather than coercion), conceptualization, foresight, stewardship, commitment to growth of people, and building community.</p>
+        <p>Research supports associations between servant leadership and increased organizational citizenship behaviors, job satisfaction, and team effectiveness (Liden et al., 2008).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Ohio State studies identified two independent dimensions: initiating structure and consideration</li>
+            <li>Michigan studies identified production-oriented vs. employee-oriented leaders</li>
+            <li>Fiedler's LPC scale: low-LPC = task-motivated; high-LPC = relationship-motivated</li>
+            <li>Fiedler: task-motivated leaders best in high/low control; relationship-motivated leaders best in moderate control</li>
+            <li>Fiedler argues leadership style is fixed; change the situation, not the leader</li>
+            <li>Hersey-Blanchard Situational Leadership: four styles (S1 Telling, S2 Selling, S3 Participating, S4 Delegating) matched to four follower readiness levels (R1-R4)</li>
+            <li>Hersey-Blanchard: originally called "Life Cycle Theory"; widely popular but limited empirical support</li>
+            <li>Path-goal theory: four styles (directive, supportive, participative, achievement-oriented); leaders can adapt</li>
+            <li>LMX theory: in-group vs. out-group based on quality of leader-follower dyadic relationship</li>
+            <li>Burns: transformational vs. transactional as a continuum; Bass: separate, complementary dimensions</li>
+            <li>Bass's Four I's: idealized influence, inspirational motivation, intellectual stimulation, individualized consideration</li>
+            <li>MLQ (Multifactor Leadership Questionnaire) measures transformational/transactional leadership</li>
+            <li>Transformational leadership augments (adds to) effects of transactional leadership</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Bass, B. M. (1985). <em>Leadership and performance beyond expectations</em>. Free Press.</div>
+        <div class="citation">Bass, B. M., & Avolio, B. J. (1995). <em>MLQ Multifactor Leadership Questionnaire</em>. Mind Garden.</div>
+        <div class="citation">Blake, R. R., & Mouton, J. S. (1964). <em>The managerial grid</em>. Gulf Publishing.</div>
+        <div class="citation">Burns, J. M. (1978). <em>Leadership</em>. Harper & Row.</div>
+        <div class="citation">Fiedler, F. E. (1967). <em>A theory of leadership effectiveness</em>. McGraw-Hill.</div>
+        <div class="citation">Graen, G. B., & Uhl-Bien, M. (1995). Relationship-based approach to leadership. <em>The Leadership Quarterly, 6</em>(2), 219-247.</div>
+        <div class="citation">Hersey, P., & Blanchard, K. H. (1969). Life cycle theory of leadership. <em>Training and Development Journal, 23</em>(5), 26-34.</div>
+        <div class="citation">Hersey, P., & Blanchard, K. H. (1977). <em>Management of organizational behavior: Utilizing human resources</em> (3rd ed.). Prentice Hall.</div>
+        <div class="citation">Greenleaf, R. K. (1970). <em>The servant as leader</em>. Robert K. Greenleaf Center.</div>
+        <div class="citation">House, R. J. (1971). A path goal theory of leader effectiveness. <em>Administrative Science Quarterly, 16</em>(3), 321-339.</div>
+        <div class="citation">Judge, T. A., Bono, J. E., Ilies, R., & Gerhardt, M. W. (2002). Personality and leadership: A qualitative and quantitative review. <em>Journal of Applied Psychology, 87</em>(4), 765-780.</div>
+        <div class="citation">Judge, T. A., & Piccolo, R. F. (2004). Transformational and transactional leadership: A meta-analytic test of their relative validity. <em>Journal of Applied Psychology, 89</em>(5), 755-768.</div>
+        <div class="citation">Liden, R. C., Wayne, S. J., Zhao, H., & Henderson, D. (2008). Servant leadership. <em>Academy of Management Journal, 51</em>(5), 161-177.</div>
+        <div class="citation">Stogdill, R. M. (1948). Personal factors associated with leadership. <em>Journal of Psychology, 25</em>, 35-71.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="satisfaction-stress.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Sustaining Engagement</div>
+          </div>
+        </a>
+        <a href="decision-making.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Making Better Decisions</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

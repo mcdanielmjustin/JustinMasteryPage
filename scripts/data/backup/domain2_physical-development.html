@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physical Development | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Physical Development</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link active"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 9</div>
+        <h1>Physical Development</h1>
+        <div class="chapter-meta">
+          <span>Motor milestones, brain development, puberty, aging</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Physical Development</h2>
+        <p>Physical development encompasses changes in body size, proportions, motor abilities, brain structure, and physiological processes from conception through old age. For the EPPP, candidates must understand the major milestones of motor development, the principles governing brain maturation, the biological changes of puberty and menopause, and the distinction between primary and secondary aging.</p>
+        <p>Physical development follows several general principles: development proceeds in a <span class="key-term">cephalocaudal</span> (head-to-toe) and <span class="key-term">proximodistal</span> (center-to-periphery) direction, and it moves from gross motor to fine motor control.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Motor Development in Infancy and Childhood</h2>
+        <p>Motor milestones follow a relatively predictable sequence, though the exact timing varies across individuals and cultures. The sequence reflects the maturation of the nervous system and the cephalocaudal/proximodistal principles.</p>
+
+        <h3>Gross Motor Milestones</h3>
+        <table>
+          <tr><th>Age (approximate)</th><th>Milestone</th></tr>
+          <tr><td>2 months</td><td>Lifts head when prone (on stomach)</td></tr>
+          <tr><td>3-4 months</td><td>Rolls over</td></tr>
+          <tr><td>5-6 months</td><td>Sits with support; then sits independently</td></tr>
+          <tr><td>7-8 months</td><td>Crawls (some children skip crawling entirely)</td></tr>
+          <tr><td>9-10 months</td><td>Pulls to stand; cruises along furniture</td></tr>
+          <tr><td>12 months</td><td>Walks independently (average; range: 9-17 months)</td></tr>
+          <tr><td>2 years</td><td>Runs; kicks a ball; climbs stairs with both feet on each step</td></tr>
+          <tr><td>3-4 years</td><td>Hops on one foot; pedals a tricycle; catches a bounced ball</td></tr>
+          <tr><td>5-6 years</td><td>Skips; rides a bicycle with training wheels; ties shoelaces</td></tr>
+        </table>
+
+        <h3>Fine Motor Milestones</h3>
+        <ul>
+          <li><strong>3-4 months:</strong> Reaches for and grasps objects (initially with the whole hand -- <span class="key-term">ulnar grasp</span>)</li>
+          <li><strong>9-10 months:</strong> <span class="key-term">Pincer grasp</span> develops (thumb and forefinger), allowing precise manipulation of small objects</li>
+          <li><strong>12-18 months:</strong> Stacks 2-4 blocks; scribbles with a crayon</li>
+          <li><strong>2-3 years:</strong> Copies a circle; uses a spoon effectively</li>
+          <li><strong>4-5 years:</strong> Copies a cross and square; draws recognizable figures; uses scissors</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Dynamic systems theory (Thelen & Smith, 1994):</strong> Motor development results from the dynamic interaction of multiple systems -- neural maturation, body proportions, muscle strength, motivation, and environmental support. This theory replaced earlier maturational views (Gesell) that attributed motor milestones solely to biological unfolding.</p>
+          <p><strong>Neonatal reflexes:</strong> Involuntary motor responses present at birth that typically disappear within the first few months as cortical control develops. Their persistence beyond expected ages may indicate neurological dysfunction.</p>
+        </div>
+
+        <h3>Important Neonatal Reflexes</h3>
+        <table>
+          <tr><th>Reflex</th><th>Stimulus</th><th>Response</th><th>Disappears</th></tr>
+          <tr><td>Rooting</td><td>Touch on cheek</td><td>Turns head toward stimulus, opens mouth</td><td>3-4 months</td></tr>
+          <tr><td>Moro (startle)</td><td>Sudden drop of head or loud noise</td><td>Arms extend, then draw inward</td><td>5-6 months</td></tr>
+          <tr><td>Palmar grasp</td><td>Object placed in palm</td><td>Fingers close around object</td><td>3-4 months</td></tr>
+          <tr><td>Babinski</td><td>Stroke sole of foot</td><td>Toes fan out and up</td><td>8-12 months</td></tr>
+          <tr><td>Stepping</td><td>Held upright with feet on surface</td><td>Stepping movements</td><td>2-3 months</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Clinical Example: Reflex Assessment</h4>
+          <p>A pediatric neuropsychologist evaluates a 14-month-old referred for delayed motor milestones. Examination reveals that several neonatal reflexes (Moro, palmar grasp, Babinski) are still present and robust. The persistence of these primitive reflexes beyond their expected disappearance dates is a red flag for neurological dysfunction, as it suggests incomplete development of cortical inhibition over brainstem-mediated reflexes. This finding, combined with the motor delays, prompts referral for neuroimaging to evaluate for possible cerebral palsy or other neurological conditions.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Brain Development</h2>
+
+        <h3>Prenatal and Early Postnatal Brain Development</h3>
+        <p>The brain is one of the first organs to develop and one of the last to mature fully. Key processes include:</p>
+        <ul>
+          <li><strong>Neurogenesis:</strong> The production of new neurons, occurring primarily during prenatal development (peaking between months 3-5 of gestation). Most of the brain's approximately 100 billion neurons are produced before birth.</li>
+          <li><strong>Neuronal migration:</strong> Newly formed neurons travel from their birthplace to their final destinations in the brain. Disruptions in migration can lead to conditions such as lissencephaly and certain forms of epilepsy.</li>
+          <li><strong>Synaptogenesis:</strong> The formation of synaptic connections, which occurs explosively during the first two years of life. The infant brain produces far more synapses than will ultimately be retained.</li>
+          <li><strong>Synaptic pruning:</strong> The elimination of unused synaptic connections based on experience. This "use it or lose it" process refines neural circuits and continues into adolescence. The principle of <span class="key-term">neural plasticity</span> underlies this experience-dependent brain sculpting.</li>
+        </ul>
+
+        <h3>Myelination</h3>
+        <p><span class="key-term">Myelination</span> is the process of coating neural axons with myelin (a fatty sheath produced by oligodendrocytes in the CNS and Schwann cells in the PNS), which dramatically increases the speed and efficiency of neural transmission. Myelination follows a predictable sequence:</p>
+        <ul>
+          <li>Sensory pathways myelinate before motor pathways</li>
+          <li>Lower brain structures (brainstem, cerebellum) myelinate before higher structures (cortex)</li>
+          <li>The <span class="key-term">prefrontal cortex</span> is the last brain region to fully myelinate, a process that continues into the <strong>mid-20s</strong></li>
+          <li>This protracted prefrontal development has implications for adolescent risk-taking, impulse control, and decision-making</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>The late maturation of the prefrontal cortex relative to the limbic system (which matures earlier in adolescence) creates a developmental mismatch that helps explain increased risk-taking behavior in adolescents. Steinberg (2008) described this as "starting the engine before the steering is in place" -- heightened emotional and reward sensitivity (limbic system) with still-developing impulse control (prefrontal cortex). This understanding has influenced legal and policy decisions regarding juvenile justice, age of consent, and driving regulations.</p>
+        </div>
+
+        <h3>Brain Plasticity</h3>
+        <p><span class="key-term">Brain plasticity</span> (neuroplasticity) refers to the brain's ability to change in response to experience. Two types are distinguished:</p>
+        <ul>
+          <li><strong>Experience-expectant plasticity:</strong> The brain "expects" certain types of input during sensitive periods (e.g., visual input, language exposure). Deprivation during these periods can have lasting effects.</li>
+          <li><strong>Experience-dependent plasticity:</strong> The brain changes in response to individual experiences throughout life (e.g., learning a musical instrument, recovering from brain injury). This type of plasticity supports learning and rehabilitation at any age.</li>
+        </ul>
+        <p>Plasticity is generally greater in younger brains, which is why children often recover from brain injuries more fully than adults -- a concept known as the <span class="key-term">Kennard principle</span>, though it has important limitations (early damage can also be more devastating because it disrupts the development of subsequent skills that build on affected areas).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Puberty</h2>
+        <p><span class="key-term">Puberty</span> is the period of rapid physical maturation during which the body becomes capable of sexual reproduction. It is triggered by the activation of the <span class="key-term">hypothalamic-pituitary-gonadal (HPG) axis</span>, which stimulates the gonads (ovaries and testes) to produce sex hormones (estrogen and testosterone).</p>
+
+        <h3>Physical Changes</h3>
+        <ul>
+          <li><strong>Growth spurt:</strong> Rapid increase in height and weight; occurs earlier in girls (~10-12 years) than boys (~12-14 years)</li>
+          <li><strong>Primary sexual characteristics:</strong> Changes in reproductive organs (ovaries, uterus, testes, penis)</li>
+          <li><strong>Secondary sexual characteristics:</strong> Breast development, facial hair, deepening of voice, pubic and axillary hair</li>
+          <li><strong>Menarche:</strong> First menstruation in girls (average age ~12.5 years; range: 10-16)</li>
+          <li><strong>Spermarche:</strong> First ejaculation in boys (average age ~13 years)</li>
+        </ul>
+
+        <h3>Psychological Effects of Pubertal Timing</h3>
+        <p>The timing of puberty relative to peers has significant psychological implications:</p>
+        <ul>
+          <li><strong>Early-maturing girls:</strong> At greatest risk for negative outcomes including depression, anxiety, disordered eating, early sexual activity, substance use, and association with older peers (Ge et al., 2001)</li>
+          <li><strong>Early-maturing boys:</strong> May initially benefit from increased status and athletic advantage, but also show elevated rates of delinquency and substance use</li>
+          <li><strong>Late-maturing boys:</strong> May experience lower self-esteem and social difficulties during adolescence, though outcomes tend to improve by adulthood</li>
+          <li><strong>Late-maturing girls:</strong> Generally show the most positive adjustment during adolescence</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Clinical Example: Early Puberty and Psychological Risk</h4>
+          <p>An 11-year-old girl is referred for therapy presenting with depressive symptoms, social withdrawal, and body image concerns. She experienced menarche at age 9 and has developed noticeably ahead of her peers. Assessment reveals she has been subject to sexual comments from older boys and feels alienated from her same-age peers. This presentation is consistent with research showing that early-maturing girls face a mismatch between their physical appearance and their cognitive/emotional maturity, placing them in social situations they are not developmentally prepared to navigate. The contextual amplification hypothesis (Ge et al., 2002) suggests these effects are worse in challenging social environments.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Aging: Menopause and Late Adulthood</h2>
+
+        <h3>Menopause</h3>
+        <p><span class="key-term">Menopause</span> is the permanent cessation of menstruation, occurring at an average age of 51 (range: 45-55). It results from the depletion of ovarian follicles and the resulting decline in estrogen and progesterone production. Perimenopause (the transition period) typically begins 2-8 years before the last menstrual period and is characterized by irregular cycles, hot flashes, sleep disturbances, and mood changes.</p>
+        <p>Cross-cultural research reveals that the experience of menopause varies considerably across cultures. In cultures where aging women gain status (e.g., traditional Indian society), fewer negative symptoms are reported (Beyene, 1989), suggesting significant psychosocial influences on menopausal experience.</p>
+
+        <h3>Primary vs. Secondary Aging</h3>
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Primary aging:</strong> Universal, inevitable, biological changes associated with the passage of time (e.g., decreased skin elasticity, graying of hair, gradual loss of bone density, decline in processing speed). These changes occur in all individuals regardless of health or lifestyle.</p>
+          <p><strong>Secondary aging:</strong> Age-related changes that are due to disease, lifestyle, and environmental factors rather than aging per se (e.g., cardiovascular disease from sedentary lifestyle, cognitive decline from Alzheimer's disease, hearing loss from noise exposure). These changes are potentially preventable or modifiable.</p>
+        </div>
+
+        <h3>Cognitive Changes in Normal Aging</h3>
+        <ul>
+          <li><strong>Fluid intelligence</strong> (novel problem-solving, processing speed) declines gradually beginning in the 20s-30s</li>
+          <li><strong>Crystallized intelligence</strong> (accumulated knowledge, vocabulary) remains stable or increases into the 60s-70s (Horn & Cattell, 1967)</li>
+          <li><strong>Processing speed</strong> declines steadily with age and accounts for much of the age-related variance in cognitive performance (Salthouse, 1996)</li>
+          <li><strong>Working memory</strong> capacity decreases with age</li>
+          <li><strong>Episodic memory</strong> shows age-related decline, while semantic memory and procedural memory are relatively preserved</li>
+          <li><strong>Wisdom</strong> may increase with age, according to some researchers (Baltes & Staudinger, 2000)</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Development follows cephalocaudal (head to toe) and proximodistal (center to periphery) patterns</li>
+          <li>Know the major motor milestones: sits independently (~6 months), walks (~12 months), pincer grasp (~9-10 months)</li>
+          <li>Persistence of neonatal reflexes beyond expected ages suggests neurological dysfunction</li>
+          <li>The prefrontal cortex is the last brain region to fully myelinate (not until mid-20s), explaining adolescent impulsivity</li>
+          <li>Synaptic pruning eliminates unused connections ("use it or lose it"); brain plasticity is greater in younger brains</li>
+          <li>Experience-expectant vs. experience-dependent plasticity</li>
+          <li>Early-maturing girls are at greatest risk for negative psychological outcomes</li>
+          <li>Distinguish primary aging (universal, inevitable biological changes) from secondary aging (disease-related, potentially preventable)</li>
+          <li>Fluid intelligence declines with age; crystallized intelligence remains stable or increases</li>
+          <li>Processing speed decline accounts for much of age-related cognitive decline (Salthouse, 1996)</li>
+          <li>Menopause occurs at average age 51; its psychological experience is influenced by cultural context</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Baltes, P. B., & Staudinger, U. M. (2000). Wisdom: A metaheuristic (pragmatic) to orchestrate mind and virtue toward excellence. <em>American Psychologist, 55</em>(1), 122-136.</div>
+        <div class="citation">Beyene, Y. (1989). <em>From menarche to menopause: Reproductive lives of peasant women in two cultures.</em> SUNY Press.</div>
+        <div class="citation">Ge, X., Conger, R. D., & Elder, G. H. (2001). Pubertal transition, stressful life events, and the emergence of gender differences in adolescent depressive symptoms. <em>Developmental Psychology, 37</em>(3), 404-417.</div>
+        <div class="citation">Horn, J. L., & Cattell, R. B. (1967). Age differences in fluid and crystallized intelligence. <em>Acta Psychologica, 26</em>, 107-129.</div>
+        <div class="citation">Salthouse, T. A. (1996). The processing-speed theory of adult age differences in cognition. <em>Psychological Review, 103</em>(3), 403-428.</div>
+        <div class="citation">Steinberg, L. (2008). A social neuroscience perspective on adolescent risk-taking. <em>Developmental Review, 28</em>(1), 78-106.</div>
+        <div class="citation">Thelen, E., & Smith, L. B. (1994). <em>A dynamic systems approach to the development of cognition and action.</em> MIT Press.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="language-development.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Language Development</div>
+          </div>
+        </a>
+        <a href="family-influences.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">School & Family Influences</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

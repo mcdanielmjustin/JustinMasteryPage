@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMPI-2/MMPI-3 | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>MMPI-2/MMPI-3</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link active"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 3 of 9</div>
+        <h1>MMPI-2/MMPI-3</h1>
+        <div class="chapter-meta">
+          <span>Validity scales, clinical scales, code types</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of the MMPI Family</h2>
+        <p>The <span class="key-term">Minnesota Multiphasic Personality Inventory</span> is the most widely used and researched objective personality test in clinical psychology. Originally developed by Hathaway and McKinley in 1943, the instrument has undergone several major revisions. For the EPPP, you must understand the MMPI-2, MMPI-2-RF, and MMPI-3, including their scale structures, construction methods, and interpretation strategies.</p>
+
+        <h3>Historical Development</h3>
+        <ul>
+          <li><strong>Original MMPI (1943):</strong> Hathaway and McKinley developed the instrument at the University of Minnesota using <span class="key-term">empirical criterion keying</span> -- items were selected based on their ability to discriminate between clinical groups and normals, not based on item content</li>
+          <li><strong>MMPI-2 (1989):</strong> Butcher, Dahlstrom, Graham, Tellegen, and Kaemmer restandardized the instrument with a more representative normative sample (N = 2,600). Item content was updated but the clinical scales were preserved. Uniform T-scores were introduced.</li>
+          <li><strong>MMPI-2-RF (2008):</strong> Ben-Porath and Tellegen restructured the instrument using factor analysis, creating 51 scales organized hierarchically. The 10 clinical scales were replaced by Restructured Clinical (RC) scales.</li>
+          <li><strong>MMPI-3 (2020):</strong> Ben-Porath and Tellegen further revised the RF, with updated norms, revised items, and modernized content. 335 items, 52 scales.</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Empirical Criterion Keying:</strong> Items are selected not based on their face validity (what they appear to measure) but based on their empirical ability to discriminate between criterion groups (e.g., patients diagnosed with depression vs. normals). This approach means that an item about headaches might appear on the Depression scale -- not because headaches are theoretically related to depression, but because depressed individuals endorsed that item significantly more often than non-depressed individuals.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>MMPI-2: Structure and Scales</h2>
+        <p>The MMPI-2 contains <span class="key-term">567 true/false items</span>, takes approximately 60-90 minutes to administer, and requires a sixth-grade reading level. It is normed for ages 18 and older.</p>
+
+        <h3>Validity Scales</h3>
+        <p>The validity scales assess the test-taking attitude and response style of the examinee. They must be evaluated before interpreting the clinical scales.</p>
+        <table>
+          <tr><th>Scale</th><th>Name</th><th>What It Measures</th></tr>
+          <tr><td>? (CNS)</td><td>Cannot Say</td><td>Number of items left unanswered. More than 30 unanswered items invalidates the profile.</td></tr>
+          <tr><td>L</td><td>Lie</td><td>Naive, unsophisticated attempts to present oneself in a favorable light. Denying common human faults. Elevated L = "faking good" or rigid/moralistic personality.</td></tr>
+          <tr><td>F</td><td>Infrequency</td><td>Items endorsed by fewer than 10% of the normative sample. Elevated F = "faking bad," exaggeration, random responding, severe psychopathology, or a "cry for help."</td></tr>
+          <tr><td>K</td><td>Defensiveness</td><td>More sophisticated defensiveness than L. Moderate K = healthy self-presentation; very high K = denial/defensiveness; very low K = excessive openness or self-criticism.</td></tr>
+          <tr><td>Fb</td><td>Back F</td><td>Infrequency items from the second half of the test. Detects changes in response style partway through administration.</td></tr>
+          <tr><td>VRIN</td><td>Variable Response Inconsistency</td><td>Pairs of items with similar or opposite content; inconsistent responding suggests random or careless responding.</td></tr>
+          <tr><td>TRIN</td><td>True Response Inconsistency</td><td>Pairs of items where answering both True or both False is contradictory. Detects acquiescence (yea-saying) or nay-saying bias.</td></tr>
+          <tr><td>Fp</td><td>Infrequency-Psychopathology</td><td>Items infrequently endorsed even by psychiatric inpatients. Helps distinguish genuine severe psychopathology (F elevated, Fp normal) from overreporting (both elevated).</td></tr>
+          <tr><td>S</td><td>Superlative Self-Presentation</td><td>Items reflecting an extremely positive self-view; supplement to L and K for detecting underreporting.</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <strong>EPPP Commonly Tested:</strong> F-K Index (Gough Dissimulation Index): F minus K. A positive value (F > K) suggests overreporting/faking bad. A negative value (K > F) suggests underreporting/faking good. This index is commonly tested.
+        </div>
+
+        <h3>Clinical Scales</h3>
+        <table>
+          <tr><th>Scale</th><th>Name</th><th>Abbreviation</th><th>Elevated Score Interpretation</th></tr>
+          <tr><td>1</td><td>Hypochondriasis</td><td>Hs</td><td>Excessive somatic concern, vague physical complaints, pessimism, demanding</td></tr>
+          <tr><td>2</td><td>Depression</td><td>D</td><td>Depressed mood, psychomotor retardation, hopelessness, social withdrawal</td></tr>
+          <tr><td>3</td><td>Hysteria</td><td>Hy</td><td>Somatic complaints with denial of psychological problems, need for attention, naive/superficial</td></tr>
+          <tr><td>4</td><td>Psychopathic Deviate</td><td>Pd</td><td>Antisocial behavior, rebelliousness, family conflict, impulsivity, authority problems</td></tr>
+          <tr><td>5</td><td>Masculinity-Femininity</td><td>Mf</td><td>Interests differing from traditional gender roles; interpretation depends on gender and context</td></tr>
+          <tr><td>6</td><td>Paranoia</td><td>Pa</td><td>Suspiciousness, sensitivity, hostility, rigidity, paranoid ideation, persecutory beliefs</td></tr>
+          <tr><td>7</td><td>Psychasthenia</td><td>Pt</td><td>Anxiety, obsessive-compulsive features, guilt, self-doubt, indecisiveness, rumination</td></tr>
+          <tr><td>8</td><td>Schizophrenia</td><td>Sc</td><td>Bizarre thinking, social alienation, unusual perceptions, poor reality testing, confusion</td></tr>
+          <tr><td>9</td><td>Hypomania</td><td>Ma</td><td>Elevated mood, grandiosity, hyperactivity, impulsivity, flight of ideas, irritability</td></tr>
+          <tr><td>0</td><td>Social Introversion</td><td>Si</td><td>Social withdrawal, shyness, discomfort in social situations; low scores = extroversion</td></tr>
+        </table>
+
+        <h3>T-Score Interpretation</h3>
+        <ul>
+          <li>Clinical scales use <span class="key-term">Uniform T-scores</span> (developed by Auke Tellegen) to ensure comparable percentile rankings across scales</li>
+          <li>T-score of 65 or above is considered clinically significant (93rd percentile)</li>
+          <li>T-scores between 60-64 are marginally elevated</li>
+          <li>Scales 5 (Mf) and 0 (Si) use linear T-scores rather than uniform T-scores because their distributions are close to normal</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Code Types</h2>
+        <p>A <span class="key-term">code type</span> is determined by the two or three highest clinical scales in the profile. Code type interpretation is based on decades of research correlating specific code types with behavioral, personality, and diagnostic characteristics.</p>
+
+        <h3>Common Two-Point Code Types</h3>
+        <table>
+          <tr><th>Code Type</th><th>Common Characteristics</th></tr>
+          <tr><td>1-3 / 3-1 (Hs-Hy)</td><td>"Conversion V" -- somatic complaints with denial of psychological distress; Scale 2 lower than 1 and 3; la belle indifference; classically associated with conversion disorder</td></tr>
+          <tr><td>2-7 / 7-2 (D-Pt)</td><td>Depression with anxiety; guilt, self-blame, rumination; good prognosis for therapy due to high subjective distress</td></tr>
+          <tr><td>4-9 / 9-4 (Pd-Ma)</td><td>Antisocial behavior, impulsivity, grandiosity, substance abuse risk; poor therapy prognosis; acting out</td></tr>
+          <tr><td>6-8 / 8-6 (Pa-Sc)</td><td>Paranoid thinking, unusual experiences, social withdrawal, suspiciousness; associated with paranoid schizophrenia</td></tr>
+          <tr><td>2-4 / 4-2 (D-Pd)</td><td>Depression with antisocial features; substance abuse common; may present after legal consequences</td></tr>
+          <tr><td>1-2 / 2-1 (Hs-D)</td><td>Somatic preoccupation with depression; chronic pain presentation; passive, whiny</td></tr>
+          <tr><td>2-3 / 3-2 (D-Hy)</td><td>Depression with somatic features; passive, dependent, conflict-avoidant; poor insight</td></tr>
+          <tr><td>4-6 / 6-4 (Pd-Pa)</td><td>Hostile, blaming, passive-aggressive; interpersonal conflict; projects responsibility onto others</td></tr>
+          <tr><td>8-9 / 9-8 (Sc-Ma)</td><td>Severe disturbance; possible mania with psychotic features; agitation, grandiosity, disorganization</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>EPPP Commonly Tested:</strong> The "Conversion V" (1-3/3-1 code type with Scale 2 lower than both 1 and 3) is one of the most commonly tested code types. The visual pattern on the profile looks like a "V" because Scale 2 (Depression) dips below Scales 1 and 3. It classically indicates somatic complaints with denial of emotional distress.
+        </div>
+
+        <h3>Harris-Lingoes Subscales</h3>
+        <p>The <span class="key-term">Harris-Lingoes subscales</span> were developed by Harris and Lingoes in 1955 to clarify the content within the heterogeneous clinical scales. They are particularly useful when a clinical scale is elevated and the clinician wants to determine which content domain is driving the elevation. Subscales exist for Scales 2, 3, 4, 6, 8, and 9.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>MMPI-2-RF (Restructured Form)</h2>
+        <p>The <span class="key-term">MMPI-2-RF</span> (Ben-Porath & Tellegen, 2008) contains 338 items and uses a hierarchically organized structure of 51 scales. The key innovation was removing the <span class="key-term">demoralization variance</span> (a general distress factor) that permeated and inflated correlations among the original clinical scales.</p>
+
+        <h3>Scale Hierarchy</h3>
+        <ol>
+          <li><strong>Validity Scales (9):</strong> CNS, VRIN-r, TRIN-r, F-r, Fp-r, Fs, FBS-r, L-r, K-r</li>
+          <li><strong>Higher-Order (H-O) Scales (3):</strong> Emotional/Internalizing Dysfunction (EID), Thought Dysfunction (THD), Behavioral/Externalizing Dysfunction (BXD)</li>
+          <li><strong>Restructured Clinical (RC) Scales (9):</strong> The core interpretive scales
+            <ul>
+              <li>RCd: Demoralization (general unhappiness/distress)</li>
+              <li>RC1: Somatic Complaints</li>
+              <li>RC2: Low Positive Emotions</li>
+              <li>RC3: Cynicism</li>
+              <li>RC4: Antisocial Behavior</li>
+              <li>RC6: Ideas of Persecution</li>
+              <li>RC7: Dysfunctional Negative Emotions</li>
+              <li>RC8: Aberrant Experiences</li>
+              <li>RC9: Hypomanic Activation</li>
+            </ul>
+          </li>
+          <li><strong>Specific Problems (SP) Scales (23):</strong> Provide detailed information within domains (e.g., Head Pain Complaints, Stress/Worry, Juvenile Conduct Problems)</li>
+          <li><strong>Interest Scales (2):</strong> Aesthetic-Literary Interests, Mechanical-Physical Interests</li>
+          <li><strong>Personality Psychopathology Five (PSY-5) Scales (5):</strong> Aggressiveness-Revised, Psychoticism-Revised, Disconstraint-Revised, Negative Emotionality/Neuroticism-Revised, Introversion/Low Positive Emotionality-Revised</li>
+        </ol>
+
+        <div class="clinical-note">
+          <strong>Key Distinction:</strong> The MMPI-2-RF RC scales differ from the original clinical scales primarily in the removal of the demoralization factor. In the original MMPI-2, many clinical scales intercorrelated highly because they all contained items tapping general distress. The RC scales isolate the distinctive core construct of each scale, improving discriminant validity.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>MMPI-3</h2>
+        <p>The <span class="key-term">MMPI-3</span> (Ben-Porath & Tellegen, 2020) is the latest version, containing 335 items and 52 scales. It retains the hierarchical structure of the MMPI-2-RF with several key updates:</p>
+        <ul>
+          <li>Updated normative sample (N = 1,620) that is more representative of the U.S. population</li>
+          <li>Revised and modernized item content (removed outdated or offensive items)</li>
+          <li>New scales addressing interpersonal functioning and compulsive behaviors</li>
+          <li>Improved validity scales for detecting over- and underreporting</li>
+          <li>Updated PSY-5 scales</li>
+        </ul>
+
+        <h3>Key Differences from MMPI-2-RF</h3>
+        <ul>
+          <li>The MMPI-3 replaces some specific problems scales and adds new ones (e.g., Compulsivity, Self-Importance)</li>
+          <li>The normative sample is more diverse and contemporary</li>
+          <li>Item content was further refined for clarity and modern language</li>
+          <li>The MMPI-3 is not backward-compatible with the MMPI-2 or MMPI-2-RF</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Administration and Scoring</h2>
+        <h3>Administration Requirements</h3>
+        <ul>
+          <li>Age: 18+ for all MMPI instruments (the <span class="key-term">MMPI-A</span> and <span class="key-term">MMPI-A-RF</span> are the adolescent versions for ages 14-18)</li>
+          <li>Reading level: Approximately sixth grade for the MMPI-2; similar for MMPI-2-RF and MMPI-3</li>
+          <li>Format: True/False items; can be administered via booklet, computer, or audio recording</li>
+          <li>Completion of first 370 items of the MMPI-2 allows scoring of all validity and clinical scales (the remaining items contribute to supplementary and content scales)</li>
+        </ul>
+
+        <h3>Scoring Considerations</h3>
+        <ul>
+          <li>Raw scores are converted to <span class="key-term">T-scores</span> (M = 50, SD = 10)</li>
+          <li>The MMPI-2 uses Uniform T-scores for most scales (except Mf and Si)</li>
+          <li>The MMPI-2-RF and MMPI-3 use non-gendered norms (combined male/female reference group)</li>
+          <li><span class="key-term">K-correction</span> is applied to five clinical scales on the MMPI-2 (Scales 1, 4, 7, 8, 9) -- a proportion of the K score is added to compensate for defensiveness. K-correction is NOT used on the MMPI-2-RF or MMPI-3.</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Tip:</strong> K-correction adds a fraction of K to specific clinical scales on the MMPI-2 to adjust for defensiveness. This was controversial because it could inflate scores for genuinely well-adjusted individuals. The MMPI-2-RF and MMPI-3 eliminated K-correction entirely, instead relying on validity scale interpretation to contextualize clinical scale scores.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Interpretation Strategies</h2>
+        <h3>Steps in MMPI-2 Interpretation</h3>
+        <ol>
+          <li><strong>Evaluate validity scales:</strong> Determine whether the profile is valid and interpretable. Check CNS, VRIN, TRIN, F, L, K, Fb, Fp, S</li>
+          <li><strong>Examine overall profile elevation:</strong> Look at how many scales are elevated above 65T</li>
+          <li><strong>Identify code type:</strong> Determine the two or three highest clinical scales and look up the corresponding code type interpretation</li>
+          <li><strong>Examine individual scale elevations:</strong> Consider the meaning of each elevated scale</li>
+          <li><strong>Review Harris-Lingoes subscales:</strong> Clarify what content is driving clinical scale elevations</li>
+          <li><strong>Examine content and supplementary scales:</strong> Use additional scales (e.g., Anxiety, Depression, Addiction Acknowledgment) to refine interpretation</li>
+          <li><strong>Integrate with clinical data:</strong> Combine MMPI results with interview, history, behavioral observation, and other test data</li>
+        </ol>
+        <div class="clinical-note">
+          <strong>EPPP Reminder:</strong> Never interpret an MMPI profile in isolation. Results must be integrated with clinical interview, behavioral observations, collateral information, and the referral question. The MMPI is an aid to clinical decision-making, not a diagnostic algorithm.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Commonly Tested EPPP Topics</h2>
+        <div class="definition-box">
+          <strong>Construction method:</strong> Empirical criterion keying -- items selected based on ability to discriminate groups, not face validity or theory.
+        </div>
+        <div class="definition-box">
+          <strong>Validity scale summary:</strong> L = naive faking good. F = faking bad / random / severe pathology. K = sophisticated defensiveness. VRIN = random responding. TRIN = yea/nay-saying. Fp = distinguishes true pathology from overreporting.
+        </div>
+        <div class="definition-box">
+          <strong>Conversion V:</strong> 1-3/3-1 code type with Scale 2 depressed. Somatic complaints, denial of psychological distress, la belle indifference.
+        </div>
+        <div class="definition-box">
+          <strong>MMPI-2-RF key innovation:</strong> Removal of demoralization variance from clinical scales, creating purer RC scales with improved discriminant validity.
+        </div>
+        <div class="definition-box">
+          <strong>K-correction:</strong> Applied to MMPI-2 Scales 1, 4, 7, 8, 9. Eliminated in MMPI-2-RF and MMPI-3.
+        </div>
+        <p class="citation">References: Butcher et al. (2001). MMPI-2 Manual. Ben-Porath & Tellegen (2008). MMPI-2-RF Manual. Ben-Porath & Tellegen (2020). MMPI-3 Manual. Graham (2012). MMPI-2: Assessing Personality and Psychopathology.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="cognitive-measures.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Other Cognitive Measures</div>
+          </div>
+        </a>
+        <a href="personality-measures.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Personality Measures</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

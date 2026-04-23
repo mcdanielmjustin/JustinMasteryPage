@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selection Evaluation | Domain 6 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #6366f1; --accent-dim: rgba(99, 102, 241, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; display: flex; align-items: center; gap: 8px; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 6</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Selection Evaluation</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 6</div>
+        <div class="domain-title">Industrial/Organizational</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="organizational-theories.html" class="chapter-link"><span class="chapter-number">1</span>Understanding Organizations</a></li>
+        <li class="chapter-item"><a href="job-analysis.html" class="chapter-link"><span class="chapter-number">2</span>Defining the Work</a></li>
+        <li class="chapter-item"><a href="selection-techniques.html" class="chapter-link"><span class="chapter-number">3</span>Finding the Right People</a></li>
+        <li class="chapter-item"><a href="selection-evaluation.html" class="chapter-link active"><span class="chapter-number">4</span>Evaluating Selection Decisions</a></li>
+        <li class="chapter-item"><a href="training.html" class="chapter-link"><span class="chapter-number">5</span>Developing Talent</a></li>
+        <li class="chapter-item"><a href="career-development.html" class="chapter-link"><span class="chapter-number">6</span>Navigating Career Paths</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">7</span>Driving Performance</a></li>
+        <li class="chapter-item"><a href="satisfaction-stress.html" class="chapter-link"><span class="chapter-number">8</span>Sustaining Engagement</a></li>
+        <li class="chapter-item"><a href="leadership.html" class="chapter-link"><span class="chapter-number">9</span>Leading People</a></li>
+        <li class="chapter-item"><a href="decision-making.html" class="chapter-link"><span class="chapter-number">10</span>Making Better Decisions</a></li>
+        <li class="chapter-item"><a href="org-change.html" class="chapter-link"><span class="chapter-number">11</span>Transforming Organizations</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 11</div>
+        <h1>Selection Evaluation</h1>
+        <div class="chapter-meta">
+          <span>Utility analysis, adverse impact, validity generalization</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 6)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 6)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Selection Evaluation</h2>
+        <p>Evaluating the effectiveness of selection systems involves examining their predictive accuracy, practical utility, fairness to different groups, and legal compliance. The EPPP tests knowledge of utility analysis, adverse impact assessment, validity generalization, and the legal/professional guidelines governing testing in employment settings.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Utility Analysis</h2>
+        <p><span class="key-term">Utility analysis</span> quantifies the economic value of using a particular selection procedure compared to random selection or an existing method. It translates validity coefficients into dollar values, helping organizations understand the return on investment from improved selection.</p>
+
+        <h3>The Brogden-Cronbach-Gleser Model</h3>
+        <div class="definition-box">
+          <h4>Utility Analysis Formula</h4>
+          <p>The standard utility formula estimates the dollar gain per selectee per year:</p>
+          <p><strong>Utility = N x r x SD<sub>y</sub> x Z<sub>x</sub> - C</strong></p>
+          <ul>
+            <li><strong>N:</strong> Number of applicants selected</li>
+            <li><strong>r:</strong> Validity coefficient of the selection procedure</li>
+            <li><strong>SD<sub>y</sub>:</strong> Standard deviation of job performance in dollar terms (typically estimated as 40% of salary)</li>
+            <li><strong>Z<sub>x</sub>:</strong> Average standardized test score of those selected (depends on the selection ratio)</li>
+            <li><strong>C:</strong> Cost of testing per applicant</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Key Determinant: The Selection Ratio</h4>
+          <p>The <span class="key-term">selection ratio</span> is the number of positions divided by the number of applicants (n hired / N applicants). A <strong>low selection ratio</strong> (e.g., 10 positions for 100 applicants = .10) means the organization is more selective and the utility of a valid test is greater. A <strong>high selection ratio</strong> (e.g., 90 positions for 100 applicants = .90) means nearly everyone is hired regardless of test scores, reducing the test's practical value.</p>
+        </div>
+        <p>The <span class="key-term">Taylor-Russell tables</span> provide an alternative approach, showing the proportion of successful employees expected when using a selection test, given the test's validity, the selection ratio, and the <span class="key-term">base rate</span> of success (the proportion who would succeed without the test). Utility is greatest when the validity is high, the selection ratio is low, and the base rate is moderate (around .50).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Adverse Impact and the Four-Fifths Rule</h2>
+        <p><span class="key-term">Adverse impact</span> occurs when a selection procedure results in a substantially different selection rate for members of a protected group compared to the group with the highest selection rate.</p>
+        <div class="definition-box">
+          <h4>The Four-Fifths (80%) Rule</h4>
+          <p>The <span class="key-term">four-fifths rule</span>, established in the Uniform Guidelines on Employee Selection Procedures (1978), provides a practical measure of adverse impact:</p>
+          <p><strong>If the selection rate for a protected group is less than 4/5 (80%) of the rate for the group with the highest selection rate, adverse impact is indicated.</strong></p>
+          <p>Formula: Selection rate of protected group / Selection rate of majority group &lt; .80 = adverse impact</p>
+        </div>
+        <div class="example-box">
+          <h4>Example: Calculating Adverse Impact</h4>
+          <p>An employer tests 100 White applicants and hires 60 (60% selection rate). The same employer tests 50 Black applicants and hires 20 (40% selection rate).</p>
+          <p>Adverse impact ratio = 40% / 60% = .667 (66.7%)</p>
+          <p>Since .667 is less than .80, adverse impact is indicated. The employer would need to demonstrate the test is job-related and consistent with business necessity.</p>
+        </div>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>The four-fifths rule is a guideline, not a strict legal standard. Courts also consider statistical significance tests and practical significance. If adverse impact is found, the burden shifts to the employer to demonstrate job-relatedness (validity). Even if validity is demonstrated, the plaintiff can still prevail by showing that an equally valid alternative with less adverse impact exists.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Validity Generalization</h2>
+        <p><span class="key-term">Validity generalization</span> (VG), developed by Schmidt and Hunter (1977), uses meta-analysis to demonstrate that much of the variability in validity coefficients across studies is due to statistical artifacts (sampling error, criterion unreliability, range restriction) rather than true situational differences.</p>
+        <div class="definition-box">
+          <h4>Key Implications of Validity Generalization</h4>
+          <ul>
+            <li>If artifacts account for most variability in validity coefficients, a test validated in one setting can be assumed valid in similar settings without local validation -- called <span class="key-term">transportability</span></li>
+            <li>General cognitive ability tests show validity that generalizes across nearly all jobs and settings</li>
+            <li>VG challenges the traditional requirement for separate local validation studies for each organization and job</li>
+            <li>True validities are often much higher than observed validities once statistical artifacts are corrected</li>
+          </ul>
+        </div>
+        <p>Validity generalization has been accepted by courts and the <em>Principles for the Validation and Use of Personnel Selection Procedures</em> (SIOP, 2003) as evidence supporting test use in situations where local validation is impractical.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Banding</h2>
+        <p><span class="key-term">Banding</span> is a method of interpreting test scores that groups scores within a specified range into a "band" and treats all scores within that band as equivalent. The rationale is that small score differences may not be meaningfully different given the test's measurement error.</p>
+        <div class="definition-box">
+          <h4>Types of Banding</h4>
+          <ul>
+            <li><strong>Fixed bands:</strong> The score range is divided into predetermined, non-overlapping bands (e.g., 90-100, 80-89). Candidates within a band are treated as equivalent.</li>
+            <li><strong>Sliding bands:</strong> Bands are centered on the highest remaining score. After the top-scoring candidate is selected, the band shifts down. This approach is more controversial and has been both supported and criticized in legal contexts.</li>
+          </ul>
+        </div>
+        <p>Within a band, employers may consider other factors, including diversity, for selection decisions. Banding is controversial: proponents argue it appropriately accounts for measurement error; critics argue it sacrifices predictive validity and may amount to quota-based selection.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Test Fairness and Differential Validity</h2>
+
+        <h3>Test Fairness Models</h3>
+        <p>Multiple definitions of test fairness exist, and they sometimes conflict:</p>
+        <div class="definition-box">
+          <h4>Models of Test Fairness</h4>
+          <ul>
+            <li><strong>Cleary model (predictive bias):</strong> A test is fair if the regression line for predicting job performance is the same for all groups. If separate regression lines yield different predictions for the same test score, the test shows <span class="key-term">predictive bias</span>. This is the most widely accepted psychometric definition.</li>
+            <li><strong>Thorndike model (equal probability):</strong> A test is fair if equally qualified individuals from different groups have equal probability of being selected</li>
+            <li><strong>Equal outcomes model:</strong> A test is fair only if it results in equal selection rates across groups (this is the most stringent criterion and is generally not accepted as a standard)</li>
+          </ul>
+        </div>
+
+        <h3>Differential Validity</h3>
+        <p><span class="key-term">Differential validity</span> occurs when a test has different validity coefficients for different subgroups (e.g., the test predicts performance with r = .45 for White applicants but r = .25 for Black applicants). Research using large samples and meta-analyses has generally found minimal evidence of differential validity for cognitive ability tests (Hunter et al., 1979).</p>
+        <div class="clinical-note">
+          <h4>EPPP Key Concept</h4>
+          <p>Research consistently shows that cognitive ability tests tend to <strong>slightly overpredict</strong> job performance for minority group members (i.e., the test underpredicts the true performance gap). This means that using a common regression line does not disadvantage minority applicants from a predictive standpoint, even though group mean score differences create adverse impact. The distinction between predictive bias (absent) and adverse impact (present) is critical for the EPPP.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Uniform Guidelines on Employee Selection Procedures</h2>
+        <p>The <span class="key-term">Uniform Guidelines</span> (1978), adopted by the EEOC, Department of Labor, Department of Justice, and Civil Service Commission, provide the federal framework for evaluating selection procedures:</p>
+        <ul>
+          <li>Any procedure used to make employment decisions is a "test" subject to the Guidelines</li>
+          <li>If adverse impact is demonstrated, the employer must show the procedure is valid (criterion-related, content, or construct validity)</li>
+          <li>Content validity is acceptable only for selection procedures that directly sample job content</li>
+          <li>Employers should use the procedure with the least adverse impact when alternatives exist</li>
+          <li>The bottom-line concept: adverse impact is evaluated based on the overall selection process, not individual components (though this was somewhat limited by <em>Connecticut v. Teal</em>, 1982)</li>
+        </ul>
+        <div class="citation">Equal Employment Opportunity Commission. (1978). Uniform guidelines on employee selection procedures. <em>Federal Register, 43</em>(166), 38290-38315.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus: Key Testable Concepts</h2>
+        <div class="clinical-note">
+          <h4>Commonly Tested Topics for the EPPP</h4>
+          <ul>
+            <li>Four-fifths rule: if minority selection rate / majority selection rate &lt; .80, adverse impact exists</li>
+            <li>Low selection ratio + high validity + moderate base rate = maximum utility (Taylor-Russell)</li>
+            <li>Validity generalization: artifact-corrected meta-analysis shows cognitive ability validity generalizes across jobs</li>
+            <li>Banding: treats scores within a range as equivalent; sliding bands are more controversial than fixed bands</li>
+            <li>Cleary model: test is fair if same regression line predicts performance for all groups</li>
+            <li>Cognitive ability tests show no predictive bias (they slightly overpredict minority performance)</li>
+            <li>Adverse impact (disparate impact) is different from predictive bias -- a test can show adverse impact without being biased</li>
+            <li>Differential validity is rare in large-sample studies</li>
+            <li>Civil Rights Act of 1991 prohibits race-norming (within-group scoring)</li>
+            <li>Uniform Guidelines: all employment decision procedures are "tests" subject to validation if adverse impact exists</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Cleary, T. A. (1968). Test bias: Prediction of grades of Negro and White students in integrated colleges. <em>Journal of Educational Measurement, 5</em>(2), 115-124.</div>
+        <div class="citation">Equal Employment Opportunity Commission. (1978). Uniform guidelines on employee selection procedures. <em>Federal Register, 43</em>(166), 38290-38315.</div>
+        <div class="citation">Hunter, J. E., Schmidt, F. L., & Hunter, R. (1979). Differential validity of employment tests by race. <em>Psychological Bulletin, 86</em>(4), 721-735.</div>
+        <div class="citation">Schmidt, F. L., & Hunter, J. E. (1977). Development of a general solution to the problem of validity generalization. <em>Journal of Applied Psychology, 62</em>(5), 529-540.</div>
+        <div class="citation">Society for Industrial and Organizational Psychology. (2003). <em>Principles for the validation and use of personnel selection procedures</em> (4th ed.).</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="selection-techniques.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Finding the Right People</div>
+          </div>
+        </a>
+        <a href="training.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Developing Talent</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

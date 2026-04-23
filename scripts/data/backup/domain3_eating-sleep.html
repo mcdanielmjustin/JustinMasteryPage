@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eating & Sleep Disorders | Domain 3 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #a855f7; --accent-dim: rgba(168, 85, 247, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 3</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Eating & Sleep Disorders</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 3</div>
+        <div class="domain-title">Clinical Psychopathology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="anxiety-ocd.html" class="chapter-link"><span class="chapter-number">1</span>Anxiety & OCD</a></li>
+        <li class="chapter-item"><a href="mood-disorders.html" class="chapter-link"><span class="chapter-number">2</span>Mood Disorders</a></li>
+        <li class="chapter-item"><a href="conduct-disorders.html" class="chapter-link"><span class="chapter-number">3</span>Disruptive & Conduct</a></li>
+        <li class="chapter-item"><a href="eating-sleep.html" class="chapter-link active"><span class="chapter-number">4</span>Eating & Sleep Disorders</a></li>
+        <li class="chapter-item"><a href="neurodevelopmental.html" class="chapter-link"><span class="chapter-number">5</span>Neurodevelopmental</a></li>
+        <li class="chapter-item"><a href="personality-disorders.html" class="chapter-link"><span class="chapter-number">6</span>Personality Disorders</a></li>
+        <li class="chapter-item"><a href="schizophrenia.html" class="chapter-link"><span class="chapter-number">7</span>Schizophrenia Spectrum</a></li>
+        <li class="chapter-item"><a href="sexual-disorders.html" class="chapter-link"><span class="chapter-number">8</span>Sexual Disorders</a></li>
+        <li class="chapter-item"><a href="substance-disorders.html" class="chapter-link"><span class="chapter-number">9</span>Substance Use Disorders</a></li>
+        <li class="chapter-item"><a href="trauma-dissociative.html" class="chapter-link"><span class="chapter-number">10</span>Trauma & Dissociative</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 4 of 10</div>
+        <h1>Eating & Sleep-Wake Disorders</h1>
+        <div class="chapter-meta">
+          <span>AN, BN, BED, insomnia, narcolepsy, parasomnias</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 3)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 3)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Feeding and Eating Disorders</h2>
+        <p>The DSM-5 chapter on feeding and eating disorders includes conditions characterized by persistent disturbances in eating or eating-related behavior that result in altered consumption or absorption of food, causing significant impairment in physical health or psychosocial functioning. These disorders have among the highest mortality rates of any psychiatric condition, particularly <span class="key-term">anorexia nervosa</span>.</p>
+        <div class="definition-box">
+          <h4>Key Concept: Transdiagnostic Model</h4>
+          <p>Fairburn's (2003) <span class="key-term">transdiagnostic model</span> proposes that eating disorders share a core psychopathology: the over-evaluation of eating, shape, and weight, and their control. This model is the basis for enhanced cognitive-behavioral therapy (CBT-E), which can be applied across eating disorder diagnoses.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Anorexia Nervosa (AN)</h2>
+        <p><span class="key-term">Anorexia nervosa</span> is characterized by restriction of energy intake leading to a significantly low body weight, intense fear of gaining weight, and disturbance in the way body weight or shape is experienced.</p>
+        <h3>DSM-5 Diagnostic Criteria</h3>
+        <ol>
+          <li><strong>Criterion A:</strong> Restriction of energy intake relative to requirements, leading to significantly low body weight in the context of age, sex, developmental trajectory, and physical health</li>
+          <li><strong>Criterion B:</strong> Intense fear of gaining weight or becoming fat, or persistent behavior that interferes with weight gain, even though at a significantly low weight</li>
+          <li><strong>Criterion C:</strong> Disturbance in the way body weight or shape is experienced, undue influence of body weight/shape on self-evaluation, or persistent lack of recognition of the seriousness of the current low body weight</li>
+        </ol>
+        <h3>Subtypes</h3>
+        <ul>
+          <li><strong>Restricting type:</strong> Weight loss achieved primarily through dieting, fasting, and/or excessive exercise. No recurrent binge-eating or purging in the past 3 months.</li>
+          <li><strong>Binge-eating/purging type:</strong> Recurrent episodes of binge eating or purging (self-induced vomiting, misuse of laxatives, diuretics, or enemas) during the past 3 months.</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>DSM-5 made several important changes to AN criteria: (1) removed the specific BMI threshold and the word "refusal" to eat, replacing it with "restriction"; (2) removed the amenorrhea criterion, recognizing that AN occurs in males and post-menopausal women; (3) Criterion B no longer requires explicit acknowledgment of fear of weight gain -- persistent behavior interfering with weight gain suffices.</p>
+        </div>
+        <h3>Medical Complications</h3>
+        <p>AN has the <strong>highest mortality rate</strong> of any psychiatric disorder, approximately 5-10% per decade of illness. Deaths result from medical complications (cardiac arrhythmias, electrolyte imbalances) and suicide. Key medical findings include bradycardia, hypotension, lanugo hair, osteoporosis, and <span class="key-term">refeeding syndrome</span> (dangerous electrolyte shifts upon nutritional restoration, particularly hypophosphatemia).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Bulimia Nervosa (BN)</h2>
+        <p><span class="key-term">Bulimia nervosa</span> involves recurrent episodes of binge eating followed by inappropriate compensatory behaviors to prevent weight gain.</p>
+        <h3>DSM-5 Criteria</h3>
+        <ol>
+          <li>Recurrent episodes of <strong>binge eating</strong> (eating a definitively large amount of food in a discrete period with a sense of lack of control)</li>
+          <li>Recurrent inappropriate <strong>compensatory behaviors</strong> to prevent weight gain (purging, fasting, excessive exercise)</li>
+          <li>Both occur at least <strong>once per week for 3 months</strong> (reduced from twice per week in DSM-IV)</li>
+          <li>Self-evaluation is unduly influenced by body shape and weight</li>
+          <li>Does not occur exclusively during episodes of AN</li>
+        </ol>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>A key differential: AN binge-eating/purging type vs. BN. The distinguishing factor is <strong>body weight</strong>. If the individual is at a significantly low body weight and meets AN criteria, the diagnosis is AN binge-eating/purging type, even if binge-purge cycles are present. BN is diagnosed when the individual is at or above minimally normal weight. Note that BN no longer has purging/nonpurging subtypes in DSM-5.</p>
+        </div>
+        <p>Medical complications of BN include dental erosion (from stomach acid), parotid gland enlargement ("chipmunk cheeks"), <span class="key-term">Russell's sign</span> (calluses on the knuckles from self-induced vomiting), esophageal tears (Mallory-Weiss syndrome), and metabolic alkalosis from purging.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Binge-Eating Disorder (BED)</h2>
+        <p><span class="key-term">Binge-Eating Disorder</span> was elevated to a full diagnosis in DSM-5 (it was in the appendix of DSM-IV). It involves recurrent binge eating episodes without the regular use of compensatory behaviors.</p>
+        <h3>Binge-Eating Episode Features (3 or more)</h3>
+        <ul>
+          <li>Eating much more rapidly than normal</li>
+          <li>Eating until feeling uncomfortably full</li>
+          <li>Eating large amounts when not feeling physically hungry</li>
+          <li>Eating alone because of embarrassment</li>
+          <li>Feeling disgusted, depressed, or very guilty afterward</li>
+        </ul>
+        <p>Episodes occur at least <strong>once per week for 3 months</strong>. Marked distress regarding binge eating is present. BED is the most common eating disorder, with a lifetime prevalence of approximately 2.8%. It is associated with obesity but not all individuals with BED are obese, and not all obese individuals have BED.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Avoidant/Restrictive Food Intake Disorder (ARFID)</h2>
+        <p><span class="key-term">ARFID</span> is a new diagnosis in DSM-5, replacing and expanding the DSM-IV diagnosis of "feeding disorder of infancy or early childhood." It involves an eating or feeding disturbance manifested by persistent failure to meet nutritional needs, associated with significant weight loss, nutritional deficiency, dependence on enteral feeding or supplements, or marked interference with psychosocial functioning.</p>
+        <div class="definition-box">
+          <h4>Key Distinction</h4>
+          <p>Unlike AN, ARFID does <strong>not</strong> involve distress about body shape or weight, nor fear of weight gain. The food avoidance may be based on sensory characteristics of food (texture, color, smell), concern about aversive consequences of eating (e.g., choking, vomiting), or apparent lack of interest in eating. ARFID can occur in children and adults.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Pica and Rumination Disorder</h2>
+        <p>The DSM-5 feeding and eating disorders chapter includes two additional conditions that are commonly tested: <span class="key-term">Pica</span> and <span class="key-term">Rumination Disorder</span>. These may co-occur with intellectual disability, autism spectrum disorder, or other conditions.</p>
+        <h3>Pica</h3>
+        <p><span class="key-term">Pica</span> is defined as the persistent eating of nonnutritive, nonfood substances for a period of at least <strong>1 month</strong>. The diagnostic criteria require:</p>
+        <ul>
+          <li>The eating behavior is <strong>developmentally inappropriate</strong> -- mouthing and ingesting nonfood items is not considered abnormal before approximately <strong>age 2</strong></li>
+          <li>The behavior is <strong>not part of a culturally sanctioned</strong> or socially normative practice</li>
+          <li>If the behavior occurs in the context of another mental disorder (e.g., intellectual disability, autism spectrum disorder), it is sufficiently severe to warrant independent clinical attention</li>
+        </ul>
+        <p>Pica is associated with <strong>intellectual disability, autism spectrum disorder (ASD), pregnancy, and iron deficiency</strong>. Substances commonly ingested include dirt, clay, chalk, paper, soap, cloth, hair, string, and paint chips. Medical complications can be serious and include <strong>bowel obstruction, intestinal perforation, lead poisoning</strong> (from paint chips), parasitic infections, and dental injury.</p>
+        <h3>Rumination Disorder</h3>
+        <p><span class="key-term">Rumination Disorder</span> involves the <strong>repeated regurgitation of food</strong> for a period of at least <strong>1 month</strong>. Regurgitated food may be re-chewed, re-swallowed, or spit out. The diagnostic criteria require:</p>
+        <ul>
+          <li>The behavior is <strong>not attributable to an associated gastrointestinal or other medical condition</strong> (e.g., gastroesophageal reflux, pyloric stenosis)</li>
+          <li>The behavior does <strong>not occur exclusively</strong> during the course of anorexia nervosa, bulimia nervosa, binge-eating disorder, or avoidant/restrictive food intake disorder (ARFID)</li>
+          <li>If occurring in the context of another mental disorder (e.g., intellectual disability), the symptoms are sufficiently severe to warrant independent clinical attention</li>
+        </ul>
+        <p>Rumination disorder <strong>can occur across the lifespan</strong>, from infancy through adulthood. In infants, it may present with characteristic straining and arching movements. Treatment typically involves <span class="key-term">habit reversal training</span> (learning incompatible behaviors such as diaphragmatic breathing after meals) and behavioral interventions. <strong>Diaphragmatic breathing</strong> -- breathing deeply using the diaphragm to create abdominal pressure that counteracts regurgitation -- has the strongest evidence base for this condition.</p>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Key distinctions: <strong>Pica</strong> involves eating nonfood substances (not regurgitation) and is not diagnosed before age 2. <strong>Rumination disorder</strong> involves regurgitation of previously ingested food (not nonfood substances). Both require at least <strong>1 month</strong> duration and both can occur across the lifespan but must be distinguished from developmentally normal behaviors and medical conditions.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Etiology of Eating Disorders</h2>
+        <h3>Biological Factors</h3>
+        <ul>
+          <li><strong>Genetics:</strong> Heritability estimates for AN are approximately 50-80%, among the highest for any psychiatric disorder. BN shows heritability of approximately 55%. Twin studies suggest shared genetic vulnerability across eating disorder diagnoses (Bulik et al., 2006).</li>
+          <li><strong>Neurotransmitters:</strong> Serotonin dysregulation is implicated in both AN and BN. Individuals with BN show reduced serotonergic activity, which may contribute to impulsivity and binge eating. The efficacy of fluoxetine (the only FDA-approved medication for BN) supports serotonergic involvement.</li>
+          <li><strong>Neuroendocrine changes:</strong> Leptin, ghrelin, and other appetite-regulating hormones are disrupted in eating disorders, though many changes appear to be consequences rather than causes of disordered eating.</li>
+        </ul>
+        <h3>Psychological and Sociocultural Factors</h3>
+        <ul>
+          <li><strong>Perfectionism and low self-esteem:</strong> Perfectionism is a robust risk factor, particularly for AN. The combination of high standards and self-critical evaluation creates vulnerability.</li>
+          <li><strong>Internalization of the thin ideal:</strong> Stice's (2002) dual-pathway model proposes that sociocultural pressure for thinness leads to body dissatisfaction, which promotes both dietary restraint (risk for AN) and negative affect (risk for binge eating).</li>
+          <li><strong>Cognitive rigidity:</strong> Individuals with AN show set-shifting difficulties and weak central coherence (tendency to focus on details rather than global picture), which may be trait markers rather than state-dependent features.</li>
+          <li><strong>Trauma history:</strong> Childhood sexual abuse is a nonspecific risk factor, associated with increased rates of BN and BED in particular.</li>
+        </ul>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Treatment approaches differ by disorder: <strong>CBT-E</strong> (enhanced cognitive-behavioral therapy) is the first-line treatment for BN and BED. For AN, <strong>family-based treatment (FBT/Maudsley approach)</strong> is the best-supported treatment for adolescents, empowering parents to take charge of refeeding. For adults with AN, no single therapy has demonstrated clear superiority, though CBT-E, MANTRA (Maudsley model of anorexia treatment), and specialist supportive clinical management have the most evidence. Fluoxetine at 60 mg/day is effective for BN but medications have limited efficacy for AN.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Sleep-Wake Disorders</h2>
+        <h3>Insomnia Disorder</h3>
+        <p><span class="key-term">Insomnia disorder</span> involves dissatisfaction with sleep quantity or quality, associated with difficulty initiating sleep, maintaining sleep, or early morning awakening with inability to return to sleep. The disturbance occurs at least <strong>3 nights per week for at least 3 months</strong>, despite adequate opportunity for sleep. It causes clinically significant distress or impairment.</p>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p><span class="key-term">Cognitive-Behavioral Therapy for Insomnia (CBT-I)</span> is the first-line treatment, more effective than pharmacotherapy in the long term. Key components include stimulus control (bed only for sleep and sex), sleep restriction, sleep hygiene education, cognitive restructuring, and relaxation training. Spielman's (1987) <span class="key-term">3P model</span> of insomnia identifies predisposing, precipitating, and perpetuating factors.</p>
+        </div>
+
+        <h3>Narcolepsy</h3>
+        <p><span class="key-term">Narcolepsy</span> involves recurrent periods of irrepressible need to sleep, lapsing into sleep, or napping, occurring at least 3 times per week over the past 3 months, plus at least one of the following:</p>
+        <ul>
+          <li><strong>Cataplexy:</strong> Brief episodes of sudden bilateral loss of muscle tone triggered by laughter or joking (most specific symptom)</li>
+          <li><strong>Hypocretin (orexin) deficiency:</strong> CSF hypocretin-1 levels less than 110 pg/mL (the definitive biomarker)</li>
+          <li><strong>Sleep study findings:</strong> REM sleep latency of 15 minutes or less, or MSLT showing mean sleep latency of 8 minutes or less with 2 or more sleep-onset REM periods</li>
+        </ul>
+        <p>Narcolepsy Type 1 (with cataplexy/hypocretin deficiency) is caused by autoimmune destruction of hypocretin-producing neurons in the hypothalamus. Narcolepsy Type 2 is without cataplexy and with normal hypocretin levels.</p>
+
+        <h3>Obstructive Sleep Apnea Hypopnea</h3>
+        <p><span class="key-term">Obstructive sleep apnea</span> involves repeated episodes of upper airway obstruction during sleep, manifested by snoring, gasping, or breathing pauses. Diagnosed by polysomnography showing 5 or more obstructive apneas or hypopneas per hour of sleep (apnea-hypopnea index, or AHI, of 5 or more) with associated symptoms, or 15 or more regardless of symptoms. Risk factors include obesity, male sex, older age, and craniofacial abnormalities.</p>
+
+        <h3>Parasomnias</h3>
+        <p>Parasomnias are abnormal behavioral, experiential, or physiological events occurring during sleep.</p>
+        <table>
+          <tr><th>Parasomnia</th><th>Sleep Stage</th><th>Key Features</th></tr>
+          <tr><td>Sleepwalking (somnambulism)</td><td>NREM (Stage N3)</td><td>Rising from bed and walking; blank stare, difficult to awaken, amnesia for episode</td></tr>
+          <tr><td>Sleep terrors (night terrors)</td><td>NREM (Stage N3)</td><td>Abrupt awakening with panicked scream, intense fear, autonomic arousal, amnesia</td></tr>
+          <tr><td>Nightmare disorder</td><td>REM sleep</td><td>Extended, dysphoric, well-remembered dreams; full alertness on awakening</td></tr>
+          <tr><td>REM sleep behavior disorder</td><td>REM sleep</td><td>Acting out dreams due to loss of normal REM atonia; associated with neurodegenerative disease</td></tr>
+        </table>
+        <div class="example-box">
+          <h4>EPPP Example</h4>
+          <p>Distinguishing sleep terrors from nightmares: <strong>Sleep terrors</strong> occur during NREM Stage N3 (deep sleep), involve intense autonomic arousal, and the individual is typically amnestic for the episode. <strong>Nightmares</strong> occur during REM sleep, the individual fully awakens with recall of the dream content, and there is less autonomic arousal. Sleep terrors are most common in children ages 4-12 and typically resolve spontaneously.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Circadian Rhythm Sleep-Wake Disorders</h2>
+        <p>These disorders involve a persistent or recurrent pattern of sleep disruption primarily due to alteration of the circadian system or misalignment between the endogenous circadian rhythm and the sleep-wake schedule required by an individual's environment.</p>
+        <h3>Types</h3>
+        <ul>
+          <li><strong>Delayed sleep-wake phase type:</strong> Habitual sleep-wake timing is delayed, usually by 2+ hours, relative to conventional times. Common in adolescents. The individual cannot fall asleep until very late (e.g., 2-6 AM) and has difficulty waking for school or work.</li>
+          <li><strong>Advanced sleep-wake phase type:</strong> Habitual sleep-wake timing is advanced. More common in older adults. Individuals fall asleep and wake very early (e.g., sleep at 6-8 PM, wake at 2-5 AM).</li>
+          <li><strong>Shift work type:</strong> Insomnia and/or excessive sleepiness due to a work schedule that overlaps the usual sleep period.</li>
+          <li><strong>Jet lag type:</strong> Sleepiness and alertness occurring at inappropriate times relative to local time after travel across time zones.</li>
+          <li><strong>Non-24-hour sleep-wake type:</strong> Pattern of sleep-wake cycles not synchronized to the 24-hour environment. Most common in blind individuals lacking light input to the suprachiasmatic nucleus.</li>
+        </ul>
+        <div class="clinical-note">
+          <h4>Clinical Pearl</h4>
+          <p>The <span class="key-term">suprachiasmatic nucleus (SCN)</span> of the hypothalamus is the master circadian pacemaker. It is primarily entrained (synchronized) by light input via the retinohypothalamic tract. <span class="key-term">Melatonin</span>, produced by the pineal gland under SCN control, promotes sleep onset and is used therapeutically for circadian rhythm disorders. Light therapy (bright light exposure) is the primary treatment for delayed sleep-wake phase disorder and seasonal affective disorder.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Focus Points</h2>
+        <ul>
+          <li>AN has the <strong>highest mortality rate</strong> of any psychiatric disorder</li>
+          <li>DSM-5 <strong>removed amenorrhea</strong> as a criterion for AN</li>
+          <li>AN binge-eating/purging type vs. BN: the key distinction is <strong>significantly low body weight</strong></li>
+          <li>BN frequency threshold: binge/purge at least <strong>once per week for 3 months</strong> (reduced from twice per week in DSM-IV)</li>
+          <li>BED is a <strong>new full diagnosis in DSM-5</strong>; involves binge eating <strong>without compensatory behaviors</strong></li>
+          <li>ARFID involves food avoidance <strong>without body image disturbance</strong></li>
+          <li>Russell's sign (knuckle calluses) is associated with <strong>BN purging</strong></li>
+          <li><strong>CBT-I</strong> is the first-line treatment for insomnia, superior to medication long-term</li>
+          <li>Narcolepsy Type 1: <strong>cataplexy + hypocretin deficiency</strong>; autoimmune etiology</li>
+          <li>Sleep terrors = <strong>NREM/N3</strong> with amnesia; nightmares = <strong>REM</strong> with dream recall</li>
+          <li><strong>REM sleep behavior disorder</strong> is a prodromal marker for Parkinson's disease and other synucleinopathies</li>
+          <li><strong>Pica</strong>: eating nonfood substances for 1+ month; not diagnosed before age ~2; associated with ID, ASD, pregnancy, iron deficiency</li>
+          <li><strong>Rumination disorder</strong>: repeated regurgitation for 1+ month; treat with <strong>habit reversal and diaphragmatic breathing</strong></li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed.). American Psychiatric Publishing.</div>
+        <div class="citation">Arcelus, J., Mitchell, A. J., Wales, J., & Nielsen, S. (2011). Mortality rates in patients with anorexia nervosa and other eating disorders. <em>Archives of General Psychiatry, 68</em>(7), 724-731.</div>
+        <div class="citation">Fairburn, C. G. (2003). <em>Cognitive behavior therapy and eating disorders</em>. Guilford Press.</div>
+        <div class="citation">Morin, C. M., & Benca, R. (2012). Chronic insomnia. <em>The Lancet, 379</em>(9821), 1129-1141.</div>
+        <div class="citation">Scammell, T. E. (2015). Narcolepsy. <em>New England Journal of Medicine, 373</em>(27), 2654-2662.</div>
+        <div class="citation">Spielman, A. J., Caruso, L. S., & Glovinsky, P. B. (1987). A behavioral perspective on insomnia treatment. <em>Psychiatric Clinics of North America, 10</em>(4), 541-553.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="conduct-disorders.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Disruptive & Conduct</div>
+          </div>
+        </a>
+        <a href="neurodevelopmental.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Neurodevelopmental</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

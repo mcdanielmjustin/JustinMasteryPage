@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cerebral Cortex | Domain 7 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #ec4899; --accent-dim: rgba(236, 72, 153, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; font-size: 0.95rem; }
+    .content-section li { margin-bottom: 8px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-secondary); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .definition-box p { margin-bottom: 0; }
+    .example-box { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 16px 0; }
+    .example-box strong { color: var(--accent); }
+    .clinical-note { background: rgba(59, 130, 246, 0.08); border-left: 3px solid #3b82f6; padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; }
+    .clinical-note strong { color: #60a5fa; }
+    .clinical-note p { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9rem; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); padding: 12px 16px; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+    td { padding: 10px 16px; border: 1px solid var(--border); color: var(--text-secondary); }
+    tr:hover td { background: var(--bg-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 7</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Cerebral Cortex</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 7</div>
+        <div class="domain-title">Biological Bases of Behavior</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="memory-forgetting.html" class="chapter-link"><span class="chapter-number">1</span>Memory & Forgetting</a></li>
+        <li class="chapter-item"><a href="cerebral-cortex.html" class="chapter-link active"><span class="chapter-number">2</span>Cerebral Cortex</a></li>
+        <li class="chapter-item"><a href="subcortical.html" class="chapter-link"><span class="chapter-number">3</span>Subcortical Structures</a></li>
+        <li class="chapter-item"><a href="emotion-stress.html" class="chapter-link"><span class="chapter-number">4</span>Emotion & Stress</a></li>
+        <li class="chapter-item"><a href="memory-sleep.html" class="chapter-link"><span class="chapter-number">5</span>Memory & Sleep</a></li>
+        <li class="chapter-item"><a href="neurons-neurotransmitters.html" class="chapter-link"><span class="chapter-number">6</span>Neurons & Neurotransmitters</a></li>
+        <li class="chapter-item"><a href="neurological-disorders.html" class="chapter-link"><span class="chapter-number">7</span>Neurological Disorders</a></li>
+        <li class="chapter-item"><a href="sensation-perception.html" class="chapter-link"><span class="chapter-number">8</span>Sensation & Perception</a></li>
+        <li class="chapter-item"><a href="neurocognitive.html" class="chapter-link"><span class="chapter-number">9</span>Neurocognitive Disorders</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 9</div>
+        <h1>Cerebral Cortex</h1>
+        <div class="chapter-meta">
+          <span>Lobes, lateralization, association areas</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 7)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 7)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of the Cerebral Cortex</h2>
+        <p>The cerebral cortex is the thin, wrinkled outer layer of the cerebral hemispheres, approximately 2-4 mm thick, containing roughly 20 billion neurons. It is responsible for the highest-order cognitive functions including perception, voluntary movement, language, reasoning, and consciousness. The cortex is divided into four lobes in each hemisphere, each with specialized functions, as well as extensive association areas that integrate information across domains.</p>
+        <div class="definition-box">
+          <p><strong>Cerebral Cortex:</strong> The outermost layer of neural tissue of the cerebrum, composed primarily of gray matter (neuronal cell bodies). Its extensive folding (gyri = ridges; sulci = grooves; fissures = deep grooves) dramatically increases surface area, allowing greater computational capacity within the skull.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Frontal Lobe</h2>
+        <p>The frontal lobe is the largest cortical lobe, located anterior to the central sulcus and superior to the lateral (Sylvian) fissure. It is involved in motor control, executive functions, personality, and expressive language.</p>
+
+        <h3>Primary Motor Cortex (Precentral Gyrus)</h3>
+        <p>Located immediately anterior to the central sulcus, the <span class="key-term">primary motor cortex</span> controls voluntary movements of the contralateral (opposite) side of the body. The body is represented topographically in a pattern known as the <span class="key-term">motor homunculus</span>, with disproportionately large areas devoted to the hands, fingers, and face, reflecting the fine motor control required for these regions.</p>
+
+        <h3>Prefrontal Cortex (PFC)</h3>
+        <p>The anterior portion of the frontal lobe, the <span class="key-term">prefrontal cortex</span>, is the seat of executive functions and is the last cortical region to fully myelinate (not until the mid-20s):</p>
+        <ul>
+          <li><strong>Dorsolateral PFC:</strong> Working memory, cognitive flexibility, planning, and problem-solving. Damage impairs the ability to hold and manipulate information, shift between tasks, and generate strategies.</li>
+          <li><strong>Orbitofrontal cortex:</strong> Decision-making, impulse control, and social behavior. Damage produces disinhibition, poor judgment, inappropriate social behavior, and personality changes.</li>
+          <li><strong>Ventromedial PFC:</strong> Emotional regulation and valuation. Damage impairs the ability to use emotional signals (somatic markers) to guide decisions (Damasio, 1994).</li>
+        </ul>
+        <div class="definition-box">
+          <p><strong>Case of Phineas Gage (1848):</strong> A railroad worker who survived a tamping iron through his left frontal lobe. Although his intellect and language remained intact, his personality changed dramatically -- he became impulsive, irreverent, and unable to plan for the future. This case was pivotal in establishing the frontal lobe's role in personality and executive function.</p>
+        </div>
+
+        <h3>Broca's Area (Inferior Frontal Gyrus, Typically Left Hemisphere)</h3>
+        <p><span class="key-term">Broca's area</span> (Brodmann areas 44 and 45) is essential for speech production and language expression. Damage results in <span class="key-term">Broca's aphasia (expressive/nonfluent aphasia)</span>:</p>
+        <ul>
+          <li>Speech is effortful, slow, and telegraphic (content words without function words)</li>
+          <li>Comprehension is relatively preserved</li>
+          <li>Patients are typically aware of and frustrated by their deficits</li>
+          <li>Writing is usually similarly impaired</li>
+        </ul>
+
+        <h3>Premotor and Supplementary Motor Areas</h3>
+        <p>Located anterior to the primary motor cortex, these regions are involved in planning and coordinating complex movements, motor sequencing, and motor learning. The supplementary motor area (SMA) is particularly active during internally generated (self-initiated) movements.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Parietal Lobe</h2>
+        <p>The parietal lobe is located posterior to the central sulcus and superior to the temporal lobe. It processes somatosensory information and integrates sensory data for spatial awareness and attention.</p>
+
+        <h3>Primary Somatosensory Cortex (Postcentral Gyrus)</h3>
+        <p>Located immediately posterior to the central sulcus, the <span class="key-term">primary somatosensory cortex</span> receives and processes tactile information (touch, pressure, temperature, pain) from the contralateral side of the body. Like the motor cortex, it is organized as a <span class="key-term">sensory homunculus</span>, with the largest representations for highly sensitive regions such as the lips, tongue, and fingertips.</p>
+
+        <h3>Posterior Parietal Cortex</h3>
+        <p>The posterior parietal cortex integrates sensory information to create spatial maps of the body and the environment. It is crucial for:</p>
+        <ul>
+          <li><strong>Spatial attention:</strong> Directing awareness to locations in space</li>
+          <li><strong>Visuomotor integration:</strong> Guiding reaching and grasping movements</li>
+          <li><strong>Spatial reasoning:</strong> Mental rotation, navigation, and spatial working memory</li>
+        </ul>
+
+        <h3>Parietal Lobe Damage Syndromes</h3>
+        <ul>
+          <li><strong>Hemispatial neglect (contralateral neglect):</strong> Typically results from right parietal damage. Patients fail to attend to stimuli in the left side of space -- they may eat food only from the right side of their plate, shave only the right side of their face, or copy only the right half of a drawing.</li>
+          <li><strong>Gerstmann's syndrome:</strong> Left parietal (angular gyrus) damage producing finger agnosia, agraphia, acalculia, and left-right disorientation.</li>
+          <li><strong>Astereognosis:</strong> Inability to identify objects by touch alone despite intact tactile sensation.</li>
+        </ul>
+        <div class="clinical-note">
+          <p><strong>Clinical Significance:</strong> Hemispatial neglect is more common and severe after right hemisphere damage because the right parietal lobe attends to both sides of space, while the left parietal lobe primarily attends to the right side. When the right hemisphere is damaged, the left hemisphere cannot compensate for attention to the left side of space.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Temporal Lobe</h2>
+        <p>The temporal lobe is located below the lateral fissure and is involved in auditory processing, language comprehension, memory, and object recognition.</p>
+
+        <h3>Primary Auditory Cortex (Heschl's Gyrus)</h3>
+        <p>Located on the superior temporal gyrus, the <span class="key-term">primary auditory cortex</span> receives and processes auditory information. It is organized tonotopically, meaning different frequencies are processed in different locations.</p>
+
+        <h3>Wernicke's Area (Posterior Superior Temporal Gyrus, Typically Left Hemisphere)</h3>
+        <p><span class="key-term">Wernicke's area</span> (Brodmann area 22) is critical for language comprehension. Damage results in <span class="key-term">Wernicke's aphasia (receptive/fluent aphasia)</span>:</p>
+        <ul>
+          <li>Speech is fluent but often meaningless, filled with neologisms (made-up words) and paraphasias (word substitutions)</li>
+          <li>Comprehension is severely impaired</li>
+          <li>Patients are often unaware of their deficits (anosognosia)</li>
+          <li>Speech output may be described as "word salad"</li>
+        </ul>
+
+        <table>
+          <tr><th>Feature</th><th>Broca's Aphasia</th><th>Wernicke's Aphasia</th></tr>
+          <tr><td>Speech fluency</td><td>Nonfluent, effortful</td><td>Fluent but meaningless</td></tr>
+          <tr><td>Comprehension</td><td>Relatively preserved</td><td>Severely impaired</td></tr>
+          <tr><td>Awareness of deficit</td><td>Aware (frustrated)</td><td>Usually unaware</td></tr>
+          <tr><td>Repetition</td><td>Impaired</td><td>Impaired</td></tr>
+          <tr><td>Lesion location</td><td>Left inferior frontal</td><td>Left posterior superior temporal</td></tr>
+        </table>
+
+        <h3>Medial Temporal Lobe</h3>
+        <p>The medial temporal lobe, including the hippocampus, parahippocampal gyrus, and entorhinal cortex, is essential for the formation of new declarative (explicit) memories. Bilateral damage produces severe anterograde amnesia (see Memory &amp; Forgetting chapter).</p>
+
+        <h3>Inferotemporal Cortex</h3>
+        <p>The ventral surface of the temporal lobe is critical for visual object recognition (the "what" pathway). The <span class="key-term">fusiform face area (FFA)</span> within this region is specialized for face recognition. Damage can produce <span class="key-term">prosopagnosia</span> (inability to recognize faces).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Occipital Lobe</h2>
+        <p>The occipital lobe is the most posterior cortical lobe and is devoted primarily to visual processing.</p>
+
+        <h3>Primary Visual Cortex (V1, Striate Cortex)</h3>
+        <p>Located along the calcarine fissure, <span class="key-term">V1</span> receives direct input from the lateral geniculate nucleus (LGN) of the thalamus. It is organized retinotopically, meaning adjacent areas of the visual field are processed in adjacent cortical areas. The fovea (center of gaze) has a disproportionately large cortical representation.</p>
+
+        <h3>Visual Association Areas (V2-V5)</h3>
+        <p>Surrounding V1, these areas perform progressively more complex visual processing:</p>
+        <ul>
+          <li><strong>V4:</strong> Color processing; damage can cause achromatopsia (cortical color blindness)</li>
+          <li><strong>V5/MT (middle temporal area):</strong> Motion processing; damage can cause akinetopsia (motion blindness)</li>
+        </ul>
+
+        <h3>Two Visual Processing Streams</h3>
+        <ul>
+          <li><strong>Ventral stream ("what" pathway):</strong> Extends from V1 to the inferotemporal cortex. Processes object identity, including shape, color, and texture.</li>
+          <li><strong>Dorsal stream ("where/how" pathway):</strong> Extends from V1 to the posterior parietal cortex. Processes spatial location, motion, and guides visually directed actions.</li>
+        </ul>
+        <div class="example-box">
+          <p><strong>EPPP Application:</strong> Patient D.F. (Goodale &amp; Milner, 1992) with ventral stream damage could not visually identify objects or describe their orientation but could accurately reach for and grasp them. This double dissociation between the two streams provided strong evidence for their functional independence.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Lateralization and Hemispheric Specialization</h2>
+        <p><span class="key-term">Lateralization</span> refers to the functional specialization of the two cerebral hemispheres. While both hemispheres contribute to most tasks, certain functions are preferentially processed by one hemisphere.</p>
+
+        <table>
+          <tr><th>Left Hemisphere</th><th>Right Hemisphere</th></tr>
+          <tr><td>Language production and comprehension</td><td>Visuospatial processing</td></tr>
+          <tr><td>Analytical and logical reasoning</td><td>Holistic/gestalt processing</td></tr>
+          <tr><td>Mathematical calculation</td><td>Facial recognition and emotional prosody</td></tr>
+          <tr><td>Sequential processing</td><td>Spatial attention (both visual fields)</td></tr>
+          <tr><td>Fine motor control of dominant hand</td><td>Music perception and production</td></tr>
+        </table>
+
+        <h3>Split-Brain Research (Sperry &amp; Gazzaniga)</h3>
+        <p>Roger Sperry (Nobel Prize, 1981) and Michael Gazzaniga studied patients who had undergone <span class="key-term">corpus callosotomy</span> (severing of the corpus callosum) for intractable epilepsy. Their experiments with lateralized visual presentations revealed:</p>
+        <ul>
+          <li>Information presented to the right visual field (left hemisphere) could be verbally reported, while information presented to the left visual field (right hemisphere) could not be named but could be identified by touch with the left hand.</li>
+          <li>The right hemisphere demonstrated comprehension of simple language and superior performance on visuospatial tasks.</li>
+          <li>The left hemisphere "interpreter" would confabulate explanations for actions initiated by the right hemisphere.</li>
+        </ul>
+
+        <h3>The Corpus Callosum</h3>
+        <p>The <span class="key-term">corpus callosum</span> is the largest commissure (white matter tract) connecting the two hemispheres, containing approximately 200 million axons. It enables interhemispheric communication and coordinated bilateral activity. Complete agenesis (absence) of the corpus callosum can occur congenitally but often produces surprisingly mild deficits due to compensatory development of alternative pathways.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Association Areas</h2>
+        <p>Association areas comprise the majority of the cortical surface and integrate information from multiple sensory modalities and motor systems. They are responsible for higher-order cognitive functions:</p>
+        <ul>
+          <li><strong>Prefrontal association cortex:</strong> Planning, decision-making, personality, working memory, and executive control</li>
+          <li><strong>Parietal-temporal-occipital association area:</strong> At the junction of three lobes; integrates visual, auditory, and somatosensory information for language, spatial reasoning, and complex perception</li>
+          <li><strong>Limbic association cortex:</strong> Located on medial and inferior surfaces; involved in emotion, motivation, and memory formation</li>
+        </ul>
+
+        <h3>Arcuate Fasciculus</h3>
+        <p>The <span class="key-term">arcuate fasciculus</span> is a white matter tract connecting Broca's area and Wernicke's area. Damage to this tract produces <span class="key-term">conduction aphasia</span>, characterized by fluent speech, intact comprehension, but severely impaired repetition along with frequent phonemic paraphasias.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Key Terms Summary</h2>
+        <table>
+          <tr><th>Term</th><th>Definition</th></tr>
+          <tr><td>Motor homunculus</td><td>Topographic map of body representation on the primary motor cortex</td></tr>
+          <tr><td>Broca's aphasia</td><td>Nonfluent, effortful speech with preserved comprehension (left inferior frontal)</td></tr>
+          <tr><td>Wernicke's aphasia</td><td>Fluent but meaningless speech with impaired comprehension (left posterior temporal)</td></tr>
+          <tr><td>Conduction aphasia</td><td>Fluent speech, intact comprehension, impaired repetition (arcuate fasciculus)</td></tr>
+          <tr><td>Hemispatial neglect</td><td>Failure to attend to contralateral space, typically left neglect from right parietal damage</td></tr>
+          <tr><td>Prosopagnosia</td><td>Inability to recognize faces despite intact visual acuity</td></tr>
+          <tr><td>Lateralization</td><td>Functional specialization of the cerebral hemispheres</td></tr>
+          <tr><td>Corpus callosum</td><td>Major commissure connecting left and right hemispheres</td></tr>
+          <tr><td>Ventral stream</td><td>"What" pathway for object recognition (occipital to temporal)</td></tr>
+          <tr><td>Dorsal stream</td><td>"Where/how" pathway for spatial processing (occipital to parietal)</td></tr>
+        </table>
+        <p class="citation">Key references: Broca (1861); Damasio (1994); Gazzaniga (2000); Goodale &amp; Milner (1992); Sperry (1968); Wernicke (1874).</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="memory-forgetting.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Memory & Forgetting</div>
+          </div>
+        </a>
+        <a href="subcortical.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Subcortical Structures</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cultural Concepts | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Cultural Concepts</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link active"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 2 of 9</div>
+        <h1>Cultural Concepts</h1>
+        <div class="chapter-meta">
+          <span>Individualism/collectivism, cultural syndromes, cultural competence</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Cultural Concepts</h2>
+        <p>Cultural psychology examines how cultural contexts shape psychological processes and behavior. For the EPPP, understanding key cultural dimensions is essential because they influence how clients experience distress, express symptoms, relate to authority figures (including therapists), and define mental health and illness.</p>
+        <p>Culture encompasses the shared values, beliefs, norms, and practices of a group. It is transmitted across generations and shapes cognition, emotion, and behavior in ways that are often outside conscious awareness. Cultural concepts help psychologists move beyond individual-level explanations to appreciate the systemic and contextual forces that shape human functioning.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Individualism and Collectivism</h2>
+        <p>The <span class="key-term">individualism-collectivism</span> dimension is the most widely studied cultural variable in cross-cultural psychology. It describes the extent to which a culture prioritizes the individual self versus the group.</p>
+
+        <div class="definition-box">
+          <h4>Individualism</h4>
+          <p>Cultures emphasizing individualism prioritize personal goals, autonomy, and self-reliance. The self is construed as independent -- bounded, stable, and separate from social context. Identity is defined by internal attributes such as personality traits, abilities, and personal preferences. Examples include the United States, Canada, United Kingdom, and Australia.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Collectivism</h4>
+          <p>Cultures emphasizing collectivism prioritize group harmony, interdependence, and social obligations. The self is construed as interdependent -- fluid, connected, and defined by relationships and social roles. Group goals take precedence over individual desires. Examples include many East Asian, Latin American, and African cultures.</p>
+        </div>
+
+        <h3>Implications for Psychology</h3>
+        <ul>
+          <li><strong>Self-concept:</strong> Individualistic cultures foster an <span class="key-term">independent self-construal</span>; collectivistic cultures foster an <span class="key-term">interdependent self-construal</span> (Markus &amp; Kitayama, 1991).</li>
+          <li><strong>Attribution:</strong> Individualistic cultures show greater fundamental attribution error; collectivistic cultures attend more to situational factors.</li>
+          <li><strong>Emotion:</strong> Individualistic cultures value high-arousal positive emotions (excitement); collectivistic cultures value low-arousal positive emotions (calm, contentment).</li>
+          <li><strong>Therapy:</strong> Traditional Western therapy emphasizes individual autonomy and self-disclosure, which may conflict with collectivistic values of family loyalty and emotional restraint.</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Remember that individualism-collectivism exists on a continuum and varies within cultures. Not all members of a collectivistic culture are collectivistic. Avoid stereotyping individuals based on cultural group membership -- assess each client's personal cultural orientation.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Hofstede's Cultural Dimensions</h2>
+        <p>Geert Hofstede's (1980, 2001) research on IBM employees across 50+ countries identified several dimensions along which national cultures vary. His framework remains one of the most cited in cross-cultural psychology.</p>
+
+        <h3>The Six Dimensions</h3>
+        <table>
+          <tr><th>Dimension</th><th>Description</th><th>High Score Example</th><th>Low Score Example</th></tr>
+          <tr><td><strong>Power Distance</strong></td><td>Degree to which less powerful members accept unequal power distribution</td><td>Malaysia, Philippines</td><td>Austria, Denmark</td></tr>
+          <tr><td><strong>Individualism vs. Collectivism</strong></td><td>Degree to which individuals are integrated into groups</td><td>USA, Australia (high individualism)</td><td>Guatemala, Ecuador (high collectivism)</td></tr>
+          <tr><td><strong>Masculinity vs. Femininity</strong></td><td>Distribution of emotional roles between genders; achievement vs. quality of life</td><td>Japan, Hungary (masculine)</td><td>Sweden, Norway (feminine)</td></tr>
+          <tr><td><strong>Uncertainty Avoidance</strong></td><td>Degree to which a society tolerates ambiguity and uncertainty</td><td>Greece, Portugal</td><td>Singapore, Denmark</td></tr>
+          <tr><td><strong>Long-Term vs. Short-Term Orientation</strong></td><td>Focus on future rewards (thrift, perseverance) vs. past and present (tradition, fulfilling social obligations)</td><td>China, Japan</td><td>Nigeria, Philippines</td></tr>
+          <tr><td><strong>Indulgence vs. Restraint</strong></td><td>Degree to which a society allows gratification of basic human desires</td><td>Mexico, Nigeria</td><td>Pakistan, Egypt</td></tr>
+        </table>
+
+        <h3>Power Distance in Therapy</h3>
+        <p>In high <span class="key-term">power distance</span> cultures, clients may expect the therapist to be directive and authoritative. A non-directive, egalitarian therapeutic approach (common in person-centered therapy) may be perceived as incompetence or lack of caring. Conversely, clients from low power distance cultures may resist overly directive approaches.</p>
+
+        <h3>Uncertainty Avoidance in Therapy</h3>
+        <p>Clients from high <span class="key-term">uncertainty avoidance</span> cultures may prefer structured, predictable therapeutic approaches with clear rules and expectations. They may experience greater anxiety with ambiguous techniques such as free association or open-ended exploration. Clients from low uncertainty avoidance cultures may be more comfortable with ambiguity and less structured interventions.</p>
+
+        <div class="citation">Hofstede, G. (2001). Culture's consequences: Comparing values, behaviors, institutions, and organizations across nations (2nd ed.). Sage.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Emic vs. Etic Approaches</h2>
+        <p>The <span class="key-term">emic-etic</span> distinction (from linguistics: phonemic vs. phonetic) is fundamental to cross-cultural research methodology.</p>
+
+        <div class="definition-box">
+          <h4>Emic Approach</h4>
+          <p>Studies behavior from within a single culture using criteria and constructs meaningful to that culture's members. Prioritizes cultural specificity and the insider's perspective. Example: studying <em>amok</em> as it is understood within Malay culture.</p>
+        </div>
+        <div class="definition-box">
+          <h4>Etic Approach</h4>
+          <p>Studies behavior from outside a particular culture using universal categories that allow cross-cultural comparison. Prioritizes generalizability and the outsider's perspective. Example: measuring depression across cultures using standardized instruments.</p>
+        </div>
+
+        <h3>The Problem of Imposed Etics</h3>
+        <p>An <span class="key-term">imposed etic</span> occurs when researchers apply constructs developed in one culture (typically Western) to another culture as if they were universal, without verifying their validity in the new context. This is a major methodological concern in cross-cultural psychology. For example, applying Western diagnostic criteria for depression to a culture where somatic complaints are the primary expression of distress may lead to underdiagnosis.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Application</h4>
+          <p>Culturally competent assessment requires awareness of whether instruments and diagnostic categories have been validated for the client's cultural group. Using an emic lens means understanding how the client's culture conceptualizes the presenting problem, rather than automatically applying Western diagnostic frameworks.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cultural Syndromes</h2>
+        <p><span class="key-term">Cultural syndromes</span> (previously called culture-bound syndromes) are patterns of distressing experiences and behaviors that are recognized within specific cultural contexts. The DSM-5 replaced the term "culture-bound syndrome" with three concepts:</p>
+        <ul>
+          <li><strong>Cultural concepts of distress:</strong> Ways that cultural groups experience, understand, and communicate suffering, behavioral problems, or troubling thoughts and emotions.</li>
+          <li><strong>Cultural syndromes:</strong> Clusters of symptoms that tend to co-occur in certain cultural groups.</li>
+          <li><strong>Cultural idioms of distress:</strong> Ways of expressing distress that may not involve specific symptoms or syndromes but convey culturally recognized meanings.</li>
+        </ul>
+
+        <h3>Key Examples for the EPPP</h3>
+        <table>
+          <tr><th>Syndrome</th><th>Culture</th><th>Description</th></tr>
+          <tr><td><strong>Ataque de nervios</strong></td><td>Latin American</td><td>Episodes of intense emotional upset including anxiety, anger, grief, screaming, crying, trembling, and sometimes dissociative or seizure-like episodes. Often triggered by stressful family events.</td></tr>
+          <tr><td><strong>Taijin kyofusho</strong></td><td>Japanese</td><td>Intense fear that one's body, appearance, or bodily functions are offensive to others. Differs from social anxiety in its focus on offending others rather than being embarrassed oneself.</td></tr>
+          <tr><td><strong>Susto</strong></td><td>Latin American</td><td>"Fright sickness" -- attributed to a frightening event that causes the soul to leave the body. Symptoms include appetite/sleep disturbance, sadness, lack of motivation, and somatic complaints.</td></tr>
+          <tr><td><strong>Dhat syndrome</strong></td><td>South Asian</td><td>Anxiety and somatic complaints associated with perceived semen loss. Reflects cultural beliefs about vital bodily fluids.</td></tr>
+          <tr><td><strong>Khyal cap</strong></td><td>Cambodian</td><td>"Wind attacks" -- panic-like episodes attributed to wind-like substance rising in the body. Symptoms overlap with panic disorder but have distinct cultural attributions.</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>The EPPP may test your ability to distinguish between cultural syndromes and Western diagnostic categories. For instance, <em>ataque de nervios</em> overlaps with panic disorder but is distinct in its triggers (family conflict) and cultural meaning. <em>Taijin kyofusho</em> differs from social anxiety disorder in its other-focused (vs. self-focused) concern.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cultural Competence</h2>
+        <p><span class="key-term">Cultural competence</span> refers to the ability to effectively deliver services to individuals from diverse cultural backgrounds. It is an ethical imperative (APA Ethics Code Standard 2.01b) and a clinical necessity.</p>
+
+        <h3>Components of Cultural Competence</h3>
+        <ul>
+          <li><strong>Self-awareness:</strong> Ongoing examination of one's own cultural identity, biases, assumptions, and privilege.</li>
+          <li><strong>Knowledge:</strong> Understanding of the cultural backgrounds, histories, and current realities of client populations.</li>
+          <li><strong>Skills:</strong> Ability to adapt assessment and intervention approaches to be culturally responsive.</li>
+          <li><strong>Advocacy:</strong> Willingness to address systemic barriers and advocate for social justice on behalf of clients.</li>
+        </ul>
+
+        <h3>Cultural Humility</h3>
+        <p><span class="key-term">Cultural humility</span> (Tervalon &amp; Murray-Garcia, 1998) is an alternative or complement to cultural competence that emphasizes a lifelong commitment to self-evaluation and critique, redressing power imbalances in the therapeutic relationship, and developing mutually beneficial partnerships with communities. Unlike "competence," which implies a finite endpoint, humility frames cultural learning as a continuous process.</p>
+
+        <div class="clinical-note">
+          <h4>Integration in Practice</h4>
+          <p>Both cultural competence and cultural humility are essential. Competence provides the knowledge base and skill set, while humility provides the attitude of openness and ongoing learning. A culturally responsive psychologist integrates both: knowing when to apply cultural knowledge and when to ask the client to educate them about their unique cultural experience.</p>
+        </div>
+        <div class="citation">Tervalon, M., &amp; Murray-Garcia, J. (1998). Cultural humility versus cultural competence: A critical distinction. Journal of Health Care for the Poor and Underserved, 9(2), 117-125.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Microaggressions</h2>
+        <p>Derald Wing Sue et al. (2007) defined <span class="key-term">microaggressions</span> as brief, commonplace verbal, behavioral, or environmental communications -- whether intentional or unintentional -- that convey hostile, derogatory, or negative messages to members of marginalized groups.</p>
+
+        <h3>Three Types of Microaggressions</h3>
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+          <tr><td><strong>Microassaults</strong></td><td>Explicit derogatory verbal or nonverbal attacks meant to hurt. Most similar to traditional discrimination.</td><td>Using a racial slur; deliberately serving a White customer before a customer of color.</td></tr>
+          <tr><td><strong>Microinsults</strong></td><td>Communications that convey rudeness, insensitivity, or demean a person's heritage or identity. Often outside the perpetrator's awareness.</td><td>Asking an Asian American "Where are you really from?"; telling a person of color "You are so articulate."</td></tr>
+          <tr><td><strong>Microinvalidations</strong></td><td>Communications that exclude, negate, or nullify the psychological thoughts, feelings, or experiential reality of certain groups.</td><td>"I don't see color"; "When I look at you, I see a human being, not a Black person."</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Impact and Clinical Relevance</h4>
+          <p>Research has linked chronic exposure to microaggressions with increased psychological distress, depressive symptoms, anxiety, and diminished self-esteem. In the therapeutic context, therapist microaggressions can damage the therapeutic alliance, leading to early termination. Psychologists should engage in ongoing self-examination to identify and reduce their own microaggressive behaviors, and they should be prepared to address microaggressions when they occur -- both within therapy and in the client's broader life context.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>APA Multicultural Guidelines (2017)</h2>
+        <p>The APA's most recent Multicultural Guidelines emphasize several key principles for psychological practice:</p>
+        <ul>
+          <li><strong>Intersectionality:</strong> Recognize that individuals hold multiple identities (race, gender, sexual orientation, disability, class) that interact in complex ways to shape their experiences.</li>
+          <li><strong>Ecological approach:</strong> Understand behavior within the context of systems (family, community, institutional, societal) rather than focusing solely on the individual.</li>
+          <li><strong>Social justice orientation:</strong> Psychologists have a responsibility not only to provide culturally responsive services but also to advocate for systemic change that promotes equity.</li>
+          <li><strong>Ongoing development:</strong> Cultural competence is a lifelong developmental process, not a fixed state that one achieves.</li>
+          <li><strong>Evidence-based adaptations:</strong> Adapt empirically supported treatments to be culturally responsive while maintaining treatment integrity.</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Cultural concepts questions on the EPPP frequently involve applying knowledge to vignettes. You may be asked to identify the best therapeutic approach for a client from a specific cultural background, recognize a cultural syndrome, determine whether an assessment tool is appropriate cross-culturally, or identify how cultural dimensions like individualism-collectivism or power distance should inform treatment. Remember that cultural competence requires integrating self-awareness, knowledge, and skills -- not simply memorizing facts about cultural groups.</p>
+        </div>
+        <div class="citation">American Psychological Association. (2017). Multicultural guidelines: An ecological approach to context, identity, and intersectionality. APA.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cross-Cultural Assessment Considerations</h2>
+        <p>Psychological assessment across cultures requires careful attention to the validity and appropriateness of instruments and procedures.</p>
+
+        <h3>Key Concerns</h3>
+        <ul>
+          <li><strong>Construct equivalence:</strong> Does the construct being measured (e.g., intelligence, depression) have the same meaning across cultures? Depression may manifest primarily through somatic symptoms in some cultures rather than the cognitive/affective symptoms emphasized in Western diagnostic criteria.</li>
+          <li><strong>Linguistic equivalence:</strong> Is the translated version of an instrument psychometrically equivalent to the original? Simple translation is insufficient -- back-translation and cultural adaptation are required.</li>
+          <li><strong>Metric equivalence:</strong> Do scores on an instrument have the same meaning across cultural groups? Different normative distributions may make the same score indicative of different levels of the construct.</li>
+          <li><strong>Functional equivalence:</strong> Does the behavior being assessed serve the same function across cultures? Eye contact avoidance may indicate respect in some cultures but social anxiety in others.</li>
+        </ul>
+
+        <h3>Assessment Bias Types</h3>
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+          <tr><td><strong>Construct bias</strong></td><td>The construct itself differs across cultures</td><td>Intelligence tests that emphasize verbal ability disadvantage those from oral traditions</td></tr>
+          <tr><td><strong>Method bias</strong></td><td>The assessment method produces different effects across cultures</td><td>Cultures that discourage self-disclosure may underperform on interview-based assessments</td></tr>
+          <tr><td><strong>Item bias</strong></td><td>Individual items function differently across groups</td><td>Vocabulary items referencing culturally specific objects or experiences</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Best Practices</h4>
+          <p>When assessing clients from diverse cultural backgrounds: (1) Use instruments that have been validated for the client's cultural group when available. (2) Consider the client's level of acculturation and language proficiency. (3) Supplement standardized testing with culturally informed clinical interview. (4) Interpret results within the client's cultural context. (5) Acknowledge the limitations of available instruments and document any concerns about cross-cultural validity in the assessment report.</p>
+        </div>
+        <div class="citation">Markus, H. R., &amp; Kitayama, S. (1991). Culture and the self: Implications for cognition, emotion, and motivation. Psychological Review, 98(2), 224-253.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Language, Bilingualism, and Therapy</h2>
+        <p>Language is a critical cultural variable that affects every aspect of psychological assessment and treatment.</p>
+
+        <h3>Key Considerations</h3>
+        <ul>
+          <li><strong>Language proficiency vs. dominance:</strong> A bilingual client may be proficient in English for daily tasks but may access emotional memories and core beliefs more readily in their first language. Assessing only in English may miss important clinical material.</li>
+          <li><strong>Linguistic equivalence in testing:</strong> Direct translation of psychological tests does not guarantee equivalence. Idioms, culturally loaded terms, and syntax differences can alter item meaning and difficulty.</li>
+          <li><strong>Code-switching:</strong> Bilingual clients may switch languages within therapy sessions, often shifting to their first language when discussing emotionally charged material. This provides important clinical information about the emotional valence of different topics.</li>
+          <li><strong>Use of interpreters:</strong> When an interpreter is needed, the psychologist should use professional interpreters rather than family members, brief the interpreter on confidentiality and the purpose of the session, and allow extra time for the session.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Bilingualism and Emotional Processing</h4>
+          <p>Research shows that emotional experiences encoded in the first language may be less accessible when therapy is conducted in a second language. Marcos (1976) described a "language barrier" in bilingual psychotherapy where clients appear more detached or intellectualized when discussing emotional content in their second language. This has implications for the assessment of affect, the therapeutic alliance, and the effectiveness of interventions that rely on emotional processing.</p>
+        </div>
+      </section>
+      <div class="nav-buttons">
+        <a href="identity-models.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Identity Development</div>
+          </div>
+        </a>
+        <a href="attribution.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Attribution Theory</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

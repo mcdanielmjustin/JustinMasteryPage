@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinical & Neuropsych Tests | Domain 8 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--text-primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .content-section h3 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 28px 0 12px; }
+    .content-section h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+    .content-section p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .content-section ul, .content-section ol { color: var(--text-secondary); margin: 0 0 16px 24px; line-height: 1.8; }
+    .content-section li { margin-bottom: 6px; }
+    .key-term { color: var(--accent); font-weight: 600; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .definition-box strong { color: var(--text-primary); }
+    .example-box { background: rgba(249, 115, 22, 0.05); border: 1px solid rgba(249, 115, 22, 0.15); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; }
+    .clinical-note strong { color: #22c55e; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; text-align: left; padding: 10px 14px; font-size: 0.9rem; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Clinical & Neuropsych Tests</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 8</div>
+        <div class="domain-title">Psychological Assessment</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="wechsler-sb.html" class="chapter-link"><span class="chapter-number">1</span>Wechsler & Stanford-Binet</a></li>
+        <li class="chapter-item"><a href="cognitive-measures.html" class="chapter-link"><span class="chapter-number">2</span>Other Cognitive Measures</a></li>
+        <li class="chapter-item"><a href="mmpi.html" class="chapter-link"><span class="chapter-number">3</span>MMPI-2/MMPI-3</a></li>
+        <li class="chapter-item"><a href="personality-measures.html" class="chapter-link"><span class="chapter-number">4</span>Personality Measures</a></li>
+        <li class="chapter-item"><a href="clinical-tests.html" class="chapter-link active"><span class="chapter-number">5</span>Clinical & Neuropsych Tests</a></li>
+        <li class="chapter-item"><a href="interest-inventories.html" class="chapter-link"><span class="chapter-number">6</span>Interest Inventories</a></li>
+        <li class="chapter-item"><a href="score-interpretation.html" class="chapter-link"><span class="chapter-number">7</span>Score Interpretation</a></li>
+        <li class="chapter-item"><a href="assessment-ethics.html" class="chapter-link"><span class="chapter-number">8</span>Assessment Ethics</a></li>
+        <li class="chapter-item"><a href="ebp-treatment.html" class="chapter-link"><span class="chapter-number">9</span>Evidence-Based Treatments</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 5 of 9</div>
+        <h1>Clinical & Neuropsych Tests</h1>
+        <div class="chapter-meta">
+          <span>Bender-Gestalt, MMSE, WCST, Halstead-Reitan</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Clinical and Neuropsychological Tests</h2>
+        <p>This chapter covers specialized clinical instruments and neuropsychological test batteries that are commonly tested on the EPPP. Unlike the broad cognitive measures (Wechsler, Stanford-Binet) or personality inventories (MMPI, NEO), these instruments target specific clinical functions such as <span class="key-term">visual-motor integration</span>, <span class="key-term">cognitive screening</span>, <span class="key-term">executive functioning</span>, and <span class="key-term">comprehensive neuropsychological assessment</span>.</p>
+        <div class="clinical-note">
+          <strong>EPPP Focus:</strong> For neuropsychological tests, the exam typically asks about what each test measures, the populations for which it is used, and key scoring or interpretation features. You are less likely to be asked about specific administration details.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Bender Visual Motor Gestalt Test</h2>
+        <p>The <span class="key-term">Bender Visual Motor Gestalt Test</span> (commonly called the Bender-Gestalt) was originally developed by Lauretta Bender in 1938 based on Gestalt psychology principles from Max Wertheimer. It assesses visual-motor integration by asking examinees to copy geometric designs.</p>
+
+        <h3>Test Description</h3>
+        <ul>
+          <li>The original version presents 9 geometric designs one at a time; the examinee copies each design onto blank paper</li>
+          <li>The <span class="key-term">Bender-Gestalt II</span> (Brannigan & Decker, 2003) updated the instrument with 16 designs, modern norms (ages 4-85+), and supplemental tests (motor and perception tests)</li>
+          <li>Administration takes approximately 5-10 minutes for the copy phase</li>
+        </ul>
+
+        <h3>Scoring Systems</h3>
+        <ul>
+          <li><span class="key-term">Koppitz Developmental Scoring System:</span> Used primarily with children ages 5-11; scores 30 possible errors across categories of distortion, rotation, integration, and perseveration</li>
+          <li><span class="key-term">Lacks Scoring System:</span> Designed for adults; identifies 12 essential discriminators of organic brain impairment</li>
+          <li><span class="key-term">Bender-Gestalt II Global Scoring System:</span> Uses a 0-4 rating for each design based on overall quality of reproduction</li>
+        </ul>
+
+        <h3>Clinical Uses</h3>
+        <ul>
+          <li>Screening for visual-motor integration deficits</li>
+          <li>Screening for possible neurological impairment (though sensitivity/specificity is limited)</li>
+          <li>Developmental assessment in children</li>
+          <li>A recall phase (redrawing from memory) can assess visual memory</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Key Point:</strong> The Bender-Gestalt is a screening instrument, not a diagnostic tool. Errors such as rotation, fragmentation, perseveration, and collision of figures may suggest neurological impairment but require follow-up with comprehensive neuropsychological testing.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Cognitive Screening Instruments: MMSE and MoCA</h2>
+
+        <h3>Mini-Mental State Examination (MMSE)</h3>
+        <p>The <span class="key-term">MMSE</span> was developed by Folstein, Folstein, and McHugh (1975) as a brief screening measure for cognitive impairment, particularly dementia. Key features:</p>
+        <ul>
+          <li>Total score range: 0-30 points</li>
+          <li>Assesses orientation (time and place), registration, attention and calculation, recall, and language</li>
+          <li>Traditional cutoff: score of 23/24 suggests possible cognitive impairment</li>
+          <li>Administration time: approximately 5-10 minutes</li>
+        </ul>
+        <div class="definition-box">
+          <strong>MMSE Domains and Point Values:</strong> Orientation to time (5), orientation to place (5), registration (3), attention/calculation -- serial 7s or WORLD backwards (5), recall (3), naming (2), repetition (1), 3-stage command (3), reading (1), writing (1), copying (1).
+        </div>
+
+        <h3>Montreal Cognitive Assessment (MoCA)</h3>
+        <p>The <span class="key-term">MoCA</span> (Nasreddine et al., 2005) was developed to address the MMSE's limitations in detecting mild cognitive impairment (MCI). It is more sensitive to early cognitive decline than the MMSE.</p>
+        <ul>
+          <li>Total score range: 0-30 points (cutoff of 26 for normal cognition)</li>
+          <li>Assesses visuospatial/executive, naming, memory, attention, language, abstraction, delayed recall, and orientation</li>
+          <li>Includes executive function tasks (Trail Making B adaptation, clock drawing) that the MMSE lacks</li>
+          <li>Better ceiling effect performance: more sensitive to MCI because the MMSE shows ceiling effects in educated individuals</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Comparison:</strong> The MoCA is more sensitive to mild cognitive impairment than the MMSE because it includes executive function tasks and has a higher ceiling. The MMSE has a well-known education bias (higher-educated individuals score artificially high).
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Wisconsin Card Sorting Test (WCST)</h2>
+        <p>The <span class="key-term">WCST</span> (Berg, 1948; Heaton et al., 1993) is the gold standard measure of <span class="key-term">executive functioning</span>, specifically cognitive flexibility and set-shifting. It is highly sensitive to frontal lobe dysfunction.</p>
+
+        <h3>Administration</h3>
+        <ul>
+          <li>The examinee sorts cards according to an unknown rule (color, form, or number)</li>
+          <li>After each sort, the examiner indicates "right" or "wrong" -- the examinee must infer the sorting rule from feedback</li>
+          <li>After 10 consecutive correct sorts, the rule changes without warning, and the examinee must shift to the new rule</li>
+          <li>The test continues until 6 categories are completed or all 128 cards are used</li>
+        </ul>
+
+        <h3>Key Scores</h3>
+        <ul>
+          <li><span class="key-term">Categories completed:</span> Number of sorting categories successfully identified (max = 6)</li>
+          <li><span class="key-term">Perseverative errors:</span> Continuing to sort by a previously correct but now incorrect rule -- the most clinically significant score, sensitive to frontal lobe dysfunction</li>
+          <li><span class="key-term">Perseverative responses:</span> Total responses matching a previously reinforced category</li>
+          <li><span class="key-term">Failure to maintain set:</span> Making an error after 5+ consecutive correct sorts within a category (suggests attentional lapses)</li>
+        </ul>
+        <div class="definition-box">
+          <strong>Primary Measure:</strong> Perseverative errors are the most clinically meaningful score on the WCST. Elevated perseverative errors are associated with dorsolateral prefrontal cortex dysfunction and indicate difficulty with cognitive flexibility and set-shifting.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Trail Making Test (TMT)</h2>
+        <p>The <span class="key-term">Trail Making Test</span> is one of the most widely used neuropsychological instruments, included in nearly all neuropsychological batteries. It consists of two parts:</p>
+
+        <h3>Part A (Trails A)</h3>
+        <ul>
+          <li>The examinee draws a line connecting numbered circles (1-2-3-4...25) in sequential order as quickly as possible</li>
+          <li>Primarily measures <span class="key-term">processing speed</span>, visual scanning, and simple sequencing</li>
+          <li>Score = time to completion in seconds</li>
+        </ul>
+
+        <h3>Part B (Trails B)</h3>
+        <ul>
+          <li>The examinee alternates between numbers and letters (1-A-2-B-3-C...13)</li>
+          <li>Measures <span class="key-term">cognitive flexibility</span>, set-shifting, and divided attention in addition to processing speed</li>
+          <li>Score = time to completion in seconds</li>
+          <li>Much more sensitive to executive dysfunction than Part A</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>EPPP Interpretation:</strong> A large discrepancy between Trails A and B performance (with B being disproportionately slow) suggests executive dysfunction beyond simple slowing. If both A and B are slow proportionally, the difficulty is more likely due to processing speed or motor impairment rather than executive dysfunction specifically.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Halstead-Reitan Neuropsychological Battery (HRB)</h2>
+        <p>The <span class="key-term">Halstead-Reitan Battery</span> was developed by Ward Halstead and later refined by Ralph Reitan. It is one of the two major comprehensive fixed neuropsychological batteries (along with the Luria-Nebraska).</p>
+
+        <h3>Core Tests</h3>
+        <ul>
+          <li><span class="key-term">Category Test:</span> Measures abstract reasoning and concept formation -- the examinee identifies a common principle underlying groups of stimuli (208 stimuli, 7 subtests). Most sensitive test in the battery to brain damage.</li>
+          <li><span class="key-term">Tactual Performance Test (TPT):</span> Blindfolded examinee places blocks into a form board using dominant hand, non-dominant hand, then both hands; followed by memory and localization drawings. Measures tactile perception, psychomotor speed, spatial memory.</li>
+          <li><span class="key-term">Speech Sounds Perception Test:</span> Examinee matches spoken nonsense syllables to printed options. Measures auditory-verbal perception and sustained attention.</li>
+          <li><span class="key-term">Seashore Rhythm Test:</span> Examinee identifies whether pairs of rhythmic patterns are the same or different. Measures nonverbal auditory perception and attention.</li>
+          <li><span class="key-term">Finger Oscillation Test (Finger Tapping):</span> Measures motor speed for each hand separately.</li>
+          <li><span class="key-term">Trail Making Test (Parts A and B):</span> Often considered part of the HRB battery.</li>
+        </ul>
+
+        <h3>The Halstead Impairment Index</h3>
+        <p>The <span class="key-term">Impairment Index</span> is the proportion of tests (out of 7 core measures) on which the examinee scores in the impaired range. A score above 0.4 (i.e., impaired on more than 40% of tests) suggests brain dysfunction.</p>
+
+        <h3>Interpretive Approaches</h3>
+        <ul>
+          <li><span class="key-term">Level of performance:</span> Comparing scores to normative cutoffs</li>
+          <li><span class="key-term">Pattern of performance:</span> Examining the profile of strengths and weaknesses across tests</li>
+          <li><span class="key-term">Right-left comparisons:</span> Comparing performance between the two sides of the body (lateralization)</li>
+          <li><span class="key-term">Pathognomonic signs:</span> Specific indicators (e.g., dysnomia, sensory suppression) that are strongly associated with brain dysfunction</li>
+        </ul>
+        <div class="clinical-note">
+          <strong>EPPP Note:</strong> The Halstead-Reitan uses a fixed battery approach (same tests for all patients). This contrasts with the flexible or hypothesis-testing approach favored by some neuropsychologists. The fixed approach ensures comprehensive coverage; the flexible approach tailors the battery to the referral question.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Luria-Nebraska Neuropsychological Battery (LNNB)</h2>
+        <p>The <span class="key-term">LNNB</span> was developed by Golden, Purisch, and Hammeke (1985) based on A. R. Luria's qualitative neuropsychological assessment procedures. It was designed to standardize and quantify Luria's methods.</p>
+
+        <h3>Structure</h3>
+        <ul>
+          <li>269 items organized into 11 clinical scales and 3 summary scales</li>
+          <li><strong>Clinical scales:</strong> Motor, Rhythm, Tactile, Visual, Receptive Speech, Expressive Speech, Writing, Reading, Arithmetic, Memory, Intellectual Processes</li>
+          <li><strong>Summary scales:</strong> Pathognomonic (items most sensitive to brain damage), Left Hemisphere, Right Hemisphere</li>
+          <li>Administration time: approximately 1.5-2.5 hours (shorter than the Halstead-Reitan)</li>
+        </ul>
+
+        <h3>Scoring</h3>
+        <ul>
+          <li>Items scored 0 (normal), 1 (borderline), or 2 (impaired)</li>
+          <li>The <span class="key-term">critical level</span> is determined based on the examinee's age and education -- scale scores above this level suggest impairment</li>
+          <li>Localization scales (Left Hemisphere, Right Hemisphere) help identify lateralized dysfunction</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>HRB vs. LNNB:</strong> The HRB has a longer history and more extensive validation. The LNNB is shorter and based on Luria's qualitative tradition. Both are fixed batteries. The HRB is generally considered more thoroughly validated, but the LNNB may be preferred when time is limited.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Rey Complex Figure Test (RCFT)</h2>
+        <p>The <span class="key-term">Rey Complex Figure Test</span> (Rey, 1941; Osterrieth, 1944) assesses visuospatial constructional ability and visual memory. It involves copying a complex geometric figure and then reproducing it from memory.</p>
+
+        <h3>Administration</h3>
+        <ol>
+          <li><strong>Copy trial:</strong> The examinee copies the complex figure while looking at it (no time limit)</li>
+          <li><strong>Immediate recall:</strong> After a brief delay (approximately 3 minutes), the examinee draws the figure from memory</li>
+          <li><strong>Delayed recall:</strong> After approximately 30 minutes, the examinee draws the figure again from memory</li>
+          <li>Optional: a recognition trial may also be administered</li>
+        </ol>
+
+        <h3>Scoring</h3>
+        <ul>
+          <li>The figure is divided into 18 scorable elements</li>
+          <li>Each element is scored 0-2 based on accuracy and placement</li>
+          <li>Maximum score = 36 for each trial</li>
+          <li>Clinicians also assess the organizational strategy (e.g., does the examinee begin with the overall structure or with details?)</li>
+        </ul>
+
+        <h3>Clinical Significance</h3>
+        <ul>
+          <li><span class="key-term">Copy performance:</span> Impaired copy suggests visuospatial constructional deficits (right hemisphere, parietal lobe dysfunction)</li>
+          <li><span class="key-term">Memory performance:</span> Impaired recall with intact copy suggests visual memory deficits (right temporal or hippocampal dysfunction)</li>
+          <li><span class="key-term">Organizational approach:</span> A piecemeal or fragmented approach to copying (focusing on details rather than the global structure) is associated with executive dysfunction and may also predict poor recall</li>
+        </ul>
+        <div class="example-box">
+          <strong>EPPP Tip:</strong> The key clinical distinction on the RCFT is between the copy and recall phases. Intact copy with poor recall = memory problem. Poor copy with poor recall = constructional deficit (memory cannot be fairly assessed). Good organizational strategy during copy predicts better recall.
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Summary Comparison Table</h2>
+        <table>
+          <tr><th>Test</th><th>Primary Measures</th><th>Key Features</th></tr>
+          <tr><td>Bender-Gestalt II</td><td>Visual-motor integration</td><td>9-16 designs to copy; screening tool; Koppitz scoring for children</td></tr>
+          <tr><td>MMSE</td><td>Global cognitive screening</td><td>30-point scale; cutoff 23/24; limited executive function assessment</td></tr>
+          <tr><td>MoCA</td><td>Global cognitive screening</td><td>30-point scale; cutoff 26; better for MCI detection; includes executive tasks</td></tr>
+          <tr><td>WCST</td><td>Executive function, set-shifting</td><td>Card sorting by color/form/number; perseverative errors key score</td></tr>
+          <tr><td>Trail Making A/B</td><td>Processing speed, cognitive flexibility</td><td>A = sequencing; B = alternating sets; B-A discrepancy = executive dysfunction</td></tr>
+          <tr><td>Halstead-Reitan</td><td>Comprehensive neuropsych battery</td><td>Fixed battery; Impairment Index; 4 interpretive methods</td></tr>
+          <tr><td>Luria-Nebraska</td><td>Comprehensive neuropsych battery</td><td>11 clinical scales; based on Luria; shorter than HRB</td></tr>
+          <tr><td>Rey Complex Figure</td><td>Visuospatial construction, visual memory</td><td>Copy + recall; 18 elements; organizational strategy important</td></tr>
+        </table>
+        <p class="citation">References: Folstein et al. (1975). MMSE. Nasreddine et al. (2005). MoCA. Heaton et al. (1993). WCST. Reitan & Wolfson (1993). Halstead-Reitan Battery. Golden et al. (1985). Luria-Nebraska. Meyers & Meyers (1995). Rey Complex Figure Test.</p>
+      </section>
+      <div class="nav-buttons">
+        <a href="personality-measures.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Personality Measures</div>
+          </div>
+        </a>
+        <a href="interest-inventories.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Interest Inventories</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

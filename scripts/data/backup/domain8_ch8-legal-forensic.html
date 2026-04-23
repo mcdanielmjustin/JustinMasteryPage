@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal & Forensic Psychology – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Legal &amp; Forensic Psychology</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 8</div>
+        <div class="domain-title">Clinical Assessment &amp; Interpretation</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link active"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 8 of 12</div>
+        <h1>Legal &amp; Forensic Psychology</h1>
+        <div class="chapter-meta">
+          <span>Domain 8: Clinical Assessment &amp; Interpretation</span>
+          <span>~28 min read</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a>
+      </div>
+
+      <!-- Section 1: Competency -->
+      <div class="content-section">
+        <h2>Competency to Stand Trial</h2>
+        <p>Competency to stand trial (CST) is the most frequently raised forensic psychology issue in criminal proceedings. The legal standard was established in <span class="key-term">Dusky v. United States (1960)</span>.</p>
+
+        <div class="definition-box">
+          <strong>Dusky Standard:</strong>
+          <p>A defendant is competent to stand trial if they have: (1) a <span class="key-term">rational understanding</span> of the charges against them and the proceedings, (2) a <span class="key-term">factual understanding</span> of the charges and proceedings, and (3) the ability to <span class="key-term">consult with their attorney</span> with a reasonable degree of rational understanding. Competency is assessed at the current time — it is a present-state evaluation, not a retrospective assessment.</p>
+        </div>
+
+        <p>Key assessment instruments for CST include:</p>
+        <ul>
+          <li><strong>MacArthur Competence Assessment Tool-Criminal Adjudication (MacCAT-CA):</strong> Structured interview assessing Understanding, Reasoning, and Appreciation</li>
+          <li><strong>Competency Screening Test (CST):</strong> 22-item sentence completion screening measure</li>
+          <li><strong>Competency to Stand Trial Assessment Instrument (CAI):</strong> 13 functions rated by the evaluator</li>
+        </ul>
+
+        <p>If a defendant is found incompetent, the court may order <span class="key-term">competency restoration</span> — typically involving psychoeducation about the legal process, medication management, and cognitive remediation. <em>Jackson v. Indiana</em> (1972) established that defendants cannot be held indefinitely for competency restoration; the duration must bear a reasonable relationship to the purpose.</p>
+
+        <h3>Sell v. United States (2003)</h3>
+        <p><span class="key-term">Sell v. United States</span> established criteria for involuntary medication of incompetent defendants solely for the purpose of competency restoration. The government must demonstrate: (1) an important governmental interest is at stake, (2) medication is substantially likely to render the defendant competent, (3) medication is substantially unlikely to have side effects that interfere with the defendant's ability to assist counsel, and (4) no less intrusive alternative exists. This ruling balances the government's interest in prosecution against the defendant's liberty interest in refusing medication.</p>
+
+        <div class="clinical-note">
+          <strong>Competency Restoration Rates:</strong>
+          <p>Research indicates that approximately 70-80% of defendants referred for competency restoration are successfully restored, most within 6 months. Factors associated with failure to restore include intellectual disability, chronic psychotic disorders with medication resistance, and neurocognitive disorders such as dementia. For defendants who cannot be restored, civil commitment proceedings may be initiated under Jackson v. Indiana standards.</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Insanity Defense -->
+      <div class="content-section">
+        <h2>Insanity Defense Standards</h2>
+        <p>Unlike competency (a present-state assessment), the insanity defense is a <span class="key-term">retrospective evaluation</span> of the defendant's mental state at the time of the offense. Multiple standards exist, and the EPPP tests all of them.</p>
+
+        <table>
+          <tr><th>Standard</th><th>Year</th><th>Key Criteria</th></tr>
+          <tr><td>M'Naghten Rule</td><td>1843</td><td>Did not know the <strong>nature and quality</strong> of the act OR did not know the act was <strong>wrong</strong> (cognitive test only)</td></tr>
+          <tr><td>Durham Rule (Product Test)</td><td>1954</td><td>The act was the <strong>product of mental disease</strong> or defect (broadest standard; largely abandoned)</td></tr>
+          <tr><td>ALI/Model Penal Code</td><td>1962</td><td>Lacked substantial capacity to <strong>appreciate</strong> wrongfulness OR to <strong>conform</strong> conduct to the law (includes volitional prong)</td></tr>
+          <tr><td>Insanity Defense Reform Act (IDRA)</td><td>1984</td><td>Severe mental disease/defect; unable to <strong>appreciate</strong> wrongfulness (federal standard; eliminated volitional prong after Hinckley)</td></tr>
+        </table>
+
+        <div class="example-box">
+          <strong>Historical Context:</strong>
+          <p>The <span class="key-term">Insanity Defense Reform Act of 1984</span> was passed by Congress following John Hinckley Jr.'s acquittal by reason of insanity for the attempted assassination of President Reagan. The IDRA tightened the federal standard by eliminating the volitional ("conform conduct") prong of the ALI test, shifting the burden of proof to the defense (clear and convincing evidence), and eliminating diminished capacity as a defense in federal courts.</p>
+        </div>
+
+        <h3>Guilty But Mentally Ill (GBMI)</h3>
+        <p><span class="key-term">GBMI</span> is a verdict available in some states that acknowledges the defendant was mentally ill at the time of the offense but was NOT insane. The defendant is found guilty and receives a criminal sentence but is entitled to mental health treatment during incarceration. GBMI does NOT reduce the sentence and is considered by many forensic psychologists to be misleading to jurors.</p>
+
+        <h3>Diminished Capacity</h3>
+        <p><span class="key-term">Diminished capacity</span> is not an insanity defense but rather a strategy to argue that mental illness prevented the defendant from forming the specific intent (mens rea) required for the charged offense. If successful, it results in conviction on a lesser charge rather than acquittal. Not all jurisdictions allow this defense.</p>
+
+        <h3>Not Guilty by Reason of Insanity (NGRI) — Disposition</h3>
+        <p>Defendants found NGRI are typically committed to a psychiatric facility rather than released. In most jurisdictions, the committed individual must demonstrate that they are no longer mentally ill or dangerous to be released. The length of psychiatric commitment can exceed the maximum prison sentence for the original charge. <em>Jones v. United States</em> (1983) held that an NGRI acquittee may be confined in a psychiatric hospital for longer than the maximum sentence for the crime committed, as the commitment is based on mental illness and dangerousness, not punishment.</p>
+      </div>
+
+      <!-- Section 3: Tarasoff and Privilege -->
+      <div class="content-section">
+        <h2>Duty to Warn/Protect and Privileged Communication</h2>
+
+        <h3>Tarasoff v. Regents of the University of California</h3>
+        <p>The <span class="key-term">Tarasoff</span> case (1974/1976) established the precedent for mental health professionals' duty to protect identifiable potential victims of client violence.</p>
+        <ul>
+          <li><strong>Tarasoff I (1974):</strong> Established a <span class="key-term">duty to warn</span> — the therapist must warn the identified potential victim</li>
+          <li><strong>Tarasoff II (1976):</strong> Broadened to a <span class="key-term">duty to protect</span> — the therapist must take reasonable steps to protect the potential victim, which may include warning but also hospitalization, notification of police, or other interventions</li>
+        </ul>
+        <p>The duty to protect applies when the therapist determines (or should have determined) that the client poses a serious threat of violence to a <span class="key-term">reasonably identifiable victim</span>. States vary considerably in their implementation of Tarasoff principles — some have codified the duty by statute, others apply it through case law, and a few have explicitly rejected it.</p>
+
+        <div class="example-box">
+          <strong>Tarasoff Application Scenario:</strong>
+          <p>A client tells their therapist, "If my ex-wife brings her new boyfriend to my daughter's recital next week, I'm going to kill him." The therapist must assess whether this represents a serious, imminent threat to a reasonably identifiable victim. Factors to consider include: the specificity of the threat (identified person, time, and place), the client's history of violence, access to means, and current mental state. If the therapist concludes the threat is credible, the duty to protect may require warning the identified potential victim, notifying law enforcement, adjusting treatment (e.g., voluntary or involuntary hospitalization), or a combination of these interventions.</p>
+        </div>
+
+        <h3>Jaffee v. Redmond (1996)</h3>
+        <p><span class="key-term">Jaffee v. Redmond</span> established psychotherapist-patient privilege in federal courts. The Supreme Court recognized that confidential communications between a licensed psychotherapist (including licensed social workers) and their patients are protected from compelled disclosure in federal proceedings. The privilege belongs to the client, not the therapist, and can be waived only by the client.</p>
+
+        <div class="clinical-note">
+          <strong>Privilege vs. Confidentiality:</strong>
+          <p><span class="key-term">Confidentiality</span> is a broader ethical obligation to protect client information from disclosure. <span class="key-term">Privilege</span> is a narrower legal right that protects against compelled disclosure in judicial proceedings. A communication can be confidential but not privileged (e.g., a therapist could be legally compelled to testify), or both confidential and privileged. Privilege is established by statute or case law and varies by jurisdiction.</p>
+        </div>
+
+        <h3>Exceptions to Privileged Communication</h3>
+        <p>Psychotherapist-patient privilege is not absolute. Common exceptions include:</p>
+        <ul>
+          <li><strong>Danger to self or others:</strong> When the client poses imminent risk of harm (consistent with Tarasoff duties)</li>
+          <li><strong>Child abuse reporting:</strong> All states have mandatory reporting laws for suspected child abuse or neglect that override privilege</li>
+          <li><strong>Court-ordered evaluations:</strong> When the evaluation is ordered by the court, privilege typically does not apply because the relationship is not therapeutic</li>
+          <li><strong>Client raises mental health as an issue:</strong> If the client puts their mental health at issue in litigation (e.g., suing for emotional damages), they may waive privilege regarding relevant treatment records</li>
+          <li><strong>Malpractice claims:</strong> If the client sues the therapist, the therapist may disclose relevant information in self-defense</li>
+        </ul>
+      </div>
+
+      <!-- Section 4: Expert Testimony Standards -->
+      <div class="content-section">
+        <h2>Standards for Expert Testimony</h2>
+
+        <h3>Daubert v. Merrell Dow Pharmaceuticals (1993)</h3>
+        <p>The <span class="key-term">Daubert standard</span> is the federal standard for admissibility of expert testimony. The trial judge serves as "gatekeeper" and evaluates whether the expert's testimony is based on:</p>
+        <ol>
+          <li><strong>Testability:</strong> Can the theory or technique be (and has it been) tested?</li>
+          <li><strong>Peer review and publication:</strong> Has the theory or technique been subjected to peer review?</li>
+          <li><strong>Known error rate:</strong> Is the error rate of the technique known and acceptable?</li>
+          <li><strong>General acceptance:</strong> Is the theory or technique generally accepted in the relevant scientific community?</li>
+        </ol>
+        <p>Additionally, the testimony must be relevant (helpful to the trier of fact) and reliable (based on sufficient facts/data and reliable principles/methods).</p>
+
+        <h3>Kumho Tire Co. v. Carmichael (1999)</h3>
+        <p><span class="key-term">Kumho Tire</span> extended the Daubert gatekeeping function to all expert testimony, not just scientific testimony. This means that the trial judge's role as gatekeeper applies equally to testimony based on technical or other specialized knowledge (e.g., clinical experience, vocational assessment). For forensic psychologists, this ruling means that clinical opinions — not just research findings — must meet standards of reliability and relevance to be admissible.</p>
+
+        <h3>Frye v. United States (1923)</h3>
+        <p>The older <span class="key-term">Frye standard</span> ("general acceptance test") required only that the scientific theory or technique had gained <span class="key-term">general acceptance in the relevant scientific community</span>. Frye is still used in some state courts but has been largely superseded by Daubert in federal courts and many state jurisdictions.</p>
+
+        <div class="clinical-note">
+          <strong>Ultimate Issue Testimony:</strong>
+          <p>Whether forensic psychologists should offer opinions on the <span class="key-term">ultimate legal issue</span> (e.g., "Was the defendant insane?") is debated. Federal Rule of Evidence 704(b) prohibits expert witnesses from stating an opinion about whether a criminal defendant had the mental state required for the offense (the ultimate issue). Many forensic psychology guidelines recommend that experts limit testimony to clinical findings and opinions while leaving the ultimate legal determination to the trier of fact (judge or jury). This approach respects the boundary between clinical expertise and legal decision-making.</p>
+        </div>
+
+        <table>
+          <tr><th>Feature</th><th>Daubert (1993)</th><th>Frye (1923)</th></tr>
+          <tr><td>Jurisdiction</td><td>Federal courts (and many states)</td><td>Some state courts</td></tr>
+          <tr><td>Gatekeeper</td><td>Trial judge</td><td>Scientific community</td></tr>
+          <tr><td>Criteria</td><td>Testability, peer review, error rate, general acceptance</td><td>General acceptance only</td></tr>
+          <tr><td>Flexibility</td><td>Multi-factor; more flexible</td><td>Single factor; more restrictive for novel science</td></tr>
+        </table>
+      </div>
+
+      <!-- Section 5: Risk Assessment -->
+      <div class="content-section">
+        <h2>Risk Assessment Instruments</h2>
+        <p>Forensic psychologists frequently conduct violence risk assessments for courts, parole boards, and civil commitment proceedings. Key instruments include:</p>
+        <ul>
+          <li><strong>PCL-R (Hare Psychopathy Checklist-Revised):</strong> 20-item clinician-rated scale assessing psychopathic personality traits. Two factors: Factor 1 (interpersonal/affective: grandiosity, callousness, lack of empathy) and Factor 2 (social deviance: impulsivity, irresponsibility, criminal versatility). Cutoff score of 30 for psychopathy designation. The PCL-R is a robust predictor of violent recidivism.</li>
+          <li><strong>VRAG (Violence Risk Appraisal Guide):</strong> Actuarial instrument using 12 static risk factors to predict violent recidivism. Items include PCL-R score, elementary school maladjustment, age at index offense, and victim injury.</li>
+          <li><strong>HCR-20 (Historical-Clinical-Risk Management):</strong> Structured professional judgment tool with 20 items across Historical (static), Clinical (dynamic), and Risk Management (contextual) domains. Unlike purely actuarial tools, it emphasizes clinical judgment in combining risk factors.</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Actuarial vs. Structured Professional Judgment:</strong>
+          <p><span class="key-term">Actuarial approaches</span> (e.g., VRAG) use fixed algorithms to combine risk factors into a probability estimate; no clinical judgment modifies the score. <span class="key-term">Structured professional judgment (SPJ)</span> approaches (e.g., HCR-20) use identified risk factors to structure the clinician's assessment but allow clinical judgment in the final risk determination. Research generally shows that actuarial tools outperform unstructured clinical judgment, while SPJ approaches perform comparably to actuarial methods.</p>
+        </div>
+
+        <h3>Static vs. Dynamic Risk Factors</h3>
+        <p><span class="key-term">Static risk factors</span> are historical and unchangeable (e.g., age at first offense, prior convictions, history of childhood abuse). <span class="key-term">Dynamic risk factors</span> (criminogenic needs) are modifiable targets for intervention (e.g., substance use, antisocial attitudes, peer associations, employment instability). Effective risk management addresses dynamic factors while acknowledging the baseline risk indicated by static factors.</p>
+
+        <div class="citation">Daubert v. Merrell Dow Pharmaceuticals, Inc., 509 U.S. 579 (1993).</div>
+      </div>
+
+      <!-- Section 5.5: Civil Commitment -->
+      <div class="content-section">
+        <h2>Civil Commitment and Involuntary Hospitalization</h2>
+        <p><span class="key-term">Civil commitment</span> is the legal process by which individuals with mental illness can be involuntarily hospitalized when they meet specific criteria established by state law.</p>
+
+        <h3>Criteria for Civil Commitment</h3>
+        <p>Most jurisdictions require two elements: (1) the individual has a <span class="key-term">mental illness</span>, and (2) as a result of that mental illness, the individual is a <span class="key-term">danger to self or others</span> or is <span class="key-term">gravely disabled</span> (unable to provide for basic needs such as food, shelter, or clothing). Some states also include a "need for treatment" criterion. The standard of proof required for civil commitment was established by the Supreme Court as <span class="key-term">clear and convincing evidence</span> in <em>Addington v. Texas</em> (1979).</p>
+
+        <h3>Key Civil Commitment Cases</h3>
+        <table>
+          <tr><th>Case</th><th>Year</th><th>Holding</th></tr>
+          <tr><td>O'Connor v. Donaldson</td><td>1975</td><td>A non-dangerous, mentally ill person who can survive safely in freedom cannot be involuntarily confined. Mental illness alone is insufficient.</td></tr>
+          <tr><td>Addington v. Texas</td><td>1979</td><td>The standard of proof for civil commitment must be at least "clear and convincing evidence" — higher than civil "preponderance of evidence" but lower than criminal "beyond a reasonable doubt."</td></tr>
+          <tr><td>Wyatt v. Stickney</td><td>1971</td><td>Established the right to treatment in the least restrictive environment for involuntarily committed individuals.</td></tr>
+          <tr><td>Youngberg v. Romeo</td><td>1982</td><td>Involuntarily committed individuals have constitutional rights to safety, freedom from unnecessary restraint, and minimally adequate training/habilitation.</td></tr>
+        </table>
+      </div>
+
+      <!-- Section 6: EPPP Focus -->
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Dusky standard:</strong> Rational understanding + factual understanding + ability to consult with attorney. Present-state assessment.</li>
+          <li><strong>M'Naghten:</strong> Cognitive test only — did not know nature/quality of act OR did not know it was wrong. Most restrictive standard.</li>
+          <li><strong>ALI/MPC:</strong> Includes both cognitive (appreciate) AND volitional (conform) prongs. Broader than M'Naghten.</li>
+          <li><strong>IDRA (1984):</strong> Federal standard post-Hinckley. Eliminated volitional prong. Burden of proof on defense.</li>
+          <li><strong>Durham:</strong> Broadest — act was "product of" mental disease. Largely abandoned due to vagueness.</li>
+          <li><strong>Tarasoff I = warn; Tarasoff II = protect.</strong> Duty triggered by serious threat to identifiable victim.</li>
+          <li><strong>Jaffee v. Redmond:</strong> Established psychotherapist-patient privilege in federal courts. Includes licensed social workers.</li>
+          <li><strong>Daubert:</strong> Four factors (testability, peer review, error rate, general acceptance). Judge as gatekeeper.</li>
+          <li><strong>Frye:</strong> General acceptance only. Older, simpler standard.</li>
+          <li><strong>Kumho Tire:</strong> Extended Daubert gatekeeping to ALL expert testimony, including clinical and technical opinions, not just scientific testimony.</li>
+          <li><strong>PCL-R:</strong> 20 items, cutoff of 30. Two factors (interpersonal/affective and social deviance). Strong predictor of violent recidivism.</li>
+          <li><strong>Competency vs. insanity:</strong> Competency = present state, can the defendant participate? Insanity = retrospective, was the defendant mentally responsible at the time of the offense?</li>
+          <li><strong>GBMI:</strong> Guilty verdict with mental health treatment during incarceration. Does NOT reduce sentence.</li>
+          <li><strong>Sell v. United States:</strong> Criteria for involuntary medication to restore competency: important government interest, likely to work, unlikely to impair defense ability, no less intrusive alternative.</li>
+          <li><strong>Jackson v. Indiana:</strong> Cannot hold incompetent defendants indefinitely for restoration. Duration must be reasonable.</li>
+          <li><strong>Jones v. United States:</strong> NGRI commitment can exceed maximum prison sentence because it is based on illness/dangerousness, not punishment.</li>
+          <li><strong>Exceptions to privilege:</strong> Danger to self/others, child abuse reporting, court-ordered evaluation, client raises mental health in litigation, malpractice defense.</li>
+          <li><strong>Static vs. dynamic risk factors:</strong> Static = historical/unchangeable. Dynamic = modifiable criminogenic needs (substance use, antisocial attitudes). Treatment targets dynamic factors.</li>
+          <li><strong>Civil commitment standard:</strong> Clear and convincing evidence (Addington v. Texas). Requires mental illness PLUS dangerousness or grave disability.</li>
+          <li><strong>O'Connor v. Donaldson:</strong> Non-dangerous mentally ill person who can survive in freedom cannot be confined involuntarily.</li>
+          <li><strong>Wyatt v. Stickney:</strong> Right to treatment in least restrictive environment for involuntarily committed individuals.</li>
+          <li><strong>HCR-20:</strong> SPJ tool with Historical, Clinical, and Risk Management domains. Allows clinical judgment in final risk determination.</li>
+          <li><strong>VRAG:</strong> Purely actuarial — 12 static risk factors, algorithmic scoring, no clinical override.</li>
+          <li><strong>MacCAT-CA:</strong> MacArthur Competence Assessment Tool. Structured interview assessing Understanding, Reasoning, and Appreciation for CST evaluations.</li>
+          <li><strong>Youngberg v. Romeo:</strong> Involuntarily committed individuals have constitutional rights to safety, freedom from restraint, and minimally adequate training.</li>
+          <li><strong>Competency restoration rates:</strong> 70-80% of defendants are successfully restored, most within 6 months. Failure to restore is associated with intellectual disability, treatment-resistant psychosis, and neurocognitive disorders.</li>
+          <li><strong>Forensic evaluator's role:</strong> Provide objective, balanced opinions to assist the court. Avoid advocacy for either side. Opinions should be based on sufficient data and clearly articulate limitations.</li>
+          <li><strong>Ultimate issue testimony:</strong> Federal Rule 704(b) prohibits experts from stating opinions on whether the defendant had the mental state required for the offense. Many guidelines recommend limiting testimony to clinical findings.</li>
+          <li><strong>Privilege exceptions:</strong> Danger to self/others, child abuse reporting, court-ordered evaluation, client raises mental health in litigation, malpractice defense by therapist.</li>
+          <li><strong>Mens rea:</strong> The "guilty mind" or criminal intent required for most crimes. Diminished capacity argues that mental illness prevented formation of the specific mens rea required for the charged offense.</li>
+          <li><strong>Competency vs. sanity vs. diminished capacity:</strong> Three distinct legal concepts. Competency = present state ability to participate in trial. Insanity = retrospective mental state at time of offense. Diminished capacity = inability to form specific intent.</li>
+          <li><strong>Parens patriae vs. police power:</strong> Two constitutional bases for involuntary state action. Parens patriae = state's authority to protect those who cannot protect themselves (gravely disabled). Police power = state's authority to protect public safety (dangerous to others).</li>
+          <li><strong>Least restrictive alternative:</strong> Legal principle that the state should use the least restrictive means of achieving its interests. Applies to civil commitment (outpatient vs. inpatient), guardianship, and treatment decisions.</li>
+          <li><strong>Forensic assessment instruments (FAIs):</strong> Tools designed specifically for legal questions. MacCAT-CA (competency), R-CRAS (insanity), ECST-R (competency), PCL-R (psychopathy/risk). FAIs differ from clinical instruments in their legal focus.</li>
+          <li><strong>Parham v. J.R. (1979):</strong> Parents can commit minor children to psychiatric hospitals with physician approval. No formal adversarial hearing required. The physician serves as a neutral factfinder.</li>
+          <li><strong>Dusky is the floor:</strong> The Dusky standard establishes the minimum threshold for competency. Courts may require higher functioning for complex trials (e.g., death penalty cases or cases involving sophisticated defenses).</li>
+          <li><strong>Washington v. Harper (1990):</strong> Prisoners have a liberty interest in refusing medication, but the state can override that interest when the inmate is dangerous to self or others AND treatment is in the inmate's medical interest.</li>
+          <li><strong>Insanity defense prevalence:</strong> Raised in less than 1% of felony cases. Successful in approximately 25% of cases where raised. The vast majority result from plea bargains, not jury trials.</li>
+          <li><strong>Risk assessment generations:</strong> First = unstructured clinical judgment. Second = actuarial instruments (VRAG). Third = structured professional judgment (HCR-20). Fourth = integration of risk/needs with management planning (START).</li>
+          <li><strong>Ake v. Oklahoma (1985):</strong> Indigent defendants have a constitutional right to a psychiatric expert when sanity is a significant factor at trial.</li>
+          <li><strong>Fitness for duty evaluations:</strong> Employer-requested assessments of whether an employee can safely and effectively perform job duties. Informed consent must clarify who requested the evaluation and who receives results.</li>
+          <li><strong>Base rates in forensic assessment:</strong> Prevalence of the condition being assessed (e.g., malingering, violence) affects predictive accuracy. Even accurate tests produce many false positives when base rates are low.</li>
+          <li><strong>Forensic vs. therapeutic roles:</strong> Forensic evaluator's primary obligation is to the referral source/truth. Therapist's primary obligation is to the client's welfare. Dual forensic-therapeutic roles should be avoided.</li>
+          <li><strong>Sexually violent predator (SVP) laws:</strong> Allow indefinite civil commitment of sex offenders after prison term ends if they have a mental abnormality that predisposes them to commit predatory sexual violence. Upheld in Kansas v. Hendricks (1997).</li>
+        </ul>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch7-therapeutic-relationships.html" class="nav-btn"><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Therapeutic Relationships &amp; Boundaries</div></div></a>
+        <a href="ch9-supervision-training.html" class="nav-btn"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Supervision &amp; Professional Standards</div></div></a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

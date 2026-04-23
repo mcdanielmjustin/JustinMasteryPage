@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through Evidence | Domain 4 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #22c55e; --accent-dim: rgba(34, 197, 94, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 4</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Through Evidence</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Domain 4</div>
+        <div class="domain-title">How Therapy Works</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="insight.html" class="chapter-link"><span class="chapter-number">1</span>Through the Unconscious</a></li>
+        <li class="chapter-item"><a href="cognition.html" class="chapter-link"><span class="chapter-number">2</span>Through Thoughts</a></li>
+        <li class="chapter-item"><a href="conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Through Conditioning</a></li>
+        <li class="chapter-item"><a href="acceptance.html" class="chapter-link"><span class="chapter-number">4</span>Through Acceptance</a></li>
+        <li class="chapter-item"><a href="relationship.html" class="chapter-link"><span class="chapter-number">5</span>Through the Relationship</a></li>
+        <li class="chapter-item"><a href="motivation.html" class="chapter-link"><span class="chapter-number">6</span>Through Motivation</a></li>
+        <li class="chapter-item"><a href="systems.html" class="chapter-link"><span class="chapter-number">7</span>Through the System</a></li>
+        <li class="chapter-item"><a href="evidence.html" class="chapter-link active"><span class="chapter-number">8</span>Through Evidence</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 8 of 8</div>
+        <h1>Through Evidence</h1>
+        <div class="chapter-meta">
+          <span>Outcomes, prevention &amp; professional practice</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 4)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 4)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <!-- === OUTCOME RESEARCH SECTIONS === -->
+
+      <section class="content-section">
+        <h2>Efficacy vs. Effectiveness</h2>
+        <p>A fundamental distinction in psychotherapy outcome research is between <span class="key-term">efficacy</span> and <span class="key-term">effectiveness</span> studies. Understanding this distinction is critical for evaluating the evidence base for psychological treatments.</p>
+
+        <div class="definition-box">
+          <h4>Key Definitions</h4>
+          <p><strong>Efficacy</strong> -- Does the treatment work under ideal, controlled conditions? Efficacy studies are typically randomized controlled trials (RCTs) conducted in research settings with manualized treatments, homogeneous samples (strict inclusion/exclusion criteria), trained therapists, and comparison to control groups. High <strong>internal validity</strong>.</p>
+          <p><strong>Effectiveness</strong> -- Does the treatment work in real-world clinical practice? Effectiveness studies examine outcomes in naturalistic settings with diverse patients, typical clinical conditions, and routine care. High <strong>external validity</strong> (generalizability).</p>
+        </div>
+
+        <table>
+          <tr><th>Feature</th><th>Efficacy Studies</th><th>Effectiveness Studies</th></tr>
+          <tr><td>Setting</td><td>Research clinic/university</td><td>Community practice</td></tr>
+          <tr><td>Patients</td><td>Homogeneous; screened for comorbidities</td><td>Heterogeneous; comorbidities included</td></tr>
+          <tr><td>Treatment</td><td>Manualized, closely monitored</td><td>Flexibly applied by practicing clinicians</td></tr>
+          <tr><td>Therapists</td><td>Specially trained, closely supervised</td><td>Typical clinicians in routine practice</td></tr>
+          <tr><td>Assignment</td><td>Random assignment to conditions</td><td>Naturalistic (patient/therapist choice)</td></tr>
+          <tr><td>Strength</td><td>Internal validity (causal inference)</td><td>External validity (generalizability)</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>The Dodo Bird Verdict</h2>
+        <p>The <span class="key-term">Dodo bird verdict</span> refers to the controversial conclusion that all bona fide psychotherapies produce roughly equivalent outcomes. The name derives from the Dodo bird in <em>Alice's Adventures in Wonderland</em>, who declared after a race: "Everybody has won, and all must have prizes."</p>
+
+        <p><span class="key-term">Saul Rosenzweig</span> (1936) first suggested this idea, and <span class="key-term">Lester Luborsky</span> and colleagues (1975) provided the first empirical support through a review of comparative outcome studies. Their frequently cited conclusion: "Everyone has won and all must have prizes."</p>
+
+        <div class="clinical-note">
+          <h4>The Debate</h4>
+          <p><strong>Supporters</strong> of the Dodo bird verdict (e.g., Wampold, Luborsky) argue that when bona fide treatments are compared, effect size differences are minimal, and that <span class="key-term">common factors</span> (shared by all therapies) account for most therapeutic change. <strong>Critics</strong> (e.g., Chambless, Beutler) argue that specific treatments do outperform others for specific disorders (e.g., ERP for OCD, CBT for panic disorder) and that lumping all therapies together obscures meaningful differences. This debate remains one of the most important in the field.</p>
+        </div>
+
+        <div class="citation">Rosenzweig, S. (1936). Some implicit common factors in diverse methods of psychotherapy. <em>American Journal of Orthopsychiatry, 6</em>(3), 412-415.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Common Factors</h2>
+        <p>The <span class="key-term">common factors</span> model holds that ingredients shared across all effective therapies are the primary drivers of therapeutic change, rather than technique-specific factors unique to each orientation. Research suggests the following approximate breakdown of outcome variance:</p>
+
+        <h3>Lambert's Outcome Variance Model</h3>
+        <p><span class="key-term">Michael Lambert</span> estimated the relative contributions to therapy outcome:</p>
+        <table>
+          <tr><th>Factor</th><th>Estimated Contribution</th><th>Description</th></tr>
+          <tr><td><strong>Extratherapeutic factors</strong></td><td>~40%</td><td>Client variables, life events, social support, fortuitous events -- factors outside therapy</td></tr>
+          <tr><td><strong>Therapeutic relationship</strong></td><td>~30%</td><td>Empathy, warmth, acceptance, therapeutic alliance -- the relationship itself</td></tr>
+          <tr><td><strong>Expectancy (placebo)</strong></td><td>~15%</td><td>The client's hope and expectation that therapy will help</td></tr>
+          <tr><td><strong>Specific techniques</strong></td><td>~15%</td><td>Factors unique to particular therapies (e.g., systematic desensitization, cognitive restructuring)</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Empirically Supported Treatments (ESTs)</h2>
+        <p>The <span class="key-term">Empirically Supported Treatment (EST)</span> movement, led by the APA Division 12 (Society of Clinical Psychology) Task Force, aimed to identify specific treatments with demonstrated efficacy for specific disorders.</p>
+
+        <h3>Criteria for EST Designation</h3>
+        <p>The <span class="key-term">Chambless criteria</span> (named after Dianne Chambless, who chaired the original task force) established two levels:</p>
+        <ul>
+          <li><strong>Well-established treatments</strong> -- At least two good group-design experiments by different research teams showing superiority to pill/psychological placebo or equivalence to an established treatment, OR a large series of single-case experiments; conducted with treatment manuals; clearly specified population</li>
+          <li><strong>Probably efficacious treatments</strong> -- At least two good experiments showing superiority to a wait-list control, OR one well-designed experiment meeting well-established criteria, OR a small series of single-case experiments</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Examples of Well-Established ESTs</h4>
+          <p>CBT for depression and anxiety disorders. ERP for OCD. Behavioral couples therapy for relationship distress. CBT for bulimia nervosa. Interpersonal therapy for depression. Prolonged exposure for PTSD. These treatments have the strongest evidence bases, supported by multiple RCTs from independent research groups.</p>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Criticisms of the EST Movement</h4>
+          <p>The EST approach has been criticized for: (1) overemphasis on manualized treatments at the expense of clinical flexibility; (2) reliance on RCTs that may not generalize to real-world settings; (3) potential exclusion of effective treatments that lack research funding (e.g., psychodynamic, humanistic therapies); (4) treating disorders as discrete entities when comorbidity is the norm; and (5) undervaluing the role of the therapeutic relationship and common factors. The <span class="key-term">evidence-based practice (EBP)</span> framework was developed partly in response, integrating research evidence with clinical expertise and patient values/preferences.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Dose-Response Research</h2>
+        <p>The <span class="key-term">dose-response</span> model examines the relationship between the "dose" of therapy (typically measured in number of sessions) and therapeutic outcome.</p>
+
+        <h3>Howard's Dose-Response Curve</h3>
+        <p><span class="key-term">Kenneth Howard</span> and colleagues (1986) found a negatively accelerating (log-linear) relationship between number of sessions and improvement:</p>
+        <ul>
+          <li>By <strong>session 8</strong>: approximately 50% of patients showed measurable improvement</li>
+          <li>By <strong>session 26</strong>: approximately 75% showed improvement</li>
+          <li>By <strong>session 52</strong>: approximately 85% showed improvement</li>
+        </ul>
+        <p>The curve shows diminishing returns -- the largest gains occur earliest in treatment, with progressively smaller incremental gains per additional session. This has significant implications for managed care and session limits.</p>
+
+        <h3>The Phase Model</h3>
+        <p>Howard also proposed a <span class="key-term">phase model</span> of psychotherapy outcome with three sequential phases:</p>
+        <ol>
+          <li><strong>Remoralization</strong> -- Restoration of hope and subjective well-being (occurs earliest)</li>
+          <li><strong>Remediation</strong> -- Reduction of specific symptoms</li>
+          <li><strong>Rehabilitation</strong> -- Improvement in overall functioning and life patterns (occurs latest)</li>
+        </ol>
+
+        <div class="citation">Howard, K. I., Kopta, S. M., Krause, M. S., &amp; Orlinsky, D. E. (1986). The dose-response relationship in psychotherapy. <em>American Psychologist, 41</em>(2), 159-164.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Meta-Analysis Findings</h2>
+        <p><span class="key-term">Meta-analysis</span> is a statistical technique for combining results across multiple studies to estimate an overall effect size. It has been transformative for psychotherapy outcome research.</p>
+
+        <h3>The Smith and Glass (1977) Meta-Analysis</h3>
+        <p><span class="key-term">Mary Lee Smith</span> and <span class="key-term">Gene Glass</span> conducted the landmark first meta-analysis of psychotherapy outcomes, combining 375 studies. Their key findings:</p>
+        <ul>
+          <li>The average effect size across all therapies was <strong>d = 0.85</strong>, meaning the average therapy client was better off than 80% of untreated controls</li>
+          <li>Psychotherapy was clearly effective compared to no treatment</li>
+          <li>Different types of therapy produced broadly similar effect sizes (supporting the Dodo bird verdict)</li>
+        </ul>
+
+        <h3>Subsequent Key Meta-Analytic Findings</h3>
+        <ul>
+          <li><span class="key-term">Wampold (2001)</span> found that specific treatment techniques account for at most 1-8% of outcome variance, while common factors account for substantially more</li>
+          <li>The <span class="key-term">allegiance effect</span> -- researchers tend to find superior results for their preferred therapy; when allegiance is controlled, differences between therapies shrink</li>
+          <li>Therapy is more effective than placebo, which is more effective than no treatment</li>
+          <li>Individual therapy and group therapy produce broadly comparable outcomes for most conditions</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Effect Size Interpretation</h4>
+          <p>Cohen's d: <strong>0.2 = small</strong>, <strong>0.5 = medium</strong>, <strong>0.8 = large</strong>. The overall effect of psychotherapy (d = 0.80-0.85) is considered a large effect -- comparable to many well-accepted medical interventions. This means the average person receiving therapy is better off than approximately 80% of those who do not receive therapy.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Evidence-Based Practice (EBP)</h2>
+        <p>In response to criticisms of the EST movement, the APA Presidential Task Force on Evidence-Based Practice adopted a broader framework. <span class="key-term">Evidence-based practice in psychology (EBPP)</span> is defined as "the integration of the best available research with clinical expertise in the context of patient characteristics, culture, and preferences" (APA, 2006).</p>
+
+        <div class="definition-box">
+          <h4>Three Components of EBPP</h4>
+          <p><strong>(1) Best available research evidence</strong> -- Including but not limited to RCTs; also systematic case studies, qualitative research, process research, and clinical observation. <strong>(2) Clinical expertise</strong> -- The clinician's judgment, skill, and experience in applying treatments, including the ability to form a strong therapeutic alliance, assess patient needs, and adapt interventions. <strong>(3) Patient characteristics, culture, and preferences</strong> -- Individual differences in values, beliefs, cultural background, and treatment preferences that must guide clinical decision-making.</p>
+        </div>
+
+        <h3>EST vs. EBP: A Comparison</h3>
+        <table>
+          <tr><th>Feature</th><th>ESTs</th><th>EBP</th></tr>
+          <tr><td>Focus</td><td>Specific treatments for specific disorders</td><td>Integrative clinical decision-making</td></tr>
+          <tr><td>Evidence valued</td><td>RCTs primarily</td><td>Multiple forms of evidence</td></tr>
+          <tr><td>Clinical expertise</td><td>Follows manual</td><td>Central to the process</td></tr>
+          <tr><td>Patient factors</td><td>Not emphasized</td><td>Explicitly integrated</td></tr>
+          <tr><td>Approach</td><td>Top-down (research dictates practice)</td><td>Integrative (research + expertise + patient)</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Therapist Effects and Client Variables</h2>
+        <h3>Therapist Effects</h3>
+        <p>Research consistently shows that there is significant variability in outcomes across therapists, even when delivering the same manualized treatment. <span class="key-term">Therapist effects</span> account for approximately 5-9% of outcome variance -- comparable to or larger than the effects of specific treatment techniques. Factors associated with more effective therapists include:</p>
+        <ul>
+          <li>Strong facilitative interpersonal skills (empathy, warmth, emotional expressiveness)</li>
+          <li>Ability to form strong therapeutic alliances across diverse clients</li>
+          <li>Flexibility in adapting treatment to individual client needs</li>
+          <li>Engagement in deliberate practice and ongoing professional development</li>
+        </ul>
+
+        <h3>Client Variables as Predictors</h3>
+        <p>Client characteristics are the single largest predictor of therapy outcome (accounting for roughly 40% of variance per Lambert's model). Key client variables include:</p>
+        <ul>
+          <li><strong>Severity and chronicity</strong> -- More severe and chronic disorders generally require longer treatment</li>
+          <li><strong>Motivation and readiness for change</strong> -- Clients in the action stage (Prochaska) tend to benefit more</li>
+          <li><strong>Social support</strong> -- Clients with stronger social networks tend to have better outcomes</li>
+          <li><strong>Psychological mindedness</strong> -- The capacity for self-reflection and insight</li>
+          <li><strong>Attachment style</strong> -- Secure attachment predicts better alliance formation and outcomes</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Deterioration and Negative Effects</h2>
+        <p>While therapy is generally effective, research indicates that approximately <strong>5-10%</strong> of adult clients and <strong>14-24%</strong> of child clients deteriorate during treatment. <span class="key-term">Lambert</span> developed an <span class="key-term">early warning system (OQ-45)</span> that tracks client progress session-by-session and alerts therapists when clients are not improving or are deteriorating, allowing for mid-course corrections.</p>
+      </section>
+
+      <!-- === PREVENTION SECTIONS === -->
+
+      <section class="content-section">
+        <h2>Levels of Prevention</h2>
+        <p>The prevention framework, originally developed in public health and adapted for mental health by <span class="key-term">Gerald Caplan</span>, organizes prevention efforts into three levels based on when the intervention occurs relative to the onset of disorder.</p>
+
+        <div class="definition-box">
+          <h4>Caplan's Three Levels of Prevention</h4>
+          <p><strong>Primary prevention</strong> -- Interventions directed at the <em>general population</em> or at-risk groups <em>before</em> a disorder develops. Goal: reduce the incidence (new cases) of disorder. <strong>Secondary prevention</strong> -- Early identification and treatment of a disorder in its <em>initial stages</em>. Goal: reduce the prevalence (total cases) and severity by catching problems early. <strong>Tertiary prevention</strong> -- Interventions aimed at reducing the <em>disability, relapse, and complications</em> associated with an already-established disorder. Goal: reduce residual effects and prevent recurrence.</p>
+        </div>
+
+        <table>
+          <tr><th>Level</th><th>Target</th><th>Goal</th><th>Example</th></tr>
+          <tr><td><strong>Primary</strong></td><td>General population or at-risk groups (before onset)</td><td>Reduce incidence</td><td>School-based anti-bullying programs, parenting skills training, Head Start</td></tr>
+          <tr><td><strong>Secondary</strong></td><td>Individuals showing early signs or at high risk</td><td>Reduce prevalence through early detection</td><td>Depression screening in primary care, crisis intervention hotlines, developmental screening for children</td></tr>
+          <tr><td><strong>Tertiary</strong></td><td>Individuals with established disorders</td><td>Reduce disability and prevent relapse</td><td>Relapse prevention programs, vocational rehabilitation, supported employment for severe mental illness</td></tr>
+        </table>
+
+        <h3>IOM Classification (Alternative Framework)</h3>
+        <p>The <span class="key-term">Institute of Medicine (IOM)</span> proposed an alternative classification that further divides primary prevention:</p>
+        <ul>
+          <li><span class="key-term">Universal prevention</span> -- Targets the entire population regardless of risk (e.g., public service announcements about mental health)</li>
+          <li><span class="key-term">Selective prevention</span> -- Targets individuals or groups whose risk is above average (e.g., support groups for children of divorcing parents)</li>
+          <li><span class="key-term">Indicated prevention</span> -- Targets individuals showing early signs or subclinical symptoms (e.g., intervention for students with emerging anxiety symptoms)</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Distinguishing Prevention Levels</h4>
+          <p>A schoolwide social-emotional learning curriculum delivered to all students = <strong>primary/universal prevention</strong>. Screening all students for depression and referring those who score high = <strong>secondary prevention</strong>. A cognitive-behavioral group for students already diagnosed with anxiety = <strong>tertiary prevention</strong>. The EPPP frequently tests the ability to correctly classify interventions into these levels.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Caplan's Consultation Model</h2>
+        <p><span class="key-term">Gerald Caplan</span> developed the most influential model of <span class="key-term">mental health consultation</span>, which he defined as a process between a professional helper (consultant) and a help-seeker (consultee) who has responsibility for a client or program. The consultant has no direct authority over the consultee, and the relationship is non-hierarchical and voluntary.</p>
+
+        <div class="definition-box">
+          <h4>Core Principles of Caplan's Model</h4>
+          <p>The consultant works <strong>indirectly</strong> -- improving the consultee's ability to handle current and future similar cases, rather than directly treating the client. The consultee retains full responsibility for the client. The consultation relationship is <strong>coordinate</strong> (non-hierarchical), <strong>voluntary</strong>, and <strong>confidential</strong>. The goal is to enhance the consultee's professional functioning, not to provide personal therapy.</p>
+        </div>
+
+        <h3>Four Types of Mental Health Consultation</h3>
+        <table>
+          <tr><th>Type</th><th>Focus</th><th>Description</th></tr>
+          <tr><td><strong>Client-centered case consultation</strong></td><td>The client/case</td><td>The consultant assesses the client and provides recommendations to the consultee about the case. Most similar to traditional clinical work. The primary goal is to help the client.</td></tr>
+          <tr><td><strong>Consultee-centered case consultation</strong></td><td>The consultee's difficulty with the case</td><td>The focus is on improving the consultee's ability to handle the case. The problem may stem from lack of knowledge, skill, confidence, or objectivity. Most emphasized by Caplan.</td></tr>
+          <tr><td><strong>Program-centered administrative consultation</strong></td><td>A program or organization</td><td>The consultant evaluates a specific program or organizational problem and provides recommendations.</td></tr>
+          <tr><td><strong>Consultee-centered administrative consultation</strong></td><td>The consultee's approach to administration</td><td>The focus is on improving the consultee's skills in program development, leadership, or organizational management.</td></tr>
+        </table>
+
+        <h3>Consultee-Centered Case Consultation in Detail</h3>
+        <p>Caplan regarded <span class="key-term">consultee-centered case consultation</span> as the most unique and important type. He identified four reasons a consultee may have difficulty with a case:</p>
+        <ol>
+          <li><strong>Lack of knowledge</strong> -- The consultee doesn't have sufficient information about the client's condition</li>
+          <li><strong>Lack of skill</strong> -- The consultee lacks the technical ability to intervene effectively</li>
+          <li><strong>Lack of confidence</strong> -- The consultee has the knowledge and skill but lacks self-assurance</li>
+          <li><strong>Lack of objectivity</strong> -- The consultee's personal issues interfere with professional judgment (the most complex and interesting problem)</li>
+        </ol>
+
+        <div class="clinical-note">
+          <h4>Theme Interference and Theme Interference Reduction</h4>
+          <p>When a consultee lacks objectivity, Caplan attributed this to <span class="key-term">theme interference</span> -- the consultee unconsciously links the client's situation to an unresolved personal conflict, leading to a "syllogism" such as: "All women who are assertive end up alone and miserable" (connecting the client to the consultee's personal theme). The consultant addresses this through <span class="key-term">theme interference reduction</span>, which involves demonstrating that the feared outcome is not inevitable -- typically by examining the specifics of the case rather than by directly addressing the consultee's personal issues. The consultant never provides therapy to the consultee.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Types of Consultation Beyond Caplan</h2>
+        <h3>Behavioral Consultation</h3>
+        <p><span class="key-term">Behavioral consultation</span> applies behavioral principles (functional analysis, reinforcement, environmental modification) to consultation. The consultant helps the consultee conduct a functional behavioral assessment, identify antecedents and consequences maintaining problem behavior, and design a behavior intervention plan. Common in school settings.</p>
+
+        <h3>Organizational Consultation</h3>
+        <p><span class="key-term">Organizational consultation</span> focuses on the system level, addressing organizational culture, structure, communication, and processes rather than individual cases. Approaches include process consultation (Edgar Schein), where the consultant helps the organization diagnose and solve its own problems rather than providing expert recommendations.</p>
+
+        <h3>Consultation vs. Supervision vs. Collaboration</h3>
+        <table>
+          <tr><th>Feature</th><th>Consultation</th><th>Supervision</th><th>Collaboration</th></tr>
+          <tr><td>Relationship</td><td>Voluntary, non-hierarchical</td><td>Required, hierarchical</td><td>Voluntary, peer-level</td></tr>
+          <tr><td>Authority</td><td>Consultant has no authority over consultee</td><td>Supervisor has authority and legal responsibility</td><td>Shared responsibility</td></tr>
+          <tr><td>Client responsibility</td><td>Remains with consultee</td><td>Shared with supervisor (vicarious liability)</td><td>Shared among collaborators</td></tr>
+          <tr><td>Consultee free to accept/reject?</td><td>Yes</td><td>Generally no</td><td>Yes, by mutual agreement</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Community Psychology</h2>
+        <p><span class="key-term">Community psychology</span> emerged in the 1960s (formalized at the <span class="key-term">Swampscott Conference</span> in 1965) as a reaction against the limitations of the individual-treatment model. Community psychology shifts the focus from treating individuals to changing systems, environments, and social conditions that contribute to psychological problems.</p>
+
+        <h3>Core Principles</h3>
+        <ul>
+          <li><span class="key-term">Prevention over treatment</span> -- Addressing problems before they develop rather than waiting to treat them</li>
+          <li><span class="key-term">Ecological perspective</span> -- Understanding behavior in the context of multiple environmental systems (individual, family, community, society)</li>
+          <li><span class="key-term">Empowerment</span> -- Helping communities and individuals gain control over their lives and circumstances</li>
+          <li><span class="key-term">Social justice</span> -- Advocating for equitable access to resources and addressing systemic inequalities</li>
+          <li><span class="key-term">Respect for diversity</span> -- Valuing cultural differences and adapting interventions to community contexts</li>
+          <li><span class="key-term">Citizen participation</span> -- Involving community members in the design and implementation of programs</li>
+        </ul>
+
+        <h3>Key Community Psychology Concepts</h3>
+        <ul>
+          <li><span class="key-term">Sense of community</span> (McMillan & Chavis) -- Membership, influence, integration and fulfillment of needs, shared emotional connection</li>
+          <li><span class="key-term">Ecological analogy</span> (James Kelly) -- Communities function like ecosystems; interventions must consider interdependence, cycling of resources, adaptation, and succession</li>
+          <li><span class="key-term">Underpopulated settings</span> (Barker) -- Environments with fewer people than needed to fill available roles, leading to increased participation and role versatility</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>The Community Mental Health Movement</h4>
+          <p>The <span class="key-term">Community Mental Health Centers Act (1963)</span>, signed by President Kennedy, established federally funded community mental health centers (CMHCs). These centers were required to provide five essential services: (1) inpatient care, (2) outpatient care, (3) partial hospitalization, (4) emergency services, and (5) consultation and education. This legislation was a cornerstone of <span class="key-term">deinstitutionalization</span> -- the movement to shift care from large state hospitals to community-based settings.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Empowerment and Prevention Programs</h2>
+        <h3>Resilience and Protective Factors</h3>
+        <p>Prevention research has increasingly focused on identifying <span class="key-term">protective factors</span> that buffer individuals against developing psychological disorders, even in the presence of significant risk factors. Key protective factors include:</p>
+        <ul>
+          <li><strong>Individual factors</strong> -- High intelligence, easy temperament, positive self-esteem, internal locus of control, effective coping skills</li>
+          <li><strong>Family factors</strong> -- Warm and supportive parenting, family cohesion, stable home environment, at least one caring adult</li>
+          <li><strong>Community factors</strong> -- Strong social support networks, access to quality education, positive school climate, involvement in prosocial organizations</li>
+        </ul>
+
+        <h3>Notable Prevention Programs</h3>
+        <table>
+          <tr><th>Program</th><th>Type</th><th>Description</th></tr>
+          <tr><td><strong>Head Start</strong></td><td>Primary/universal</td><td>Federal early childhood education program for low-income families; aims to promote school readiness and reduce developmental delays</td></tr>
+          <tr><td><strong>Perry Preschool Project</strong></td><td>Primary/selective</td><td>Intensive preschool program for disadvantaged children; long-term follow-up showed reduced crime, higher employment, better educational outcomes</td></tr>
+          <tr><td><strong>DARE</strong></td><td>Primary/universal</td><td>Drug Abuse Resistance Education delivered in schools; research consistently shows it is <em>not effective</em> in reducing substance use despite widespread adoption</td></tr>
+          <tr><td><strong>Triple P</strong></td><td>Multi-level (universal to indicated)</td><td>Positive Parenting Program using a public health framework with escalating levels of intervention based on need</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Primary Prevention vs. Psychotherapy</h4>
+          <p>A critical distinction for the EPPP: <span class="key-term">primary prevention</span> targets populations before disorder onset and aims to reduce <strong>incidence</strong> (new cases). <span class="key-term">Psychotherapy</span> is a form of tertiary prevention that treats existing disorders. <span class="key-term">Screening programs</span> (e.g., PHQ-9 for depression in primary care) are secondary prevention because they aim for early detection. The EPPP frequently asks examinees to classify interventions into the correct prevention level based on the target population and timing.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Crisis Intervention</h2>
+        <p><span class="key-term">Crisis intervention</span> is a form of secondary prevention that provides immediate, short-term assistance to individuals experiencing acute psychological distress. Grounded in <span class="key-term">crisis theory</span> (developed by Erich Lindemann and Gerald Caplan), it assumes that crises are time-limited (typically resolving within 4-6 weeks) and that individuals in crisis are more amenable to change.</p>
+
+        <h3>Principles of Crisis Intervention</h3>
+        <ul>
+          <li><strong>Immediacy</strong> -- Respond quickly; delay reduces effectiveness</li>
+          <li><strong>Short-term focus</strong> -- Typically 1-6 sessions; focus on the here and now</li>
+          <li><strong>Goal: return to pre-crisis functioning</strong> -- Not long-term personality change but restoring equilibrium</li>
+          <li><strong>Active, directive approach</strong> -- The therapist is more active and directive than in traditional therapy</li>
+          <li><strong>Assess lethality</strong> -- Evaluate suicide/homicide risk as a first priority</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Psychological First Aid vs. Critical Incident Stress Debriefing</h4>
+          <p><span class="key-term">Psychological First Aid (PFA)</span> is the current evidence-informed approach to immediate post-disaster/crisis support. It emphasizes safety, calming, self-efficacy, connectedness, and hope. <span class="key-term">Critical Incident Stress Debriefing (CISD)</span> -- a structured group intervention conducted within 24-72 hours of a traumatic event -- was once widely used but is no longer recommended. Research (including a Cochrane review) found that CISD does not prevent PTSD and may actually interfere with natural recovery processes.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Self-Help and Mutual Support Groups</h2>
+        <p><span class="key-term">Self-help groups</span> (also called mutual support or peer support groups) are voluntary organizations of people who share a common condition or experience. They differ from professionally led group therapy in that they are typically peer-facilitated and free of charge.</p>
+
+        <h3>Examples and Characteristics</h3>
+        <table>
+          <tr><th>Group</th><th>Focus</th><th>Key Features</th></tr>
+          <tr><td><strong>Alcoholics Anonymous (AA)</strong></td><td>Alcohol use disorder</td><td>12-step model; sponsor system; emphasis on spiritual growth and powerlessness over alcohol; the most widely known self-help organization</td></tr>
+          <tr><td><strong>NAMI</strong></td><td>Families of individuals with mental illness</td><td>National Alliance on Mental Illness; provides education, advocacy, and family support</td></tr>
+          <tr><td><strong>Al-Anon / Alateen</strong></td><td>Family members of individuals with alcohol problems</td><td>Adapted 12-step model for affected family members</td></tr>
+          <tr><td><strong>DBSA</strong></td><td>Depression and bipolar disorders</td><td>Depression and Bipolar Support Alliance; peer-led support and psychoeducation</td></tr>
+        </table>
+
+        <div class="clinical-note">
+          <h4>Professional Role with Self-Help Groups</h4>
+          <p>Psychologists can serve as consultants to self-help groups, provide referrals, and collaborate with these organizations. However, it is important to recognize that self-help groups are not a substitute for professional treatment in all cases. Research on AA and 12-step facilitation therapy (TSF) suggests that active involvement in AA is associated with improved abstinence outcomes. The <span class="key-term">Project MATCH</span> study found TSF to be as effective as CBT and motivational enhancement therapy for alcohol use disorder.</p>
+        </div>
+      </section>
+
+      <!-- === MERGED EPPP FOCUS === -->
+
+      <section class="content-section">
+        <h2>EPPP Focus: Commonly Tested Concepts</h2>
+        <ul>
+          <li><span class="key-term">Efficacy</span> = controlled conditions, internal validity; <span class="key-term">effectiveness</span> = real-world, external validity</li>
+          <li><span class="key-term">Dodo bird verdict</span> = all bona fide therapies are roughly equivalent; coined by Rosenzweig (1936), supported by Luborsky</li>
+          <li>Lambert's model: extratherapeutic (40%), relationship (30%), expectancy (15%), technique (15%)</li>
+          <li><span class="key-term">ESTs</span> = Chambless criteria; well-established vs. probably efficacious; know examples (CBT for depression, ERP for OCD)</li>
+          <li>Howard's <span class="key-term">dose-response</span>: 50% improved by session 8, 75% by session 26</li>
+          <li>Howard's <span class="key-term">phase model</span>: remoralization, remediation, rehabilitation (in that order)</li>
+          <li>Smith & Glass: first meta-analysis, d = 0.85, therapy effective vs. no treatment</li>
+          <li><span class="key-term">Allegiance effect</span> -- researchers' preferred treatments tend to show larger effects</li>
+          <li><span class="key-term">Evidence-based practice (EBP)</span> integrates research evidence + clinical expertise + patient preferences</li>
+          <li>Approximately <span class="key-term">5-10% of clients deteriorate</span> during therapy</li>
+          <li><span class="key-term">Primary prevention</span> = reduce incidence (before onset); <span class="key-term">secondary</span> = reduce prevalence (early detection); <span class="key-term">tertiary</span> = reduce disability (after onset)</li>
+          <li>Know the <span class="key-term">IOM classification</span>: universal, selective, indicated</li>
+          <li>Caplan's four types of consultation -- especially <span class="key-term">consultee-centered case consultation</span> and <span class="key-term">theme interference</span></li>
+          <li>In consultation, the consultee retains <span class="key-term">responsibility for the client</span>; the relationship is <span class="key-term">non-hierarchical and voluntary</span></li>
+          <li><span class="key-term">Theme interference reduction</span> addresses the consultee's lack of objectivity without providing personal therapy</li>
+          <li>The <span class="key-term">Swampscott Conference (1965)</span> launched community psychology</li>
+          <li>The <span class="key-term">Community Mental Health Centers Act (1963)</span> established CMHCs with five essential services</li>
+          <li>Crisis intervention is a form of <span class="key-term">secondary prevention</span>; crises typically resolve in <span class="key-term">4-6 weeks</span></li>
+          <li><span class="key-term">CISD is not recommended</span> -- PFA is the current evidence-informed approach</li>
+          <li>Distinguish <span class="key-term">consultation</span> (voluntary, no authority) from <span class="key-term">supervision</span> (required, hierarchical, vicarious liability)</li>
+        </ul>
+      </section>
+
+      <!-- === MERGED REFERENCES === -->
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Smith, M. L., &amp; Glass, G. V. (1977). Meta-analysis of psychotherapy outcome studies. <em>American Psychologist, 32</em>(9), 752-760.</div>
+        <div class="citation">Wampold, B. E. (2001). <em>The great psychotherapy debate: Models, methods, and findings.</em> Lawrence Erlbaum.</div>
+        <div class="citation">Lambert, M. J. (2013). The efficacy and effectiveness of psychotherapy. In M. J. Lambert (Ed.), <em>Bergin and Garfield's handbook of psychotherapy and behavior change</em> (6th ed., pp. 169-218). Wiley.</div>
+        <div class="citation">Horvath, A. O., Del Re, A. C., Fluckiger, C., &amp; Symonds, D. (2011). Alliance in individual psychotherapy. <em>Psychotherapy, 48</em>(1), 9-16.</div>
+        <div class="citation">Chambless, D. L., &amp; Hollon, S. D. (1998). Defining empirically supported therapies. <em>Journal of Consulting and Clinical Psychology, 66</em>(1), 7-18.</div>
+        <div class="citation">Caplan, G. (1970). <em>The theory and practice of mental health consultation.</em> Basic Books.</div>
+        <div class="citation">Heller, K., &amp; Monahan, J. (1977). <em>Psychology and community change.</em> Dorsey Press.</div>
+        <div class="citation">Mrazek, P. J., &amp; Haggerty, R. J. (Eds.). (1994). <em>Reducing risks for mental disorders: Frontiers for preventive intervention research.</em> National Academy Press.</div>
+        <div class="citation">Rappaport, J. (1977). <em>Community psychology: Values, research, and action.</em> Holt, Rinehart and Winston.</div>
+        <div class="citation">Rose, S., Bisson, J., Churchill, R., &amp; Wessely, S. (2002). Psychological debriefing for preventing post traumatic stress disorder. <em>Cochrane Database of Systematic Reviews, 2</em>, CD000560.</div>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="systems.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Through the System</div>
+          </div>
+        </a>
+        <a href="index.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Back to</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

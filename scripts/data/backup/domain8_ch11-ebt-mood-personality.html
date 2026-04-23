@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EBT: Mood, Personality & Eating Disorders – Domain 8 | MasteryPage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #f97316; --accent-dim: rgba(249, 115, 22, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --success: #22c55e; --success-dim: rgba(34, 197, 94, 0.15);
+      --blue: #3b82f6; --blue-dim: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box strong { color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: var(--blue-dim); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box strong { color: var(--blue); }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: var(--success-dim); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note strong { color: var(--success); }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><span class="logo-text">MasteryPage</span></a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><a href="index.html">Domain 8</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span>EBT: Mood, Personality &amp; Eating</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header"><div class="sidebar-title">Domain 8</div><div class="domain-title">Clinical Assessment &amp; Interpretation</div></div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="ch1-intelligence-cognitive.html" class="chapter-link"><span class="chapter-number">1</span>Intelligence &amp; Cognitive Assessment</a></li>
+        <li class="chapter-item"><a href="ch2-personality-assessment.html" class="chapter-link"><span class="chapter-number">2</span>Personality Assessment</a></li>
+        <li class="chapter-item"><a href="ch3-neuropsych-clinical.html" class="chapter-link"><span class="chapter-number">3</span>Neuropsych Screening &amp; Clinical Measurement</a></li>
+        <li class="chapter-item"><a href="ch4-vocational-assessment.html" class="chapter-link"><span class="chapter-number">4</span>Vocational Assessment &amp; Interest Inventories</a></li>
+        <li class="chapter-item"><a href="ch5-score-interpretation.html" class="chapter-link"><span class="chapter-number">5</span>Test Score Interpretation &amp; Psychometrics</a></li>
+        <li class="chapter-item"><a href="ch6-assessment-ethics.html" class="chapter-link"><span class="chapter-number">6</span>Assessment Ethics: Fairness &amp; Security</a></li>
+        <li class="chapter-item"><a href="ch7-therapeutic-relationships.html" class="chapter-link"><span class="chapter-number">7</span>Therapeutic Relationships &amp; Boundaries</a></li>
+        <li class="chapter-item"><a href="ch8-legal-forensic.html" class="chapter-link"><span class="chapter-number">8</span>Legal &amp; Forensic Psychology</a></li>
+        <li class="chapter-item"><a href="ch9-supervision-training.html" class="chapter-link"><span class="chapter-number">9</span>Supervision &amp; Professional Standards</a></li>
+        <li class="chapter-item"><a href="ch10-ebt-anxiety-trauma.html" class="chapter-link"><span class="chapter-number">10</span>EBT: Anxiety, Trauma &amp; OCD</a></li>
+        <li class="chapter-item"><a href="ch11-ebt-mood-personality.html" class="chapter-link active"><span class="chapter-number">11</span>EBT: Mood, Personality &amp; Eating</a></li>
+        <li class="chapter-item"><a href="ch12-ebt-substance-developmental.html" class="chapter-link"><span class="chapter-number">12</span>EBT: Substance &amp; Developmental</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="chapter-header">
+        <div class="chapter-badge">Chapter 11 of 12</div>
+        <h1>EBT: Mood, Personality &amp; Eating Disorders</h1>
+        <div class="chapter-meta"><span>Domain 8: Clinical Assessment &amp; Interpretation</span><span>~28 min read</span></div>
+      </div>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Flashcards</a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 8)" class="action-btn quiz-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Quick Quiz: Fundamental</a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 8)" class="action-btn mastery-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Advanced Learning</a>
+      </div>
+
+      <div class="content-section">
+        <h2>CBT for Depression</h2>
+        <p>Aaron Beck's <span class="key-term">cognitive theory of depression</span> proposes that depression is maintained by negative cognitive schemas that generate systematic cognitive distortions. The <span class="key-term">cognitive triad</span> describes three domains of negative thinking: negative views of the self ("I'm worthless"), the world ("Everything is hopeless"), and the future ("Things will never get better").</p>
+
+        <h3>Core CBT Techniques for Depression</h3>
+        <ul>
+          <li><strong>Identifying automatic thoughts:</strong> Catching the spontaneous, evaluative thoughts that arise in response to situations and are often accepted as true without examination</li>
+          <li><strong>Cognitive restructuring:</strong> Examining evidence for and against automatic thoughts, generating alternative interpretations, and testing distorted cognitions through behavioral experiments</li>
+          <li><strong>Behavioral activation:</strong> Scheduling and engaging in pleasurable and mastery activities to counteract withdrawal, inactivity, and loss of reinforcement</li>
+          <li><strong>Identifying cognitive distortions:</strong> Recognizing systematic thinking errors such as all-or-nothing thinking, overgeneralization, mental filtering, catastrophizing, personalization, and "should" statements</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>Beck's Cognitive Distortions:</strong>
+          <p>Common distortions include: <span class="key-term">All-or-nothing thinking</span> (seeing things in black-and-white categories), <span class="key-term">overgeneralization</span> (viewing a single negative event as a never-ending pattern), <span class="key-term">mental filter</span> (dwelling on negatives while ignoring positives), <span class="key-term">magnification/minimization</span> (exaggerating negatives and shrinking positives), <span class="key-term">emotional reasoning</span> ("I feel it, therefore it must be true"), and <span class="key-term">personalization</span> (assuming responsibility for negative events outside one's control).</p>
+        </div>
+
+        <h3>Structure of Beck's CBT for Depression</h3>
+        <p>Beck's CBT is a structured, time-limited (typically 12-20 sessions) treatment that follows a predictable session format: mood check, bridge from previous session, agenda setting, review of homework, discussion of agenda items, assignment of new homework, and summary/feedback. The treatment progresses through three phases:</p>
+        <ul>
+          <li><strong>Early sessions (1-4):</strong> Establishing the therapeutic relationship, psychoeducation about the cognitive model, introducing activity monitoring and scheduling, identifying automatic thoughts</li>
+          <li><strong>Middle sessions (5-12):</strong> Cognitive restructuring using thought records, behavioral experiments to test predictions, identifying and challenging intermediate beliefs (rules, attitudes, assumptions)</li>
+          <li><strong>Late sessions (13-20):</strong> Identifying and modifying core beliefs (schemas), relapse prevention, spacing sessions, consolidating gains</li>
+        </ul>
+
+        <div class="clinical-note">
+          <strong>Levels of Cognition in CBT:</strong>
+          <p>Beck distinguished three levels of cognition: (1) <span class="key-term">Automatic thoughts</span> — spontaneous, situation-specific thoughts that are closest to conscious awareness; (2) <span class="key-term">Intermediate beliefs</span> — conditional rules and attitudes ("If I'm not perfect, I'm a failure"); and (3) <span class="key-term">Core beliefs/schemas</span> — deep, unconditional beliefs about self, others, and the world ("I am worthless"). CBT for depression addresses all three levels, progressing from automatic thoughts early in treatment to deeper schema-level work in later sessions.</p>
+        </div>
+
+        <h3>Pharmacological Considerations for Depression</h3>
+        <p>The EPPP expects knowledge of how psychotherapy compares with and combines with pharmacotherapy for depression. Key findings include:</p>
+        <ul>
+          <li>For <strong>mild to moderate depression</strong>, CBT and pharmacotherapy are approximately equally effective. Psychotherapy alone is a reasonable first-line treatment.</li>
+          <li>For <strong>severe depression</strong>, combined CBT + medication tends to outperform either alone. BA may be as effective as medication for severe depression.</li>
+          <li><strong>Long-term outcomes:</strong> CBT has an enduring effect that persists after treatment ends, whereas pharmacotherapy benefits typically disappear when medication is discontinued.</li>
+          <li><strong>Relapse prevention:</strong> Both MBCT and maintenance antidepressant medication reduce relapse; MBCT may be equivalent to maintenance medication for patients with 3+ prior episodes.</li>
+        </ul>
+
+        <h3>Behavioral Activation (BA)</h3>
+        <p><span class="key-term">Behavioral Activation</span> (Jacobson et al., 1996) emerged from a component analysis (known as the "component analysis study") showing that the behavioral component of CBT was as effective as the full cognitive-behavioral package for depression. This finding was replicated in the landmark <span class="key-term">NIMH Treatment of Depression Collaborative Research Program</span> and the Dimidjian et al. (2006) trial. BA is based on the theory that depression results from a decrease in <span class="key-term">response-contingent positive reinforcement</span> — when life circumstances reduce access to reinforcing activities, withdrawal and inactivity follow, which further decreases reinforcement in a self-perpetuating cycle.</p>
+        <p>Treatment focuses on: (1) monitoring daily activities and mood to identify the activity-mood connection, (2) scheduling and engaging in valued activities (even when motivation is low), (3) reducing avoidance behaviors and withdrawal, (4) addressing rumination as a form of avoidance (TRAP: Trigger-Response-Avoidance Pattern; TRAC: Trigger-Response-Alternative Coping), and (5) problem-solving environmental barriers to activation. BA is simpler to deliver than full CBT and has been shown to be equally effective, even for severe depression.</p>
+
+        <div class="example-box">
+          <strong>Activity Scheduling Example:</strong>
+          <p>A depressed client who has stopped exercising, socializing, and pursuing hobbies begins BA by tracking daily activities and rating each for pleasure (0-10) and mastery (0-10). The therapist and client then identify a graded hierarchy of activities to re-engage with, starting with low-effort, high-reward behaviors (e.g., a brief walk) and gradually building toward more demanding activities (e.g., attending a social event). The key principle is that action precedes motivation — the client acts first, and mood improvement follows.</p>
+        </div>
+
+        <div class="citation">Dimidjian, S., Hollon, S. D., Dobson, K. S., et al. (2006). Randomized trial of behavioral activation, cognitive therapy, and antidepressant medication in the acute treatment of adults with major depression. <em>Journal of Consulting and Clinical Psychology, 74</em>(4), 658-670.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>Interpersonal Therapy (IPT)</h2>
+        <p><span class="key-term">Interpersonal Therapy</span> (Klerman et al., 1984) is a time-limited (12-16 session) treatment for depression that focuses on four interpersonal problem areas:</p>
+
+        <table>
+          <tr><th>Problem Area</th><th>Description</th><th>Treatment Focus</th></tr>
+          <tr><td><strong>Grief</strong></td><td>Complicated bereavement or unresolved loss</td><td>Facilitating mourning, reconnecting with social supports</td></tr>
+          <tr><td><strong>Role Disputes</strong></td><td>Conflicts with significant other about expectations</td><td>Identifying the dispute, clarifying expectations, negotiation</td></tr>
+          <tr><td><strong>Role Transitions</strong></td><td>Life changes (retirement, divorce, new parenthood)</td><td>Mourning the old role, embracing the new role, developing supports</td></tr>
+          <tr><td><strong>Interpersonal Deficits</strong></td><td>Chronic social isolation or poor social skills</td><td>Building social skills, expanding social network</td></tr>
+        </table>
+
+        <p>IPT does NOT directly address cognitive distortions or use homework assignments in the CBT sense. Instead, it works on the interpersonal context that triggers and maintains depression. The therapist uses communication analysis (exploring a recent interpersonal interaction in detail) and role-playing to improve interpersonal skills. A key early task in IPT is the <span class="key-term">interpersonal inventory</span> — a detailed review of the client's significant relationships, including expectations, satisfactions, and disappointments.</p>
+        <p>IPT proceeds in three phases: (1) initial phase (sessions 1-3) — assessment, diagnosis, interpersonal inventory, assignment of the "sick role," and identification of the primary problem area; (2) middle phase (sessions 4-13) — focused work on the identified problem area using IPT strategies; and (3) termination phase (sessions 14-16) — review of progress, consolidation of gains, and planning for the future. IPT has strong empirical support for MDD and is also efficacious for bulimia nervosa, postpartum depression, and bipolar disorder (as adjunct to medication).</p>
+
+        <div class="clinical-note">
+          <strong>The Sick Role in IPT:</strong>
+          <p>Early in treatment, the IPT therapist formally assigns the <span class="key-term">"sick role"</span> — acknowledging that the client has a legitimate illness (depression) that is not their fault. This serves to reduce guilt and self-blame, normalize the client's difficulties, and mobilize the client to work toward recovery as they would with any medical illness. This is one of IPT's most distinctive features.</p>
+        </div>
+
+        <div class="citation">Klerman, G. L., Weissman, M. M., Rounsaville, B. J., & Chevron, E. S. (1984). <em>Interpersonal psychotherapy of depression.</em> Basic Books.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>MBCT and Relapse Prevention for Depression</h2>
+        <p><span class="key-term">Mindfulness-Based Cognitive Therapy (MBCT)</span> (Segal, Williams, & Teasdale, 2002) integrates mindfulness meditation practices with elements of CBT specifically for the prevention of depressive relapse in individuals who have recovered from recurrent depression. The theoretical model proposes that after multiple depressive episodes, the association between low mood and negative thinking becomes increasingly automatic — a phenomenon called <span class="key-term">cognitive reactivity</span>. Eventually, even minor mood fluctuations can trigger a cascade of ruminative negative thoughts that precipitate a full depressive relapse.</p>
+        <p>MBCT teaches clients to observe their thoughts and feelings with non-judgmental awareness — a skill called <span class="key-term">decentering</span> or <span class="key-term">metacognitive awareness</span> — rather than becoming caught up in ruminative cognitive patterns that trigger relapse. The 8-session group program (typically 8-12 participants) includes formal mindfulness practices (body scan, sitting meditation, mindful movement, 3-minute breathing space) along with cognitive therapy elements such as psychoeducation about depression and identifying early warning signs of relapse.</p>
+        <p>MBCT is recommended for individuals with <strong>three or more</strong> previous episodes of depression, where it reduces relapse rates by approximately 50% compared to treatment as usual. Notably, MBCT appears most effective for those whose prior episodes were NOT preceded by major adverse life events — suggesting it targets the autonomous, internally triggered relapse process rather than depression precipitated by external stressors. NICE guidelines recommend MBCT as a first-line relapse prevention intervention.</p>
+
+        <div class="clinical-note">
+          <strong>Key EPPP Distinction:</strong>
+          <p>MBCT is primarily a <strong>relapse prevention</strong> intervention for recovered patients with recurrent depression, not a treatment for current acute depressive episodes. This distinguishes it from CBT (treats acute depression) and from MBSR (Kabat-Zinn's Mindfulness-Based Stress Reduction, which targets stress and chronic pain in general medical populations). MBCT is most effective for individuals with three or more prior episodes.</p>
+        </div>
+
+        <div class="definition-box">
+          <strong>MBCT vs. MBSR:</strong>
+          <p><span class="key-term">MBSR</span> (Mindfulness-Based Stress Reduction; Kabat-Zinn, 1990) is a general mindfulness program originally developed for chronic pain and stress management. It teaches mindfulness through body scan, sitting meditation, and gentle yoga over 8 weekly sessions plus a day-long retreat. <span class="key-term">MBCT</span> adapts MBSR's mindfulness practices but adds CBT-specific content (psychoeducation about depression, identifying early warning signs, developing action plans for impending relapse). MBCT is diagnosis-specific (depression relapse prevention); MBSR is transdiagnostic.</p>
+        </div>
+
+        <div class="citation">Segal, Z. V., Williams, J. M. G., & Teasdale, J. D. (2002). <em>Mindfulness-based cognitive therapy for depression: A new approach to preventing relapse.</em> Guilford Press.</div>
+      </div>
+
+      <div class="content-section">
+        <h2>DBT for Borderline Personality Disorder</h2>
+        <p><span class="key-term">Dialectical Behavior Therapy (DBT)</span> (Linehan, 1993) was developed specifically for chronically suicidal individuals with borderline personality disorder (BPD). DBT is grounded in the <span class="key-term">biosocial theory</span>, which proposes that BPD results from the transaction between a biological vulnerability to <span class="key-term">emotional dysregulation</span> (high emotional sensitivity, intense emotional reactions, and slow return to baseline) and an <span class="key-term">invalidating environment</span> during development (an environment that pervasively dismisses, punishes, or responds erratically to the expression of private emotional experiences). This transaction produces the core features of BPD: emotional dysregulation, interpersonal chaos, behavioral impulsivity, identity disturbance, and cognitive dysregulation.</p>
+
+        <h3>DBT Skills Modules</h3>
+        <ul>
+          <li><strong>Mindfulness:</strong> Core skill — observing, describing, and participating in experiences with non-judgmental awareness (the "what" skills) and doing so one-mindfully and effectively (the "how" skills)</li>
+          <li><strong>Distress Tolerance:</strong> Crisis survival strategies (TIPP, ACCEPTS, IMPROVE) and radical acceptance — tolerating painful emotions without making them worse</li>
+          <li><strong>Emotion Regulation:</strong> Understanding and naming emotions, reducing vulnerability to negative emotions (<span class="key-term">PLEASE skills</span>: treat Physical illness, balanced Eating, avoid mood-Altering substances, balanced Sleep, get Exercise), increasing positive emotional events, and <span class="key-term">opposite action</span> (acting opposite to the emotion's action urge when the emotion does not fit the facts)</li>
+          <li><strong>Interpersonal Effectiveness:</strong> <span class="key-term">DEAR MAN</span> (Describe, Express, Assert, Reinforce, stay Mindful, Appear confident, Negotiate) for asking for what one needs; <span class="key-term">GIVE</span> (be Gentle, act Interested, Validate, use Easy manner) for maintaining relationships; <span class="key-term">FAST</span> (be Fair, no Apologies, Stick to values, be Truthful) for maintaining self-respect</li>
+        </ul>
+
+        <p>Standard DBT involves four modes of treatment delivered simultaneously:</p>
+        <table>
+          <tr><th>Mode</th><th>Frequency</th><th>Purpose</th></tr>
+          <tr><td><strong>Individual therapy</strong></td><td>Weekly (1 hour)</td><td>Addresses treatment targets using hierarchy: life-threatening behaviors > therapy-interfering behaviors > quality-of-life-interfering behaviors > skills acquisition</td></tr>
+          <tr><td><strong>Skills training group</strong></td><td>Weekly (2.5 hours)</td><td>Teaches the four skills modules; structured psychoeducational format; NOT process-oriented group therapy</td></tr>
+          <tr><td><strong>Phone coaching</strong></td><td>As needed</td><td>Helps generalize skills to everyday life; brief coaching during crises; NOT therapy between sessions</td></tr>
+          <tr><td><strong>Therapist consultation team</strong></td><td>Weekly</td><td>Supports therapist motivation and competence; prevents burnout; "therapy for the therapist"</td></tr>
+        </table>
+        <p>The dialectical philosophy is central to DBT — it balances acceptance strategies (validation, mindfulness) and change strategies (behavior analysis, skills training, contingency management) throughout treatment. The fundamental dialectic is between acceptance and change: the therapist simultaneously communicates "you are doing the best you can AND you need to do better."</p>
+        <p><span class="key-term">Diary cards</span> are used to track daily emotions, urges (e.g., self-harm, substance use), target behaviors, and skills used. They are reviewed at the beginning of each individual session to set the agenda according to the treatment hierarchy. <span class="key-term">Chain analysis</span> (also called behavioral analysis) is a core DBT technique in which the therapist and client examine a problem behavior in minute detail — identifying the prompting event, vulnerability factors, links in the chain (thoughts, emotions, behaviors, body sensations), consequences, and potential points for intervention.</p>
+
+        <div class="citation">Linehan, M. M. (1993). <em>Cognitive-behavioral treatment of borderline personality disorder.</em> Guilford Press.</div>
+
+        <h3>Mentalization-Based Therapy (MBT)</h3>
+        <p><span class="key-term">MBT</span> (Bateman & Fonagy) focuses on improving the capacity to <span class="key-term">mentalize</span> — to understand one's own and others' behavior in terms of underlying mental states (thoughts, feelings, desires, intentions). BPD is conceptualized as a disorder of mentalization: under emotional stress, the capacity to mentalize breaks down, leading to impulsive action, emotional dysregulation, and interpersonal difficulties. MBT uses the therapeutic relationship as the primary vehicle for developing mentalizing capacity. The therapist adopts a <span class="key-term">"not-knowing" stance</span>, using curiosity and inquiry rather than interpretation.</p>
+
+        <h3>Transference-Focused Psychotherapy (TFP)</h3>
+        <p><span class="key-term">TFP</span> (Kernberg, Yeomans, & Clarkin) is a psychodynamic treatment that uses the analysis of transference patterns to restructure pathological <span class="key-term">object relations</span>. The treatment assumes that BPD results from the predominance of splitting and other primitive defenses that prevent the integration of positive and negative representations of self and others. TFP aims to integrate these split representations through systematic analysis of how they manifest in the therapeutic relationship. TFP is a twice-weekly, individual treatment.</p>
+
+        <h3>Schema Therapy</h3>
+        <p><span class="key-term">Schema Therapy</span> (Young et al., 2003) identifies and modifies <span class="key-term">early maladaptive schemas (EMS)</span> — broad, pervasive themes regarding oneself and one's relationships that develop during childhood and are elaborated throughout life. For BPD, schema therapy focuses on four maladaptive <span class="key-term">schema modes</span>: the Detached Protector, the Punitive Parent, the Abandoned/Abused Child, and the Angry Child. Treatment aims to strengthen the Healthy Adult mode. Schema therapy uses cognitive, experiential (empty chair, imagery rescripting), behavioral, and relational strategies.</p>
+
+        <div class="example-box">
+          <strong>BPD Treatment Comparison:</strong>
+          <p>All four BPD treatments (DBT, MBT, TFP, Schema Therapy) have RCT support. DBT has the largest evidence base and is the most widely available. The APA Practice Guideline for BPD notes that different treatments may be preferred based on the predominant features: DBT when self-harm and emotional dysregulation are primary; MBT when mentalization deficits are prominent; TFP when identity disturbance and splitting are central; and Schema Therapy when rigid patterns of avoidance and early maladaptive schemas dominate the presentation.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>Evidence-Based Treatments for Eating Disorders</h2>
+
+        <h3>CBT-E for Bulimia and Binge Eating</h3>
+        <p><span class="key-term">CBT-Enhanced (CBT-E)</span> (Fairburn, 2008) is the leading evidence-based treatment for bulimia nervosa and binge eating disorder. The <span class="key-term">transdiagnostic model</span> proposes that all eating disorders share a core psychopathology: the overevaluation of eating, shape, and weight and their control. The cognitive-behavioral model of bulimia nervosa identifies a self-perpetuating cycle: low self-esteem and overvaluation of shape/weight lead to extreme dietary restriction, which leads to binge eating (as restriction eventually breaks down), which triggers compensatory behaviors (purging) and intensifies feelings of failure and low self-esteem.</p>
+        <p>CBT-E has two forms: a <strong>focused form</strong> (20 sessions) that targets the core eating disorder psychopathology, and a <strong>broad form</strong> that additionally addresses maintaining processes including clinical perfectionism, core low self-esteem, mood intolerance, and interpersonal difficulties. Key treatment components include:</p>
+        <ul>
+          <li><strong>Self-monitoring:</strong> Real-time recording of eating, purging, and associated thoughts/feelings</li>
+          <li><strong>Regular eating pattern:</strong> Establishing three planned meals and two to three planned snacks per day</li>
+          <li><strong>Cognitive restructuring:</strong> Challenging overvaluation of shape/weight and dietary rules</li>
+          <li><strong>Exposure to avoided foods:</strong> Gradually reintroducing forbidden foods</li>
+          <li><strong>Relapse prevention:</strong> Developing a personalized maintenance plan</li>
+        </ul>
+
+        <div class="definition-box">
+          <strong>CBT-E Outcomes:</strong>
+          <p>CBT-E produces remission rates of approximately 40-50% for bulimia nervosa and higher rates for binge eating disorder. It is superior to pharmacotherapy alone for bulimia nervosa, and gains are well-maintained at follow-up. The transdiagnostic framework allows CBT-E to be applied across eating disorder diagnoses, including atypical presentations.</p>
+        </div>
+
+        <h3>FBT/Maudsley Approach for Adolescent Anorexia</h3>
+        <p><span class="key-term">Family-Based Treatment (FBT)</span>, also known as the Maudsley approach (Lock & Le Grange), is the first-line treatment for adolescent anorexia nervosa. FBT proceeds in three phases:</p>
+        <ul>
+          <li><strong>Phase 1 (Weight Restoration):</strong> Parents take full charge of refeeding their child. The therapist empowers the parents as the experts on feeding their child, while externalizing the eating disorder as separate from the adolescent. A family meal is conducted in session 2, during which the therapist coaches parents to encourage the adolescent to eat one more bite than they feel comfortable with.</li>
+          <li><strong>Phase 2 (Return of Control):</strong> Once weight is largely restored and the eating disorder symptoms have decreased, control of eating is gradually returned to the adolescent in an age-appropriate manner.</li>
+          <li><strong>Phase 3 (Adolescent Identity):</strong> Focus shifts to establishing a healthy adolescent identity, addressing general developmental issues, and termination of treatment.</li>
+        </ul>
+        <p>FBT is agnostic about the cause of the eating disorder and explicitly exonerates parents from blame. This represents a significant departure from earlier family therapy approaches that implicated family dynamics in the development of anorexia. FBT typically involves 15-20 sessions over 6-12 months.</p>
+
+        <div class="definition-box">
+          <strong>IPT for Bulimia:</strong>
+          <p>IPT has been shown to be as effective as CBT for bulimia nervosa in the long term, though CBT produces faster symptom improvement. IPT for eating disorders focuses on the same four interpersonal problem areas (grief, role disputes, role transitions, interpersonal deficits) and does not directly target eating behaviors — yet eating symptoms improve as interpersonal functioning improves.</p>
+        </div>
+
+        <h3>Treatment of Anorexia Nervosa in Adults</h3>
+        <p>Unlike bulimia nervosa and binge eating disorder, no single psychotherapy has demonstrated clear superiority for adult anorexia nervosa. Evidence supports <span class="key-term">CBT-E (adapted for underweight patients)</span>, the <span class="key-term">Maudsley Model of Anorexia Nervosa Treatment for Adults (MANTRA)</span>, and <span class="key-term">Specialist Supportive Clinical Management (SSCM)</span>. Medical monitoring and nutritional rehabilitation are essential across all treatment approaches. Inpatient or residential treatment may be necessary when BMI is dangerously low or medical complications are present. The mortality rate for anorexia nervosa is the highest of any psychiatric disorder.</p>
+
+        <div class="example-box">
+          <strong>Pharmacotherapy for Eating Disorders:</strong>
+          <p>SSRIs (particularly fluoxetine at 60 mg) are FDA-approved for bulimia nervosa and can reduce binge/purge frequency. For binge eating disorder, lisdexamfetamine (a stimulant) is FDA-approved. Pharmacotherapy has limited efficacy for anorexia nervosa — no medication has been shown to produce weight gain in acutely underweight patients. Olanzapine (an atypical antipsychotic) has shown modest weight gain benefits in some studies. Pharmacotherapy is generally recommended as an adjunct to psychotherapy, not as a standalone treatment for eating disorders.</p>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li><strong>Beck's cognitive triad:</strong> Negative views of self, world, and future. Core of cognitive theory of depression.</li>
+          <li><strong>Behavioral Activation:</strong> Jacobson. As effective as full CBT for depression. Based on increasing response-contingent positive reinforcement.</li>
+          <li><strong>IPT problem areas:</strong> Grief, role disputes, role transitions, interpersonal deficits. Time-limited (12-16 sessions). Does NOT use cognitive restructuring.</li>
+          <li><strong>MBCT:</strong> Relapse prevention for recurrent depression (3+ episodes). NOT for acute depression. Reduces relapse by approximately 50%.</li>
+          <li><strong>DBT:</strong> Linehan. Biosocial theory. Four modes (individual, group skills, phone coaching, consultation team). Four skills modules (mindfulness, distress tolerance, emotion regulation, interpersonal effectiveness).</li>
+          <li><strong>DBT dialectics:</strong> Balance of acceptance and change strategies. Radical acceptance is a key distress tolerance skill.</li>
+          <li><strong>MBT:</strong> Bateman & Fonagy. Focuses on mentalization capacity. For BPD.</li>
+          <li><strong>TFP:</strong> Kernberg. Object relations approach. Analyzes transference patterns in BPD.</li>
+          <li><strong>CBT-E:</strong> Fairburn. Transdiagnostic model. First-line for bulimia and binge eating disorder.</li>
+          <li><strong>FBT/Maudsley:</strong> First-line for adolescent anorexia. Parents direct refeeding in Phase 1. Three-phase model.</li>
+          <li><strong>Cognitive distortions:</strong> Know all-or-nothing thinking, overgeneralization, mental filter, magnification/minimization, emotional reasoning, personalization, catastrophizing, "should" statements.</li>
+          <li><strong>Schema Therapy:</strong> Young. Early maladaptive schemas (EMS). Four schema modes for BPD (Detached Protector, Punitive Parent, Abandoned Child, Angry Child). Strengthen Healthy Adult mode.</li>
+          <li><strong>IPT sick role:</strong> Legitimizes depression as an illness, reduces guilt, mobilizes the client for treatment. Unique IPT feature.</li>
+          <li><strong>IPT interpersonal inventory:</strong> Detailed review of all significant relationships conducted early in treatment to identify the primary problem area.</li>
+          <li><strong>BA TRAP/TRAC:</strong> TRAP = Trigger-Response-Avoidance Pattern. TRAC = Trigger-Response-Alternative Coping. Framework for identifying and breaking avoidance cycles.</li>
+          <li><strong>DBT diary cards:</strong> Daily tracking of emotions, urges, behaviors, and skills use. Reviewed at beginning of each individual session.</li>
+          <li><strong>DBT treatment hierarchy:</strong> Life-threatening behaviors first, then therapy-interfering behaviors, then quality-of-life-interfering behaviors, then skills acquisition.</li>
+          <li><strong>MBCT mechanism:</strong> Teaches decentering — the ability to observe thoughts as mental events rather than reality. This prevents the "depressive interlock" where negative mood activates negative thinking patterns that trigger relapse.</li>
+          <li><strong>Levels of cognition:</strong> Automatic thoughts (surface), intermediate beliefs (rules/attitudes), core beliefs/schemas (deep). CBT progresses from surface to deep cognitions.</li>
+          <li><strong>CBT session structure:</strong> Mood check, bridge, agenda setting, homework review, agenda items, new homework, summary/feedback. Collaborative empiricism is the working stance.</li>
+          <li><strong>CBT vs. medication for depression:</strong> Approximately equal for mild-moderate depression. Combined treatment may be best for severe depression. CBT has enduring effects after treatment ends; medication effects typically disappear when discontinued.</li>
+          <li><strong>Fluoxetine for bulimia:</strong> FDA-approved at 60 mg (higher than the typical antidepressant dose). SSRIs reduce binge/purge frequency.</li>
+          <li><strong>Lisdexamfetamine:</strong> FDA-approved for binge eating disorder. The only stimulant approved for an eating disorder.</li>
+          <li><strong>No effective pharmacotherapy for anorexia:</strong> No medication produces weight gain in acutely underweight AN patients. Nutritional rehabilitation is essential.</li>
+          <li><strong>Anorexia mortality:</strong> Highest mortality rate of any psychiatric disorder. Medical monitoring is essential.</li>
+          <li><strong>Biosocial theory:</strong> Linehan's DBT model. Emotional vulnerability (biological) + invalidating environment (social) = BPD features.</li>
+          <li><strong>Invalidating environment:</strong> Pervasively dismisses, punishes, or responds inconsistently to emotional expression. Central concept in DBT's developmental model of BPD.</li>
+          <li><strong>Mentalization:</strong> The capacity to understand behavior as driven by mental states. When mentalization breaks down under stress, impulsive action replaces reflective thought.</li>
+          <li><strong>Object relations in TFP:</strong> Kernberg. BPD involves predominance of splitting — inability to integrate positive and negative representations of self and others. TFP works to integrate split representations through transference analysis.</li>
+          <li><strong>DBT chain analysis:</strong> Detailed behavioral analysis of problem behaviors — examining prompting event, vulnerability factors, chain links, and consequences. Used to identify intervention points.</li>
+          <li><strong>MBSR vs. MBCT:</strong> MBSR = Kabat-Zinn, general stress/pain, transdiagnostic. MBCT = Segal/Williams/Teasdale, depression relapse prevention, includes CBT-specific content.</li>
+          <li><strong>Cognitive reactivity:</strong> After multiple depressive episodes, the association between low mood and negative thinking becomes automatic. MBCT targets this process.</li>
+          <li><strong>Opposite action:</strong> DBT emotion regulation skill. When an emotion does not fit the facts of the situation, act opposite to the emotion's action urge (e.g., approach instead of avoid when afraid; be kind when unjustifiably angry).</li>
+          <li><strong>IPT for postpartum depression:</strong> IPT has specific adaptations for postpartum depression, addressing the role transition to motherhood and interpersonal changes during the perinatal period.</li>
+          <li><strong>CBT-E transdiagnostic model:</strong> Fairburn. All eating disorders share core psychopathology — overevaluation of shape, weight, and eating control. Focused (20 sessions) vs. broad form.</li>
+        </ul>
+      </div>
+
+      <div class="content-section">
+        <h2>Summary: Depression Treatments by Modality</h2>
+        <table>
+          <tr><th>Treatment</th><th>Developer</th><th>Key Mechanism</th><th>Best For</th></tr>
+          <tr><td>CBT</td><td>Beck</td><td>Cognitive restructuring of negative schemas</td><td>Acute major depression</td></tr>
+          <tr><td>Behavioral Activation</td><td>Jacobson</td><td>Increasing response-contingent positive reinforcement</td><td>Acute depression (including severe)</td></tr>
+          <tr><td>IPT</td><td>Klerman & Weissman</td><td>Resolving interpersonal problems</td><td>Depression with interpersonal issues; postpartum depression</td></tr>
+          <tr><td>MBCT</td><td>Segal, Williams, Teasdale</td><td>Mindfulness-based decentering from depressive cognitions</td><td>Relapse prevention (3+ episodes)</td></tr>
+          <tr><td>DBT</td><td>Linehan</td><td>Dialectical balance of acceptance and change</td><td>BPD with self-harm; chronic suicidality</td></tr>
+          <tr><td>CBT-E</td><td>Fairburn</td><td>Addressing overevaluation of shape/weight/eating</td><td>Bulimia nervosa; binge eating disorder</td></tr>
+          <tr><td>FBT</td><td>Lock & Le Grange</td><td>Parental refeeding; externalizing the illness</td><td>Adolescent anorexia nervosa</td></tr>
+        </table>
+      </div>
+
+      <div class="nav-buttons">
+        <a href="ch10-ebt-anxiety-trauma.html" class="nav-btn"><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">EBT: Anxiety, Trauma &amp; OCD</div></div></a>
+        <a href="ch12-ebt-substance-developmental.html" class="nav-btn"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">EBT: Substance &amp; Developmental</div></div></a>
+      </div>
+    </main>
+  </div>
+
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try { var s = sessionStorage.getItem('passeppp_session'); if (s) { tier = JSON.parse(s).tier || 'free'; } } catch(e) {}
+      if (tier === 'free') { document.getElementById('upgradeModal').classList.add('visible'); return; }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

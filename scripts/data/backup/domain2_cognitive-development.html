@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cognitive Development | Domain 2 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #06b6d4; --accent-dim: rgba(6, 182, 212, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 2</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Cognitive Development</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 2</div>
+        <div class="domain-title">Developmental Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="cognitive-development.html" class="chapter-link active"><span class="chapter-number">1</span>Cognitive Development</a></li>
+        <li class="chapter-item"><a href="nature-nurture.html" class="chapter-link"><span class="chapter-number">2</span>Nature vs. Nurture</a></li>
+        <li class="chapter-item"><a href="prenatal-development.html" class="chapter-link"><span class="chapter-number">3</span>Prenatal Development</a></li>
+        <li class="chapter-item"><a href="language-development.html" class="chapter-link"><span class="chapter-number">4</span>Language Development</a></li>
+        <li class="chapter-item"><a href="physical-development.html" class="chapter-link"><span class="chapter-number">5</span>Physical Development</a></li>
+        <li class="chapter-item"><a href="family-influences.html" class="chapter-link"><span class="chapter-number">6</span>School & Family Influences</a></li>
+        <li class="chapter-item"><a href="attachment.html" class="chapter-link"><span class="chapter-number">7</span>Attachment & Emotions</a></li>
+        <li class="chapter-item"><a href="moral-development.html" class="chapter-link"><span class="chapter-number">8</span>Moral Development</a></li>
+        <li class="chapter-item"><a href="temperament.html" class="chapter-link"><span class="chapter-number">9</span>Temperament & Personality</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 1 of 9</div>
+        <h1>Cognitive Development</h1>
+        <div class="chapter-meta">
+          <span>Piaget's stages, Vygotsky's ZPD, information processing approaches</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 2)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 2)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Overview of Cognitive Development</h2>
+        <p>Cognitive development refers to the progressive changes in how individuals think, reason, and understand the world from infancy through adulthood. This chapter covers the major theoretical frameworks that have shaped our understanding of intellectual growth, including Piaget's stage theory, Vygotsky's sociocultural approach, information processing models, and neo-Piagetian extensions.</p>
+        <p>For the EPPP, candidates must understand not only the stages and mechanisms proposed by each theory but also the key differences, criticisms, and clinical applications of these models. Cognitive development is foundational to understanding psychopathology, learning disabilities, and neuropsychological assessment across the lifespan.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Piaget's Theory of Cognitive Development</h2>
+        <p>Jean Piaget (1896-1980) proposed the most influential stage theory of cognitive development. He viewed children as active constructors of knowledge who build increasingly complex <span class="key-term">schemas</span> through interaction with the environment. Piaget identified two complementary processes that drive cognitive growth.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Schema:</strong> An organized pattern of thought or action used to interpret experience. Schemas become more sophisticated with development.</p>
+          <p><strong>Assimilation:</strong> Incorporating new information into existing schemas without changing the schema itself.</p>
+          <p><strong>Accommodation:</strong> Modifying existing schemas or creating new ones to incorporate information that does not fit current understanding.</p>
+          <p><strong>Equilibration:</strong> The self-regulatory process by which children balance assimilation and accommodation to achieve cognitive stability.</p>
+        </div>
+
+        <h3>Stage 1: Sensorimotor Stage (Birth to ~2 Years)</h3>
+        <p>During this stage, infants learn about the world through sensory experiences and motor actions. Piaget subdivided this stage into six substages, progressing from simple reflexes to the beginning of symbolic thought.</p>
+        <p>The major achievement of the sensorimotor stage is <span class="key-term">object permanence</span> -- the understanding that objects continue to exist even when they cannot be seen, heard, or touched. Piaget observed that this develops gradually, typically consolidating around 8-12 months when infants begin searching for hidden objects (the A-not-B error occurs around this age).</p>
+        <p>By the end of this stage, children demonstrate <span class="key-term">deferred imitation</span> (imitating actions observed earlier) and the beginnings of mental representation, which marks the transition to preoperational thought.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: Object Permanence Assessment</h4>
+          <p>A developmental psychologist assessing a 10-month-old hides a toy under Cloth A repeatedly. After the infant retrieves it several times, the psychologist moves the toy to Cloth B while the infant watches. The infant persists in searching under Cloth A -- demonstrating the classic <strong>A-not-B error</strong>, which Piaget attributed to incomplete object permanence. However, newer research (Baillargeon, 1987) using looking-time paradigms suggests infants may have earlier object knowledge than Piaget believed.</p>
+        </div>
+
+        <h3>Stage 2: Preoperational Stage (~2 to 7 Years)</h3>
+        <p>The preoperational stage is characterized by the rapid development of symbolic thought, including language and pretend play, but is limited by several cognitive constraints:</p>
+        <ul>
+          <li><strong>Egocentrism:</strong> Difficulty taking another person's perspective, demonstrated by Piaget's <span class="key-term">three-mountain task</span></li>
+          <li><strong>Centration:</strong> Focusing on only one dimension of a problem while ignoring others</li>
+          <li><strong>Irreversibility:</strong> Inability to mentally reverse a sequence of events or operations</li>
+          <li><strong>Animism:</strong> Attributing life-like qualities to inanimate objects</li>
+          <li><strong>Transductive reasoning:</strong> Reasoning from particular to particular rather than from general to particular (or vice versa)</li>
+        </ul>
+        <p>Children in this stage fail <span class="key-term">conservation tasks</span> because they cannot simultaneously consider multiple dimensions (e.g., height and width of liquid in a container).</p>
+
+        <h3>Stage 3: Concrete Operational Stage (~7 to 11 Years)</h3>
+        <p>Children in this stage can perform <span class="key-term">mental operations</span> on concrete objects and events. Key achievements include:</p>
+        <ul>
+          <li><strong>Conservation:</strong> Understanding that quantity remains the same despite changes in appearance (number conservation typically develops first, followed by mass, then volume)</li>
+          <li><strong>Reversibility:</strong> The ability to mentally reverse an action</li>
+          <li><strong>Seriation:</strong> Arranging items along a quantitative dimension (e.g., shortest to tallest)</li>
+          <li><strong>Transitivity:</strong> Understanding that if A > B and B > C, then A > C</li>
+          <li><strong>Classification:</strong> Grouping objects by shared features, including hierarchical classification</li>
+        </ul>
+        <p>A critical limitation is that logical operations can only be applied to <strong>concrete</strong>, tangible problems -- abstract and hypothetical reasoning remains beyond reach.</p>
+
+        <h3>Stage 4: Formal Operational Stage (~11 Years and Onward)</h3>
+        <p>The hallmark of this stage is <span class="key-term">hypothetico-deductive reasoning</span> -- the ability to formulate hypotheses and systematically test them. Adolescents can think abstractly, reason about possibilities (not just realities), and engage in propositional logic.</p>
+        <p>Piaget used the <span class="key-term">pendulum problem</span> to assess this stage: participants must isolate variables (string length, weight, force, height) to determine what controls the pendulum's speed. Formal operational thinkers test variables systematically rather than haphazardly.</p>
+        <p>Not all individuals reach formal operations, and research suggests this stage may be more culturally and educationally dependent than earlier stages. Cross-cultural studies indicate that formal operational thinking is not universal (Dasen, 1994).</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Understanding Piaget's stages is essential for clinical work with children. A child functioning in the preoperational stage may not benefit from cognitive-behavioral interventions requiring abstract thought. Clinicians should match therapeutic strategies to the child's cognitive level -- for example, using concrete behavioral techniques with younger children and introducing cognitive restructuring only when the child has reached concrete or formal operations.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Vygotsky's Sociocultural Theory</h2>
+        <p>Lev Vygotsky (1896-1934) proposed that cognitive development is fundamentally a social process. Unlike Piaget, who emphasized the child as an independent explorer, Vygotsky argued that higher mental functions develop through social interaction and are mediated by cultural tools, especially language.</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Zone of Proximal Development (ZPD):</strong> The distance between what a child can accomplish independently and what the child can achieve with guidance from a more skilled partner. Learning occurs most effectively within this zone.</p>
+          <p><strong>Scaffolding:</strong> The process by which a more knowledgeable other provides temporary support that is gradually withdrawn as the learner gains competence. (Note: The term "scaffolding" was introduced by Wood, Bruner, & Ross (1976), not Vygotsky himself.)</p>
+          <p><strong>Private Speech:</strong> Self-directed speech that children use to guide their own thinking and behavior. Vygotsky viewed this as an internalization of social speech, eventually becoming inner speech.</p>
+        </div>
+
+        <p>Vygotsky distinguished between <span class="key-term">elementary mental functions</span> (innate capacities like attention and sensation) and <span class="key-term">higher mental functions</span> (culturally mediated processes like logical memory and voluntary attention). The transformation from elementary to higher functions occurs through social interaction.</p>
+        <p>A central tenet of Vygotsky's theory is that language and thought begin as separate systems and merge around age 2, after which language serves as the primary tool for thought. This contrasts with Piaget's view that language merely reflects existing cognitive structures.</p>
+
+        <div class="example-box">
+          <h4>Clinical Example: ZPD in Educational Assessment</h4>
+          <p>A school psychologist conducting a dynamic assessment provides a student with graduated prompts during a problem-solving task. The student initially cannot solve matrix reasoning problems independently (scoring at the 25th percentile) but with minimal scaffolding reaches the 60th percentile. This discrepancy between assisted and unassisted performance reveals the child's ZPD and suggests greater learning potential than static IQ testing alone would indicate. This approach, formalized by Feuerstein (1979) as the Learning Potential Assessment Device, has direct roots in Vygotsky's theory.</p>
+        </div>
+
+        <h3>Piaget vs. Vygotsky: Key Contrasts</h3>
+        <table>
+          <tr><th>Dimension</th><th>Piaget</th><th>Vygotsky</th></tr>
+          <tr><td>Role of the child</td><td>Independent explorer</td><td>Social apprentice</td></tr>
+          <tr><td>Source of development</td><td>Internal maturation + individual exploration</td><td>Social interaction + cultural tools</td></tr>
+          <tr><td>Role of language</td><td>Reflects cognitive level</td><td>Drives cognitive development</td></tr>
+          <tr><td>Private speech</td><td>Egocentric (immature, declines with age)</td><td>Self-regulatory (functional, becomes inner speech)</td></tr>
+          <tr><td>Stages</td><td>Universal, invariant stages</td><td>No stage theory; development is continuous</td></tr>
+          <tr><td>Role of instruction</td><td>Must match developmental readiness</td><td>Good instruction leads development (within ZPD)</td></tr>
+        </table>
+      </section>
+
+      <section class="content-section">
+        <h2>Information Processing Approach</h2>
+        <p>The information processing approach views cognitive development not as a series of qualitative stages but as a continuous process of improvement in the efficiency and capacity of mental processes. This perspective draws analogies between the human mind and computer processing.</p>
+
+        <h3>Core Components</h3>
+        <ul>
+          <li><strong>Processing speed:</strong> Increases steadily from infancy through adolescence, largely due to myelination and synaptic pruning (Kail, 1991)</li>
+          <li><strong>Working memory capacity:</strong> Increases throughout childhood, enabling more complex problem solving</li>
+          <li><strong>Attention:</strong> Becomes more selective, sustained, and planful with age</li>
+          <li><strong>Memory strategies:</strong> Children progressively develop and use strategies such as rehearsal (~age 6), organization (~age 9), and elaboration (~age 11)</li>
+          <li><strong>Metacognition:</strong> Awareness and regulation of one's own cognitive processes, developing notably during middle childhood and adolescence</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <p><strong>Encoding:</strong> The process of transforming sensory input into mental representations.</p>
+          <p><strong>Automaticity:</strong> The ability to perform a cognitive task with minimal conscious effort, freeing working memory resources for other tasks.</p>
+          <p><strong>Executive functions:</strong> Higher-order cognitive processes including inhibitory control, cognitive flexibility, and working memory updating, primarily mediated by the prefrontal cortex.</p>
+        </div>
+
+        <p>Siegler's (1996) <span class="key-term">overlapping waves theory</span> proposes that children have access to multiple strategies at any given age and gradually shift toward more efficient ones. This contrasts with Piaget's abrupt stage transitions and better explains the variability observed in children's problem-solving.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical Implications</h4>
+          <p>Information processing models are particularly relevant for understanding and assessing learning disabilities, ADHD, and traumatic brain injury in children. Deficits in specific components (e.g., working memory, processing speed) can be identified through neuropsychological testing and targeted with specific interventions. For example, children with ADHD often show deficits in executive function that can be addressed through behavioral strategies and, when appropriate, pharmacological treatment.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Neo-Piagetian Theories</h2>
+        <p>Neo-Piagetian theorists have attempted to integrate Piaget's stage framework with information processing concepts and address limitations of the original theory.</p>
+
+        <h3>Robbie Case's Theory</h3>
+        <p>Case (1992) proposed that cognitive development progresses through stages similar to Piaget's but attributed stage transitions to increases in <span class="key-term">working memory capacity</span> rather than the development of new logical structures. As children become more efficient at processing information (through practice and biological maturation), they free up working memory resources for more complex thinking.</p>
+
+        <h3>Kurt Fischer's Skill Theory</h3>
+        <p>Fischer (1980) proposed that cognitive development involves the construction of increasingly complex <span class="key-term">skills</span> organized into tiers (reflexive, sensorimotor, representational, and abstract). Development is domain-specific rather than domain-general -- a child may show advanced skills in one area while functioning at a lower level in another, a concept Fischer called <span class="key-term">developmental range</span>.</p>
+
+        <h3>Criticisms of Piaget Addressed by Neo-Piagetians</h3>
+        <ul>
+          <li><strong>Underestimation of children's abilities:</strong> Research using simplified tasks shows children demonstrate competencies earlier than Piaget suggested (e.g., Baillargeon's violation-of-expectation paradigm for object permanence in infants as young as 3.5 months)</li>
+          <li><strong>Domain-general vs. domain-specific:</strong> Development is often uneven across domains, contrary to Piaget's domain-general stages</li>
+          <li><strong>Insufficient attention to social and cultural context:</strong> Addressed by integrating Vygotskian concepts</li>
+          <li><strong>Training effects:</strong> Children can be trained to succeed on tasks beyond their supposed stage level, challenging the notion of strict stage boundaries</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>EPPP Exam Focus Points</h2>
+        <ul>
+          <li>Know all four of Piaget's stages, their approximate ages, and the defining characteristics and limitations of each stage</li>
+          <li>Understand the key concepts: schemas, assimilation, accommodation, equilibration, object permanence, conservation, egocentrism, and hypothetico-deductive reasoning</li>
+          <li>Be able to compare and contrast Piaget and Vygotsky, especially regarding the role of language, social interaction, and instruction</li>
+          <li>Know the ZPD and scaffolding concepts and their applications to assessment (dynamic assessment) and education</li>
+          <li>Understand the information processing approach: processing speed, working memory, strategy development, executive functions</li>
+          <li>Be familiar with criticisms of Piaget -- especially the research showing earlier competencies than Piaget predicted (Baillargeon's work on object permanence)</li>
+          <li>Conservation develops in a predictable order: number first, then mass/substance, then weight, then volume (horizontal decalage)</li>
+          <li>Private speech: Piaget called it "egocentric speech" (viewed negatively); Vygotsky saw it as self-regulatory and functional</li>
+          <li>Know that not all individuals reach formal operations, and cultural factors influence cognitive development</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>References</h2>
+        <div class="citation">Baillargeon, R. (1987). Object permanence in 3.5- and 4.5-month-old infants. <em>Developmental Psychology, 23</em>(5), 655-664.</div>
+        <div class="citation">Case, R. (1992). <em>The mind's staircase: Exploring the conceptual underpinnings of children's thought and knowledge.</em> Erlbaum.</div>
+        <div class="citation">Dasen, P. R. (1994). Culture and cognitive development from a Piagetian perspective. In W. J. Lonner & R. Malpass (Eds.), <em>Psychology and culture</em> (pp. 145-149). Allyn and Bacon.</div>
+        <div class="citation">Feuerstein, R. (1979). <em>The dynamic assessment of retarded performers.</em> University Park Press.</div>
+        <div class="citation">Fischer, K. W. (1980). A theory of cognitive development: The control and construction of hierarchies of skills. <em>Psychological Review, 87</em>(6), 477-531.</div>
+        <div class="citation">Kail, R. (1991). Developmental change in speed of processing during childhood and adolescence. <em>Psychological Bulletin, 109</em>(3), 490-501.</div>
+        <div class="citation">Piaget, J. (1952). <em>The origins of intelligence in children.</em> International Universities Press.</div>
+        <div class="citation">Siegler, R. S. (1996). <em>Emerging minds: The process of change in children's thinking.</em> Oxford University Press.</div>
+        <div class="citation">Vygotsky, L. S. (1978). <em>Mind in society: The development of higher psychological processes.</em> Harvard University Press.</div>
+        <div class="citation">Wood, D., Bruner, J. S., & Ross, G. (1976). The role of tutoring in problem solving. <em>Journal of Child Psychology and Psychiatry, 17</em>(2), 89-100.</div>
+      </section>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Domain Overview</div>
+          </div>
+        </a>
+        <a href="nature-nurture.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Nature vs. Nurture</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

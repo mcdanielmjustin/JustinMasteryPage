@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Influence | Domain 5 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b; --bg-secondary: #0f0f11; --bg-tertiary: #18181b; --bg-card: #1c1c1f;
+      --text-primary: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
+      --accent: #3b82f6; --accent-dim: rgba(59, 130, 246, 0.15);
+      --border: rgba(255, 255, 255, 0.06); --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif; --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .coming-soon-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; }
+    .coming-soon-icon { width: 80px; height: 80px; background: var(--accent-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .coming-soon-icon svg { width: 40px; height: 40px; color: var(--accent); }
+    .coming-soon-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 16px; color: var(--text-primary); }
+    .coming-soon-text { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin-bottom: 32px; line-height: 1.8; }
+    .coming-soon-note { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; color: var(--text-muted); font-size: 0.9rem; }
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin: 16px 0; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .definition-box h4 { margin-top: 0; color: var(--accent); }
+    .definition-box p:last-child { margin-bottom: 0; }
+    .example-box { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .example-box h4 { margin-top: 0; color: #3b82f6; }
+    .example-box p:last-child { margin-bottom: 0; }
+    .clinical-note { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+    .clinical-note h4 { margin-top: 0; color: #22c55e; }
+    .clinical-note p:last-child { margin-bottom: 0; }
+    .citation { font-size: 0.85rem; color: var(--text-muted); padding: 16px; background: var(--bg-tertiary); border-left: 3px solid var(--accent); margin: 16px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); font-weight: 600; color: var(--text-primary); }
+    td { color: var(--text-secondary); }
+    @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 32px 24px; } }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 5</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Group Influence</span>
+      </div>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 5</div>
+        <div class="domain-title">Social & Cultural Psychology</div>
+      </div>
+      <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="identity-models.html" class="chapter-link"><span class="chapter-number">1</span>Identity Development</a></li>
+        <li class="chapter-item"><a href="cultural-concepts.html" class="chapter-link"><span class="chapter-number">2</span>Cultural Concepts</a></li>
+        <li class="chapter-item"><a href="attribution.html" class="chapter-link"><span class="chapter-number">3</span>Attribution Theory</a></li>
+        <li class="chapter-item"><a href="biases-heuristics.html" class="chapter-link"><span class="chapter-number">4</span>Biases & Heuristics</a></li>
+        <li class="chapter-item"><a href="attitudes.html" class="chapter-link"><span class="chapter-number">5</span>Attitudes</a></li>
+        <li class="chapter-item"><a href="persuasion.html" class="chapter-link"><span class="chapter-number">6</span>Persuasion</a></li>
+        <li class="chapter-item"><a href="group-influence.html" class="chapter-link active"><span class="chapter-number">7</span>Group Influence</a></li>
+        <li class="chapter-item"><a href="prosocial-prejudice.html" class="chapter-link"><span class="chapter-number">8</span>Prosocial & Prejudice</a></li>
+        <li class="chapter-item"><a href="attraction.html" class="chapter-link"><span class="chapter-number">9</span>Attraction & Relationships</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 7 of 9</div>
+        <h1>Group Influence</h1>
+        <div class="chapter-meta">
+          <span>Conformity, obedience, social facilitation, groupthink</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 5)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 5)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+      <section class="content-section">
+        <h2>Introduction to Group Influence</h2>
+        <p>Groups exert powerful influence on individual behavior, thought, and emotion. Social psychology has demonstrated that the presence of others -- whether real, imagined, or implied -- fundamentally alters how we think, feel, and act. This chapter covers the major phenomena of group influence that are frequently tested on the EPPP.</p>
+        <p>The key themes across this chapter are: (1) people are strongly motivated to fit in with groups, (2) group settings can amplify individual tendencies (for better or worse), and (3) awareness of group dynamics is essential for effective clinical and organizational work.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Conformity</h2>
+        <p><span class="key-term">Conformity</span> is a change in behavior or belief as a result of real or imagined group pressure. Two types of social influence produce conformity:</p>
+        <ul>
+          <li><strong>Informational social influence:</strong> Conforming because we believe the group has accurate information (especially in ambiguous situations). Leads to private acceptance -- genuine belief change.</li>
+          <li><strong>Normative social influence:</strong> Conforming to gain approval or avoid rejection. Leads to public compliance without private acceptance.</li>
+        </ul>
+
+        <h3>Asch's Conformity Experiments (1951, 1956)</h3>
+        <div class="definition-box">
+          <h4>Procedure and Findings</h4>
+          <p>Participants judged which of three comparison lines matched a standard line -- a task with an obvious correct answer. They responded in a group where all other members (confederates) unanimously gave the same wrong answer on critical trials. Results: <strong>approximately 75% of participants conformed at least once</strong>, and the overall conformity rate was about <strong>37%</strong> across all critical trials. Notably, in a control condition without group pressure, errors were less than 1%.</p>
+        </div>
+
+        <h3>Factors Affecting Conformity</h3>
+        <table>
+          <tr><th>Factor</th><th>Effect on Conformity</th></tr>
+          <tr><td><strong>Group size</strong></td><td>Conformity increases up to about 3-5 members, then plateaus.</td></tr>
+          <tr><td><strong>Unanimity</strong></td><td>A single dissenter dramatically reduces conformity, even if the dissenter gives a different wrong answer.</td></tr>
+          <tr><td><strong>Task difficulty</strong></td><td>Greater ambiguity increases conformity (informational influence is stronger).</td></tr>
+          <tr><td><strong>Group cohesiveness</strong></td><td>Higher cohesion increases conformity (normative influence is stronger).</td></tr>
+          <tr><td><strong>Public vs. private response</strong></td><td>Conformity is higher when responses are public.</td></tr>
+          <tr><td><strong>Cultural factors</strong></td><td>Collectivistic cultures show higher conformity rates than individualistic cultures.</td></tr>
+          <tr><td><strong>Status</strong></td><td>Lower-status individuals conform more to higher-status group members.</td></tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Sherif's Autokinetic Effect (1935)</h4>
+          <p>Sherif used the autokinetic effect (a stationary point of light appearing to move in a dark room) to study conformity in ambiguous situations. Individual judgments converged toward a group norm when participants were tested together. This norm persisted even when participants were later tested alone, demonstrating <strong>informational social influence</strong> producing genuine private acceptance.</p>
+        </div>
+        <div class="citation">Asch, S. E. (1956). Studies of independence and conformity: A minority of one against a unanimous majority. Psychological Monographs, 70(9), 1-70.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Obedience</h2>
+        <p><span class="key-term">Obedience</span> is compliance with a direct command, usually from an authority figure. Stanley Milgram's (1963, 1974) obedience studies are among the most famous and controversial experiments in psychology.</p>
+
+        <h3>Milgram's Obedience Studies</h3>
+        <div class="definition-box">
+          <h4>Procedure and Key Findings</h4>
+          <p>Participants (the "teacher") were instructed by an experimenter to deliver increasingly intense electric shocks (15V to 450V) to a confederate (the "learner") for wrong answers on a memory task. No real shocks were given, but participants believed they were real. Results: <strong>65% of participants obeyed to the maximum 450V level</strong> in the baseline condition. All participants obeyed to at least 300V.</p>
+        </div>
+
+        <h3>Factors Affecting Obedience</h3>
+        <table>
+          <tr><th>Variation</th><th>Obedience Rate</th><th>Mechanism</th></tr>
+          <tr><td>Baseline (separate rooms)</td><td>65%</td><td>Standard condition</td></tr>
+          <tr><td>Experimenter absent (phone instructions)</td><td>21%</td><td>Reduced authority presence</td></tr>
+          <tr><td>Learner in same room</td><td>40%</td><td>Increased victim proximity</td></tr>
+          <tr><td>Participant touches learner</td><td>30%</td><td>Further increased victim proximity</td></tr>
+          <tr><td>Ordinary building (not Yale)</td><td>48%</td><td>Reduced institutional authority</td></tr>
+          <tr><td>Two confederates rebel</td><td>10%</td><td>Social support for disobedience</td></tr>
+          <tr><td>Two experimenters disagree</td><td>0%</td><td>Undermined authority</td></tr>
+        </table>
+
+        <h3>Explanations for Obedience</h3>
+        <ul>
+          <li><strong>Agentic state:</strong> Milgram proposed that people shift from an autonomous state to an <span class="key-term">agentic state</span> in which they see themselves as agents carrying out another person's wishes and therefore feel less personally responsible.</li>
+          <li><strong>Gradual commitment:</strong> The incremental increase in shock levels (15V at a time) made it difficult to identify a clear point at which to disobey -- similar to the foot-in-the-door technique.</li>
+          <li><strong>Binding factors:</strong> Social politeness, desire not to disrupt the experiment, and commitment to the agreed-upon role made disobedience psychologically difficult.</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Ethical Legacy</h4>
+          <p>Milgram's studies were instrumental in developing modern research ethics standards. They contributed to the establishment of Institutional Review Boards (IRBs) and the ethical principles of informed consent, right to withdraw, and debriefing. These studies could not be conducted in their original form today due to the psychological distress experienced by participants.</p>
+        </div>
+        <div class="citation">Milgram, S. (1974). Obedience to authority: An experimental view. Harper &amp; Row.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Social Facilitation and Social Loafing</h2>
+
+        <h3>Social Facilitation</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Social facilitation</span> refers to the tendency for the presence of others to improve performance on simple or well-learned tasks and impair performance on complex or novel tasks. Zajonc (1965) proposed the <strong>drive theory</strong> explanation: the presence of others increases physiological arousal, which enhances the <span class="key-term">dominant response</span>. For well-practiced tasks, the dominant response is correct; for novel tasks, the dominant response is often incorrect.</p>
+        </div>
+
+        <h3>Social Loafing</h3>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Social loafing</span> is the tendency for individuals to exert less effort when working in a group than when working alone (Latane, Williams, &amp; Harkins, 1979). Unlike social facilitation (which involves performing <strong>alongside</strong> others), social loafing occurs when individual contributions are <strong>pooled</strong> and individual effort is not identifiable.</p>
+        </div>
+
+        <h3>Reducing Social Loafing</h3>
+        <ul>
+          <li>Making individual contributions identifiable</li>
+          <li>Increasing task importance or personal relevance</li>
+          <li>Keeping groups small</li>
+          <li>Increasing group cohesion</li>
+          <li>Setting clear individual goals and accountability</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Key Distinction for the EPPP</h4>
+          <p><strong>Social facilitation</strong>: Others are present as audience or co-actors; individual performance is evaluable; the presence of others increases arousal. <strong>Social loafing</strong>: Working in a group with pooled output; individual effort is not identifiable; effort decreases. These are opposite effects that depend on whether individual performance can be evaluated.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Groupthink</h2>
+        <p>Irving Janis (1972, 1982) introduced the concept of <span class="key-term">groupthink</span> to describe a mode of thinking in highly cohesive groups where the desire for harmony and conformity overrides realistic appraisal of alternatives. Janis analyzed several foreign policy disasters (Bay of Pigs, Pearl Harbor) as examples of groupthink.</p>
+
+        <h3>Antecedent Conditions</h3>
+        <ul>
+          <li>High group cohesiveness</li>
+          <li>Insulation from outside experts</li>
+          <li>Directive leadership (leader states preference early)</li>
+          <li>Lack of systematic procedures for evaluating alternatives</li>
+          <li>High stress with perceived low likelihood of finding a better solution than the leader's</li>
+        </ul>
+
+        <h3>Symptoms of Groupthink</h3>
+        <table>
+          <tr><th>Symptom</th><th>Description</th></tr>
+          <tr><td><strong>Illusion of invulnerability</strong></td><td>Excessive optimism and risk-taking</td></tr>
+          <tr><td><strong>Collective rationalization</strong></td><td>Discounting warnings and negative feedback</td></tr>
+          <tr><td><strong>Belief in inherent morality</strong></td><td>Assuming the group's decisions are ethically correct</td></tr>
+          <tr><td><strong>Stereotyping outgroups</strong></td><td>Viewing opponents as weak, evil, or stupid</td></tr>
+          <tr><td><strong>Pressure on dissenters</strong></td><td>Direct pressure to conform on members who express disagreement</td></tr>
+          <tr><td><strong>Self-censorship</strong></td><td>Members withhold dissenting views</td></tr>
+          <tr><td><strong>Illusion of unanimity</strong></td><td>Assuming silence means agreement</td></tr>
+          <tr><td><strong>Self-appointed mindguards</strong></td><td>Members who protect the group from dissenting information</td></tr>
+        </table>
+
+        <h3>Prevention Strategies</h3>
+        <ul>
+          <li>Leaders should refrain from stating preferences at the outset</li>
+          <li>Assign a "devil's advocate" role</li>
+          <li>Invite outside experts to challenge the group</li>
+          <li>Encourage critical evaluation of all alternatives</li>
+          <li>Hold a "second-chance" meeting to reconsider decisions</li>
+        </ul>
+        <div class="citation">Janis, I. L. (1982). Groupthink: Psychological studies of policy decisions and fiascoes (2nd ed.). Houghton Mifflin.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Group Polarization</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Group polarization</span> is the tendency for group discussion to strengthen the average initial tendency of group members (Moscovici &amp; Zavalloni, 1969). If members initially lean toward risk, the group decision will be riskier than the average individual decision. If members initially lean toward caution, the group will be more cautious. The group does not move toward a moderate position -- it moves toward a more extreme version of its initial inclination.</p>
+        </div>
+
+        <h3>Explanations</h3>
+        <ul>
+          <li><strong>Persuasive arguments theory:</strong> During discussion, members hear novel arguments supporting the prevailing position. This pool of predominantly one-sided arguments shifts individuals further in that direction.</li>
+          <li><strong>Social comparison theory:</strong> People discover during discussion that others hold positions more extreme than their own and shift to be at least as extreme as others to gain social approval or maintain a positive self-image.</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>EPPP Exam Tip</h4>
+          <p>Group polarization is distinct from groupthink. Group polarization describes the <strong>direction</strong> of the shift (toward the extreme of the initial tendency), while groupthink describes a <strong>process</strong> of defective decision-making in cohesive groups. A group can polarize without experiencing groupthink, and groupthink involves more than just polarization.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Deindividuation</h2>
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p><span class="key-term">Deindividuation</span> is a psychological state of reduced self-awareness and diminished sense of personal identity that can occur in group settings, particularly when individuals feel anonymous. In this state, people are more likely to engage in impulsive, antisocial, or norm-violating behavior because the normal restraints of self-monitoring and concern about evaluation are weakened.</p>
+        </div>
+
+        <h3>Conditions That Promote Deindividuation</h3>
+        <ul>
+          <li><strong>Anonymity:</strong> Wearing uniforms, masks, or being in darkness reduces identifiability.</li>
+          <li><strong>Large group size:</strong> Being one of many reduces the feeling of individual accountability.</li>
+          <li><strong>Arousal:</strong> High emotional arousal shifts attention away from self-regulation.</li>
+          <li><strong>Reduced self-awareness:</strong> Conditions that focus attention outward (rather than inward) promote deindividuation.</li>
+        </ul>
+
+        <h3>Key Research</h3>
+        <p>Zimbardo (1969) demonstrated that participants wearing hoods and lab coats (anonymous condition) delivered more intense shocks than identifiable participants. Diener et al. (1976) found that trick-or-treating children in costumes (anonymous) stole more candy when in groups than when alone or identifiable.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical and Practical Relevance</h4>
+          <p>Deindividuation helps explain mob behavior, online trolling and cyberbullying (where anonymity is high), and the behavior of individuals in institutional settings (e.g., the Stanford Prison Experiment). Understanding deindividuation is relevant to workplace consultation, school psychology, and forensic evaluations. Interventions that increase self-awareness and accountability (mirrors, cameras, name tags) can counteract deindividuation effects.</p>
+        </div>
+
+        <h3>Summary Table: Group Influence Phenomena</h3>
+        <table>
+          <tr><th>Phenomenon</th><th>Key Researcher(s)</th><th>Core Finding</th></tr>
+          <tr><td>Conformity</td><td>Asch; Sherif</td><td>People change behavior to match group norms</td></tr>
+          <tr><td>Obedience</td><td>Milgram</td><td>65% obeyed authority to maximum shock level</td></tr>
+          <tr><td>Social facilitation</td><td>Zajonc</td><td>Others enhance dominant responses</td></tr>
+          <tr><td>Social loafing</td><td>Latane et al.</td><td>Less effort in groups when individual effort is not identifiable</td></tr>
+          <tr><td>Groupthink</td><td>Janis</td><td>Cohesive groups make defective decisions</td></tr>
+          <tr><td>Group polarization</td><td>Moscovici &amp; Zavalloni</td><td>Discussion intensifies initial group tendency</td></tr>
+          <tr><td>Deindividuation</td><td>Zimbardo</td><td>Anonymity in groups reduces self-regulation</td></tr>
+        </table>
+        <div class="citation">Zimbardo, P. G. (2007). The Lucifer effect: Understanding how good people turn evil. Random House.</div>
+      </section>
+
+      <section class="content-section">
+        <h2>Minority Influence</h2>
+        <p>While most group influence research focuses on how majorities influence individuals, Serge Moscovici's (1976) work on <span class="key-term">minority influence</span> examines how a consistent minority can change majority opinions over time.</p>
+
+        <h3>Conditions for Effective Minority Influence</h3>
+        <ul>
+          <li><strong>Consistency:</strong> The minority must maintain a consistent position over time and across situations. This is the single most important factor.</li>
+          <li><strong>Flexibility:</strong> While consistent in their core position, effective minorities demonstrate willingness to negotiate on peripheral issues.</li>
+          <li><strong>Confidence:</strong> The minority must appear confident and committed to their position.</li>
+          <li><strong>Identification:</strong> Minority influence is stronger when the minority is perceived as part of the ingroup rather than an outgroup.</li>
+        </ul>
+
+        <h3>Conversion Theory (Moscovici, 1980)</h3>
+        <p>Moscovici proposed that majority and minority influence operate through different processes. Majority influence produces <strong>compliance</strong> (public conformity without private change) through comparison. Minority influence produces <strong>conversion</strong> (genuine private attitude change) through validation -- the minority's consistent position triggers deeper processing of the issue. Importantly, minority influence often manifests as <span class="key-term">indirect influence</span> -- the person changes attitudes on related (but not the exact) issues raised by the minority.</p>
+
+        <div class="clinical-note">
+          <h4>Clinical and Organizational Applications</h4>
+          <p>Understanding group influence processes is essential for psychologists working in organizational consulting, group therapy, and community settings. Group therapists must manage conformity pressure, encourage productive dissent, guard against groupthink in treatment teams, and use group processes therapeutically. In organizational settings, understanding social facilitation, loafing, polarization, and minority influence helps design more effective teams and decision-making procedures.</p>
+        </div>
+      </section>
+      <div class="nav-buttons">
+        <a href="persuasion.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Persuasion</div>
+          </div>
+        </a>
+        <a href="prosocial-prejudice.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Prosocial & Prejudice</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>

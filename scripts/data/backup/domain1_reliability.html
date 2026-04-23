@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consistency of Measurement: Test Reliability | Domain 1 | MasteryPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f11;
+      --bg-tertiary: #18181b;
+      --bg-card: #1c1c1f;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f59e0b;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; background: rgba(9, 9, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 32px; }
+    .nav-left { display: flex; align-items: center; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 20px; height: 20px; color: var(--bg-primary); }
+    .logo-text { font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb svg { width: 16px; height: 16px; }
+
+    .content-wrapper { padding-top: 72px; display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); position: fixed; top: 72px; bottom: 0; overflow-y: auto; padding: 24px 0; }
+    .sidebar-header { padding: 0 20px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .sidebar-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .domain-title { font-size: 1rem; font-weight: 600; color: var(--accent); }
+    .chapter-list { list-style: none; }
+    .chapter-item { border-bottom: 1px solid var(--border); }
+    .chapter-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease; }
+    .chapter-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .chapter-link.active { background: var(--accent-dim); color: var(--accent); border-left: 3px solid var(--accent); }
+    .chapter-number { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+
+    .main-content { margin-left: 280px; flex: 1; padding: 48px 64px; max-width: 900px; }
+    .chapter-header { margin-bottom: 48px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px; }
+    h1 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 16px; line-height: 1.2; }
+    .chapter-meta { display: flex; gap: 24px; color: var(--text-muted); font-size: 0.9rem; }
+
+    .content-section { margin-bottom: 48px; }
+    h2 { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 20px; color: var(--text-primary); }
+    h3 { font-size: 1.25rem; font-weight: 600; margin: 32px 0 16px; color: var(--text-primary); }
+    h4 { font-size: 1.1rem; font-weight: 600; margin: 24px 0 12px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+
+    .key-term { background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .definition-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .definition-box h4 { margin: 0 0 12px; color: var(--accent); font-size: 1rem; }
+    .definition-box p { margin: 0; color: var(--text-secondary); }
+    .definition-box ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .definition-box li { margin-bottom: 8px; }
+
+    .example-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .example-box h4 { margin: 0 0 12px; color: #60a5fa; font-size: 1rem; }
+    .example-box p { margin: 0; color: var(--text-secondary); }
+
+    .clinical-note { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: var(--radius-md); padding: 20px 24px; margin: 24px 0; }
+    .clinical-note h4 { margin: 0 0 12px; color: #4ade80; font-size: 1rem; }
+    .clinical-note p { margin: 0; color: var(--text-secondary); }
+    .clinical-note ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); }
+    .clinical-note li { margin-bottom: 8px; }
+
+    .citation { border-left: 3px solid var(--accent); padding-left: 16px; margin: 24px 0; font-style: italic; color: var(--text-muted); }
+
+    .exam-focus { background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 28px; margin: 40px 0; }
+    .exam-focus h3 { color: var(--accent); margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+    .exam-focus ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .exam-focus li { margin-bottom: 10px; }
+
+    .references { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .references h3 { margin-bottom: 20px; }
+    .reference-list { list-style: none; }
+    .reference-list li { margin-bottom: 16px; color: var(--text-muted); font-size: 0.9rem; padding-left: 32px; text-indent: -32px; }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text-secondary); transition: all 0.2s ease; }
+    .nav-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .nav-btn-label { font-size: 0.8rem; color: var(--text-muted); }
+    .nav-btn-title { font-weight: 600; color: var(--text-primary); }
+
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: var(--bg-tertiary); color: var(--text-primary); font-weight: 600; }
+    td { color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; padding: 32px 24px; }
+    }
+    .chapter-actions { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease; }
+    .flashcard-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .flashcard-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .quiz-btn { background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); }
+    .quiz-btn:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--accent); }
+    .mastery-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border: none; color: #fff; font-weight: 600; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.3); }
+    .mastery-btn:hover { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.5); transform: translateY(-1px); }
+    .upgrade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .upgrade-modal-overlay.visible { display:flex; }
+    .upgrade-modal { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg,16px); padding:40px; max-width:420px; width:90%; text-align:center; }
+    .upgrade-modal-icon { width:64px; height:64px; margin:0 auto 20px; background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .upgrade-modal-icon svg { color:#fff; }
+    .upgrade-modal h3 { font-size:1.25rem; margin-bottom:8px; color:var(--text-primary); }
+    .upgrade-modal p { color:var(--text-secondary); margin-bottom:24px; font-size:0.9rem; line-height:1.6; }
+    .upgrade-modal-actions { display:flex; gap:12px; }
+    .upgrade-modal-actions a, .upgrade-modal-actions button { flex:1; padding:12px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; border:none; }
+    .upgrade-modal .btn-dismiss { background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border); }
+    .upgrade-modal .btn-upgrade { background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%); color:#fff; }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="../../index.html" class="logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <span class="logo-text">MasteryPage</span>
+      </a>
+      <div class="breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="../../textbook.html">Textbook</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="index.html">Domain 1</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>Consistency of Measurement: Test Reliability</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Content Area 1</div>
+        <div class="domain-title">Psychometrics & Scientific Foundations</div>
+      </div>
+            <ul class="chapter-list">
+        <li class="chapter-item"><a href="index.html" class="chapter-link"><span class="chapter-number">0</span>Overview</a></li>
+        <li class="chapter-item"><a href="variables-data.html" class="chapter-link"><span class="chapter-number">1</span>Variables, Scales & the Language of Data</a></li>
+        <li class="chapter-item"><a href="classical-conditioning.html" class="chapter-link"><span class="chapter-number">2</span>How Organisms Learn: Classical Conditioning</a></li>
+        <li class="chapter-item"><a href="operant-conditioning.html" class="chapter-link"><span class="chapter-number">3</span>Shaping Behavior: Operant Conditioning</a></li>
+        <li class="chapter-item"><a href="correlation-regression.html" class="chapter-link"><span class="chapter-number">4</span>Relationships in Data: Correlation & Regression</a></li>
+        <li class="chapter-item"><a href="inferential-statistics.html" class="chapter-link"><span class="chapter-number">5</span>From Samples to Populations: Inferential Statistics</a></li>
+        <li class="chapter-item"><a href="research-designs.html" class="chapter-link"><span class="chapter-number">6</span>Blueprints for Discovery: Research Designs</a></li>
+        <li class="chapter-item"><a href="research-validity.html" class="chapter-link"><span class="chapter-number">7</span>Threats & Safeguards: Research Validity</a></li>
+        <li class="chapter-item"><a href="reliability.html" class="chapter-link active"><span class="chapter-number">8</span>Consistency of Measurement: Test Reliability</a></li>
+        <li class="chapter-item"><a href="validity.html" class="chapter-link"><span class="chapter-number">9</span>Measuring What Matters: Content & Construct Validity</a></li>
+        <li class="chapter-item"><a href="criterion-validity.html" class="chapter-link"><span class="chapter-number">10</span>Predicting Outcomes: Criterion-Related Validity</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <header class="chapter-header">
+        <div class="chapter-badge">Chapter 8 of 10</div>
+        <h1>Consistency of Measurement: Test Reliability</h1>
+        <div class="chapter-meta">
+          <span>Reliability types, coefficients, and standard error of measurement</span>
+        </div>
+      </header>
+      <div class="chapter-actions">
+        <a href="javascript:void(0)" onclick="chapterAction('flashcards')" class="action-btn flashcard-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Flashcards
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('quiz-fundamental', 1)" class="action-btn quiz-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Quick Quiz: Fundamental
+        </a>
+        <a href="javascript:void(0)" onclick="chapterAction('advanced-learning', 1)" class="action-btn mastery-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Advanced Learning
+        </a>
+      </div>
+
+      <section class="content-section">
+        <h2>Introduction to Reliability</h2>
+        <p>Reliability refers to the consistency, stability, and dependability of test scores. A reliable test produces similar results under consistent conditions—if an examinee takes the same test twice under identical circumstances, a reliable test should yield similar scores. Reliability is a prerequisite for validity; a test cannot measure a construct accurately if it produces inconsistent measurements (Nunnally & Bernstein, 1994).</p>
+
+        <div class="definition-box">
+          <h4>Key Terminology</h4>
+          <ul>
+            <li><strong>Reliability:</strong> The degree to which test scores are consistent, stable, and free from measurement error</li>
+            <li><strong>Reliability Coefficient:</strong> A correlation coefficient indicating the proportion of score variance that is systematic (true score variance)</li>
+            <li><strong>Measurement Error:</strong> Random fluctuations in scores due to factors unrelated to the construct being measured</li>
+            <li><strong>True Score:</strong> A hypothetical score representing an examinee's actual level on the measured attribute</li>
+          </ul>
+        </div>
+
+        <p>In <span class="key-term">Classical Test Theory (CTT)</span>, reliability is conceptualized as the proportion of observed score variance attributable to true score variance. Mathematically, the reliability coefficient (r<sub>xx</sub>) represents the ratio of true score variance to observed score variance (Lord & Novick, 1968).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Classical Test Theory</h2>
+        <p>Classical Test Theory provides the theoretical foundation for understanding reliability. The core assumption is that any observed score (X) consists of two components: a true score (T) and error (E).</p>
+
+        <div class="definition-box">
+          <h4>Classical Test Theory Formula</h4>
+          <p><strong>X = T + E</strong></p>
+          <p>Where:</p>
+          <ul>
+            <li><strong>X</strong> = Observed score (what we measure)</li>
+            <li><strong>T</strong> = True score (the person's actual ability)</li>
+            <li><strong>E</strong> = Error (random measurement error)</li>
+          </ul>
+        </div>
+
+        <h3>Assumptions of Classical Test Theory</h3>
+        <ul>
+          <li>The mean error of measurement equals zero across repeated testing</li>
+          <li>True scores and error scores are uncorrelated</li>
+          <li>Error scores on one test are uncorrelated with error scores on another test</li>
+          <li>Error scores are uncorrelated with true scores on other tests</li>
+        </ul>
+
+        <h3>Reliability as True Score Variance</h3>
+        <p>The <span class="key-term">reliability coefficient</span> can be expressed as:</p>
+        <p style="text-align: center; font-style: italic;">r<sub>xx</sub> = σ²<sub>T</sub> / σ²<sub>X</sub> = 1 - (σ²<sub>E</sub> / σ²<sub>X</sub>)</p>
+        <p>A reliability coefficient of .80 means that 80% of the observed score variance is true score variance, while 20% is error variance.</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Item Response Theory (IRT)</h2>
+        <p>While Classical Test Theory operates at the test level, <span class="key-term">Item Response Theory (IRT)</span> operates at the item level, modeling the probability that a person with a given ability level will respond correctly to a specific item. IRT addresses several limitations of CTT by providing item-level analysis and more flexible measurement properties (Embretson & Reise, 2000).</p>
+
+        <div class="definition-box">
+          <h4>CTT vs. IRT: Key Contrasts</h4>
+          <ul>
+            <li><strong>Unit of analysis:</strong> CTT analyzes total test scores; IRT analyzes individual items</li>
+            <li><strong>Sample dependence:</strong> CTT item statistics (difficulty, discrimination) depend on the sample tested; IRT item parameters are sample-independent (invariant) once the model fits</li>
+            <li><strong>Test dependence:</strong> CTT ability estimates depend on which test was given; IRT ability estimates are test-independent within a calibrated item bank</li>
+            <li><strong>Measurement precision:</strong> CTT assumes equal SEM for all examinees; IRT provides a unique standard error for each ability level</li>
+          </ul>
+        </div>
+
+        <h3>Item Parameters</h3>
+        <p>IRT models characterize items using up to three parameters:</p>
+        <ul>
+          <li><strong>Difficulty (b):</strong> The ability level at which an examinee has a 50% probability of answering correctly. Higher b values indicate more difficult items. On the ability (theta) scale, b typically ranges from -3 to +3.</li>
+          <li><strong>Discrimination (a):</strong> How well the item differentiates between examinees of different ability levels. Higher a values indicate that the item sharply distinguishes between those just above and just below the difficulty level. Graphically, this is the steepness of the item characteristic curve at the inflection point.</li>
+          <li><strong>Guessing (c):</strong> The probability that an examinee with very low ability will answer correctly (also called the pseudo-guessing parameter). For a four-option multiple-choice item, c is often around .25 but may be lower if distractors are effective.</li>
+        </ul>
+
+        <h3>Item Characteristic Curves (ICCs)</h3>
+        <p>The <span class="key-term">Item Characteristic Curve (ICC)</span> is an S-shaped (logistic) curve that plots the probability of a correct response (y-axis) as a function of examinee ability, denoted <span class="key-term">theta</span> (x-axis). Each item has its own ICC. The curve's position along the theta axis reflects difficulty (b), its steepness reflects discrimination (a), and its lower asymptote reflects guessing (c).</p>
+
+        <div class="example-box">
+          <h4>Reading an ICC</h4>
+          <p>An item with b = 0.0 is of average difficulty (50% correct at average ability). If a = 1.5, the curve is moderately steep, meaning the item differentiates well. If c = 0.20, even very low-ability examinees have a 20% chance of guessing correctly, so the curve never drops below 0.20 on the y-axis.</p>
+        </div>
+
+        <h3>IRT Models</h3>
+        <table>
+          <tr>
+            <th>Model</th>
+            <th>Parameters</th>
+            <th>Key Features</th>
+          </tr>
+          <tr>
+            <td><strong>1PL (Rasch Model)</strong></td>
+            <td>Difficulty (b) only</td>
+            <td>All items assumed equally discriminating; no guessing. Simplest model; emphasizes measurement properties and specific objectivity</td>
+          </tr>
+          <tr>
+            <td><strong>2PL</strong></td>
+            <td>Difficulty (b) + Discrimination (a)</td>
+            <td>Allows items to vary in discrimination. ICCs can differ in steepness. More realistic for many tests</td>
+          </tr>
+          <tr>
+            <td><strong>3PL</strong></td>
+            <td>Difficulty (b) + Discrimination (a) + Guessing (c)</td>
+            <td>Accounts for correct guessing on multiple-choice items. Lower asymptote of ICC is above zero. Most commonly used for standardized multiple-choice tests</td>
+          </tr>
+        </table>
+
+        <h3>Advantages of IRT</h3>
+        <ul>
+          <li><strong>Item parameter invariance:</strong> Item parameters remain stable across different examinee samples (provided the model fits), enabling items to be calibrated once and used across contexts</li>
+          <li><strong>Ability estimate invariance:</strong> Examinee ability estimates are comparable regardless of which specific items were administered, as long as items come from a calibrated bank</li>
+          <li><strong>Conditional standard error:</strong> IRT provides unique precision estimates at each ability level, rather than a single SEM for all examinees</li>
+          <li><strong>Flexible test design:</strong> Items can be selected to maximize information (precision) at specific ability levels</li>
+        </ul>
+
+        <h3>Applications of IRT</h3>
+
+        <div class="definition-box">
+          <h4>Key Applications</h4>
+          <ul>
+            <li><strong>Computerized Adaptive Testing (CAT):</strong> IRT enables tests that dynamically select items based on the examinee's estimated ability. After each response, the ability estimate is updated and the next item is chosen to provide maximum information at that ability level. CATs are typically shorter yet more precise than fixed-length tests.</li>
+            <li><strong>Test equating:</strong> IRT allows scores from different test forms to be placed on a common scale, ensuring fairness when different examinees take different versions of a test</li>
+            <li><strong>Differential Item Functioning (DIF):</strong> IRT can identify items that function differently across demographic groups (e.g., gender, ethnicity) after controlling for ability, which is essential for detecting item-level bias</li>
+            <li><strong>Item banking:</strong> Calibrated items can be stored in a bank and assembled into multiple test forms with known psychometric properties</li>
+          </ul>
+        </div>
+
+        <div class="clinical-note">
+          <h4>IRT and the EPPP</h4>
+          <p>The EPPP itself uses IRT-based scoring. Items are calibrated using IRT models, and examinee scores are estimated on a theta scale. This means the EPPP can draw from a large item bank while maintaining score comparability across administrations. The pass/fail decision is based on a theta cutoff rather than a raw percentage correct, which accounts for differences in item difficulty across test forms.</p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Types of Reliability</h2>
+        <p>Different types of reliability assess different sources of measurement error. The appropriate type depends on the nature of the test and how it will be used (AERA et al., 2014).</p>
+
+        <h3>Test-Retest Reliability</h3>
+        <p><span class="key-term">Test-retest reliability</span> (also called temporal stability) assesses the consistency of scores across time. The same test is administered to the same individuals on two occasions, and the correlation between scores indicates stability.</p>
+
+        <div class="definition-box">
+          <h4>Test-Retest Reliability</h4>
+          <ul>
+            <li><strong>Method:</strong> Administer same test twice; correlate scores</li>
+            <li><strong>Source of error:</strong> Time sampling (changes in examinees over time)</li>
+            <li><strong>Considerations:</strong> Interval between testings, memory/practice effects, true changes in the construct</li>
+          </ul>
+        </div>
+
+        <div class="clinical-note">
+          <h4>Optimal Testing Interval</h4>
+          <p>The appropriate interval depends on the construct being measured:</p>
+          <ul>
+            <li><strong>Shorter intervals</strong> (days to weeks): Minimize true change but increase practice effects</li>
+            <li><strong>Longer intervals</strong> (months): Reduce practice effects but allow more true change</li>
+            <li><strong>Stable traits</strong> (intelligence, personality): Longer intervals are appropriate</li>
+            <li><strong>Variable states</strong> (mood, anxiety): Very short intervals or alternative methods</li>
+          </ul>
+        </div>
+
+        <h3>Alternate (Parallel) Forms Reliability</h3>
+        <p><span class="key-term">Alternate forms reliability</span> assesses consistency across different versions of the same test. Two equivalent forms are administered to the same individuals, and the correlation between forms indicates reliability. This method controls for memory effects and provides evidence of content sampling consistency.</p>
+
+        <div class="example-box">
+          <h4>Alternate Forms Example</h4>
+          <p>A publisher develops Form A and Form B of an achievement test, each with different items measuring the same content domain. Students take Form A one week and Form B the next. A correlation of .85 between forms indicates good alternate forms reliability, suggesting the two versions measure the same construct consistently.</p>
+        </div>
+
+        <p>For forms to be truly <span class="key-term">parallel</span>, they must have equal means, equal variances, and equal correlations with other measures. In practice, this is difficult to achieve, so most alternate forms are better described as "equivalent" rather than strictly parallel.</p>
+
+        <h3>Internal Consistency Reliability</h3>
+        <p><span class="key-term">Internal consistency</span> assesses the homogeneity of items within a single test administration. It indicates the extent to which items measure the same construct and is the most commonly reported type of reliability.</p>
+
+        <h4>Split-Half Reliability</h4>
+        <p>The test is divided into two halves (typically odd vs. even items), and the correlation between halves is calculated. Because each half is only half as long as the full test, the <span class="key-term">Spearman-Brown formula</span> is used to estimate the reliability of the full-length test.</p>
+
+        <div class="definition-box">
+          <h4>Spearman-Brown Prophecy Formula</h4>
+          <p>r<sub>xx</sub> = (2 × r<sub>hh</sub>) / (1 + r<sub>hh</sub>)</p>
+          <p>Where r<sub>hh</sub> is the correlation between the two halves.</p>
+          <p>For example, if the correlation between halves is .60, the estimated full-test reliability is:</p>
+          <p>(2 × .60) / (1 + .60) = 1.20 / 1.60 = .75</p>
+        </div>
+
+        <h4>Cronbach's Alpha (Coefficient Alpha)</h4>
+        <p><span class="key-term">Cronbach's alpha</span> (α) is the most widely used measure of internal consistency. It represents the average of all possible split-half reliabilities and indicates how well items hang together as a set. Alpha is appropriate for items with multiple response options (Cronbach, 1951).</p>
+
+        <p>Alpha values are interpreted as follows:</p>
+        <table>
+          <tr>
+            <th>Alpha Value</th>
+            <th>Interpretation</th>
+          </tr>
+          <tr>
+            <td>≥ .90</td>
+            <td>Excellent (individual decision-making)</td>
+          </tr>
+          <tr>
+            <td>.80 - .89</td>
+            <td>Good</td>
+          </tr>
+          <tr>
+            <td>.70 - .79</td>
+            <td>Acceptable (research purposes)</td>
+          </tr>
+          <tr>
+            <td>.60 - .69</td>
+            <td>Questionable</td>
+          </tr>
+          <tr>
+            <td>< .60</td>
+            <td>Poor/Unacceptable</td>
+          </tr>
+        </table>
+
+        <h4>Kuder-Richardson Formulas</h4>
+        <p>The <span class="key-term">Kuder-Richardson formulas</span> are special cases of Cronbach's alpha for dichotomously scored items (correct/incorrect). <span class="key-term">KR-20</span> is used when item difficulties vary, while <span class="key-term">KR-21</span> assumes equal item difficulties (Kuder & Richardson, 1937).</p>
+
+        <div class="clinical-note">
+          <h4>Limitations of Internal Consistency</h4>
+          <ul>
+            <li>May be inappropriately high for speeded tests (items are not independently answered)</li>
+            <li>Does not assess stability over time</li>
+            <li>May be artificially inflated by redundant items</li>
+            <li>Not appropriate for multidimensional tests (should be calculated separately for each subscale)</li>
+          </ul>
+        </div>
+
+        <h3>Inter-Rater (Inter-Scorer) Reliability</h3>
+        <p><span class="key-term">Inter-rater reliability</span> assesses the consistency of scores assigned by different raters or scorers. This is essential for tests involving subjective judgment, such as essay tests, behavioral observations, projective tests, and structured interviews.</p>
+
+        <h4>Methods of Assessment</h4>
+        <ul>
+          <li><strong>Percent agreement:</strong> Simple but does not account for chance agreement</li>
+          <li><strong>Cohen's kappa (κ):</strong> Corrects for chance agreement; used for categorical ratings</li>
+          <li><strong>Intraclass correlation coefficient (ICC):</strong> Used for continuous ratings; accounts for both agreement and consistency</li>
+        </ul>
+
+        <div class="definition-box">
+          <h4>Cohen's Kappa Interpretation</h4>
+          <ul>
+            <li><strong>κ < .20:</strong> Poor agreement</li>
+            <li><strong>κ = .21 - .40:</strong> Fair agreement</li>
+            <li><strong>κ = .41 - .60:</strong> Moderate agreement</li>
+            <li><strong>κ = .61 - .80:</strong> Substantial agreement</li>
+            <li><strong>κ > .80:</strong> Almost perfect agreement</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Standard Error of Measurement</h2>
+        <p>The <span class="key-term">standard error of measurement (SEM)</span> quantifies the amount of error expected in an individual's observed score. While the reliability coefficient describes group-level consistency, the SEM provides information about the precision of individual scores (Harvill, 1991).</p>
+
+        <div class="definition-box">
+          <h4>SEM Formula</h4>
+          <p>SEM = SD × √(1 - r<sub>xx</sub>)</p>
+          <p>Where SD is the standard deviation of test scores and r<sub>xx</sub> is the reliability coefficient.</p>
+        </div>
+
+        <div class="example-box">
+          <h4>SEM Calculation Example</h4>
+          <p>A test has M = 100, SD = 15, and reliability = .91</p>
+          <p>SEM = 15 × √(1 - .91) = 15 × √.09 = 15 × .30 = 4.5</p>
+          <p>This means the typical measurement error is about 4.5 points.</p>
+        </div>
+
+        <h3>Confidence Intervals</h3>
+        <p>The SEM is used to construct <span class="key-term">confidence intervals</span> around observed scores. Assuming a normal distribution of errors:</p>
+        <ul>
+          <li><strong>68% confidence interval:</strong> Observed score ± 1 SEM</li>
+          <li><strong>95% confidence interval:</strong> Observed score ± 1.96 SEM (approximately ± 2 SEM)</li>
+          <li><strong>99% confidence interval:</strong> Observed score ± 2.58 SEM</li>
+        </ul>
+
+        <div class="clinical-note">
+          <h4>Clinical Application</h4>
+          <p>If a client obtains an IQ score of 115 with an SEM of 4.5, the 95% confidence interval is approximately 115 ± 9 points, or 106 to 124. Clinicians should report and interpret confidence intervals rather than treating observed scores as exact values. This is especially important when scores fall near clinical cutoffs.</p>
+        </div>
+
+        <h3>Standard Error of the Difference</h3>
+        <p>When comparing two scores (e.g., Verbal IQ vs. Performance IQ, or pretest vs. posttest), the <span class="key-term">standard error of the difference (SEdiff)</span> is used to determine whether the difference is statistically significant:</p>
+        <p style="text-align: center;">SEdiff = √(SEM₁² + SEM₂²)</p>
+        <p>A difference is typically considered significant if it exceeds 1.96 × SEdiff (for 95% confidence).</p>
+      </section>
+
+      <section class="content-section">
+        <h2>Factors Affecting Reliability</h2>
+
+        <h3>Test Length</h3>
+        <p>Longer tests are generally more reliable because they sample the content domain more thoroughly. The <span class="key-term">Spearman-Brown formula</span> can estimate how reliability changes with test length:</p>
+        <p style="text-align: center;">r<sub>kk</sub> = (k × r<sub>xx</sub>) / [1 + (k - 1) × r<sub>xx</sub>]</p>
+        <p>Where k is the factor by which the test length is multiplied.</p>
+
+        <div class="example-box">
+          <h4>Spearman-Brown Example</h4>
+          <p>If a 20-item test has reliability of .70, doubling its length (k = 2) would yield estimated reliability of:</p>
+          <p>(2 × .70) / [1 + (2 - 1) × .70] = 1.40 / 1.70 = .82</p>
+        </div>
+
+        <h3>Score Variability (Range Restriction)</h3>
+        <p>Reliability coefficients are higher when scores are more variable. <span class="key-term">Restriction of range</span>—when scores cluster together—attenuates reliability estimates. This is important when estimating reliability in selected samples (e.g., university students, clinical populations).</p>
+
+        <h3>Item Quality and Homogeneity</h3>
+        <p>Items that are too easy or too difficult contribute little to reliability because they produce little variability. Items with optimal difficulty (around .50 for maximum discrimination) and high item-total correlations enhance reliability.</p>
+
+        <h3>Examinee and Administration Factors</h3>
+        <ul>
+          <li><strong>Test-taking conditions:</strong> Standardized administration enhances reliability</li>
+          <li><strong>Examinee characteristics:</strong> Fatigue, anxiety, and motivation affect consistency</li>
+          <li><strong>Guessing:</strong> Random guessing adds error variance, reducing reliability</li>
+          <li><strong>Scorer training:</strong> Well-trained raters produce more consistent scores</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>Reliability and Validity</h2>
+        <p>Reliability sets an upper limit on validity. A test cannot correlate with an external criterion more highly than the square root of its reliability coefficient. This relationship is expressed as:</p>
+        <p style="text-align: center;">r<sub>xy(max)</sub> = √r<sub>xx</sub></p>
+
+        <div class="example-box">
+          <h4>Reliability-Validity Relationship</h4>
+          <p>If a predictor test has reliability of .64, the maximum possible validity coefficient is:</p>
+          <p>√.64 = .80</p>
+          <p>The test cannot correlate higher than .80 with any criterion, even if the test were a perfect measure of the construct.</p>
+        </div>
+
+        <p>The <span class="key-term">correction for attenuation</span> formula estimates what the correlation between two measures would be if both were perfectly reliable:</p>
+        <p style="text-align: center;">r<sub>xy(corrected)</sub> = r<sub>xy</sub> / √(r<sub>xx</sub> × r<sub>yy</sub>)</p>
+        <p>This formula is useful for theoretical purposes but should be used cautiously in applied contexts.</p>
+      </section>
+
+      <div class="exam-focus">
+        <h3>EPPP Exam Focus Points</h3>
+        <ul>
+          <li><strong>Classical Test Theory:</strong> X = T + E; reliability is the proportion of true score variance</li>
+          <li><strong>Test-retest reliability</strong> assesses stability over time; affected by testing interval and practice effects</li>
+          <li><strong>Alternate forms reliability</strong> requires two equivalent versions of the test</li>
+          <li><strong>Cronbach's alpha</strong> is the most common internal consistency measure; represents average of all split-half correlations</li>
+          <li><strong>KR-20 and KR-21</strong> are used for dichotomous items (special cases of alpha)</li>
+          <li><strong>Spearman-Brown formula</strong> estimates reliability for different test lengths</li>
+          <li><strong>SEM formula:</strong> SEM = SD × √(1 - r<sub>xx</sub>); used to construct confidence intervals</li>
+          <li>Reliability is <strong>higher with longer tests</strong> and <strong>greater score variability</strong></li>
+          <li><strong>Inter-rater reliability</strong> is essential for subjectively scored tests; Cohen's kappa corrects for chance</li>
+          <li>Reliability sets the <strong>upper limit for validity</strong>: r<sub>xy(max)</sub> = √r<sub>xx</sub></li>
+          <li><strong>IRT vs. CTT:</strong> CTT is test-level; IRT is item-level. IRT item parameters are sample-independent; CTT item statistics are not</li>
+          <li><strong>IRT models:</strong> 1PL/Rasch (difficulty only), 2PL (+ discrimination), 3PL (+ guessing)</li>
+          <li><strong>Item Characteristic Curves:</strong> S-shaped curves showing P(correct) as a function of theta (ability)</li>
+          <li><strong>IRT applications:</strong> Computerized adaptive testing (CAT), test equating, DIF detection</li>
+          <li>The <strong>EPPP uses IRT-based scoring</strong>—scores reflect theta estimates, not raw percentage correct</li>
+        </ul>
+      </div>
+
+      <section class="references">
+        <h3>References</h3>
+        <ul class="reference-list">
+          <li>American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing</em>. AERA.</li>
+          <li>Cronbach, L. J. (1951). Coefficient alpha and the internal structure of tests. <em>Psychometrika, 16</em>(3), 297-334.</li>
+          <li>Embretson, S. E., & Reise, S. P. (2000). <em>Item response theory for psychologists</em>. Lawrence Erlbaum Associates.</li>
+          <li>Harvill, L. M. (1991). Standard error of measurement. <em>Educational Measurement: Issues and Practice, 10</em>(2), 33-41.</li>
+          <li>Kuder, G. F., & Richardson, M. W. (1937). The theory of the estimation of test reliability. <em>Psychometrika, 2</em>(3), 151-160.</li>
+          <li>Lord, F. M., & Novick, M. R. (1968). <em>Statistical theories of mental test scores</em>. Addison-Wesley.</li>
+          <li>Nunnally, J. C., & Bernstein, I. H. (1994). <em>Psychometric theory</em> (3rd ed.). McGraw-Hill.</li>
+        </ul>
+      </section>
+
+      <div class="nav-buttons">
+        <a href="research-validity.html" class="nav-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <div>
+            <div class="nav-btn-label">Previous</div>
+            <div class="nav-btn-title">Threats & Safeguards: Research Validity</div>
+          </div>
+        </a>
+        <a href="validity.html" class="nav-btn">
+          <div style="text-align: right;">
+            <div class="nav-btn-label">Next</div>
+            <div class="nav-btn-title">Measuring What Matters: Content & Construct Validity</div>
+          </div>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="upgrade-modal-overlay" id="upgradeModal" onclick="if(event.target===this)this.classList.remove('visible')">
+    <div class="upgrade-modal">
+      <div class="upgrade-modal-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Upgrade to Unlock</h3>
+      <p>Flashcards, Quick Quizzes, and Mastery Quizzes are available on paid plans. Upgrade today to test your knowledge and track your progress.</p>
+      <div class="upgrade-modal-actions">
+        <button class="btn-dismiss" onclick="document.getElementById('upgradeModal').classList.remove('visible')">Maybe Later</button>
+        <a href="../../index.html" class="btn-upgrade">View Plans</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function chapterAction(action, domainNum) {
+      var tier = 'free';
+      try {
+        var s = sessionStorage.getItem('passeppp_session');
+        if (s) { tier = JSON.parse(s).tier || 'free'; }
+      } catch(e) {}
+      if (tier === 'free') {
+        document.getElementById('upgradeModal').classList.add('visible');
+        return;
+      }
+      if (action === 'flashcards') window.location.href = '../../index.html';
+      else if (action === 'quiz-fundamental') window.location.href = '../../index.html';
+      else if (action === 'advanced-learning') { var ch = document.querySelector('h1').textContent.trim(); window.location.href = '../../index.html'; }
+    }
+  </script>
+</body>
+</html>
